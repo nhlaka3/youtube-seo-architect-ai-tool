@@ -72,6 +72,12 @@ build_log.txt
 skills/
 skills2/
 
+# Manim video generation (large media files)
+manim-video/media/
+manim-video/audio/
+manim-video/tts_audio/
+manim-video/__pycache__/
+
 # Large generated files
 sed*
 
