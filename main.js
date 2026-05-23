@@ -15517,14 +15517,17 @@ let _architectChatHistory = [];
 let coachPollInterval = null;
 
 function toggleCoachChat() {
-  const panel = document.getElementById('coach-chat-panel');
+  var panel = document.getElementById('coach-chat-panel');
   if (!panel) return;
-  const isOpen = panel.style.display === 'flex';
+  var isOpen = panel.style.display === 'flex';
   panel.style.display = isOpen ? 'none' : 'flex';
   if (!isOpen) {
     loadCoachMessages();
     loadGoalBar();
-    coachPollInterval = setInterval(loadCoachMessages, 30000);
+    coachPollInterval = setInterval(function() {
+      // Only update badge count, don't replace messages
+      updateCoachBadge();
+    }, 30000);
   } else {
     clearInterval(coachPollInterval);
   }
@@ -15551,18 +15554,32 @@ window.loadGoalBar = loadGoalBar;
 
 async function loadCoachMessages() {
   try {
-    const chId = localStorage.getItem('ytseo_channel_id');
+    var chId = localStorage.getItem('ytseo_channel_id');
     if (!chId) return;
-    const res = await fetch('/api/agent/coach/inbox?channelId=' + chId);
-    const data = await res.json();
+    var res = await fetch('/api/agent/coach/inbox?channelId=' + chId);
+    var data = await res.json();
     renderCoachMessages(data.messages || []);
-    const unread = (data.messages || []).filter(function(m) { return !m.read; }).length;
-    const badge = document.getElementById('coach-badge');
-    if (badge) {
-      badge.style.display = unread > 0 ? 'block' : 'none';
-      badge.textContent = unread;
-    }
+    updateCoachBadgeFromMessages(data.messages || []);
   } catch(e) {}
+}
+
+async function updateCoachBadge() {
+  try {
+    var chId = localStorage.getItem('ytseo_channel_id');
+    if (!chId) return;
+    var res = await fetch('/api/agent/coach/inbox?channelId=' + chId);
+    var data = await res.json();
+    updateCoachBadgeFromMessages(data.messages || []);
+  } catch(e) {}
+}
+
+function updateCoachBadgeFromMessages(messages) {
+  var unread = messages.filter(function(m) { return !m.read; }).length;
+  var badge = document.getElementById('coach-badge');
+  if (badge) {
+    badge.style.display = unread > 0 ? 'block' : 'none';
+    badge.textContent = unread;
+  }
 }
 window.loadCoachMessages = loadCoachMessages;
 
