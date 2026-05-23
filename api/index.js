@@ -1304,6 +1304,19 @@ app.post('/api/agent/coach/ask', async (req, res) => {
   } catch(e) { res.status(500).json({ error: e.message }); }
 });
 
+app.get('/api/agent/status', async (req, res) => {
+  try {
+    const channelId = req.query.channelId || req.headers['x-channel-id'];
+    const { default: dbService } = await import('../src/database/services.js');
+    const s = await import('../src/database/schema.js');
+    const logs = await dbService.db.select().from(s.agentActivityLogs)
+      .where({ channelId })
+      .orderBy(s.agentActivityLogs.createdAt, 'desc')
+      .limit(20);
+    res.json({ recentActivity: logs || [] });
+  } catch(e) { res.status(500).json({ error: e.message }); }
+});
+
 // Sentry Error Handler (MUST BE AFTER ROUTES, BEFORE 404)
 
 if (Sentry && Sentry.Handlers) {

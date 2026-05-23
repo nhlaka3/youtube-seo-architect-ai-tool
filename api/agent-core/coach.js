@@ -69,6 +69,9 @@ export async function handleQuestion(channelId, question) {
     const { getGoalStatus } = await import('./goal-engine.js');
     const goal = await getGoalStatus(channelId);
 
+    // Get agent context (recent activity, proposals, scans)
+    const agentCtx = await getAgentContext(channelId);
+
     // Get or create conversation history
     if (!conversationHistory.has(channelId)) {
       conversationHistory.set(channelId, []);
@@ -112,10 +115,13 @@ Your role:
 - Use the goal and channel context provided
 
 GOAL CONTEXT:
-${goalContext || 'No active goal set. Encourage the user to set one.'}
+${goalContext || 'No active goal set.'}
+
+AGENT CONTEXT (recent activity):
+${agentCtx || 'No recent agent activity.'}
 ${conversationContext}
 
-Respond conversationally. Reference earlier parts of the conversation if the user asks a follow-up. Do NOT use markdown or emoji.`;
+Respond conversationally. Reference earlier parts of the conversation if the user asks a follow-up. If the user asks about proposals, scans, or optimizations, use the AGENT CONTEXT above. Do NOT use markdown or emoji.`;
 
     var { askAI } = await import('../_lib/ai-provider.js');
     var answer = await askAI(systemPrompt, question);
@@ -138,6 +144,33 @@ Respond conversationally. Reference earlier parts of the conversation if the use
     console.error('[Coach] AI error:', e.message);
     var fb = fallbackResponse(null, question);
     return fb;
+  }
+}
+
+/**
+ * Query recent Phronesis agent activity to give the coach real context
+ */
+async function getAgentContext(channelId) {
+  try {
+    var { default: dbService } = await import('../../src/database/services.js');
+    var s = await import('../../src/database/schema.js');
+    var logs = await dbService.db.select().from(s.agentActivityLogs)
+      .where({ channelId })
+      .orderBy(s.agentActivityLogs.createdAt, 'desc')
+      .limit(20);
+
+    if (!logs || !logs.length) return 'No recent agent activity.';
+
+    var recent = logs.slice(0, 10);
+    var summary = 'Recent Phronesis activity:\n';
+    for (var i = 0; i < recent.length; i++) {
+      var log = recent[i];
+      var time = new Date(log.createdAt).toLocaleString();
+      summary += '- [' + time + '] ' + log.agentName + ': ' + (log.actionTaken || '').substring(0, 150) + '\n';
+    }
+    return summary;
+  } catch(e) {
+    return 'Agent activity data unavailable.';
   }
 }
 
