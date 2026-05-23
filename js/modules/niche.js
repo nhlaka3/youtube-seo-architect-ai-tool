@@ -74,14 +74,15 @@ export function checkHealthAndCoach(avgScore) {
 }
 
 export async function detectChannelNiche() {
-  if (!accessToken) {
+  const token = localStorage.getItem('ytseo_access_token');
+  if (!token) {
     console.log('[Niche Detection] No access token, skipping');
     return;
   }
 
   try {
     const channelRes = await fetch('https://www.googleapis.com/youtube/v3/channels?part=snippet,statistics&mine=true', {
-      headers: { Authorization: 'Bearer ' + accessToken }
+      headers: { Authorization: 'Bearer ' + token }
     });
     const channelData = await channelRes.json();
 
@@ -91,7 +92,7 @@ export async function detectChannelNiche() {
     const channelId = channel.id;
 
     const videosRes = await fetch('https://www.googleapis.com/youtube/v3/search?part=snippet&channelId=' + channelId + '&order=date&maxResults=5&type=video', {
-      headers: { Authorization: 'Bearer ' + accessToken }
+      headers: { Authorization: 'Bearer ' + token }
     });
     const videosData = await videosRes.json();
     const recentTitles = (videosData.items || []).map(function(v) { return v.snippet.title; });

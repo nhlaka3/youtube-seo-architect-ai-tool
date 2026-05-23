@@ -16527,7 +16527,7 @@ window.apiPost = _apiPost;
 // Replace the DOMContentLoaded listener that legacy code may have set
 // (legacy code does: document.addEventListener('DOMContentLoaded', platformInit))
 // We need to ensure Phase 1 initialization runs properly.
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('DOMContentLoaded', async () => {
   console.log('[main] Phase 1 boot via DOMContentLoaded');
   
   initConfig();
@@ -16637,6 +16637,17 @@ document.addEventListener('DOMContentLoaded', () => {
     SaaS_clearChat: () => {},
     SaaS_pay: (plan) => { if (typeof openPayPalModal === 'function') openPayPalModal(plan); },
   });
+
+  // Fetch CSRF token before API calls
+  try {
+    const chId = localStorage.getItem('ytseo_channel_id') || 'anonymous';
+    const csrfRes = await fetch('/api/auth/csrf?channelId=' + chId);
+    const csrfData = await csrfRes.json();
+    if (csrfData.token) {
+      window.csrfToken = csrfData.token;
+      localStorage.setItem('csrf_token', csrfData.token);
+    }
+  } catch(e) {}
 
   // Run the legacy platformInit if it exists (Phase 2/3 modules)
   if (typeof platformInit === 'function') {
