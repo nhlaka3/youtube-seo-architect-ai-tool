@@ -18,8 +18,6 @@ import { showToast as _showToast, apiPost as _apiPost, safeRender as _safeRender
 //  are defined in js/modules/ and aliased above.
 // ═══════════════════════════════════════════════════════════════
 /* BEGIN LEGACY */
-  try { track(event, data); } catch(e) {}
-};
 
 let tokenClient;
 let accessToken = null;
