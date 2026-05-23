@@ -27,13 +27,13 @@ export async function setGoal({ channelId, type, target, deadline }) {
     const s = await import('../../src/database/schema.js');
     await dbService.db.update(s.goals)
       .set({ status: 'completed', updatedAt: new Date().toISOString() })
-      .where({ channelId, status: 'active' }).execute().catch(() => {});
+      .where({ channelId, status: 'active' });
     
     // Generate plan using existing planner
     const plan = await generateGoalPlan(goal);
     goal.phases = plan;
     
-    await dbService.db.insert(goals).values(goal).execute().catch(() => {});
+    await dbService.db.insert(goals).values(goal);
   } catch(e) {
     console.error('[Goal Engine] DB error:', e.message);
   }
@@ -98,7 +98,7 @@ export async function getGoalStatus(channelId) {
     const { default: dbService } = await import('../../src/database/services.js');
     const s = await import('../../src/database/schema.js');
     const results = await dbService.db.select().from(s.goals)
-      .where({ channelId, status: 'active' }).limit(1).execute().catch(() => []);
+      .where({ channelId, status: 'active' }).limit(1);
     
     if (!results || !results.length) return null;
     const goal = results[0];
