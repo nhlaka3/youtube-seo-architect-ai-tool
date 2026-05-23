@@ -1,7 +1,7 @@
 // js/modules/config.js
-// Application configuration — frozen after init, no mutation
+// Application configuration
 
-export const config = Object.freeze({
+const _config = {
   CLIENT_ID: '482101609629-e9t4lijfthm4rco4v8t0vbla2tg9v1tl.apps.googleusercontent.com',
   YOUTUBE_API_KEY: '',
 
@@ -10,7 +10,12 @@ export const config = Object.freeze({
       ? 'http://localhost:3000'
       : '';
   }
-});
+};
+
+// Freeze only the getter-based properties. Mutable fields can still be set.
+Object.defineProperty(_config, 'CLIENT_ID', { value: _config.CLIENT_ID, writable: false, configurable: false });
+
+export const config = _config;
 
 let tokenClient = null;
 let accessToken = null;
