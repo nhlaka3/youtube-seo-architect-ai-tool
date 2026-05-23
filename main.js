@@ -1,39 +1,10 @@
-// main.js — Application entry point (Phase 1)
-// Architecture: Phase 1 modules (config, core, views, onboarding, delegation)
-// are imported first. Phase 2/3 legacy code follows inline (to be extracted incrementally).
 import { inject, track } from '@vercel/analytics';
+inject();
 
-// Phase 1 module imports (aliased to avoid conflicts with legacy code below)
-import { initConfig, config } from './js/modules/config.js';
-import { initDelegation, registerActions } from './js/modules/event-delegation.js';
-import { initOnboarding as _initOnboarding } from './js/modules/onboarding.js';
-import { switchView as _switchView, platformInit as _platformInit } from './js/modules/views.js';
-import { showToast as _showToast, apiPost as _apiPost, safeRender as _safeRender, escapeHTML as _escapeHTML } from './js/modules/core.js';
-
-// Phase 2 module imports (aliased to avoid conflicts with legacy declarations)
-import { setAgentMode as _setAgentMode, detectChannelNiche as _detectChannelNiche, agentKillSwitch as _agentKillSwitch, checkHealthAndCoach as _checkHealthAndCoach } from './js/modules/niche.js';
-import { CreditsSystem as _CreditsSystem, syncCredits as _syncCredits, openPayPalModal as _openPayPalModal, closePaymentModal as _closePaymentModal } from './js/modules/credits.js';
-import { runResearch as _runResearch, displayResults as _displayResults, sortTable as _sortTable, copyKeyword as _copyKeyword, exportKeywordsCSV as _exportKeywordsCSV } from './js/modules/research.js';
-import { generateScript as _generateScript, runManualAudit as _runManualAudit, sendToAuditor as _sendToAuditor, showMetadataModal as _showMetadataModal } from './js/modules/video-factory.js';
-import { executeSniperInfiltration as _executeSniperInfiltration, analyzeCompetitor as _analyzeCompetitor, fetchVideoTags as _fetchVideoTags } from './js/modules/competitor.js';
-import { calculateSEOScore as _calculateSEOScore, runAudit as _runAudit, OptimizationTrials as _OptimizationTrials, checkPremiumFeature as _checkPremiumFeature } from './js/modules/seo-audit.js';
-
-// Phase 3 module imports (aliased — bridge pattern)
-import { GrowthEngine as _GrowthEngine } from './js/modules/growth.js';
-import { loadPhronesis as _loadPhronesis, loadScanResults as _loadScanResults, loadNeuralStrategy as _loadNeuralStrategy } from './js/modules/dashboard.js';
-import { runThumbnailRedesign as _runThumbnailRedesign, generateChapters as _generateChapters } from './js/modules/tools.js';
-import { runAutoFlow as _runAutoFlow, generateWeave as _generateWeave, generateCollusionTags as _generateCollusionTags } from './js/modules/pipeline.js';
-import { loadRetentionData as _loadRetentionData, reorderPlaylistOnYoutube as _reorderPlaylistOnYoutube, toggleCoachDrawer as _toggleCoachDrawer, sendArchitectMessage as _sendArchitectMessage } from './js/modules/retention.js';
-import { loadTrendPulse as _loadTrendPulse, generateCommunityPost as _generateCommunityPost, generateMultiLanguageSEO as _generateMultiLanguageSEO, generateAILabel as _generateAILabel } from './js/modules/ai-tools.js';
-
-// ═══════════════════════════════════════════════════════════════
-//  PHASE 2/3 LEGACY CODE (to be extracted incrementally)
-//  This is the full main.js body from before the Phase 1 refactor.
-//  Functions here use window.* globals for backward compat.
-//  Phase 1 functions (switchView, platformInit, apiPost, etc.)
-//  are defined in js/modules/ and aliased above.
-// ═══════════════════════════════════════════════════════════════
-// BEGIN LEGACY CODE (Phase 2/3 — to be extracted incrementally)
+// Analytics helpers
+window.vaTrack = (event, data) => {
+  try { track(event, data); } catch(e) {}
+};
 
 let tokenClient;
 let accessToken = null;
@@ -1061,8 +1032,8 @@ function platformInit() {
   setTimeout(checkAIStatus, 2000);
 }
 
-// Single DOMContentLoaded Listener (NOW HANDLED BY PHASE 1 main.js boot sequence)
-// document.addEventListener('DOMContentLoaded', platformInit);
+// Single DOMContentLoaded Listener
+document.addEventListener('DOMContentLoaded', platformInit);
 
 // AI Status Checker - checks both Groq and Gemini
 async function checkAIStatus() {
@@ -16505,172 +16476,3 @@ window.copyAILabelAll = copyAILabelAll;
 console.log('✅ All 2026 Modern Features Loaded');
 console.log('✅ SaaS Logic exposed to Global Window');
 
-
-// END LEGACY CODE
-
-// ═══════════════════════════════════════════════════════════════
-//  PHASE 1 BACKWARD-COMPATIBLE OVERRIDES
-//  The legacy code above may set window.* globals. We override
-//  them here with the Phase 1 module versions.
-//  These will be removed when Phase 2/3 extraction is complete.
-// ═══════════════════════════════════════════════════════════════
-
-// Override key functions with Phase 1 module versions
-window.switchView = _switchView;
-window.showToast = _showToast;
-window.safeRender = _safeRender;
-window.escapeHTML = _escapeHTML;
-
-// TEMP: Use legacy switchView while debugging
-window.switchView = (typeof switchView === 'function') ? switchView : _switchView;
-
-// apiPost needs special handling since it's async
-window.apiPost = _apiPost;
-
-// Replace the DOMContentLoaded listener that legacy code may have set
-// (legacy code does: document.addEventListener('DOMContentLoaded', platformInit))
-// We need to ensure Phase 1 initialization runs properly.
-document.addEventListener('DOMContentLoaded', async () => {
-  console.log('[main] Phase 1 boot via DOMContentLoaded');
-  
-  initConfig();
-  // initDelegation(); // TEMP: disabled for debugging
-  
-  // Register all action handlers for data-action delegation
-  // registerActions disabled for debugging
-  /*
-  registerActions({
-    switchTo: (viewName) => _switchView(viewName),
-    toggleFolder: (id) => { if (typeof toggleFolder === 'function') toggleFolder(id); },
-    toggleSidebar: () => { if (typeof window.toggleSidebar === 'function') window.toggleSidebar(); },
-    toggleProfileMenu: () => { if (typeof window.toggleProfileMenu === 'function') window.toggleProfileMenu(); },
-    initiateOAuth: () => { if (typeof initiateOAuth === 'function') initiateOAuth(); },
-    logout: () => { if (typeof window.logout === 'function') window.logout(); },
-    setAgentMode: (mode) => { if (typeof setAgentMode === 'function') setAgentMode(mode); },
-    agentKillSwitch: () => { if (typeof agentKillSwitch === 'function') agentKillSwitch(); },
-    runResearch: () => { if (typeof runResearch === 'function') runResearch(); },
-    sortTable: (col) => { if (typeof sortTable === 'function') sortTable(parseInt(col)); },
-    exportKeywordsCSV: () => { if (typeof exportKeywordsCSV === 'function') exportKeywordsCSV(); },
-    generateScript: () => { if (typeof generateScript === 'function') generateScript(); },
-    runManualAudit: () => { if (typeof runManualAudit === 'function') runManualAudit(); },
-    regenerateScript: () => { if (typeof regenerateScript === 'function') regenerateScript(); },
-    sendToAuditor: () => { if (typeof sendToAuditor === 'function') sendToAuditor(); },
-    sendToVideoFactory: () => { if (typeof window.sendToVideoFactory === 'function') window.sendToVideoFactory(); },
-    exportToMetadata: () => { if (typeof exportToMetadata === 'function') exportToMetadata(); },
-    exportToMetadataWeaver: () => { if (typeof window.exportToMetadataWeaver === 'function') window.exportToMetadataWeaver(); },
-    copyVoiceover: () => { if (typeof copyVoiceover === 'function') copyVoiceover(); },
-    copyMetadataOnly: () => { if (typeof copyMetadataOnly === 'function') copyMetadataOnly(); },
-    copyElement: (id) => { if (typeof window.copyElement === 'function') window.copyElement(id); },
-    copyFullBundle: () => { if (typeof window.copyFullBundle === 'function') window.copyFullBundle(); },
-    copyInfiltrationBundle: () => { if (typeof copyInfiltrationBundle === 'function') copyInfiltrationBundle(); },
-    copyAllOriginalTags: () => { if (typeof copyAllOriginalTags === 'function') copyAllOriginalTags(); },
-    copyChapters: () => { if (typeof copyChapters === 'function') copyChapters(); },
-    copyCommunityPost: () => { if (typeof copyCommunityPost === 'function') copyCommunityPost(); },
-    copyAILabelAll: () => { if (typeof copyAILabelAll === 'function') copyAILabelAll(); },
-    copyCollusionTags: () => { if (typeof copyCollusionTags === 'function') copyCollusionTags(); },
-    copyGatewayUrl: () => { if (typeof copyGatewayUrl === 'function') copyGatewayUrl(); },
-    applyToMetadataWeaver: () => { if (typeof applyToMetadataWeaver === 'function') applyToMetadataWeaver(); },
-    analyzeCompetitor: () => { if (typeof analyzeCompetitor === 'function') analyzeCompetitor(); },
-    analyzeThumbnail: (mode) => { if (typeof window.analyzeThumbnail === 'function') window.analyzeThumbnail(mode); },
-    analyzeNicheRelevance: () => { if (typeof window.analyzeNicheRelevance === 'function') window.analyzeNicheRelevance(); },
-    discoverCompetitors: () => { if (typeof window.discoverCompetitors === 'function') window.discoverCompetitors(); },
-    auditVideoMetadata: () => { if (typeof window.auditVideoMetadata === 'function') window.auditVideoMetadata(); },
-    generateSEOBundle: () => { if (typeof window.generateSEOBundle === 'function') window.generateSEOBundle(); },
-    runEvergreenAudit: () => { if (typeof runEvergreenAudit === 'function') runEvergreenAudit(); },
-    triggerGrowthScan: () => { if (typeof window.triggerGrowthScan === 'function') window.triggerGrowthScan(); },
-    runAutoFlow: () => { if (typeof runAutoFlow === 'function') runAutoFlow(); },
-    GrowthEngine_scan: () => { if (typeof window.GrowthEngine !== 'undefined') window.GrowthEngine.scan(); },
-    scanAndQueue: () => { if (typeof window.scanAndQueue === 'function') window.scanAndQueue(); },
-    loadOptQueue: () => { if (typeof window.loadOptQueue === 'function') window.loadOptQueue(); },
-    approveAllQueue: () => { if (typeof window.approveAllQueue === 'function') window.approveAllQueue(); },
-    skipAllQueue: () => { if (typeof window.skipAllQueue === 'function') window.skipAllQueue(); },
-    applyAllApproved: () => { if (typeof window.applyAllApproved === 'function') window.applyAllApproved(); },
-    filterInbox: (f) => { if (typeof window.filterInbox === 'function') window.filterInbox(f); },
-    loadPhronesis: () => { if (typeof loadPhronesis === 'function') loadPhronesis(); },
-    refreshPhronesis: () => { if (typeof window.refreshPhronesis === 'function') window.refreshPhronesis(); },
-    loadNeuralStrategy: () => { if (typeof loadNeuralStrategy === 'function') loadNeuralStrategy(); },
-    loadRetentionData: () => { if (typeof loadRetentionData === 'function') loadRetentionData(); },
-    reorderPlaylistOnYoutube: () => { if (typeof reorderPlaylistOnYoutube === 'function') reorderPlaylistOnYoutube(); },
-    restoreOriginalOrder: () => { if (typeof restoreOriginalOrder === 'function') restoreOriginalOrder(); },
-    toggleCoachDrawer: (show) => { if (typeof toggleCoachDrawer === 'function') toggleCoachDrawer(show === 'true'); },
-    toggleAssistant: () => { if (typeof toggleAssistant === 'function') toggleAssistant(); },
-    sendArchitectMessage: () => { if (typeof sendArchitectMessage === 'function') sendArchitectMessage(); },
-    clearCoachMemory: () => { if (typeof window.clearCoachMemory === 'function') window.clearCoachMemory(); },
-    fetchTargetComments: () => { if (typeof fetchTargetComments === 'function') fetchTargetComments(); },
-    generateChapters: () => { if (typeof generateChapters === 'function') generateChapters(); },
-    generateCommunityPost: () => { if (typeof generateCommunityPost === 'function') generateCommunityPost(); },
-    generateMultiLanguageSEO: () => { if (typeof generateMultiLanguageSEO === 'function') generateMultiLanguageSEO(); },
-    generateAILabel: () => { if (typeof generateAILabel === 'function') generateAILabel(); },
-    extractShortsHooks: () => { if (typeof window.extractShortsHooks === 'function') window.extractShortsHooks(); },
-    extractShortsHooksFromFactory: () => { if (typeof window.extractShortsHooksFromFactory === 'function') window.extractShortsHooksFromFactory(); },
-    generateWeave: () => { if (typeof generateWeave === 'function') generateWeave(); },
-    generateCollusionTags: () => { if (typeof generateCollusionTags === 'function') generateCollusionTags(); },
-    generateGatewayUrl: () => { if (typeof generateGatewayUrl === 'function') generateGatewayUrl(); },
-    applyNarrativeToPlaylist: () => { if (typeof applyNarrativeToPlaylist === 'function') applyNarrativeToPlaylist(); },
-    injectCollusionTags: () => { if (typeof injectCollusionTags === 'function') injectCollusionTags(); },
-    loadWeaverPlaylists: () => { if (typeof loadWeaverPlaylists === 'function') loadWeaverPlaylists(); },
-    switchSuiteTab: (tab) => { if (typeof switchSuiteTab === 'function') switchSuiteTab(tab); },
-    generateAllProposals: () => { if (typeof window.generateAllProposals === 'function') window.generateAllProposals(); },
-    generateAllRevivals: () => { if (typeof window.generateAllRevivals === 'function') window.generateAllRevivals(); },
-    applyAllRevivals: () => { if (typeof window.applyAllRevivals === 'function') window.applyAllRevivals(); },
-    generateClusters: () => { if (typeof window.generateClusters === 'function') window.generateClusters(); },
-    bulkGeneratePages: () => { if (typeof window.bulkGeneratePages === 'function') window.bulkGeneratePages(); },
-    loadTrendPulse: () => { if (typeof loadTrendPulse === 'function') loadTrendPulse(); },
-    closeTrendModal: () => { if (typeof window.closeTrendModal === 'function') window.closeTrendModal(); },
-    loadAnalytics: () => { if (typeof loadAnalytics === 'function') loadAnalytics(); },
-    loadAbTests: () => { if (typeof loadAbTests === 'function') loadAbTests(); },
-    loadSeoLab: () => { if (typeof loadSeoLab === 'function') loadSeoLab(); },
-    loadSuggestedAnalytics: () => { if (typeof loadSuggestedAnalytics === 'function') loadSuggestedAnalytics(); },
-    suggestAbVariants: () => { if (typeof window.suggestAbVariants === 'function') window.suggestAbVariants(); },
-    startAbTest: () => { if (typeof window.startAbTest === 'function') window.startAbTest(); },
-    runHealthCheck: () => { if (typeof runHealthCheck === 'function') runHealthCheck(); },
-    runSystemHealthProbe: () => { if (typeof runSystemHealthProbe === 'function') runSystemHealthProbe(); },
-    runMockTest: () => { if (typeof window.runMockTest === 'function') window.runMockTest(); },
-    saveAgentGoal: () => { if (typeof window.saveAgentGoal === 'function') window.saveAgentGoal(); },
-    OptTrials_refresh: () => { if (typeof OptimizationTrials !== 'undefined') OptimizationTrials.refresh(); },
-    OptTrials_measureImpact: () => { if (typeof OptimizationTrials !== 'undefined') OptimizationTrials.measureImpact(); },
-    OptTrials_measureAll: () => { if (typeof OptimizationTrials !== 'undefined') OptimizationTrials.measureAllPending(); },
-    SessionMemory_clear: () => { if (typeof SessionMemory !== 'undefined') SessionMemory.clear(); },
-    SaaS_research: () => { if (typeof runResearch === 'function') runResearch(); },
-    SaaS_factory: () => { if (typeof generateScript === 'function') generateScript(); },
-    SaaS_sniper: () => { if (typeof analyzeCompetitor === 'function') analyzeCompetitor(); },
-    SaaS_redesign: () => { if (typeof runThumbnailRedesign === 'function') runThumbnailRedesign(); },
-    SaaS_coach: () => { if (typeof toggleCoachDrawer === 'function') toggleCoachDrawer(true); },
-    SaaS_auth: () => { if (typeof initiateOAuth === 'function') initiateOAuth(); },
-    SaaS_send: () => { if (typeof sendArchitectMessage === 'function') sendArchitectMessage(); },
-    SaaS_ask: (msg) => { if (typeof window.SaaS !== 'undefined') window.SaaS.ask(msg); },
-    SaaS_clearChat: () => {},
-    // SaaS_pay disabled
-  });
-  */
-
-  // Fetch CSRF token before API calls
-  try {
-    const chId = localStorage.getItem('ytseo_channel_id') || 'anonymous';
-    const csrfRes = await fetch('/api/auth/csrf?channelId=' + chId);
-    const csrfData = await csrfRes.json();
-    if (csrfData.token) {
-      window.csrfToken = csrfData.token;
-      localStorage.setItem('csrf_token', csrfData.token);
-    }
-  } catch(e) {}
-
-  // Run the legacy platformInit if it exists (Phase 2/3 modules)
-  if (typeof platformInit === 'function') {
-    console.log('[main] Running legacy platformInit');
-    platformInit();
-  }
-
-  // Init onboarding (Phase 1 version)
-  _initOnboarding();
-
-  console.log('[main] Phase 1 boot complete.');
-});
-
-// Initialize Vercel Analytics
-inject();
-window.vaTrack = (event, data) => {
-  try { track(event, data); } catch(e) {}
-};
-
-console.log('[main] Phase 1 modules loaded. Legacy code follows...');
