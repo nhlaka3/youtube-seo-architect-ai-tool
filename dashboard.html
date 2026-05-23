@@ -3398,7 +3398,7 @@ window.openUpgradeModal = function(plan, amount) {
 <!-- ═══════════════════════════════════════════════════════
      Phronesis Coach Chat Panel (Goal-Driven Agent)
      ═══════════════════════════════════════════════════════ -->
-<div id="coach-chat-panel" style="display:none;position:fixed;bottom:80px;right:24px;z-index:999;
+<div id="coach-chat-panel" style="display:none;position:fixed;bottom:80px;right:24px;z-index:99999;
   width:380px;max-height:520px;background:var(--bg-card);border:1px solid var(--border);
   border-radius:16px;box-shadow:0 8px 40px rgba(0,0,0,0.5);flex-direction:column;overflow:hidden;">
   <div style="display:flex;align-items:center;justify-content:space-between;
@@ -3420,13 +3420,12 @@ window.openUpgradeModal = function(plan, amount) {
 
 <!-- Coach Toggle Button -->
 <button id="coach-toggle-btn" onclick="toggleCoachChat()"
-  style="position:fixed;bottom:24px;right:24px;z-index:998;
-  background:var(--primary);color:#fff;border:none;
-  border-radius:50%;width:56px;height:56px;font-size:24px;
-  cursor:pointer;box-shadow:0 4px 20px rgba(0,0,0,0.3);">
-  🧠
-  <span id="coach-badge" style="display:none;position:absolute;top:-4px;right:-4px;
-    background:var(--danger);color:#fff;border-radius:50%;width:20px;height:20px;
+  style="position:fixed;bottom:24px;right:24px;z-index:99999;
+  background:linear-gradient(135deg, var(--primary), var(--accent));color:#000;border:none;
+  border-radius:16px;padding:12px 20px;font-size:15px;font-weight:700;
+  cursor:pointer;box-shadow:0 4px 24px rgba(0,0,0,0.4);display:flex;align-items:center;gap:8px;">
+  🧠 Ask Phronesis
+  <span id="coach-badge" style="display:none;background:var(--danger);color:#fff;border-radius:50%;width:20px;height:20px;
     font-size:11px;line-height:20px;text-align:center;"></span>
 </button>
 
