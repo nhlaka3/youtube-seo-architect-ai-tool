@@ -4,11 +4,11 @@
 import { inject, track } from '@vercel/analytics';
 
 // Phase 1 module imports (aliased to avoid conflicts with legacy code below)
-import { initConfig, config } from './modules/config.js';
-import { initDelegation, registerActions } from './modules/event-delegation.js';
-import { initOnboarding as _initOnboarding } from './modules/onboarding.js';
-import { switchView as _switchView, platformInit as _platformInit } from './modules/views.js';
-import { showToast as _showToast, apiPost as _apiPost, safeRender as _safeRender, escapeHTML as _escapeHTML } from './modules/core.js';
+import { initConfig, config } from './js/modules/config.js';
+import { initDelegation, registerActions } from './js/modules/event-delegation.js';
+import { initOnboarding as _initOnboarding } from './js/modules/onboarding.js';
+import { switchView as _switchView, platformInit as _platformInit } from './js/modules/views.js';
+import { showToast as _showToast, apiPost as _apiPost, safeRender as _safeRender, escapeHTML as _escapeHTML } from './js/modules/core.js';
 
 // ═══════════════════════════════════════════════════════════════
 //  PHASE 2/3 LEGACY CODE (to be extracted incrementally)
