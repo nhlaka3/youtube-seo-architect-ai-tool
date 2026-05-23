@@ -1,0 +1,252 @@
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Geist:wght@100..900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Geist+Mono:wght@100..900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600;700&display=swap');
+
+/* Tool Visual Enhancements */
+.tool-visual-wrapper {
+  perspective: 1200px;
+}
+
+.tool-card-enhanced {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-xl);
+  padding: 1.5rem;
+  transition: all 0.5s cubic-bezier(0.23, 1, 0.32, 1);
+  position: relative;
+  overflow: hidden;
+}
+
+.tool-card-enhanced::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(circle at center, rgba(59, 130, 246, 0.1) 0%, transparent 70%);
+  opacity: 0;
+  transition: opacity 0.4s ease;
+  pointer-events: none;
+}
+
+.tool-card-enhanced:hover {
+  transform: translateY(-10px) rotateX(1deg) rotateY(1deg);
+  border-color: var(--primary);
+  box-shadow: 
+    0 25px 50px -12px rgba(0, 0, 0, 0.5),
+    0 0 20px rgba(59, 130, 246, 0.1);
+}
+
+.tool-card-enhanced:hover::before {
+  opacity: 1;
+}
+
+.tool-icon-wrapper {
+  width: 52px;
+  height: 52px;
+  background: rgba(59, 130, 246, 0.1);
+  border-radius: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 1.25rem;
+  color: var(--primary);
+  transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+.tool-card-enhanced:hover .tool-icon-wrapper {
+  transform: scale(1.15) rotate(8deg);
+  background: var(--primary);
+  color: white;
+  box-shadow: 0 0 15px var(--primary-glow);
+}
+
+.tool-badge {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  padding: 0.35rem 0.85rem;
+  border-radius: 99px;
+  font-size: 0.7rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  background: rgba(59, 130, 246, 0.15);
+  color: var(--primary);
+  border: 1px solid rgba(59, 130, 246, 0.2);
+}
+
+.tool-loading-shimmer {
+  background: linear-gradient(
+    90deg,
+    rgba(255, 255, 255, 0) 0%,
+    rgba(255, 255, 255, 0.05) 50%,
+    rgba(255, 255, 255, 0) 100%
+  );
+  background-size: 200% 100%;
+  animation: shimmer 2s infinite;
+}
+
+@keyframes shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+/* Pulse animation for active tools */
+.tool-active-pulse {
+  position: relative;
+}
+
+.tool-active-pulse::after {
+  content: '';
+  position: absolute;
+  inset: -3px;
+  border: 2px solid var(--primary);
+  border-radius: inherit;
+  animation: pulse-border 2.5s cubic-bezier(0.455, 0.03, 0.515, 0.955) infinite;
+  pointer-events: none;
+}
+
+@keyframes pulse-border {
+  0% { transform: scale(1); opacity: 0.8; }
+  100% { transform: scale(1.08); opacity: 0; }
+}
+
+/* CSS Variables - Premium SaaS OLED Precision */
+:root {
+  /* Premium Cyber-Luxe Palette */
+  --primary: #00f2ff; /* Electric Cyan */
+  --primary-hover: #00d7e6;
+  --primary-glow: rgba(0, 242, 255, 0.3);
+  
+  --accent: #00ff88; /* Acid Green / Mint */
+  --accent-hover: #00e67a;
+  --accent-glow: rgba(0, 255, 136, 0.3);
+  
+  --bg-dark: #0a0b10; /* Midnight Navy Deep */
+  --bg-oled: #000000; /* Pure Black */
+  --bg-sidebar: rgba(10, 11, 16, 0.9);
+  --bg-card: rgba(16, 20, 32, 0.6);
+  --bg-glass: rgba(10, 11, 16, 0.7);
+  
+  --border: rgba(0, 242, 255, 0.1);
+  --border-hover: rgba(0, 242, 255, 0.4);
+  --border-card: rgba(255, 255, 255, 0.05);
+  
+  --text-active: #ffffff;
+  --text-primary: #f0f2f5;
+  --text-muted: #a8b2c1;
+  --text-dim: #5d6676;
+  
+  --success: #00ff88;
+  --warning: #ffcc00;
+  --danger: #ff3366;
+  
+  --font-family: 'Geist', 'Outfit', sans-serif;
+  --font-mono: 'Geist Mono', 'Fira Code', monospace;
+  
+  --radius-lg: 0.5rem; /* Sharper geometry */
+  --radius-xl: 0.75rem;
+  --radius-2xl: 1rem;
+  
+  --glass-shadow: 0 10px 40px -10px rgba(0, 0, 0, 0.9), 0 0 20px rgba(0, 242, 255, 0.05);
+  --glow-primary: 0 0 25px rgba(0, 242, 255, 0.15);
+  --glow-accent: 0 0 25px rgba(0, 255, 136, 0.15);
+}
+
+/* Global Purple Ban (Preserved as requested) */
+[style*="violet"], [style*="purple"], [style*="indigo"], 
+[class*="violet"], [class*="purple"], [class*="indigo"],
+.violet-glow, .purple-glow {
+  display: none !important;
+  opacity: 0 !important;
+  visibility: hidden !important;
+}
+
+/* Reset */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+/* ==========================================
+   CURSOR POINTER AUDIT - UI/UX Pro-Max Standard
+   ========================================== */
+a, button, .btn, .nav-item, .folder-item, .folder-header,
+.bento-card, .feature-card, .price-card, .action-btn,
+.connect-btn, .export-btn, .regenerate-btn, .upgrade-link,
+.history-toggle, .profile-btn, .dropdown-item, .sidebar-collapse-btn,
+.mobile-menu-btn, .toggle-btn, .paypal-btn, [onclick],
+[role="button"], .input-group, .input-minimal, .glass-card,
+.suggested-question, .history-item, .fix-empty, .activity-item,
+.nav-folder, .quick-actions-section button, .settings-section button,
+.concept-card, .thumb-card {
+  cursor: pointer;
+}
+
+/* Ensure focus states are visible for accessibility */
+a:focus-visible, button:focus-visible, .btn:focus-visible, 
+input:focus-visible, select:focus-visible, textarea:focus-visible {
+  outline: 2px solid var(--primary);
+  outline-offset: 3px;
+}
+
+body {
+  font-family: var(--font-family);
+  background-color: var(--bg-dark);
+  color: var(--text-primary);
+  min-height: 100vh;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  line-height: 1.6;
+}
+
+/* Premium Reveal Animations */
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(24px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes scaleIn {
+  from { opacity: 0; transform: scale(0.96); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+.view-container > * {
+  animation: fadeInUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+.grid-container > *:nth-child(1) { animation-delay: 0.1s; }
+.grid-container > *:nth-child(2) { animation-delay: 0.15s; }
+.grid-container > *:nth-child(3) { animation-delay: 0.2s; }
+.grid-container > *:nth-child(4) { animation-delay: 0.25s; }
+.grid-container > *:nth-child(5) { animation-delay: 0.3s; }
+
+/* Ghost Overlay Kill - ensure hidden overlays don't block mouse */
+.modal-backdrop.hidden,
+.loading-scrim.hidden,
+.processing-overlay.hidden,
+.api-overlay.hidden {
+  display: none !important;
+  pointer-events: none;
+  z-index: -1;
+}
+
+/* ==========================================
+   Floating Layout Architecture
+   ========================================== */
+.app-layout {
+  display: flex;
+  height: 100vh;
+  padding: 1rem;
+  gap: 1.25rem;
+  background-image: 
+    radial-gradient(at 0% 0%, rgba(59, 130, 246, 0.04) 0px, transparent 50%),
+    radial-gradient(at 100% 100%, rgba(249, 115, 22, 0.03) 0px, transparent 50%);
+  overflow: hidden; 
+  position: relative;
+}
+
