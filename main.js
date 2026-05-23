@@ -17,7 +17,7 @@ import { showToast as _showToast, apiPost as _apiPost, safeRender as _safeRender
 //  Phase 1 functions (switchView, platformInit, apiPost, etc.)
 //  are defined in js/modules/ and aliased above.
 // ═══════════════════════════════════════════════════════════════
-/* BEGIN LEGACY */
+// BEGIN LEGACY CODE (Phase 2/3 — to be extracted incrementally)
 
 let tokenClient;
 let accessToken = null;
@@ -16490,7 +16490,7 @@ console.log('✅ All 2026 Modern Features Loaded');
 console.log('✅ SaaS Logic exposed to Global Window');
 
 
-/* END LEGACY */
+// END LEGACY CODE
 
 // ═══════════════════════════════════════════════════════════════
 //  PHASE 1 BACKWARD-COMPATIBLE OVERRIDES
