@@ -1256,6 +1256,54 @@ app.get('/tools/:tool/:slug', (req, res) => res.redirect(`/blog/${req.params.slu
 // Legacy sitemap redirect (backward compat)
 app.get('/sitemap-pseo.xml', (req, res) => res.redirect('/api/pseo/indexing/sitemap.xml'));
 
+// ── Phronesis Agent — Goal & Coach API ──
+app.post('/api/agent/goal/set', async (req, res) => {
+  try {
+    const channelId = req.headers['x-channel-id'] || req.body?.channelId;
+    const { type, target, deadline } = req.body || {};
+    if (!type || !target) return res.status(400).json({ error: 'type and target required' });
+    const { setGoal } = await import('./agent-core/goal-engine.js');
+    const goal = await setGoal({ channelId, type, target: parseInt(target), deadline });
+    res.json({ success: true, goal });
+  } catch(e) { res.status(500).json({ error: e.message }); }
+});
+
+app.get('/api/agent/goal/status', async (req, res) => {
+  try {
+    const channelId = req.query.channelId || req.headers['x-channel-id'];
+    const { getGoalStatus } = await import('./agent-core/goal-engine.js');
+    const goal = await getGoalStatus(channelId);
+    res.json({ goal });
+  } catch(e) { res.status(500).json({ error: e.message }); }
+});
+
+app.get('/api/agent/coach/inbox', (req, res) => {
+  const channelId = req.query.channelId || req.headers['x-channel-id'];
+  import('./agent-core/coach.js').then(({ getCoachInbox }) => {
+    res.json({ messages: getCoachInbox(channelId) });
+  }).catch(e => res.status(500).json({ error: e.message }));
+});
+
+app.post('/api/agent/coach/respond', async (req, res) => {
+  try {
+    const channelId = req.headers['x-channel-id'] || req.body?.channelId;
+    const { messageId, action, proposalId } = req.body || {};
+    const { markRead } = await import('./agent-core/coach.js');
+    markRead(channelId, messageId);
+    res.json({ success: true });
+  } catch(e) { res.status(500).json({ error: e.message }); }
+});
+
+app.post('/api/agent/coach/ask', async (req, res) => {
+  try {
+    const channelId = req.headers['x-channel-id'] || req.body?.channelId;
+    const { question } = req.body || {};
+    const { handleQuestion } = await import('./agent-core/coach.js');
+    const response = await handleQuestion(channelId, question);
+    res.json({ response });
+  } catch(e) { res.status(500).json({ error: e.message }); }
+});
+
 // Sentry Error Handler (MUST BE AFTER ROUTES, BEFORE 404)
 
 if (Sentry && Sentry.Handlers) {

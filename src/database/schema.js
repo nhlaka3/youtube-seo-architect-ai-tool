@@ -359,3 +359,18 @@ export const agentRules = pgTable('agent_rules', {
   priority: integer('priority').default(5),
   createdAt: timestamp('created_at').defaultNow(),
 });
+
+// ── Phronesis Agent — Goals ──
+export const goals = pgTable('goals', {
+  id: text('id').primaryKey(),
+  channelId: text('channel_id').notNull(),
+  type: text('type').notNull(), // 'subscribers', 'views', 'watch_hours'
+  target: integer('target').notNull(),
+  current: integer('current').notNull().default(0),
+  initialCurrent: integer('initial_current').default(0),
+  deadline: text('deadline'),
+  status: text('status').notNull().default('active'),
+  phases: jsonb('phases').default('[]'),
+  createdAt: text('created_at').notNull(),
+  updatedAt: text('updated_at').notNull()
+});

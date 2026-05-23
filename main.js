@@ -15511,6 +15511,166 @@ window.askArchitect = askArchitect;
 
 let _architectChatHistory = [];
 
+// ═══════════════════════════════════════════════════════
+//  Phronesis Coach Chat UI (Goal-Driven Agent)
+// ═══════════════════════════════════════════════════════
+let coachPollInterval = null;
+
+function toggleCoachChat() {
+  const panel = document.getElementById('coach-chat-panel');
+  if (!panel) return;
+  const isOpen = panel.style.display === 'flex';
+  panel.style.display = isOpen ? 'none' : 'flex';
+  if (!isOpen) {
+    loadCoachMessages();
+    loadGoalBar();
+    coachPollInterval = setInterval(loadCoachMessages, 30000);
+  } else {
+    clearInterval(coachPollInterval);
+  }
+}
+window.toggleCoachChat = toggleCoachChat;
+
+async function loadGoalBar() {
+  try {
+    const chId = localStorage.getItem('ytseo_channel_id');
+    if (!chId) return;
+    const res = await fetch('/api/agent/goal/status?channelId=' + chId);
+    const data = await res.json();
+    const bar = document.getElementById('goal-progress-bar');
+    if (!bar) return;
+    if (data.goal) {
+      bar.textContent = data.goal.current + '/' + data.goal.target + ' ' + data.goal.type + ' (' + (data.goal.progress?.percent || 0) + '%)';
+      bar.style.display = '';
+    } else {
+      bar.innerHTML = '<a href="#" onclick="showGoalSetup();return false" style="color:var(--primary);">Set a goal →</a>';
+    }
+  } catch(e) {}
+}
+window.loadGoalBar = loadGoalBar;
+
+async function loadCoachMessages() {
+  try {
+    const chId = localStorage.getItem('ytseo_channel_id');
+    if (!chId) return;
+    const res = await fetch('/api/agent/coach/inbox?channelId=' + chId);
+    const data = await res.json();
+    renderCoachMessages(data.messages || []);
+    const unread = (data.messages || []).filter(function(m) { return !m.read; }).length;
+    const badge = document.getElementById('coach-badge');
+    if (badge) {
+      badge.style.display = unread > 0 ? 'block' : 'none';
+      badge.textContent = unread;
+    }
+  } catch(e) {}
+}
+window.loadCoachMessages = loadCoachMessages;
+
+function renderCoachMessages(messages) {
+  const container = document.getElementById('coach-messages');
+  if (!container) return;
+  if (!messages.length) {
+    container.innerHTML = '<div style="text-align:center;color:var(--text-muted);padding:40px;">🧠 No messages yet.<br>The agent will alert you when it finds optimization opportunities.</div>';
+    return;
+  }
+  container.innerHTML = messages.map(function(m) {
+    return '<div class="coach-msg coach-msg--' + (m.type || 'info') + '">' +
+      '<div class="coach-msg-title">' + (m.title || '') + '</div>' +
+      '<div class="coach-msg-body">' + (m.body || '') + '</div>' +
+      (m.goalImpact ? '<div class="coach-msg-impact">' + m.goalImpact + '</div>' : '') +
+      (m.actions && m.actions.length ? '<div class="coach-msg-actions">' +
+        m.actions.map(function(a) {
+          return '<button onclick="respondToCoach(\'' + m.id + '\',\'' + a.action + '\',\'' + (a.proposalId || '') + '\')">' + a.label + '</button>';
+        }).join('') + '</div>' : '') +
+      '<div class="coach-msg-time">' + new Date(m.timestamp).toLocaleTimeString() + '</div>' +
+    '</div>';
+  }).join('');
+  container.scrollTop = container.scrollHeight;
+}
+
+async function respondToCoach(messageId, action, proposalId) {
+  try {
+    const chId = localStorage.getItem('ytseo_channel_id');
+    await fetch('/api/agent/coach/respond', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'x-channel-id': chId },
+      body: JSON.stringify({ messageId: messageId, action: action, proposalId: proposalId, channelId: chId })
+    });
+    loadCoachMessages();
+  } catch(e) {}
+}
+window.respondToCoach = respondToCoach;
+
+async function sendCoachQuestion() {
+  const input = document.getElementById('coach-input');
+  if (!input) return;
+  const question = input.value.trim();
+  if (!question) return;
+  input.value = '';
+  const container = document.getElementById('coach-messages');
+  if (!container) return;
+  container.innerHTML += '<div class="coach-msg coach-msg--user"><div class="coach-msg-body">' + question + '</div></div>';
+  try {
+    const chId = localStorage.getItem('ytseo_channel_id');
+    const res = await fetch('/api/agent/coach/ask', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'x-channel-id': chId },
+      body: JSON.stringify({ question: question, channelId: chId })
+    });
+    const data = await res.json();
+    container.innerHTML += '<div class="coach-msg coach-msg--response"><div class="coach-msg-body">' + (data.response || 'Sorry, I could not process that.') + '</div></div>';
+    container.scrollTop = container.scrollHeight;
+  } catch(e) {}
+}
+window.sendCoachQuestion = sendCoachQuestion;
+
+function showGoalSetup() {
+  const existing = document.getElementById('goal-setup-modal');
+  if (existing) existing.remove();
+  const modal = document.createElement('div');
+  modal.id = 'goal-setup-modal';
+  modal.style.cssText = 'position:fixed;inset:0;z-index:99999;display:flex;align-items:center;justify-content:center;';
+  modal.innerHTML = '<div style="position:absolute;inset:0;background:rgba(0,0,0,0.6);" onclick="this.parentElement.remove()"></div>' +
+    '<div style="position:relative;background:var(--bg-card);border:1px solid var(--border);border-radius:16px;padding:32px;max-width:420px;width:90%;">' +
+    '<h3 style="margin-bottom:16px;">🎯 Set Your Channel Goal</h3>' +
+    '<select id="goal-type" style="width:100%;padding:10px;margin-bottom:12px;background:var(--bg-dark);color:var(--text-primary);border:1px solid var(--border);border-radius:8px;">' +
+    '<option value="subscribers">Subscribers</option><option value="views">Views</option><option value="watch_hours">Watch Hours</option></select>' +
+    '<input id="goal-target" type="number" placeholder="Target (e.g. 10000)" style="width:100%;padding:10px;margin-bottom:12px;background:var(--bg-dark);color:var(--text-primary);border:1px solid var(--border);border-radius:8px;" />' +
+    '<input id="goal-deadline" type="date" style="width:100%;padding:10px;margin-bottom:16px;background:var(--bg-dark);color:var(--text-primary);border:1px solid var(--border);border-radius:8px;" />' +
+    '<button onclick="saveGoal()" style="width:100%;padding:12px;background:var(--primary);color:#fff;border:none;border-radius:8px;font-weight:600;cursor:pointer;margin-bottom:8px;">Start Working Toward This Goal</button>' +
+    '<button onclick="this.closest(\'#goal-setup-modal\').remove()" style="width:100%;padding:10px;background:none;color:var(--text-muted);border:1px solid var(--border);border-radius:8px;cursor:pointer;">Cancel</button>' +
+    '</div>';
+  document.body.appendChild(modal);
+}
+window.showGoalSetup = showGoalSetup;
+
+async function saveGoal() {
+  const type = document.getElementById('goal-type').value;
+  const target = document.getElementById('goal-target').value;
+  const deadline = document.getElementById('goal-deadline').value;
+  if (!target) { showToast('Please set a target', 'error'); return; }
+  try {
+    const chId = localStorage.getItem('ytseo_channel_id');
+    const res = await fetch('/api/agent/goal/set', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'x-channel-id': chId },
+      body: JSON.stringify({ type: type, target: parseInt(target), deadline: deadline, channelId: chId })
+    });
+    const data = await res.json();
+    if (data.success) {
+      showToast('Goal set! Agent is working on it.', 'success');
+      document.getElementById('goal-setup-modal').remove();
+      loadGoalBar();
+    }
+  } catch(e) { showToast('Failed to set goal', 'error'); }
+}
+window.saveGoal = saveGoal;
+
+// Initialize on load
+setTimeout(function() { loadCoachMessages(); loadGoalBar(); }, 3000);
+
+// ═══════════════════════════════════════════════════════
+
 async function sendArchitectMessage() {
   if (window.isCoachThinking) return;
   window.isCoachThinking = true;

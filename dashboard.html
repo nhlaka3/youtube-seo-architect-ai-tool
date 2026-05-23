@@ -3394,6 +3394,42 @@ window.openUpgradeModal = function(plan, amount) {
 </div>
 </div>
 </div>
+
+<!-- ═══════════════════════════════════════════════════════
+     Phronesis Coach Chat Panel (Goal-Driven Agent)
+     ═══════════════════════════════════════════════════════ -->
+<div id="coach-chat-panel" style="display:none;position:fixed;bottom:80px;right:24px;z-index:999;
+  width:380px;max-height:520px;background:var(--bg-card);border:1px solid var(--border);
+  border-radius:16px;box-shadow:0 8px 40px rgba(0,0,0,0.5);flex-direction:column;overflow:hidden;">
+  <div style="display:flex;align-items:center;justify-content:space-between;
+    padding:14px 18px;border-bottom:1px solid var(--border);">
+    <strong>🧠 Phronesis Coach</strong>
+    <span id="goal-progress-bar" style="font-size:12px;color:var(--text-muted);"></span>
+    <button onclick="toggleCoachChat()" style="background:none;border:none;color:var(--text-muted);cursor:pointer;font-size:18px;line-height:1;">×</button>
+  </div>
+  <div id="coach-messages" style="flex:1;overflow-y:auto;padding:12px 16px;max-height:380px;"></div>
+  <div style="display:flex;padding:10px 16px;border-top:1px solid var(--border);gap:8px;">
+    <input id="coach-input" type="text" placeholder="Ask Phronesis..."
+      onkeydown="if(event.key==='Enter')sendCoachQuestion()"
+      style="flex:1;padding:8px 12px;background:var(--bg-dark);color:var(--text-primary);
+        border:1px solid var(--border);border-radius:8px;font-size:13px;" />
+    <button onclick="sendCoachQuestion()" style="padding:8px 16px;background:var(--primary);
+      color:#fff;border:none;border-radius:8px;cursor:pointer;font-weight:600;font-size:13px;">Send</button>
+  </div>
+</div>
+
+<!-- Coach Toggle Button -->
+<button id="coach-toggle-btn" onclick="toggleCoachChat()"
+  style="position:fixed;bottom:24px;right:24px;z-index:998;
+  background:var(--primary);color:#fff;border:none;
+  border-radius:50%;width:56px;height:56px;font-size:24px;
+  cursor:pointer;box-shadow:0 4px 20px rgba(0,0,0,0.3);">
+  🧠
+  <span id="coach-badge" style="display:none;position:absolute;top:-4px;right:-4px;
+    background:var(--danger);color:#fff;border-radius:50%;width:20px;height:20px;
+    font-size:11px;line-height:20px;text-align:center;"></span>
+</button>
+
 </body>
 
 </html> 
