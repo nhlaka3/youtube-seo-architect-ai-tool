@@ -18,6 +18,14 @@ import { generateScript as _generateScript, runManualAudit as _runManualAudit, s
 import { executeSniperInfiltration as _executeSniperInfiltration, analyzeCompetitor as _analyzeCompetitor, fetchVideoTags as _fetchVideoTags } from './js/modules/competitor.js';
 import { calculateSEOScore as _calculateSEOScore, runAudit as _runAudit, OptimizationTrials as _OptimizationTrials, checkPremiumFeature as _checkPremiumFeature } from './js/modules/seo-audit.js';
 
+// Phase 3 module imports (aliased — bridge pattern)
+import { GrowthEngine as _GrowthEngine } from './js/modules/growth.js';
+import { loadPhronesis as _loadPhronesis, loadScanResults as _loadScanResults, loadNeuralStrategy as _loadNeuralStrategy } from './js/modules/dashboard.js';
+import { runThumbnailRedesign as _runThumbnailRedesign, generateChapters as _generateChapters } from './js/modules/tools.js';
+import { runAutoFlow as _runAutoFlow, generateWeave as _generateWeave, generateCollusionTags as _generateCollusionTags } from './js/modules/pipeline.js';
+import { loadRetentionData as _loadRetentionData, reorderPlaylistOnYoutube as _reorderPlaylistOnYoutube, toggleCoachDrawer as _toggleCoachDrawer, sendArchitectMessage as _sendArchitectMessage } from './js/modules/retention.js';
+import { loadTrendPulse as _loadTrendPulse, generateCommunityPost as _generateCommunityPost, generateMultiLanguageSEO as _generateMultiLanguageSEO, generateAILabel as _generateAILabel } from './js/modules/ai-tools.js';
+
 // ═══════════════════════════════════════════════════════════════
 //  PHASE 2/3 LEGACY CODE (to be extracted incrementally)
 //  This is the full main.js body from before the Phase 1 refactor.
