@@ -10,13 +10,13 @@ import { initOnboarding as _initOnboarding } from './js/modules/onboarding.js';
 import { switchView as _switchView, platformInit as _platformInit } from './js/modules/views.js';
 import { showToast as _showToast, apiPost as _apiPost, safeRender as _safeRender, escapeHTML as _escapeHTML } from './js/modules/core.js';
 
-// Phase 2 module imports
-import { setAgentMode, detectChannelNiche, agentKillSwitch, checkHealthAndCoach } from './js/modules/niche.js';
-import { CreditsSystem, syncCredits, openPayPalModal, closePaymentModal } from './js/modules/credits.js';
-import { runResearch, displayResults, sortTable, copyKeyword, exportKeywordsCSV } from './js/modules/research.js';
-import { generateScript, runManualAudit, sendToAuditor, showMetadataModal } from './js/modules/video-factory.js';
-import { executeSniperInfiltration, analyzeCompetitor, fetchVideoTags } from './js/modules/competitor.js';
-import { calculateSEOScore, runAudit, OptimizationTrials, checkPremiumFeature } from './js/modules/seo-audit.js';
+// Phase 2 module imports (aliased to avoid conflicts with legacy declarations)
+import { setAgentMode as _setAgentMode, detectChannelNiche as _detectChannelNiche, agentKillSwitch as _agentKillSwitch, checkHealthAndCoach as _checkHealthAndCoach } from './js/modules/niche.js';
+import { CreditsSystem as _CreditsSystem, syncCredits as _syncCredits, openPayPalModal as _openPayPalModal, closePaymentModal as _closePaymentModal } from './js/modules/credits.js';
+import { runResearch as _runResearch, displayResults as _displayResults, sortTable as _sortTable, copyKeyword as _copyKeyword, exportKeywordsCSV as _exportKeywordsCSV } from './js/modules/research.js';
+import { generateScript as _generateScript, runManualAudit as _runManualAudit, sendToAuditor as _sendToAuditor, showMetadataModal as _showMetadataModal } from './js/modules/video-factory.js';
+import { executeSniperInfiltration as _executeSniperInfiltration, analyzeCompetitor as _analyzeCompetitor, fetchVideoTags as _fetchVideoTags } from './js/modules/competitor.js';
+import { calculateSEOScore as _calculateSEOScore, runAudit as _runAudit, OptimizationTrials as _OptimizationTrials, checkPremiumFeature as _checkPremiumFeature } from './js/modules/seo-audit.js';
 
 // ═══════════════════════════════════════════════════════════════
 //  PHASE 2/3 LEGACY CODE (to be extracted incrementally)
