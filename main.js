@@ -12,6 +12,11 @@ import { showToast as _showToast, apiPost as _apiPost, safeRender as _safeRender
 
 // Phase 2 module imports
 import { setAgentMode, detectChannelNiche, agentKillSwitch, checkHealthAndCoach } from './js/modules/niche.js';
+import { CreditsSystem, syncCredits, openPayPalModal, closePaymentModal } from './js/modules/credits.js';
+import { runResearch, displayResults, sortTable, copyKeyword, exportKeywordsCSV } from './js/modules/research.js';
+import { generateScript, runManualAudit, sendToAuditor, showMetadataModal } from './js/modules/video-factory.js';
+import { executeSniperInfiltration, analyzeCompetitor, fetchVideoTags } from './js/modules/competitor.js';
+import { calculateSEOScore, runAudit, OptimizationTrials, checkPremiumFeature } from './js/modules/seo-audit.js';
 
 // ═══════════════════════════════════════════════════════════════
 //  PHASE 2/3 LEGACY CODE (to be extracted incrementally)
