@@ -1,8 +1,23 @@
+// main.js — Application entry point (Phase 1)
+// Architecture: Phase 1 modules (config, core, views, onboarding, delegation)
+// are imported first. Phase 2/3 legacy code follows inline (to be extracted incrementally).
 import { inject, track } from '@vercel/analytics';
-inject();
 
-// Analytics helpers
-window.vaTrack = (event, data) => {
+// Phase 1 module imports (aliased to avoid conflicts with legacy code below)
+import { initConfig, config } from './modules/config.js';
+import { initDelegation, registerActions } from './modules/event-delegation.js';
+import { initOnboarding as _initOnboarding } from './modules/onboarding.js';
+import { switchView as _switchView, platformInit as _platformInit } from './modules/views.js';
+import { showToast as _showToast, apiPost as _apiPost, safeRender as _safeRender, escapeHTML as _escapeHTML } from './modules/core.js';
+
+// ═══════════════════════════════════════════════════════════════
+//  PHASE 2/3 LEGACY CODE (to be extracted incrementally)
+//  This is the full main.js body from before the Phase 1 refactor.
+//  Functions here use window.* globals for backward compat.
+//  Phase 1 functions (switchView, platformInit, apiPost, etc.)
+//  are defined in js/modules/ and aliased above.
+// ═══════════════════════════════════════════════════════════════
+/* BEGIN LEGACY */
   try { track(event, data); } catch(e) {}
 };
 
@@ -1032,8 +1047,8 @@ function platformInit() {
   setTimeout(checkAIStatus, 2000);
 }
 
-// Single DOMContentLoaded Listener
-document.addEventListener('DOMContentLoaded', platformInit);
+// Single DOMContentLoaded Listener (NOW HANDLED BY PHASE 1 main.js boot sequence)
+// document.addEventListener('DOMContentLoaded', platformInit);
 
 // AI Status Checker - checks both Groq and Gemini
 async function checkAIStatus() {
@@ -16476,3 +16491,55 @@ window.copyAILabelAll = copyAILabelAll;
 console.log('✅ All 2026 Modern Features Loaded');
 console.log('✅ SaaS Logic exposed to Global Window');
 
+
+/* END LEGACY */
+
+// ═══════════════════════════════════════════════════════════════
+//  PHASE 1 BACKWARD-COMPATIBLE OVERRIDES
+//  The legacy code above may set window.* globals. We override
+//  them here with the Phase 1 module versions.
+//  These will be removed when Phase 2/3 extraction is complete.
+// ═══════════════════════════════════════════════════════════════
+
+// Override key functions with Phase 1 module versions
+window.switchView = _switchView;
+window.showToast = _showToast;
+window.safeRender = _safeRender;
+window.escapeHTML = _escapeHTML;
+
+// apiPost needs special handling since it's async
+window.apiPost = _apiPost;
+
+// Replace the DOMContentLoaded listener that legacy code may have set
+// (legacy code does: document.addEventListener('DOMContentLoaded', platformInit))
+// We need to ensure Phase 1 initialization runs properly.
+document.addEventListener('DOMContentLoaded', () => {
+  console.log('[main] Phase 1 boot via DOMContentLoaded');
+  
+  initConfig();
+  initDelegation();
+  
+  // Register Phase 1 action handlers
+  registerActions({
+    switchTo: (viewName) => _switchView(viewName),
+  });
+
+  // Run the legacy platformInit if it exists (Phase 2/3 modules)
+  if (typeof platformInit === 'function') {
+    console.log('[main] Running legacy platformInit');
+    platformInit();
+  }
+
+  // Init onboarding (Phase 1 version)
+  _initOnboarding();
+
+  console.log('[main] Phase 1 boot complete.');
+});
+
+// Initialize Vercel Analytics
+inject();
+window.vaTrack = (event, data) => {
+  try { track(event, data); } catch(e) {}
+};
+
+console.log('[main] Phase 1 modules loaded. Legacy code follows...');
