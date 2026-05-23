@@ -66,20 +66,58 @@ export async function handleQuestion(channelId, question) {
   try {
     const { getGoalStatus } = await import('./goal-engine.js');
     const goal = await getGoalStatus(channelId);
-    
-    const q = question.toLowerCase();
-    if (q.includes('progress') || q.includes('goal') || q.includes('status')) {
-      if (!goal) return "No active goal set. Would you like to set one?";
-      return `Your goal: ${goal.current}/${goal.target} ${goal.type} (${goal.progress?.percent || 0}%). Weekly rate: +${goal.progress?.weeklyRate || 0}. ETA: ${goal.progress?.eta || 'calculating...'}`;
+
+    // Build context for the AI
+    let context = '';
+    if (goal) {
+      context = `The user has an active goal: ${goal.current}/${goal.target} ${goal.type} (${goal.progress?.percent || 0}% complete). `;
+      context += `Weekly progress: +${goal.progress?.weeklyRate || 0}. `;
+      if (goal.progress?.eta) context += `ETA: ${goal.progress.eta}. `;
+      if (goal.phases?.length) {
+        const activePhase = goal.phases.find(p => p.status === 'active') || goal.phases[0];
+        context += `Current phase: ${activePhase?.name || 'AUDIT'}. `;
+      }
+    } else {
+      context = 'The user has not set a channel growth goal yet.';
     }
-    if (q.includes('optimiz') || q.includes('fix') || q.includes('improve')) {
-      return "I'll scan your channel for optimization opportunities. Run a scan from the Phronesis dashboard or wait for the next scheduled scan (every 6 hours).";
-    }
-    if (q.includes('recommend') || q.includes('suggest') || q.includes('what should')) {
-      return "Based on your channel data, I recommend: 1) Check your latest videos' SEO scores, 2) Review tagging strategy, 3) Consider A/B testing thumbnails on underperforming videos. Want me to help with any of these?";
-    }
-    return "I'm your Phronesis coach. I can help with: tracking your goal progress, finding optimization opportunities, reviewing your channel metrics, and suggesting growth strategies. What would you like to know?";
+
+    const systemPrompt = `You are Phronesis, an AI YouTube SEO coach embedded in YT SEO Architect.
+
+Your role:
+- Help creators grow their YouTube channels
+- Give specific, actionable SEO advice
+- Track goal progress and suggest next steps
+- Be concise (2-4 sentences max per response)
+- Use channel data and goal context when available
+
+${context}
+
+Respond conversationally. If the user asks about progress, give specific numbers. If they ask for advice, give 1-2 actionable tips. Do NOT use markdown formatting.`;
+
+    // Import and call the AI provider
+    const { askAI } = await import('../_lib/ai-provider.js');
+    const answer = await askAI(systemPrompt, question);
+
+    if (answer && typeof answer === 'string') return answer.trim();
+    return fallbackResponse(goal, question);
   } catch(e) {
-    return "I encountered an error processing your question. Please try again.";
+    console.error('[Coach] AI error:', e.message);
+    return fallbackResponse(null, question);
   }
+}
+
+function fallbackResponse(goal, question) {
+  const q = (question || '').toLowerCase();
+  if (goal) {
+    if (q.includes('progress') || q.includes('goal') || q.includes('status')) {
+      return `Your goal: ${goal.current}/${goal.target} ${goal.type} (${goal.progress?.percent || 0}%). Weekly rate: +${goal.progress?.weeklyRate || 0}.${goal.progress?.eta ? ` ETA: ${goal.progress.eta}.` : ''}`;
+    }
+  }
+  if (q.includes('optimiz') || q.includes('fix') || q.includes('improve')) {
+    return 'I recommend: 1) Check your latest videos SEO scores, 2) Review tags for missing keywords, 3) A/B test thumbnails on low-CTR videos. Want me to run a full scan?';
+  }
+  if (q.includes('recommend') || q.includes('suggest')) {
+    return 'Based on general best practices: focus on title optimization first (biggest CTR impact), then tags, then descriptions. Consistency matters more than perfection.';
+  }
+  return 'I am your Phronesis coach. Ask me about your channel progress, optimization tips, or growth strategies. What would you like to know?';
 }
