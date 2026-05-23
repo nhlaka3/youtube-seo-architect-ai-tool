@@ -16537,7 +16537,9 @@ document.addEventListener('DOMContentLoaded', async () => {
   // initDelegation(); // TEMP: disabled for debugging
   
   // Register all action handlers for data-action delegation
-  // registerActions({
+  // registerActions disabled for debugging
+  /*
+  registerActions({
     switchTo: (viewName) => _switchView(viewName),
     toggleFolder: (id) => { if (typeof toggleFolder === 'function') toggleFolder(id); },
     toggleSidebar: () => { if (typeof window.toggleSidebar === 'function') window.toggleSidebar(); },
@@ -16639,7 +16641,8 @@ document.addEventListener('DOMContentLoaded', async () => {
     SaaS_ask: (msg) => { if (typeof window.SaaS !== 'undefined') window.SaaS.ask(msg); },
     SaaS_clearChat: () => {},
     // SaaS_pay disabled
-  }); // END disabled
+  });
+  */
   });
 
   // Fetch CSRF token before API calls
