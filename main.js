@@ -10,6 +10,9 @@ import { initOnboarding as _initOnboarding } from './js/modules/onboarding.js';
 import { switchView as _switchView, platformInit as _platformInit } from './js/modules/views.js';
 import { showToast as _showToast, apiPost as _apiPost, safeRender as _safeRender, escapeHTML as _escapeHTML } from './js/modules/core.js';
 
+// Phase 2 module imports
+import { setAgentMode, detectChannelNiche, agentKillSwitch, checkHealthAndCoach } from './js/modules/niche.js';
+
 // ═══════════════════════════════════════════════════════════════
 //  PHASE 2/3 LEGACY CODE (to be extracted incrementally)
 //  This is the full main.js body from before the Phase 1 refactor.
