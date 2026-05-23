@@ -1,7 +1,9 @@
 // api/agent-core/coach.js
 // Proactive coach chat — agent initiates messages, user responds
 
-const coachInbox = new Map();
+const coachInbox = new Map(); // channelId → system messages
+const conversationHistory = new Map(); // channelId → [{role, content}, ...]
+const MAX_HISTORY = 10;
 
 export function addCoachMessage(channelId, message) {
   if (!coachInbox.has(channelId)) coachInbox.set(channelId, []);
@@ -67,42 +69,75 @@ export async function handleQuestion(channelId, question) {
     const { getGoalStatus } = await import('./goal-engine.js');
     const goal = await getGoalStatus(channelId);
 
-    // Build context for the AI
-    let context = '';
+    // Get or create conversation history
+    if (!conversationHistory.has(channelId)) {
+      conversationHistory.set(channelId, []);
+    }
+    const history = conversationHistory.get(channelId);
+
+    // Add user question to history
+    history.push({ role: 'user', content: question });
+
+    // Build goal context
+    let goalContext = '';
     if (goal) {
-      context = `The user has an active goal: ${goal.current}/${goal.target} ${goal.type} (${goal.progress?.percent || 0}% complete). `;
-      context += `Weekly progress: +${goal.progress?.weeklyRate || 0}. `;
-      if (goal.progress?.eta) context += `ETA: ${goal.progress.eta}. `;
+      goalContext = `The user has an active goal: ${goal.current}/${goal.target} ${goal.type} (${goal.progress?.percent || 0}% done). `;
+      goalContext += `Weekly progress: +${goal.progress?.weeklyRate || 0}. `;
+      if (goal.progress?.eta) goalContext += `ETA: ${goal.progress.eta}. `;
       if (goal.phases?.length) {
-        const activePhase = goal.phases.find(p => p.status === 'active') || goal.phases[0];
-        context += `Current phase: ${activePhase?.name || 'AUDIT'}. `;
+        var activePhase = goal.phases.find(function(p) { return p.status === 'active'; }) || goal.phases[0];
+        goalContext += `Current phase: ${activePhase?.name || 'AUDIT'}.`;
       }
-    } else {
-      context = 'The user has not set a channel growth goal yet.';
     }
 
-    const systemPrompt = `You are Phronesis, an AI YouTube SEO coach embedded in YT SEO Architect.
+    // Build conversation context from history
+    var conversationContext = '';
+    if (history.length > 1) {
+      conversationContext = '\n\nPREVIOUS CONVERSATION:\n';
+      var recentHistory = history.slice(-MAX_HISTORY);
+      for (var i = 0; i < recentHistory.length; i++) {
+        var h = recentHistory[i];
+        conversationContext += (h.role === 'user' ? 'User' : 'Phronesis') + ': ' + h.content + '\n';
+      }
+    }
+
+    var systemPrompt = `You are Phronesis, an AI YouTube SEO coach in YT SEO Architect.
 
 Your role:
 - Help creators grow their YouTube channels
-- Give specific, actionable SEO advice
+- Give specific, actionable SEO and growth advice
 - Track goal progress and suggest next steps
-- Be concise (2-4 sentences max per response)
-- Use channel data and goal context when available
+- Be concise but helpful (2-4 sentences)
+- Reference previous conversation when relevant
+- Use the goal and channel context provided
 
-${context}
+GOAL CONTEXT:
+${goalContext || 'No active goal set. Encourage the user to set one.'}
+${conversationContext}
 
-Respond conversationally. If the user asks about progress, give specific numbers. If they ask for advice, give 1-2 actionable tips. Do NOT use markdown formatting.`;
+Respond conversationally. Reference earlier parts of the conversation if the user asks a follow-up. Do NOT use markdown or emoji.`;
 
-    // Import and call the AI provider
-    const { askAI } = await import('../_lib/ai-provider.js');
-    const answer = await askAI(systemPrompt, question);
+    var { askAI } = await import('../_lib/ai-provider.js');
+    var answer = await askAI(systemPrompt, question);
 
-    if (answer && typeof answer === 'string') return answer.trim();
-    return fallbackResponse(goal, question);
+    // Store assistant response in history
+    if (answer && typeof answer === 'string') {
+      var trimmed = answer.trim();
+      history.push({ role: 'assistant', content: trimmed });
+      // Trim history if too long
+      if (history.length > MAX_HISTORY * 2) {
+        history.splice(0, history.length - MAX_HISTORY * 2);
+      }
+      return trimmed;
+    }
+
+    var fallback = fallbackResponse(goal, question);
+    history.push({ role: 'assistant', content: fallback });
+    return fallback;
   } catch(e) {
     console.error('[Coach] AI error:', e.message);
-    return fallbackResponse(null, question);
+    var fb = fallbackResponse(null, question);
+    return fb;
   }
 }
 
