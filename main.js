@@ -16521,6 +16521,9 @@ window.showToast = _showToast;
 window.safeRender = _safeRender;
 window.escapeHTML = _escapeHTML;
 
+// TEMP: Use legacy switchView while debugging
+window.switchView = (typeof switchView === 'function') ? switchView : _switchView;
+
 // apiPost needs special handling since it's async
 window.apiPost = _apiPost;
 
