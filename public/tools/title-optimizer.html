@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="google-site-verification" content="google6368748a920a2add" />
+  <title id="pageTitle">YouTube Title Optimizer — AI-Powered in 2026 | YT SEO Architect</title>
+  <meta name="description" id="pageDesc" content="Free AI YouTube title optimizer. Generate click-worthy titles that boost CTR and rank higher. No login required." />
+  <meta name="robots" content="index, follow" />
+  <link rel="canonical" id="pageCanonical" href="https://yt-seo-architect.vercel.app/tools/title-optimizer/" />
+  <meta property="og:title" id="ogTitle" content="YouTube Title Optimizer — AI-Powered in 2026" />
+  <meta property="og:description" id="ogDesc" content="Free AI YouTube title optimizer. Generate click-worthy titles." />
+  <meta property="og:image" content="https://yt-seo-architect.vercel.app/logo.svg" />
+  <meta property="twitter:card" content="summary_large_image" />
+  <meta property="twitter:title" id="twTitle" content="YouTube Title Optimizer — AI-Powered in 2026" />
+  <meta property="twitter:description" id="twDesc" content="Free AI YouTube title optimizer." />
+  <meta property="twitter:image" content="https://yt-seo-architect.vercel.app/logo.svg" />
+  <script type="application/ld+json" id="schemaData">
+  { "@context": "https://schema.org", "@type": "WebApplication", "name": "YouTube Title Optimizer", "description": "AI-powered YouTube title optimizer", "url": "https://yt-seo-architect.vercel.app/tools/title-optimizer/", "applicationCategory": "MultimediaApplication", "operatingSystem": "Web", "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" } }
+  </script>
+  <style>
+    :root { --bg: #0f0f1a; --surface: #1a1a2e; --border: #2a2a4a; --accent: #6366f1; --accent2: #06b6d4; --yt-red: #ff0000; --text: #e2e8f0; --text2: #94a3b8; --text3: #64748b; --success: #22c55e; }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { background: var(--bg); color: var(--text); font-family: 'Segoe UI', system-ui, -apple-system, sans-serif; line-height: 1.6; min-height: 100vh; }
+    .header { background: var(--surface); border-bottom: 1px solid var(--border); padding: 1rem 2rem; display: flex; align-items: center; justify-content: space-between; position: sticky; top: 0; z-index: 100; }
+    .header-logo { display: flex; align-items: center; gap: 0.75rem; text-decoration: none; color: var(--text); font-weight: 700; font-size: 1.25rem; }
+    .header-logo img { height: 32px; width: 32px; }
+    .header-cta { background: linear-gradient(135deg, var(--accent), var(--accent2)); color: #fff; padding: 0.6rem 1.5rem; border-radius: 8px; text-decoration: none; font-weight: 600; font-size: 0.9rem; }
+    .hero { text-align: center; padding: 3rem 2rem 2rem; max-width: 800px; margin: 0 auto; }
+    .hero h1 { font-size: 2.25rem; font-weight: 800; line-height: 1.3; margin-bottom: 0.75rem; background: linear-gradient(135deg, #fff, var(--accent2)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+    .hero .subtitle { color: var(--text2); font-size: 1.05rem; margin-bottom: 0.5rem; }
+    .hero .breadcrumb { font-size: 0.85rem; color: var(--text3); margin-bottom: 1.25rem; }
+    .hero .breadcrumb a { color: var(--accent); text-decoration: none; }
+    .results-section { max-width: 800px; margin: 0 auto; padding: 0 2rem 2rem; }
+    .result-item { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 1rem 1.25rem; margin-bottom: 0.75rem; display: flex; align-items: center; gap: 1rem; }
+    .result-rank { font-weight: 700; font-size: 1.1rem; color: var(--accent); min-width: 2rem; }
+    .result-title { font-weight: 600; color: var(--text); flex: 1; }
+    .result-score { font-size: 0.8rem; color: var(--text3); background: rgba(99,102,241,0.1); padding: 0.25rem 0.6rem; border-radius: 4px; }
+    .result-copy { background: none; border: 1px solid var(--border); color: var(--text2); padding: 0.4rem 0.75rem; border-radius: 6px; cursor: pointer; font-size: 0.8rem; }
+    .result-copy:hover { border-color: var(--accent); color: var(--accent); }
+    .blur-overlay-wrap { position: relative; margin-top: 1.5rem; }
+    .blur-container { filter: blur(6px); pointer-events: none; user-select: none; opacity: 0.4; }
+    .blur-cta { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; background: rgba(15,15,26,0.85); border-radius: 12px; border: 2px dashed var(--accent); text-align: center; padding: 2rem; }
+    .blur-cta h3 { font-size: 1.3rem; margin-bottom: 0.5rem; }
+    .blur-cta p { color: var(--text2); margin-bottom: 1.25rem; max-width: 400px; }
+    .blur-cta .cta-btn { background: linear-gradient(135deg, var(--accent), var(--accent2)); color: #fff; padding: 0.75rem 2rem; border-radius: 8px; text-decoration: none; font-weight: 700; font-size: 1rem; }
+    .intro-card { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 1.5rem; max-width: 800px; margin: 0 auto 2rem; }
+    .intro-card h2 { font-size: 1.2rem; margin-bottom: 0.75rem; color: var(--accent); }
+    .intro-card p { color: var(--text2); font-size: 0.95rem; line-height: 1.7; margin-bottom: 1rem; }
+    .tips-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; }
+    .tip-card { background: rgba(99,102,241,0.08); border-radius: 8px; padding: 1rem; }
+    .tip-card h4 { font-size: 0.9rem; color: var(--accent); margin-bottom: 0.35rem; }
+    .tip-card p { font-size: 0.82rem; }
+    .faq-section { max-width: 800px; margin: 0 auto 3rem; padding: 0 2rem; }
+    .faq-section h2 { font-size: 1.5rem; margin-bottom: 1.5rem; color: var(--text); }
+    .faq-item { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; margin-bottom: 0.75rem; overflow: hidden; }
+    .faq-question { padding: 1rem 1.25rem; font-weight: 600; cursor: pointer; display: flex; justify-content: space-between; align-items: center; user-select: none; }
+    .faq-question::after { content: '+'; font-size: 1.25rem; color: var(--accent); }
+    .faq-answer { padding: 0 1.25rem 1rem; color: var(--text2); display: none; font-size: 0.95rem; line-height: 1.7; }
+    .faq-item.open .faq-answer { display: block; }
+    .faq-item.open .faq-question::after { content: '−'; }
+    .tools-grid { max-width: 800px; margin: 2rem auto 3rem; padding: 0 2rem; display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 1rem; }
+    .tools-grid h2 { grid-column: 1 / -1; font-size: 1.5rem; margin-bottom: 0.5rem; }
+    .tool-card { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 1.25rem; text-decoration: none; color: var(--text); transition: border-color 0.2s; }
+    .tool-card:hover { border-color: var(--accent); }
+    .tool-card h4 { font-size: 1rem; margin-bottom: 0.35rem; }
+    .tool-card p { font-size: 0.85rem; color: var(--text2); }
+    .footer { text-align: center; padding: 2rem; border-top: 1px solid var(--border); color: var(--text3); font-size: 0.85rem; max-width: 800px; margin: 0 auto; }
+    .footer a { color: var(--accent); text-decoration: none; margin: 0 0.5rem; }
+    @media (max-width: 600px) { .hero h1 { font-size: 1.5rem; } .header { padding: 0.75rem 1rem; } }
+  </style>
+</head>
+<body>
+  <header class="header">
+    <a href="/" class="header-logo"><img src="/logo.svg" alt="YT SEO Architect" width="32" height="32" />YT SEO Architect</a>
+    <a href="/dashboard" class="header-cta">🚀 Get Started Free</a>
+  </header>
+
+  <section class="hero">
+    <div class="breadcrumb"><a href="/">Home</a> › <a href="/tools/">Tools</a> › <strong id="breadcrumbKeyword">Title Optimizer</strong></div>
+    <h1 id="heroTitle">YouTube Title Optimizer — Free AI Tool 2026</h1>
+    <p class="subtitle" id="heroSubtitle">Generate click-worthy YouTube titles that boost CTR and rank higher in search results.</p>
+  </section>
+
+  <section class="results-section">
+    <div class="intro-card" id="introSection">
+      <h2>📋 About YouTube Title Optimization</h2>
+      <p id="introDesc">Your title is the #1 factor for getting clicks on YouTube. These AI-optimized titles are crafted to maximize click-through rate (CTR) while incorporating keywords that rank in YouTube search. Each title balances emotional hooks, keyword placement, and optimal length for maximum impact.</p>
+      <div class="tips-grid">
+        <div class="tip-card"><h4>🎯 CTR Formula</h4><p>Power words + numbers + curiosity gap = high CTR. Use words like "Ultimate", "Proven", "Secret" in the first 3 words.</p></div>
+        <div class="tip-card"><h4>📏 Optimal Length</h4><p>Keep titles between 40-65 characters. YouTube truncates at 70 chars on mobile. Front-load your main keyword.</p></div>
+        <div class="tip-card"><h4>🔍 SEO Tips</h4><p>Place your target keyword in the first 3-5 words. Natural phrasing beats keyword stuffing — YouTube's AI detects clickbait.</p></div>
+      </div>
+    </div>
+
+    <div class="result-item"><span class="result-rank">#1</span><span class="result-title" id="title1">loading...</span><span class="result-score" id="score1">95/100</span><button class="result-copy" onclick="copyText(this)">Copy</button></div>
+    <div class="result-item"><span class="result-rank">#2</span><span class="result-title" id="title2">loading...</span><span class="result-score" id="score2">92/100</span><button class="result-copy" onclick="copyText(this)">Copy</button></div>
+    <div class="result-item"><span class="result-rank">#3</span><span class="result-title" id="title3">loading...</span><span class="result-score" id="score3">88/100</span><button class="result-copy" onclick="copyText(this)">Copy</button></div>
+    <div class="result-item"><span class="result-rank">#4</span><span class="result-title" id="title4">loading...</span><span class="result-score" id="score4">85/100</span><button class="result-copy" onclick="copyText(this)">Copy</button></div>
+    <div class="result-item"><span class="result-rank">#5</span><span class="result-title" id="title5">loading...</span><span class="result-score" id="score5">82/100</span><button class="result-copy" onclick="copyText(this)">Copy</button></div>
+  </section>
+
+  <section class="results-section blur-overlay-wrap">
+    <div class="blur-container" id="blurContainer"></div>
+    <div class="blur-cta">
+      <h3>🔓 Unlock All 15+ Titles</h3>
+      <p id="blurCtaText">Connect your YouTube channel to get AI-powered title scores, CTR predictions, and keyword-rich variations.</p>
+      <a href="/dashboard" class="cta-btn">Connect YouTube — It's Free</a>
+    </div>
+  </section>
+
+  <section class="faq-section">
+    <h2>Frequently Asked Questions</h2>
+    <div class="faq-item open"><div class="faq-question" onclick="this.parentElement.classList.toggle('open')">How do I write a good YouTube title?</div><div class="faq-answer"><p id="faq1">A good YouTube title combines a strong hook, target keywords, and emotional triggers. Keep it under 65 characters, front-load your main keyword, and use power words like "Ultimate", "Complete", or "Secret". YT SEO Architect's AI title optimizer generates titles optimized for both CTR and search ranking.</p></div></div>
+    <div class="faq-item"><div class="faq-question" onclick="this.parentElement.classList.toggle('open')">What is the best title length for YouTube?</div><div class="faq-answer"><p>YouTube recommends 60-70 characters. Titles longer than 70 characters get truncated on mobile and search results. Our AI tool automatically optimizes title length for maximum visibility across all devices.</p></div></div>
+    <div class="faq-item"><div class="faq-question" onclick="this.parentElement.classList.toggle('open')">Do YouTube titles affect SEO ranking?</div><div class="faq-answer"><p>Yes — your title is the single most important SEO factor for YouTube. It tells both the algorithm and viewers what your video is about. An optimized title with the right keywords can dramatically improve your video's ranking and click-through rate.</p></div></div>
+  </section>
+
+  <section class="tools-grid">
+    <h2>More Free YouTube SEO Tools</h2>
+    <a href="/tools/tag-generator" class="tool-card"><h4>🏷️ Tag Generator</h4><p>AI-optimized YouTube tags for any niche</p></a>
+    <a href="/dashboard" class="tool-card"><h4>🔍 Keyword Research</h4><p>Discover high-volume, low-competition keywords</p></a>
+    <a href="/dashboard" class="tool-card"><h4>📊 Channel Audit</h4><p>Full SEO audit of your YouTube channel</p></a>
+    <a href="/dashboard" class="tool-card"><h4>💬 AI Coach</h4><p>Ask anything about YouTube growth</p></a>
+  </section>
+
+  <footer class="footer">
+    <p><a href="/">Home</a> | <a href="/dashboard">Dashboard</a> | <a href="/pricing">Pricing</a> | <a href="/about">About</a> | <a href="/privacy-policy">Privacy</a> | <a href="/terms-of-service">Terms</a></p>
+    <p style="margin-top:0.5rem;">© 2026 YT SEO Architect. AI-powered YouTube growth platform.</p>
+  </footer>
+
+  <script>
+    (function() {
+      const path = window.location.pathname;
+      const match = path.match(/\/tools\/title-optimizer\/(.+)/);
+      const rawSlug = match ? match[1] : '';
+      const slug = rawSlug.replace(/\.html$/, '').replace(/-/g, ' ').replace(/\//g, '').trim();
+      const keyword = slug || 'Your Videos';
+      const keywordLower = slug || 'your videos';
+
+      const titleText = `YouTube Title Optimizer for ${keyword} — Free AI Tool 2026`;
+      const descText = `Generate optimized YouTube titles for ${keywordLower} videos. AI-powered title optimizer with CTR scores — free, no login required.`;
+      document.title = titleText;
+      document.getElementById('heroTitle').textContent = `YouTube Title Optimizer for ${keyword} — 2026`;
+      document.getElementById('heroSubtitle').textContent = `AI-generated YouTube titles optimized for ${keywordLower} — boost clicks and rank higher.`;
+      document.getElementById('breadcrumbKeyword').textContent = keyword;
+      document.getElementById('blurCtaText').textContent = `Connect your YouTube channel to unlock 15+ AI-optimized titles for ${keyword} with CTR scores and keyword analysis.`;
+      document.getElementById('faq1').innerHTML = `A good YouTube title for ${keywordLower} content combines a strong hook, target keywords, and emotional triggers. Use power words like "Ultimate", "Complete", or "Secret". Our AI title optimizer generates ${keywordLower}-specific titles optimized for both CTR and search ranking.`;
+
+      // Generate sample titles
+      const templates = [
+        `The ULTIMATE Guide to ${keyword} in 2026`,
+        `How to Master ${keyword} — Step by Step`,
+        `${keyword} Explained: Everything You Need to Know`,
+        `Why ${keyword} Will Change Everything in 2026`,
+        `${keyword} Secrets the Pros Don't Want You to Know`
+      ];
+      const scores = [95, 92, 88, 85, 82];
+      for (let i = 0; i < 5; i++) {
+        const titleEl = document.getElementById('title' + (i+1));
+        const scoreEl = document.getElementById('score' + (i+1));
+        if (titleEl) titleEl.textContent = templates[i];
+        if (scoreEl) scoreEl.textContent = scores[i] + '/100';
+      }
+
+      // Blurred preview
+      const previewTitles = [
+        `${keyword}: The Complete Beginner's Guide`,
+        `Top 10 ${keyword} Tips for 2026`,
+        `${keyword} Tutorial — Learn in 10 Minutes`,
+        `The Truth About ${keyword} Nobody Talks About`,
+        `I Tried ${keyword} for 30 Days — Here's What Happened`,
+        `${keyword} vs Traditional Methods — Which Wins?`,
+        `5 ${keyword} Mistakes Beginners Always Make`,
+        `${keyword} for Intermediate: Level Up Your Skills`,
+        `The Science Behind ${keyword} — Explained Simply`,
+        `My ${keyword} Workflow — Full Walkthrough`
+      ];
+      const cont = document.getElementById('blurContainer');
+      previewTitles.forEach((t, i) => {
+        const div = document.createElement('div');
+        div.className = 'result-item';
+        div.innerHTML = `<span class="result-rank">#${i+6}</span><span class="result-title">${t}</span><span class="result-score">${Math.floor(Math.random()*20+75)}/100</span>`;
+        cont.appendChild(div);
+      });
+    })();
+
+    function copyText(btn) {
+      const title = btn.parentElement.querySelector('.result-title').textContent;
+      navigator.clipboard.writeText(title).then(() => {
+        btn.textContent = 'Copied!'; btn.style.color = '#22c55e';
+        setTimeout(() => { btn.textContent = 'Copy'; btn.style.color = ''; }, 1500);
+      });
+    }
+  </script>
+</body>
+</html>

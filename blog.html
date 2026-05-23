@@ -1,0 +1,437 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="google-site-verification" content="google6368748a920a2add" />
+  <title>YouTube SEO Blog — Tips, Guides & Strategies | YT SEO Architect</title>
+  <meta name="description" content="Free YouTube SEO guides, tips, and tutorials. Learn keyword research, title optimization, thumbnail A/B testing, and analytics to grow your channel with AI-powered tools." />
+  <meta name="keywords" content="YouTube SEO blog, YouTube growth tips, video optimization, YouTube algorithm, content creator guides" />
+  <meta name="robots" content="index, follow" />
+  <link rel="canonical" href="https://yt-seo-architect.vercel.app/blog" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="dns-prefetch" href="https://www.google-analytics.com" />
+
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://yt-seo-architect.vercel.app/blog" />
+  <meta property="og:title" content="YouTube SEO Blog — Tips & Strategies" />
+  <meta property="og:description" content="Free YouTube SEO guides, tips, and tutorials. Learn keyword research, title optimization, thumbnail A/B testing, and analytics to grow your channel." />
+  <meta property="og:image" content="https://yt-seo-architect.vercel.app/og-image.png" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta property="og:site_name" content="YT SEO Architect" />
+
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="YouTube SEO Blog — Tips & Strategies" />
+  <meta name="twitter:description" content="Free YouTube SEO guides, tips, and tutorials to grow your YouTube channel with AI-powered tools." />
+  <meta name="twitter:image" content="https://yt-seo-architect.vercel.app/og-image.png" />
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Blog",
+    "name": "YT SEO Architect Blog",
+    "description": "YouTube SEO tips, guides, and growth strategies for content creators.",
+    "url": "https://yt-seo-architect.vercel.app/blog",
+    "publisher": {
+      "@type": "Organization",
+      "name": "YT SEO Architect",
+      "url": "https://yt-seo-architect.vercel.app/"
+    }
+  }
+  </script>
+
+  <style>
+    :root {
+      --bg: #0f0f1a;
+      --surface: #1a1a2e;
+      --border: #2a2a4a;
+      --accent: #6366f1;
+      --accent2: #06b6d4;
+      --yt-red: #ff0000;
+      --text: #e2e8f0;
+      --text2: #94a3b8;
+      --text3: #64748b;
+      --success: #22c55e;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+      line-height: 1.6;
+    }
+
+    .header {
+      background: var(--surface);
+      border-bottom: 1px solid var(--border);
+      padding: 1rem 2rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+    .header-logo {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      text-decoration: none;
+      color: var(--text);
+      font-weight: 700;
+      font-size: 1.25rem;
+    }
+    .header-logo img { height: 32px; width: 32px; }
+    .header-cta {
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      color: #fff;
+      padding: 0.6rem 1.5rem;
+      border-radius: 8px;
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 0.9rem;
+    }
+    .header-cta:hover { opacity: 0.9; }
+
+    /* ========= HERO ========= */
+    .blog-hero {
+      text-align: center;
+      padding: 3rem 2rem 2rem;
+    }
+    .blog-hero h1 {
+      font-size: 2.25rem;
+      font-weight: 800;
+      background: linear-gradient(135deg, #fff, var(--accent2));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .blog-hero p { color: var(--text2); margin-top: 0.5rem; }
+
+    /* ========= ARTICLE GRID ========= */
+    .articles {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 0 2rem 3rem;
+    }
+    .article-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 1.5rem;
+      margin-bottom: 1rem;
+      transition: border-color 0.2s;
+    }
+    .article-card:hover { border-color: var(--accent); }
+    .article-card .category {
+      display: inline-block;
+      background: rgba(99,102,241,0.15);
+      color: var(--accent);
+      padding: 0.2rem 0.6rem;
+      border-radius: 4px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      margin-bottom: 0.5rem;
+    }
+    .article-card h3 {
+      font-size: 1.2rem;
+      margin-bottom: 0.5rem;
+    }
+    .article-card h3 a {
+      color: var(--text);
+      text-decoration: none;
+    }
+    .article-card h3 a:hover { color: var(--accent); }
+    .article-card .excerpt {
+      color: var(--text2);
+      font-size: 0.9rem;
+      margin-bottom: 0.75rem;
+    }
+    .article-card .meta {
+      font-size: 0.8rem;
+      color: var(--text3);
+    }
+
+    /* ========= CTA WIDGET (mid-page) ========= */
+    .cta-widget {
+      background: linear-gradient(135deg, var(--surface), #1e1e40);
+      border: 2px solid var(--accent);
+      border-radius: 16px;
+      padding: 2rem;
+      margin: 2rem 0;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+    .cta-widget::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: radial-gradient(circle at 30% 50%, rgba(99,102,241,0.1), transparent 50%);
+      pointer-events: none;
+    }
+    .cta-widget h3 {
+      font-size: 1.4rem;
+      margin-bottom: 0.5rem;
+      position: relative;
+    }
+    .cta-widget p {
+      color: var(--text2);
+      margin-bottom: 1.25rem;
+      position: relative;
+    }
+    .cta-widget .audit-btn {
+      display: inline-block;
+      background: linear-gradient(135deg, var(--yt-red), #cc0000);
+      color: #fff;
+      padding: 0.75rem 2rem;
+      border-radius: 8px;
+      text-decoration: none;
+      font-weight: 700;
+      font-size: 1rem;
+      position: relative;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .cta-widget .audit-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 20px rgba(255,0,0,0.3);
+    }
+    .cta-widget .benefits {
+      display: flex;
+      gap: 1.5rem;
+      justify-content: center;
+      margin-top: 1.25rem;
+      flex-wrap: wrap;
+      position: relative;
+    }
+    .cta-widget .benefit {
+      font-size: 0.85rem;
+      color: var(--text2);
+    }
+    .cta-widget .benefit::before {
+      content: '✓ ';
+      color: var(--success);
+    }
+
+    /* ========= FOOTER ========= */
+    .footer {
+      text-align: center;
+      padding: 2rem;
+      border-top: 1px solid var(--border);
+      color: var(--text3);
+      font-size: 0.85rem;
+    }
+    .footer a { color: var(--accent); text-decoration: none; margin: 0 0.5rem; }
+    .footer a:hover { text-decoration: underline; }
+
+    @media (max-width: 600px) {
+      .blog-hero h1 { font-size: 1.5rem; }
+      .articles { padding: 0 1rem 2rem; }
+      .header { padding: 0.75rem 1rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <header class="header">
+    <a href="/" class="header-logo">
+      <img src="/logo.svg" alt="YT SEO Architect" width="32" height="32" />
+      YT SEO Architect
+    </a>
+    <a href="/dashboard" class="header-cta">🚀 Get Started Free</a>
+  </header>
+
+  <section class="blog-hero">
+    <h1>YouTube SEO Blog</h1>
+    <p>Expert guides, tips, and strategies to grow your YouTube channel with AI.</p>
+  </section>
+
+  <!-- CTA Widget (positioned early for visibility) -->
+  <section class="articles">
+    <div class="cta-widget">
+      <h3>🔍 Is Your YouTube Channel Optimized?</h3>
+      <p>Get a free AI-powered audit of your channel's SEO — titles, tags, descriptions, and more — in 60 seconds.</p>
+      <a href="/dashboard" class="audit-btn">Audit My Channel — Free</a>
+      <div class="benefits">
+        <span class="benefit">17 AI tools</span>
+        <span class="benefit">No credit card</span>
+        <span class="benefit">60-second setup</span>
+      </div>
+    </div>
+
+    <!-- Articles -->
+    <div class="article-card">
+      <span class="category">Tools Comparison</span>
+      <h3><a href="/blog/best-youtube-seo-tools-2026">Best YouTube SEO Tools in 2026: Compared by Use Case</a></h3>
+      <p class="excerpt">Compare YT SEO Architect, TubeBuddy, VidIQ, and Morningfame. Find the right tool for your channel stage — beginner, growing creator, or agency. Free & paid options with honest trade-offs.</p>
+      <p class="meta">📅 May 2026 &middot; ⏱️ 12 min read &middot; 🏷️ Tools, Comparison, SEO</p>
+    </div>
+
+    <div class="article-card">
+      <span class="category">Strategy</span>
+      <h3><a href="/blog/youtube-competitor-analysis-reverse-engineer">YouTube Competitor Analysis: How to Reverse-Engineer Top Channels in Your Niche</a></h3>
+      <p class="excerpt">Learn to extract competitor tags, map their content strategy, and build infiltration bundles that outrank them. Step-by-step blueprint with free tools — from identifying targets to generating your attack plan.</p>
+      <p class="meta">📅 May 2026 &middot; ⏱️ 12 min read &middot; 🏷️ Strategy, Competitor Analysis, Tags</p>
+    </div>
+
+    <div class="article-card">
+      <span class="category">SEO Audit</span>
+      <h3><a href="/blog/youtube-seo-audit-diagnostic-fix-2026">YouTube SEO Audit: The 5-Minute Diagnostic That Finds What's Killing Your Views</a></h3>
+      <p class="excerpt">Stop guessing why your videos flatlined. Run a full YouTube SEO audit on title, description, tags, and thumbnail in under 5 minutes. Includes step-by-step fix guide with real recovery data.</p>
+      <p class="meta">📅 May 2026 &middot; ⏱️ 9 min read &middot; 🏷️ Audit, SEO, Diagnostic</p>
+    </div>
+
+    <div class="article-card">
+      <span class="category">Comparison</span>
+      <h3><a href="/blog/youtube-metadata-auditor-vs-vidiq-shadow-ban">YouTube Metadata Auditor vs vidIQ: Which AI Tool Actually Fixes Shadow Bans?</a></h3>
+      <p class="excerpt">A head-to-head comparison of YouTube SEO safety. Learn why traditional keyword density isn't enough in 2026 and how to use AI safety agents to protect your reach.</p>
+      <p class="meta">📅 May 2026 &middot; ⏱️ 14 min read &middot; 🏷️ Comparison, vidIQ, Safety, Shadow Ban</p>
+    </div>
+
+    <div class="article-card">
+      <span class="category">Algorithm Recovery</span>
+      <h3><a href="/blog/how-to-fix-youtube-shadow-ban-2026">How to Fix YouTube Shadow Ban 2026: The Ultimate Recovery Guide</a></h3>
+      <p class="excerpt">Is your reach dropping? Learn how to diagnose and fix a YouTube shadow ban in 2026. Step-by-step algorithmic reset strategy to regain your impressions.</p>
+      <p class="meta">📅 May 2026 &middot; ⏱️ 12 min read &middot; 🏷️ Shadow Ban, Algorithm, Recovery, Impressions</p>
+    </div>
+
+    <div class="article-card">
+      <span class="category">Views Diagnostic</span>
+      <h3><a href="/blog/youtube-video-not-getting-views-diagnostic-fix-2026">YouTube Video Not Getting Views? Diagnose &amp; Fix in 5 Minutes</a></h3>
+      <p class="excerpt">Stop guessing. Use the 4-metric diagnostic framework to find exactly what's broken — CTR, AVD, Impressions, or Subscribers — and fix it in 5 minutes.</p>
+      <p class="meta">📅 May 2026 &middot; ⏱️ 8 min read &middot; 🏷️ Views, Diagnostic, CTR, AVD, Impressions</p>
+    </div>
+
+    <div class="article-card">
+      <span class="category">End Screens &amp; Cards</span>
+      <h3><a href="/blog/youtube-end-screens-cards-guide-2026">YouTube End Screens &amp; Cards Tutorial 2026: Boost Watch Time on Autopilot</a></h3>
+      <p class="excerpt">Learn where to place end screens and cards, what to link, and how to set them up. Videos with end screens get 25-40% higher session watch time — a top 2026 ranking signal.</p>
+      <p class="meta">📅 May 2026 &middot; ⏱️ 8 min read &middot; 🏷️ End Screens, Cards, Watch Time, Session Duration</p>
+    </div>
+
+    <div class="article-card">
+      <span class="category">Analytics Framework</span>
+      <h3><a href="/blog/youtube-analytics-4-metrics-that-matter">The Only 4 YouTube Metrics That Actually Matter — Ignore Everything Else</a></h3>
+      <p class="excerpt">YouTube shows 30+ metrics. You need 4: CTR, AVD, Impressions, and Subscribers Gained. Learn why these four predict growth and what to track daily.</p>
+      <p class="meta">📅 May 2026 &middot; ⏱️ 7 min read &middot; 🏷️ Analytics, Metrics, Growth Framework</p>
+    </div>
+
+    <div class="article-card">
+      <span class="category">CTR Deep Dive</span>
+      <h3><a href="/blog/what-does-youtube-ctr-actually-mean">What Does YouTube CTR Actually Mean? Stop Misreading It</a></h3>
+      <p class="excerpt">A 12% CTR is not always good. A 3% CTR is not always bad. Learn the 4 CTR-impression scenarios and how to read yours in 5 seconds.</p>
+      <p class="meta">📅 May 2026 &middot; ⏱️ 8 min read &middot; 🏷️ CTR, Impressions, Analytics, Thumbnails</p>
+    </div>
+
+    <div class="article-card">
+      <span class="category">Retention</span>
+      <h3><a href="/blog/youtube-retention-graph-explained-2026">YouTube Retention Graph Explained 2026: Read the Curve Like a Pro</a></h3>
+      <p class="excerpt">Learn to read the retention graph — the cliff, the slide, the spike, and the flatline. Each shape tells a different story. Fix the right problem.</p>
+      <p class="meta">📅 May 2026 &middot; ⏱️ 8 min read &middot; 🏷️ Retention, AVD, Analytics, Hook</p>
+    </div>
+
+    <div class="article-card">
+      <span class="category">Analytics &amp; Data</span>
+      <h3><a href="/blog/youtube-analytics-explained-2026">YouTube Analytics Explained 2026: Read Your Data Like a Pro</a></h3>
+      <p class="excerpt">Learn what CTR, AVD, impressions, and retention actually mean. Step-by-step walkthrough of every metric in YouTube Studio — and what to do with the data.</p>
+      <p class="meta">📅 May 2026 &middot; ⏱️ 10 min read &middot; 🏷️ Analytics, CTR, Retention, Data</p>
+    </div>
+
+    <div class="article-card">
+      <span class="category">Thumbnails &amp; CTR</span>
+      <h3><a href="/blog/youtube-thumbnail-ab-testing-guide">YouTube Thumbnail A/B Testing: Double Your CTR in 30 Days</a></h3>
+      <p class="excerpt">Learn the exact process to A/B test YouTube thumbnails using the built-in Test &amp; Compare tool. Real data from channels that doubled CTR in 60 days.</p>
+      <p class="meta">📅 May 2026 &middot; ⏱️ 9 min read &middot; 🏷️ Thumbnails, A/B Testing, CTR, Optimization</p>
+    </div>
+
+    <div class="article-card">
+      <span class="category">Bulk Updates</span>
+      <h3><a href="/blog/how-to-mass-update-youtube-descriptions-safely">How to Mass Update YouTube Video Descriptions Safely (2026 Strategy)</a></h3>
+      <p class="excerpt">Learn how to bulk edit YouTube video descriptions safely without losing rankings or triggering duplicate content spam filters. Step-by-step master guide.</p>
+      <p class="meta">📅 May 2026 &middot; ⏱️ 12 min read &middot; 🏷️ Descriptions, Bulk Edit, Automation</p>
+    </div>
+
+    <div class="article-card">
+      <span class="category">Shorts SEO</span>
+      <h3><a href="/blog/youtube-shorts-seo-ranking-guide">YouTube Shorts SEO: How to Rank Shorts in 2026</a></h3>
+      <p class="excerpt">Master YouTube Shorts SEO in 2026. Learn how to optimize metadata, perfect the first 3 seconds hook, beat the swiped-away metric, and gain more views on Shorts.</p>
+      <p class="meta">📅 May 2026 &middot; ⏱️ 5 min read &middot; 🏷️ Shorts, SEO, Algorithm, AVD</p>
+    </div>
+
+    <div class="article-card">
+      <span class="category">SEO Guide</span>
+      <h3><a href="/blog/youtube-seo-guide-2026">YouTube SEO Guide 2026: Rank #1 with AI-Powered Optimization</a></h3>
+
+      <p class="excerpt">Learn how YouTube's algorithm works in 2026 and how AI tools can help you rank higher. Complete guide covering titles, tags, descriptions, thumbnails, and the new AI content era.</p>
+      <p class="meta">📅 May 2026 &middot; ⏱️ 12 min read &middot; 🏷️ SEO, Algorithm, AI</p>
+    </div>
+
+    <div class="article-card">
+      <span class="category">Keyword Research</span>
+      <h3><a href="/blog/youtube-keyword-research-tutorial">YouTube Keyword Research: The Complete Tutorial for 2026</a></h3>
+      <p class="excerpt">Master YouTube keyword research with AI tools. Discover high-volume, low-competition keywords that actually drive views. Step-by-step tutorial with examples.</p>
+      <p class="meta">📅 May 2026 &middot; ⏱️ 10 min read &middot; 🏷️ Keywords, Research, AI</p>
+    </div>
+
+    <div class="article-card">
+      <span class="category">Tools</span>
+      <h3><a href="/blog/youtube-tags-generator-vs-vidiq">YouTube Tags Generator: Free AI Tool vs vidIQ &amp; TubeBuddy</a></h3>
+      <p class="excerpt">Compare the best YouTube tag generators in 2026. See how YT SEO Architect's free AI tag generator stacks up against vidIQ and TubeBuddy for tag optimization.</p>
+      <p class="meta">📅 May 2026 &middot; ⏱️ 8 min read &middot; 🏷️ Tools, Tags, Comparison</p>
+    </div>
+
+    <div class="article-card">
+      <span class="category">Growth</span>
+      <h3><a href="/blog/how-to-write-youtube-titles">How to Write YouTube Titles That Get Clicks (2026 Data)</a></h3>
+      <p class="excerpt">Data-backed strategies for writing YouTube titles that maximize CTR. Learn the psychology behind click-worthy titles and use AI to generate optimized ones.</p>
+      <p class="meta">📅 May 2026 &middot; ⏱️ 9 min read &middot; 🏷️ Titles, CTR, Psychology</p>
+    </div>
+
+    <div class="article-card">
+      <span class="category">Templates</span>
+      <h3><a href="/blog/youtube-description-templates">YouTube Description Templates That Boost Views &amp; SEO</a></h3>
+      <p class="excerpt">Copy-paste YouTube description templates optimized for SEO. Includes chapters, links, and keyword placement strategies that improve rankings.</p>
+      <p class="meta">📅 May 2026 &middot; ⏱️ 7 min read &middot; 🏷️ Descriptions, Templates</p>
+    </div>
+
+    <div class="article-card">
+      <span class="category">Algorithm</span>
+      <h3><a href="/blog/youtube-algorithm-changes-2026">YouTube Algorithm Changes in 2026: What Creators Need to Know</a></h3>
+      <p class="excerpt">Stay ahead of YouTube's algorithm updates. Learn about the latest changes affecting video rankings, AI content detection, and what it means for your channel.</p>
+      <p class="meta">📅 May 2026 &middot; ⏱️ 11 min read &middot; 🏷️ Algorithm, Updates</p>
+    </div>
+
+    <!-- CTA Widget (bottom of page) -->
+    <div class="cta-widget" style="margin-top:2rem;">
+      <h3>🚀 Ready to Grow Your Channel?</h3>
+      <p>17 AI-powered YouTube SEO tools. Free to start. No credit card required.</p>
+      <a href="/dashboard" class="audit-btn">Start Free Now</a>
+      <div class="benefits">
+        <span class="benefit">Tag Generator</span>
+        <span class="benefit">Title Optimizer</span>
+        <span class="benefit">AI Coach</span>
+        <span class="benefit">Bulk Injector</span>
+      </div>
+    </div>
+  </section>
+
+  <footer class="footer">
+    <p>
+      <a href="/">Home</a> |
+      <a href="/dashboard">Dashboard</a> |
+      <a href="/about">About</a> |
+      <a href="/privacy-policy">Privacy</a> |
+      <a href="/terms-of-service">Terms</a> |
+      <a href="/tools/tag-generator">Free Tag Generator</a>
+    </p>
+    <p style="margin-top:0.5rem;">© 2026 YT SEO Architect. AI-powered YouTube growth platform.</p>
+  </footer>
+</body>
+</html>

@@ -1,0 +1,53 @@
+<!DOCTYPE html><html><head><meta charset="UTF-8"><title>YT SEO Architect Logo</title>
+<style>
+body{margin:0;background:#09090b;display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:100vh;gap:20px}
+canvas{border-radius:8px}
+button{padding:10px 24px;border-radius:8px;background:rgba(0,212,255,0.12);border:1px solid rgba(0,212,255,0.25);color:#00d4ff;font-size:14px;font-weight:600;cursor:pointer;font-family:system-ui}
+button:hover{background:rgba(0,212,255,0.2)}
+</style></head><body>
+<canvas id="c" width="440" height="120"></canvas>
+<button onclick="download()">Download PNG (440×120)</button>
+<script>
+const c=document.getElementById('c'),x=c.getContext('2d');
+
+// Background
+x.fillStyle='#09090b';x.fillRect(0,0,440,120);
+
+// Icon background
+const g=x.createLinearGradient(20,26,68,74);
+g.addColorStop(0,'rgba(0,212,255,0.12)');
+g.addColorStop(1,'rgba(0,212,255,0.02)');
+x.beginPath();x.roundRect(20,26,48,48,12);x.fillStyle=g;x.fill();
+x.strokeStyle='rgba(0,212,255,0.25)';x.lineWidth=1.5;x.stroke();
+
+// Play triangle
+x.beginPath();x.moveTo(40,38);x.lineTo(40,62);x.lineTo(58,50);x.closePath();
+x.fillStyle='#00d4ff';x.fill();
+
+// Magnifying glass
+x.beginPath();x.arc(56,38,7,0,Math.PI*2);
+x.strokeStyle='rgba(16,185,129,0.6)';x.lineWidth=1.5;x.stroke();
+x.beginPath();x.moveTo(60.5,42.5);x.lineTo(64,46);
+x.strokeStyle='rgba(16,185,129,0.6)';x.lineWidth=1.5;x.lineCap='round';x.stroke();
+
+// Score bar
+x.fillStyle='rgba(255,255,255,0.06)';x.fillRect(26,66,36,2);
+x.fillStyle='rgba(0,212,255,0.4)';x.fillRect(26,66,26,2);
+
+// Text
+x.font='bold 24px system-ui, sans-serif';
+x.fillStyle='#ff0000';x.fillText('YT',84,52);
+x.fillStyle='#f4f4f5';x.fillText('SEO',118,52);
+x.font='bold 16px system-ui, sans-serif';
+x.fillStyle='#00d4ff';x.fillText('Architect',84,74);
+x.font='bold 7px system-ui, sans-serif';
+x.fillStyle='#52525b';x.fillText('BUILD RANKINGS',84,85);
+
+function download(){
+  const a=document.createElement('a');
+  a.download='yt-seo-architect-logo.png';
+  a.href=c.toDataURL('image/png');
+  a.click();
+}
+</script>
+</body></html>

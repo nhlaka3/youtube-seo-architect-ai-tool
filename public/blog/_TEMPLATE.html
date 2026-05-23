@@ -1,0 +1,498 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="icon" href="/logo.svg" type="image/svg+xml" />
+
+  <!-- ═══════════════════════════════════════════════════════════════
+       ELITE SEO/AEO BLOG POST TEMPLATE — YT SEO Architect (v4.0)
+       ═══════════════════════════════════════════════════════════════
+       HOW TO USE:
+       1. KEYWORD TARGETING: Long-tail (3+ words), Volume 100-5k, Difficulty < 40.
+       2. TREND-JACKING PROTOCOL: Check GET /api/trends/pulse. If Alignment > 70,
+          adjust topic to ride the 48-hour newsjacking wave.
+       3. BANNED AI-ISMS: Never use "excited, leverage, seamless, robust, embark, 
+          streamline, pivotal, cutting-edge."
+       4. WORD COUNT: Minimum 1,500 words of high-yield content.
+       5. AEO REQUIREMENT: The TL;DR block must contain a 2-3 sentence 
+          DIRECT ANSWER to the core search query.
+       6. E-E-A-T: Include a "Technical Trade-offs" section to prove senior-level
+          engineering authority — real data, real failures, real fixes.
+
+       ═══════════════════════════════════════════════════════════════
+       COMPETITOR HIJACKING PROTOCOL (do this BEFORE writing):
+       ═══════════════════════════════════════════════════════════════
+
+       STEP A — Find the weak pages you're going to beat:
+         - Google your target keyword. Open the top 10 results in tabs.
+         - For EACH page, score it on this checklist. Give 1 point per issue:
+
+           ☐ Word count < 1,000 (thin content — easy to beat)
+           ☐ No FAQ section or FAQ schema (missing SERP real estate)
+           ☐ Published/updated date older than 1 year (freshness penalty)
+           ☐ No table of contents (bad UX = higher bounce = lower rank)
+           ☐ Missing or broken images (no hero image, no diagrams)
+           ☐ No comparison table or data (opinion without evidence)
+           ☐ No key takeaways or summary (readers don't finish = low dwell)
+           ☐ Title doesn't include a number, year, or power word ("7 Ways…",
+             "2026 Guide…", "Ultimate…")
+           ☐ No author bio or credentials (weak E-E-A-T signal)
+           ☐ H1 matches title tag exactly (missed secondary keyword opportunity)
+
+         - SCORE: 0-2 points = strong page, hard to beat. 3-5 = vulnerable.
+           6-10 = easy target. Prioritize pages scoring 4+.
+
+       STEP B — Map what they're ranking for that you can steal:
+         - For your top 3 weak targets, extract their:
+           H1 text (what keyword are they targeting?)
+           H2 text (what subtopics do they cover?)
+           FAQ questions (what are they answering?)
+           Missing subtopics (what should they have covered but didn't?)
+         - List EVERY keyword angle they cover. Then list the ones they missed.
+           The missed angles are your differentiation strategy.
+
+       STEP C — Build your post to systematically beat each weakness:
+         - If their post is 800 words → yours is 2,000+
+         - If they have no FAQ → yours has 5 questions with schema
+         - If they have no TOC → yours has a detailed table of contents
+         - If their title is generic → yours includes a number, year, and benefit
+         - If they have no comparison table → you add one with real data
+         - If they have no author box → you include credentials
+         - If they missed 3 subtopics → you cover all 3 in dedicated sections
+         - If they have no images → you include a hero image + optional diagram
+
+       STEP D — Structure the post to signal "better than X" to Google:
+         - Comparison section should name the competitor page types
+           ("Most guides on this topic are 800-word listicles…")
+         - Your definition sentence should be 1 sentence a user can quote
+         - Your step-by-step should be more detailed than any competitor's
+         - Your FAQ should answer questions their commenters are asking
+
+       RESULT: When Google crawls your page, it sees:
+         - Higher word count ✓
+         - Better structure (TOC, steps, FAQ) ✓
+         - Fresher date ✓
+         - Stronger E-E-A-T (author, data, trade-offs) ✓
+         - More comprehensive coverage (competitor gaps filled) ✓
+       → You outrank the weak pages within 2-6 weeks.
+
+       ═══════════════════════════════════════════════════════════════
+       IMAGE PROTOCOL:
+       ═══════════════════════════════════════════════════════════════
+      - Hero: loading="eager", fetchpriority="high", 800×400.
+      - Generate with: python3 scripts/generate-blog-hero.py <slug> "Title Line 1" "Title Line 2" "Optional Line 3" "CATEGORY BADGE"
+      - Saves to: public/blog/[SLUG]-hero.png. Reference as /blog/[SLUG]-hero.png.
+      - OG image: Uses [SLUG]-og.png (1200×630 generated alongside hero).
+      - SVG: Prefer inline SVGs for technical diagrams.
+      - SECOND IMAGE: Add a diagram, screenshot, or comparison chart in the
+        implementation or trade-offs section. Run the generator again with a
+        different title for your second image:
+        python3 scripts/generate-blog-hero.py <slug>-diagram "Section Title" "" "" "DIAGRAM"
+        This creates [SLUG]-diagram-hero.png. Use loading="lazy" in-content.
+
+       ═══════════════════════════════════════════════════════════════
+       POST-PUBLISH CHECKLIST:
+       ═══════════════════════════════════════════════════════════════
+       8. Update: JSON-LD (Article + FAQPage + BreadcrumbList) + meta dates
+       9. Register: Add <url> entry to sitemap.xml with <lastmod>YYYY-MM-DD</lastmod>
+      10. Link: Add card to blog.html index page
+      11. Cross-link: Add link from 1-2 related existing posts back to this one
+      12. Verify: Check page at https://yt-seo-architect.vercel.app/blog/[SLUG]
+       ═══════════════════════════════════════════════════════════════ -->
+
+  <link rel="alternate" hreflang="en" href="https://yt-seo-architect.vercel.app/blog/[POST_SLUG]" />
+  <link rel="alternate" hreflang="x-default" href="https://yt-seo-architect.vercel.app/blog/[POST_SLUG]" />
+
+  <!-- ── Performance ───────────────────────────────────────────────── -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+
+  <!-- ── Title ────────────────────────────────────────────────────── -->
+  <title>[POST_TITLE] — YT SEO Architect</title>
+
+  <!-- ── Meta Description ─────────────────────────────────────────── -->
+  <meta name="description" content="[META_DESCRIPTION — 150-160 chars with primary keyword]" />
+  <meta name="robots" content="index, follow" />
+  <link rel="canonical" href="https://yt-seo-architect.vercel.app/blog/[POST_SLUG]" />
+
+  <!-- ── Open Graph ──────────────── -->
+  <meta property="og:type" content="article" />
+  <meta property="og:url" content="https://yt-seo-architect.vercel.app/blog/[POST_SLUG]" />
+  <meta property="og:title" content="[OG_TITLE]" />
+  <meta property="og:description" content="[OG_DESCRIPTION]" />
+  <meta property="og:image" content="https://yt-seo-architect.vercel.app/blog/[SLUG]-og.png" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta property="og:site_name" content="YT SEO Architect" />
+  <meta property="article:author" content="https://yt-seo-architect.vercel.app/about" />
+  <meta property="article:published_time" content="[YYYY-MM-DD]" />
+  <meta property="article:modified_time" content="[YYYY-MM-DD]" />
+
+  <!-- ── Twitter/X Card ──────────── -->
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="[OG_TITLE]" />
+  <meta name="twitter:description" content="[OG_DESCRIPTION]" />
+  <meta name="twitter:image" content="https://yt-seo-architect.vercel.app/blog/[SLUG]-og.png" />
+
+  <!-- ── Article Schema (JSON-LD) ───────────────────────────────── -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "headline": "[HEADLINE — max 110 chars]",
+    "description": "[SCHEMA_DESCRIPTION]",
+    "datePublished": "[YYYY-MM-DD]",
+    "dateModified": "[YYYY-MM-DD]",
+    "timeRequired": "PT[READING_TIME]M",
+    "author": {
+      "@type": "Person",
+      "name": "Patrick",
+      "url": "https://yt-seo-architect.vercel.app/about"
+    },
+    "publisher": {
+      "@type": "Organization",
+      "name": "YT SEO Architect",
+      "logo": {
+        "@type": "ImageObject",
+        "url": "https://yt-seo-architect.vercel.app/logo.svg"
+      }
+    },
+    "mainEntityOfPage": {
+      "@type": "WebPage",
+      "@id": "https://yt-seo-architect.vercel.app/blog/[POST_SLUG]"
+    }
+  }
+  </script>
+
+  <!-- ── FAQ Schema (JSON-LD) ───────────────────────────────────────
+       Rules: Exactly 5 questions. Answers < 50 words context-free.
+       CRITICAL: Answers here MUST match the visible FAQ content exactly.
+       Google rejects mismatched JSON-LD + visible text.
+  -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "[FAQ_QUESTION_1]",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "[FAQ_ANSWER_1 — keep under 50 words, match visible FAQ exactly]"
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "[FAQ_QUESTION_2]",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "[FAQ_ANSWER_2]"
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "[FAQ_QUESTION_3]",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "[FAQ_ANSWER_3]"
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "[FAQ_QUESTION_4]",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "[FAQ_ANSWER_4]"
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "[FAQ_QUESTION_5]",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "[FAQ_ANSWER_5]"
+        }
+      }
+    ]
+  }
+  </script>
+
+  <!-- ── Speakable Schema for voice search ─────────────────────────── -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "SpeakableSpecification",
+    "xPath": [
+      "/html/head/title",
+      "/html/head/meta[@name='description']/@content"
+    ]
+  }
+  </script>
+
+  <!-- ── BreadcrumbList Schema (JSON-LD) ────────────────────────── -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      {
+        "@type": "ListItem",
+        "position": 1,
+        "name": "Home",
+        "item": "https://yt-seo-architect.vercel.app/"
+      },
+      {
+        "@type": "ListItem",
+        "position": 2,
+        "name": "Blog",
+        "item": "https://yt-seo-architect.vercel.app/blog"
+      },
+      {
+        "@type": "ListItem",
+        "position": 3,
+        "name": "[CATEGORY]",
+        "item": "https://yt-seo-architect.vercel.app/blog/[POST_SLUG]"
+      }
+    ]
+  }
+  </script>
+
+  <link rel="stylesheet" href="/blog/blog.css" media="print" onload="this.media='all'">
+  <noscript><link rel="stylesheet" href="/blog/blog.css"></noscript>
+  <style>body{font-display:swap;font-family:'Outfit','Geist',-apple-system,BlinkMacSystemFont,sans-serif}</style>
+</head>
+<body>
+
+  <header class="header">
+    <a href="/">⚡ YT SEO Architect</a>
+    <a href="/dashboard" class="cta">Try Free</a>
+  </header>
+
+  <main>
+  <article>
+
+    <nav class="breadcrumb" aria-label="Breadcrumb">
+      <a href="/">Home</a> › <a href="/blog">Blog</a> › <strong>[CATEGORY]</strong>
+    </nav>
+
+    <h1>[ARTICLE_HEADLINE]</h1>
+
+    <p class="meta">
+      Published <time datetime="[YYYY-MM-DD]">[Month DD, YYYY]</time> · [X] min read · By <a href="/about">Patrick</a>
+      <span class="last-updated">✓ Updated <time datetime="[YYYY-MM-DD]">[Month YYYY]</time></span>
+    </p>
+
+    <!-- ── E-E-A-T: Author credentials box ───────────────────────── -->
+    <div class="author-box">
+      <div class="avatar">P</div>
+      <div class="author-info">
+        <h4>Patrick</h4>
+        <p>Founder of YT SEO Architect. Building AI-powered YouTube SEO tools for creators. Writing about algorithm changes, metadata optimization, and growth strategies backed by real channel data.</p>
+      </div>
+    </div>
+
+    <!-- ── Featured Image (Above the Fold) ────────────────────────── -->
+    <div class="featured-image-wrapper">
+      <img 
+        src="/blog/[SLUG]-hero.png" 
+        alt="[ALT_TEXT — descriptive, include keyword]" 
+        width="800" 
+        height="400" 
+        loading="eager"
+        fetchpriority="high"
+        onerror="this.onerror=null;this.src='/blog/hero-generic.png'"
+      />
+    </div>
+
+    <!-- ═══════════════════════════════════════════════════════════
+         TL;DR — AEO DIRECT ANSWER BLOCK
+         ═══════════════════════════════════════════════════════════ -->
+    <div class="tldr">
+      <h2>⚡ TL;DR (Direct Answer)</h2>
+      <ul>
+        <li><strong>[DIRECT_ANSWER]:</strong> [1-2 sentences answering the core query for AI extraction]</li>
+        <li>[Factual metric or statistic supporting the answer]</li>
+        <li>[Key actionable takeaway]</li>
+        <li><a href="/dashboard">Try YT SEO Architect free →</a></li>
+      </ul>
+    </div>
+
+    <nav class="toc" aria-label="Table of contents">
+      <h2>📑 In This Article</h2>
+      <ol>
+        <li><a href="#definition">[What Is Section]</a></li>
+        <li><a href="#comparison">[Competitive Analysis]</a></li>
+        <li><a href="#implementation">[Step-by-Step Guide]</a></li>
+        <li><a href="#technical-tradeoffs">[Technical Trade-offs]<span class="optional-badge">optional</span></a></li>
+        <li><a href="#faq">Frequently Asked Questions</a></li>
+        <li><a href="#key-takeaways">Key Takeaways</a></li>
+      </ol>
+    </nav>
+
+    <!-- ── Section 1: Definition (AEO Target) ────────────────────── -->
+    <section id="definition" aria-labelledby="definition-heading">
+    <h2 id="definition-heading">[WHAT_IS_SECTION_TITLE]</h2>
+    <p><strong>[DEFINITION_SENTENCE]:</strong> [A single, context-free definition sentence that can be quoted by AI.]</p>
+    <p>[Section content...]</p>
+
+    <div class="tip-card">
+      <strong>💡 EXPERT TIP:</strong> [Pro-tip related to section 1]
+    </div>
+    </section>
+
+    <!-- ── Section 2: Competitive Analysis (Comparison Matrix) ───── -->
+    <section id="comparison" aria-labelledby="comparison-heading">
+    <h2 id="comparison-heading">The Competitive Landscape: [Category] Tools Compared</h2>
+    <p>[Comparison narrative...]</p>
+    
+    <table>
+      <thead>
+        <tr>
+          <th>Feature</th>
+          <th>YT SEO Architect</th>
+          <th>[Competitor A]</th>
+          <th>[Competitor B]</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>[Feature 1]</td>
+          <td>✅ [Detail]</td>
+          <td>⚠️ [Detail]</td>
+          <td>❌ [Detail]</td>
+        </tr>
+        <tr>
+          <td>[Feature 2]</td>
+          <td>✅ [Detail]</td>
+          <td>✅ [Detail]</td>
+          <td>⚠️ [Detail]</td>
+        </tr>
+        <tr>
+          <td>Pricing</td>
+          <td>Free / $5–$19/mo</td>
+          <td>$15/mo</td>
+          <td>$19/mo</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="alert-box">
+      <strong>ℹ️ NOTE:</strong> [Critical information or comparison disclaimer]
+    </div>
+    </section>
+
+    <!-- ── Section 3: Implementation ─────────────────────────────── -->
+    <section id="implementation" aria-labelledby="implementation-heading">
+    <h2 id="implementation-heading">How to [Process]: Step-by-Step Recovery Blueprint</h2>
+    <p>[Implementation narrative...]</p>
+
+    <div class="step-guide">
+      <div class="step">
+        <h3>[Step 1 Title]</h3>
+        <p>[Step 1 Detail]</p>
+      </div>
+      <div class="step">
+        <h3>[Step 2 Title]</h3>
+        <p>[Step 2 Detail]</p>
+      </div>
+    </div>
+
+    <div class="cta-box">
+      <h3>🚀 [CTA_HEADLINE]</h3>
+      <p>[CTA_DESCRIPTION]</p>
+      <a href="/dashboard">[CTA_BUTTON_TEXT] →</a>
+    </div>
+    </section>
+
+    <!-- ── Section 4: Technical Authority (Trade-offs) ───────────── -->
+    <section id="technical-tradeoffs" aria-labelledby="tradeoffs-heading">
+    <h2 id="tradeoffs-heading">Technical Trade-offs: Why Most Strategies Fail</h2>
+    <p>[Honest engineering-level discussion of alternative methods that failed or the limitations of this current approach.]</p>
+    
+    <div class="warning-callout">
+      <strong>⚠️ WARNING:</strong> [Common pitfall or high-risk mistake]
+    </div>
+    </section>
+
+    <!-- ── FAQ Section (Exactly 5 Questions) ───────────────────────
+         CRITICAL: visible answers MUST match JSON-LD FAQPage answers exactly.
+         Google rejects mismatched schema + visible content.           -->
+    <section class="faq" id="faq">
+      <h2>❓ Frequently Asked Questions</h2>
+
+      <details open>
+        <summary>[FAQ_QUESTION_1]</summary>
+        <div class="faq-answer">
+          <p>[FAQ_ANSWER_1 — Under 50 words, must match JSON-LD exactly]</p>
+        </div>
+      </details>
+      <details open>
+        <summary>[FAQ_QUESTION_2]</summary>
+        <div class="faq-answer"><p>[FAQ_ANSWER_2 — must match JSON-LD exactly]</p></div>
+      </details>
+      <details open>
+        <summary>[FAQ_QUESTION_3]</summary>
+        <div class="faq-answer"><p>[FAQ_ANSWER_3 — must match JSON-LD exactly]</p></div>
+      </details>
+      <details open>
+        <summary>[FAQ_QUESTION_4]</summary>
+        <div class="faq-answer"><p>[FAQ_ANSWER_4 — must match JSON-LD exactly]</p></div>
+      </details>
+      <details open>
+        <summary>[FAQ_QUESTION_5]</summary>
+        <div class="faq-answer"><p>[FAQ_ANSWER_5 — must match JSON-LD exactly]</p></div>
+      </details>
+    </section>
+
+    <!-- ── Key Takeaways ─────────────────────────────────────────── -->
+    <div class="key-takeaways" id="key-takeaways">
+      <h2>🎯 Key Takeaways</h2>
+      <ul>
+        <li>[TAKEAWAY_1]</li>
+        <li>[TAKEAWAY_2]</li>
+        <li>[TAKEAWAY_3]</li>
+      </ul>
+    </div>
+
+    <!-- ── Trending Now (Update monthly) ──────────────────────────── -->
+    <div class="trending-now">
+      <h2>🔥 Trending Now in YouTube — [Month YYYY]</h2>
+      <ul>
+        <li>[TREND_1]</li>
+        <li>[TREND_2]</li>
+        <li>[TREND_3]</li>
+      </ul>
+    </div>
+
+    <!-- ── Social Proof ──────────────────────────────────────────── -->
+    <div class="social-proof">
+      <h2>📊 Trusted by YouTube Creators</h2>
+      <p>[STAT — e.g. "Over X creators use YT SEO Architect to optimize Y videos monthly"]</p>
+      <p>[TESTIMONIAL or CASE STUDY teaser]</p>
+    </div>
+
+    <!-- ── Bottom CTA ───────────────────────────────────────────── -->
+    <div class="cta-box cta-bottom">
+      <h3>🚀 Ready to Rank Higher on YouTube?</h3>
+      <p>Start with 100 free credits. No credit card required. Get optimized titles, tags, and descriptions in seconds.</p>
+      <a href="/dashboard">Start Free — 100 Credits →</a>
+    </div>
+
+  </article>
+
+  <nav class="related-posts" aria-label="Related articles">
+    <h3>📖 Related Articles</h3>
+    <a href="/blog/youtube-seo-guide-2026">YouTube SEO Guide 2026</a>
+    <a href="/blog/youtube-keyword-research-tutorial">YouTube Keyword Research Tutorial</a>
+  </nav>
+
+  </main>
+
+  <footer class="footer">
+    <p>© 2026 YT SEO Architect · <a href="/blog">All Articles</a> · <a href="/pricing">Pricing</a> · <a href="/privacy-policy">Privacy</a></p>
+  </footer>
+
+</body>
+</html>

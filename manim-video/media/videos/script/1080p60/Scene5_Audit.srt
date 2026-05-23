@@ -1,0 +1,4 @@
+1
+00:00:00,000 --> 00:00:03,000
+SEO Audit — paste any URL, get a full scorecard with AI fix suggestions
+

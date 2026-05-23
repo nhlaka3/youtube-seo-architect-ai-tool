@@ -1,0 +1,173 @@
+# Vercel
+.vercel
+
+# Environment
+.env
+.env.local
+.env*.local
+
+# Dependencies
+node_modules/
+
+# Build output
+dist/
+
+# Logs
+*.log
+logs/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/
+
+# Temp / scratch
+scratch/
+output/
+storage/
+chrome-data/
+chrome-temp-*/
+backup_*/
+backups/
+logs.*
+*.bak
+
+# Agent / skill state
+.superpowers/
+.agent/
+.agents/
+.claude/
+.opencode/
+.hermes/
+graphify-out/
+
+# Database
+*.sqlite
+db.sqlite
+
+# Sensitive files
+CRON_SECRET.txt
+secret*.txt
+oauth*.txt
+key.txt
+geminiapi.txt
+
+# Test artifacts
+payload_*.json
+test-*.js
+verify_*.js
+verify_*.mjs
+trigger-automation.js
+run-autoflow.*
+
+# Build artifacts
+BUILD_*.txt
+build.log
+build_log.txt
+
+# Skill marketplace (not project files)
+skills/
+skills2/
+
+# Large generated files
+sed*
+
+# AI output drafts and scratch notes
+Qwen__*.txt
+*_PLAN.txt
+*_GOAL.txt
+*_PLAN.md
+*_STRATEGY.txt
+phronesis-*.md
+tas*.txt
+task*.txt
+tester.txt
+phro*.txt
+phronesismind.txt
+phr.txt
+agentandpersona.txt
+agentking.txt
+anaz.txt
+assff.txt
+checks.txt
+coach.txt
+content.txt
+cook.txt
+credit.txt
+data*.txt
+error*.txt
+errorseo.txt
+growth.txt
+implementation.txt
+improve.txt
+inbox.txt
+language.txt
+look.txt
+now.txt
+opti.txt
+optre.txt
+optimizationhistory.txt
+outcome.txt
+page.txt
+persona.txt
+post.txt
+preuploadlab*.txt
+redu.txt
+res.txt
+results*.txt
+see.txt
+seo.txt
+sentryemail.txt
+sniper.txt
+speed.txt
+traffic.txt
+trebb.txt
+trendpulse.txt
+trendresults*.txt
+valid.txt
+verifyque.txt
+video.txt
+war.txt
+warrs.txt
+marketing*.txt
+marketing*.md
+blog-*.txt
+twitter*.txt
+competitor-*.txt
+backlink-*.txt
+free-backlinks.txt
+haro-templates.txt
+directory-submissions.txt
+pinterest-pins.txt
+youtube-*.txt
+room.txt
+dude.txt
+edit results.txt
+me.txt
+file_paths.txt
+table-*.csv
+Aicontentlabel.txt
+Implementation Plan*.txt
+BACKLINK_PLAN.md
+TOPICAL_CLUSTER_MAP.md
+GROWTH_PLAN.txt
+GREATPLAN.txt
+SALES_STRATEGY.txt
+BUSINESS_GOAL.txt
+MARKETING_GOAL.txt
+analytics.txt
+autoflow.js
+automation.js
+extracted-features.js
+3 fixes.txt
+YTSEOVERIFICATION.txt
+subscription model.txt
+blog ideas.txt
+WEBSITE_INDEXING.txt
+YOUTUBE_VERIFICATION.txt
+db.json
+server_run.js
+server.log

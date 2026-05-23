@@ -1,0 +1,67 @@
+Title: I A/B tested thumbnails on 40 videos. Here's the exact order to test variables (with real CTR data)
+
+Body:
+
+I spent the last 60 days running YouTube's built-in Thumbnail Test & Compare on every video above 10K impressions. I tracked every result. The data taught me something I wasn't expecting: the ORDER you test variables matters more than which variable you pick.
+
+Here's the testing hierarchy that actually moved CTR:
+
+---
+
+TEST 1: Face vs. No Face (Biggest Impact)
+
+This is always your first test. A thumbnail with a human face showing a clear emotion — surprise, curiosity, intensity — against a text-only version. Across 40 tests, face-forward thumbnails won 28 out of 40 times (70%). The ones that lost were usually in niches where the product itself was the star (tech reviews, unboxing).
+
+Do not skip this test because "my channel doesn't do faces." Test it anyway. The data might surprise you.
+
+---
+
+TEST 2: Background Color & Contrast
+
+Thumbnails sit at roughly 200x112 pixels in suggested feeds. Low-contrast thumbnails disappear completely against YouTube's dark-mode UI. I tested bright backgrounds (yellow, cyan, white) against dark backgrounds. Bright won 22 out of 30 tests. The winning color was yellow — it pops against both dark mode and light mode.
+
+Quick rule: if your thumbnail blends into YouTube's dark sidebar, people literally cannot see it. Fix contrast before anything else.
+
+---
+
+TEST 3: Text Overlay Length
+
+Most creators use too many words. I tested 0-4 words against 6-10 words across 15 videos. The shorter version won 12 times. The text that worked best was a 2-3 word phrase that reinforces the title without repeating it.
+
+Example: If your title is "How I Grew to 10K Subs in 90 Days," your thumbnail text should say "10K in 90 Days" — shorter, different from the title, instantly readable.
+
+---
+
+TEST 4: Element Placement (Surprising Result)
+
+This one caught me off guard. Thumbnails where the subject was looking slightly AWAY from the camera (toward the title text) outperformed direct eye contact by about 15%. The viewer's gaze follows the subject's line of sight toward the text, reads it, and clicks. It's a composition trick photographers have used forever. It works on thumbnails too.
+
+---
+
+THE MATH THAT MAKES THIS WORTH IT
+
+100,000 impressions at 4% CTR = 4,000 clicks
+100,000 impressions at 6% CTR = 6,000 clicks
+Same impressions. Same video. 2,000 more views. No algorithm change needed. Just a better thumbnail.
+
+I went from 3.2% to 7.8% channel-wide CTR in 60 days by running 2 tests per video, keeping winners, and applying the patterns to every upload.
+
+---
+
+ONE MISTAKE I SEE EVERYWHERE
+
+Do not change 3 variables in one test. If you change the face, the background, AND the text — and the new thumbnail wins — which variable drove the win? You don't know. You learned nothing. One variable per test. Always.
+
+---
+
+HOW TO ACTUALLY RUN THE TEST (Built Into YouTube)
+
+YouTube Studio has Thumbnail Test & Compare under the Content tab. Click any video with 10K+ impressions, go to the Thumbnail tab, upload 2-3 variants. YouTube shows them evenly and declares a winner when confidence hits 95%. It measures watch time share, not raw CTR — so clickbait loses. The test runs for up to 2 weeks. If a winner emerges earlier, YouTube auto-applies it.
+
+Do not check results daily. Set a reminder for 7 days. The tool needs traffic to reach significance. Ending early defeats the purpose.
+
+---
+
+Start with videos already published — your back catalog is a testing goldmine. Videos from 6 months ago still get impressions from search. A thumbnail swap on a 40K-impression video with a 2% CTR can add hundreds of views per month without uploading anything new.
+
+What testing order have you guys tried? Anyone tested something that surprised them?

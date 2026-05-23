@@ -1,0 +1,54 @@
+{
+  "name": "youtube-seo-tool",
+  "version": "1.0.0",
+  "type": "module",
+  "description": "YouTube SEO Optimization Platform",
+  "main": "api/index.js",
+  "engines": {
+    "node": "20"
+  },
+  "scripts": {
+    "start": "node api/index.js",
+    "dev": "node api/index.js",
+    "test": "node --test tests/api.test.js",
+    "test:critical": "node --test tests/critical-path.test.js",
+    "test:watch": "node --test tests/api.test.js --watch",
+    "lint": "echo 'Linting...'",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "devDependencies": {
+    "serve": "^14.2.6",
+    "vite": "^7.3.1"
+  },
+  "dependencies": {
+    "@ffmpeg-installer/ffmpeg": "^1.1.0",
+    "@google/generative-ai": "^0.21.0",
+    "@neondatabase/serverless": "^0.8.1",
+    "@paralleldrive/cuid2": "^3.3.0",
+    "@sentry/node": "^7.100.1",
+    "@vercel/analytics": "^2.0.1",
+    "@vudovn/ag-kit": "^2.0.2",
+    "cors": "^2.8.6",
+    "dotenv": "^17.3.1",
+    "drizzle-orm": "^0.29.5",
+    "express": "^5.2.1",
+    "express-rate-limit": "^7.1.5",
+    "ffmpeg-static": "^5.3.0",
+    "fluent-ffmpeg": "^2.1.3",
+    "groq-sdk": "^0.3.3",
+    "helmet": "^7.1.0",
+    "node-cron": "^4.2.1",
+    "node-fetch": "^3.3.2",
+    "pg": "^8.11.3",
+    "playwright": "^1.59.1",
+    "puppeteer": "^24.39.0",
+    "puppeteer-extra": "^3.3.6",
+    "puppeteer-extra-plugin-stealth": "^2.11.2",
+    "sharp": "^0.34.5",
+    "sql.js": "^1.14.1",
+    "winston": "^3.11.0",
+    "winston-daily-rotate-file": "^5.0.0",
+    "zod": "^4.3.6"
+  }
+}

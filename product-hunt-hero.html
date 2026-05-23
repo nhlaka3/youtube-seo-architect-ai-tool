@@ -1,0 +1,530 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>YT SEO Architect — Product Hunt Hero</title>
+<style>
+  :root {
+    --bg: #09090b;
+    --surface: #111118;
+    --accent: #00d4ff;
+    --accent-dim: rgba(0,212,255,0.12);
+    --text: #f4f4f5;
+    --muted: #71717a;
+    --green: #10b981;
+    --amber: #f59e0b;
+    --red: #ef4444;
+    --border: rgba(255,255,255,0.06);
+    --radius: 10px;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: #000;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+  }
+
+  .canvas {
+    width: 1270px;
+    height: 760px;
+    background: var(--bg);
+    position: relative;
+    overflow: hidden;
+    border-radius: 16px;
+    box-shadow: 0 0 0 1px var(--border), 0 30px 80px rgba(0,0,0,0.6);
+  }
+
+  /* Subtle grid pattern */
+  .grid {
+    position: absolute;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(255,255,255,0.015) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255,255,255,0.015) 1px, transparent 1px);
+    background-size: 48px 48px;
+    pointer-events: none;
+  }
+
+  /* Accent glow top-right */
+  .glow {
+    position: absolute;
+    top: -200px;
+    right: -100px;
+    width: 700px;
+    height: 600px;
+    background: radial-gradient(ellipse, rgba(0,212,255,0.07) 0%, transparent 70%);
+    pointer-events: none;
+  }
+
+  /* Second glow bottom-left */
+  .glow2 {
+    position: absolute;
+    bottom: -150px;
+    left: -100px;
+    width: 500px;
+    height: 400px;
+    background: radial-gradient(ellipse, rgba(16,185,129,0.04) 0%, transparent 70%);
+    pointer-events: none;
+  }
+
+  /* === LEFT: Product identity === */
+  .hero-left {
+    position: absolute;
+    top: 80px;
+    left: 80px;
+    z-index: 2;
+    max-width: 480px;
+  }
+
+  .badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 6px 14px;
+    border-radius: 20px;
+    background: var(--accent-dim);
+    border: 1px solid rgba(0,212,255,0.2);
+    color: var(--accent);
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    margin-bottom: 32px;
+  }
+
+  .badge-dot {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: var(--accent);
+    box-shadow: 0 0 8px var(--accent);
+    animation: pulse 2s ease-in-out infinite;
+  }
+
+  @keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.4; }
+  }
+
+  .product-name {
+    display: flex;
+    align-items: baseline;
+    gap: 12px;
+    margin-bottom: 16px;
+  }
+
+  .product-name .yt {
+    font-size: 48px;
+    font-weight: 800;
+    color: #ff0000;
+    line-height: 1;
+    letter-spacing: -1px;
+  }
+
+  .product-name .seo {
+    font-size: 48px;
+    font-weight: 800;
+    color: var(--text);
+    line-height: 1;
+    letter-spacing: -1px;
+  }
+
+  .product-name .arch {
+    font-size: 48px;
+    font-weight: 300;
+    color: var(--muted);
+    line-height: 1;
+    letter-spacing: -1px;
+  }
+
+  .tagline {
+    font-size: 22px;
+    font-weight: 500;
+    color: var(--muted);
+    margin-bottom: 40px;
+    line-height: 1.4;
+  }
+
+  .tagline strong {
+    color: var(--accent);
+    font-weight: 600;
+  }
+
+  /* Feature pills */
+  .pills {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+
+  .pill {
+    padding: 10px 18px;
+    border-radius: 8px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    font-size: 13px;
+    color: var(--text);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .pill-icon { font-size: 16px; }
+
+  /* === RIGHT: Pipeline visualization === */
+  .hero-right {
+    position: absolute;
+    top: 60px;
+    right: 60px;
+    width: 580px;
+    z-index: 2;
+  }
+
+  .pipeline-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 28px;
+    margin-bottom: 16px;
+    position: relative;
+  }
+
+  .pipeline-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--accent), transparent);
+  }
+
+  .pipeline-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+  }
+
+  .pipeline-title {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text);
+    letter-spacing: 0.3px;
+  }
+
+  .pipeline-status {
+    font-size: 11px;
+    padding: 3px 10px;
+    border-radius: 12px;
+    background: rgba(16,185,129,0.1);
+    color: var(--green);
+    border: 1px solid rgba(16,185,129,0.15);
+  }
+
+  /* Tier indicators */
+  .tiers {
+    display: flex;
+    gap: 12px;
+    margin-bottom: 24px;
+  }
+
+  .tier {
+    flex: 1;
+    padding: 16px 14px;
+    border-radius: 8px;
+    background: rgba(255,255,255,0.02);
+    border: 1px solid var(--border);
+    text-align: center;
+  }
+
+  .tier.active {
+    border-color: var(--accent);
+    background: var(--accent-dim);
+  }
+
+  .tier-num {
+    font-size: 22px;
+    font-weight: 700;
+    color: var(--accent);
+    line-height: 1;
+  }
+
+  .tier-label {
+    font-size: 10px;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-top: 6px;
+  }
+
+  .tier-stat {
+    font-size: 18px;
+    font-weight: 600;
+    color: var(--text);
+    margin-top: 4px;
+  }
+
+  /* Arrow between tiers */
+  .tier-arrows {
+    display: flex;
+    align-items: center;
+    gap: 0;
+    position: relative;
+  }
+
+  .arrow {
+    color: var(--muted);
+    font-size: 18px;
+    position: absolute;
+    transform: translateY(-15px);
+  }
+
+  /* Video list */
+  .video-list {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .video-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 14px;
+    border-radius: 8px;
+    background: rgba(255,255,255,0.015);
+    border: 1px solid transparent;
+  }
+
+  .video-row:hover {
+    border-color: var(--border);
+    background: rgba(255,255,255,0.025);
+  }
+
+  .score-badge {
+    width: 36px;
+    height: 36px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 13px;
+    font-weight: 700;
+    color: #fff;
+  }
+
+  .score-low { background: var(--red); opacity: 0.8; }
+  .score-mid { background: var(--amber); opacity: 0.8; }
+  .score-high { background: var(--green); opacity: 0.8; }
+
+  .video-info {
+    flex: 1;
+    min-width: 0;
+  }
+
+  .video-title {
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--text);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .video-meta {
+    font-size: 10px;
+    color: var(--muted);
+    margin-top: 2px;
+  }
+
+  .fix-indicator {
+    font-size: 10px;
+    padding: 3px 8px;
+    border-radius: 6px;
+    white-space: nowrap;
+  }
+
+  .fix-tags { background: rgba(0,212,255,0.08); color: var(--accent); }
+  .fix-title { background: rgba(245,158,11,0.08); color: var(--amber); }
+
+  /* Auto-apply toast */
+  .auto-toast {
+    position: absolute;
+    bottom: 70px;
+    right: 80px;
+    padding: 14px 20px;
+    border-radius: 10px;
+    background: rgba(16,185,129,0.08);
+    border: 1px solid rgba(16,185,129,0.2);
+    color: var(--green);
+    font-size: 13px;
+    font-weight: 500;
+    z-index: 3;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .auto-toast-icon {
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    background: var(--green);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #000;
+    font-size: 14px;
+  }
+
+  /* URL bar at bottom */
+  .url-bar {
+    position: absolute;
+    bottom: 24px;
+    left: 80px;
+    right: 80px;
+    height: 32px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    padding: 0 14px;
+    font-size: 12px;
+    color: var(--muted);
+    z-index: 2;
+  }
+
+  .url-segment { color: var(--accent); font-weight: 500; }
+
+  /* Particle accents */
+  .particle {
+    position: absolute;
+    width: 2px;
+    height: 2px;
+    border-radius: 50%;
+    background: var(--accent);
+    opacity: 0.3;
+    pointer-events: none;
+  }
+</style>
+</head>
+<body>
+
+<div class="canvas">
+
+  <div class="grid"></div>
+  <div class="glow"></div>
+  <div class="glow2"></div>
+
+  <!-- LEFT HERO -->
+  <div class="hero-left">
+    <div class="badge">
+      <div class="badge-dot"></div>
+      AUTONOMOUS AGENT — LIVE
+    </div>
+
+    <div class="product-name">
+      <span class="yt">YT</span>
+      <span class="seo">SEO</span>
+      <span class="arch">Architect</span>
+    </div>
+
+    <div class="tagline">
+      <strong>Build Rankings.</strong> Not Guesswork.
+    </div>
+
+    <div class="pills">
+      <div class="pill"><span class="pill-icon">🔍</span> Scan → Score</div>
+      <div class="pill"><span class="pill-icon">⚡</span> Auto-Apply</div>
+      <div class="pill"><span class="pill-icon">🧪</span> A/B Test</div>
+      <div class="pill"><span class="pill-icon">📈</span> Track Impact</div>
+    </div>
+  </div>
+
+  <!-- RIGHT: PIPELINE -->
+  <div class="hero-right">
+    <div class="pipeline-card">
+      <div class="pipeline-header">
+        <span class="pipeline-title">Phronesis Agent — Autonomous Pipeline</span>
+        <span class="pipeline-status">● Active</span>
+      </div>
+
+      <div class="tiers">
+        <div class="tier active">
+          <div class="tier-num">🔍</div>
+          <div class="tier-label">Scan</div>
+          <div class="tier-stat">8</div>
+        </div>
+        <div style="display:flex;align-items:center;color:var(--muted);font-size:20px;">→</div>
+        <div class="tier">
+          <div class="tier-num">💡</div>
+          <div class="tier-label">Propose</div>
+          <div class="tier-stat">38</div>
+        </div>
+        <div style="display:flex;align-items:center;color:var(--muted);font-size:20px;">→</div>
+        <div class="tier">
+          <div class="tier-num">⚡</div>
+          <div class="tier-label">Act</div>
+          <div class="tier-stat">7</div>
+        </div>
+      </div>
+
+      <div class="video-list">
+        <div class="video-row">
+          <div class="score-badge score-mid">52</div>
+          <div class="video-info">
+            <div class="video-title">Einstein's Proof You Have No Free Will</div>
+            <div class="video-meta">Title · 1.2K views · 0.8% engagement</div>
+          </div>
+          <div class="fix-indicator fix-title">Title Fix</div>
+        </div>
+        <div class="video-row">
+          <div class="score-badge score-mid">39</div>
+          <div class="video-info">
+            <div class="video-title">The Loneliest Place On Earth</div>
+            <div class="video-meta">Tags · 380 views · 0 tags</div>
+          </div>
+          <div class="fix-indicator fix-tags">+5 Tags</div>
+        </div>
+        <div class="video-row">
+          <div class="score-badge score-high">75</div>
+          <div class="video-info">
+            <div class="video-title">Dead While Alive: Cotard's Delusion</div>
+            <div class="video-meta">Chapters · 2.4K views · 2.1% engagement</div>
+          </div>
+          <div class="fix-indicator fix-title">Chapters</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- AUTO-APPLY TOAST -->
+  <div class="auto-toast">
+    <div class="auto-toast-icon">✓</div>
+    7 tag improvements auto-applied to YouTube
+  </div>
+
+  <!-- URL BAR -->
+  <div class="url-bar">
+    <span>🔒</span>
+    <span style="margin:0 8px;">yt-seo-architect</span>
+    <span class="url-segment">.vercel.app</span>
+    <span style="margin-left:auto;font-size:10px;">Node.js 22 · Groq/Gemini · Neon DB · Vercel</span>
+  </div>
+
+  <!-- Decorative particles -->
+  <div class="particle" style="top:120px;left:620px;"></div>
+  <div class="particle" style="top:180px;left:650px;opacity:0.5;width:3px;height:3px;"></div>
+  <div class="particle" style="top:300px;left:610px;opacity:0.2;"></div>
+  <div class="particle" style="top:400px;right:200px;opacity:0.4;width:1px;height:4px;"></div>
+  <div class="particle" style="bottom:120px;right:400px;opacity:0.3;"></div>
+
+</div>
+
+</body>
+</html>

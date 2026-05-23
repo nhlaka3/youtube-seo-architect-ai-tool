@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=900,height=600">
+<title>YT SEO Architect — Demo</title>
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body {
+    width: 900px; height: 600px;
+    background: #09090b;
+    font-family: 'Inter', system-ui, -apple-system, sans-serif;
+    overflow: hidden;
+    color: #f4f4f5;
+  }
+  .header {
+    display: flex; align-items: center; gap: 12px;
+    padding: 16px 24px;
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+  }
+  .logo-text { font-size: 14px; font-weight: 700; }
+  .logo-text .r { color: #ff0000; } .logo-text .c { color: #00d4ff; }
+  .badge {
+    padding: 3px 10px; border-radius: 12px;
+    font-size: 10px; font-weight: 600;
+    background: rgba(0,212,255,0.08);
+    border: 1px solid rgba(0,212,255,0.2);
+    color: #00d4ff;
+  }
+  .main {
+    display: grid; grid-template-columns: 1fr 1.4fr 1fr;
+    height: calc(600px - 53px);
+    gap: 1px;
+    background: rgba(255,255,255,0.04);
+  }
+  .col {
+    background: #09090b;
+    padding: 16px;
+    overflow-y: auto;
+  }
+  .col-title {
+    font-size: 10px; text-transform: uppercase;
+    letter-spacing: 1.5px; color: #71717a;
+    margin-bottom: 12px;
+    display: flex; align-items: center; gap: 6px;
+  }
+  .col-title .dot {
+    width: 6px; height: 6px; border-radius: 50%;
+    background: #00d4ff;
+  }
+  .col-title .dot.done { background: #10b981; }
+  .col-title .dot.waiting { background: #3f3f46; }
+
+  /* Pipeline steps */
+  .pipeline {
+    display: flex; flex-direction: column; gap: 0;
+    position: relative;
+  }
+  .step {
+    display: flex; align-items: center; gap: 10px;
+    padding: 8px 10px; border-radius: 6px;
+    font-size: 12px;
+    opacity: 0.4; transition: all 0.5s;
+  }
+  .step.active { opacity: 1; background: rgba(0,212,255,0.04); }
+  .step.done { opacity: 0.7; }
+  .step-icon {
+    width: 28px; height: 28px; border-radius: 8px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 14px; flex-shrink: 0;
+    background: rgba(255,255,255,0.04);
+  }
+  .step.active .step-icon { background: rgba(0,212,255,0.1); }
+  .step.done .step-icon { background: rgba(16,185,129,0.1); }
+  .step-label { font-weight: 500; }
+  .step-stat {
+    margin-left: auto; font-size: 13px; font-weight: 700;
+    color: #00d4ff; display: none;
+  }
+  .step.active .step-stat, .step.done .step-stat { display: block; }
+  .step.done .step-stat { color: #10b981; }
+
+  .connector {
+    width: 1.5px; height: 12px;
+    margin-left: 23px;
+    background: rgba(255,255,255,0.06);
+  }
+
+  /* Score cards */
+  .video-card {
+    background: rgba(255,255,255,0.02);
+    border: 1px solid rgba(255,255,255,0.05);
+    border-radius: 8px; padding: 12px;
+    margin-bottom: 8px;
+    opacity: 0; transform: translateY(8px);
+    animation: fadeIn 0.4s forwards;
+  }
+  @keyframes fadeIn { to { opacity:1; transform:translateY(0); } }
+  .video-title {
+    font-size: 12px; font-weight: 600;
+    overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+    margin-bottom: 8px;
+  }
+  .score-row {
+    display: flex; align-items: center; gap: 8px;
+    font-size: 10px; margin-bottom: 3px;
+  }
+  .score-label { width: 32px; color: #71717a; text-transform: uppercase; font-size: 8px; }
+  .score-bar {
+    flex: 1; height: 3px; background: rgba(255,255,255,0.06);
+    border-radius: 2px; overflow: hidden;
+  }
+  .score-fill {
+    height: 100%; border-radius: 2px;
+    transition: width 1s ease-out;
+  }
+  .score-val { width: 22px; text-align: right; font-size: 9px; color: #71717a; }
+
+  /* Inbox */
+  .inbox-item {
+    background: rgba(255,255,255,0.02);
+    border: 1px solid rgba(255,255,255,0.05);
+    border-radius: 8px; padding: 12px; margin-bottom: 8px;
+    opacity: 0; transform: translateX(10px);
+    animation: fadeIn 0.4s forwards;
+  }
+  .item-type {
+    font-size: 9px; padding: 2px 8px; border-radius: 4px;
+    display: inline-block; margin-bottom: 6px;
+  }
+  .type-title { background: rgba(245,158,11,0.1); color: #f59e0b; }
+  .type-tags { background: rgba(0,212,255,0.1); color: #00d4ff; }
+  .type-chapters { background: rgba(16,185,129,0.1); color: #10b981; }
+  .compare {
+    display: grid; grid-template-columns: 1fr auto 1fr;
+    gap: 6px; align-items: start; font-size: 11px;
+    margin-bottom: 6px;
+  }
+  .old {
+    background: rgba(239,68,68,0.06);
+    border: 1px solid rgba(239,68,68,0.1);
+    border-radius: 6px; padding: 8px;
+  }
+  .new {
+    background: rgba(16,185,129,0.06);
+    border: 1px solid rgba(16,185,129,0.1);
+    border-radius: 6px; padding: 8px;
+  }
+  .comp-label {
+    font-size: 8px; text-transform: uppercase;
+    letter-spacing: 0.5px; margin-bottom: 3px;
+    font-weight: 700;
+  }
+  .old .comp-label { color: #ef4444; }
+  .new .comp-label { color: #10b981; }
+  .arrow { color: #71717a; font-size: 14px; display:flex;align-items:center; }
+  .conf {
+    font-size: 10px; font-weight: 700;
+    margin-top: 4px;
+  }
+
+  /* Toast */
+  .toast {
+    position: fixed; bottom: 20px; right: 20px;
+    padding: 12px 20px; border-radius: 10px;
+    font-size: 12px; font-weight: 500;
+    opacity: 0; transform: translateY(10px);
+    transition: all 0.3s;
+  }
+  .toast.show {
+    opacity: 1; transform: translateY(0);
+  }
+  .toast.success {
+    background: rgba(16,185,129,0.1);
+    border: 1px solid rgba(16,185,129,0.2);
+    color: #10b981;
+  }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="logo-text"><span class="r">YT</span> SEO <span class="c">Architect</span></div>
+  <div class="badge" id="statusBadge">● Idle</div>
+  <div style="margin-left:auto;font-size:11px;color:#71717a;" id="timer">0:00</div>
+</div>
+
+<div class="main">
+  <!-- LEFT: Pipeline -->
+  <div class="col">
+    <div class="col-title"><span class="dot" id="pipelineDot"></span> Phronesis Agent</div>
+    <div class="pipeline">
+      <div class="step" id="stepInit"><span class="step-icon">🔌</span><span class="step-label">Connect Channel</span><span class="step-stat">✓</span></div>
+      <div class="connector"></div>
+      <div class="step" id="stepScan"><span class="step-icon">🔍</span><span class="step-label">Scan Videos</span><span class="step-stat">0</span></div>
+      <div class="connector"></div>
+      <div class="step" id="stepScore"><span class="step-icon">📊</span><span class="step-label">Score & Analyze</span><span class="step-stat">0</span></div>
+      <div class="connector"></div>
+      <div class="step" id="stepPropose"><span class="step-icon">💡</span><span class="step-label">Generate Proposals</span><span class="step-stat">0</span></div>
+      <div class="connector"></div>
+      <div class="step" id="stepAct"><span class="step-icon">⚡</span><span class="step-label">Auto-Apply</span><span class="step-stat">0</span></div>
+    </div>
+  </div>
+
+  <!-- CENTER: Scan Results / Inbox -->
+  <div class="col" id="centerCol">
+    <div class="col-title"><span class="dot waiting" id="centerDot"></span> <span id="centerTitle">Scan Results</span></div>
+    <div id="centerContent"></div>
+  </div>
+
+  <!-- RIGHT: Recommendations -->
+  <div class="col">
+    <div class="col-title"><span class="dot waiting" id="recDot"></span> Recommendations</div>
+    <div id="recContent"></div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+const $ = id => document.getElementById(id);
+const toast = $('toast');
+let timerSec = 0, timerInterval;
+
+function showToast(msg, cls='success') {
+  toast.textContent = msg; toast.className = 'toast ' + cls + ' show';
+  setTimeout(() => toast.classList.remove('show'), 3000);
+}
+
+function startTimer() {
+  timerInterval = setInterval(() => { timerSec++; $('timer').textContent = Math.floor(timerSec/60) + ':' + String(timerSec%60).padStart(2,'0'); }, 1000);
+}
+
+// Demo sequence
+const steps = ['stepInit','stepScan','stepScore','stepPropose','stepAct'];
+let currentStep = 0;
+
+function activateStep(idx) {
+  steps.forEach((s,i) => {
+    const el = $(s);
+    el.classList.remove('active','done');
+    if (i < idx) el.classList.add('done');
+    if (i === idx) el.classList.add('active');
+  });
+  currentStep = idx;
+}
+
+async function sleep(ms) { return new Promise(r => setTimeout(r, ms)); }
+
+async function runDemo() {
+  // Step 0: Connect
+  $('statusBadge').textContent = '● Connected';
+  $('statusBadge').style.color = '#10b981';
+  $('statusBadge').style.borderColor = 'rgba(16,185,129,0.3)';
+  activateStep(0); $(steps[0]).querySelector('.step-stat').textContent = '✓';
+  $('pipelineDot').className = 'dot done';
+  startTimer();
+  showToast('Channel connected — UCYPImn...');
+  await sleep(1200);
+
+  // Step 1: Scan
+  $('statusBadge').textContent = '● Scanning';
+  $('statusBadge').style.color = '#00d4ff';
+  $('statusBadge').style.borderColor = 'rgba(0,212,255,0.3)';
+  activateStep(1);
+  $(steps[1]).querySelector('.step-stat').textContent = '8';
+  $('pipelineDot').className = 'dot';
+  $('centerDot').className = 'dot';
+  $('centerTitle').textContent = 'Scan Results';
+  showToast('Scanning 8 videos...');
+
+  // Show video cards appearing
+  const videos = [
+    { title: 'The Loneliest Place On Earth Point Nemo', scores: { title:88, desc:40, tags:20, overall:75 }, delay: 300 },
+    { title: 'The Truth About Appendicitis', scores: { title:81, desc:30, tags:20, overall:70 }, delay: 600 },
+    { title: 'Dead While Alive: Cotard\'s Delusion', scores: { title:65, desc:45, tags:55, overall:62 }, delay: 900 },
+    { title: 'Einstein\'s Proof You Have No Free Will', scores: { title:52, desc:40, tags:21, overall:39 }, delay: 1200 },
+  ];
+
+  for (const v of videos) {
+    await sleep(v.delay);
+    const card = document.createElement('div');
+    card.className = 'video-card';
+    card.style.animationDelay = '0s';
+    const grade = v.scores.overall >= 70 ? 'A' : v.scores.overall >= 55 ? 'B' : v.scores.overall >= 40 ? 'C' : 'D';
+    const gradeColor = grade === 'A' ? '#10b981' : grade === 'B' ? '#00d4ff' : grade === 'C' ? '#f59e0b' : '#ef4444';
+    card.innerHTML = `
+      <div class="video-title">${v.title}</div>
+      ${['title','desc','tags'].map(k => `
+        <div class="score-row">
+          <span class="score-label">${k}</span>
+          <div class="score-bar"><div class="score-fill" style="width:${v.scores[k]}%;background:${v.scores[k]>=70?'#10b981':v.scores[k]>=40?'#f59e0b':'#ef4444'}"></div></div>
+          <span class="score-val">${v.scores[k]}</span>
+        </div>
+      `).join('')}
+      <div style="display:flex;align-items:center;gap:6px;margin-top:6px;">
+        <span style="font-size:8px;color:#71717a;">OVERALL</span>
+        <div class="score-bar" style="height:4px;"><div class="score-fill" style="width:${v.scores.overall}%;background:${gradeColor}"></div></div>
+        <span style="font-size:10px;font-weight:700;color:${gradeColor}">${grade}</span>
+      </div>
+    `;
+    $('centerContent').appendChild(card);
+  }
+  await sleep(600);
+  activateStep(1); $(steps[1]).classList.add('done');
+
+  // Step 2: Score
+  activateStep(2);
+  $(steps[2]).querySelector('.step-stat').textContent = '8';
+  showToast('Analyzing scores & detecting niche...');
+  await sleep(1000);
+  $(steps[2]).classList.add('done');
+
+  // Step 3: Propose
+  $('centerTitle').textContent = 'Command Inbox';
+  $('centerContent').innerHTML = '';
+  activateStep(3);
+  $(steps[3]).querySelector('.step-stat').textContent = '38';
+
+  const proposals = [
+    { type:'title', old:'Dead While Alive: Cotard\'s Delusion Explained #Shorts', new:'10 Critical Dead While Alive: Cotard\'s Delusion Explained #Shorts (Step by Step)', conf:53, delay:400 },
+    { type:'tags', old:'0 tags', new:'+5 tags: loneliest, place, earth, point, nemo', conf:90, delay:800 },
+    { type:'title', old:'Einstein\'s Proof You Have No Free Will | Time\'s Illusion', new:'Proven: Einstein\'s Proof You Have No Free Will — Full Breakdown', conf:70, delay:1200 },
+    { type:'chapters', old:'No timestamps', new:'0:00 Intro · 2:15 Main Point · 5:30 Key Takeaway', conf:67, delay:1600 },
+  ];
+
+  for (const p of proposals) {
+    await sleep(p.delay);
+    const item = document.createElement('div');
+    item.className = 'inbox-item';
+    const typeClass = p.type === 'title' ? 'type-title' : p.type === 'tags' ? 'type-tags' : 'type-chapters';
+    item.innerHTML = `
+      <span class="item-type ${typeClass}">${p.type.toUpperCase()} FIX</span>
+      <div class="compare">
+        <div class="old"><div class="comp-label">CURRENT</div>${p.old}</div>
+        <div class="arrow">→</div>
+        <div class="new"><div class="comp-label">PROPOSED</div>${p.new}</div>
+      </div>
+      <div class="conf" style="color:${p.conf>=85?'#10b981':p.conf>=60?'#f59e0b':'#ef4444'}">Confidence: ${p.conf}%</div>
+    `;
+    $('centerContent').appendChild(item);
+    showToast(`${p.type.toUpperCase()} fix proposed — Confidence: ${p.conf}%`, 'success');
+  }
+
+  await sleep(600);
+  $(steps[3]).classList.add('done');
+
+  // Step 4: Auto-Apply
+  activateStep(4);
+  $(steps[4]).querySelector('.step-stat').textContent = '7';
+  showToast('⚡ 7 tag improvements auto-applied to YouTube');
+  $('statusBadge').textContent = '● Auto-Applying';
+  $('statusBadge').style.color = '#a78bfa';
+  $('statusBadge').style.borderColor = 'rgba(167,139,250,0.3)';
+
+  // Show recommendations
+  $('recDot').className = 'dot done';
+  $('recContent').innerHTML = `
+    <div class="inbox-item">
+      <span class="item-type type-tags">📊 BULK</span>
+      <div style="font-size:11px;line-height:1.5;">7/8 videos need tag improvements. Check the Tag Generator.</div>
+    </div>
+    <div class="inbox-item" style="animation-delay:0.2s;">
+      <span class="item-type type-chapters">📂 PLAYLIST</span>
+      <div style="font-size:11px;line-height:1.5;">Group 4 similar videos into a series playlist.</div>
+    </div>
+    <div class="inbox-item" style="animation-delay:0.4s;">
+      <span class="item-type type-title">🌐 MULTI-LANG</span>
+      <div style="font-size:11px;line-height:1.5;">Add subtitles to boost international reach.</div>
+    </div>
+  `;
+
+  await sleep(1500);
+  $(steps[4]).classList.add('done');
+  $('statusBadge').textContent = '● Complete';
+  $('statusBadge').style.color = '#10b981';
+  $('statusBadge').style.borderColor = 'rgba(16,185,129,0.3)';
+  showToast('✅ Pipeline complete — 38 proposals, 7 auto-applied, 11 alerts');
+
+  // Summary
+  await sleep(1000);
+  $('centerContent').insertAdjacentHTML('afterbegin', `
+    <div style="background:rgba(16,185,129,0.06);border:1px solid rgba(16,185,129,0.15);border-radius:8px;padding:12px;margin-bottom:12px;text-align:center;font-size:12px;color:#10b981;">
+      ✅ <b>Pipeline Complete</b><br>
+      <span style="font-size:10px;color:#71717a;">8 scanned · 38 proposals · 7 auto-applied · 11 alerts · 42s</span>
+    </div>
+  `);
+}
+
+runDemo();
+</script>
+</body>
+</html>

@@ -1,0 +1,10 @@
+# This file is used internally by FFMPEG.
+file 'file:/mnt/c/Users/nhlaka/Desktop/Youtube seo tool/manim-video/media/videos/script/480p15/partial_movie_files/Scene1_Opening/4156864382_705201740_223132457.mp4'
+file 'file:/mnt/c/Users/nhlaka/Desktop/Youtube seo tool/manim-video/media/videos/script/480p15/partial_movie_files/Scene1_Opening/300363247_2318836581_622992219.mp4'
+file 'file:/mnt/c/Users/nhlaka/Desktop/Youtube seo tool/manim-video/media/videos/script/480p15/partial_movie_files/Scene1_Opening/300363247_1383605943_4293561600.mp4'
+file 'file:/mnt/c/Users/nhlaka/Desktop/Youtube seo tool/manim-video/media/videos/script/480p15/partial_movie_files/Scene1_Opening/300363247_1433877407_20685250.mp4'
+file 'file:/mnt/c/Users/nhlaka/Desktop/Youtube seo tool/manim-video/media/videos/script/480p15/partial_movie_files/Scene1_Opening/300363247_342999943_3203177295.mp4'
+file 'file:/mnt/c/Users/nhlaka/Desktop/Youtube seo tool/manim-video/media/videos/script/480p15/partial_movie_files/Scene1_Opening/300363247_1328725370_3781918992.mp4'
+file 'file:/mnt/c/Users/nhlaka/Desktop/Youtube seo tool/manim-video/media/videos/script/480p15/partial_movie_files/Scene1_Opening/300363247_2950721455_3341030199.mp4'
+file 'file:/mnt/c/Users/nhlaka/Desktop/Youtube seo tool/manim-video/media/videos/script/480p15/partial_movie_files/Scene1_Opening/300363247_559431967_2420296903.mp4'
+file 'file:/mnt/c/Users/nhlaka/Desktop/Youtube seo tool/manim-video/media/videos/script/480p15/partial_movie_files/Scene1_Opening/300363247_2514011427_3968961708.mp4'

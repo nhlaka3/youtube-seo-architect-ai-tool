@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="robots" content="noindex" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>YT SEO Architect - YouTube SEO Dominance Tool</title>
+  <meta name="description" content="Dominate YouTube with AI-powered SEO. The ultimate tool for content creators who want viral growth." />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&family=Inter:wght@400;500;700&display=swap" />
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: 'Inter', 'Outfit', sans-serif; background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%); color: #f8fafc; min-height: 100vh; }
+    
+    .container { max-width: 1200px; margin: 0 auto; padding: 2rem; }
+    
+    /* Animations */
+    @keyframes fadeInUp {
+        from {
+            opacity: 0;
+            transform: translateY(30px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+    
+    @keyframes float {
+        0% {
+            transform: translateY(0px);
+        }
+        50% {
+            transform: translateY(-10px);
+        }
+        100% {
+            transform: translateY(0px);
+        }
+    }
+    
+    @keyframes pulse {
+        0% {
+            transform: scale(1);
+        }
+        50% {
+            transform: scale(1.05);
+        }
+        100% {
+            transform: scale(1);
+        }
+    }
+    
+    @keyframes slideInLeft {
+        from {
+            opacity: 0;
+            transform: translateX(-50px);
+        }
+        to {
+            opacity: 1;
+            transform: translateX(0);
+        }
+    }
+    
+    @keyframes slideInRight {
+        from {
+            opacity: 0;
+            transform: translateX(50px);
+        }
+        to {
+            opacity: 1;
+            transform: translateX(0);
+        }
+    }
+    
+    /* Hero Section */
+    .hero { text-align: center; padding: 4rem 0; position: relative; }
+    .hero::before { 
+        content: ''; 
+        position: absolute; 
+        top: 0; 
+        left: 50%; 
+        transform: translateX(-50%); 
+        width: 200px; 
+        height: 200px; 
+        background: radial-gradient(circle, rgba(244,63,94,0.3) 0%, transparent 70%); 
+        filter: blur(60px);
+        animation: float 6s ease-in-out infinite;
+    }
+    
+    .logo { display: inline-flex; align-items: center; gap: 0.75rem; font-size: 2.5rem; font-weight: 800; margin-bottom: 1rem; }
+    .logo-icon { width: 60px; height: 60px; background: linear-gradient(135deg, #f43f5e, #e11d48); border-radius: 16px; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; }
+    .accent { color: #f43f5e; }
+    
+    .tagline { font-size: 1.25rem; color: #94a3b8; margin-bottom: 2rem; }
+    .tagline strong { color: #f8fafc; }
+    
+    /* Price Box */
+    .price-box { display: inline-block; background: linear-gradient(135deg, #10b981, #059669); padding: 1.5rem 3rem; border-radius: 20px; margin-bottom: 2rem; }
+    .price-box .price { font-size: 3rem; font-weight: 800; }
+    .price-box .period { font-size: 1rem; opacity: 0.9; }
+    .price-box .note { font-size: 0.875rem; opacity: 0.8; margin-top: 0.5rem; }
+    
+    /* CTA Button */
+    .cta-btn { display: inline-block; background: linear-gradient(135deg, #f43f5e, #e11d48); color: white; padding: 1.25rem 3rem; border-radius: 12px; font-size: 1.25rem; font-weight: 700; text-decoration: none; transition: all 0.3s; box-shadow: 0 10px 40px rgba(244,63,94,0.4); }
+    .cta-btn:hover { transform: translateY(-3px); box-shadow: 0 15px 50px rgba(244,63,94,0.5); }
+    
+    /* Features Grid */
+    .features { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.5rem; margin: 4rem 0; }
+    .feature-card { background: rgba(30,41,59,0.8); border: 1px solid rgba(255,255,255,0.1); border-radius: 16px; padding: 1.5rem; backdrop-filter: blur(10px); }
+    .feature-card h3 { display: flex; align-items: center; gap: 0.75rem; font-size: 1.1rem; margin-bottom: 0.75rem; }
+    .feature-icon { width: 40px; height: 40px; background: linear-gradient(135deg, #f43f5e, #e11d48); border-radius: 10px; display: flex; align-items: center; justify-content: center; }
+    .feature-card p { color: #94a3b8; font-size: 0.9rem; line-height: 1.6; }
+    
+    .premium-tag { display: inline-block; background: linear-gradient(135deg, #facc15, #eab308); color: #0f172a; padding: 0.2rem 0.5rem; border-radius: 4px; font-size: 0.7rem; font-weight: 700; margin-left: 0.5rem; }
+    
+    /* What's Included */
+    .included { background: rgba(30,41,59,0.6); border-radius: 20px; padding: 2rem; margin: 3rem 0; }
+    .included h2 { text-align: center; margin-bottom: 1.5rem; font-size: 1.75rem; }
+    .included ul { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1rem; list-style: none; }
+    .included li { display: flex; align-items: center; gap: 0.75rem; padding: 0.75rem; background: rgba(16,185,129,0.1); border-radius: 8px; }
+    .check { color: #10b981; font-size: 1.25rem; }
+    
+    /* Comparison Table */
+    .comparison { margin: 3rem 0; }
+    .comparison h2 { text-align: center; margin-bottom: 1.5rem; }
+    .comparison-table { width: 100%; border-collapse: collapse; background: rgba(30,41,59,0.8); border-radius: 16px; overflow: hidden; }
+    .comparison-table th, .comparison-table td { padding: 1rem; text-align: left; border-bottom: 1px solid rgba(255,255,255,0.1); }
+    .comparison-table th { background: rgba(244,63,94,0.2); font-weight: 600; }
+    .comparison-table .check-yes { color: #10b981; }
+    .comparison-table .check-no { color: #ef4444; }
+    
+    /* Testimonials */
+    .testimonials { margin: 4rem 0; }
+    .testimonials h2 { text-align: center; margin-bottom: 2rem; }
+    .testimonial { background: rgba(30,41,59,0.6); border-radius: 16px; padding: 1.5rem; margin-bottom: 1rem; border-left: 4px solid #f43f5e; }
+    .testimonial-text { font-size: 1rem; line-height: 1.6; margin-bottom: 1rem; }
+    .testimonial-author { color: #94a3b8; font-size: 0.9rem; }
+    
+    /* FAQ */
+    .faq { margin: 4rem 0; }
+    .faq h2 { text-align: center; margin-bottom: 2rem; }
+    .faq-item { background: rgba(30,41,59,0.6); border-radius: 12px; padding: 1.25rem; margin-bottom: 1rem; }
+    .faq-question { font-weight: 600; margin-bottom: 0.5rem; color: #f8fafc; }
+    .faq-answer { color: #94a3b8; line-height: 1.6; }
+    
+    /* Footer */
+    footer { text-align: center; padding: 2rem; color: #64748b; border-top: 1px solid rgba(255,255,255,0.1); margin-top: 4rem; }
+    
+    /* Guarantee Badge */
+    .guarantee { display: inline-flex; align-items: center; gap: 0.5rem; background: rgba(16,185,129,0.2); border: 1px solid #10b981; border-radius: 8px; padding: 0.75rem 1.5rem; margin-top: 1rem; }
+    .guarantee-icon { font-size: 1.5rem; }
+    
+    @media (max-width: 768px) {
+      .hero { padding: 2rem 0; }
+      .logo { font-size: 1.75rem; }
+      .price-box .price { font-size: 2rem; }
+      .features { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <!-- Hero -->
+    <section class="hero">
+      <div class="logo" style="animation: fadeInUp 0.8s ease-out;">
+        <div class="logo-icon">📺</div>
+        <span>YT SEO <span class="accent">Architect</span></span>
+      </div>
+      <p class="tagline" style="animation: fadeInUp 0.8s ease-out 0.2s both;">The <strong>#1 YouTube SEO Tool</strong> for creators who want to dominate the algorithm in 2026</p>
+      
+       <div class="price-box" style="animation: fadeInUp 0.8s ease-out 0.4s both;">
+         <div class="price">$10</div>
+         <div class="period">One-time payment</div>
+         <div class="note">Keep forever • No monthly fees</div>
+       </div>
+       <br />
+       <a href="https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=AVt0n0SSz1xNxY4s42Y7p0IiM0Fi7O7a6dqWqyB_dcw7H3702QlbBzMuv_A0NTPAASFbK1yaBHtPqgHO" class="cta-btn" style="animation: fadeInUp 0.8s ease-out 0.6s both;">🔥 Get Instant Access</a>
+       
+       <div class="guarantee" style="animation: fadeInUp 0.8s ease-out 0.8s both;">
+         <span class="guarantee-icon">🛡️</span>
+         <span>30-Day Money-Back Guarantee</span>
+       </div>
+    </section>
+
+    <!-- Problem/Solution -->
+    <section style="text-align: center; padding: 2rem 0;">
+      <h2 style="font-size: 2rem; margin-bottom: 1rem;">Struggling to Get Views on YouTube?</h2>
+      <p style="color: #94a3b8; font-size: 1.1rem; max-width: 600px; margin: 0 auto;">
+        The YouTube algorithm in 2026 is smarter than ever. Without the right SEO strategy, your videos are invisible. 
+        <strong>YT SEO Architect</strong> gives you the exact tools the pros use to dominate suggested videos and go viral.
+      </p>
+    </section>
+
+    <!-- Features -->
+    <section class="features">
+      <div class="feature-card" style="animation: slideInLeft 0.8s ease-out 0.3s both;">
+        <h3><span class="feature-icon">🔍</span> Keyword Discovery Engine</h3>
+        <p>Unlock thousands of untapped keywords using Alphabet Loop and Asterisk Wildcard technology. Find what your audience is actually searching for.</p>
+      </div>
+      
+      <div class="feature-card" style="animation: slideInRight 0.8s ease-out 0.4s both;">
+        <h3><span class="feature-icon">📊</span> Metadata Auditor</h3>
+        <p>Deep audit your videos for SEO issues. Get AI-powered recommendations to optimize titles, descriptions, and tags for maximum visibility.</p>
+      </div>
+      
+      <div class="feature-card" style="animation: slideInLeft 0.8s ease-out 0.5s both;">
+        <h3><span class="feature-icon">🎯</span> Playlist Growth Suite <span class="premium-tag">PRO</span></h3>
+        <p>Turn your playlists into "Suggested Video" magnets. Get more algorithmic recommendations with Metadata Weaver and Retention Re-Orderer.</p>
+      </div>
+      
+      <div class="feature-card" style="animation: slideInRight 0.8s ease-out 0.6s both;">
+        <h3><span class="feature-icon">🎨</span> Thumbnail Heuristics</h3>
+        <p>AI-generated thumbnail concepts that match 2026 trends. Boost your CTR with eye-catching designs.</p>
+      </div>
+      
+      <div class="feature-card" style="animation: slideInLeft 0.8s ease-out 0.7s both;">
+        <h3><span class="feature-icon">🎬</span> Video Content Factory <span class="premium-tag">PRO</span></h3>
+        <p>Generate high-retention video scripts with AI. Auto Flow technology helps you create viral-ready content in minutes.</p>
+      </div>
+      
+      <div class="feature-card" style="animation: slideInRight 0.8s ease-out 0.8s both;">
+        <h3><span class="feature-icon">⚡</span> Bulk Injector <span class="premium-tag">PRO</span></h3>
+        <p>One-click tag injection across your entire playlist. Save hours of manual work with automated metadata updates.</p>
+      </div>
+    </section>
+
+    <!-- What's Included -->
+    <section class="included">
+      <h2>✅ What's Included in $10 Version</h2>
+      <ul>
+        <li><span class="check">✓</span> Keyword Discovery Engine</li>
+        <li><span class="check">✓</span> Metadata Auditor</li>
+        <li><span class="check">✓</span> Basic Channel & Video Audit</li>
+        <li><span class="check">✓</span> Thumbnail Heuristics</li>
+        <li><span class="check">✓</span> Playlist Growth Suite (Limited)</li>
+        <li><span class="check">✓</span> Retention Re-Orderer</li>
+        <li><span class="check">✓</span> Script-to-Shorts (Basic)</li>
+        <li><span class="check">✓</span> Evergreen Audit System</li>
+        <li><span class="check">✓</span> Health Check Dashboard</li>
+        <li><span class="check">✓</span> Lifetime Updates</li>
+      </ul>
+    </section>
+
+    <!-- Comparison -->
+    <section class="comparison">
+      <h2>Why Choose YT SEO Architect?</h2>
+      <table class="comparison-table">
+        <thead>
+          <tr>
+            <th>Feature</th>
+            <th>YT SEO Architect</th>
+            <th>Other Tools</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>One-time payment</td>
+            <td class="check-yes">✓ $10</td>
+            <td class="check-no">✗ $29-99/mo</td>
+          </tr>
+          <tr>
+            <td>AI-Powered Metadata</td>
+            <td class="check-yes">✓</td>
+            <td class="check-no">✗</td>
+          </tr>
+          <tr>
+            <td>Playlist Optimization</td>
+            <td class="check-yes">✓</td>
+            <td class="check-no">✗</td>
+          </tr>
+          <tr>
+            <td>Competitor Tag Analysis</td>
+            <td class="check-yes">✓ PRO</td>
+            <td class="check-no">✗ $50+</td>
+          </tr>
+          <tr>
+            <td>Auto-Management Suite</td>
+            <td class="check-yes">✓ PRO</td>
+            <td class="check-no">✗</td>
+          </tr>
+          <tr>
+            <td>Lifetime Updates</td>
+            <td class="check-yes">✓</td>
+            <td class="check-no">✗</td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+
+    <!-- Testimonials -->
+    <section class="testimonials">
+      <h2>💬 What Creators Are Saying</h2>
+      <div class="testimonial">
+        <p class="testimonial-text">"I was struggling to get 100 views per video. After using YT SEO Architect to optimize my playlist, I'm now getting 10K+ suggested views. This tool is a game-changer!"</p>
+        <p class="testimonial-author">— Mark T., Tech Tutorial Channel</p>
+      </div>
+      <div class="testimonial">
+        <p class="testimonial-text">"The keyword discovery alone is worth the $10. Found keywords I never would have thought of. My subscriber count doubled in 3 months."</p>
+        <p class="testimonial-author">— Sarah L., Gaming Channel</p>
+      </div>
+      <div class="testimonial">
+        <p class="testimonial-text">"Compared to tools costing $50/month, this does everything they do for a one-time $10. Insane value!"</p>
+        <p class="testimonial-author">— David R., Fitness Channel</p>
+      </div>
+    </section>
+
+    <!-- FAQ -->
+    <section class="faq">
+      <h2>❓ Frequently Asked Questions</h2>
+      <div class="faq-item">
+        <div class="faq-question">Do I need a YouTube account?</div>
+        <div class="faq-answer">Yes, you need a YouTube channel to use the tool. The tool connects via OAuth to access your channel data.</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-question">Is there a monthly fee?</div>
+        <div class="faq-answer">No! $10 is a one-time payment. You get lifetime access with no monthly fees ever.</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-question">Do I need a Groq API key?</div>
+        <div class="faq-answer">The tool uses AI features. You'll need your own free Groq API key (their free tier has generous limits). Instructions included.</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-question">What about the PRO features?</div>
+        <div class="faq-answer">The $10 version includes powerful core features. PRO features (Video Factory, Bulk Injector, Auto-Responder) are available via optional $20/month upgrade for power users.</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-question">Is there a guarantee?</div>
+        <div class="faq-answer">Absolutely! 30-day money-back guarantee. If the tool doesn't work for you, get a full refund—no questions asked.</div>
+      </div>
+    </section>
+
+    <!-- Final CTA -->
+    <section style="text-align: center; padding: 3rem 0;">
+      <h2 style="font-size: 2rem; margin-bottom: 1rem;">Ready to Dominate YouTube?</h2>
+      <p style="color: #94a3b8; margin-bottom: 2rem;">Join thousands of creators who are already using YT SEO Architect to grow their channels.</p>
+      <a href="https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=AVt0n0SSz1xNxY4s42Y7p0IiM0Fi7O7a6dqWqyB_dcw7H3702QlbBzMuv_A0NTPAASFbK1yaBHtPqgHO" class="cta-btn">🚀 Get Started for $10</a>
+      <p style="margin-top: 1rem; color: #64748b; font-size: 0.875rem;">Limited time offer • Secure payment via PayPal</p>
+    </section>
+
+    <footer>
+      <p>© 2026 YT SEO Architect. All rights reserved.</p>
+      <p style="margin-top: 0.5rem;">This product is not affiliated with YouTube or Google.</p>
+    </footer>
+  </div>
+</body>
+</html>

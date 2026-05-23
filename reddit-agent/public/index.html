@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Reddit Monitor — YT SEO Architect</title>
+<style>
+:root{--bg:#0a0a14;--card:#12122a;--border:#252545;--primary:#f97316;--text:#e8e8f0;--muted:#8080a0;--indigo:#818cf8}
+*{margin:0;padding:0;box-sizing:border-box}body{background:var(--bg);color:var(--text);font-family:system-ui,sans-serif;min-height:100vh}
+.header{background:var(--card);border-bottom:1px solid var(--border);padding:14px 24px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px}
+.header h1{font-size:1.2rem;font-weight:700}
+.container{max-width:900px;margin:0 auto;padding:24px 16px}
+.controls{display:flex;gap:12px;margin-bottom:24px;align-items:center;flex-wrap:wrap}
+.btn{padding:10px 20px;border:none;border-radius:8px;font-weight:600;cursor:pointer;font-size:0.9rem;transition:all 0.2s}
+.btn-primary{background:var(--primary);color:#fff}.btn-primary:hover{filter:brightness(1.15)}
+.btn-indigo{background:var(--indigo);color:#fff}.btn-indigo:hover{filter:brightness(1.15)}
+.btn-outline{background:transparent;border:1px solid var(--border);color:var(--text)}.btn-outline:hover{border-color:var(--primary)}
+.card{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:16px 20px;margin-bottom:12px}
+.card .meta{display:flex;gap:10px;font-size:0.75rem;color:var(--muted);margin-bottom:8px;flex-wrap:wrap}
+.card .meta span{background:rgba(255,255,255,0.04);padding:3px 8px;border-radius:4px}
+.card h3{font-size:1rem;margin-bottom:4px}
+.card .body{font-size:0.84rem;color:var(--muted);margin-bottom:10px;line-height:1.5;max-height:70px;overflow:hidden}
+.card .reply-box{display:none;margin-top:10px}
+.card .reply-box .ai-reply{background:rgba(99,102,241,0.08);border:1px solid rgba(99,102,241,0.25);border-radius:8px;padding:12px;font-size:0.85rem;line-height:1.7;color:var(--text);white-space:pre-wrap;margin-bottom:10px}
+.card .reply-actions{display:flex;gap:8px}
+.copy-btn{background:rgba(99,102,241,0.15);border:1px solid rgba(99,102,241,0.3);color:var(--indigo);padding:6px 14px;border-radius:6px;cursor:pointer;font-size:0.8rem;font-weight:600}
+.copy-btn:hover{background:rgba(99,102,241,0.25)}
+.loading{text-align:center;padding:60px 20px;color:var(--muted)}
+.spinner{width:32px;height:32px;border:3px solid var(--border);border-top-color:var(--primary);border-radius:50%;animation:spin 0.8s linear infinite;margin:0 auto 12px}
+@keyframes spin{to{transform:rotate(360deg)}}
+.empty{text-align:center;padding:60px 20px;color:var(--muted)}.empty h3{color:var(--text);margin-bottom:8px}
+.toast{position:fixed;bottom:24px;right:24px;background:var(--card);border:1px solid var(--primary);padding:12px 20px;border-radius:8px;font-size:0.85rem;z-index:9999;animation:fadeIn 0.3s}
+@keyframes fadeIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+.help{font-size:0.8rem;color:var(--muted);text-align:center;margin-top:40px;padding:20px;border-top:1px solid var(--border)}
+</style>
+</head>
+<body>
+<div class="header">
+  <h1>🤖 Reddit Monitor</h1>
+  <div style="font-size:0.8rem;color:var(--muted)">No API credentials needed • You post manually</div>
+</div>
+<div class="container">
+  <div class="controls">
+    <button class="btn btn-primary" onclick="scan()">🔍 Scan Reddit</button>
+    <label style="display:flex;align-items:center;gap:6px;font-size:0.85rem;color:var(--muted);cursor:pointer;margin-left:8px;">
+      <input type="checkbox" id="helpOnly" onchange="updateMode()" style="accent-color:var(--primary);">
+      Help only (no link)
+    </label>
+    <span style="font-size:0.8rem;color:var(--muted)" id="status">Click Scan to find YouTube questions</span>
+  </div>
+  <div id="results"></div>
+  <div class="help">
+    <strong>How it works:</strong> AI scans 8 YouTube subreddits → drafts a reply → you click <strong>Copy</strong> → paste into Reddit yourself.<br>
+    No bot detection risk because a human posts every reply.
+  </div>
+</div>
+<script>
+let posts = [];
+
+async function scan() {
+  document.getElementById('results').innerHTML = '<div class="loading"><div class="spinner"></div><p>Scanning r/YouTube, r/NewTubers, r/SEO...</p></div>';
+  document.getElementById('status').textContent = 'Scanning...';
+  try {
+    const res = await fetch('/api/scan');
+    const data = await res.json();
+    posts = data.posts || [];
+    render();
+    document.getElementById('status').textContent = `${posts.length} posts found`;
+  } catch(e) {
+    document.getElementById('results').innerHTML = `<div class="empty"><h3>Error</h3><p>${e.message}</p></div>`;
+  }
+}
+
+function render() {
+  const el = document.getElementById('results');
+  if (!posts.length) {
+    el.innerHTML = '<div class="empty"><h3>No posts found right now</h3><p>Try again later — new questions appear throughout the day.</p></div>';
+    return;
+  }
+  el.innerHTML = posts.map((p, i) => {
+    const hot = p.score > 5;
+    return `
+    <div class="card" id="card-${i}">
+      <div class="meta">
+        <span>r/${p.subreddit}</span>
+        <span>👤 ${esc(p.author)}</span>
+        <span>⬆ ${p.score}</span>
+        <span>💬 ${p.numComments} comments</span>
+        <span style="color:${hot?'var(--primary)':'var(--success)'}">${hot?'🔥 Hot':'🆕 New'}</span>
+      </div>
+      <h3>${esc(p.title)}</h3>
+      ${p.text ? `<div class="body">${esc(p.text.substring(0, 250))}</div>` : ''}
+      <a href="${p.url}" target="_blank" style="font-size:0.8rem;color:var(--primary);">View on Reddit →</a>
+      <button class="btn btn-indigo" onclick="generate(${i})" id="gen-btn-${i}" style="margin-left:8px;padding:5px 12px;font-size:0.8rem;">🤖 Generate Reply</button>
+      <div class="reply-box" id="reply-box-${i}">
+        <div class="ai-reply" id="ai-reply-${i}"></div>
+        <div class="reply-actions">
+          <button class="copy-btn" onclick="copyReply(${i})">📋 Copy</button>
+          <button class="btn btn-outline" onclick="regenerate(${i})" style="font-size:0.8rem;padding:6px 14px;">🔄 Regenerate</button>
+          <button class="btn btn-outline" onclick="openReddit('${p.url}')" style="font-size:0.8rem;padding:6px 14px;">↗️ Open Reddit</button>
+          <button class="btn btn-outline" onclick="markDone(${i})" style="font-size:0.8rem;padding:6px 14px;">✅ Done</button>
+        </div>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function esc(s) { const d = document.createElement('div'); d.textContent = s || ''; return d.innerHTML; }
+
+async function generate(i) {
+  const btn = document.getElementById('gen-btn-'+i);
+  const helpOnly = document.getElementById('helpOnly').checked;
+  btn.textContent = '⏳ Thinking...'; btn.disabled = true;
+  try {
+    const res = await fetch('/api/generate', {
+      method: 'POST', headers: {'Content-Type':'application/json'},
+      body: JSON.stringify({postId: posts[i].id, helpOnly})
+    });
+    const data = await res.json();
+    document.getElementById('ai-reply-'+i).textContent = data.reply || 'Failed to generate';
+    document.getElementById('reply-box-'+i).style.display = 'block';
+    btn.textContent = '🤖 Generate Reply'; btn.disabled = false;
+  } catch(e) {
+    btn.textContent = '❌ Retry'; btn.disabled = false;
+  }
+}
+
+async function regenerate(i) {
+  const replyEl = document.getElementById('ai-reply-'+i);
+  const helpOnly = document.getElementById('helpOnly').checked;
+  replyEl.textContent = 'Generating new reply...';
+  replyEl.style.opacity = '0.5';
+  try {
+    const res = await fetch('/api/generate', {
+      method: 'POST', headers: {'Content-Type':'application/json'},
+      body: JSON.stringify({postId: posts[i].id, helpOnly, _: Date.now()})
+    });
+    const data = await res.json();
+    replyEl.style.opacity = '1';
+    replyEl.textContent = data.reply || 'Failed to generate';
+    if (data.reply === replyEl.textContent) {
+      showToast('Same reply — AI may be unavailable, using fallback');
+    }
+  } catch(e) {
+    replyEl.style.opacity = '1';
+    replyEl.textContent = 'Failed to regenerate — is the server running?';
+  }
+}
+
+async function copyReply(i) {
+  const text = document.getElementById('ai-reply-'+i).textContent;
+  await navigator.clipboard.writeText(text);
+  showToast('📋 Copied! Paste it into Reddit.');
+}
+
+function openReddit(url) {
+  window.open(url, '_blank');
+}
+
+async function markDone(i) {
+  await fetch('/api/done', {
+    method: 'POST', headers: {'Content-Type':'application/json'},
+    body: JSON.stringify({postId: posts[i].id})
+  });
+  document.getElementById('card-'+i).remove();
+  showToast('✅ Marked as done');
+}
+
+function updateMode() {
+  const help = document.getElementById('helpOnly').checked;
+  showToast(help ? '🙏 Help-only mode — no tool links' : '🔗 Normal mode — includes tool URL');
+}
+
+function showToast(msg) {
+  const t = document.createElement('div'); t.className = 'toast'; t.textContent = msg;
+  document.body.appendChild(t);
+  setTimeout(() => t.remove(), 3000);
+}
+</script>
+</body>
+</html>

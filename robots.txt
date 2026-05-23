@@ -1,0 +1,7 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://yt-seo-architect.vercel.app/sitemap.xml
+
+# SEO Tool - YT SEO Architect
+# Crawling optimization for search engines

@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>PayPal Test</title>
+    <style>
+        body { font-family: Arial, sans-serif; padding: 20px; }
+        #paypal-button-container {
+            min-height: 150px;
+            display: flex !important;
+            justify-content: center;
+            align-items: center;
+            width: 100%;
+            position: relative;
+            z-index: 10003;
+            margin: 1rem 0;
+            border: 1px solid #ccc;
+        }
+        #paypal-button-container iframe {
+            max-width: 100% !important;
+            width: 100% !important;
+            min-height: 40px !important;
+            border: none !important;
+            display: block !important;
+            visibility: visible !important;
+            opacity: 1 !important;
+            position: relative !important;
+            z-index: 10004 !important;
+        }
+        #paypal-button-container div {
+            width: 100% !important;
+            display: flex !important;
+            justify-content: center !important;
+            align-items: center !important;
+        }
+    </style>
+</head>
+<body>
+    <h1>PayPal Integration Test</h1>
+    <div id="paypal-button-container"></div>
+
+    <script>
+        // Load PayPal SDK
+        const script = document.createElement('script');
+        script.src = 'https://www.paypal.com/sdk/js?client-id=AUI5l3YbwHsiKNq-XFVHLJSuagJsTGVTCJkalxsbY8VuUEoavAHcFVKsC7ZD4AQMaH_mTt1ccpna8f8i&components=buttons';
+        script.onload = () => {
+            console.log('PayPal SDK loaded');
+
+            // Initialize PayPal buttons
+            paypal.Buttons({
+                style: { layout: 'vertical', color: 'gold', shape: 'rect', label: 'paypal' },
+                createOrder: function(data, actions) {
+                    return actions.order.create({
+                        purchase_units: [{
+                            amount: { value: '10.00' }
+                        }]
+                    });
+                },
+                onApprove: function(data, actions) {
+                    return actions.order.capture().then(function(details) {
+                        alert('Transaction completed by ' + details.payer.name.given_name);
+                    });
+                }
+            }).render('#paypal-button-container');
+
+            console.log('PayPal buttons rendered');
+        };
+        script.onerror = () => console.error('Failed to load PayPal SDK');
+        document.head.appendChild(script);
+    </script>
+</body>
+</html></content>
+<parameter name="filePath">paypal-test.html

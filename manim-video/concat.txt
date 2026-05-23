@@ -1,0 +1,7 @@
+file '/mnt/c/Users/nhlaka/Desktop/Youtube seo tool/manim-video/media/videos/script/1080p60/Scene1_Opening.mp4'
+file '/mnt/c/Users/nhlaka/Desktop/Youtube seo tool/manim-video/media/videos/script/1080p60/Scene2_Problem.mp4'
+file '/mnt/c/Users/nhlaka/Desktop/Youtube seo tool/manim-video/media/videos/script/1080p60/Scene3_Dashboard.mp4'
+file '/mnt/c/Users/nhlaka/Desktop/Youtube seo tool/manim-video/media/videos/script/1080p60/Scene4_Keyword.mp4'
+file '/mnt/c/Users/nhlaka/Desktop/Youtube seo tool/manim-video/media/videos/script/1080p60/Scene5_Audit.mp4'
+file '/mnt/c/Users/nhlaka/Desktop/Youtube seo tool/manim-video/media/videos/script/1080p60/Scene6_Script.mp4'
+file '/mnt/c/Users/nhlaka/Desktop/Youtube seo tool/manim-video/media/videos/script/1080p60/Scene7_CTA.mp4'

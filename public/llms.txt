@@ -1,0 +1,35 @@
+# YT SEO Architect
+> 17 AI-powered tools that automate YouTube SEO — competing with vidIQ and TubeBuddy.
+
+## Overview
+YT SEO Architect is a comprehensive YouTube SEO optimization platform for creators of all sizes. Built for the 2026 YouTube algorithm, it focuses on discoverability, session watch time, and niche authority.
+
+## Key Features
+- **AI Coach**: Data-driven YouTube strategy with your real channel metrics
+- **Bulk Injector**: One-click SEO overhaul for entire playlists
+- **Retention Re-Orderer**: Gateway strategy playlist sorting
+- **AI Auto-Responder**: Fetch comments → AI generates reply → posts to YouTube
+- **Playlist Growth Suite**: Weaver, Collusion Tags, Session Linker
+- **17 tools total**: Keyword Discovery, Thumbnail Lab, Competitor Sniper, Script-to-Shorts, Chapters Generator, Trend Pulse, Evergreen Audit, Multi-Language SEO, Video Factory, Metadata Auditor, AI Content Label
+
+## How It Works
+1. Connect your YouTube channel via Google OAuth
+2. AI analyzes your videos, playlists, and performance data
+3. Apply optimizations with one click directly to YouTube
+4. Monitor growth through the dashboard
+
+## Pricing
+- **Free**: 100 credits to start, no credit card required
+- **Pro**: $5/month — 1,000 credits, premium features
+- **Agency**: $19/month — unlimited credits, all features
+
+## Technical Details
+- **AI**: Groq (primary) + Google Gemini (automatic failover)
+- **Security**: OAuth 2.0, CSRF protection, Helmet headers, atomic credit transactions
+- **Infrastructure**: Vercel + Neon PostgreSQL
+- **Domain**: https://yt-seo-architect.vercel.app
+
+## Contact
+- **Email**: thiza3062@gmail.com
+- **Dashboard**: https://yt-seo-architect.vercel.app/dashboard
+- **About**: https://yt-seo-architect.vercel.app/about

@@ -1,0 +1,53 @@
+User-agent: *
+Allow: /
+
+# Block access to API routes and sensitive areas
+Disallow: /api/
+Disallow: /admin/
+Disallow: /_next/
+Disallow: /node_modules/
+
+# Allow crawling of main content
+Allow: /dashboard.html
+Allow: /about.html
+Allow: /terms-of-service.html
+Allow: /privacy-policy.html
+
+# ── AI Crawlers (2026 GEO Optimization) ──
+# Allow AI search crawlers to index content for AI Overviews, ChatGPT, Perplexity
+User-agent: ChatGPT-User
+Allow: /
+
+User-agent: Google-Extended
+Allow: /
+
+User-agent: PerplexityBot
+Allow: /
+
+User-agent: Claude-Web
+Allow: /
+
+User-agent: anthropic-ai
+Allow: /
+
+User-agent: OAI-SearchBot
+Allow: /
+
+User-agent: Applebot-Extended
+Allow: /
+
+User-agent: Bytespider
+Allow: /
+
+# Block training-only crawlers (different from search/indexing crawlers)
+User-agent: GPTBot
+Disallow: /
+
+User-agent: CCBot
+Disallow: /
+
+# Sitemap
+Sitemap: https://yt-seo-architect.vercel.app/sitemap.xml
+
+# llms.txt for AI content discovery
+# https://yt-seo-architect.vercel.app/llms.txt
