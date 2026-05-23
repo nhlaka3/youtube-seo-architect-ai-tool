@@ -16643,7 +16643,6 @@ document.addEventListener('DOMContentLoaded', async () => {
     // SaaS_pay disabled
   });
   */
-  });
 
   // Fetch CSRF token before API calls
   try {
