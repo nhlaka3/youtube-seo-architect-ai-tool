@@ -15931,7 +15931,20 @@ async function sendArchitectMessage() {
     };
     if (groqKey) headers['x-api-key'] = groqKey;
 
-    const res = await fetch(`${API_BASE_URL}/api/ai/assistant`, {
+    // Refresh CSRF token if needed (expires after 1 hour)
+    if (!headers['x-csrf-token'] || headers['x-csrf-token'] === '') {
+      try {
+        var healthRes = await fetch('/api/health?channelId=' + (localStorage.getItem('ytseo_channel_id') || 'anonymous'));
+        var healthData = await healthRes.json();
+        if (healthData.csrfToken) {
+          window.csrfToken = healthData.csrfToken;
+          localStorage.setItem('csrf_token', healthData.csrfToken);
+          headers['x-csrf-token'] = healthData.csrfToken;
+        }
+      } catch(e) {}
+    }
+
+    var res = await fetch(`${API_BASE_URL}/api/ai/assistant`, {
       method: 'POST',
       headers,
       body: JSON.stringify({
@@ -15940,6 +15953,28 @@ async function sendArchitectMessage() {
         history: _architectChatHistory
       })
     });
+
+    // Retry once on CSRF failure
+    if (res.status === 403) {
+      try {
+        var retryHealth = await fetch('/api/health?channelId=' + (localStorage.getItem('ytseo_channel_id') || 'anonymous'));
+        var retryData = await retryHealth.json();
+        if (retryData.csrfToken) {
+          window.csrfToken = retryData.csrfToken;
+          localStorage.setItem('csrf_token', retryData.csrfToken);
+          headers['x-csrf-token'] = retryData.csrfToken;
+          res = await fetch(`${API_BASE_URL}/api/ai/assistant`, {
+            method: 'POST',
+            headers,
+            body: JSON.stringify({
+              message,
+              context: { niche, credits, healthScore, videos: videoContext },
+              history: _architectChatHistory
+            })
+          });
+        }
+      } catch(e2) {}
+    }
 
     const data = await res.json();
     if (!res.ok) throw new Error(data.error || 'Coach is processing the strategy...');
