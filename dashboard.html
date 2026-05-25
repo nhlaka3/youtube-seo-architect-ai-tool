@@ -3497,16 +3497,10 @@ window.openUpgradeModal = function(plan, amount) {
   </div>
 </div>
 
-<!-- Coach Toggle Button -->
+<!-- Coach Toggle Button (hidden — AI Coach sidebar is the primary coach) -->
 <button id="coach-toggle-btn" onclick="toggleCoachChat()"
-  style="position:fixed;bottom:24px;right:24px;z-index:99999;
-  background:linear-gradient(135deg,#6366f1,#8b5cf6);color:#fff;border:none;
-  border-radius:20px;padding:12px 22px;font-size:14px;font-weight:700;
-  cursor:pointer;box-shadow:0 4px 24px rgba(99,102,241,0.4);
-  display:flex;align-items:center;gap:8px;transition:all 0.2s;">
+  style="display:none;">
   🧠 Phronesis
-  <span id="coach-badge" style="display:none;background:var(--danger);color:#fff;border-radius:50%;width:20px;height:20px;
-    font-size:11px;line-height:20px;text-align:center;"></span>
 </button>
 
 </body>
