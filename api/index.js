@@ -1347,6 +1347,18 @@ app.post('/api/agent/coach/ask', async (req, res) => {
   } catch(e) { res.status(500).json({ error: e.message }); }
 });
 
+app.get('/api/agent/coach/job/:id', async (req, res) => {
+  try {
+    const { default: dbService } = await import('../src/database/services.js');
+    const job = await dbService.getJob(req.params.id);
+    if (!job) return res.status(404).json({ error: 'Job not found' });
+    res.json({ job: {
+      id: job.id, tool: job.tool, status: job.status,
+      progress: job.progress, result: job.result, error: job.error
+    }});
+  } catch(e) { res.status(500).json({ error: e.message }); }
+});
+
 app.get('/api/agent/status', async (req, res) => {
   try {
     const channelId = req.query.channelId || req.headers['x-channel-id'];

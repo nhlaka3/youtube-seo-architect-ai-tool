@@ -825,6 +825,9 @@ router.post('/mock-test', async (req, res) => {
 
 // ── POST /goal — Set agent goal + auto-decompose + capture baseline
 router.post('/goal', async (req, res) => {
+  // Deprecated — use POST /api/agent/goal/set instead (goal-engine.js with DB persistence)
+  return sendRes(res, 200, { deprecated: true, message: 'Use POST /api/agent/goal/set instead' });
+  /*
   try {
     const parsed = z.object({ goal: z.string().min(1).max(1000) }).safeParse(req.body);
     if (!parsed.success) return sendRes(res, 400, { error: 'Invalid goal', details: parsed.error.errors });
@@ -878,6 +881,7 @@ router.post('/goal', async (req, res) => {
     });
     sendRes(res, 200, { success: true, goal, strategy, baselineSubs });
   } catch (e) { sendRes(res, 500, { error: e.message }); }
+  */
 });
 
 // ── POST /reset-limits — Reset daily limit counter ──
