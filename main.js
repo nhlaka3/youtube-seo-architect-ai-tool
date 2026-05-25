@@ -16406,8 +16406,6 @@ function toggleCoachDrawer(show) {
   if (shouldShow) {
     coach.style.display = 'flex';
     setTimeout(() => { coach.classList.add('active'); coach.style.transform = 'translateX(0)'; }, 10);
-    // Auto-load goal card + dashboard
-    setTimeout(() => { refreshAiCoachGoalCard(); }, 300);
   } else {
     coach.classList.remove('active');
     coach.style.transform = 'translateX(100%)';

@@ -2841,22 +2841,6 @@
         <div id="coach-memory-content" style="color:var(--text-muted);line-height:1.6;"></div>
       </div>
 
-      <!-- Goal Card -->
-      <div id="ai-coach-goal-card" style="display:none;margin:0 16px 8px 16px;padding:10px 14px;background:linear-gradient(135deg,rgba(99,102,241,0.06),rgba(139,92,246,0.03));border:1px solid rgba(99,102,241,0.12);border-radius:10px;">
-        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px;">
-          <span style="font-size:10px;text-transform:uppercase;color:var(--text-muted);letter-spacing:0.5px;">Active Goal</span>
-          <button onclick="showGoalSetup()" style="font-size:10px;background:none;border:1px solid var(--border);color:var(--accent);padding:1px 7px;border-radius:4px;cursor:pointer;">Edit</button>
-        </div>
-        <div id="ai-coach-goal-text" style="font-size:13px;font-weight:700;margin-bottom:5px;color:var(--text-primary);">🎯 —</div>
-        <div style="height:4px;background:var(--bg-dark);border-radius:2px;overflow:hidden;margin-bottom:5px;">
-          <div id="ai-coach-goal-fill" style="width:0%;height:100%;background:linear-gradient(90deg,#6366f1,#8b5cf6);border-radius:2px;transition:width 0.5s ease;"></div>
-        </div>
-        <div style="display:flex;justify-content:space-between;font-size:10px;color:var(--text-muted);">
-          <span id="ai-coach-goal-pct">No goal set</span>
-          <span id="ai-coach-goal-eta">Click 🎯 below</span>
-        </div>
-      </div>
-
       <div id="chat-messages" class="chat-messages">
         <div class="message ai">
           Hello! I am the Coach. I've analyzed your channel's Intelligence metrics. How can I help you dominate the
@@ -2873,23 +2857,23 @@
       </div>
 
       <!-- Chat Input Area -->
-      <div class="chat-input-area">
-        <label for="coach-input-field" class="sr-only">Ask the AI Coach</label>
-        <input type="text" id="coach-input-field" placeholder="Ask the Coach anything..."
-          onkeypress="if(event.key==='Enter') SaaS.send()">
-        <button onclick="SaaS.send()"
-          style="background: #f97316; border: none; border-radius: 8px; padding: 8px 12px; cursor: pointer;">
-          <i data-lucide="send-horizontal" style="color: white;"></i>
-        </button>
-      </div>
-
-      <!-- Quick Action Chips -->
-      <div style="display:flex;gap:6px;padding:8px 16px 12px 16px;overflow-x:auto;flex-wrap:nowrap;">
-        <button onclick="SaaS.quickAction('dashboard')" style="flex-shrink:0;padding:6px 12px;background:rgba(99,102,241,0.08);border:1px solid rgba(99,102,241,0.2);border-radius:16px;font-size:11px;cursor:pointer;color:var(--accent);white-space:nowrap;">📋 Overview</button>
-        <button onclick="SaaS.quickAction('scan')" style="flex-shrink:0;padding:6px 12px;background:rgba(99,102,241,0.08);border:1px solid rgba(99,102,241,0.2);border-radius:16px;font-size:11px;cursor:pointer;color:var(--accent);white-space:nowrap;">🔍 Scan</button>
-        <button onclick="SaaS.quickAction('progress')" style="flex-shrink:0;padding:6px 12px;background:rgba(99,102,241,0.08);border:1px solid rgba(99,102,241,0.2);border-radius:16px;font-size:11px;cursor:pointer;color:var(--accent);white-space:nowrap;">📊 Progress</button>
-        <button onclick="SaaS.quickAction('inbox')" style="flex-shrink:0;padding:6px 12px;background:rgba(99,102,241,0.08);border:1px solid rgba(99,102,241,0.2);border-radius:16px;font-size:11px;cursor:pointer;color:var(--accent);white-space:nowrap;">📥 Inbox</button>
-        <button onclick="SaaS.quickAction('goal')" style="flex-shrink:0;padding:6px 12px;background:rgba(16,185,129,0.08);border:1px solid rgba(16,185,129,0.2);border-radius:16px;font-size:11px;cursor:pointer;color:#10b981;white-space:nowrap;">🎯 Set Goal</button>
+      <div class="chat-input-area" style="flex-direction:column;gap:6px;padding:10px 16px;">
+        <div style="display:flex;gap:8px;">
+          <label for="coach-input-field" class="sr-only">Ask the AI Coach</label>
+          <input type="text" id="coach-input-field" placeholder="Ask the Coach anything..."
+            onkeypress="if(event.key==='Enter') SaaS.send()" style="flex:1;">
+          <button onclick="SaaS.send()"
+            style="background: #f97316; border: none; border-radius: 8px; padding: 8px 12px; cursor: pointer;flex-shrink:0;">
+            <i data-lucide="send-horizontal" style="color: white;"></i>
+          </button>
+        </div>
+        <div style="display:flex;gap:4px;overflow-x:auto;">
+          <button onclick="SaaS.quickAction('dashboard')" style="flex-shrink:0;padding:4px 10px;background:rgba(99,102,241,0.08);border:1px solid rgba(99,102,241,0.15);border-radius:12px;font-size:10px;cursor:pointer;color:var(--accent);white-space:nowrap;">📋 Overview</button>
+          <button onclick="SaaS.quickAction('scan')" style="flex-shrink:0;padding:4px 10px;background:rgba(99,102,241,0.08);border:1px solid rgba(99,102,241,0.15);border-radius:12px;font-size:10px;cursor:pointer;color:var(--accent);white-space:nowrap;">🔍 Scan</button>
+          <button onclick="SaaS.quickAction('progress')" style="flex-shrink:0;padding:4px 10px;background:rgba(99,102,241,0.08);border:1px solid rgba(99,102,241,0.15);border-radius:12px;font-size:10px;cursor:pointer;color:var(--accent);white-space:nowrap;">📊 Progress</button>
+          <button onclick="SaaS.quickAction('inbox')" style="flex-shrink:0;padding:4px 10px;background:rgba(99,102,241,0.08);border:1px solid rgba(99,102,241,0.15);border-radius:12px;font-size:10px;cursor:pointer;color:var(--accent);white-space:nowrap;">📥 Inbox</button>
+          <button onclick="SaaS.quickAction('goal')" style="flex-shrink:0;padding:4px 10px;background:rgba(16,185,129,0.08);border:1px solid rgba(16,185,129,0.15);border-radius:12px;font-size:10px;cursor:pointer;color:#10b981;white-space:nowrap;">🎯 Goal</button>
+        </div>
       </div>
       <!-- AI ASSISTANT DRAWER MOVED TO BODY ROOT -->
 
