@@ -1129,6 +1129,78 @@ class DatabaseService {
       }).returning();
     }, 'insertRule');
   }
+
+  // ── Goal Engine CRUD (DB-persisted goals) ──
+  async upsertGoal(channelId, goalData) {
+    return this._retry(async () => {
+      const s = await import('./schema.js');
+      const { eq } = await import('drizzle-orm');
+      const existing = await this.db.select().from(s.goals).where(eq(s.goals.channelId, channelId)).limit(1);
+      if (existing.length > 0) {
+        const updateData = { ...goalData, updatedAt: new Date() };
+        delete updateData.id; delete updateData.channelId; delete updateData.createdAt;
+        return this.db.update(s.goals).set(updateData).where(eq(s.goals.channelId, channelId)).returning();
+      } else {
+        return this.db.insert(s.goals).values({ channelId, ...goalData }).returning();
+      }
+    }, 'upsertGoal');
+  }
+
+  async getGoal(channelId) {
+    return this._retry(async () => {
+      const s = await import('./schema.js');
+      const { eq } = await import('drizzle-orm');
+      const rows = await this.db.select().from(s.goals).where(eq(s.goals.channelId, channelId)).limit(1);
+      return rows[0] || null;
+    }, 'getGoal').catch(() => null);
+  }
+
+  async deleteGoal(channelId) {
+    return this._retry(async () => {
+      const s = await import('./schema.js');
+      const { eq } = await import('drizzle-orm');
+      return this.db.delete(s.goals).where(eq(s.goals.channelId, channelId));
+    }, 'deleteGoal');
+  }
+
+  // ── Agent Job CRUD (async job tracking for chat-triggered actions) ──
+  async createJob(channelId, tool) {
+    return this._retry(async () => {
+      const s = await import('./schema.js');
+      const jobs = await this.db.insert(s.agentJobs).values({ channelId, tool, status: 'queued' }).returning();
+      return jobs[0];
+    }, 'createJob');
+  }
+
+  async getJob(jobId) {
+    return this._retry(async () => {
+      const s = await import('./schema.js');
+      const { eq } = await import('drizzle-orm');
+      const rows = await this.db.select().from(s.agentJobs).where(eq(s.agentJobs.id, jobId)).limit(1);
+      return rows[0] || null;
+    }, 'getJob').catch(() => null);
+  }
+
+  async updateJob(jobId, updates) {
+    return this._retry(async () => {
+      const s = await import('./schema.js');
+      const { eq } = await import('drizzle-orm');
+      return this.db.update(s.agentJobs).set(updates).where(eq(s.agentJobs.id, jobId));
+    }, 'updateJob');
+  }
+
+  async getActiveJob(channelId, tool) {
+    return this._retry(async () => {
+      const s = await import('./schema.js');
+      const { eq, and, inArray } = await import('drizzle-orm');
+      const rows = await this.db.select().from(s.agentJobs).where(and(
+        eq(s.agentJobs.channelId, channelId),
+        eq(s.agentJobs.tool, tool),
+        inArray(s.agentJobs.status, ['queued', 'running'])
+      )).limit(1);
+      return rows[0] || null;
+    }, 'getActiveJob').catch(() => null);
+  }
 }
 const dbService = new DatabaseService();
 

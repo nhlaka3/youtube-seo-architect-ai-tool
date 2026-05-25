@@ -1166,6 +1166,49 @@ app.get('/api/agent/migrate', async (req, res) => {
       await sql`CREATE INDEX IF NOT EXISTS idx_scan_results_channel ON scan_results(channel_id)`;
       await sql`CREATE INDEX IF NOT EXISTS idx_scan_results_scanned ON scan_results(scanned_at DESC)`;
       await sql`CREATE INDEX IF NOT EXISTS idx_agent_recs_channel ON agent_recommendations(channel_id)`;
+
+      // ── Goals table (DB-persisted, replaces in-memory goalStore) ──
+      await sql`CREATE TABLE IF NOT EXISTS goals (
+        id TEXT PRIMARY KEY DEFAULT gen_random_uuid()::text,
+        channel_id TEXT NOT NULL UNIQUE,
+        type TEXT NOT NULL,
+        target INTEGER NOT NULL,
+        current INTEGER DEFAULT 0,
+        initial_current INTEGER DEFAULT 0,
+        deadline TEXT,
+        status TEXT DEFAULT 'active',
+        phases JSONB DEFAULT '[]'::jsonb,
+        progress JSONB DEFAULT '{}'::jsonb,
+        created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
+        updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+      )`;
+      await sql`ALTER TABLE goals ADD COLUMN IF NOT EXISTS progress JSONB DEFAULT '{}'::jsonb`;
+
+      // Migrate existing goals from agent_settings.goal column
+      try {
+        await sql`
+          INSERT INTO goals (channel_id, type, target, status)
+          SELECT COALESCE(channel_id, 'global'), 'subscribers',
+            CASE WHEN goal ~ '^\d+$' THEN goal::integer ELSE 1000 END,
+            'active'
+          FROM agent_settings WHERE goal IS NOT NULL AND goal != '' AND channel_id IS NOT NULL
+          ON CONFLICT (channel_id) DO NOTHING
+        `;
+      } catch (migErr) { console.warn('[Migration] goal migration:', migErr.message); }
+
+      // ── Agent Jobs table (async job tracking) ──
+      await sql`CREATE TABLE IF NOT EXISTS agent_jobs (
+        id TEXT PRIMARY KEY DEFAULT gen_random_uuid()::text,
+        channel_id TEXT NOT NULL,
+        tool TEXT NOT NULL,
+        status TEXT DEFAULT 'queued',
+        progress INTEGER DEFAULT 0,
+        result JSONB DEFAULT '{}'::jsonb,
+        error TEXT,
+        created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
+        completed_at TIMESTAMP WITH TIME ZONE
+      )`;
+
       } catch (sErr) { console.warn('[Agent] Safety migration:', sErr.message); }
       res.json({ success: true, message: 'Agent tables created' });
     } catch (tableErr) {

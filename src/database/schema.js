@@ -360,17 +360,31 @@ export const agentRules = pgTable('agent_rules', {
   createdAt: timestamp('created_at').defaultNow(),
 });
 
-// ── Phronesis Agent — Goals ──
+// ── Phronesis Agent — Goals (DB-persisted, replaces in-memory goalStore Map) ──
 export const goals = pgTable('goals', {
-  id: text('id').primaryKey(),
-  channelId: text('channel_id').notNull(),
+  id: text('id').primaryKey().$defaultFn(() => createId()),
+  channelId: text('channel_id').notNull().unique(), // one active goal per channel
   type: text('type').notNull(), // 'subscribers', 'views', 'watch_hours'
   target: integer('target').notNull(),
-  current: integer('current').notNull().default(0),
+  current: integer('current').default(0),
   initialCurrent: integer('initial_current').default(0),
   deadline: text('deadline'),
-  status: text('status').notNull().default('active'),
-  phases: jsonb('phases').default('[]'),
-  createdAt: text('created_at').notNull(),
-  updatedAt: text('updated_at').notNull()
+  status: text('status').default('active'),
+  phases: jsonb('phases').default([]),
+  progress: jsonb('progress').default({}), // { percent, remaining, weeklyRate, eta }
+  createdAt: timestamp('created_at').defaultNow(),
+  updatedAt: timestamp('updated_at').defaultNow(),
+});
+
+// ── Phronesis Agent — Async Jobs (chat-triggered agent actions) ──
+export const agentJobs = pgTable('agent_jobs', {
+  id: text('id').primaryKey().$defaultFn(() => createId()),
+  channelId: text('channel_id').notNull(),
+  tool: text('tool').notNull(), // scan_channel, optimize_video, apply_fixes
+  status: text('status').default('queued'), // queued, running, completed, failed
+  progress: integer('progress').default(0), // 0-100
+  result: jsonb('result').default({}),
+  error: text('error'),
+  createdAt: timestamp('created_at').defaultNow(),
+  completedAt: timestamp('completed_at'),
 });
