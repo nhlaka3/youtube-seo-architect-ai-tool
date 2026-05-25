@@ -194,6 +194,18 @@ async function buildDashboard(channelId) {
       }
     } catch(e) {}
 
+    // 5. Intelligence: channel baselines (30-day trends)
+    try {
+      const { getChannelBaselines } = await import('../context-enricher.js');
+      const bl = await getChannelBaselines(channelId);
+      if (bl && bl.rolling30d && !bl.error) {
+        parts.push('\n🧠 30-Day Intelligence:');
+        if (bl.rolling30d.viewVelocity !== undefined) parts.push('   • View Velocity: ' + bl.rolling30d.viewVelocity + ' views/day (' + (bl.trend?.direction || 'stable') + ')');
+        if (bl.rolling30d.successRate !== undefined) parts.push('   • Optimization Success Rate: ' + bl.rolling30d.successRate + '%');
+        if (bl.rolling30d.appliedOptimizations) parts.push('   • Applied Optimizations: ' + bl.rolling30d.appliedOptimizations + ' in last 30 days');
+      }
+    } catch(e) {}
+
     if (!parts.length) {
       return { instant: true, response: '👋 Welcome to Phronesis! I\'m your AI growth coach.\n\nHere\'s how to get started:\n• Click 🎯 Set Goal to define your target\n• Run ⚡ TRIGGER SCAN in Phronesis to analyze your channel\n• I\'ll summarize results and guide your next moves\n\nWhat would you like to do first?' };
     }

@@ -294,6 +294,31 @@ router.post('/assistant', aiLimiter, validateBody(assistantSchema), requireChann
       }
     } catch (e) { /* Memory load failed silently */ }
 
+    // ── LAYER 1-4: Agent Intelligence Context (baselines, EV, plan, learning) ──
+    let intelligenceContext = '';
+    try {
+      const { getChannelBaselines } = await import('./context-enricher.js');
+      const baselines = await getChannelBaselines(req.channelId);
+      if (baselines && baselines.rolling30d) {
+        const bl = baselines.rolling30d;
+        intelligenceContext += '\n\n## Channel Intelligence (30-day baselines):\n';
+        if (bl.viewVelocity !== undefined) intelligenceContext += `- View Velocity: ${bl.viewVelocity} views/day (trend: ${baselines.trend?.direction || 'stable'})\n`;
+        if (bl.successRate !== undefined) intelligenceContext += `- Optimization Success Rate: ${bl.successRate}% (${bl.appliedOptimizations || 0} applied)\n`;
+        if (bl.totalActions) intelligenceContext += `- Recent Actions: ${bl.totalActions} in last 30 days\n`;
+        intelligenceContext += 'Use these baselines to give DATA-DRIVEN advice. Compare their performance against their own history, not generic benchmarks.';
+      }
+    } catch(e) { /* non-critical */ }
+
+    // ── Planner: strategic next steps if goal exists ──
+    try {
+      const { getGoalStatus } = await import('./agent-core/goal-engine.js');
+      const goal = await getGoalStatus(req.channelId);
+      if (goal && goal.phases && goal.phases.length) {
+        var nextPhase = goal.phases.find(p => p.status === 'pending') || goal.phases[0];
+        intelligenceContext += `\n\n## Strategic Plan:\n- Current Goal: ${goal.current}/${goal.target} ${goal.type} (${goal.progress?.percent || 0}%)\n- Next Phase: ${nextPhase.name} — ${nextPhase.estimatedImpact || ''}\n- ETA: ${goal.progress?.eta || 'calculating...'}\nGuide the creator toward their next phase naturally.`;
+      }
+    } catch(e) { /* non-critical */ }
+
     // Build conversation history as formatted context
     let historyContext = '';
     if (history && Array.isArray(history) && history.length > 0) {
@@ -304,7 +329,7 @@ router.post('/assistant', aiLimiter, validateBody(assistantSchema), requireChann
       historyContext = '\n\nConversation history:\n' + safeHistory.join('\n');
     }
 
-    const reply = await askAI(systemPrompt + memoryContext, safeMessage + historyContext, { temperature: 0.7, maxTokens: 500 });
+    const reply = await askAI(systemPrompt + memoryContext + intelligenceContext, safeMessage + historyContext, { temperature: 0.7, maxTokens: 500 });
     
     if (!reply) { await refundCredits(req.channelId, CREDIT_COSTS['ai-assistant']); return sendRes(res, 502, { error: 'AI generation failed' }); }
     sendRes(res, 200, { reply });
