@@ -15514,6 +15514,7 @@ let _architectChatHistory = [];
 // ═══════════════════════════════════════════════════════
 //  Phronesis Coach Chat UI (Goal-Driven Agent)
 // ═══════════════════════════════════════════════════════
+var _phronesisChatHistory = [];
 let coachPollInterval = null;
 
 function toggleCoachChat() {
@@ -15524,6 +15525,7 @@ function toggleCoachChat() {
   if (!isOpen) {
     loadCoachMessages();
     loadGoalBar();
+    loadPhronesisCoachMemory();
     coachPollInterval = setInterval(function() {
       // Only update badge count, don't replace messages
       updateCoachBadge();
@@ -15627,6 +15629,7 @@ async function sendCoachQuestion() {
   const container = document.getElementById('coach-messages');
   if (!container) return;
   container.innerHTML += '<div class="coach-msg coach-msg--user"><div class="coach-msg-body">' + question + '</div></div>';
+  container.scrollTop = container.scrollHeight;
   try {
     const chId = localStorage.getItem('ytseo_channel_id');
     const res = await fetch('/api/agent/coach/ask', {
@@ -15635,11 +15638,91 @@ async function sendCoachQuestion() {
       body: JSON.stringify({ question: question, channelId: chId })
     });
     const data = await res.json();
-    container.innerHTML += '<div class="coach-msg coach-msg--response"><div class="coach-msg-body">' + (data.response || 'Sorry, I could not process that.') + '</div></div>';
+    var responseText = data.response || 'Sorry, I could not process that.';
+    container.innerHTML += '<div class="coach-msg coach-msg--response"><div class="coach-msg-body">' + responseText + '</div></div>';
     container.scrollTop = container.scrollHeight;
-  } catch(e) {}
+
+    // Track history for memory persistence
+    _phronesisChatHistory.push({ role: 'user', content: question });
+    _phronesisChatHistory.push({ role: 'assistant', content: responseText });
+    if (_phronesisChatHistory.length > 20) _phronesisChatHistory = _phronesisChatHistory.slice(-20);
+
+    // Save coach memory in background
+    savePhronesisCoachMemory();
+
+    // If response contains a jobId pattern, start polling
+    var jobMatch = responseText.match(/Job #([a-z0-9]+)/i);
+    if (jobMatch) {
+      pollJobStatus(jobMatch[1], container);
+    }
+  } catch(e) {
+    container.innerHTML += '<div class="coach-msg coach-msg--error"><div class="coach-msg-body">Error: ' + e.message + '</div></div>';
+  }
 }
 window.sendCoachQuestion = sendCoachQuestion;
+
+// ── Phronesis Coach Memory (save + load for chat panel) ──
+async function savePhronesisCoachMemory() {
+  if (!_phronesisChatHistory || _phronesisChatHistory.length < 2) return;
+  try {
+    var channelId = localStorage.getItem('ytseo_channel_id') || 'anonymous';
+    await fetch('/api/coach-memory/save', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'x-channel-id': channelId },
+      body: JSON.stringify({ conversation: _phronesisChatHistory.slice(-6), niche: 'General' })
+    });
+  } catch(e) { /* best-effort */ }
+}
+window.savePhronesisCoachMemory = savePhronesisCoachMemory;
+
+var _activePollTimers = {};
+function pollJobStatus(jobId, container) {
+  if (_activePollTimers[jobId]) clearInterval(_activePollTimers[jobId]);
+  var pollCount = 0;
+  var maxPolls = 24; // 24 × 5s = 2 minutes max
+  _activePollTimers[jobId] = setInterval(async function() {
+    pollCount++;
+    try {
+      var res = await fetch('/api/agent/coach/job/' + jobId);
+      var data = await res.json();
+      if (!data.job) { clearInterval(_activePollTimers[jobId]); return; }
+      if (data.job.status === 'completed') {
+        clearInterval(_activePollTimers[jobId]);
+        container.innerHTML += '<div class="coach-msg coach-msg--success"><div class="coach-msg-body">✅ Job complete! ' + (data.job.result?.proposals || 0) + ' proposals generated. Check your inbox.</div></div>';
+        container.scrollTop = container.scrollHeight;
+        loadCoachMessages();
+      } else if (data.job.status === 'failed') {
+        clearInterval(_activePollTimers[jobId]);
+        container.innerHTML += '<div class="coach-msg coach-msg--error"><div class="coach-msg-body">❌ Job failed: ' + (data.job.error || 'Unknown error') + '</div></div>';
+        container.scrollTop = container.scrollHeight;
+      }
+    } catch(e) { /* keep polling */ }
+    if (pollCount >= maxPolls) {
+      clearInterval(_activePollTimers[jobId]);
+      container.innerHTML += '<div class="coach-msg coach-msg--warning"><div class="coach-msg-body">⏰ Job #' + jobId.substring(0, 8) + ' is taking longer than expected. Check your inbox shortly.</div></div>';
+      container.scrollTop = container.scrollHeight;
+    }
+  }, 5000);
+}
+window.pollJobStatus = pollJobStatus;
+
+async function loadPhronesisCoachMemory() {
+  try {
+    var channelId = localStorage.getItem('ytseo_channel_id') || 'anonymous';
+    var res = await fetch('/api/coach-memory/memory', { headers: { 'x-channel-id': channelId } });
+    var data = await res.json();
+    if (data.hasMemory && data.memory) {
+      var container = document.getElementById('coach-messages');
+      if (container && data.memory.lastConversation) {
+        var existingSystem = container.querySelector('.coach-msg--memory');
+        if (!existingSystem) {
+          container.innerHTML = '<div class="coach-msg coach-msg--memory" style="font-size:11px;color:var(--text-muted);padding:8px;border-bottom:1px solid var(--border);margin-bottom:8px;">🧠 Memory: ' + data.memory.lastConversation + '</div>' + container.innerHTML;
+        }
+      }
+    }
+  } catch(e) { /* silent */ }
+}
+window.loadPhronesisCoachMemory = loadPhronesisCoachMemory;
 
 function showGoalSetup() {
   const existing = document.getElementById('goal-setup-modal');
