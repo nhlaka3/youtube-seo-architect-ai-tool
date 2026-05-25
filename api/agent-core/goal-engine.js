@@ -1,66 +1,64 @@
 // api/agent-core/goal-engine.js
 // Goal lifecycle: set → plan → track → adapt
-// Uses in-memory storage (Map) — DB migration TBD
-
-const goalStore = new Map(); // channelId → goal
+// Persisted to Neon Postgres `goals` table (replaces in-memory Map)
 
 export async function setGoal({ channelId, type, target, deadline }) {
   const current = await getCurrentMetric(channelId, type);
   const goal = {
-    id: 'goal_' + Date.now() + '_' + Math.random().toString(36).slice(2, 8),
     channelId,
     type,
-    target,
+    target: parseInt(target),
     current,
     initialCurrent: current,
     deadline: deadline || null,
     status: 'active',
     phases: [],
-    createdAt: new Date().toISOString(),
-    updatedAt: new Date().toISOString()
+    progress: {},
+    updatedAt: new Date()
   };
 
   // Generate plan using existing planner
   try {
-    const plan = await generateGoalPlan(goal);
-    goal.phases = plan;
+    const { generatePlan } = await import('./planner.js');
+    const plan = await generatePlan(
+      'goal_' + Date.now(),
+      'Grow channel ' + type + ' to ' + target + (deadline ? ' by ' + deadline : ''),
+      'channel-growth'
+    );
+    goal.phases = (plan.phases || []).map(p => ({
+      ...p,
+      status: 'pending',
+      estimatedImpact: estimatePhaseImpact(p, type, parseInt(target))
+    }));
   } catch(e) {
     goal.phases = getFallbackPhases(goal);
   }
 
-  // Deactivate old goal, store new one
-  goalStore.set(channelId, goal);
-  return goal;
-}
-
-async function generateGoalPlan(goal) {
+  // Persist to DB
   try {
-    const { generatePlan } = await import('./planner.js');
-    const plan = await generatePlan(goal.id,
-      `Grow channel ${goal.type} to ${goal.target}` + (goal.deadline ? ` by ${goal.deadline}` : ''),
-      'channel-growth');
-    return (plan.phases || []).map(p => ({
-      ...p,
-      status: 'pending',
-      estimatedImpact: estimatePhaseImpact(p, goal.type, goal.target)
-    }));
-  } catch(e) { return getFallbackPhases(goal); }
-}
+    const { default: dbService } = await import('../../src/database/services.js');
+    await dbService.upsertGoal(channelId, goal);
+  } catch(e) {
+    console.error('[GoalEngine] DB persist failed:', e.message);
+  }
 
-function getFallbackPhases(goal) {
-  return [
-    { phase: 1, name: 'AUDIT', status: 'pending', estimatedImpact: `+${Math.round(goal.target * 0.1)} ${goal.type}` },
-    { phase: 2, name: 'OPTIMIZE', status: 'pending', estimatedImpact: `+${Math.round(goal.target * 0.4)} ${goal.type}` },
-    { phase: 3, name: 'GROWTH', status: 'pending', estimatedImpact: `+${Math.round(goal.target * 0.3)} ${goal.type}` },
-    { phase: 4, name: 'COMPOUND', status: 'pending', estimatedImpact: `+${Math.round(goal.target * 0.2)} ${goal.type}` }
-  ];
+  return goal;
 }
 
 function estimatePhaseImpact(phase, goalType, target) {
   const weights = { AUDIT: 0.1, OPTIMIZE: 0.4, GROWTH: 0.3, COMPOUND: 0.2 };
   const name = (phase.name || '').toUpperCase();
   const key = Object.keys(weights).find(k => name.includes(k));
-  return `+${Math.round(target * (key ? weights[key] : 0.2))} ${goalType}`;
+  return '+' + Math.round(target * (key ? weights[key] : 0.2)) + ' ' + goalType;
+}
+
+function getFallbackPhases(goal) {
+  return [
+    { phase: 1, name: 'AUDIT', status: 'pending', estimatedImpact: '+' + Math.round(goal.target * 0.1) + ' ' + goal.type },
+    { phase: 2, name: 'OPTIMIZE', status: 'pending', estimatedImpact: '+' + Math.round(goal.target * 0.4) + ' ' + goal.type },
+    { phase: 3, name: 'GROWTH', status: 'pending', estimatedImpact: '+' + Math.round(goal.target * 0.3) + ' ' + goal.type },
+    { phase: 4, name: 'COMPOUND', status: 'pending', estimatedImpact: '+' + Math.round(goal.target * 0.2) + ' ' + goal.type }
+  ];
 }
 
 async function getCurrentMetric(channelId, type) {
@@ -77,28 +75,39 @@ async function getCurrentMetric(channelId, type) {
 }
 
 export async function getGoalStatus(channelId) {
-  const goal = goalStore.get(channelId);
-  if (!goal || goal.status !== 'active') return null;
+  try {
+    const { default: dbService } = await import('../../src/database/services.js');
+    const goal = await dbService.getGoal(channelId);
+    if (!goal || goal.status !== 'active') return null;
 
-  // Update current metric
-  goal.current = await getCurrentMetric(channelId, goal.type);
+    // Update current metric
+    const current = await getCurrentMetric(channelId, goal.type);
 
-  // Calculate progress
-  const created = new Date(goal.createdAt);
-  const weeks = Math.max(0.1, (Date.now() - created.getTime()) / (7 * 86400000));
-  const initial = goal.initialCurrent || 0;
-  const weeklyRate = Math.round((goal.current - initial) / weeks);
+    // Calculate progress
+    const created = new Date(goal.createdAt);
+    const weeks = Math.max(0.1, (Date.now() - created.getTime()) / (7 * 86400000));
+    const initial = goal.initialCurrent || 0;
+    const weeklyRate = Math.round((current - initial) / weeks);
 
-  goal.progress = {
-    percent: goal.target > 0 ? Math.round((goal.current / goal.target) * 100) : 0,
-    remaining: Math.max(0, goal.target - goal.current),
-    weeklyRate
-  };
+    const progress = {
+      percent: goal.target > 0 ? Math.round((current / goal.target) * 100) : 0,
+      remaining: Math.max(0, goal.target - current),
+      weeklyRate
+    };
 
-  if (weeklyRate > 0 && goal.progress.remaining > 0) {
-    const weeksLeft = goal.progress.remaining / weeklyRate;
-    goal.progress.eta = new Date(Date.now() + weeksLeft * 7 * 86400000).toISOString().split('T')[0];
+    if (weeklyRate > 0 && progress.remaining > 0) {
+      const weeksLeft = progress.remaining / weeklyRate;
+      progress.eta = new Date(Date.now() + weeksLeft * 7 * 86400000).toISOString().split('T')[0];
+    }
+
+    // Persist updated current + progress
+    try {
+      await dbService.upsertGoal(channelId, { current, progress, updatedAt: new Date() });
+    } catch(e) { /* non-critical */ }
+
+    return { ...goal, current, progress };
+  } catch(e) {
+    console.error('[GoalEngine] getGoalStatus failed:', e.message);
+    return null;
   }
-
-  return goal;
 }
