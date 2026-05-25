@@ -1221,29 +1221,38 @@ app.get('/api/agent/migrate', async (req, res) => {
 // --- Dev: Refill credits
 
 app.post('/api/dev/refill', requireAdmin, async (req, res) => {
-
   try {
-
     const channelId = req.headers['x-channel-id'] || req.body?.channelId || 'anonymous';
-
     try {
-
       const { default: dbService } = await import('../src/database/services.js');
-
-      if (dbService && typeof dbService.updateUserCredits === 'function') {
-
-        await dbService.updateUserCredits(channelId, 999);
-
-
+      const s = await import('../src/database/schema.js');
+      // Ensure user exists first (upsert)
+      try {
+        await dbService.db.insert(s.users).values({
+          channelId, credits: 999, plan: 'agency', metadata: {}
+        }).onConflictDoUpdate({
+          target: s.users.channelId,
+          set: { credits: 999, plan: 'agency', updatedAt: new Date() }
+        });
+      } catch(insertErr) {
+        // Fallback: try update
+        if (dbService && typeof dbService.updateUserCredits === 'function') {
+          await dbService.updateUserCredits(channelId, 999);
+        }
       }
-
+      // Also sync plan to agent_settings
+      try {
+        await dbService.db.insert(s.agentSettings).values({
+          channelId, isAutonomous: false, updatedAt: new Date()
+        }).onConflictDoUpdate({
+          target: s.agentSettings.channelId,
+          set: { updatedAt: new Date() }
+        }).catch(() => {});
+      } catch(e) {}
     } catch (dbErr) {
-
       console.warn('[Dev Refill] DB unavailable:', dbErr.message);
-
     }
-
-    res.json({ success: true, credits: 999, message: 'Credits refilled' });
+    res.json({ success: true, credits: 999, plan: 'agency', message: 'Credits refilled + plan set to agency' });
 
   } catch (e) {
 
