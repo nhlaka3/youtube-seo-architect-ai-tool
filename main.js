@@ -74,7 +74,8 @@ window.SaaS = window.SaaS || {
   reorder: function() { if (typeof loadRetentionData === 'function') loadRetentionData(); else console.warn('Reorder not ready yet'); },
   clearChat: function() { /* loaded lazily */ },
   restore: function(index) { if (typeof restoreOriginal === 'function') restoreOriginal(index); else console.warn('Restore not ready yet'); },
-  purchaseSuccess: function(orderId, plan) { /* loaded lazily */ }
+  purchaseSuccess: function(orderId, plan) { /* loaded lazily */ },
+  quickAction: function(action) { if (typeof aiCoachQuickAction === 'function') aiCoachQuickAction(action); else console.warn('QuickAction not ready yet'); }
 };
 
 // ═══════════════════════════════════════════════════════════════
@@ -15824,6 +15825,7 @@ async function saveGoal() {
       showToast('Goal set! Agent is working on it.', 'success');
       document.getElementById('goal-setup-modal').remove();
       refreshCoachGoalCard();
+      refreshAiCoachGoalCard();
     }
   } catch(e) { showToast('Failed to set goal', 'error'); }
 }
@@ -15988,6 +15990,71 @@ async function tryPhronesisTool(message) {
   } catch(e) { return null; }
 }
 window.tryPhronesisTool = tryPhronesisTool;
+
+// ── AI Coach Quick Actions (chips) ──
+async function aiCoachQuickAction(action) {
+  var chatMessages = document.getElementById('chat-messages');
+  if (!chatMessages) return;
+  var chId = localStorage.getItem('ytseo_channel_id') || 'anonymous';
+
+  if (action === 'goal') { showGoalSetup(); return; }
+
+  var toolMap = { dashboard: 'dashboard', scan: 'scan_channel', progress: 'goal_status', inbox: 'get_inbox' };
+  var tool = toolMap[action] || action;
+
+  chatMessages.innerHTML += '<div class="message user">' + (action === 'dashboard' ? '📋 Overview' : action === 'scan' ? '🔍 Scan' : action === 'progress' ? '📊 Progress' : '📥 Inbox') + '</div>';
+  chatMessages.scrollTop = chatMessages.scrollHeight;
+
+  try {
+    var res = await fetch('/api/agent/coach/tool', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'x-channel-id': chId },
+      body: JSON.stringify({ tool: tool, args: {}, channelId: chId })
+    });
+    var data = await res.json();
+    var msg = data.response || data.message || 'Done.';
+    chatMessages.innerHTML += '<div class="message ai">' + msg.replace(/\n/g, '<br>') + '</div>';
+    chatMessages.scrollTop = chatMessages.scrollHeight;
+    refreshAiCoachGoalCard();
+  } catch(e) {
+    chatMessages.innerHTML += '<div class="message ai" style="color:var(--danger);">Error: ' + e.message + '</div>';
+  }
+}
+window.aiCoachQuickAction = aiCoachQuickAction;
+
+// ── AI Coach Goal Card ──
+async function refreshAiCoachGoalCard() {
+  try {
+    var chId = localStorage.getItem('ytseo_channel_id');
+    if (!chId) return;
+    var res = await fetch('/api/agent/goal/status?channelId=' + chId);
+    var data = await res.json();
+    var card = document.getElementById('ai-coach-goal-card');
+    if (!card) return;
+    card.style.display = 'block';
+    if (data.goal) {
+      var g = data.goal;
+      var text = document.getElementById('ai-coach-goal-text');
+      var fill = document.getElementById('ai-coach-goal-fill');
+      var pct = document.getElementById('ai-coach-goal-pct');
+      var eta = document.getElementById('ai-coach-goal-eta');
+      if (text) text.textContent = '🎯 ' + (g.current || 0).toLocaleString() + ' / ' + (g.target || 0).toLocaleString() + ' ' + (g.type || 'subscribers');
+      if (fill) fill.style.width = (g.progress?.percent || 0) + '%';
+      if (pct) pct.textContent = (g.progress?.percent || 0) + '% complete';
+      if (eta) eta.textContent = g.progress?.weeklyRate ? '+' + g.progress.weeklyRate + '/week · ETA ' + (g.progress.eta || '...') : 'Tracking...';
+    } else {
+      var text = document.getElementById('ai-coach-goal-text');
+      var fill = document.getElementById('ai-coach-goal-fill');
+      var pct = document.getElementById('ai-coach-goal-pct');
+      var eta = document.getElementById('ai-coach-goal-eta');
+      if (text) text.textContent = '🎯 No goal set';
+      if (fill) fill.style.width = '0%';
+      if (pct) pct.textContent = 'Set a goal to start';
+      if (eta) eta.textContent = 'Click 🎯 Set Goal below';
+    }
+  } catch(e) {}
+}
+window.refreshAiCoachGoalCard = refreshAiCoachGoalCard;
 
 // ── Coach Memory Functions (Task 07) ──
 async function saveCoachMemoryInBackground(conversationHistory, niche) {
@@ -16339,6 +16406,8 @@ function toggleCoachDrawer(show) {
   if (shouldShow) {
     coach.style.display = 'flex';
     setTimeout(() => { coach.classList.add('active'); coach.style.transform = 'translateX(0)'; }, 10);
+    // Auto-load goal card + dashboard
+    setTimeout(() => { refreshAiCoachGoalCard(); }, 300);
   } else {
     coach.classList.remove('active');
     coach.style.transform = 'translateX(100%)';
