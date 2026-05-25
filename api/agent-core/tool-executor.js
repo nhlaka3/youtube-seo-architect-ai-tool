@@ -37,8 +37,8 @@ export async function executeTool(tool, args, channelId) {
       try {
         const { default: dbService } = await import('../../src/database/services.js');
         const s = await import('../../src/database/schema.js');
-        const { eq } = await import('drizzle-orm');
-        const items = await dbService.db.select().from(s.optimizationQueue).where(eq(s.optimizationQueue.status, 'pending')).limit(5);
+        const { eq, and } = await import('drizzle-orm');
+        const items = await dbService.db.select().from(s.optimizationQueue).where(and(eq(s.optimizationQueue.status, 'pending'), eq(s.optimizationQueue.channelId, channelId))).limit(5);
         if (!items || !items.length) return { instant: true, response: '📭 Your inbox is empty. No pending optimizations right now.\n\nRun a channel scan (⚡ TRIGGER SCAN in Phronesis) to discover opportunities, then come back here.' };
         var lines = items.map(function(i) {
           var vid = (i.videoTitle || 'Untitled').substring(0, 45);
@@ -54,9 +54,9 @@ export async function executeTool(tool, args, channelId) {
       try {
         const { default: dbService } = await import('../../src/database/services.js');
         const s = await import('../../src/database/schema.js');
-        const { desc } = await import('drizzle-orm');
+        const { desc, eq } = await import('drizzle-orm');
         var limit = Math.min(args.limit || 5, 10);
-        const logs = await dbService.db.select().from(s.agentActivityLogs).orderBy(desc(s.agentActivityLogs.createdAt)).limit(limit);
+        const logs = await dbService.db.select().from(s.agentActivityLogs).where(eq(s.agentActivityLogs.channelId, channelId)).orderBy(desc(s.agentActivityLogs.createdAt)).limit(limit);
         if (!logs || !logs.length) return { instant: true, response: 'No recent agent activity yet. Run ⚡ TRIGGER SCAN in Phronesis to start analyzing your channel.' };
         var recent = logs.slice(0, 5).map(function(l) {
           var time = new Date(l.createdAt).toLocaleString('en-US', {month:'short',day:'numeric',hour:'2-digit',minute:'2-digit'});
@@ -73,13 +73,14 @@ export async function executeTool(tool, args, channelId) {
         const s = await import('../../src/database/schema.js');
         const { desc, eq } = await import('drizzle-orm');
 
-        // Check for recent scan results (last 24h)
+        // Check for recent scan results (last 24h) for THIS channel
         const recentScans = await dbService.db.select().from(s.scanResults)
+          .where(eq(s.scanResults.channelId, channelId))
           .orderBy(desc(s.scanResults.scannedAt)).limit(5);
         
-        // Check for pending proposals
+        // Check for pending proposals for THIS channel
         const proposals = await dbService.db.select().from(s.optimizationQueue)
-          .where(eq(s.optimizationQueue.status, 'pending')).limit(5);
+          .where(and(eq(s.optimizationQueue.status, 'pending'), eq(s.optimizationQueue.channelId, channelId))).limit(5);
 
         if (recentScans && recentScans.length > 0) {
           var newestScan = new Date(recentScans[0].scannedAt);
@@ -162,9 +163,10 @@ async function buildDashboard(channelId) {
       }
     } catch(e) {}
 
-    // 2. Recent activity
+    // 2. Recent activity (this channel only)
     try {
       const logs = await dbService.db.select().from(s.agentActivityLogs)
+        .where(eq(s.agentActivityLogs.channelId, channelId))
         .orderBy(desc(s.agentActivityLogs.createdAt)).limit(5);
       if (logs && logs.length) {
         parts.push('\n📊 Recent activity:');
@@ -174,9 +176,10 @@ async function buildDashboard(channelId) {
       }
     } catch(e) {}
 
-    // 3. Scan results
+    // 3. Scan results (this channel only)
     try {
       const scans = await dbService.db.select().from(s.scanResults)
+        .where(eq(s.scanResults.channelId, channelId))
         .orderBy(desc(s.scanResults.scannedAt)).limit(10);
       if (scans && scans.length) {
         var low = scans.filter(function(v) { return (v.overallScore || 100) < 60; });
@@ -188,7 +191,7 @@ async function buildDashboard(channelId) {
     // 4. Pending proposals
     try {
       const proposals = await dbService.db.select().from(s.optimizationQueue)
-        .where(eq(s.optimizationQueue.status, 'pending')).limit(5);
+        .where(and(eq(s.optimizationQueue.status, 'pending'), eq(s.optimizationQueue.channelId, channelId))).limit(5);
       if (proposals && proposals.length) {
         parts.push('\n📥 ' + proposals.length + ' proposal(s) waiting in inbox');
       }
