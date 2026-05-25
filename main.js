@@ -15905,6 +15905,21 @@ async function sendArchitectMessage() {
     }
   }
 
+    // ── Try tool detection first (scan, goal, inbox, etc.) ──
+    var toolResult = await tryPhronesisTool(message);
+    if (toolResult) {
+      if (chatMessages) {
+        chatMessages.innerHTML += `<div class="message ai">${toolResult}</div>`;
+        chatMessages.scrollTop = chatMessages.scrollHeight;
+      }
+      _architectChatHistory.push({ role: 'user', content: message });
+      _architectChatHistory.push({ role: 'assistant', content: toolResult });
+      saveCoachMemoryInBackground(_architectChatHistory, niche);
+      window.isCoachThinking = false;
+      return;
+    }
+
+    // ── Conversational: use the powerful AI assistant endpoint ──
     const groqKey = checkGroqApiKey();
     const headers = {
       'Content-Type': 'application/json',
@@ -15945,6 +15960,34 @@ async function sendArchitectMessage() {
   }
 }
 window.sendArchitectMessage = sendArchitectMessage;
+
+// ── Tool detection for AI Coach — bridges to Phronesis tools ──
+async function tryPhronesisTool(message) {
+  var msg = (message || '').toLowerCase();
+  var chId = localStorage.getItem('ytseo_channel_id') || 'anonymous';
+
+  // Detect tool intent by keywords
+  var tool = null;
+  if (/scan|analyze|check.*channel|underperform|find.*issue|audit/i.test(msg)) tool = 'scan_channel';
+  else if (/goal|progress|how.*doing|target|subscriber.*count/i.test(msg)) tool = 'goal_status';
+  else if (/inbox|proposal|pending|optimization.*ready/i.test(msg)) tool = 'get_inbox';
+  else if (/set.*goal|i want.*\d+.*subscriber/i.test(msg)) tool = null; // Let AI handle goal setting conversationally
+  else if (/activity|what.*happen|recent|updates/i.test(msg)) tool = 'get_activity';
+  else if (/dashboard|overview|status|summary/i.test(msg)) tool = 'dashboard';
+
+  if (!tool) return null;
+
+  try {
+    var res = await fetch('/api/agent/coach/tool', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'x-channel-id': chId },
+      body: JSON.stringify({ tool: tool, args: {}, channelId: chId })
+    });
+    var data = await res.json();
+    return data.response || data.message || null;
+  } catch(e) { return null; }
+}
+window.tryPhronesisTool = tryPhronesisTool;
 
 // ── Coach Memory Functions (Task 07) ──
 async function saveCoachMemoryInBackground(conversationHistory, niche) {
