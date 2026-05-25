@@ -827,61 +827,6 @@ router.post('/mock-test', async (req, res) => {
 router.post('/goal', async (req, res) => {
   // Deprecated — use POST /api/agent/goal/set instead (goal-engine.js with DB persistence)
   return sendRes(res, 200, { deprecated: true, message: 'Use POST /api/agent/goal/set instead' });
-  /*
-  try {
-    const parsed = z.object({ goal: z.string().min(1).max(1000) }).safeParse(req.body);
-    if (!parsed.success) return sendRes(res, 400, { error: 'Invalid goal', details: parsed.error.errors });
-    const { goal } = parsed.data;
-    const chId = req.headers['x-channel-id'] || 'global';
-    const { default: dbService } = await import('../../src/database/services.js');
-    const s = await import('../../src/database/schema.js');
-    
-    // Decompose goal into strategy sub-tasks
-    let strategy = null;
-    try { strategy = await decomposeGoal(goal); } catch (e) { /* non-blocking */ }
-    
-    // Try to capture current subscriber count as baseline
-    let baselineSubs = null;
-    try {
-      const user = await dbService.getUserByChannel(chId);
-      if (user?.metadata?.accessToken) {
-        const chRes = await fetch('https://www.googleapis.com/youtube/v3/channels?part=statistics&mine=true', {
-          headers: { Authorization: 'Bearer ' + user.metadata.accessToken },
-          signal: AbortSignal.timeout(3000)
-        });
-        if (chRes.ok) {
-          const data = await chRes.json();
-          baselineSubs = parseInt(data.items?.[0]?.statistics?.subscriberCount || '0');
-        }
-      }
-    } catch (e) { /* non-critical */ }
-    
-    await dbService.db.insert(s.agentSettings).values({ 
-      channelId: chId, goal: goal || null, updatedAt: new Date() 
-    }).onConflictDoUpdate({ target: s.agentSettings.channelId, set: { 
-      goal: goal || null, updatedAt: new Date() 
-    } });
-    
-    // Store strategy + baseline as a log entry
-    if (strategy || baselineSubs !== null) {
-      await dbService.db.insert(s.agentActivityLogs).values({
-        channelId: chId,
-        agentName: 'system',
-        actionTaken: `STRATEGY:${JSON.stringify(strategy)}`,
-        impactDescription: `BASELINE_SUBS:${baselineSubs !== null ? baselineSubs : 'unknown'}`,
-        status: 'success'
-      });
-    }
-    
-    const subMsg = baselineSubs !== null ? ` (current: ${baselineSubs.toLocaleString()} subs)` : '';
-    await dbService.db.insert(s.agentActivityLogs).values({
-      channelId: chId,
-      agentName: 'system', actionTaken: `Goal set: ${goal}${subMsg}${strategy ? ' — ' + strategy.subtasks.length + ' sub-tasks' : ''}`,
-      impactDescription: goal ? 'Growth strategy active — pipeline prioritizes strategy agents' : 'Goal removed', status: 'success'
-    });
-    sendRes(res, 200, { success: true, goal, strategy, baselineSubs });
-  } catch (e) { sendRes(res, 500, { error: e.message }); }
-  */
 });
 
 // ── POST /reset-limits — Reset daily limit counter ──
