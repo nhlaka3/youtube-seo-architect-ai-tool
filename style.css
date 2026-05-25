@@ -7703,7 +7703,8 @@ body {
   backdrop-filter: blur(40px) !important;
   border-left: 1px solid var(--primary) !important;
   box-shadow: -20px 0 60px rgba(0, 0, 0, 0.8) !important;
-  width: 400px !important;
+  width: 50vw !important;
+  max-width: 700px !important;
   padding: 0 !important;
   display: flex;
   flex-direction: column;
