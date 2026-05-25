@@ -61,8 +61,17 @@ export async function executeTool(tool, args, channelId) {
     case 'scan_channel': {
       try {
         const { default: dbService } = await import('../../src/database/services.js');
+        // Auto-cleanup stuck jobs older than 5 minutes
         const existing = await dbService.getActiveJob(channelId, 'scan_channel');
-        if (existing) return { instant: true, response: 'A channel scan is already running (job #' + (existing.id || '').substring(0, 8) + '). I\'ll show results when it\'s done.' };
+        if (existing) {
+          const age = Date.now() - new Date(existing.createdAt).getTime();
+          if (age > 5 * 60 * 1000) {
+            // Stale job — mark as failed and continue
+            await dbService.updateJob(existing.id, { status: 'failed', error: 'Timed out (stale job)', completedAt: new Date() }).catch(function(){});
+          } else {
+            return { instant: true, response: 'A channel scan is already running (job #' + (existing.id || '').substring(0, 8) + '). I\'ll show results when it\'s done.' };
+          }
+        }
         const job = await dbService.createJob(channelId, 'scan_channel');
         runScanJob(job.id, channelId, args);
         return { instant: false, jobId: job.id, message: 'Scanning your channel now... I\'ll update you when I find optimization opportunities. (Job #' + (job.id || '').substring(0, 8) + ')' };

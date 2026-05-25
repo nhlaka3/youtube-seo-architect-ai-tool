@@ -1371,6 +1371,18 @@ app.post('/api/agent/coach/tool', async (req, res) => {
   } catch(e) { res.status(500).json({ error: e.message }); }
 });
 
+// Clear stuck/stale jobs
+app.post('/api/agent/coach/clear-jobs', async (req, res) => {
+  try {
+    const { default: dbService } = await import('../src/database/services.js');
+    const s = await import('../src/database/schema.js');
+    const { eq, inArray } = await import('drizzle-orm');
+    await dbService.db.update(s.agentJobs).set({ status: 'failed', error: 'Cleared by user', completedAt: new Date() })
+      .where(inArray(s.agentJobs.status, ['queued', 'running']));
+    res.json({ success: true, message: 'All pending/running jobs cleared' });
+  } catch(e) { res.status(500).json({ error: e.message }); }
+});
+
 app.get('/api/agent/status', async (req, res) => {
   try {
     const channelId = req.query.channelId || req.headers['x-channel-id'];
