@@ -15526,6 +15526,7 @@ function toggleCoachChat() {
     loadCoachMessages();
     refreshCoachGoalCard();
     loadPhronesisCoachMemory();
+    loadCoachDashboard();
     coachPollInterval = setInterval(function() {
       // Only update badge count, don't replace messages
       updateCoachBadge();
@@ -15568,66 +15569,62 @@ async function refreshCoachGoalCard() {
 window.refreshCoachGoalCard = refreshCoachGoalCard;
 
 // ── Quick Action Chips (bypass AI, call tool-executor directly) ──
+
+window.coachChipAction = coachChipAction;
+
+// ── Load coach dashboard on panel open ──
+async function loadCoachDashboard() {
+  var container = document.getElementById('coach-messages');
+  if (!container) return;
+  var chId = localStorage.getItem('ytseo_channel_id');
+  try {
+    var res = await fetch('/api/agent/coach/tool', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'x-channel-id': chId },
+      body: JSON.stringify({ tool: 'dashboard', args: {}, channelId: chId })
+    });
+    var data = await res.json();
+    if (data.response) {
+      container.innerHTML = '<div class="coach-msg coach-msg--response"><div class="coach-msg-body" style="white-space:pre-line;font-size:13px;">' + data.response + '</div></div>' + container.innerHTML;
+      container.scrollTop = 0;
+    }
+  } catch(e) {}
+}
+window.loadCoachDashboard = loadCoachDashboard;
+
+// ── Quick Action Chips (bypass AI, call tool-executor directly) ──
 async function coachChipAction(action) {
   var container = document.getElementById('coach-messages');
   if (!container) return;
   var chId = localStorage.getItem('ytseo_channel_id');
 
-  switch(action) {
-    case 'scan':
-      container.innerHTML += '<div class="coach-msg coach-msg--user"><div class="coach-msg-body">🔍 Scan my channel</div></div>';
-      container.scrollTop = container.scrollHeight;
-      try {
-        var scanRes = await fetch('/api/agent/coach/tool', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json', 'x-channel-id': chId },
-          body: JSON.stringify({ tool: 'scan_channel', args: {}, channelId: chId })
-        });
-        var scanData = await scanRes.json();
-        var msg = scanData.instant ? scanData.response : scanData.message;
-        container.innerHTML += '<div class="coach-msg coach-msg--response"><div class="coach-msg-body">' + msg + '</div></div>';
-        container.scrollTop = container.scrollHeight;
-        // Also refresh inbox after a short delay
-        setTimeout(function() { loadCoachMessages(); }, 2000);
-      } catch(e) {
-        container.innerHTML += '<div class="coach-msg coach-msg--error"><div class="coach-msg-body">Scan failed: ' + e.message + '</div></div>';
-      }
-      container.scrollTop = container.scrollHeight;
-      break;
+  var labels = { scan: '🔍 Scan my channel', progress: '📊 How am I doing?', inbox: '📥 Show my inbox', goal: '🎯 Set a goal', dashboard: '📋 Dashboard' };
+  if (action !== 'goal') {
+    container.innerHTML += '<div class="coach-msg coach-msg--user"><div class="coach-msg-body">' + (labels[action] || action) + '</div></div>';
+    container.scrollTop = container.scrollHeight;
+  }
 
-    case 'progress':
-      try {
-        var progRes = await fetch('/api/agent/coach/tool', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json', 'x-channel-id': chId },
-          body: JSON.stringify({ tool: 'goal_status', args: {}, channelId: chId })
-        });
-        var progData = await progRes.json();
-        container.innerHTML += '<div class="coach-msg coach-msg--response"><div class="coach-msg-body">' + (progData.response || 'No goal data.') + '</div></div>';
-        container.scrollTop = container.scrollHeight;
-        refreshCoachGoalCard();
-      } catch(e) {}
-      break;
+  if (action === 'goal') { showGoalSetup(); return; }
 
-    case 'inbox':
-      try {
-        var inboxRes = await fetch('/api/agent/coach/tool', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json', 'x-channel-id': chId },
-          body: JSON.stringify({ tool: 'get_inbox', args: {}, channelId: chId })
-        });
-        var inboxData = await inboxRes.json();
-        container.innerHTML += '<div class="coach-msg coach-msg--response"><div class="coach-msg-body">' + (inboxData.response || 'No proposals.') + '</div></div>';
-        container.scrollTop = container.scrollHeight;
-      } catch(e) {}
-      break;
+  var toolMap = { scan: 'scan_channel', progress: 'goal_status', inbox: 'get_inbox', dashboard: 'dashboard' };
+  var tool = toolMap[action] || action;
 
-    case 'goal':
-      showGoalSetup();
-      break;
+  try {
+    var res = await fetch('/api/agent/coach/tool', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'x-channel-id': chId },
+      body: JSON.stringify({ tool: tool, args: {}, channelId: chId })
+    });
+    var data = await res.json();
+    var msg = data.response || data.message || 'Done.';
+    container.innerHTML += '<div class="coach-msg coach-msg--response"><div class="coach-msg-body" style="white-space:pre-line;font-size:13px;">' + msg + '</div></div>';
+    container.scrollTop = container.scrollHeight;
+    refreshCoachGoalCard();
+    if (action === 'scan') setTimeout(function() { loadCoachMessages(); }, 2000);
+  } catch(e) {
+    container.innerHTML += '<div class="coach-msg coach-msg--error"><div class="coach-msg-body">Error: ' + e.message + '</div></div>';
   }
 }
-window.coachChipAction = coachChipAction;
 
 async function loadCoachMessages() {
   try {
