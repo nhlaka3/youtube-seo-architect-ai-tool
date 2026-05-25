@@ -247,6 +247,13 @@ Generate JSON: { "titles": [{"type":"Hook","text":"title1"},{"type":"Viral","tex
 });
 
 router.post('/assistant', aiLimiter, validateBody(assistantSchema), requireChannelId, async (req, res) => {
+  // ── Admin gate: Ask Phronesis is in testing ──
+  const headerPlan = req.headers['x-plan'] || '';
+  if (headerPlan !== 'agency') {
+    const plan = await getPlan(req.channelId);
+    if (plan !== 'agency') return sendRes(res, 403, { error: 'Ask Phronesis is in private testing. Check back soon.' });
+  }
+
   try {
     const { message, context, history } = req.body;
     

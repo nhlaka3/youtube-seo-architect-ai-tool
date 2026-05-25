@@ -606,6 +606,12 @@ async function resetCredits() {
 window.resetCredits = resetCredits;
 
 document.addEventListener('DOMContentLoaded', function() {
+  // ── Admin features: show Ask Phronesis coach ──
+  if (typeof isAdmin === 'function' && isAdmin()) {
+    var coachLink = document.getElementById('sidebar-coach-link');
+    if (coachLink) coachLink.style.display = '';
+  }
+
   vaTrack('page_view', { page: 'dashboard' });
 
   // Accessibility runtime enhancements (safe - only enhances onclick items, skips real links)

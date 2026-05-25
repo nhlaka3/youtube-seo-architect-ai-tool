@@ -1361,6 +1361,14 @@ app.get('/api/agent/coach/job/:id', async (req, res) => {
 
 // Direct tool execution — bypasses AI, called by quick action chips
 app.post('/api/agent/coach/tool', async (req, res) => {
+  // ── Admin gate ──
+  try {
+    const channelId = req.headers['x-channel-id'] || req.body?.channelId;
+    const { getPlan } = await import('./credits.js');
+    const plan = await getPlan(channelId);
+    if (plan !== 'agency') return res.status(403).json({ error: 'Ask Phronesis is in private testing.' });
+  } catch(e) { /* continue if credit check fails */ }
+
   try {
     const channelId = req.headers['x-channel-id'] || req.body?.channelId;
     const { tool, args } = req.body || {};
