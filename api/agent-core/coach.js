@@ -104,15 +104,29 @@ export async function handleQuestion(channelId, question) {
       }
     }
 
-    var systemPrompt = `You are Phronesis, an AI YouTube SEO coach in YT SEO Architect.
+    var toolDefinitions = `AVAILABLE TOOLS — You MUST use one of these when the user's request matches. Return ONLY valid JSON: {"tool":"tool_name","args":{},"message":"brief confirmation message"}
 
-Your role:
-- Help creators grow their YouTube channels
-- Give specific, actionable SEO and growth advice
-- Track goal progress and suggest next steps
-- Be concise but helpful (2-4 sentences)
-- Reference previous conversation when relevant
-- Use the goal and channel context provided
+1. goal_status — Check current goal progress. No args needed.
+2. set_goal — Set a new goal. Args: type (subscribers/views/watch_hours), target (number), deadline (optional date string).
+3. scan_channel — Scan channel for underperforming videos. Args: videoId (optional, to target one video).
+4. get_inbox — Show pending optimization proposals. No args needed.
+5. apply_fixes — Apply approved optimizations to YouTube. Args: autoApply (boolean, default true).
+6. optimize_video — Optimize a specific video. Args: videoId (string) or title (string).
+7. get_activity — Show recent agent activity. Args: limit (number, default 5).
+8. chat — None of the above fits. Args: message (your conversational response).
+
+RULES:
+- If the user asks about their goal or progress → use goal_status
+- If the user wants to scan, find issues, check for problems → use scan_channel
+- If the user wants to see proposals, inbox, pending items → use get_inbox
+- If the user wants to apply, push, or fix things → use apply_fixes
+- If the user asks to optimize a specific video → use optimize_video
+- If the user asks what's been happening, recent activity → use get_activity
+- If the user wants to set a goal → use set_goal
+- If none of the above clearly match → use chat with a helpful conversational response
+- If the request is ambiguous, use chat and ask a clarifying question`;
+
+    var systemPrompt = `You are Phronesis, an AI YouTube SEO coach in YT SEO Architect. You help creators grow their channels through SEO optimization and strategic guidance.
 
 GOAL CONTEXT:
 ${goalContext || 'No active goal set.'}
@@ -121,19 +135,50 @@ AGENT CONTEXT (recent activity):
 ${agentCtx || 'No recent agent activity.'}
 ${conversationContext}
 
-Respond conversationally. Reference earlier parts of the conversation if the user asks a follow-up. If the user asks about proposals, scans, or optimizations, use the AGENT CONTEXT above. Do NOT use markdown or emoji.`;
+${toolDefinitions}
+
+Return ONLY valid JSON. No markdown, no code blocks, no extra text. Just the JSON object.`;
 
     var { askAI } = await import('../_lib/ai-provider.js');
-    var answer = await askAI(systemPrompt, question);
+    var rawAnswer = await askAI(systemPrompt, question, { temperature: 0.3, maxTokens: 500, forceJson: true });
+
+    // Parse the AI response
+    var parsed;
+    try {
+      var cleaned = (rawAnswer || '').replace(/```json|```/g, '').trim();
+      parsed = JSON.parse(cleaned);
+    } catch(e) {
+      // If JSON parsing fails, treat as chat
+      parsed = { tool: 'chat', args: { message: rawAnswer || fallbackResponse(goal, question) } };
+    }
+
+    // Dispatch to tool executor
+    var { executeTool } = await import('./tool-executor.js');
+    var toolResult = await executeTool(parsed.tool || 'chat', parsed.args || {}, channelId);
+
+    var finalAnswer;
+    if (toolResult && toolResult.instant) {
+      finalAnswer = toolResult.response;
+    } else if (toolResult && !toolResult.instant) {
+      finalAnswer = toolResult.message;
+    } else {
+      // Fallback: use the message from chat tool or raw response
+      finalAnswer = (parsed.args && parsed.args.message) || parsed.message || rawAnswer || fallbackResponse(goal, question);
+    }
 
     // Store assistant response in history
-    if (answer && typeof answer === 'string') {
-      var trimmed = answer.trim();
-      history.push({ role: 'assistant', content: trimmed });
-      // Trim history if too long
+    if (finalAnswer && typeof finalAnswer === 'string') {
+      var trimmed = finalAnswer.trim();
+      var historyEntry = { role: 'assistant', content: trimmed };
+      if (toolResult && toolResult.jobId) {
+        historyEntry.jobId = toolResult.jobId;
+      }
+      history.push(historyEntry);
       if (history.length > MAX_HISTORY * 2) {
         history.splice(0, history.length - MAX_HISTORY * 2);
       }
+      // Persist conversation to coach_memory (best-effort, fire-and-forget)
+      persistConversationMemory(channelId, history).catch(function(){});
       return trimmed;
     }
 
@@ -188,4 +233,39 @@ function fallbackResponse(goal, question) {
     return 'Based on general best practices: focus on title optimization first (biggest CTR impact), then tags, then descriptions. Consistency matters more than perfection.';
   }
   return 'I am your Phronesis coach. Ask me about your channel progress, optimization tips, or growth strategies. What would you like to know?';
+}
+
+// ── Conversation Persistence (best-effort, fire-and-forget) ──
+async function persistConversationMemory(channelId, history) {
+  try {
+    if (!history || history.length < 2) return;
+    const { default: dbService } = await import('../../src/database/services.js');
+    const lastMessages = history.slice(-6);
+    const extracted = await extractKeyFacts(lastMessages);
+    await dbService.upsertCoachMemory(channelId, {
+      lastConversation: extracted.lastConversation || 'Coaching session',
+      contentGoals: extracted.contentGoals || [],
+      focusKeywords: extracted.focusKeywords || [],
+      painPoints: extracted.painPoints || [],
+      wins: extracted.wins || []
+    });
+  } catch(e) { /* best-effort — don't block chat on memory persistence */ }
+}
+
+async function extractKeyFacts(messages) {
+  try {
+    const { askAI } = await import('../_lib/ai-provider.js');
+    var transcript = messages.map(function(m) {
+      return (m.role === 'user' ? 'Creator' : 'Coach') + ': ' + m.content;
+    }).join('\n');
+    var raw = await askAI(
+      'Extract key facts from this coaching conversation. Return ONLY valid JSON.',
+      'Extract facts:\n\n' + transcript.substring(0, 2000) + '\n\nJSON: {"contentGoals":[],"focusKeywords":[],"painPoints":[],"wins":[],"lastConversation":"one sentence summary"}',
+      { temperature: 0.3, maxTokens: 400, forceJson: true }
+    );
+    var cleaned = (raw || '{}').replace(/```json|```/g, '').trim();
+    return JSON.parse(cleaned);
+  } catch(e) {
+    return { lastConversation: 'Coaching session' };
+  }
 }
