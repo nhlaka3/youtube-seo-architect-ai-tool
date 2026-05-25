@@ -15584,13 +15584,11 @@ async function coachChipAction(action) {
           body: JSON.stringify({ tool: 'scan_channel', args: {}, channelId: chId })
         });
         var scanData = await scanRes.json();
-        if (scanData.instant) {
-          container.innerHTML += '<div class="coach-msg coach-msg--response"><div class="coach-msg-body">' + scanData.response + '</div></div>';
-        } else {
-          container.innerHTML += '<div class="coach-msg coach-msg--response"><div class="coach-msg-body">' + scanData.message + '</div></div>';
-          var jobMatch = (scanData.message || '').match(/Job #([a-z0-9]+)/i);
-          if (jobMatch) pollJobStatus(jobMatch[1], container);
-        }
+        var msg = scanData.instant ? scanData.response : scanData.message;
+        container.innerHTML += '<div class="coach-msg coach-msg--response"><div class="coach-msg-body">' + msg + '</div></div>';
+        container.scrollTop = container.scrollHeight;
+        // Also refresh inbox after a short delay
+        setTimeout(function() { loadCoachMessages(); }, 2000);
       } catch(e) {
         container.innerHTML += '<div class="coach-msg coach-msg--error"><div class="coach-msg-body">Scan failed: ' + e.message + '</div></div>';
       }

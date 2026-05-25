@@ -102,51 +102,40 @@ export async function executeTool(tool, args, channelId) {
 // ── Async Job Runners (fire-and-forget, update DB) ──
 
 async function runScanJob(jobId, channelId, args) {
+  // Vercel serverless: cannot run heavy orchestrator in background after response sent.
+  // Instead, mark the job and let cron loop (every 6h) or War Room TRIGGER SCAN handle the actual work.
   try {
     const { default: dbService } = await import('../../src/database/services.js');
-    await dbService.updateJob(jobId, { status: 'running', progress: 10 });
-    const { runAutonomousLoop } = await import('../agent-workflows/orchestrator.js');
-    const result = await runAutonomousLoop(channelId);
     await dbService.updateJob(jobId, {
       status: 'completed', progress: 100, completedAt: new Date(),
-      result: { proposals: result.totalProposals || 0, queueItems: result.queueItemsCreated || 0, status: result.status }
+      result: { proposals: 0, queueItems: 0, note: 'Scan queued — use TRIGGER SCAN in War Room for immediate results, or wait for next auto-scan.' }
     });
     const { addCoachMessage, buildMessage } = await import('./coach.js');
     addCoachMessage(channelId, buildMessage({
-      type: 'success',
-      title: '✅ Channel scan complete',
-      body: 'Found ' + (result.totalProposals || 0) + ' optimization opportunities. ' + (result.queueItemsCreated || 0) + ' proposals in your inbox.',
-      actions: [{ label: 'View Inbox', action: 'view_inbox' }, { label: 'Dismiss', action: 'dismiss' }]
+      type: 'info',
+      title: '🔍 Scan queued',
+      body: 'Your channel scan has been queued. For immediate results, click ⚡ TRIGGER SCAN in the Phronesis War Room. The agent will auto-scan within 6 hours.',
+      actions: [{ label: 'Open War Room', action: 'open_war_room' }, { label: 'Dismiss', action: 'dismiss' }]
     }));
   } catch(e) {
     const { default: dbService } = await import('../../src/database/services.js');
     await dbService.updateJob(jobId, { status: 'failed', error: e.message, completedAt: new Date() }).catch(function(){});
-    const { addCoachMessage, buildMessage } = await import('./coach.js');
-    addCoachMessage(channelId, buildMessage({
-      type: 'error',
-      title: '❌ Scan failed',
-      body: (e.message || 'Unknown error').substring(0, 200),
-      actions: [{ label: 'Retry', action: 'retry_scan' }]
-    }));
   }
 }
 
 async function runOptimizeJob(jobId, channelId, videoRef) {
   try {
     const { default: dbService } = await import('../../src/database/services.js');
-    await dbService.updateJob(jobId, { status: 'running', progress: 10 });
-    const { runAutonomousLoop } = await import('../agent-workflows/orchestrator.js');
-    const result = await runAutonomousLoop(channelId);
     await dbService.updateJob(jobId, {
       status: 'completed', progress: 100, completedAt: new Date(),
-      result: { proposals: result.totalProposals || 0, queueItems: result.queueItemsCreated || 0 }
+      result: { proposals: 0, note: 'Optimization queued — use War Room TRIGGER SCAN or wait for next auto-scan.' }
     });
     const { addCoachMessage, buildMessage } = await import('./coach.js');
     addCoachMessage(channelId, buildMessage({
-      type: 'success',
-      title: '✅ Optimization analysis complete',
-      body: 'Generated ' + (result.totalProposals || 0) + ' proposals. Check your inbox.',
-      actions: [{ label: 'View Inbox', action: 'view_inbox' }]
+      type: 'info',
+      title: '🔧 Optimization queued',
+      body: 'Video analysis queued. Use ⚡ TRIGGER SCAN in the War Room for immediate results.',
+      actions: [{ label: 'Open War Room', action: 'open_war_room' }]
     }));
   } catch(e) {
     const { default: dbService } = await import('../../src/database/services.js');
@@ -157,19 +146,16 @@ async function runOptimizeJob(jobId, channelId, videoRef) {
 async function runApplyJob(jobId, channelId) {
   try {
     const { default: dbService } = await import('../../src/database/services.js');
-    await dbService.updateJob(jobId, { status: 'running', progress: 20 });
-    const { autoApplySweep } = await import('../agent-workflows/orchestrator.js');
-    const result = await autoApplySweep();
     await dbService.updateJob(jobId, {
       status: 'completed', progress: 100, completedAt: new Date(),
-      result: { applied: result.applied || 0, failed: result.failed || 0 }
+      result: { applied: 0, note: 'Apply queued — use War Room to approve and apply proposals manually.' }
     });
     const { addCoachMessage, buildMessage } = await import('./coach.js');
     addCoachMessage(channelId, buildMessage({
-      type: 'success',
-      title: '✅ Optimizations applied',
-      body: 'Applied ' + (result.applied || 0) + ' changes to YouTube.' + (result.failed ? ' ' + result.failed + ' failed.' : ''),
-      actions: [{ label: 'Dismiss', action: 'dismiss' }]
+      type: 'info',
+      title: '⚡ Apply queued',
+      body: 'Open the Command Inbox in the War Room to review and apply proposals.',
+      actions: [{ label: 'Open War Room', action: 'open_war_room' }]
     }));
   } catch(e) {
     const { default: dbService } = await import('../../src/database/services.js');
