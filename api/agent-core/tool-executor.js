@@ -39,14 +39,14 @@ export async function executeTool(tool, args, channelId) {
         const s = await import('../../src/database/schema.js');
         const { eq } = await import('drizzle-orm');
         const items = await dbService.db.select().from(s.optimizationQueue).where(eq(s.optimizationQueue.status, 'pending')).limit(5);
-        if (!items || !items.length) return { instant: true, response: '📭 Your inbox is empty. No pending optimizations right now.\n\nRun a channel scan (⚡ TRIGGER SCAN in the War Room) to discover opportunities, then come back here.' };
+        if (!items || !items.length) return { instant: true, response: '📭 Your inbox is empty. No pending optimizations right now.\n\nRun a channel scan (⚡ TRIGGER SCAN in Phronesis) to discover opportunities, then come back here.' };
         var lines = items.map(function(i) {
           var vid = (i.videoTitle || 'Untitled').substring(0, 45);
           var type = i.actionType || 'optimization';
           var conf = i.confidence || '?';
           return '• ' + vid + ' — ' + type + ' (' + conf + '% confidence)';
         });
-        return { instant: true, response: '📥 ' + items.length + ' pending proposal(s):\n\n' + lines.join('\n') + '\n\nGo to the War Room Command Inbox to review and apply them.' };
+        return { instant: true, response: '📥 ' + items.length + ' pending proposal(s):\n\n' + lines.join('\n') + '\n\nGo to the Phronesis Agent Command Inbox to review and apply them.' };
       } catch(e) { return { instant: true, response: 'Could not access inbox right now.' }; }
     }
 
@@ -57,7 +57,7 @@ export async function executeTool(tool, args, channelId) {
         const { desc } = await import('drizzle-orm');
         var limit = Math.min(args.limit || 5, 10);
         const logs = await dbService.db.select().from(s.agentActivityLogs).orderBy(desc(s.agentActivityLogs.createdAt)).limit(limit);
-        if (!logs || !logs.length) return { instant: true, response: 'No recent agent activity yet. Run ⚡ TRIGGER SCAN in the War Room to start analyzing your channel.' };
+        if (!logs || !logs.length) return { instant: true, response: 'No recent agent activity yet. Run ⚡ TRIGGER SCAN in Phronesis to start analyzing your channel.' };
         var recent = logs.slice(0, 5).map(function(l) {
           var time = new Date(l.createdAt).toLocaleString('en-US', {month:'short',day:'numeric',hour:'2-digit',minute:'2-digit'});
           return '[' + time + '] ' + l.agentName + ': ' + (l.actionTaken || '').substring(0, 90);
@@ -102,12 +102,12 @@ export async function executeTool(tool, args, channelId) {
             msg += '\n📥 ' + proposals.length + ' proposal(s) in your inbox.\n';
           }
           
-          msg += '\nRun ⚡ TRIGGER SCAN in the War Room for a fresh analysis.';
+          msg += '\nRun ⚡ TRIGGER SCAN in Phronesis for a fresh analysis.';
           return { instant: true, response: msg };
         }
 
         if (proposals && proposals.length > 0) {
-          return { instant: true, response: '📥 You have ' + proposals.length + ' pending proposals in your inbox, but no recent scan data. Run ⚡ TRIGGER SCAN in the War Room for fresh analysis.' };
+          return { instant: true, response: '📥 You have ' + proposals.length + ' pending proposals in your inbox, but no recent scan data. Run ⚡ TRIGGER SCAN in Phronesis for fresh analysis.' };
         }
 
       } catch(e) { /* fall through to queued message */ }
@@ -121,21 +121,21 @@ export async function executeTool(tool, args, channelId) {
           if (age > 5 * 60 * 1000) {
             await dbService.updateJob(existing.id, { status: 'failed', error: 'Timed out', completedAt: new Date() }).catch(function(){});
           } else {
-            return { instant: true, response: 'A scan is already queued. Run ⚡ TRIGGER SCAN in the War Room for immediate analysis.' };
+            return { instant: true, response: 'A scan is already queued. Run ⚡ TRIGGER SCAN in Phronesis for immediate analysis.' };
           }
         }
         var job = await dbService.createJob(channelId, 'scan_channel');
         await dbService.updateJob(job.id, { status: 'completed', completedAt: new Date(), result: { note: 'Queued' } }).catch(function(){});
-        return { instant: true, response: '🔍 No recent scan data available. Here\'s what to do:\n\n1. Go to the Phronesis War Room tab\n2. Make sure Agent Mode is 👁 MONITOR or ⚡ AUTO\n3. Click ⚡ TRIGGER SCAN\n\nThis analyzes your videos and generates optimization proposals. I\'ll summarize the results here once complete.' };
-      } catch(e) { return { instant: true, response: 'Could not access scan system. Try ⚡ TRIGGER SCAN in the War Room.' }; }
+        return { instant: true, response: '🔍 No recent scan data available. Here\'s what to do:\n\n1. Go to the Phronesis tab\n2. Make sure Agent Mode is 👁 MONITOR or ⚡ AUTO\n3. Click ⚡ TRIGGER SCAN\n\nThis analyzes your videos and generates optimization proposals. I\'ll summarize the results here once complete.' };
+      } catch(e) { return { instant: true, response: 'Could not access scan system. Try ⚡ TRIGGER SCAN in Phronesis.' }; }
     }
 
     case 'optimize_video': {
-      return { instant: true, response: 'Run ⚡ TRIGGER SCAN in the War Room to analyze and generate optimization proposals for all your videos. I\'ll summarize the results here.' };
+      return { instant: true, response: 'Run ⚡ TRIGGER SCAN in Phronesis to analyze and generate optimization proposals for all your videos. I\'ll summarize the results here.' };
     }
 
     case 'apply_fixes': {
-      return { instant: true, response: 'Go to the War Room Command Inbox to review and apply proposals. Each proposal shows the exact changes before they\'re pushed to YouTube.' };
+      return { instant: true, response: 'Go to the Phronesis Agent Command Inbox to review and apply proposals. Each proposal shows the exact changes before they\'re pushed to YouTube.' };
     }
 
     default:
@@ -195,7 +195,7 @@ async function buildDashboard(channelId) {
     } catch(e) {}
 
     if (!parts.length) {
-      return { instant: true, response: '👋 Welcome to Phronesis! I\'m your AI growth coach.\n\nHere\'s how to get started:\n• Click 🎯 Set Goal to define your target\n• Run ⚡ TRIGGER SCAN in the War Room to analyze your channel\n• I\'ll summarize results and guide your next moves\n\nWhat would you like to do first?' };
+      return { instant: true, response: '👋 Welcome to Phronesis! I\'m your AI growth coach.\n\nHere\'s how to get started:\n• Click 🎯 Set Goal to define your target\n• Run ⚡ TRIGGER SCAN in Phronesis to analyze your channel\n• I\'ll summarize results and guide your next moves\n\nWhat would you like to do first?' };
     }
 
     parts.push('\n\nWhat would you like to do? Use the chips below or ask me anything.');
