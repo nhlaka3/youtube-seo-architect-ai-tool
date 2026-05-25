@@ -157,12 +157,29 @@ Return ONLY valid JSON. No markdown, no code blocks, no extra text. Just the JSO
     var toolResult = await executeTool(parsed.tool || 'chat', parsed.args || {}, channelId);
 
     var finalAnswer;
-    if (toolResult && toolResult.instant) {
+    if (parsed.tool === 'chat' || !toolResult) {
+      // For conversational queries, make a second AI call WITHOUT JSON format
+      // to get a full, natural response (not truncated by JSON constraints)
+      try {
+        var chatPrompt = `You are Phronesis, an AI YouTube SEO coach. Be helpful, specific, and concise (4-6 sentences).
+
+GOAL CONTEXT:
+${goalContext || 'No active goal set.'}
+
+AGENT CONTEXT:
+${agentCtx || 'No recent agent activity.'}
+
+Respond naturally. No JSON. No markdown.`;
+        var chatAnswer = await askAI(chatPrompt, question, { temperature: 0.7, maxTokens: 600 });
+        finalAnswer = chatAnswer || (parsed.args && parsed.args.message) || fallbackResponse(goal, question);
+      } catch(e2) {
+        finalAnswer = (parsed.args && parsed.args.message) || fallbackResponse(goal, question);
+      }
+    } else if (toolResult && toolResult.instant) {
       finalAnswer = toolResult.response;
     } else if (toolResult && !toolResult.instant) {
       finalAnswer = toolResult.message;
     } else {
-      // Fallback: use the message from chat tool or raw response
       finalAnswer = (parsed.args && parsed.args.message) || parsed.message || rawAnswer || fallbackResponse(goal, question);
     }
 
