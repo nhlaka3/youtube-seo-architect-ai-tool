@@ -1359,6 +1359,18 @@ app.get('/api/agent/coach/job/:id', async (req, res) => {
   } catch(e) { res.status(500).json({ error: e.message }); }
 });
 
+// Direct tool execution — bypasses AI, called by quick action chips
+app.post('/api/agent/coach/tool', async (req, res) => {
+  try {
+    const channelId = req.headers['x-channel-id'] || req.body?.channelId;
+    const { tool, args } = req.body || {};
+    if (!tool) return res.status(400).json({ error: 'tool required' });
+    const { executeTool } = await import('./agent-core/tool-executor.js');
+    const result = await executeTool(tool, args || {}, channelId);
+    res.json(result);
+  } catch(e) { res.status(500).json({ error: e.message }); }
+});
+
 app.get('/api/agent/status', async (req, res) => {
   try {
     const channelId = req.query.channelId || req.headers['x-channel-id'];

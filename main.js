@@ -15524,7 +15524,7 @@ function toggleCoachChat() {
   panel.style.display = isOpen ? 'none' : 'flex';
   if (!isOpen) {
     loadCoachMessages();
-    loadGoalBar();
+    refreshCoachGoalCard();
     loadPhronesisCoachMemory();
     coachPollInterval = setInterval(function() {
       // Only update badge count, don't replace messages
@@ -15536,23 +15536,100 @@ function toggleCoachChat() {
 }
 window.toggleCoachChat = toggleCoachChat;
 
-async function loadGoalBar() {
+// ── Coach Goal Card (modern UI) ──
+async function refreshCoachGoalCard() {
   try {
     const chId = localStorage.getItem('ytseo_channel_id');
     if (!chId) return;
     const res = await fetch('/api/agent/goal/status?channelId=' + chId);
     const data = await res.json();
-    const bar = document.getElementById('goal-progress-bar');
-    if (!bar) return;
+    var card = document.getElementById('coach-goal-card');
+    var text = document.getElementById('coach-goal-text');
+    var fill = document.getElementById('coach-goal-progress-fill');
+    var pct = document.getElementById('coach-goal-percent');
+    var eta = document.getElementById('coach-goal-eta');
+    if (!card) return;
     if (data.goal) {
-      bar.textContent = data.goal.current + '/' + data.goal.target + ' ' + data.goal.type + ' (' + (data.goal.progress?.percent || 0) + '%)';
-      bar.style.display = '';
+      card.style.display = '';
+      var g = data.goal;
+      if (text) text.textContent = '🎯 ' + (g.current || 0).toLocaleString() + ' / ' + (g.target || 0).toLocaleString() + ' ' + (g.type || 'subscribers');
+      if (fill) fill.style.width = (g.progress?.percent || 0) + '%';
+      if (pct) pct.textContent = (g.progress?.percent || 0) + '% complete';
+      if (eta) eta.textContent = g.progress?.weeklyRate ? '+' + g.progress.weeklyRate + '/week · ETA ' + (g.progress.eta || '...') : 'Tracking...';
     } else {
-      bar.innerHTML = '<a href="#" onclick="showGoalSetup();return false" style="color:var(--primary);">Set a goal →</a>';
+      card.style.display = '';
+      if (text) text.textContent = '🎯 No goal set';
+      if (fill) fill.style.width = '0%';
+      if (pct) pct.textContent = 'Set a goal to start';
+      if (eta) eta.textContent = 'Click 🎯 Set Goal below';
     }
   } catch(e) {}
 }
-window.loadGoalBar = loadGoalBar;
+window.refreshCoachGoalCard = refreshCoachGoalCard;
+
+// ── Quick Action Chips (bypass AI, call tool-executor directly) ──
+async function coachChipAction(action) {
+  var container = document.getElementById('coach-messages');
+  if (!container) return;
+  var chId = localStorage.getItem('ytseo_channel_id');
+
+  switch(action) {
+    case 'scan':
+      container.innerHTML += '<div class="coach-msg coach-msg--user"><div class="coach-msg-body">🔍 Scan my channel</div></div>';
+      container.scrollTop = container.scrollHeight;
+      try {
+        var scanRes = await fetch('/api/agent/coach/tool', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', 'x-channel-id': chId },
+          body: JSON.stringify({ tool: 'scan_channel', args: {}, channelId: chId })
+        });
+        var scanData = await scanRes.json();
+        if (scanData.instant) {
+          container.innerHTML += '<div class="coach-msg coach-msg--response"><div class="coach-msg-body">' + scanData.response + '</div></div>';
+        } else {
+          container.innerHTML += '<div class="coach-msg coach-msg--response"><div class="coach-msg-body">' + scanData.message + '</div></div>';
+          var jobMatch = (scanData.message || '').match(/Job #([a-z0-9]+)/i);
+          if (jobMatch) pollJobStatus(jobMatch[1], container);
+        }
+      } catch(e) {
+        container.innerHTML += '<div class="coach-msg coach-msg--error"><div class="coach-msg-body">Scan failed: ' + e.message + '</div></div>';
+      }
+      container.scrollTop = container.scrollHeight;
+      break;
+
+    case 'progress':
+      try {
+        var progRes = await fetch('/api/agent/coach/tool', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', 'x-channel-id': chId },
+          body: JSON.stringify({ tool: 'goal_status', args: {}, channelId: chId })
+        });
+        var progData = await progRes.json();
+        container.innerHTML += '<div class="coach-msg coach-msg--response"><div class="coach-msg-body">' + (progData.response || 'No goal data.') + '</div></div>';
+        container.scrollTop = container.scrollHeight;
+        refreshCoachGoalCard();
+      } catch(e) {}
+      break;
+
+    case 'inbox':
+      try {
+        var inboxRes = await fetch('/api/agent/coach/tool', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', 'x-channel-id': chId },
+          body: JSON.stringify({ tool: 'get_inbox', args: {}, channelId: chId })
+        });
+        var inboxData = await inboxRes.json();
+        container.innerHTML += '<div class="coach-msg coach-msg--response"><div class="coach-msg-body">' + (inboxData.response || 'No proposals.') + '</div></div>';
+        container.scrollTop = container.scrollHeight;
+      } catch(e) {}
+      break;
+
+    case 'goal':
+      showGoalSetup();
+      break;
+  }
+}
+window.coachChipAction = coachChipAction;
 
 async function loadCoachMessages() {
   try {
@@ -15589,20 +15666,11 @@ function renderCoachMessages(messages) {
   const container = document.getElementById('coach-messages');
   if (!container) return;
   if (!messages.length) {
-    container.innerHTML = '<div style="text-align:center;color:var(--text-muted);padding:40px;">🧠 No messages yet.<br>The agent will alert you when it finds optimization opportunities.</div>';
+    container.innerHTML = '<div style="display:flex;gap:10px;padding:6px 0;"><div style="width:28px;height:28px;border-radius:50%;background:linear-gradient(135deg,#6366f1,#8b5cf6);flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:12px;">🧠</div><div style="background:var(--bg-dark);padding:10px 14px;border-radius:12px 12px 12px 2px;font-size:12px;line-height:1.5;color:var(--text-muted);">Hey! I am Phronesis, your growth coach. Use the chips below or ask me anything about your channel.</div></div>';
     return;
   }
   container.innerHTML = messages.map(function(m) {
-    return '<div class="coach-msg coach-msg--' + (m.type || 'info') + '">' +
-      '<div class="coach-msg-title">' + (m.title || '') + '</div>' +
-      '<div class="coach-msg-body">' + (m.body || '') + '</div>' +
-      (m.goalImpact ? '<div class="coach-msg-impact">' + m.goalImpact + '</div>' : '') +
-      (m.actions && m.actions.length ? '<div class="coach-msg-actions">' +
-        m.actions.map(function(a) {
-          return '<button onclick="respondToCoach(\'' + m.id + '\',\'' + a.action + '\',\'' + (a.proposalId || '') + '\')">' + a.label + '</button>';
-        }).join('') + '</div>' : '') +
-      '<div class="coach-msg-time">' + new Date(m.timestamp).toLocaleTimeString() + '</div>' +
-    '</div>';
+    return '<div class="coach-msg coach-msg--' + (m.type || 'info') + '" style="display:flex;gap:8px;align-items:flex-start;"><div style="min-width:28px;width:28px;height:28px;border-radius:50%;background:linear-gradient(135deg,#6366f1,#8b5cf6);display:flex;align-items:center;justify-content:center;font-size:12px;flex-shrink:0;">🧠</div><div style="flex:1;"><div style="font-size:12px;font-weight:600;margin-bottom:4px;">' + (m.title || '') + '</div><div style="font-size:12px;line-height:1.5;margin-bottom:4px;">' + (m.body || '') + '</div>' + (m.goalImpact ? '<div style="font-size:10px;color:var(--accent);margin-bottom:4px;">' + m.goalImpact + '</div>' : '') + (m.actions && m.actions.length ? '<div style="display:flex;gap:6px;margin-top:6px;">' + m.actions.map(function(a) { return '<button onclick="respondToCoach(\'' + m.id + '\',\'' + a.action + '\',\'' + (a.proposalId || '') + '\')" style="padding:4px 10px;font-size:11px;border-radius:14px;background:rgba(99,102,241,0.1);border:1px solid rgba(99,102,241,0.2);color:var(--accent);cursor:pointer;">' + a.label + '</button>'; }).join('') + '</div>' : '') + '</div></div>';
   }).join('');
   container.scrollTop = container.scrollHeight;
 }
@@ -15760,14 +15828,14 @@ async function saveGoal() {
     if (data.success) {
       showToast('Goal set! Agent is working on it.', 'success');
       document.getElementById('goal-setup-modal').remove();
-      loadGoalBar();
+      refreshCoachGoalCard();
     }
   } catch(e) { showToast('Failed to set goal', 'error'); }
 }
 window.saveGoal = saveGoal;
 
 // Initialize on load
-setTimeout(function() { loadCoachMessages(); loadGoalBar(); }, 3000);
+setTimeout(function() { loadCoachMessages(); refreshCoachGoalCard(); }, 3000);
 
 // ═══════════════════════════════════════════════════════
 
