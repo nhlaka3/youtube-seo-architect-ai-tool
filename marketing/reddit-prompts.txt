@@ -1,0 +1,107 @@
+YT SEO Architect — Reddit Prompts
+====================================
+
+RULES FOR REDDIT:
+- Never spam. One genuine post every 2 weeks max.
+- Add value first, link second.
+- r/YouTube and r/SEO are the best subreddits.
+- r/NewTubers, r/PartneredYoutube, r/ContentCreators also good.
+- Natural tone. Don't sound like an ad.
+
+=====================================
+POST 1: r/YouTube (Feedback request)
+=====================================
+
+Title: I built a free YouTube SEO tool — would love creator feedback
+
+Body:
+Hey creators — I spent the last few weeks building a YouTube SEO tool and would really appreciate honest feedback from people who actually make videos.
+
+What it does:
+• AI coach that scans your channel and finds underperforming videos
+• Keyword research, tag generator, title optimizer (17 tools total)
+• Goal tracking — set a subscriber target and see weekly progress
+• 100 free credits, no card needed
+
+I'm specifically looking for feedback on:
+1. What's missing that you actually need?
+2. Does anything feel broken or confusing?
+3. Would you use this alongside vidIQ/TubeBuddy or instead of?
+
+Link: https://yt-seo-architect.vercel.app
+
+Not trying to sell anything — genuinely want to make something useful for creators. Roast it if you want.
+
+=====================================
+POST 2: r/SEO (Case study)
+=====================================
+
+Title: I built a YouTube SEO tool — here's what I learned about ranking
+
+Body:
+Built a YouTube SEO platform over the last few weeks and wanted to share what actually moved the needle for our own SEO:
+
+1. FAQ schema + Article schema together outperformed either alone. Our blog post with both schemas indexed within 24 hours.
+
+2. TL;DR boxes at the top of posts (direct answer format) are getting picked up by AI overviews. Our post with a TL;DR section appeared in SGE snippets within 3 days.
+
+3. GitHub awesome-list backlinks actually work. We submitted to 4 lists and got 2 merged within a week. Domain authority transfers.
+
+4. Programmatic SEO was a waste of time for us. AI-generated "SEO pages" with keyword clusters got zero traffic. We removed the feature entirely.
+
+5. Internal linking between blog posts (pillar + cluster) improved time-on-site by 40%.
+
+The tool: https://yt-seo-architect.vercel.app (free tier, no card)
+
+Not here to promote — the SEO lessons are real. Happy to answer questions.
+
+=====================================
+POST 3: r/NewTubers (Helpful resource)
+=====================================
+
+Title: Free tool to check if your YouTube titles and tags are optimized
+
+Body:
+Made a free tool for fellow small YouTubers. You paste your video title, it scores it out of 100 and tells you what to fix.
+
+It checks:
+• Title length (40-60 chars ideal)
+• Emotional trigger words
+• Numbers in title (they increase CTR)
+• Power words count
+• Keyword placement
+
+Also has a tag generator that gives you 20 optimized tags for any topic.
+
+Completely free, no signup. https://yt-seo-architect.vercel.app
+
+Hope it helps someone. Drop your channel below if you want me to run a quick scan.
+
+=====================================
+POST 4: r/PartneredYoutube (Growth strategy)
+=====================================
+
+Title: My channel went from 450 to 1,000 subscribers — the one thing that made the difference
+
+Body:
+Been grinding for months. The thing that finally moved the needle wasn't better content — it was fixing my metadata.
+
+I used a tool that scanned my channel and showed me exactly which videos had bad titles, missing tags, or weak descriptions. Fixed the top 5 worst ones. Within a week, impressions went up 30%.
+
+The insight: YouTube's algorithm doesn't judge your content quality. It judges your metadata. Good metadata = more impressions = more clicks = more subscribers.
+
+The tool I used: https://yt-seo-architect.vercel.app (free tier)
+
+What worked for you? What finally got your channel growing?
+
+=====================================
+QUICK COMMENT TEMPLATES (for replying to others)
+=================================================
+
+Comment 1: "Check out YT SEO Architect — it's free and has an AI coach that auto-scans your channel for underperforming videos. Way more actionable than vidIQ for small channels."
+
+Comment 2: "Honestly the best free YouTube SEO tool I've found is YT SEO Architect. 17 tools, no credit card. The tag generator alone saves me 10 minutes per video."
+
+Comment 3: "If you're looking for a free alternative to TubeBuddy/vidIQ, try YT SEO Architect. It has keyword research, tag generator, title scorer — all free."
+
+Comment 4: "I was skeptical but the AI coach actually works. It scans your channel, finds problems, and gives you exact fixes. Free tier gives you 100 credits."

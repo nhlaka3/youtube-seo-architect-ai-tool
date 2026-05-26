@@ -1,0 +1,184 @@
+============================================================
+AGENT INTELLIGENCE UPGRADE: CODING AGENT INSTRUCTIONS & VERIFICATION
+LAYERS: CONTEXT → REASONING → ARCHITECTURE → LEARNING
+============================================================
+
+🎯 ROLE & CONTEXT
+You are a senior full-stack AI systems architect. Implement a comprehensive "Intelligence Upgrade" for the existing autonomous agent. The goal is to make the agent genuinely smarter (not just more active) by upgrading 4 distinct layers: Context, Reasoning, Architecture, and Learning. Follow file paths, schemas, and routing EXACTLY.
+
+⚠️ EXECUTION PROTOCOL
+1. STRICT PHASING: Implement in exact order: Layer 1 (Context) → Layer 2 (Reasoning) → Layer 3 (Architecture) → Layer 4 (Learning). Do not proceed until the current phase passes verification.
+2. FIX SOURCE ARTIFACTS: The provided spec contains spacing/copy-paste glitches. Fix ALL before writing code:
+   • "st atus" → "status"
+   • "= >" → "=>"
+   • "& &" → "&&"
+   • "catc h" → "catch"
+   • "co nst" → "const"
+   • "aut onomous" → "autonomous"
+   • "qu eue" → "queue"
+   • "al ert" → "alert"
+   • "ev aluate" → "evaluate"
+3. ASYNC SAFETY: Wrap all AI calls, DB writes, and external fetches in `try/catch`. Never block the main event loop.
+4. SAFETY FIRST: Smart agents can burn quotas fast. Enforce strict `max_daily_actions` and `circuit_breaker` logic in every new module.
+5. STOP & VERIFY: After each phase, run the verification steps. Output the exact confirmation string before proceeding.
+
+============================================================
+PHASE 1: LAYER 1 — CONTEXT ENRICHMENT (BETTER INPUTS)
+============================================================
+[GOAL] Upgrade inputs from static snapshots to dynamic, historical baselines and trend velocity tracking.
+
+📝 INSTRUCTIONS:
+1. Create `api/context-enricher.js`:
+   - Implement `getChannelBaselines(channelId)`:
+     • Returns 30-day rolling averages for CTR, Retention, and View Velocity.
+     • SQL: `SELECT AVG(ctr) as avg_ctr ... FROM optimization_trials WHERE channel_id = ? AND applied_at > date('now', '-30 days')`.
+   - Implement `calculateTrendVelocity(topic)`:
+     • Measures growth rate (hourly/daily delta) instead of just volume.
+     • Formula: `(current_traffic - prev_traffic) / prev_traffic`.
+
+2. Modify `src/database/services.js`:
+   - Append `CREATE TABLE IF NOT EXISTS agent_calibration` (action_type, predicted_conf REAL, actual_success REAL, updated_at).
+   - Add service method: `saveCalibrationData(data)`.
+
+3. Modify `api/scan-agents/index.js` (Scan Agent):
+   - Import `context-enricher.js`.
+   - Enhance scoring logic: Compare video performance against `channel_baselines` (dynamic norms) instead of generic benchmarks.
+   - Inject "Niche Context" (e.g., "Gaming trends spike weekends") into scan data based on channel metadata.
+
+✅ VERIFICATION STEPS (PHASE 1):
+1. Test Baselines:
+   Run SQL: `SELECT AVG(ctr) FROM optimization_trials;` (Verify rolling window logic).
+2. Test Enricher:
+   `GET /api/scan-agents/baseline?channelId=test` → Returns dynamic averages.
+3. Confirm: Scan scores now reflect channel-specific performance gaps.
+
+Output: `✅ Phase 1 Complete. Context Enrichment active.`
+
+============================================================
+PHASE 2: LAYER 2 — ADVANCED REASONING & SCORING (BETTER LOGIC)
+============================================================
+[GOAL] Replace simple confidence heuristics with Expected Value (EV) scoring and Chain-of-Thought reasoning.
+
+📝 INSTRUCTIONS:
+1. Modify `api/agent-core/confidence-engine.js`:
+   - Rename to `scoring-engine.js` (or extend existing).
+   - Add `calculateExpectedValue(actionType, confidence, impactScore)`:
+     • Formula: `EV = (Confidence * Impact) - (Cost * RiskMultiplier)`.
+     • Deduct points for: trend volatility, quota proximity, recent skip rate.
+   - Implement `getRiskModifier(action)`: Checks quota usage and brand safety flags.
+
+2. Modify `api/_lib/ai-provider.js` (Persona Wrapper):
+   - Update system prompt to enforce Chain-of-Thought (CoT):
+     `Prompt suffix: "Explain your reasoning in 3 steps before returning JSON. Format: {"reasoning": ["step1","step2","step3"], "confidence": 82}`.
+   - Ensure all AI responses strip markdown blocks before `JSON.parse()`.
+
+3. Modify `api/propose-agents/index.js` (Propose Agent):
+   - Update routing logic to sort by `EV` (Expected Value), not just `Confidence`.
+   - Only queue items where `EV > Threshold`.
+
+✅ VERIFICATION STEPS (PHASE 2):
+1. Test EV Calculation:
+   Mock inputs to `scoring-engine.js` → Verify `EV` drops when `Risk` is high.
+2. Test AI Reasoning:
+   Trigger a proposal → Check `agent_activity_logs` for "reasoning" array.
+3. Confirm: Proposals are prioritized by EV, reducing low-value suggestions.
+
+Output: `✅ Phase 2 Complete. Advanced Reasoning & EV scoring active.`
+
+============================================================
+PHASE 3: LAYER 3 — MULTI-AGENT ARCHITECTURE (BETTER WORKFLOW)
+============================================================
+[GOAL] Add Planner, Critic, and Retrospective subagents to reduce mistakes and improve strategic sequencing.
+
+📝 INSTRUCTIONS:
+1. Create `api/agent-core/planner.js`:
+   - Implement `generatePlan(goalId)`:
+     • Breaks high-level goals into dependency-aware steps.
+     • Returns ordered list of actions (e.g., "Scan CTR first" → "Optimize Title" → "Monitor").
+
+2. Create `api/agent-core/critic.js`:
+   - Implement `validateProposal(proposal)`:
+     • Reviews PROPOSE items before they hit the inbox.
+     • Checks against `agent_rules` table.
+     • Rejects redundant actions or flags for edit if `risk` is high.
+
+3. Modify `api/war-room/orchestrator.js`:
+   - Wire `Planner` → `Scanner` → `Proposer` → `Critic` → `Inbox`.
+   - Add `Circuit Breaker`: If `error_rate > 15%` in last 24h, pause all sub-agents.
+
+✅ VERIFICATION STEPS (PHASE 3):
+1. Test Planner:
+   `POST /api/agent-core/planner` with `{ goal: "Grow subs" }` → Returns sequenced actions.
+2. Test Critic:
+   `POST /api/agent-core/critic` with redundant proposal → Returns `{ rejected: true }`.
+3. Confirm: War Room shows fewer, higher-quality proposals.
+
+Output: `✅ Phase 3 Complete. Multi-Agent Architecture & Critic active.`
+
+============================================================
+PHASE 4: LAYER 4 — CONTINUOUS LEARNING & CALIBRATION
+============================================================
+[GOAL] Implement dynamic weight adjustment and win/decay models for compound intelligence.
+
+📝 INSTRUCTIONS:
+1. Create `api/agent-core/retrospective.js`:
+   - Implement `runWeeklyRetrospective()`:
+     • Analyzes `agent_calibration` table (predicted vs actual).
+     • Adjusts confidence thresholds based on accuracy.
+     • Updates `keyword_wins` with decay (older wins lose weight).
+   - Formula: `effective_win = base_lift * e^(-λ * days_since)`.
+
+2. Modify `api/cron-measure-impact.js` (Feedback Loop):
+   - Wire into `retrospective.js`.
+   - Update `keyword_wins` with dynamic weights instead of static scores.
+
+3. Modify `src/database/services.js`:
+   - Add service method: `decayOldWins()`.
+   - Ensure `upsertKeywordWin` uses weighted averages.
+
+✅ VERIFICATION STEPS (PHASE 4):
+1. Test Calibration:
+   Manually update `agent_calibration` with mismatched data → Run Retrospective → Verify threshold adjustment.
+2. Test Decay:
+   Query `keyword_wins` → Verify recent wins rank higher than old wins.
+3. Confirm: Agent adapts to algorithm shifts automatically.
+
+Output: `✅ Phase 4 Complete. Continuous Learning & Calibration active.`
+
+============================================================
+MASTER VERIFICATION CHECKLIST (FINAL)
+============================================================
+[ ] 1: DB contains `agent_calibration` table + baseline queries
+[ ] 2: Context Enricher returns dynamic channel baselines
+[ ] 3: Scoring Engine calculates EV (Expected Value) correctly
+[ ] 4: AI Responses include Chain-of-Thought reasoning
+[ ] 5: Planner sequences actions logically
+[ ] 6: Critic rejects redundant or high-risk proposals
+[ ] 7: Retrospective adjusts confidence based on historical accuracy
+[ ] 8: Keyword wins use dynamic decay model
+[ ] 9: No 500 errors, all modules wired into Phronesis Orchestrator
+[ ] ALL: Agent operates with higher accuracy and lower noise
+
+🛠️ TROUBLESHOOTING NOTES:
+| Symptom | Likely Cause | Fix |
+|---------|-------------|-----|
+| EV Score stays constant | Risk modifiers not updating | Check quota API calls and cache refresh |
+| AI returns no reasoning | System prompt not overriding | Verify `Persona Wrapper` injection in `ai-provider.js` |
+| Planner loops indefinitely | Cycle detection missing | Add `max_depth` limit to recursive planning steps |
+| Critic rejects everything | Rules table too strict | Check `agent_rules` for false positives |
+| Retrospective crashes | Missing calibration data | Ensure `saveCalibrationData` is called on every action completion |
+
+🔑 SUCCESS CRITERIA:
+• Agent inputs are context-aware (baselines, velocity).
+• Decisions are driven by Expected Value, not just confidence.
+• Workflow includes quality control (Planner, Critic).
+• System self-calibrates over time (Retrospective, Decay).
+• Code is production-ready, artifact-free, and follows existing structure.
+
+✅ REQUIRED OUTPUT:
+Output exactly this line when complete:
+`✅ AGENT INTELLIGENCE UPGRADE COMPLETE. Context, Reasoning, Architecture & Learning layers active.`
+
+============================================================
+END OF INSTRUCTIONS
+============================================================

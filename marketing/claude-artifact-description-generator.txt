@@ -1,0 +1,38 @@
+CLAUDE ARTIFACT PROMPT — YouTube Description Generator
+========================================================
+
+PASTE THIS EXACT PROMPT INTO CLAUDE.AI:
+
+Build a single-page HTML tool called "YouTube Description Generator — Free Template Builder".
+
+HOW IT WORKS:
+1. User selects video type from a dropdown: Tutorial, Review, Vlog, Shorts, Listicle, Gaming, Interview, Reaction, Coding, Evergreen SEO
+2. User fills in fields: video topic, key outcome, chapter titles (3-5 text fields)
+3. User clicks "Generate Description"
+4. Tool outputs a complete, formatted YouTube description following the template for that video type
+5. User clicks "Copy Description" to copy to clipboard
+
+TEMPLATE FORMATS (build these into the tool):
+- Tutorial: keyword-rich first sentence, value prop, chapters, resources, related videos, CTA, hashtags
+- Review: tested statement, pros/cons, chapters, buy links, CTA
+- Vlog: hook sentence, chapters, gear list, music credits, CTA
+- Shorts: hook sentence, full video link, 3 hashtags + #Shorts
+- Listicle: ranking hook, chapter breakdown, all links, CTA
+- Gaming: episode title, chapter timestamps, setup specs, playlist link
+- Interview: guest name + quote, chapters, podcast links, CTA
+- Reaction: original creator credit + link, chapters, opinion call-to-action
+- Coding: tech stack mention, chapters, source code link, docs link
+- Evergreen SEO: primary + secondary keyword front-loaded, chapters, resources, related videos
+
+DESIGN:
+- Dark theme with purple (#6366f1) accent color
+- Clean, modern, mobile responsive
+- Generated description shown in a dark code-like box with a Copy button
+- No external frameworks — vanilla HTML/CSS/JS only
+
+FOOTER:
+<footer style="text-align:center;padding:16px;font-size:11px;color:#888;border-top:1px solid #333;margin-top:24px;">
+  Powered by <a href="https://yt-seo-architect.vercel.app" style="color:#6366f1;">YT SEO Architect</a> — 17 free YouTube SEO tools. Keyword research, tag generator, AI coach.
+</footer>
+
+Make this a Claude artifact.
