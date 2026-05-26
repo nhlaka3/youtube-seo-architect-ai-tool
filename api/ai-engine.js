@@ -278,66 +278,7 @@ router.post('/assistant', aiLimiter, validateBody(assistantSchema), requireChann
     
     const videoSection = videos ? `\\n\\nCREATOR'S REAL CHANNEL DATA — reference these videos by exact title:\\n${videos}\\n\\nIMPORTANT: Videos marked 📱SHORT are YouTube Shorts (under 60s). Long-form videos are the priority for watch time and SEO. When asked "which video to fix", prioritize long-form unless they specifically ask about Shorts.` : '';
 
-    const systemPrompt = `## YouTube SEO Architect Coach\\n\\nYou are a specialized AI coach for YouTube creators competing with vidIQ and TubeBuddy. You have access to their REAL channel data with view counts and engagement rates.\\n${videoSection}\\n\\nRULES:\\n- Reference specific video titles by name\\n- Cite their actual view counts and engagement rates\\n- Distinguish Shorts (📱) from long-form videos\\n- Give DATA-DRIVEN advice, not generic tips\\n- Keep responses punchy — 2-4 sentences max\\n- When recommending fixes, say WHY with numbers\\n- Always include confidence score when proposing actions\\n\\nCurrent: Niche=${niche}, Credits=${credits}, Health=${healthScore}/100, Date=May 2026\\n\\nCOMMUNICATION STYLE: ${AGENT_PERSONA.baseTone}. Use ${AGENT_PERSONA.styles.architect.icon} prefix. Max ${AGENT_PERSONA.styles.architect.maxRationaleChars} chars per rationale.`;
-
-    // ── Load coach memory (Task 07) ──
-    let memoryContext = '';
-    try {
-      const { default: dbService } = await import('../src/database/services.js');
-      const memory = await dbService.getCoachMemory(req.channelId);
-      if (memory && memory.conversationCount > 0) {
-        const goals = (memory.contentGoals || []).slice(0, 3).join(', ');
-        const problems = (memory.problemVideos || []).slice(0, 2).join(', ');
-        const keywords = (memory.focusKeywords || []).slice(0, 3).join(', ');
-        const pains = (memory.painPoints || []).slice(0, 2).join(', ');
-        const wins = (memory.wins || []).slice(0, 2).join(', ');
-        memoryContext = `\\n\\n## What I Remember About This Creator (${memory.conversationCount} sessions):\\n`;
-        if (goals) memoryContext += `- Goals: ${goals}\\n`;
-        if (problems) memoryContext += `- Struggling with: ${problems}\\n`;
-        if (keywords) memoryContext += `- Target keywords: ${keywords}\\n`;
-        if (pains) memoryContext += `- Pain points: ${pains}\\n`;
-        if (wins) memoryContext += `- Recent wins: ${wins}\\n`;
-        if (memory.lastConversation) memoryContext += `- Last session: ${memory.lastConversation}\\n`;
-        memoryContext += `Reference this context naturally — don't list it robotically.`;
-      }
-    } catch (e) { /* Memory load failed silently */ }
-
-    // ── LAYER 1-4: Agent Intelligence Context (baselines, EV, plan, learning) ──
-    let intelligenceContext = '';
-    try {
-      const { getChannelBaselines } = await import('./context-enricher.js');
-      const baselines = await getChannelBaselines(req.channelId);
-      if (baselines && baselines.rolling30d) {
-        const bl = baselines.rolling30d;
-        intelligenceContext += '\n\n## Channel Intelligence (30-day baselines):\n';
-        if (bl.viewVelocity !== undefined) intelligenceContext += `- View Velocity: ${bl.viewVelocity} views/day (trend: ${baselines.trend?.direction || 'stable'})\n`;
-        if (bl.successRate !== undefined) intelligenceContext += `- Optimization Success Rate: ${bl.successRate}% (${bl.appliedOptimizations || 0} applied)\n`;
-        if (bl.totalActions) intelligenceContext += `- Recent Actions: ${bl.totalActions} in last 30 days\n`;
-        intelligenceContext += 'Use these baselines to give DATA-DRIVEN advice. Compare their performance against their own history, not generic benchmarks.';
-      }
-    } catch(e) { /* non-critical */ }
-
-    // ── Planner: strategic next steps if goal exists ──
-    try {
-      const { getGoalStatus } = await import('./agent-core/goal-engine.js');
-      const goal = await getGoalStatus(req.channelId);
-      if (goal && goal.phases && goal.phases.length) {
-        var nextPhase = goal.phases.find(p => p.status === 'pending') || goal.phases[0];
-        intelligenceContext += `\n\n## Strategic Plan:\n- Current Goal: ${goal.current}/${goal.target} ${goal.type} (${goal.progress?.percent || 0}%)\n- Next Phase: ${nextPhase.name} — ${nextPhase.estimatedImpact || ''}\n- ETA: ${goal.progress?.eta || 'calculating...'}\nGuide the creator toward their next phase naturally.`;
-      }
-    } catch(e) { /* non-critical */ }
-
-    // Build conversation history as formatted context
-    let historyContext = '';
-    if (history && Array.isArray(history) && history.length > 0) {
-      const safeHistory = history
-        .filter(msg => msg.role === 'user' || msg.role === 'assistant')
-        .slice(-5)
-        .map(msg => `${msg.role === 'user' ? 'User' : 'Assistant'}: ${sanitizePromptInput(msg.content, 500)}`);
-      historyContext = '\n\nConversation history:\n' + safeHistory.join('\n');
-    }
-
-    const reply = await askAI(systemPrompt + memoryContext + intelligenceContext, safeMessage + historyContext, { temperature: 0.7, maxTokens: 500 });
+    const systemPrompt = `## YouTube SEO Architect Coach\n\nYou are an AI coach built into YT SEO Architect (not vidIQ or TubeBuddy — never mention competitors). You help YouTube creators optimize their channels with SEO and growth strategies.\n${videoSection}\n\nCRITICAL RULES:\n1. NEVER invent video titles, view counts, or stats. If no channel data is provided, give GENERAL strategic advice.\n2. If asked for specific video recommendations and no data exists, say: "Connect your YouTube channel for personalized video recommendations."\n3. Only mention features that exist: keyword research, tag generator, title optimizer, description writer, metadata audit, thumbnail analyzer, SEO bundle, growth engine, and Phronesis AI coach.\n4. Be direct and helpful. 3-5 sentences. No markdown formatting.\n5. Always include a confidence percentage with recommendations.\n\nCurrent: Niche=${niche}, Credits=${credits}, Health=${healthScore}/100, Date=May 2026\n\nNever recommend competitor tools. Never make up data.`;const reply = await askAI(systemPrompt + memoryContext + intelligenceContext, safeMessage + historyContext, { temperature: 0.7, maxTokens: 500 });
     
     if (!reply) { await refundCredits(req.channelId, CREDIT_COSTS['ai-assistant']); return sendRes(res, 502, { error: 'AI generation failed' }); }
     sendRes(res, 200, { reply });
