@@ -758,10 +758,6 @@
           <span>A/B Tester</span>
         </a>
 
-        <a class="nav-item" data-view="seo-lab" onclick="switchView('seo-lab')" id="nav-seo-lab">
-          <i data-lucide="flask-conical"></i>
-          <span>SEO Lab</span>
-        </a>
 
         <a class="nav-item" data-view="phronesis" onclick="switchView('phronesis')">
           <i data-lucide="cpu"></i>
@@ -2586,32 +2582,6 @@
           </div>
           <div id="ab-loading" style="display:none;text-align:center;padding:40px;"><i data-lucide="loader" style="animation:spin 1s linear infinite;"></i></div>
           <div id="ab-list"></div>
-        </div>
-
-        <!-- SEO Lab (Admin Only) -->
-        <div class="view-container" id="view-seo-lab" style="display: none;">
-          <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;margin-bottom:20px;">
-            <div><h2>🧪 SEO Lab</h2><p style="color:var(--text-muted);">Programmatic SEO engine. Generate keyword clusters and publish AI-written pages.</p></div>
-            <div style="display:flex;gap:8px;align-items:center;">
-              <div id="seo-autopublish-toggle" style="display:flex;align-items:center;gap:6px;background:var(--bg-card);border:1px solid var(--border);border-radius:8px;padding:6px 14px;">
-                <span style="font-size:12px;color:var(--text-muted);">Auto-Publish</span>
-                <label style="position:relative;display:inline-block;width:40px;height:22px;">
-                  <input type="checkbox" id="auto-publish-toggle" onchange="toggleAutoPublish(this.checked)" style="opacity:0;width:0;height:0;">
-                  <span style="position:absolute;cursor:pointer;top:0;left:0;right:0;bottom:0;background:rgba(255,255,255,0.1);border-radius:22px;transition:0.3s;"></span>
-                  <span id="auto-publish-slider" style="position:absolute;content:'';height:16px;width:16px;left:3px;bottom:3px;background:#888;border-radius:50%;transition:0.3s;"></span>
-                </label>
-              </div>
-              <button class="btn-primary" onclick="generateClusters()">🔍 Scan Clusters</button>
-              <button class="btn-secondary" onclick="bulkGeneratePages()">📝 Publish 5 Pages</button>
-              <button class="btn-secondary" onclick="discoverCompetitors()">🔎 Find Gaps</button>
-            </div>
-          </div>
-          <div id="seo-lab-stats" style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:20px;">
-            <div style="background:var(--bg-card);border-radius:10px;padding:14px;text-align:center;"><div id="seo-pages-count" style="font-size:28px;font-weight:800;color:#10b981;">0</div><div style="font-size:11px;color:var(--text-muted);">Published Pages</div></div>
-            <div style="background:var(--bg-card);border-radius:10px;padding:14px;text-align:center;"><div id="seo-opp-count" style="font-size:28px;font-weight:800;color:#f59e0b;">0</div><div style="font-size:11px;color:var(--text-muted);">Pending Opps</div></div>
-            <div style="background:var(--bg-card);border-radius:10px;padding:14px;text-align:center;"><div id="seo-cluster-count" style="font-size:28px;font-weight:800;color:#818cf8;">0</div><div style="font-size:11px;color:var(--text-muted);">Clusters</div></div>
-          </div>
-          <div style="overflow-x:auto;"><table style="width:100%;border-collapse:collapse;"><thead><tr style="background:rgba(255,255,255,0.04);text-align:left;"><th style="padding:10px;">Keyword</th><th style="padding:10px;">Priority</th><th style="padding:10px;">Status</th><th style="padding:10px;">Action</th></tr></thead><tbody id="seo-opp-body"></tbody></table></div>
         </div>
 
         <!-- Phronesis Agent -->
