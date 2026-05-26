@@ -1377,7 +1377,7 @@ app.post('/api/agent/coach/tool', async (req, res) => {
     if (!adminIds.includes(channelId)) {
       const { getPlan } = await import('./credits.js');
       const plan = await getPlan(channelId);
-      if (plan !== 'agency') return res.status(403).json({ error: 'Ask Phronesis is in private testing.' });
+      if (plan !== 'agency' && plan !== 'pro') return res.status(403).json({ error: 'Ask Phronesis is available on Pro and Agency plans.' });
     }
   } catch(e) { /* continue if credit check fails */ }
 

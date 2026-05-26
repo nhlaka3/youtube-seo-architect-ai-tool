@@ -606,8 +606,10 @@ async function resetCredits() {
 window.resetCredits = resetCredits;
 
 document.addEventListener('DOMContentLoaded', function() {
-  // ── Admin features: show Ask Phronesis coach ──
-  if (typeof isAdmin === 'function' && isAdmin()) {
+  // ── Show Ask Phronesis for Pro, Agency, and Admin users ──
+  var plan = localStorage.getItem('ytseo_user_plan_' + (localStorage.getItem('ytseo_channel_id') || '')) || localStorage.getItem('ytseo_plan') || 'free';
+  var showCoach = plan === 'pro' || plan === 'agency' || (typeof isAdmin === 'function' && isAdmin());
+  if (showCoach) {
     var coachLink = document.getElementById('sidebar-coach-link');
     if (coachLink) coachLink.style.display = '';
   }

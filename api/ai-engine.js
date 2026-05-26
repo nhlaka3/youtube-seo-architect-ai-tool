@@ -250,9 +250,9 @@ router.post('/assistant', aiLimiter, validateBody(assistantSchema), requireChann
   // ── Admin gate: Ask Phronesis is in testing ──
   const headerPlan = req.headers['x-plan'] || '';
   const adminIds = ['UC-vVYFQC_MNjVP03YRZ56Wg', 'UCmcNApL2w7kk7NG14tXinRg'];
-  if (headerPlan !== 'agency' && !adminIds.includes(req.channelId)) {
+  if (!adminIds.includes(req.channelId)) {
     const plan = await getPlan(req.channelId);
-    if (plan !== 'agency') return sendRes(res, 403, { error: 'Ask Phronesis is in private testing. Check back soon.' });
+    if (plan !== 'agency' && plan !== 'pro') return sendRes(res, 403, { error: 'Ask Phronesis is available on Pro and Agency plans. Upgrade to access.' });
   }
 
   try {
