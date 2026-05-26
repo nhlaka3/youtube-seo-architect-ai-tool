@@ -175,7 +175,50 @@ router.get('/list', requireChannelId, async (req, res) => {
   try {
     const { default: dbService } = await import('../src/database/services.js');
     const tests = await dbService.getAbTestsByChannel(req.channelId);
-    sendRes(res, 200, { tests });
+
+    // Auto-advance any tests that are due
+    const HOURS_PER_PHASE = 48;
+    const now = Date.now();
+    for (const test of tests) {
+      if (test.status !== 'running') continue;
+      const startedAt = new Date(test.phaseStartedAt || test.createdAt).getTime();
+      const hoursElapsed = (now - startedAt) / (1000 * 60 * 60);
+      if (hoursElapsed >= HOURS_PER_PHASE) {
+        try {
+          // Get access token from user metadata
+          let accessToken = req.headers['x-access-token'];
+          if (!accessToken) {
+            const users = await dbService.getAllUsers(100).catch(() => []);
+            const user = users.find(u => u.channelId === test.channelId);
+            accessToken = user?.metadata?.accessToken;
+          }
+          if (accessToken) {
+            const currentViews = await getViewCount(test.videoId, accessToken);
+            if (test.phase === 'variant_a') {
+              await applyTitle(test.videoId, test.variantB, accessToken);
+              await dbService.updateAbTest(test.id, {
+                phase: 'variant_b', phaseStartedAt: new Date().toISOString(),
+                variantAViewsEnd: currentViews, variantBViewsStart: currentViews
+              });
+            } else if (test.phase === 'variant_b') {
+              const aViews = (test.variantAViewsEnd || 0) - (test.variantAViewsStart || 0);
+              const bViews = currentViews - (test.variantBViewsStart || 0);
+              const winner = bViews >= aViews ? 'variant_b' : 'variant_a';
+              const winningTitle = winner === 'variant_b' ? test.variantB : test.variantA;
+              await applyTitle(test.videoId, winningTitle, accessToken);
+              await dbService.updateAbTest(test.id, {
+                phase: 'complete', variantBViewsEnd: currentViews,
+                winner, status: 'completed', completedAt: new Date().toISOString()
+              });
+            }
+          }
+        } catch(e) { console.warn('[ABTest] auto-advance failed for', test.id, e.message); }
+      }
+    }
+
+    // Re-fetch to get updated tests
+    const updatedTests = await dbService.getAbTestsByChannel(req.channelId);
+    sendRes(res, 200, { tests: updatedTests });
   } catch (e) {
     console.error('[ABTest] list error:', e.message);
     sendRes(res, 500, { error: e.message });
