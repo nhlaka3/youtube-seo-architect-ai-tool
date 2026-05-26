@@ -4027,7 +4027,7 @@ async function loadAbTests(){
   var list=document.getElementById('ab-list');
   list.innerHTML='<div style="text-align:center;padding:20px;color:var(--text-muted);">Loading...</div>';
   try{
-    var r=await fetch('/api/ab-test/list?channelId='+encodeURIComponent(ch),{headers:{'x-channel-id':ch}});
+    var r=await fetch('/api/ab-test/list?channelId='+encodeURIComponent(ch),{headers:{'x-channel-id':ch,'x-access-token':localStorage.getItem('ytseo_access_token')||''}});
     var d=await r.json();
     if(!d.tests||!d.tests.length){list.innerHTML='<div style="text-align:center;padding:40px;color:var(--text-muted);">No A/B tests yet. Start one above.</div>';return;}
     list.innerHTML=d.tests.map(function(t){

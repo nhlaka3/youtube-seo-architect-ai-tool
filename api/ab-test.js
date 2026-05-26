@@ -211,6 +211,14 @@ router.get('/list', requireChannelId, async (req, res) => {
                 winner, status: 'completed', completedAt: new Date().toISOString()
               });
             }
+          } else {
+            // No access token — advance phase in DB but skip YouTube update
+            await dbService.updateAbTest(test.id, {
+              phase: test.phase === 'variant_a' ? 'variant_b' : 'complete',
+              phaseStartedAt: new Date().toISOString(),
+              status: test.phase === 'variant_b' ? 'completed' : 'running',
+              completedAt: test.phase === 'variant_b' ? new Date().toISOString() : null
+            });
           }
         } catch(e) { console.warn('[ABTest] auto-advance failed for', test.id, e.message); }
       }
