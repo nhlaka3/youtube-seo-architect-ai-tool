@@ -353,7 +353,7 @@ const CreditsSystem = {
     'auto-mgmt': 10,
     'ai-generate': 1,
     'classify-niche': 1,
-    'niche-relevance-guard': 5,
+    'niche-relevance-guard': 0,
     'evergreen-revival': 10,
     'collusion-tags': 3,
     'session-linker': 3

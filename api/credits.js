@@ -171,7 +171,7 @@ export const CREDIT_COSTS = {
   'magic-fix': 10, 'seo-bundle': 5, 'smart-overhaul': 10,
   'proposal-generate': 2, 'proposal-apply': 8, 'retention-reorder': 15,
   'ai-assistant': 1, 'video-schedule': 3, 'bulk-inject': 5,
-  'auto-mgmt': 10, 'ai-generate': 1, 'classify-niche': 1, 'niche-relevance-guard': 5,
+  'auto-mgmt': 10, 'ai-generate': 1, 'classify-niche': 1, 'niche-relevance-guard': 0,
   'evergreen-revival': 10, 'collusion-tags': 3, 'session-linker': 3,
   'growth-engine': 2, 'ab-test': 5, 'queue-scan': 3
 };
