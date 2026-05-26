@@ -1,0 +1,433 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>YT SEO Architect — Product Demo</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: 'Outfit', 'Segoe UI', system-ui, sans-serif; background: #0a0a1a; color: #e0e0e0; overflow: hidden; height: 100vh; }
+.slide-container { width: 100%; height: 100vh; position: relative; }
+.slide { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; opacity: 0; transition: opacity 0.5s, transform 0.5s; transform: translateX(40px); pointer-events: none; }
+.slide.active { opacity: 1; transform: translateX(0); pointer-events: all; }
+.slide-content { max-width: 900px; width: 90%; }
+.browser-frame { background: #111827; border: 1px solid #1f2937; border-radius: 16px; overflow: hidden; box-shadow: 0 20px 60px rgba(0,0,0,0.5); }
+.browser-bar { background: #1f2937; padding: 10px 16px; display: flex; gap: 8px; align-items: center; }
+.browser-dot { width: 12px; height: 12px; border-radius: 50%; }
+.browser-dot:nth-child(1) { background: #ef4444; }
+.browser-dot:nth-child(2) { background: #f59e0b; }
+.browser-dot:nth-child(3) { background: #10b981; }
+.browser-url { margin-left: 16px; background: #0a0a1a; color: #6b7280; padding: 6px 14px; border-radius: 20px; font-size: 12px; font-family: monospace; }
+.browser-body { padding: 24px; min-height: 400px; }
+.badge { display: inline-block; padding: 4px 12px; border-radius: 12px; font-size: 11px; font-weight: 600; margin-bottom: 12px; }
+.badge-primary { background: rgba(99,102,241,0.15); color: #818cf8; border: 1px solid rgba(99,102,241,0.3); }
+.badge-success { background: rgba(16,185,129,0.15); color: #34d399; border: 1px solid rgba(16,185,129,0.3); }
+.badge-warning { background: rgba(245,158,11,0.15); color: #fbbf24; border: 1px solid rgba(245,158,11,0.3); }
+.btn { display: inline-flex; align-items: center; gap: 6px; padding: 10px 20px; border-radius: 10px; font-size: 13px; font-weight: 600; cursor: pointer; border: none; }
+.btn-primary { background: linear-gradient(135deg, #6366f1, #8b5cf6); color: #fff; }
+.btn-secondary { background: rgba(255,255,255,0.08); color: #e0e0e0; border: 1px solid #1f2937; }
+.btn-danger { background: rgba(239,68,68,0.15); color: #f87171; border: 1px solid rgba(239,68,68,0.3); }
+.card { background: rgba(255,255,255,0.03); border: 1px solid #1f2937; border-radius: 12px; padding: 16px; }
+.flex { display: flex; }
+.grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+.grid3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
+.grid4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; }
+.text-muted { color: #6b7280; }
+.text-sm { font-size: 13px; }
+.text-xs { font-size: 11px; }
+.text-lg { font-size: 20px; }
+.text-xl { font-size: 28px; }
+.font-bold { font-weight: 700; }
+.mb-2 { margin-bottom: 8px; }
+.mb-3 { margin-bottom: 12px; }
+.mb-4 { margin-bottom: 16px; }
+.mt-3 { margin-top: 12px; }
+.gap-2 { gap: 8px; }
+.gap-3 { gap: 12px; }
+.p-3 { padding: 12px; }
+.progress-bar { height: 6px; background: #1f2937; border-radius: 3px; overflow: hidden; }
+.progress-fill { height: 100%; background: linear-gradient(90deg, #6366f1, #8b5cf6); border-radius: 3px; transition: width 0.5s; }
+.stat-number { font-size: 32px; font-weight: 800; }
+.chat-bubble { padding: 10px 14px; border-radius: 12px; font-size: 13px; line-height: 1.5; max-width: 80%; }
+.chat-bubble-ai { background: rgba(99,102,241,0.1); border: 1px solid rgba(99,102,241,0.2); }
+.chat-bubble-user { background: rgba(255,255,255,0.05); border: 1px solid #1f2937; margin-left: auto; }
+.chip { padding: 6px 14px; border-radius: 16px; font-size: 11px; border: 1px solid rgba(99,102,241,0.2); background: rgba(99,102,241,0.06); color: #818cf8; cursor: pointer; }
+/* Navigation */
+.nav { position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%); display: flex; gap: 8px; z-index: 100; }
+.nav-dot { width: 10px; height: 10px; border-radius: 50%; background: #374151; cursor: pointer; transition: all 0.3s; }
+.nav-dot.active { background: #818cf8; width: 28px; border-radius: 5px; }
+.nav-btn { width: 36px; height: 36px; border-radius: 50%; background: rgba(255,255,255,0.08); border: 1px solid #1f2937; color: #e0e0e0; cursor: pointer; font-size: 18px; display: flex; align-items: center; justify-content: center; position: fixed; top: 50%; transform: translateY(-50%); z-index: 100; transition: all 0.2s; }
+.nav-btn:hover { background: rgba(99,102,241,0.15); }
+.nav-prev { left: 24px; }
+.nav-next { right: 24px; }
+.slide-number { position: fixed; top: 24px; right: 24px; font-size: 12px; color: #6b7280; z-index: 100; }
+.step-indicator { position: fixed; top: 24px; left: 24px; font-size: 13px; font-weight: 600; z-index: 100; }
+</style>
+</head>
+<body>
+
+<div class="step-indicator" id="stepLabel"></div>
+<div class="slide-number" id="slideNumber"></div>
+
+<button class="nav-btn nav-prev" onclick="prevSlide()">‹</button>
+<button class="nav-btn nav-next" onclick="nextSlide()">›</button>
+
+<div class="nav" id="navDots"></div>
+
+<div class="slide-container">
+
+<!-- SLIDE 1: Landing Page -->
+<div class="slide active" data-label="Landing Page">
+<div class="slide-content">
+<div class="badge badge-primary mb-3">SLIDE 1/8</div>
+<h2 class="text-xl font-bold mb-2">YT SEO Architect — AI YouTube Growth Platform</h2>
+<p class="text-muted mb-4">17 free tools. AI coach. Autonomous agent. One platform to grow your channel.</p>
+<div class="browser-frame">
+<div class="browser-bar">
+  <div class="browser-dot"></div><div class="browser-dot"></div><div class="browser-dot"></div>
+  <div class="browser-url">yt-seo-architect.vercel.app</div>
+</div>
+<div class="browser-body">
+  <div class="grid2 mb-4">
+    <div>
+      <div class="badge badge-success mb-2">100 FREE CREDITS</div>
+      <h3 style="font-size:24px;font-weight:800;margin-bottom:8px;">YouTube SEO<br>Made Simple</h3>
+      <p class="text-muted text-sm mb-3">AI-powered keyword research, tag generation, metadata optimization, and channel growth — all in one place.</p>
+      <div class="flex gap-2">
+        <button class="btn btn-primary">Start Free →</button>
+        <button class="btn btn-secondary">View Demo</button>
+      </div>
+    </div>
+    <div class="grid2 gap-2">
+      <div class="card text-center"><div class="text-muted text-xs">🏷️</div><div class="text-sm font-bold">Tag Generator</div></div>
+      <div class="card text-center"><div class="text-muted text-xs">🔍</div><div class="text-sm font-bold">Keyword Research</div></div>
+      <div class="card text-center"><div class="text-muted text-xs">📝</div><div class="text-sm font-bold">Title Optimizer</div></div>
+      <div class="card text-center"><div class="text-muted text-xs">🧠</div><div class="text-sm font-bold">AI Coach</div></div>
+    </div>
+  </div>
+  <div class="grid4 text-center">
+    <div><div class="stat-number" style="color:#818cf8;">17</div><div class="text-xs text-muted">SEO Tools</div></div>
+    <div><div class="stat-number" style="color:#34d399;">100</div><div class="text-xs text-muted">Free Credits</div></div>
+    <div><div class="stat-number" style="color:#fbbf24;">50K+</div><div class="text-xs text-muted">Videos Analyzed</div></div>
+    <div><div class="stat-number" style="color:#f87171;">$0</div><div class="text-xs text-muted">No Card Needed</div></div>
+  </div>
+</div></div>
+</div></div>
+
+<!-- SLIDE 2: Connect YouTube -->
+<div class="slide" data-label="Connect Channel">
+<div class="slide-content">
+<div class="badge badge-warning mb-3">SLIDE 2/8</div>
+<h2 class="text-xl font-bold mb-2">Step 1: Connect Your YouTube Channel</h2>
+<p class="text-muted mb-4">One-click OAuth. Phronesis reads your videos to find optimization opportunities.</p>
+<div class="browser-frame">
+<div class="browser-bar">
+  <div class="browser-dot"></div><div class="browser-dot"></div><div class="browser-dot"></div>
+  <div class="browser-url">dashboard — Connect YouTube</div>
+</div>
+<div class="browser-body">
+  <div class="card mb-3" style="border:2px solid rgba(99,102,241,0.3);">
+    <div class="flex gap-3" style="align-items:center;">
+      <div style="font-size:32px;">🔗</div>
+      <div style="flex:1;">
+        <div class="font-bold mb-1">Connect Your YouTube Channel</div>
+        <div class="text-xs text-muted">We need access to read your video metadata (titles, tags, descriptions) to analyze and optimize.</div>
+      </div>
+      <button class="btn btn-primary">Connect YouTube</button>
+    </div>
+  </div>
+  <p class="text-xs text-muted">✓ OAuth 2.0 — your credentials are never stored</p>
+  <p class="text-xs text-muted">✓ Read-only by default — write access only when you approve changes</p>
+</div></div>
+</div></div>
+
+<!-- SLIDE 3: Dashboard -->
+<div class="slide" data-label="Dashboard">
+<div class="slide-content">
+<div class="badge badge-success mb-3">SLIDE 3/8</div>
+<h2 class="text-xl font-bold mb-2">Dashboard — Channel at a Glance</h2>
+<p class="text-muted mb-4">Connected! Your channel stats, credits, and tools are ready.</p>
+<div class="browser-frame">
+<div class="browser-bar">
+  <div class="browser-dot"></div><div class="browser-dot"></div><div class="browser-dot"></div>
+  <div class="browser-url">dashboard — Overview</div>
+</div>
+<div class="browser-body">
+  <div class="grid4 mb-4">
+    <div class="card text-center">
+      <div class="text-xs text-muted mb-1">Channel</div>
+      <div class="font-bold">✅ Connected</div>
+    </div>
+    <div class="card text-center">
+      <div class="text-xs text-muted mb-1">Credits</div>
+      <div class="font-bold" style="color:#34d399;">999</div>
+    </div>
+    <div class="card text-center">
+      <div class="text-xs text-muted mb-1">Plan</div>
+      <div class="font-bold" style="color:#818cf8;">Agency</div>
+    </div>
+    <div class="card text-center">
+      <div class="text-xs text-muted mb-1">Health</div>
+      <div class="font-bold" style="color:#fbbf24;">85/100</div>
+    </div>
+  </div>
+  <div class="grid2">
+    <div class="card">
+      <div class="text-xs text-muted mb-2">👤 Niche Detected</div>
+      <div class="font-bold text-lg">Gaming</div>
+    </div>
+    <div class="card">
+      <div class="text-xs text-muted mb-2">📈 Subscriber Trend</div>
+      <div class="font-bold text-lg" style="color:#34d399;">+12/month</div>
+    </div>
+  </div>
+</div></div>
+</div></div>
+
+<!-- SLIDE 4: Ask Phronesis - Set Goal -->
+<div class="slide" data-label="Ask Phronesis">
+<div class="slide-content">
+<div class="badge badge-primary mb-3">SLIDE 4/8</div>
+<h2 class="text-xl font-bold mb-2">Step 2: Ask Phronesis — Set a Growth Goal</h2>
+<p class="text-muted mb-4">Open the AI coach from the sidebar. Set a goal. Get a plan.</p>
+<div class="browser-frame">
+<div class="browser-bar">
+  <div class="browser-dot"></div><div class="browser-dot"></div><div class="browser-dot"></div>
+  <div class="browser-url">Ask Phronesis Coach</div>
+</div>
+<div class="browser-body">
+  <!-- Goal Card -->
+  <div class="card mb-3" style="border: 1px solid rgba(99,102,241,0.2); background: rgba(99,102,241,0.03);">
+    <div class="text-xs text-muted mb-1">🎯 ACTIVE GOAL</div>
+    <div class="font-bold text-lg mb-2">450 / 1,000 Subscribers</div>
+    <div class="progress-bar mb-2"><div class="progress-fill" style="width:45%"></div></div>
+    <div class="flex" style="justify-content:space-between;font-size:11px;">
+      <span class="text-muted">45% complete</span>
+      <span class="text-muted">+12/week · ETA Dec 2026</span>
+    </div>
+  </div>
+  <!-- Chat -->
+  <div class="flex" style="flex-direction:column;gap:8px;">
+    <div class="chat-bubble chat-bubble-ai">
+      <div class="text-xs font-bold mb-1" style="color:#818cf8;">🧠 Phronesis</div>
+      ✅ Goal set! Targeting 1,000 subscribers by December 2026.<br>
+      Current: 450. I'm on it.<br><br>
+      📋 Next phase: AUDIT — establish baselines and identify opportunities.
+    </div>
+    <div class="chat-bubble chat-bubble-user">
+      <div class="text-xs font-bold mb-1">You</div>
+      Scan my channel
+    </div>
+    <div class="chat-bubble chat-bubble-ai">
+      <div class="text-xs font-bold mb-1" style="color:#818cf8;">🧠 Phronesis</div>
+      🔍 Last scan analyzed 10 videos. 3 need attention:<br>
+      • "Morning Routine vlog" — Score: 42/100<br>
+      • "Gaming Setup Tour" — Score: 38/100<br>
+      • "Productivity Tips" — Score: 55/100<br><br>
+      Run ⚡ TRIGGER SCAN in the Phronesis Agent tab for fresh analysis.
+    </div>
+  </div>
+  <!-- Chips -->
+  <div class="flex gap-2 mt-3" style="flex-wrap:wrap;">
+    <div class="chip">📋 Overview</div>
+    <div class="chip">🔍 Scan</div>
+    <div class="chip">📊 Progress</div>
+    <div class="chip">📥 Inbox</div>
+    <div class="chip" style="border-color:rgba(16,185,129,0.3);color:#34d399;">🎯 Set Goal</div>
+  </div>
+</div></div>
+</div></div>
+
+<!-- SLIDE 5: Phronesis Agent -->
+<div class="slide" data-label="Agent Scan">
+<div class="slide-content">
+<div class="badge badge-warning mb-3">SLIDE 5/8</div>
+<h2 class="text-xl font-bold mb-2">Step 3: Phronesis Agent — Run a Channel Scan</h2>
+<p class="text-muted mb-4">The autonomous agent scans your videos, scores them, and proposes fixes.</p>
+<div class="browser-frame">
+<div class="browser-bar">
+  <div class="browser-dot"></div><div class="browser-dot"></div><div class="browser-dot"></div>
+  <div class="browser-url">Phronesis Agent — TRIGGER SCAN</div>
+</div>
+<div class="browser-body">
+  <div class="flex gap-3 mb-4" style="align-items:center;justify-content:space-between;">
+    <div class="flex gap-2">
+      <div class="badge badge-primary">🧠 Agent Active</div>
+      <div class="badge badge-success">MONITORING</div>
+    </div>
+    <button class="btn btn-primary">⚡ TRIGGER SCAN</button>
+  </div>
+  <div class="text-sm text-muted mb-3">🔍 Scanning 12 videos... analyzing titles, tags, descriptions, engagement...</div>
+  <div class="progress-bar mb-4"><div class="progress-fill" style="width:78%;animation:scanPulse 1.5s infinite;"></div></div>
+  <div class="grid3">
+    <div class="card text-center">
+      <div class="text-xs text-muted mb-1">Scanned</div>
+      <div class="font-bold text-lg">12</div>
+    </div>
+    <div class="card text-center">
+      <div class="text-xs text-muted mb-1">Need Fix</div>
+      <div class="font-bold text-lg" style="color:#fbbf24;">3</div>
+    </div>
+    <div class="card text-center">
+      <div class="text-xs text-muted mb-1">Avg Score</div>
+      <div class="font-bold text-lg" style="color:#34d399;">68/100</div>
+    </div>
+  </div>
+  <div class="card mt-3" style="border-left:3px solid #fbbf24;">
+    <div class="text-xs font-bold mb-1">⚠️ "Morning Routine vlog" — Score: 42/100</div>
+    <div class="text-xs text-muted">Title too short (18 chars) · No chapters · Only 4 tags · Low engagement</div>
+  </div>
+</div></div>
+<style>@keyframes scanPulse { 0%,100% { opacity:0.8; } 50% { opacity:1; } }</style>
+</div></div>
+
+<!-- SLIDE 6: Proposals -->
+<div class="slide" data-label="Proposals">
+<div class="slide-content">
+<div class="badge badge-success mb-3">SLIDE 6/8</div>
+<h2 class="text-xl font-bold mb-2">Step 4: Review Optimization Proposals</h2>
+<p class="text-muted mb-4">The agent generates specific fixes. Review and apply with one click.</p>
+<div class="browser-frame">
+<div class="browser-bar">
+  <div class="browser-dot"></div><div class="browser-dot"></div><div class="browser-dot"></div>
+  <div class="browser-url">Command Inbox — 3 proposals</div>
+</div>
+<div class="browser-body">
+  <div class="card mb-3" style="border:1px solid rgba(16,185,129,0.2);">
+    <div class="flex" style="justify-content:space-between;align-items:center;margin-bottom:8px;">
+      <div class="flex gap-2" style="align-items:center;">
+        <span class="badge badge-primary">🔧 Title Fix</span>
+        <span class="badge badge-success">85%</span>
+        <span class="text-xs text-muted">EV 3.2</span>
+      </div>
+      <span class="text-xs text-muted">Pending</span>
+    </div>
+    <div class="text-xs text-muted mb-1">📹 Morning Routine vlog</div>
+    <div class="grid2 mb-2">
+      <div class="card" style="border:1px solid rgba(239,68,68,0.2);">
+        <div class="text-xs" style="color:#f87171;">CURRENT</div>
+        <div class="text-sm text-muted">Morning Routine vlog</div>
+      </div>
+      <div class="card" style="border:1px solid rgba(16,185,129,0.2);">
+        <div class="text-xs" style="color:#34d399;">PROPOSED</div>
+        <div class="text-sm" style="color:#34d399;">My 5AM Morning Routine That Changed My Life (2026)</div>
+      </div>
+    </div>
+    <div class="text-xs text-muted mb-3">💡 Curiosity gap + number + year — estimated +15% CTR</div>
+    <div class="flex gap-2">
+      <button class="btn btn-primary" style="font-size:11px;">✅ Apply</button>
+      <button class="btn btn-secondary" style="font-size:11px;">✏️ Edit</button>
+      <button class="btn btn-danger" style="font-size:11px;">❌ Skip</button>
+    </div>
+  </div>
+  <div class="text-xs text-muted">+2 more proposals below...</div>
+</div></div>
+</div></div>
+
+<!-- SLIDE 7: Results -->
+<div class="slide" data-label="Results">
+<div class="slide-content">
+<div class="badge badge-success mb-3">SLIDE 7/8</div>
+<h2 class="text-xl font-bold mb-2">Step 5: Track Results — Optimization History</h2>
+<p class="text-muted mb-4">Every optimization is tracked. See exactly what improved.</p>
+<div class="browser-frame">
+<div class="browser-bar">
+  <div class="browser-dot"></div><div class="browser-dot"></div><div class="browser-dot"></div>
+  <div class="browser-url">Optimization History</div>
+</div>
+<div class="browser-body">
+  <div class="grid4 mb-4">
+    <div class="card text-center">
+      <div class="stat-number">12</div><div class="text-xs text-muted">Trials</div>
+    </div>
+    <div class="card text-center">
+      <div class="stat-number" style="color:#34d399;">9</div><div class="text-xs text-muted">Improved</div>
+    </div>
+    <div class="card text-center">
+      <div class="stat-number" style="color:#34d399;">75%</div><div class="text-xs text-muted">Success Rate</div>
+    </div>
+    <div class="card text-center">
+      <div class="stat-number" style="color:#818cf8;">+23%</div><div class="text-xs text-muted">Avg Lift</div>
+    </div>
+  </div>
+  <div class="card" style="border-left:3px solid #34d399;">
+    <div class="text-xs text-muted mb-1">📊 AI INSIGHT</div>
+    <div class="text-sm">Strong results! 75% of your optimizations improved performance by an average of +23%. Best results come from title optimizations.</div>
+  </div>
+</div></div>
+</div></div>
+
+<!-- SLIDE 8: Grow -->
+<div class="slide" data-label="Grow">
+<div class="slide-content" style="text-align:center;">
+<div class="badge badge-primary mb-3">SLIDE 8/8</div>
+<div style="font-size:48px;margin-bottom:16px;">🚀</div>
+<h2 class="text-xl font-bold mb-2">Your Channel, Optimized</h2>
+<p class="text-muted mb-3" style="font-size:16px;">
+  YT SEO Architect handles the SEO so you can focus on creating.<br>
+  17 tools. AI coach. Autonomous agent. All free to start.
+</p>
+<div class="grid3 mb-4" style="max-width:600px;margin:0 auto 24px;">
+  <div class="card text-center">
+    <div style="font-size:24px;margin-bottom:4px;">🧠</div>
+    <div class="font-bold text-sm">Ask Phronesis</div>
+    <div class="text-xs text-muted">AI growth coach</div>
+  </div>
+  <div class="card text-center">
+    <div style="font-size:24px;margin-bottom:4px;">⚡</div>
+    <div class="font-bold text-sm">Auto-Scan</div>
+    <div class="text-xs text-muted">Find weak videos</div>
+  </div>
+  <div class="card text-center">
+    <div style="font-size:24px;margin-bottom:4px;">📈</div>
+    <div class="font-bold text-sm">Track Growth</div>
+    <div class="text-xs text-muted">Measure impact</div>
+  </div>
+</div>
+<div class="flex gap-2" style="justify-content:center;">
+  <button class="btn btn-primary" style="font-size:15px;padding:14px 28px;">Start Free — 100 Credits →</button>
+</div>
+<p class="text-muted text-xs mt-3">yt-seo-architect.vercel.app</p>
+</div></div>
+
+</div>
+
+<script>
+let currentSlide = 0;
+const slides = document.querySelectorAll('.slide');
+const totalSlides = slides.length;
+
+function updateSlides() {
+  slides.forEach((s, i) => {
+    s.classList.toggle('active', i === currentSlide);
+  });
+  document.querySelectorAll('.nav-dot').forEach((d, i) => {
+    d.classList.toggle('active', i === currentSlide);
+  });
+  document.getElementById('slideNumber').textContent = `${currentSlide + 1} / ${totalSlides}`;
+  document.getElementById('stepLabel').textContent = slides[currentSlide].dataset.label || '';
+}
+
+function nextSlide() { currentSlide = Math.min(currentSlide + 1, totalSlides - 1); updateSlides(); }
+function prevSlide() { currentSlide = Math.max(currentSlide - 1, 0); updateSlides(); }
+
+// Build nav dots
+const nav = document.getElementById('navDots');
+for (let i = 0; i < totalSlides; i++) {
+  const dot = document.createElement('div');
+  dot.className = 'nav-dot' + (i === 0 ? ' active' : '');
+  dot.onclick = () => { currentSlide = i; updateSlides(); };
+  nav.appendChild(dot);
+}
+
+// Keyboard navigation
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'ArrowRight') nextSlide();
+  if (e.key === 'ArrowLeft') prevSlide();
+});
+
+updateSlides();
+</script>
+
+</body>
+</html>
