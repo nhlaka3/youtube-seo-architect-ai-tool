@@ -198,7 +198,7 @@ router.get('/list', requireChannelId, async (req, res) => {
               if (test.phase === 'variant_a') {
                 await applyTitle(test.videoId, test.variantB, accessToken);
                 await dbService.updateAbTest(test.id, {
-                  phase: 'variant_b', phaseStartedAt: new Date().toISOString(),
+                  phase: 'variant_b', phaseStartedAt: new Date(),
                   variantAViewsEnd: currentViews, variantBViewsStart: currentViews
                 });
               } else if (test.phase === 'variant_b') {
@@ -216,7 +216,7 @@ router.get('/list', requireChannelId, async (req, res) => {
               // YouTube API failed (expired token) — advance DB anyway
               await dbService.updateAbTest(test.id, {
                 phase: test.phase === 'variant_a' ? 'variant_b' : 'complete',
-                phaseStartedAt: new Date().toISOString(),
+                phaseStartedAt: new Date(),
                 status: test.phase === 'variant_b' ? 'completed' : 'running',
                 completedAt: test.phase === 'variant_b' ? new Date().toISOString() : null
               });
@@ -225,7 +225,7 @@ router.get('/list', requireChannelId, async (req, res) => {
             // No access token — advance phase in DB but skip YouTube update
             await dbService.updateAbTest(test.id, {
               phase: test.phase === 'variant_a' ? 'variant_b' : 'complete',
-              phaseStartedAt: new Date().toISOString(),
+              phaseStartedAt: new Date(),
               status: test.phase === 'variant_b' ? 'completed' : 'running',
               completedAt: test.phase === 'variant_b' ? new Date().toISOString() : null
             });
@@ -260,9 +260,9 @@ router.post('/force-advance', async (req, res) => {
         const newPhase = test.phase === 'variant_a' ? 'variant_b' : 'complete';
         await dbService.updateAbTest(test.id, {
           phase: newPhase,
-          phaseStartedAt: new Date().toISOString(),
+          phaseStartedAt: new Date(),
           status: newPhase === 'complete' ? 'completed' : 'running',
-          completedAt: newPhase === 'complete' ? new Date().toISOString() : null
+          completedAt: newPhase === 'complete' ? new Date() : null
         });
         entry.advanced = true;
         entry.newPhase = newPhase;
