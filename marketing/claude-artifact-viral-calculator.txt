@@ -1,0 +1,40 @@
+CLAUDE ARTIFACT PROMPT — YouTube Viral Potential Calculator
+=============================================================
+PASTE THIS EXACT PROMPT INTO CLAUDE.AI:
+
+Build an interactive single-page tool called "YouTube Viral Potential Calculator".
+
+HOW IT WORKS:
+1. User enters their video title idea
+2. User selects their niche from dropdown: Gaming, Tech, Beauty, Fitness, Cooking, Education, Music, Vlog, Finance, Comedy
+3. User selects video type: Tutorial, Review, Challenge, Reaction, Storytime, Listicle, Shorts, Commentary
+4. User enters subscriber count (optional)
+5. User clicks "Calculate Viral Score"
+
+SCORING SYSTEM (display each factor with a weight bar):
+- Title Emotional Impact (25%): checks for curiosity words, power words, numbers, questions
+- Title Length (10%): ideal 40-60 characters for mobile
+- Niche Virality (15%): each niche has a base viral rate (Gaming: 8/10, Comedy: 9/10, Education: 4/10, etc.)
+- Video Type (15%): Challenge: 9/10, Reaction: 7/10, Tutorial: 4/10, etc.
+- SEO Readiness (15%): checks for keyword placement, search-friendly terms
+- Hook Strength (20%): checks if title starts with a hook ("You won't believe..." = high, "How to..." = medium)
+
+OUTPUT:
+- Overall viral score /100 with animated circular gauge
+- Breakdown of each factor with mini progress bars
+- 3 specific tips to improve the score
+- Estimated views range (if score > 70: "100K-1M+", if > 50: "10K-100K", etc.)
+- "Compare" feature: user can enter a second title to compare scores side by side
+
+DESIGN:
+- Dark theme with neon green (#10b981) and purple (#6366f1) accents
+- Clean, modern, mobile responsive
+- Animated score gauge (CSS animation)
+- No external frameworks — vanilla HTML/CSS/JS only
+
+FOOTER (exact text):
+<footer style="text-align:center;padding:16px;font-size:11px;color:#888;border-top:1px solid #333;margin-top:30px;">
+  Want to optimize your entire channel? <a href="https://yt-seo-architect.vercel.app" style="color:#6366f1;">YT SEO Architect</a> — 17 free YouTube SEO tools. AI coach, keyword research, tag generator.
+</footer>
+
+Make this a Claude artifact.
