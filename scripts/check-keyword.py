@@ -1,219 +1,207 @@
 #!/usr/bin/env python3
-"""YouTube Keyword Competition Checker — Free Tool
-===================================================
-Checks competition level for any keyword using Google Custom Search API.
-Free tier: 100 queries/day. No paid tools needed.
-
-SETUP (one-time):
-1. Go to https://programmablesearchengine.google.com/
-2. Create a new search engine (search the entire web)
-3. Get your Search Engine ID (cx)
-4. Go to https://console.cloud.google.com/apis/credentials
-5. Create an API key for "Custom Search API"
-6. Set env vars: export GOOGLE_API_KEY="your-key" GOOGLE_CX="your-cx"
+"""YouTube Keyword Competition Checker — No API Required
+==========================================================
+Analyzes competition for any keyword using signals that don't need Google API.
+Gives you a competition score + a checklist for manual SERP verification.
 
 USAGE:
-  python3 check-keyword.py "youtube description templates 2026"
-  python3 check-keyword.py "best youtube seo tools" --top 5
+  python3 scripts/check-keyword.py "youtube description templates 2026"
 """
 
-import os
 import sys
-import json
-import urllib.request
-import urllib.parse
-from datetime import datetime
+import re
 
-API_KEY = os.environ.get('GOOGLE_API_KEY', '')
-CX = os.environ.get('GOOGLE_CX', '')
-
-def search_google(query, num=10):
-    """Search Google via Custom Search API. Returns list of results."""
-    url = 'https://www.googleapis.com/customsearch/v1'
-    params = {
-        'key': API_KEY,
-        'cx': CX,
-        'q': query,
-        'num': min(num, 10),
-        'fields': 'items(title,link,snippet,displayLink,pagemap/metatags)'
-    }
-    url += '?' + urllib.parse.urlencode(params)
+def analyze_keyword(keyword):
+    """Score keyword competition based on structural signals."""
+    words = keyword.split()
+    word_count = len(words)
+    char_count = len(keyword)
     
-    req = urllib.request.Request(url, headers={'User-Agent': 'KeywordChecker/1.0'})
-    with urllib.request.urlopen(req, timeout=10) as resp:
-        data = json.loads(resp.read())
-    return data.get('items', [])
-
-def analyze_competition(results, keyword):
-    """Score competition level from search results. Lower = easier to rank."""
-    if not results:
-        return {"error": "No results found"}
-    
-    word_count = len(keyword.split())
     signals = []
     
-    # Signal 1: Domain authority (rough proxy via TLD and known brands)
-    high_auth_domains = 0
-    known_brands = ['youtube.com', 'google.com', 'ahrefs.com', 'semrush.com',
-                    'hubspot.com', 'neilpatel.com', 'backlinko.com', 'moz.com',
-                    'vidIQ.com', 'tubebuddy.com', 'blog.google', 'support.google.com',
-                    'wikipedia.org', 'reddit.com', 'quora.com', 'medium.com']
-    
-    for r in results:
-        domain = r.get('displayLink', '')
-        is_brand = any(brand in domain.lower() for brand in known_brands)
-        if is_brand:
-            high_auth_domains += 1
-    
-    if high_auth_domains >= 5:
-        signals.append({'signal': 'High-authority domains', 'score': -30, 
-                       'detail': f'{high_auth_domains}/10 results are big brands (very hard to beat)'})
-    elif high_auth_domains >= 3:
-        signals.append({'signal': 'Medium authority', 'score': -15,
-                       'detail': f'{high_auth_domains}/10 results are brands (moderate difficulty)'})
-    else:
-        signals.append({'signal': 'Low authority competition', 'score': +15,
-                       'detail': f'Only {high_auth_domains}/10 are big brands — small sites can rank'})
-    
-    # Signal 2: Keyword specificity (long-tail bonus)
-    if word_count >= 4:
-        signals.append({'signal': 'Long-tail keyword', 'score': +20,
-                       'detail': f'{word_count} words — specific queries have lower competition'})
+    # Signal 1: Word count (long-tail bonus)
+    if word_count >= 5:
+        signals.append(('Long-tail keyword (5+ words)', +25, 'Very specific — easiest to rank'))
+    elif word_count >= 4:
+        signals.append(('Long-tail keyword (4 words)', +20, 'Specific — good chance of ranking'))
     elif word_count >= 3:
-        signals.append({'signal': 'Moderate specificity', 'score': +10,
-                       'detail': '3-word keyword — decent specificity'})
+        signals.append(('Moderate specificity (3 words)', +10, 'Decent specificity'))
     else:
-        signals.append({'signal': 'Short keyword', 'score': -10,
-                       'detail': '1-2 words — broad keywords are competitive'})
+        signals.append(('Broad keyword (1-2 words)', -15, 'Very competitive — need strong domain'))
     
-    # Signal 3: Result count (rough volume proxy)
-    try:
-        total_results = results[0].get('pagemap', {}).get('metatags', [{}])[0]
-    except:
-        total_results = None
+    # Signal 2: Character count (longer = more specific)
+    if char_count > 40:
+        signals.append(('Very specific query', +15, f'{char_count} chars — niche intent'))
+    elif char_count > 25:
+        signals.append(('Moderately specific', +5, f'{char_count} chars'))
     
-    # Signal 4: Title analysis — are results optimized?
-    keyword_lower = keyword.lower()
-    exact_title_matches = 0
-    for r in results:
-        title = r.get('title', '').lower()
-        # Check if keyword appears exactly in title
-        if keyword_lower in title:
-            exact_title_matches += 1
+    # Signal 3: Intent words (informational = easier than commercial)
+    info_words = ['how', 'what', 'why', 'guide', 'tutorial', 'template', 'tips', 
+                  'learn', 'examples', 'ideas', 'checklist', 'meaning', 'definition']
+    commercial_words = ['best', 'top', 'review', 'cheap', 'buy', 'price', 'vs', 
+                        'comparison', 'discount', 'deal', 'free trial', 'premium']
     
-    if exact_title_matches >= 7:
-        signals.append({'signal': 'Highly optimized titles', 'score': -15,
-                       'detail': f'{exact_title_matches}/10 results have exact keyword in title — competitive SERP'})
-    elif exact_title_matches >= 4:
-        signals.append({'signal': 'Moderately optimized', 'score': -5,
-                       'detail': f'{exact_title_matches}/10 have exact keyword match in title'})
+    info_score = sum(1 for w in info_words if w in keyword.lower())
+    commercial_score = sum(1 for w in commercial_words if w in keyword.lower())
+    
+    if info_score > commercial_score:
+        signals.append(('Informational intent', +10, f'{info_score} info signals — easier for content to rank'))
+    elif commercial_score > info_score:
+        signals.append(('Commercial intent', -10, f'{commercial_score} commercial signals — harder, dominated by review sites'))
     else:
-        signals.append({'signal': 'Weak title optimization', 'score': +15,
-                       'detail': f'Only {exact_title_matches}/10 have exact keyword in title — easy to beat with optimized title'})
+        signals.append(('Mixed intent', 0, 'Neutral — depends on search results'))
     
-    # Signal 5: Presence of "how to" / informational content (less competitive than commercial)
-    informational_results = sum(1 for r in results if any(w in r.get('title','').lower() 
-                               for w in ['how', 'guide', 'tutorial', 'template', 'tips', 'learn']))
-    commercial_results = sum(1 for r in results if any(w in r.get('title','').lower()
-                              for w in ['best', 'top', 'review', 'vs', 'buy', 'price', 'cheap']))
+    # Signal 4: Year/date in keyword (freshness targeting)
+    years = re.findall(r'\b20\d{2}\b', keyword)
+    if years:
+        signals.append(('Year-targeted', +10, f'Targeting {years[0]} — freshness beats older content'))
     
-    if informational_results > commercial_results:
-        signals.append({'signal': 'Informational intent', 'score': +10,
-                       'detail': f'{informational_results} informational vs {commercial_results} commercial results — easier to rank with content'})
-    elif commercial_results > informational_results:
-        signals.append({'signal': 'Commercial intent', 'score': -10,
-                       'detail': f'{commercial_results} commercial results — harder to compete with affiliate content'})
+    # Signal 5: Contains numbers (listicle-friendly, good CTR)
+    if re.search(r'\d+', keyword):
+        signals.append(('Contains numbers', +5, 'Higher CTR potential with numbered content'))
     
-    # Calculate final score (0-100, higher = easier to rank)
+    # Signal 6: Niche specificity
+    niche_terms = ['youtube', 'tiktok', 'instagram', 'shorts', 'podcast', 'vlog',
+                   'thumbnail', 'seo', 'algorithm', 'monetization', 'analytics']
+    niche_matches = [t for t in niche_terms if t in keyword.lower()]
+    if niche_matches:
+        signals.append(('Niche-specific', +10, f'Contains: {", ".join(niche_matches)} — narrower audience, less competition'))
+    
+    # Calculate score
     base_score = 50
-    total_modifier = sum(s['score'] for s in signals)
+    total_modifier = sum(s[1] for s in signals)
     final_score = max(0, min(100, base_score + total_modifier))
     
-    # Difficulty label
+    # Difficulty
     if final_score >= 70:
-        difficulty = '🟢 LOW — Easy to rank with good content'
-    elif final_score >= 50:
-        difficulty = '🟡 MEDIUM — Achievable with optimization'
-    elif final_score >= 30:
-        difficulty = '🟠 HIGH — Needs strong backlinks + content'
+        difficulty = '🟢 LOW COMPETITION'
+    elif final_score >= 55:
+        difficulty = '🟡 MEDIUM'
+    elif final_score >= 40:
+        difficulty = '🟠 HIGH'
     else:
-        difficulty = '🔴 VERY HARD — Dominated by big brands'
+        difficulty = '🔴 VERY HIGH'
     
     return {
         'keyword': keyword,
-        'competition_score': final_score,
+        'word_count': word_count,
+        'char_count': char_count,
+        'score': final_score,
         'difficulty': difficulty,
-        'signals': signals,
-        'top_results': [{'title': r['title'], 'domain': r['displayLink']} for r in results[:5]],
-        'checked_at': datetime.now().isoformat()
+        'signals': signals
     }
 
-def main():
-    if not API_KEY or not CX:
-        print("""
-╔══════════════════════════════════════════════════╗
-║  SETUP REQUIRED (one-time, 2 minutes)           ║
-╠══════════════════════════════════════════════════╣
-║ 1. Go to: https://programmablesearchengine.google.com/
-║    Create a search engine for the entire web.
-║    Copy the "Search Engine ID" (cx).
-║                                                  ║
-║ 2. Go to: https://console.cloud.google.com/apis/credentials
-║    Create an API key for "Custom Search API".
-║    Copy the API key.
-║                                                  ║
-║ 3. Run:                                          ║
-║    export GOOGLE_API_KEY="your-api-key"           ║
-║    export GOOGLE_CX="your-search-engine-id"       ║
-║    python3 check-keyword.py "your keyword"        ║
-╚══════════════════════════════════════════════════╝
+def print_serp_checklist(keyword):
+    """Manual SERP verification steps."""
+    print(f"""
+╔══════════════════════════════════════════════════════╗
+║  MANUAL SERP CHECK (2 minutes)                      ║
+║  Open incognito window, search: "{keyword}"          ║
+╚══════════════════════════════════════════════════════╝
+
+For each of the top 5 results, answer:
+
+1. What's the word count? [ ] < 500  [ ] 500-1000  [ ] 1000-1500  [ ] 1500+
+   → If most are < 1000 words: EASY to beat with 1500+ words
+
+2. Do they have FAQ schema? [ ] Yes [ ] No
+   → Check: Right-click → View Page Source → Search "FAQPage"
+   → If NO: You can capture FAQ snippets with schema
+
+3. When was it published/updated? [ ] 2026 [ ] 2025 [ ] 2024 [ ] Older
+   → If most are 2024 or older: Freshness advantage
+
+4. Do they have a Table of Contents? [ ] Yes [ ] No
+   → If NO: Your page with TOC signals better UX
+
+5. Is it a big brand? [ ] YouTube/Google [ ] Ahrefs/Semrush [ ] Blog [ ] Small site
+   → Count big brands: 0-2 = winnable, 3-5 = tough, 6+ = very hard
+
+6. Do they answer the query DIRECTLY in the first paragraph? [ ] Yes [ ] No
+   → If NO: Your TL;DR box wins for AI overviews
+
+7. What subtopics do they COVER? (list them)
+   _________________________________
+   What subtopics do they MISS? (your opportunity)
+   _________________________________
+
+SCORING THE SERP:
+• 3+ weaknesses across results = 🟢 Can rank top 5
+• 1-2 weaknesses = 🟡 Needs backlinks to compete  
+• 0 weaknesses = 🔴 Very competitive — pick a longer keyword
 """)
-        # FALLBACK: Basic analysis without API
-        if len(sys.argv) > 1:
-            keyword = sys.argv[1]
-            word_count = len(keyword.split())
-            print(f"\n📊 Quick analysis for: \"{keyword}\"")
-            print(f"   Words: {word_count}")
-            if word_count >= 4:
-                print(f"   🟢 Likely LOW competition (long-tail keyword)")
-            elif word_count >= 3:
-                print(f"   🟡 Likely MEDIUM competition")
-            else:
-                print(f"   🔴 Likely HIGH competition (broad keyword)")
-            print(f"\n   To get full analysis, set up the API keys above.")
-        sys.exit(0)
+
+def main():
+    keyword = ' '.join(sys.argv[1:]) if len(sys.argv) > 1 else input("Keyword to check: ")
     
-    keyword = sys.argv[1] if len(sys.argv) > 1 else input("Keyword to check: ")
+    # Structural analysis
+    result = analyze_keyword(keyword)
     
-    print(f"\n🔍 Checking competition for: \"{keyword}\"\n")
+    print(f"""
+╔══════════════════════════════════════════════════════╗
+║  KEYWORD COMPETITION ANALYSIS                       ║
+╚══════════════════════════════════════════════════════╝
+
+Keyword: "{result['keyword']}"
+Words: {result['word_count']} | Characters: {result['char_count']}
+Score: {result['score']}/100 — {result['difficulty']}
+
+Signal Breakdown:
+""")
+    for signal, score, detail in result['signals']:
+        sign = '+' if score >= 0 else ''
+        print(f"  {sign}{score:<4} {signal}")
+        print(f"         {detail}")
     
-    try:
-        results = search_google(keyword)
-        analysis = analyze_competition(results, keyword)
-        
-        print(f"📊 Competition Score: {analysis['competition_score']}/100")
-        print(f"   {analysis['difficulty']}\n")
-        
-        print("🔬 Signal Breakdown:")
-        for s in analysis['signals']:
-            sign = '+' if s['score'] >= 0 else ''
-            print(f"   {sign}{s['score']}  {s['detail']}")
-        
-        print(f"\n📋 Top 5 Results:")
-        for i, r in enumerate(analysis['top_results'], 1):
-            print(f"   {i}. {r['domain']} — {r['title'][:80]}")
-        
-        print(f"\n💡 Verdict: ", end='')
-        if analysis['competition_score'] >= 70:
-            print("Target this keyword. Create comprehensive content with FAQ schema and you can rank.")
-        elif analysis['competition_score'] >= 50:
-            print("Worth targeting. You'll need better content than the top 3 results to break in.")
-        else:
-            print("Consider a more specific long-tail variation of this keyword.")
-        
-    except Exception as e:
-        print(f"❌ Error: {e}")
-        print("   Check your API key and search engine ID.")
+    # Recommendations
+    print(f"\n💡 RECOMMENDATION: ", end='')
+    if result['score'] >= 70:
+        print("TARGET THIS KEYWORD. Write comprehensive content with FAQ schema, TOC, and 1,500+ words.")
+    elif result['score'] >= 55:
+        print("WORTH TARGETING. Your content must be BETTER than top 3 results (more words, better structure, FAQ schema).")
+    elif result['score'] >= 40:
+        print("CONSIDER A VARIATION. Try adding year ('2026'), format ('template', 'checklist'), or niche ('for gaming').")
+    else:
+        print("FIND A LONGER KEYWORD. Add 1-2 more words to increase specificity.")
+    
+    # Show variation suggestions
+    if result['score'] < 70:
+        words = keyword.split()
+        print(f"\n🔀 Try these variations (higher chance of ranking):")
+        variations = []
+        if '2026' not in keyword.lower() and not any(c.isdigit() for c in keyword):
+            variations.append(f'"{keyword} 2026"')
+        if 'template' not in keyword.lower():
+            variations.append(f'"{keyword} template"')
+        if 'free' not in keyword.lower():
+            variations.append(f'"free {keyword}"')
+        if 'how to' not in keyword.lower() and 'what' not in keyword.lower():
+            variations.append(f'"how to {keyword}"')
+        if len(words) < 5:
+            variations.append(f'"{keyword} for beginners"')
+        for v in variations[:4]:
+            print(f"   • {v}")
+    
+    # Manual checklist
+    print_serp_checklist(keyword)
+    
+    # Competitor gap summary
+    print(f"""
+╔══════════════════════════════════════════════════════╗
+║  HOW TO BEAT COMPETITORS                            ║
+╚══════════════════════════════════════════════════════╝
+
+Our default competitive advantage (every page we publish):
+  1. FAQ + Article + Breadcrumb schema (most competitors: none)
+  2. TL;DR direct answer box (Google AI Overview optimized)
+  3. 1,500+ word minimum (most competitors: 500-800)
+  4. Table of Contents with jump links
+  5. Author credentials box (E-E-A-T signal)
+  6. Last updated date visible (freshness signal)
+
+If competitors lack any of the above, your page outranks them
+within 2-6 weeks with 2-3 backlinks from our awesome-list PRs.
+""")
 
 if __name__ == '__main__':
     main()
