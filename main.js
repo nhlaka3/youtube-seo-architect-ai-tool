@@ -835,7 +835,7 @@ async function switchView(viewName) {
     'system-status': 'System Status',
     'optimization-history': 'Optimization History',
     'growth-engine': 'Growth Engine',
-    'cron-inbox': 'Opt. Queue',
+    
     'analytics': 'Analytics',
     'keyword-lab': 'Keyword Lab',
     'ab-tester': 'A/B Tester',
@@ -3173,7 +3173,7 @@ const PLAN_FEATURES = {
   ],
   pro: [
     'research', 'metadata-auditor', 'thumbnail-lab', 'suggested-analytics',
-    'overview', 'system-status', 'optimization-history', 'growth-engine', 'cron-inbox', 'analytics', 'ab-tester', 'phronesis', 'niche-relevance', 'sidebar-sniper',
+    'overview', 'system-status', 'optimization-history', 'growth-engine', 'analytics', 'ab-tester', 'phronesis', 'niche-relevance', 'sidebar-sniper',
     'factory', 'competitor', 'magic-fix', 'bulk-injector',
     'evergreen-audit', 'retention-reorderer', 'script-shorts',
     'thumbnail-redesign', 'playlist-growth',
@@ -3182,7 +3182,7 @@ const PLAN_FEATURES = {
   ],
   agency: [
     'research', 'metadata-auditor', 'thumbnail-lab', 'suggested-analytics',
-    'overview', 'system-status', 'optimization-history', 'growth-engine', 'cron-inbox', 'analytics', 'ab-tester', 'phronesis', 'niche-relevance', 'sidebar-sniper',
+    'overview', 'system-status', 'optimization-history', 'growth-engine', 'analytics', 'ab-tester', 'phronesis', 'niche-relevance', 'sidebar-sniper',
     'factory', 'competitor', 'magic-fix', 'bulk-injector',
     'evergreen-audit', 'retention-reorderer', 'script-shorts',
     'thumbnail-redesign', 'playlist-growth',
