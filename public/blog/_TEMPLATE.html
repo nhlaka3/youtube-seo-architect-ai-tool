@@ -6,8 +6,36 @@
   <link rel="icon" href="/logo.svg" type="image/svg+xml" />
 
   <!-- ═══════════════════════════════════════════════════════════════
-       ELITE SEO/AEO BLOG POST TEMPLATE — YT SEO Architect (v4.0)
+       ELITE SEO/AEO BLOG POST TEMPLATE — YT SEO Architect (v4.1)
        ═══════════════════════════════════════════════════════════════
+       
+       STEP 0: KEYWORD COMPETITION CHECK (RUN BEFORE WRITING)
+       ═══════════════════════════════════════════════════════════════
+       
+       Run the automated keyword checker to find low-competition keywords:
+       
+         python3 scripts/check-keyword.py "your keyword idea"
+       
+       The script searches DuckDuckGo, analyzes the top 10 SERP results,
+       and returns a competition score (0-100). Higher = easier to rank.
+       
+       SCORE THRESHOLDS:
+       • 75-100 = 🟢 VERY EASY — Write and publish immediately
+       • 60-74  = 🟢 EASY — Good target, write comprehensive content
+       • 45-59  = 🟡 MEDIUM — Needs better content + 1-2 backlinks
+       • 30-44  = 🟠 HARD — Consider a longer-tail variation
+       • 0-29   = 🔴 VERY HARD — Pick a different keyword
+       
+       IF SCORE IS BELOW 60:
+       Run the script again with a longer variation:
+         python3 scripts/check-keyword.py "your keyword + template 2026"
+         python3 scripts/check-keyword.py "your keyword + for beginners"
+         python3 scripts/check-keyword.py "free + your keyword + guide"
+       
+       Only proceed to writing when the script returns 🟢 (60+).
+       This ensures every blog post targets a keyword we can actually rank for.
+       ═══════════════════════════════════════════════════════════════
+       
        HOW TO USE:
        1. KEYWORD TARGETING: Long-tail (3+ words), Volume 100-5k, Difficulty < 40.
        2. TREND-JACKING PROTOCOL: Check GET /api/trends/pulse. If Alignment > 70,
