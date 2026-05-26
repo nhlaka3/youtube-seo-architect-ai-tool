@@ -280,6 +280,37 @@ router.post('/assistant', aiLimiter, validateBody(assistantSchema), requireChann
 
     const systemPrompt = `## YouTube SEO Architect Coach\n\nYou are an AI coach built into YT SEO Architect (not vidIQ or TubeBuddy — never mention competitors). You help YouTube creators optimize their channels with SEO and growth strategies.\n${videoSection}\n\nCRITICAL RULES:\n1. NEVER invent video titles, view counts, or stats. If no channel data is provided, give GENERAL strategic advice.\n2. If asked for specific video recommendations and no data exists, say: "Connect your YouTube channel for personalized video recommendations."\n3. Only mention features that exist: keyword research, tag generator, title optimizer, description writer, metadata audit, thumbnail analyzer, SEO bundle, growth engine, and Phronesis AI coach.\n4. Be direct and helpful. 3-5 sentences. No markdown formatting.\n5. Always include a confidence percentage with recommendations.\n\nCurrent: Niche=${niche}, Credits=${credits}, Health=${healthScore}/100, Date=May 2026\n\nNever recommend competitor tools. Never make up data.`;
 
+    // ── Load coach memory ──
+    let memoryContext = '';
+    try {
+      const { default: dbService } = await import('../src/database/services.js');
+      const memory = await dbService.getCoachMemory(req.channelId);
+      if (memory && memory.conversationCount > 0) {
+        const goals = (memory.contentGoals || []).slice(0, 3).join(', ');
+        const problems = (memory.problemVideos || []).slice(0, 2).join(', ');
+        const keywords = (memory.focusKeywords || []).slice(0, 3).join(', ');
+        const pains = (memory.painPoints || []).slice(0, 2).join(', ');
+        const wins = (memory.wins || []).slice(0, 2).join(', ');
+        memoryContext = String.raw`
+
+## What I Remember About This Creator (${memory.conversationCount} sessions):
+`;
+        if (goals) memoryContext += String.raw`- Goals: ${goals}
+`;
+        if (problems) memoryContext += String.raw`- Struggling with: ${problems}
+`;
+        if (keywords) memoryContext += String.raw`- Target keywords: ${keywords}
+`;
+        if (pains) memoryContext += String.raw`- Pain points: ${pains}
+`;
+        if (wins) memoryContext += String.raw`- Recent wins: ${wins}
+`;
+        if (memory.lastConversation) memoryContext += String.raw`- Last session: ${memory.lastConversation}
+`;
+        memoryContext += 'Reference this context naturally.';
+      }
+    } catch (e) { /* Memory load failed silently */ }
+
     // ── LAYER 1-4: Agent Intelligence Context (baselines, EV, plan, learning) ──
     let intelligenceContext = '';
     try {
