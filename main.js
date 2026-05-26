@@ -477,13 +477,9 @@ const CreditsSystem = {
 
   checkLowCredits() {
     if (this.remaining <= 10 && this.remaining > 0) {
-      // Show low credits warning
-      window.dispatchEvent(new CustomEvent('creditsLow', {
-        detail: { remaining: this.remaining }
-      }));
+      showToast('⚡ Only ' + this.remaining + ' credits left. <a href="/pricing" style="color:#fff;text-decoration:underline;">Get more →</a>', 'warning', 8000);
     } else if (this.remaining === 0) {
-      // Disable all action buttons
-      window.dispatchEvent(new CustomEvent('creditsEmpty'));
+      showToast('🪫 Out of credits. <a href="/pricing" style="color:#fff;text-decoration:underline;">Upgrade to continue →</a>', 'error', 10000);
     }
   },
 
@@ -606,12 +602,20 @@ async function resetCredits() {
 window.resetCredits = resetCredits;
 
 document.addEventListener('DOMContentLoaded', function() {
-  // ── Show Ask Phronesis for Pro, Agency, and Admin users ──
+  // ── Show Ask Phronesis: visible to all, locked for free users ──
   var plan = localStorage.getItem('ytseo_user_plan_' + (localStorage.getItem('ytseo_channel_id') || '')) || localStorage.getItem('ytseo_plan') || 'free';
   var showCoach = plan === 'pro' || plan === 'agency' || (typeof isAdmin === 'function' && isAdmin());
-  if (showCoach) {
-    var coachLink = document.getElementById('sidebar-coach-link');
-    if (coachLink) coachLink.style.display = '';
+  var coachLink = document.getElementById('sidebar-coach-link');
+  if (coachLink) {
+    coachLink.style.display = '';
+    if (!showCoach) {
+      coachLink.style.opacity = '0.5';
+      coachLink.style.pointerEvents = 'none';
+      coachLink.setAttribute('title', 'Upgrade to Pro for Ask Phronesis');
+      // Add lock icon
+      var sparkleIcon = coachLink.querySelector('i');
+      if (sparkleIcon) sparkleIcon.setAttribute('data-lucide', 'lock');
+    }
   }
 
   vaTrack('page_view', { page: 'dashboard' });

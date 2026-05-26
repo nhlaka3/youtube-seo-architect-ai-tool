@@ -252,7 +252,22 @@ router.post('/assistant', aiLimiter, validateBody(assistantSchema), requireChann
   const adminIds = ['UC-vVYFQC_MNjVP03YRZ56Wg', 'UCmcNApL2w7kk7NG14tXinRg'];
   if (!adminIds.includes(req.channelId)) {
     const plan = await getPlan(req.channelId);
-    if (plan !== 'agency' && plan !== 'pro') return sendRes(res, 403, { error: 'Ask Phronesis is available on Pro and Agency plans. Upgrade to access.' });
+    if (plan !== 'agency' && plan !== 'pro') {
+      // Free trial: 3 coaching messages before requiring upgrade
+      const trialKey = 'phronesis_trial_' + req.channelId;
+      let trialCount = 0;
+      try {
+        const { default: dbService } = await import('../src/database/services.js');
+        const s = await import('../src/database/schema.js');
+        const logs = await dbService.db.select().from(s.agentActivityLogs)
+          .where({ channelId: req.channelId, agentName: 'coach' })
+          .orderBy(s.agentActivityLogs.createdAt, 'desc').limit(10);
+        trialCount = logs.length;
+      } catch(e) {}
+      if (trialCount >= 3) {
+        return sendRes(res, 403, { error: 'You\'ve used your 3 free coaching messages. Upgrade to Pro ($5/mo) or Agency ($19/mo) for unlimited access. <a href="/pricing">View Plans</a>' });
+      }
+    }
   }
 
   try {
@@ -349,6 +364,16 @@ router.post('/assistant', aiLimiter, validateBody(assistantSchema), requireChann
     const reply = await askAI(systemPrompt + memoryContext + intelligenceContext, safeMessage + historyContext, { temperature: 0.7, maxTokens: 500 });
     
     if (!reply) { await refundCredits(req.channelId, CREDIT_COSTS['ai-assistant']); return sendRes(res, 502, { error: 'AI generation failed' }); }
+    // Log coach activity for trial tracking
+    try {
+      const { default: dbService } = await import('../src/database/services.js');
+      const s = await import('../src/database/schema.js');
+      await dbService.db.insert(s.agentActivityLogs).values({
+        channelId: req.channelId, agentName: 'coach',
+        actionTaken: 'Coach message', status: 'success'
+      }).catch(() => {});
+    } catch(e) {}
+
     sendRes(res, 200, { reply });
   } catch (e) {
     console.error('[AI Assistant] Error:', e.message);
