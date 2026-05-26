@@ -3530,7 +3530,23 @@ const OptimizationTrials = {
     const tbody = document.getElementById('trials-tbody');
     if (!tbody) return;
     if (this.trials.length === 0) {
-      tbody.innerHTML = '<tr><td colspan="8" style="text-align:center;padding:40px;color:var(--text-muted);"><i data-lucide="inbox" style="width:40px;height:40px;opacity:0.3;"></i><p>No optimization trials yet. Apply optimizations to your videos and they will appear here.</p></td></tr>';
+      tbody.innerHTML = '<tr><td colspan="8" style="text-align:center;padding:32px;">'+
+        '<div style="display:inline-block;text-align:left;max-width:500px;">'+
+        '<p style="font-size:28px;margin-bottom:12px;">📊</p>'+
+        '<h3 style="margin-bottom:8px;">No optimization trials yet</h3>'+
+        '<p style="color:var(--text-muted);margin-bottom:16px;">Apply optimizations to your videos and we\'ll track the before/after impact automatically.</p>'+
+        '<div style="background:var(--bg-dark);border:1px solid var(--border);border-radius:10px;padding:14px;margin-bottom:12px;">'+
+          '<div style="font-size:11px;color:var(--text-muted);margin-bottom:8px;">📋 WHAT YOU\'LL SEE:</div>'+
+          '<div style="display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:10px;">'+
+            '<div style="text-align:center;"><div style="font-size:18px;font-weight:700;color:var(--primary);">12</div><div style="font-size:10px;color:var(--text-muted);">Trials</div></div>'+
+            '<div style="text-align:center;"><div style="font-size:18px;font-weight:700;color:#10b981;">9</div><div style="font-size:10px;color:var(--text-muted);">Improved</div></div>'+
+            '<div style="text-align:center;"><div style="font-size:18px;font-weight:700;color:#10b981;">75%</div><div style="font-size:10px;color:var(--text-muted);">Success Rate</div></div>'+
+            '<div style="text-align:center;"><div style="font-size:18px;font-weight:700;color:#818cf8;">+23%</div><div style="font-size:10px;color:var(--text-muted);">Avg Lift</div></div>'+
+          '</div>'+
+          '<div style="font-size:10px;color:var(--text-muted);">Each trial tracks: video title → optimization type → views before → views after → % improvement → status</div>'+
+        '</div>'+
+        '<button class="btn-primary" onclick="switchView(\'phronesis\')" style="width:100%;">⚡ Go to Phronesis Agent →</button>'+
+        '</div></td></tr>';
       document.getElementById('measure-all-btn').style.display = 'none';
       return;
     }
