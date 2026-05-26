@@ -243,6 +243,36 @@ router.get('/list', requireChannelId, async (req, res) => {
   }
 });
 
+// ── Debug: Force advance all due tests ──
+router.post('/force-advance', async (req, res) => {
+  try {
+    const { default: dbService } = await import('../src/database/services.js');
+    const channelId = req.headers['x-channel-id'] || req.body?.channelId;
+    const tests = await dbService.getAbTestsByChannel(channelId);
+    const now = Date.now();
+    const results = [];
+    for (const test of tests) {
+      if (test.status !== 'running') continue;
+      const startedAt = new Date(test.phaseStartedAt || test.createdAt).getTime();
+      const hoursElapsed = (now - startedAt) / 3600000;
+      const entry = { id: test.id.substring(0,8), phase: test.phase, hoursElapsed: Math.round(hoursElapsed) };
+      if (hoursElapsed >= 48) {
+        const newPhase = test.phase === 'variant_a' ? 'variant_b' : 'complete';
+        await dbService.updateAbTest(test.id, {
+          phase: newPhase,
+          phaseStartedAt: new Date().toISOString(),
+          status: newPhase === 'complete' ? 'completed' : 'running',
+          completedAt: newPhase === 'complete' ? new Date().toISOString() : null
+        });
+        entry.advanced = true;
+        entry.newPhase = newPhase;
+      }
+      results.push(entry);
+    }
+    sendRes(res, 200, { results });
+  } catch(e) { sendRes(res, 500, { error: e.message }); }
+});
+
 // ── Route: Cancel test + restore original title ──
 router.post('/cancel/:testId', requireChannelId, async (req, res) => {
   try {
