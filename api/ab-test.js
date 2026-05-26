@@ -193,22 +193,32 @@ router.get('/list', requireChannelId, async (req, res) => {
             accessToken = user?.metadata?.accessToken;
           }
           if (accessToken) {
-            const currentViews = await getViewCount(test.videoId, accessToken);
-            if (test.phase === 'variant_a') {
-              await applyTitle(test.videoId, test.variantB, accessToken);
+            try {
+              const currentViews = await getViewCount(test.videoId, accessToken);
+              if (test.phase === 'variant_a') {
+                await applyTitle(test.videoId, test.variantB, accessToken);
+                await dbService.updateAbTest(test.id, {
+                  phase: 'variant_b', phaseStartedAt: new Date().toISOString(),
+                  variantAViewsEnd: currentViews, variantBViewsStart: currentViews
+                });
+              } else if (test.phase === 'variant_b') {
+                const aViews = (test.variantAViewsEnd || 0) - (test.variantAViewsStart || 0);
+                const bViews = currentViews - (test.variantBViewsStart || 0);
+                const winner = bViews >= aViews ? 'variant_b' : 'variant_a';
+                const winningTitle = winner === 'variant_b' ? test.variantB : test.variantA;
+                await applyTitle(test.videoId, winningTitle, accessToken);
+                await dbService.updateAbTest(test.id, {
+                  phase: 'complete', variantBViewsEnd: currentViews,
+                  winner, status: 'completed', completedAt: new Date().toISOString()
+                });
+              }
+            } catch(ytErr) {
+              // YouTube API failed (expired token) — advance DB anyway
               await dbService.updateAbTest(test.id, {
-                phase: 'variant_b', phaseStartedAt: new Date().toISOString(),
-                variantAViewsEnd: currentViews, variantBViewsStart: currentViews
-              });
-            } else if (test.phase === 'variant_b') {
-              const aViews = (test.variantAViewsEnd || 0) - (test.variantAViewsStart || 0);
-              const bViews = currentViews - (test.variantBViewsStart || 0);
-              const winner = bViews >= aViews ? 'variant_b' : 'variant_a';
-              const winningTitle = winner === 'variant_b' ? test.variantB : test.variantA;
-              await applyTitle(test.videoId, winningTitle, accessToken);
-              await dbService.updateAbTest(test.id, {
-                phase: 'complete', variantBViewsEnd: currentViews,
-                winner, status: 'completed', completedAt: new Date().toISOString()
+                phase: test.phase === 'variant_a' ? 'variant_b' : 'complete',
+                phaseStartedAt: new Date().toISOString(),
+                status: test.phase === 'variant_b' ? 'completed' : 'running',
+                completedAt: test.phase === 'variant_b' ? new Date().toISOString() : null
               });
             }
           } else {
