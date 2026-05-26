@@ -11,11 +11,11 @@ export async function getChannelBaselines(channelId) {
   try {
     const { default: dbService } = await import('../src/database/services.js');
     const s = await import('../src/database/schema.js');
-    const { sql, gte, eq } = await import('drizzle-orm');
+    const { sql, gte, eq, and } = await import('drizzle-orm');
     
     const thirtyDaysAgo = new Date(Date.now() - 30 * 86400000);
     
-    // Query optimization trials for rolling averages
+    // Query optimization trials for rolling averages (THIS CHANNEL ONLY)
     let trials = [];
     try {
       trials = await dbService.db.select({
@@ -24,15 +24,15 @@ export async function getChannelBaselines(channelId) {
         status: s.optimizationQueue.status,
         actionType: s.optimizationQueue.actionType
       }).from(s.optimizationQueue)
-        .where(gte(s.optimizationQueue.createdAt, thirtyDaysAgo));
+        .where(and(gte(s.optimizationQueue.createdAt, thirtyDaysAgo), eq(s.optimizationQueue.channelId, channelId)));
     } catch (e) { /* table may not exist */ }
 
-    // Query agent activity for engagement data
+    // Query agent activity for engagement data (THIS CHANNEL ONLY)
     let activities = [];
     try {
       activities = await dbService.db.select()
         .from(s.agentActivityLogs)
-        .where(gte(s.agentActivityLogs.createdAt, thirtyDaysAgo));
+        .where(and(gte(s.agentActivityLogs.createdAt, thirtyDaysAgo), eq(s.agentActivityLogs.channelId, channelId)));
     } catch (e) { /* fallback */ }
 
     // Calculate rolling averages
