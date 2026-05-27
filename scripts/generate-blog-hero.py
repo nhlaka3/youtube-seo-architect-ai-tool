@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Blog Hero Image Generator — YT SEO Architect
+Blog Hero Image Generator — YT SEO Architect (Cyber-Luxe v5)
 Usage:
   python3 scripts/generate-blog-hero.py <slug> "Title Line 1" "Title Line 2" "Optional Line 3" "CATEGORY BADGE"
 
@@ -8,7 +8,7 @@ Outputs:
   public/blog/<slug>-hero.png   (800×400 — article hero)
   public/blog/<slug>-og.png     (1200×630 — Open Graph / social sharing)
 
-Fallback: If Pillow is not installed, generates a minimal SVG placeholder instead.
+Design: Cyber-Luxe Dark — Electric Cyan + Acid Green on Midnight Navy.
 """
 
 import sys, os
@@ -25,19 +25,20 @@ os.makedirs(OUT_DIR, exist_ok=True)
 HERO_PATH = os.path.join(OUT_DIR, f"{SLUG}-hero.png")
 OG_PATH = os.path.join(OUT_DIR, f"{SLUG}-og.png")
 
-# ── Colors (matches site theme) ─────────────────────────────
-BG_DARK = "#020617"
-BG_CARD = "#0F172A"
-ACCENT = "#F97316"
-ACCENT_LIGHT = "#FB923C"
-TEXT_PRIMARY = "#F8FAFC"
-TEXT_MUTED = "#94A3B8"
-BORDER = "rgba(249,115,22,0.3)"
+# ── Cyber-Luxe Colors (matches DESIGN.md) ─────────────────────
+BG_DEEP = "#0a0b10"           # Midnight Navy Deep — page background
+BG_CARD = "rgba(16,20,32,0.6)" # Card Glass
+CYAN = "#00f2ff"              # Electric Cyan — CTAs, highlights
+GREEN = "#00ff88"             # Acid Green — success, accent
+TEXT_ACTIVE = "#ffffff"       # Headings
+TEXT_PRIMARY = "#f0f2f5"      # Body text
+TEXT_MUTED = "#a8b2c1"        # Secondary text
+DANGER = "#ff3366"            # Errors
+OLED_BLACK = "#000000"
 
 try:
     from PIL import Image, ImageDraw, ImageFont
 
-    # ── Font resolution ─────────────────────────────────────
     FONT_PATHS = [
         "/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf",
         "/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf",
@@ -45,79 +46,113 @@ try:
         "/usr/share/fonts/TTF/DejaVuSans.ttf",
         "/usr/share/fonts/dejavu/DejaVuSans-Bold.ttf",
         "/usr/share/fonts/dejavu/DejaVuSans.ttf",
-        # macOS
         "/System/Library/Fonts/Helvetica.ttc",
         "/System/Library/Fonts/SFNSDisplay.ttf",
-        # Windows (WSL)
         "/mnt/c/Windows/Fonts/segoeuib.ttf",
         "/mnt/c/Windows/Fonts/segoeui.ttf",
     ]
 
     def find_font(size, bold=True):
-        """Find best available font, falling back to default."""
         for fp in FONT_PATHS:
             if os.path.exists(fp):
                 return ImageFont.truetype(fp, size)
         return ImageFont.load_default()
 
-    title_font = find_font(48, bold=True)
-    title_font_sm = find_font(36, bold=True)
-    badge_font = find_font(14, bold=True)
-    brand_font = find_font(18, bold=True)
-    brand_font_sm = find_font(14, bold=False)
+    title_font = find_font(46, bold=True)
+    title_font_sm = find_font(34, bold=True)
+    badge_font = find_font(13, bold=True)
+    brand_font = find_font(16, bold=True)
+    muted_font = find_font(13, bold=False)
 
     def draw_hero(w, h, output_path, is_og=False):
         scale = w / 800.0
-        img = Image.new("RGB", (w, h), BG_DARK)
+        img = Image.new("RGB", (w, h), BG_DEEP)
         draw = ImageDraw.Draw(img)
 
-        # ── Accent bar at top ──
-        draw.rectangle([0, 0, w, int(6 * scale)], fill=ACCENT)
+        # ── Top accent bar (cyan → green gradient) ──
+        bar_h = int(4 * scale)
+        for x in range(w):
+            t = x / w
+            r = int(0) 
+            g = int(242 * (1 - t) + 255 * t)
+            b = int(255 * (1 - t) + 136 * t)
+            draw.rectangle([x, 0, x + 1, bar_h], fill=(r, g, b))
 
-        # ── Content area background ──
-        margin = int(40 * scale)
-        card_y = int(20 * scale)
-        card_h = h - int(60 * scale)
+        # ── Geometric accent shapes (subtle) ──
+        # Top-right corner triangle
+        tri_size = int(80 * scale)
+        draw.polygon([
+            (w - tri_size, 0), (w, 0), (w, tri_size)
+        ], fill=(0, 242//15, 255//15))
+
+        # ── Glass card background ──
+        margin = int(36 * scale)
+        card_y = int(22 * scale)
+        card_h = h - int(70 * scale)
+        # Card fill
         draw.rounded_rectangle(
             [margin, card_y, w - margin, card_y + card_h],
-            radius=int(16 * scale),
-            fill=BG_CARD,
-            outline=ACCENT,
+            radius=int(14 * scale),
+            fill=(16, 20, 32),
+            outline=None,
+        )
+        # Card border (cyan, subtle)
+        draw.rounded_rectangle(
+            [margin, card_y, w - margin, card_y + card_h],
+            radius=int(14 * scale),
+            fill=None,
+            outline=(0, 242, 255),
             width=1
+        )
+
+        # ── Left accent line on card ──
+        line_x = margin + int(3 * scale)
+        line_top = card_y + int(14 * scale)
+        line_bot = card_y + card_h - int(14 * scale)
+        draw.line(
+            [(line_x, line_top), (line_x, line_bot)],
+            fill=(0, 242, 255),
+            width=2
         )
 
         # ── Badge ──
         badge_text = BADGE.upper()
         badge_bbox = draw.textbbox((0, 0), badge_text, font=badge_font)
-        badge_w = badge_bbox[2] - badge_bbox[0] + int(24 * scale)
+        badge_w = badge_bbox[2] - badge_bbox[0] + int(22 * scale)
         badge_h = badge_bbox[3] - badge_bbox[1] + int(12 * scale)
-        badge_x = int(70 * scale)
-        badge_y = int(50 * scale)
+        badge_x = margin + int(20 * scale)
+        badge_y = card_y + int(28 * scale)
+        
+        # Badge background with cyan glow
+        draw.rounded_rectangle(
+            [badge_x - 1, badge_y - 1, badge_x + badge_w + 1, badge_y + badge_h + 1],
+            radius=int(6 * scale),
+            fill=None,
+            outline=(0, 242, 255),
+            width=1
+        )
         draw.rounded_rectangle(
             [badge_x, badge_y, badge_x + badge_w, badge_y + badge_h],
-            radius=int(10 * scale),
-            fill=ACCENT
+            radius=int(6 * scale),
+            fill=(0, 242 // 8, 255 // 8)
         )
         draw.text(
-            (badge_x + int(12 * scale), badge_y + int(6 * scale)),
+            (badge_x + int(11 * scale), badge_y + int(6 * scale)),
             badge_text,
-            fill="white",
+            fill=CYAN,
             font=badge_font
         )
 
         # ── Title lines ──
-        title_y = badge_y + badge_h + int(28 * scale)
-        # Determine font size based on line count
+        title_y = badge_y + badge_h + int(24 * scale)
         use_font = title_font_sm if (TITLE_L2 and TITLE_L3) else title_font
 
-        # Available text width inside the card (card edges minus badge offset and right padding)
-        text_max_x = w - margin - int(30 * scale)  # right edge of available area
+        text_max_x = w - margin - int(26 * scale)
         available_width = text_max_x - badge_x
 
         lines = [l for l in [TITLE_L1, TITLE_L2, TITLE_L3] if l]
         wrapped_lines = []
         for line in lines:
-            # Wrap by actual pixel width, not character count
             words = line.split()
             current_line = ""
             for word in words:
@@ -128,7 +163,6 @@ try:
                 else:
                     if current_line:
                         wrapped_lines.append(current_line)
-                    # If a single word is too long, truncate it with ellipsis
                     if draw.textlength(word, font=use_font) > available_width:
                         truncated = word
                         while draw.textlength(truncated + "…", font=use_font) > available_width and len(truncated) > 1:
@@ -141,45 +175,56 @@ try:
 
         max_title_lines = 4 if is_og else 3
         for i, line in enumerate(wrapped_lines[:max_title_lines]):
+            # First line white, second line acid green
+            color = TEXT_ACTIVE if i == 0 else GREEN
+            if len(wrapped_lines) > 2 and i == len(wrapped_lines) - 1:
+                color = TEXT_PRIMARY
             draw.text(
-                (badge_x, title_y + i * int(52 * scale)),
+                (badge_x, title_y + i * int(50 * scale)),
                 line,
-                fill=TEXT_PRIMARY,
+                fill=color,
                 font=use_font
             )
 
-        # ── Footer bar ──
-        footer_y = h - int(44 * scale)
-        draw.rectangle([0, footer_y, w, h], fill=BG_CARD)
+        # ── Bottom info bar ──
+        footer_y = h - int(46 * scale)
+        # Subtle top border on footer
+        draw.line(
+            [(margin, footer_y), (w - margin, footer_y)],
+            fill=(0, 242 // 4, 255 // 4),
+            width=1
+        )
         footer_text = "yt-seo-architect.vercel.app/blog  ·  17 free tools, no credit card"
-        # Truncate footer if it overflows
-        footer_width = draw.textlength(footer_text, font=brand_font_sm)
+        footer_width = draw.textlength(footer_text, font=muted_font)
         if footer_width > w - int(80 * scale):
             footer_text = "yt-seo-architect.vercel.app/blog"
         draw.text(
-            (int(40 * scale), footer_y + int(14 * scale)),
+            (margin + int(4 * scale), footer_y + int(14 * scale)),
             footer_text,
             fill=TEXT_MUTED,
-            font=brand_font_sm
+            font=muted_font
         )
 
-        # ── Logo circle ──
-        logo_size = int(40 * scale)
-        logo_x = w - margin - logo_size - int(10 * scale)
-        logo_y = int(14 * scale)
-        draw.ellipse(
+        # ── Logo mark (sharp square, not round) ──
+        logo_size = int(34 * scale)
+        logo_x = w - margin - logo_size - int(12 * scale)
+        logo_y = int(18 * scale)
+        # Sharp square (radius ≤ 1rem per DESIGN.md)
+        draw.rounded_rectangle(
             [logo_x, logo_y, logo_x + logo_size, logo_y + logo_size],
-            fill=ACCENT
+            radius=int(6 * scale),
+            fill=None,
+            outline=(0, 242, 255),
+            width=2
         )
-        # Simple bolt symbol
         bolt_text = "⚡"
         bolt_bbox = draw.textbbox((0, 0), bolt_text, font=brand_font)
         bolt_w = bolt_bbox[2] - bolt_bbox[0]
         bolt_h = bolt_bbox[3] - bolt_bbox[1]
         draw.text(
-            (logo_x + (logo_size - bolt_w) // 2, logo_y + (logo_size - bolt_h) // 2 - int(2 * scale)),
+            (logo_x + (logo_size - bolt_w) // 2, logo_y + (logo_size - bolt_h) // 2 - int(1 * scale)),
             bolt_text,
-            fill="white",
+            fill=CYAN,
             font=brand_font
         )
 
@@ -190,27 +235,4 @@ try:
     draw_hero(1200, 630, OG_PATH, is_og=True)
 
 except ImportError:
-    # ── Pillow not available — generate SVG fallback ─────────────
-    print("⚠️  Pillow not installed. Generating SVG fallback instead.")
-    print("   Install with: pip install Pillow")
-
-    title_text = TITLE_L1
-    if TITLE_L2:
-        title_text += "\n" + TITLE_L2
-
-    svg = f"""<svg xmlns="http://www.w3.org/2000/svg" width="800" height="400" viewBox="0 0 800 400">
-  <rect width="800" height="400" fill="{BG_DARK}"/>
-  <rect width="800" height="6" fill="{ACCENT}"/>
-  <rect x="30" y="20" width="740" height="340" rx="16" fill="{BG_CARD}" stroke="{ACCENT}" stroke-width="1"/>
-  <rect x="60" y="48" rx="10" width="120" height="28" fill="{ACCENT}"/>
-  <text x="72" y="68" fill="white" font-family="sans-serif" font-weight="bold" font-size="13">{BADGE.upper()}</text>
-  <text x="60" y="118" fill="{TEXT_PRIMARY}" font-family="sans-serif" font-weight="bold" font-size="34">{TITLE_L1[:40]}</text>
-  <text x="60" y="164" fill="{TEXT_PRIMARY}" font-family="sans-serif" font-weight="bold" font-size="34">{TITLE_L2[:40]}</text>
-  {"<text x=\"60\" y=\"210\" fill=\"{TEXT_PRIMARY}\" font-family=\"sans-serif\" font-weight=\"bold\" font-size=\"34\">" + TITLE_L3[:40] + "</text>" if TITLE_L3 else ""}
-  <rect y="358" width="800" height="42" fill="{BG_CARD}"/>
-  <text x="40" y="384" fill="{TEXT_MUTED}" font-family="sans-serif" font-size="13">yt-seo-architect.vercel.app/blog  ·  17 free tools, no credit card</text>
-</svg>"""
-
-    with open(HERO_PATH.replace(".png", ".svg"), "w") as f:
-        f.write(svg)
-    print(f"✅ Created SVG fallback: {HERO_PATH.replace('.png', '.svg')}")
+    print("⚠️  Pillow not installed. Install with: pip install Pillow")
