@@ -38,3 +38,5 @@ FOOTER (exact text):
 </footer>
 
 Make this a Claude artifact.
+
+https://claude.ai/public/artifacts/d99ef330-39da-4f70-83a5-4d1ed86c0c59

@@ -1271,23 +1271,23 @@ app.post('/api/save-state', (req, res) => {
 
 
 // ── Admin: Cleanup programmatic SEO posts (delete everything not in approved list) ──
-// Whitelist: only these 23 hand-crafted posts from blog.html are allowed in the DB.
-// Everything else (AI auto-generated programmatic SEO) gets deleted.
+// Whitelist: only hand-crafted posts with 8+ min read time following _TEMPLATE.html.
+// Quality gate: word count ≥ 1600 (≈ 8 min read). Shorter posts are excluded.
 // Protected by CRON_SECRET.
 const APPROVED_BLOG_SLUGS = [
   'best-youtube-seo-tools-2026', 'github-seo-backlinks-guide',
   'how-to-fix-youtube-shadow-ban-2026', 'how-to-mass-update-youtube-descriptions-safely',
   'how-to-write-youtube-titles', 'what-does-youtube-ctr-actually-mean',
   'youtube-ai-seo-coach-phronesis-2026', 'youtube-algorithm-changes-2026',
-  'youtube-analytics-4-metrics-that-matter', 'youtube-analytics-explained-2026',
-  'youtube-competitor-analysis-reverse-engineer', 'youtube-description-templates',
-  'youtube-description-templates-2026', 'youtube-end-screens-cards-guide-2026',
-  'youtube-keyword-research-tutorial', 'youtube-metadata-auditor-vs-vidiq-shadow-ban',
-  'youtube-retention-graph-explained-2026', 'youtube-seo-audit-diagnostic-fix-2026',
-  'youtube-seo-guide-2026', 'youtube-shorts-seo-ranking-guide',
-  'youtube-tags-generator-vs-vidiq', 'youtube-thumbnail-ab-testing-guide',
-  'youtube-video-not-getting-views-diagnostic-fix-2026'
+  'youtube-analytics-explained-2026', 'youtube-competitor-analysis-reverse-engineer',
+  'youtube-description-templates', 'youtube-description-templates-2026',
+  'youtube-end-screens-cards-guide-2026', 'youtube-keyword-research-tutorial',
+  'youtube-metadata-auditor-vs-vidiq-shadow-ban', 'youtube-retention-graph-explained-2026',
+  'youtube-seo-audit-diagnostic-fix-2026', 'youtube-seo-guide-2026',
+  'youtube-shorts-seo-ranking-guide', 'youtube-tags-generator-vs-vidiq',
+  'youtube-thumbnail-ab-testing-guide', 'youtube-video-not-getting-views-diagnostic-fix-2026'
 ];
+// Note: youtube-analytics-4-metrics-that-matter excluded — only 7 min read (below 8 min threshold)
 
 app.get('/api/admin/trash-posts', async (req, res) => {
   try {

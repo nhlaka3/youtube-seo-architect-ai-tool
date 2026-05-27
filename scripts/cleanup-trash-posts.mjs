@@ -13,20 +13,20 @@ import { neon } from '@neondatabase/serverless';
 import * as schema from '../src/database/schema.js';
 import { eq, notInArray } from 'drizzle-orm';
 
-// ── APPROVED WHITELIST (from blog.html — the 23 hand-crafted posts) ──
+// ── APPROVED WHITELIST (from blog.html — 22 hand-crafted posts, 8+ min read) ──
+// youtube-analytics-4-metrics-that-matter excluded — only 7 min read (below threshold)
 const APPROVED = [
   'best-youtube-seo-tools-2026', 'github-seo-backlinks-guide',
   'how-to-fix-youtube-shadow-ban-2026', 'how-to-mass-update-youtube-descriptions-safely',
   'how-to-write-youtube-titles', 'what-does-youtube-ctr-actually-mean',
   'youtube-ai-seo-coach-phronesis-2026', 'youtube-algorithm-changes-2026',
-  'youtube-analytics-4-metrics-that-matter', 'youtube-analytics-explained-2026',
-  'youtube-competitor-analysis-reverse-engineer', 'youtube-description-templates',
-  'youtube-description-templates-2026', 'youtube-end-screens-cards-guide-2026',
-  'youtube-keyword-research-tutorial', 'youtube-metadata-auditor-vs-vidiq-shadow-ban',
-  'youtube-retention-graph-explained-2026', 'youtube-seo-audit-diagnostic-fix-2026',
-  'youtube-seo-guide-2026', 'youtube-shorts-seo-ranking-guide',
-  'youtube-tags-generator-vs-vidiq', 'youtube-thumbnail-ab-testing-guide',
-  'youtube-video-not-getting-views-diagnostic-fix-2026'
+  'youtube-analytics-explained-2026', 'youtube-competitor-analysis-reverse-engineer',
+  'youtube-description-templates', 'youtube-description-templates-2026',
+  'youtube-end-screens-cards-guide-2026', 'youtube-keyword-research-tutorial',
+  'youtube-metadata-auditor-vs-vidiq-shadow-ban', 'youtube-retention-graph-explained-2026',
+  'youtube-seo-audit-diagnostic-fix-2026', 'youtube-seo-guide-2026',
+  'youtube-shorts-seo-ranking-guide', 'youtube-tags-generator-vs-vidiq',
+  'youtube-thumbnail-ab-testing-guide', 'youtube-video-not-getting-views-diagnostic-fix-2026'
 ];
 
 async function main() {
