@@ -21,11 +21,8 @@
   "rewrites": [
     { "source": "/sitemap.xml", "destination": "/api/index.js" },
     { "source": "/robots.txt", "destination": "/api/index.js" },
-    { "source": "/sitemap-pseo.xml", "destination": "/api/index.js" },
     { "source": "/blog", "destination": "/api/index.js" },
     { "source": "/blog/(.+)", "destination": "/api/index.js" },
-    { "source": "/p", "destination": "/api/index.js" },
-    { "source": "/p/(.+)", "destination": "/api/index.js" },
     { "source": "/tools/(.+)/(.+)", "destination": "/api/index.js" },
     { "source": "/dashboard", "destination": "/dashboard.html" },
     { "source": "/pricing", "destination": "/pricing.html" },
