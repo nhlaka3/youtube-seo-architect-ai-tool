@@ -165,15 +165,15 @@
   <article>
 
     <div class="featured-image-wrapper">
-      <img 
-        src="/blog/youtube-competitor-analysis-reverse-engineer-hero.png" 
-        alt="YouTube Competitor Analysis guide showing how to reverse-engineer top channels with tag extraction and keyword research" 
-        width="800" 
-        height="400" 
-        loading="eager"
-        fetchpriority="high"
-        onerror="this.onerror=null;this.src='/blog/hero-generic.png'"
-      />
+      <picture>
+      <source srcset="/blog/youtube-competitor-analysis-reverse-engineer-hero-400w.webp 400w,
+                      /blog/youtube-competitor-analysis-reverse-engineer-hero-800w.webp 800w,
+                      /blog/youtube-competitor-analysis-reverse-engineer-hero-1200w.webp 1200w"
+              sizes="(max-width: 768px) 100vw, 800px"
+              type="image/webp">
+      <img src="/blog/youtube-competitor-analysis-reverse-engineer-hero.png" alt="YouTube Competitor Analysis guide showing how to reverse-engineer top channels with tag extraction and keyword research" width="800" height="400"
+           loading="eager" fetchpriority="high">
+    </picture>
     </div>
 
     <nav class="breadcrumb" aria-label="Breadcrumb">
