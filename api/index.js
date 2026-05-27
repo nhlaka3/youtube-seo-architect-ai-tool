@@ -67,13 +67,7 @@ import { requireAdmin } from './middleware/admin-guard.js';
 
 import { sanitizePromptInput } from './ai-engine.js';
 
-// Import Programmatic SEO Routers (Phase 11A→11C)
-import { router as competitorRouter } from './programmatic-seo/competitor-analysis.js';
-import { router as clusterRouter } from './programmatic-seo/keyword-clusters.js';
-import { router as generatorRouter } from './programmatic-seo/generator.js';
-import { router as indexingRouter } from './programmatic-seo/indexing.js';
-import { router as longTailRouter } from './programmatic-seo/long-tail-engine.js';
-import { router as contentPlansRouter } from './pseo/content-plans.js';
+// Programmatic SEO permanently disabled (2026-05-27)
 import { router as agentRouter, runAutonomousLoop } from './agent-workflows/orchestrator.js';
 import { router as cronOptimizerRouter } from './cron-optimizer.js';
 // BLOG POSTS PERMANENTLY DISABLED — import removed (2026-05-19)
@@ -654,13 +648,7 @@ app.use('/api/ai', aiRouter);
 
 app.use('/api/youtube', youtubeRouter);
 
-// Programmatic SEO Routers (Phase 11A) — Admin only
-app.use('/api/pseo/competitors', requireAdmin, competitorRouter);
-app.use('/api/pseo/clusters', requireAdmin, clusterRouter);
-app.use('/api/pseo/generator', requireAdmin, generatorRouter);
-app.use('/api/pseo/indexing', indexingRouter);
-app.use('/api/pseo/long-tail', requireAdmin, longTailRouter);
-app.use('/api/pseo/plans', requireAdmin, contentPlansRouter);
+// Programmatic SEO routes permanently disabled (2026-05-27)
 app.use('/api/agent', agentRouter);
 app.use('/api/cron', cronOptimizerRouter);
 app.use('/api/measure', measureRouter);
@@ -773,13 +761,6 @@ app.post('/api/keywords/research', async (req, res) => {
     if(sugg.startsWith('The Truth About The Truth About'))sugg.replace('The Truth About The Truth About','The Truth About');
 
     res.json({seed,niche,keywords:kw.slice(0,30),topOpportunity:top,suggestedTitle:typeof sugg==='string'&&!sugg.includes('Truth')?top?.keyword+titles[0]:sugg||''});
-    // Phase 11C — Auto-expand: create content opportunity for top keyword (non-blocking)
-    if (top && top.keyword && top.keyword.length > 3) {
-      import('./programmatic-seo/generator.js').then(m => {
-        m.triggerAutoExpansion(top.keyword, niche).catch(e => console.error('PSEO Expansion Error:', e));
-      });
-    }
-
   } catch(e){ res.status(500).json({error:e.message}); }
 
 });
@@ -801,11 +782,7 @@ app.post('/api/keywords/research', async (req, res) => {
 
 // Trend Pulse routes moved to api/trend-pulse.js
 
-// Bulk generate moved to api/programmatic-seo/generator.js
-
-// Public blog route — serves generated SEO pages
-
-app.get('/p', (req, res) => res.redirect('/blog'));
+// Blog listing — dynamically rendered from database
 
 app.get('/blog', async (req, res) => {
 
@@ -838,8 +815,6 @@ app.get('/blog', async (req, res) => {
 
 
 
-app.get('/p/:slug', (req, res) => res.redirect('/blog/' + req.params.slug));
-
 app.get('/blog/:slug', async (req, res) => {
 
   try {
@@ -866,25 +841,6 @@ app.get('/blog/:slug', async (req, res) => {
     res.status(500).send('Error'); 
     }
     });
-
-
-// Dynamic sitemap with all published SEO pages — DEPRECATED (2026-05-27)
-// Replaced by canonical redirect to /api/pseo/indexing/sitemap.xml below.
-// Old route was leaking low-quality auto-generated posts to search engines.
-//
-// app.get('/sitemap-pseo.xml', async (req, res) => { ... });
-
-
-
-// Auto-expand delegates to generator (Phase 11C)
-app.post('/api/pseo/auto-expand', async (req, res) => {
-  try {
-    const { triggerAutoExpansion } = await import('./programmatic-seo/generator.js');
-    const result = await triggerAutoExpansion(req.body?.keyword, req.body?.niche);
-    res.json(result);
-  } catch(e) { res.json({ created: false }); }
-});
-
 
 
 // AI Content Strategy Planner
@@ -1274,20 +1230,17 @@ app.post('/api/save-state', (req, res) => {
 // Whitelist: only hand-crafted posts with 8+ min read time following _TEMPLATE.html.
 // Quality gate: word count ≥ 1600 (≈ 8 min read). Shorter posts are excluded.
 // Protected by CRON_SECRET.
+// Approved hand-crafted blog posts (template-compliant, 1,200+ words, 5 FAQs, author box, breadcrumb)
 const APPROVED_BLOG_SLUGS = [
   'best-youtube-seo-tools-2026', 'github-seo-backlinks-guide',
-  'how-to-fix-youtube-shadow-ban-2026', 'how-to-mass-update-youtube-descriptions-safely',
-  'how-to-write-youtube-titles', 'what-does-youtube-ctr-actually-mean',
-  'youtube-ai-seo-coach-phronesis-2026', 'youtube-algorithm-changes-2026',
+  'how-to-fix-youtube-shadow-ban-2026', 'what-does-youtube-ctr-actually-mean',
+  'youtube-ai-seo-coach-phronesis-2026', 'youtube-analytics-4-metrics-that-matter',
   'youtube-analytics-explained-2026', 'youtube-competitor-analysis-reverse-engineer',
-  'youtube-description-templates', 'youtube-description-templates-2026',
-  'youtube-end-screens-cards-guide-2026', 'youtube-keyword-research-tutorial',
+  'youtube-description-templates-2026', 'youtube-end-screens-cards-guide-2026',
   'youtube-metadata-auditor-vs-vidiq-shadow-ban', 'youtube-retention-graph-explained-2026',
-  'youtube-seo-audit-diagnostic-fix-2026', 'youtube-seo-guide-2026',
-  'youtube-shorts-seo-ranking-guide', 'youtube-tags-generator-vs-vidiq',
-  'youtube-thumbnail-ab-testing-guide', 'youtube-video-not-getting-views-diagnostic-fix-2026'
+  'youtube-seo-audit-diagnostic-fix-2026', 'youtube-thumbnail-ab-testing-guide',
+  'youtube-video-not-getting-views-diagnostic-fix-2026'
 ];
-// Note: youtube-analytics-4-metrics-that-matter excluded — only 7 min read (below 8 min threshold)
 
 app.get('/api/admin/trash-posts', async (req, res) => {
   try {
@@ -1324,13 +1277,7 @@ app.post('/api/admin/trash-posts', async (req, res) => {
   } catch(e) { res.status(500).json({ error: e.message }); }
 });
 
-// Phase 11C — Canonical redirects for sitemap, robots, and tool routing
-app.get('/sitemap.xml', (req, res) => res.redirect(301, '/api/pseo/indexing/sitemap.xml'));
-app.get('/robots.txt', (req, res) => res.redirect('/api/pseo/indexing/robots.txt'));
-app.get('/tools/:tool/:slug', (req, res) => res.redirect(`/blog/${req.params.slug}?context=${req.params.tool}`));
-
-// Legacy sitemap redirect (backward compat)
-app.get('/sitemap-pseo.xml', (req, res) => res.redirect('/api/pseo/indexing/sitemap.xml'));
+// Sitemap and robots served by validation-gated endpoints (see blog-validation.js)
 
 // ── Phronesis Agent — Goal & Coach API ──
 app.post('/api/agent/goal/set', async (req, res) => {
