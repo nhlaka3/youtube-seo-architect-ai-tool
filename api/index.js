@@ -1302,7 +1302,12 @@ app.get('/api/admin/trash-posts', async (req, res) => {
     }).from(s.seoPages).where(eq(s.seoPages.status, 'published'))
       .orderBy(s.seoPages.publishedAt).limit(100);
     const trash = pages.filter(p => !APPROVED_BLOG_SLUGS.includes(p.slug));
-    res.json({ total: pages.length, trash: trash.length, posts: trash });
+    res.json({ 
+      total: pages.length, 
+      trash: trash.length, 
+      all: pages.map(p => ({ slug: p.slug, wordCount: p.wordCount, title: p.title?.substring(0,60) })),
+      trashPosts: trash 
+    });
   } catch(e) { res.status(500).json({ error: e.message }); }
 });
 
