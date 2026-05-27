@@ -12,17 +12,21 @@ router.get('/sitemap.xml', async (req, res) => {
   try {
     const { default: dbService } = await import('../../src/database/services.js');
     const s = await import('../../src/database/schema.js');
-    const { eq, desc, sql } = await import('drizzle-orm');
+    const { eq, desc } = await import('drizzle-orm');
 
-    const pages = await dbService.db.select()
+    const allPages = await dbService.db.select()
       .from(s.seoPages)
-      .where(sql`${s.seoPages.status} = 'published' AND ${s.seoPages.wordCount} >= ${MIN_WORD_COUNT_FOR_INDEX}`)
+      .where(eq(s.seoPages.status, 'published'))
       .orderBy(desc(s.seoPages.publishedAt))
       .limit(500);
+
+    // Client-side quality filter: only index posts with ≥ 1600 words (8+ min read)
+    const pages = allPages.filter(p => (p.wordCount || 0) >= MIN_WORD_COUNT_FOR_INDEX);
 
     const base = process.env.BASE_URL || `https://${req.get('host')}`;
 
     let xml = '<?xml version="1.0" encoding="UTF-8"?>\n';
+    xml += `<!-- Quality gate: wordCount >= ${MIN_WORD_COUNT_FOR_INDEX}. Fetched: ${allPages.length}, Indexed: ${pages.length} -->\n`;
     xml += '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n';
     xml += `  <url><loc>${base}/</loc><priority>1.0</priority></url>\n`;
     xml += `  <url><loc>${base}/dashboard</loc><priority>0.9</priority></url>\n`;
