@@ -156,14 +156,14 @@ function generateFAQBlock(page) {
 }
 
 function generateRelatedPosts(page) {
-  // Core pillar posts always shown
+  // Core pillar posts — validated, template-compliant, 1,500+ words
   return `<nav class="related-posts" aria-label="Related articles" style="margin-top:3rem;padding-top:2rem;border-top:1px solid var(--border);">
     <h3 style="margin-bottom:1rem;color:var(--text);">📖 Related Articles</h3>
-    <a href="/blog/youtube-seo-guide-2026" style="display:block;color:var(--accent);text-decoration:none;padding:0.4rem 0;font-size:0.95rem;">YouTube SEO Guide 2026: Rank #1 With AI Tools</a>
-    <a href="/blog/youtube-keyword-research-tutorial" style="display:block;color:var(--accent);text-decoration:none;padding:0.4rem 0;font-size:0.95rem;">YouTube Keyword Research: Complete 2026 Tutorial</a>
-    <a href="/blog/how-to-write-youtube-titles" style="display:block;color:var(--accent);text-decoration:none;padding:0.4rem 0;font-size:0.95rem;">How to Write YouTube Titles That Get Clicks in 2026</a>
-    <a href="/blog/youtube-tags-generator-vs-vidiq" style="display:block;color:var(--accent);text-decoration:none;padding:0.4rem 0;font-size:0.95rem;">YouTube Tags Generator: AI vs vidIQ vs TubeBuddy</a>
-    <a href="/blog/youtube-description-templates" style="display:block;color:var(--accent);text-decoration:none;padding:0.4rem 0;font-size:0.95rem;">YouTube Description Templates: Boost Views & SEO</a>
+    <a href="/blog/best-youtube-seo-tools-2026" style="display:block;color:var(--accent);text-decoration:none;padding:0.4rem 0;font-size:0.95rem;">Best YouTube SEO Tools in 2026: Compared by Use Case</a>
+    <a href="/blog/youtube-competitor-analysis-reverse-engineer" style="display:block;color:var(--accent);text-decoration:none;padding:0.4rem 0;font-size:0.95rem;">YouTube Competitor Analysis: Reverse-Engineer Top Channels</a>
+    <a href="/blog/youtube-analytics-explained-2026" style="display:block;color:var(--accent);text-decoration:none;padding:0.4rem 0;font-size:0.95rem;">YouTube Analytics Explained 2026: Read Your Data Like a Pro</a>
+    <a href="/blog/youtube-seo-audit-diagnostic-fix-2026" style="display:block;color:var(--accent);text-decoration:none;padding:0.4rem 0;font-size:0.95rem;">YouTube SEO Audit: The 5-Minute Diagnostic That Finds What's Killing Your Views</a>
+    <a href="/blog/youtube-thumbnail-ab-testing-guide" style="display:block;color:var(--accent);text-decoration:none;padding:0.4rem 0;font-size:0.95rem;">YouTube Thumbnail A/B Testing: Double Your CTR in 30 Days</a>
   </nav>`;
 }
 
