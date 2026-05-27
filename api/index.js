@@ -868,41 +868,11 @@ app.get('/blog/:slug', async (req, res) => {
     });
 
 
-// Dynamic sitemap with all published SEO pages
-
-app.get('/sitemap-pseo.xml', async (req, res) => {
-
-  try {
-
-    const { default: dbService } = await import('../src/database/services.js');
-
-    const s = await import('../src/database/schema.js');
-
-    const { eq } = await import('drizzle-orm');
-
-    var pages = await dbService.db.select().from(s.seoPages).where(eq(s.seoPages.status,'published')).limit(500);
-
-    var base = 'https://yt-seo-architect.vercel.app';
-
-    var xml = '<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n  <url><loc>'+base+'/</loc><priority>1.0</priority></url>\n  <url><loc>'+base+'/p</loc><priority>0.9</priority></url>';
-
-    for (var p of pages) {
-
-      var d = p.publishedAt ? new Date(p.publishedAt).toISOString().split('T')[0] : '2026-05-13';
-
-      xml += '\n  <url><loc>'+base+'/p/'+p.slug+'</loc><lastmod>'+d+'</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>';
-
-    }
-
-    xml += '\n</urlset>';
-
-    res.header('Content-Type','application/xml');
-
-    res.send(xml);
-
-  } catch(e) { res.status(500).send('Error'); }
-
-});
+// Dynamic sitemap with all published SEO pages — DEPRECATED (2026-05-27)
+// Replaced by canonical redirect to /api/pseo/indexing/sitemap.xml below.
+// Old route was leaking low-quality auto-generated posts to search engines.
+//
+// app.get('/sitemap-pseo.xml', async (req, res) => { ... });
 
 
 
@@ -1299,6 +1269,55 @@ app.post('/api/save-state', (req, res) => {
 });
 
 
+
+// ── Admin: Cleanup programmatic SEO posts (delete everything not in approved list) ──
+// Whitelist: only these 23 hand-crafted posts from blog.html are allowed in the DB.
+// Everything else (AI auto-generated programmatic SEO) gets deleted.
+// Protected by CRON_SECRET.
+const APPROVED_BLOG_SLUGS = [
+  'best-youtube-seo-tools-2026', 'github-seo-backlinks-guide',
+  'how-to-fix-youtube-shadow-ban-2026', 'how-to-mass-update-youtube-descriptions-safely',
+  'how-to-write-youtube-titles', 'what-does-youtube-ctr-actually-mean',
+  'youtube-ai-seo-coach-phronesis-2026', 'youtube-algorithm-changes-2026',
+  'youtube-analytics-4-metrics-that-matter', 'youtube-analytics-explained-2026',
+  'youtube-competitor-analysis-reverse-engineer', 'youtube-description-templates',
+  'youtube-description-templates-2026', 'youtube-end-screens-cards-guide-2026',
+  'youtube-keyword-research-tutorial', 'youtube-metadata-auditor-vs-vidiq-shadow-ban',
+  'youtube-retention-graph-explained-2026', 'youtube-seo-audit-diagnostic-fix-2026',
+  'youtube-seo-guide-2026', 'youtube-shorts-seo-ranking-guide',
+  'youtube-tags-generator-vs-vidiq', 'youtube-thumbnail-ab-testing-guide',
+  'youtube-video-not-getting-views-diagnostic-fix-2026'
+];
+
+app.get('/api/admin/trash-posts', async (req, res) => {
+  try {
+    if (req.query.secret !== process.env.CRON_SECRET) return res.status(403).json({ error: 'Forbidden' });
+    const { default: dbService } = await import('../src/database/services.js');
+    const s = await import('../src/database/schema.js');
+    const { notInArray, eq } = await import('drizzle-orm');
+    const pages = await dbService.db.select({
+      slug: s.seoPages.slug, title: s.seoPages.title,
+      wordCount: s.seoPages.wordCount, status: s.seoPages.status,
+      publishedAt: s.seoPages.publishedAt
+    }).from(s.seoPages).where(eq(s.seoPages.status, 'published'))
+      .orderBy(s.seoPages.publishedAt).limit(100);
+    const trash = pages.filter(p => !APPROVED_BLOG_SLUGS.includes(p.slug));
+    res.json({ total: pages.length, trash: trash.length, posts: trash });
+  } catch(e) { res.status(500).json({ error: e.message }); }
+});
+
+app.post('/api/admin/trash-posts', async (req, res) => {
+  try {
+    if ((req.body?.secret || req.query.secret) !== process.env.CRON_SECRET) return res.status(403).json({ error: 'Forbidden' });
+    const { default: dbService } = await import('../src/database/services.js');
+    const s = await import('../src/database/schema.js');
+    const { notInArray } = await import('drizzle-orm');
+    const result = await dbService.db.delete(s.seoPages).where(
+      notInArray(s.seoPages.slug, APPROVED_BLOG_SLUGS)
+    ).returning({ slug: s.seoPages.slug, title: s.seoPages.title });
+    res.json({ deleted: result.length, posts: result });
+  } catch(e) { res.status(500).json({ error: e.message }); }
+});
 
 // Phase 11C — Canonical redirects for sitemap, robots, and tool routing
 app.get('/sitemap.xml', (req, res) => res.redirect(301, '/api/pseo/indexing/sitemap.xml'));
