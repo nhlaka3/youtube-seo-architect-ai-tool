@@ -794,7 +794,11 @@ app.get('/blog', async (req, res) => {
 
     const { eq, desc } = await import('drizzle-orm');
 
-    var pages = await dbService.db.select({ slug: s.seoPages.slug, title: s.seoPages.title, wordCount: s.seoPages.wordCount, publishedAt: s.seoPages.publishedAt }).from(s.seoPages).where(eq(s.seoPages.status,'published')).orderBy(desc(s.seoPages.publishedAt)).limit(50);
+    var pages = await dbService.db.select({ slug: s.seoPages.slug, title: s.seoPages.title, wordCount: s.seoPages.wordCount, content: s.seoPages.content, publishedAt: s.seoPages.publishedAt }).from(s.seoPages).where(eq(s.seoPages.status,'published')).orderBy(desc(s.seoPages.publishedAt)).limit(50);
+
+    // Quality gate: only list validated posts (template-compliant, 1,200+ words, no banned words)
+    const { validateBlogPost } = await import('./blog-validation.js');
+    pages = pages.filter(p => validateBlogPost({ slug: p.slug, title: p.title, content: p.content, wordCount: p.wordCount }).valid);
 
     var html = '<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0"><title>YouTube SEO Guides & Tips | YT SEO Architect</title><meta name="description" content="Free YouTube SEO guides, tips, and tutorials. Learn how to grow your channel with AI-powered tools."><link rel="stylesheet" href="/style.css"><style>body{font-family:system-ui,sans-serif;max-width:800px;margin:0 auto;padding:2rem;background:#0a0a0f;color:#eee;line-height:1.7}h1{color:#f97316}.card{background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:10px;padding:16px 20px;margin-bottom:10px}.card a{color:#f97316;text-decoration:none;font-weight:600;font-size:1.1rem}.card a:hover{text-decoration:underline}.card .meta{color:#888;font-size:.8rem;margin-top:4px}nav a{color:#f97316}</style></head><body><nav><a href="/">← YT SEO Architect</a></nav><h1>📚 YouTube SEO Guides</h1><p style="color:#888;">Free guides to help you grow your YouTube channel with AI-powered tools.</p>';
 
@@ -1275,6 +1279,68 @@ app.post('/api/admin/trash-posts', async (req, res) => {
     ).returning({ slug: s.seoPages.slug, title: s.seoPages.title });
     res.json({ deleted: result.length, posts: result });
   } catch(e) { res.status(500).json({ error: e.message }); }
+});
+
+// ── Dynamic Sitemap (quality-gated) ──────────────────────────────────
+app.get('/sitemap.xml', async (req, res) => {
+  try {
+    const { default: dbService } = await import('../src/database/services.js');
+    const s = await import('../src/database/schema.js');
+    const { eq, desc } = await import('drizzle-orm');
+    const { validateBlogPost } = await import('./blog-validation.js');
+
+    const allPages = await dbService.db.select()
+      .from(s.seoPages)
+      .where(eq(s.seoPages.status, 'published'))
+      .orderBy(desc(s.seoPages.publishedAt))
+      .limit(500);
+
+    let xml = '<?xml version="1.0" encoding="UTF-8"?>\n';
+    xml += '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n';
+
+    // Core static pages (always included)
+    const corePages = [
+      { loc: '/', priority: '1.0' },
+      { loc: '/dashboard', priority: '0.9' },
+      { loc: '/blog', priority: '0.9' },
+      { loc: '/pricing', priority: '0.8' },
+      { loc: '/about', priority: '0.7' },
+      { loc: '/changelog', priority: '0.6' },
+    ];
+    for (const p of corePages) {
+      xml += `  <url><loc>https://yt-seo-architect.vercel.app${p.loc}</loc><priority>${p.priority}</priority></url>\n`;
+    }
+
+    // Validated blog posts only
+    for (const page of allPages) {
+      const validation = validateBlogPost({
+        slug: page.slug,
+        title: page.title,
+        content: page.content,
+        wordCount: page.wordCount,
+      });
+      if (!validation.valid) continue;
+
+      const date = page.publishedAt
+        ? new Date(page.publishedAt).toISOString().split('T')[0]
+        : '2026-05-27';
+      xml += `  <url><loc>https://yt-seo-architect.vercel.app/blog/${page.slug}</loc><lastmod>${date}</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>\n`;
+    }
+
+    xml += '</urlset>';
+    res.header('Content-Type', 'application/xml');
+    res.header('Cache-Control', 'public, max-age=3600');
+    res.send(xml);
+  } catch (e) {
+    console.error('[Sitemap] Error:', e.message);
+    res.status(500).send('Error generating sitemap');
+  }
+});
+
+// ── Robots.txt ───────────────────────────────────────────────────────
+app.get('/robots.txt', (req, res) => {
+  res.header('Content-Type', 'text/plain');
+  res.send('User-agent: *\nAllow: /\n\nSitemap: https://yt-seo-architect.vercel.app/sitemap.xml');
 });
 
 // Sitemap and robots served by validation-gated endpoints (see blog-validation.js)
