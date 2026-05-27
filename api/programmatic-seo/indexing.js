@@ -12,14 +12,11 @@ router.get('/sitemap.xml', async (req, res) => {
   try {
     const { default: dbService } = await import('../../src/database/services.js');
     const s = await import('../../src/database/schema.js');
-    const { eq, desc, gte, and } = await import('drizzle-orm');
+    const { eq, desc, sql } = await import('drizzle-orm');
 
     const pages = await dbService.db.select()
       .from(s.seoPages)
-      .where(and(
-        eq(s.seoPages.status, 'published'),
-        gte(s.seoPages.wordCount, MIN_WORD_COUNT_FOR_INDEX)
-      ))
+      .where(sql`${s.seoPages.status} = 'published' AND ${s.seoPages.wordCount} >= ${MIN_WORD_COUNT_FOR_INDEX}`)
       .orderBy(desc(s.seoPages.publishedAt))
       .limit(500);
 
