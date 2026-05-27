@@ -1311,15 +1311,43 @@ app.get('/sitemap.xml', async (req, res) => {
 
     // Core static pages (always included)
     const corePages = [
-      { loc: '/', priority: '1.0' },
-      { loc: '/dashboard', priority: '0.9' },
-      { loc: '/blog', priority: '0.9' },
-      { loc: '/pricing', priority: '0.8' },
-      { loc: '/about', priority: '0.7' },
-      { loc: '/changelog', priority: '0.6' },
+      { loc: '/', priority: '1.0', changefreq: 'weekly' },
+      { loc: '/dashboard', priority: '0.9', changefreq: 'weekly' },
+      { loc: '/blog', priority: '0.9', changefreq: 'weekly' },
+      { loc: '/pricing', priority: '0.8', changefreq: 'weekly' },
+      { loc: '/about', priority: '0.7', changefreq: 'monthly' },
+      { loc: '/changelog', priority: '0.6', changefreq: 'monthly' },
+      { loc: '/privacy-policy', priority: '0.3', changefreq: 'yearly' },
+      { loc: '/terms-of-service', priority: '0.3', changefreq: 'yearly' },
     ];
     for (const p of corePages) {
-      xml += `  <url><loc>https://yt-seo-architect.vercel.app${p.loc}</loc><priority>${p.priority}</priority></url>\n`;
+      xml += `  <url><loc>https://yt-seo-architect.vercel.app${p.loc}</loc><changefreq>${p.changefreq}</changefreq><priority>${p.priority}</priority></url>\n`;
+    }
+
+    // Free tool pages
+    const toolPages = [
+      { loc: '/tools/tag-generator', priority: '0.9', changefreq: 'weekly' },
+      { loc: '/tools/title-optimizer', priority: '0.9', changefreq: 'weekly' },
+      { loc: '/tools/description-writer', priority: '0.9', changefreq: 'weekly' },
+    ];
+    for (const p of toolPages) {
+      xml += `  <url><loc>https://yt-seo-architect.vercel.app${p.loc}</loc><changefreq>${p.changefreq}</changefreq><priority>${p.priority}</priority></url>\n`;
+    }
+
+    // Tag generator niche pages (programmatic SEO)
+    const tagGenNiches = [
+      'gaming','minecraft','fortnite','roblox','vlog','cooking','fitness','technology',
+      'music','travel','education','makeup','football','anime','coding','podcast',
+      'unboxing','youtube-seo','video-editing','python-programming','web-development',
+      'machine-learning','photoshop-tutorial','premiere-pro','ai-tools','chatgpt-tutorial',
+      'crypto-trading','personal-finance','stock-market','iphone-review','gaming-pc-build',
+      'home-workout','morning-routine','study-tips','side-hustle-ideas','real-estate-investing',
+      'fl-studio-tutorial','guitar-tutorial','math-tutorial','language-learning',
+      'how-to-make-money-online','productivity-tips','meditation-guide','resume-tips',
+      'elden-ring','valorant','call-of-duty','data-science','fashion','macbook-pro',
+    ];
+    for (const niche of tagGenNiches) {
+      xml += `  <url><loc>https://yt-seo-architect.vercel.app/tools/tag-generator/${niche}</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>\n`;
     }
 
     // Validated blog posts only
@@ -1351,7 +1379,49 @@ app.get('/sitemap.xml', async (req, res) => {
 // ── Robots.txt ───────────────────────────────────────────────────────
 app.get('/robots.txt', (req, res) => {
   res.header('Content-Type', 'text/plain');
-  res.send('User-agent: *\nAllow: /\n\nSitemap: https://yt-seo-architect.vercel.app/sitemap.xml');
+  res.send(`User-agent: *
+Allow: /
+
+# Block internal/dev pages
+Disallow: /blog/_TEMPLATE
+Disallow: /api/
+Disallow: /admin/
+Disallow: /_next/
+Disallow: /node_modules/
+
+# Allow AI search crawlers
+User-agent: ChatGPT-User
+Allow: /
+
+User-agent: Google-Extended
+Allow: /
+
+User-agent: PerplexityBot
+Allow: /
+
+User-agent: Claude-Web
+Allow: /
+
+User-agent: anthropic-ai
+Allow: /
+
+User-agent: OAI-SearchBot
+Allow: /
+
+User-agent: Applebot-Extended
+Allow: /
+
+User-agent: Bytespider
+Allow: /
+
+# Block training-only crawlers
+User-agent: GPTBot
+Disallow: /
+
+User-agent: CCBot
+Disallow: /
+
+Sitemap: https://yt-seo-architect.vercel.app/sitemap.xml`);
 });
 
 // Sitemap and robots served by validation-gated endpoints (see blog-validation.js)
