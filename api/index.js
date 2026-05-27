@@ -784,6 +784,17 @@ app.post('/api/keywords/research', async (req, res) => {
 
 // Blog listing — dynamically rendered from database
 
+// ── 410 Gone: permanently deleted trash posts (force Bing/Google to purge) ──
+const TRASH_SLUGS_410 = [
+  'youtube-description-templates', 'how-to-write-youtube-titles',
+  'youtube-algorithm-changes-2026', 'youtube-keyword-research-tutorial',
+  'how-to-mass-update-youtube-descriptions-safely', 'youtube-shorts-seo-ranking-guide',
+  'youtube-tags-generator-vs-vidiq', 'youtube-seo-guide-2026',
+];
+TRASH_SLUGS_410.forEach(slug => {
+  app.get(`/blog/${slug}`, (req, res) => res.status(410).send('Gone'));
+});
+
 app.get('/blog', async (req, res) => {
 
   try {
