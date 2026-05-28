@@ -1,0 +1,192 @@
+YT SEO ARCHITECT — DASHBOARD TOUR VOICEOVER SCRIPT
+====================================================
+Format: Long-form YouTube video (~7 minutes)
+Tone: Conversational, excited, "I just discovered this" energy
+Style: One person walking through their dashboard for the first time
+Notes: Each chapter section has a timestamp, narration text, and
+       visual cue notes for the editor. Feed to TTS for voiceover.
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━
+CHAPTER 0: INTRO (0:00 - 0:30)
+━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+[VISUAL: Logo glows in with cyan pulse. "YT SEO Architect" appears.
+         "Complete Dashboard Tour" subtitle fades in.]
+
+NARRATOR:
+"Alright, so I just connected my YouTube channel to YT SEO Architect,
+and I want to show you everything this dashboard can do — because
+honestly, it's kind of insane how much is packed in here. Let's go."
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━
+CHAPTER 1: CONNECT & OVERVIEW (0:30 - 1:15)
+━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+[VISUAL: Dashboard fades in. SEO Score ring animates from 0 to 72.
+         Bento cards reveal: Algorithmic Stability 87, Credits 100,
+         12 Videos. Critical Fixes panel slides in showing 3 issues.]
+
+NARRATOR:
+"So the second you connect your channel, it instantly analyzes
+everything. I'm talking titles, tags, descriptions, thumbnails —
+the whole thing.
+
+Right here I get an SEO score. Mine's a 72 out of 100 — not bad,
+but definitely room to grow. It also shows my algorithmic stability
+score, how many credits I have, and how many videos it analyzed.
+
+And down here — this is the part I love — it immediately tells me
+what's broken. Three critical fixes: two titles are too short, one
+video has no chapters, and three descriptions need more words. It
+just... knows."
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━
+CHAPTER 2: INTELLIGENCE RESEARCH (1:15 - 2:15)
+━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+[VISUAL: Sidebar "Intelligence Research" hub expands. Workspace shows
+         Keyword Discovery input with autocomplete dropdown. Golden
+         Keywords get green badges. Niche Guard card shows 94%
+         relevance. Competitor Sniper shows extracted keywords from
+         a rival channel.]
+
+NARRATOR:
+"Okay, this first hub is called Intelligence Research. This is where
+you figure out what your audience is actually searching for.
+
+So you type in a seed keyword — let's say 'how to grow on youtube
+2026' — and it auto-generates all these long-tail variations. The
+ones with green Golden badges? Those are the high-value, low-
+competition gems you want to target.
+
+There's also Niche Guard, which tells you if your content actually
+matches what your channel is about — mine's at ninety-four percent,
+so I'm doing pretty well there. And the Competitor Sniper — this
+is crazy — you drop in a competitor's channel and it pulls out all
+their keywords so you know exactly what's working for them. That
+one's a Pro feature."
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━
+CHAPTER 3: CREATIVE STUDIO (2:15 - 3:15)
+━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+[VISUAL: Sidebar "Creative Studio" hub expands. Video Factory shows
+         title, description, and tags generated. Thumbnail Lab shows
+         3 mockup cards. Script-to-Shorts shows clip breakdown.]
+
+NARRATOR:
+"Next is Creative Studio. Once you know your keywords, this is where
+you turn them into actual content.
+
+The Video Factory takes your topic and generates an optimized title,
+a two-hundred-plus-word description with timestamps and hashtags,
+and twelve to fifteen relevant tags — all in one shot. I barely have
+to think.
+
+The Thumbnail Lab gives you AI-generated concepts based on your title
+and niche. Three different styles, so you can pick what fits your
+brand.
+
+And Script-to-Shorts — this one's wild for repurposing content. You
+drop in a long video, and it automatically finds the best sixty-second
+clips to turn into Shorts. Three Shorts from one video. That's three
+chances to go viral from content you already made."
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━
+CHAPTER 4: OPTICS LAB (3:15 - 4:05)
+━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+[VISUAL: Sidebar "Optics Lab" hub expands. Metadata Auditor shows red
+         42/100 score card. Before/After comparison flips from red to
+         green. Bulk Injector table. Evergreen Audit flags old videos.]
+
+NARRATOR:
+"This is the Optics Lab — and this is where broken metadata goes to
+die.
+
+The Metadata Auditor scans any video and gives it a score. Here's one
+of mine that scored forty-two out of a hundred — yikes. Title's too
+short, no chapters, only four tags. But check this out — the Pre-
+Upload Lab rewrites everything. Before: 'Morning Routine vlog' —
+boring. After: 'My 5AM Morning Routine That Changed My Life' —
+curiosity, numbers, a hook. Way better.
+
+There's also a Bulk Injector if you need to fix a bunch of videos at
+once, and an Evergreen Audit that flags videos older than a year so
+you can refresh their titles and tags to trigger re-indexing. Smart."
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━
+CHAPTER 5: AUTOPILOT (4:05 - 4:50)
+━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+[VISUAL: Sidebar "Autopilot" hub expands. Retention Re-Order shows
+         playlist restructuring. Auto-Responder shows chat bubbles.
+         Automation Pipeline shows upload → tag → optimize flow.]
+
+NARRATOR:
+"Autopilot is for channels that want to set it and forget it.
+
+The Retention Re-Orderer restructures your playlists so the strongest
+video is first — that maximizes session watch time, which is a huge
+ranking signal on YouTube. The Auto-Responder automatically replies
+to comments with links to your other videos, keeping people on your
+channel. And the full Automation Pipeline — that's Agency tier —
+automatically tags, optimizes, and adds every new upload to the right
+playlist. You literally just upload and it handles the rest."
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━
+CHAPTER 6: PHRONESIS AGENT (4:50 - 5:40)
+━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+[VISUAL: Sidebar "Phronesis Agent" nav item highlights. Goal card
+         with 450/1000 progress bar. Chat bubbles show scan request
+         and results. Command Inbox with 3 proposals. Mode badges
+         cycle through OFF → MONITORING → SUGGESTING → AUTO.]
+
+NARRATOR:
+"And then there's Phronesis. This is the AI coach that basically
+thinks about your channel twenty-four seven.
+
+You set a goal — mine is a thousand subscribers by December. Then
+you tell it to scan your channel, and it finds every weak video,
+generates a fix for each one, and puts it in your Command Inbox.
+You just hit Apply and it updates YouTube directly. No copy-pasting,
+no manual work.
+
+It has four modes — Off, Monitoring where it watches and alerts you,
+Suggesting where it proposes fixes, and full Auto where it just...
+does everything. I keep mine on Suggesting. I like having final say."
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━
+CHAPTER 7: RESULTS & CTA (5:40 - 6:15)
+━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+[VISUAL: Optimization History table with before/after scores.
+         Growth stats: 12 trials, 75% success, +23% avg lift.
+         CTA button with cyan glow. Logo + URL outro.]
+
+NARRATOR:
+"Every single optimization is tracked. You can see exactly what
+changed, the before and after scores, and whether it actually
+improved performance. Seventy-five percent success rate, average
+twenty-three percent lift — those are real numbers from my channel.
+
+And here's the best part — you get a hundred free credits every
+month. No card required. It's completely free to start.
+
+If you're a creator who's tired of guessing what the algorithm wants,
+just go to yt-seo-architect.vercel.app. Everything I showed you is
+waiting for you. See you there."
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━
+END OF SCRIPT
+━━━━━━━━━━━━━━━━━━━━━━━━━━

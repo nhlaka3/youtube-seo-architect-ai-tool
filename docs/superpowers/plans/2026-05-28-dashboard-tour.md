@@ -1,0 +1,1162 @@
+# Dashboard Product Tour Implementation Plan
+
+> **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
+
+**Goal:** Build a long-form (6-8 min) 16:9 HTML dashboard walkthrough with 8 chapters, simulating a user's first experience with YT SEO Architect, plus a separate voiceover script file.
+
+**Architecture:** Single HTML file using CSS-only animations to simulate the real dashboard UI (sidebar, top bar, workspace, progress bar). Each chapter transitions the workspace content while keeping the persistent zones. No external dependencies. All icons are inline SVG or Unicode.
+
+**Tech Stack:** Vanilla HTML5 + CSS3 + ~60 lines of vanilla JS
+
+---
+
+## File Structure
+
+| File | Purpose |
+|------|---------|
+| `marketing/dashboard-tour.html` | Single self-contained tour with all 8 chapters |
+| `marketing/dashboard-tour-script.txt` | Voiceover script with timestamps per chapter |
+
+---
+
+### Task 1: Build the base shell — persistent UI zones, CSS system, and JS controller
+
+**Files:**
+- Create: `marketing/dashboard-tour.html`
+
+- [ ] **Step 1: Write the shell HTML with all persistent zones, CSS, and JS logic**
+
+Write the entire base file with the layout skeleton, CSS variables, animation keyframes, sidebar structure, top bar, bottom progress bar, and JS chapter controller. Chapters 0-1 (Intro + Connect & Overview) are included as the first working content.
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>YT SEO Architect — Dashboard Tour</title>
+<style>
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+:root {
+  --cyan: #00f2ff;
+  --green: #00ff88;
+  --bg: #0a0b10;
+  --card: rgba(16, 20, 32, 0.6);
+  --text: #f0f2f5;
+  --white: #ffffff;
+  --muted: #a8b2c1;
+  --danger: #ff3366;
+  --border: rgba(255,255,255,0.06);
+  --border-cyan: rgba(0,242,255,0.12);
+  --ease: cubic-bezier(0.23, 1, 0.32, 1);
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+body {
+  font-family: 'Geist', 'Outfit', 'Inter', system-ui, sans-serif;
+  background: #000;
+  color: var(--text);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  overflow: hidden;
+  user-select: none;
+}
+
+.tour-container {
+  width: 960px;
+  height: 540px;
+  position: relative;
+  overflow: hidden;
+  background: var(--bg);
+  border-radius: 8px;
+  border: 1px solid var(--border);
+  box-shadow: 0 0 0 1px #1a1d2e, 0 0 80px rgba(0,242,255,0.06);
+}
+
+/* ===== TOP BAR ===== */
+.topbar {
+  height: 48px;
+  display: flex;
+  align-items: center;
+  padding: 0 16px;
+  border-bottom: 1px solid var(--border);
+  gap: 12px;
+  position: relative;
+  z-index: 10;
+  background: rgba(10,11,16,0.95);
+}
+.topbar-logo { font-size: 14px; font-weight: 800; color: var(--cyan); letter-spacing: -0.02em; display: flex; align-items: center; gap: 6px; }
+.topbar-logo span { color: var(--white); }
+.topbar-spacer { flex: 1; }
+.topbar-badge {
+  font-size: 10px; font-weight: 700; padding: 3px 10px; border-radius: 4px;
+  display: flex; align-items: center; gap: 5px;
+}
+.topbar-badge.ai { background: rgba(0,242,255,0.1); color: var(--cyan); border: 1px solid rgba(0,242,255,0.2); }
+.topbar-badge.credits { background: rgba(0,255,136,0.08); color: var(--green); border: 1px solid rgba(0,255,136,0.15); }
+.topbar-badge.plan { background: rgba(255,255,255,0.05); color: var(--muted); border: 1px solid var(--border); }
+.ai-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--green); box-shadow: 0 0 6px rgba(0,255,136,0.6); animation: aiPulse 2s ease-in-out infinite; }
+@keyframes aiPulse { 0%,100% { opacity: 1; } 50% { opacity: 0.4; } }
+.topbar-avatar {
+  width: 26px; height: 26px; border-radius: 4px;
+  background: linear-gradient(135deg, var(--cyan), var(--green));
+  font-size: 10px; font-weight: 800; color: #0a0b10;
+  display: flex; align-items: center; justify-content: center;
+}
+
+/* ===== MAIN LAYOUT ===== */
+.main-layout {
+  display: flex;
+  height: calc(540px - 48px - 26px); /* minus topbar and progress */
+}
+
+/* ===== SIDEBAR ===== */
+.sidebar {
+  width: 210px;
+  border-right: 1px solid var(--border);
+  padding: 12px 0;
+  overflow-y: auto;
+  background: rgba(10,11,16,0.8);
+  flex-shrink: 0;
+}
+.sidebar::-webkit-scrollbar { width: 3px; }
+.sidebar::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 2px; }
+
+.sb-section { margin-bottom: 4px; }
+.sb-header {
+  display: flex; align-items: center; gap: 8px; padding: 8px 14px;
+  cursor: pointer; font-size: 11px; font-weight: 700; color: var(--muted);
+  text-transform: uppercase; letter-spacing: 0.06em;
+  transition: background 0.2s;
+}
+.sb-header:hover { background: rgba(255,255,255,0.03); }
+.sb-header.active { color: var(--cyan); }
+.sb-header .chevron { margin-left: auto; font-size: 10px; transition: transform 0.3s var(--ease); }
+.sb-header.active .chevron { transform: rotate(90deg); }
+
+.sb-items { max-height: 0; overflow: hidden; transition: max-height 0.4s var(--ease); }
+.sb-items.open { max-height: 300px; }
+.sb-item {
+  display: flex; align-items: center; gap: 8px; padding: 6px 14px 6px 30px;
+  font-size: 11px; color: var(--muted); transition: all 0.2s;
+}
+.sb-item .dot { width: 4px; height: 4px; border-radius: 50%; background: var(--muted); flex-shrink: 0; opacity: 0; transition: all 0.3s; }
+.sb-item.active { color: var(--white); background: rgba(0,242,255,0.04); }
+.sb-item.active .dot { background: var(--cyan); box-shadow: 0 0 6px rgba(0,242,255,0.5); opacity: 1; }
+.sb-item .lock { font-size: 9px; margin-left: auto; opacity: 0.6; }
+.sb-item.pro-locked { opacity: 0.5; }
+
+.sb-divider { height: 1px; background: var(--border); margin: 8px 14px; }
+.sb-nav-item {
+  display: flex; align-items: center; gap: 8px; padding: 7px 14px;
+  font-size: 11px; color: var(--muted); transition: all 0.2s;
+}
+.sb-nav-item.active { color: var(--cyan); background: rgba(0,242,255,0.04); }
+
+/* ===== WORKSPACE ===== */
+.workspace {
+  flex: 1;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Chapter scenes */
+.chapter {
+  position: absolute;
+  inset: 0;
+  padding: 20px 24px;
+  opacity: 0;
+  transform: translateX(30px);
+  transition: opacity 0.4s var(--ease), transform 0.4s var(--ease);
+  pointer-events: none;
+  display: flex;
+  flex-direction: column;
+}
+.chapter.active {
+  opacity: 1;
+  transform: translateX(0);
+  pointer-events: all;
+}
+
+/* ===== ANIMATION SYSTEM ===== */
+.chapter.active .reveal { animation: fadeSlideUp 0.45s var(--ease-out) both; }
+.chapter.active .r1  { animation-delay: 0.05s; }
+.chapter.active .r2  { animation-delay: 0.15s; }
+.chapter.active .r3  { animation-delay: 0.25s; }
+.chapter.active .r4  { animation-delay: 0.35s; }
+.chapter.active .r5  { animation-delay: 0.45s; }
+.chapter.active .r6  { animation-delay: 0.55s; }
+.chapter.active .r7  { animation-delay: 0.65s; }
+.chapter.active .r8  { animation-delay: 0.75s; }
+.chapter.active .r9  { animation-delay: 0.85s; }
+.chapter.active .r10 { animation-delay: 0.95s; }
+.chapter.active .r12 { animation-delay: 1.05s; }
+.chapter.active .r14 { animation-delay: 1.15s; }
+.chapter.active .r16 { animation-delay: 1.25s; }
+.chapter.active .r18 { animation-delay: 1.35s; }
+.chapter.active .r20 { animation-delay: 1.45s; }
+.chapter.active .r-h1 { animation-delay: 0.8s; }
+.chapter.active .r-h2 { animation-delay: 1.2s; }
+.chapter.active .r-h3 { animation-delay: 1.6s; }
+
+@keyframes fadeSlideUp {
+  from { opacity: 0; transform: translateY(15px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes scaleIn {
+  from { opacity: 0; transform: scale(0.8); }
+  to   { opacity: 1; transform: scale(1); }
+}
+@keyframes glowPulse {
+  0%,100% { box-shadow: 0 0 8px rgba(0,242,255,0.3); }
+  50%    { box-shadow: 0 0 20px rgba(0,242,255,0.6); }
+}
+@keyframes countUp { from { opacity: 0; } to { opacity: 1; } }
+
+.chapter.active .scale-in { animation: scaleIn 0.5s var(--ease-out) both; }
+.chapter.active .glow-pulse { animation: glowPulse 2s ease-in-out infinite; }
+
+/* ===== COMPONENTS ===== */
+.chapter-title { font-size: 13px; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 4px; }
+.chapter-heading { font-size: 22px; font-weight: 800; letter-spacing: -0.02em; margin-bottom: 16px; line-height: 1.2; }
+.chapter-heading .cyan { color: var(--cyan); }
+.chapter-heading .green { color: var(--green); }
+
+/* Cards */
+.card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 14px;
+  backdrop-filter: blur(8px);
+}
+.card-highlight {
+  border-color: rgba(0,242,255,0.2);
+  box-shadow: 0 0 12px rgba(0,242,255,0.05);
+}
+.card-danger { border-color: rgba(255,51,102,0.2); background: rgba(255,51,102,0.04); }
+.card-green { border-color: rgba(0,255,136,0.15); background: rgba(0,255,136,0.03); }
+
+/* Bento grid */
+.bento { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; }
+.bento-2 { grid-template-columns: repeat(2, 1fr); }
+.bento-3 { grid-template-columns: repeat(3, 1fr); }
+
+/* Tags */
+.tag { display: inline-block; padding: 2px 8px; border-radius: 3px; font-size: 10px; font-weight: 700; }
+.tag-cyan { background: rgba(0,242,255,0.1); color: var(--cyan); }
+.tag-green { background: rgba(0,255,136,0.1); color: var(--green); }
+.tag-red { background: rgba(255,51,102,0.1); color: var(--danger); }
+.tag-pro { background: rgba(245,158,11,0.1); color: #f59e0b; }
+
+/* Stat numbers */
+.stat-lg { font-size: 36px; font-weight: 900; letter-spacing: -0.03em; line-height: 1; }
+.stat-md { font-size: 24px; font-weight: 800; letter-spacing: -0.02em; line-height: 1; }
+
+/* SEO Score Ring */
+.seo-ring { position: relative; width: 80px; height: 80px; }
+.seo-ring svg { transform: rotate(-90deg); }
+.seo-ring .bg { fill: none; stroke: rgba(255,255,255,0.06); stroke-width: 6; }
+.seo-ring .fill { fill: none; stroke: var(--cyan); stroke-width: 6; stroke-linecap: round; transition: stroke-dashoffset 1s var(--ease-out); }
+.seo-ring .score { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; font-size: 20px; font-weight: 900; }
+
+/* Progress bar (small) */
+.progress-sm { height: 3px; background: rgba(255,255,255,0.06); border-radius: 2px; overflow: hidden; margin: 6px 0; }
+.progress-sm-fill { height: 100%; background: var(--cyan); border-radius: 2px; transition: width 0.6s var(--ease-out); }
+
+/* Feature list */
+.feature-row { display: flex; gap: 8px; flex-wrap: wrap; }
+.feature-chip {
+  background: rgba(16,20,32,0.6); border: 1px solid var(--border-cyan); border-radius: 4px;
+  padding: 8px 12px; font-size: 11px; font-weight: 600; display: flex; align-items: center; gap: 6px;
+}
+
+/* Chat bubbles */
+.chat-stack { display: flex; flex-direction: column; gap: 8px; }
+.chat-msg {
+  padding: 8px 12px; border-radius: 4px; font-size: 11px; line-height: 1.4; max-width: 80%;
+}
+.chat-ai { background: rgba(0,242,255,0.04); border: 1px solid rgba(0,242,255,0.12); align-self: flex-start; }
+.chat-user { background: rgba(255,255,255,0.03); border: 1px solid var(--border); align-self: flex-end; text-align: right; }
+
+/* Before/After */
+.ba-row { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.ba-col { padding: 10px; border-radius: 4px; font-size: 11px; }
+.ba-bad { background: rgba(255,51,102,0.06); border: 1px solid rgba(255,51,102,0.15); }
+.ba-good { background: rgba(0,255,136,0.04); border: 1px solid rgba(0,255,136,0.12); }
+
+/* Table mini */
+.mini-table { width: 100%; font-size: 10px; }
+.mini-table th { text-align: left; color: var(--muted); font-weight: 600; padding: 5px 8px; border-bottom: 1px solid var(--border); text-transform: uppercase; letter-spacing: 0.05em; }
+.mini-table td { padding: 5px 8px; color: var(--text); border-bottom: 1px solid rgba(255,255,255,0.03); }
+
+/* Command inbox card */
+.inbox-card {
+  background: var(--card); border: 1px solid rgba(0,242,255,0.15); border-radius: 6px;
+  padding: 12px; margin-bottom: 8px; display: flex; justify-content: space-between; align-items: center;
+}
+
+/* Button */
+.btn {
+  padding: 6px 16px; border-radius: 4px; font-size: 11px; font-weight: 700; border: none; cursor: pointer;
+  display: inline-flex; align-items: center; gap: 4px;
+}
+.btn-cyan { background: var(--cyan); color: #0a0b10; box-shadow: 0 0 12px rgba(0,242,255,0.25); }
+.btn-outline { background: transparent; border: 1px solid var(--border-cyan); color: var(--cyan); }
+.btn-green { background: var(--green); color: #0a0b10; }
+
+/* Goal card */
+.goal-card {
+  background: rgba(0,242,255,0.03); border: 1px solid rgba(0,242,255,0.15); border-radius: 6px; padding: 14px;
+}
+.goal-bar { height: 6px; background: rgba(255,255,255,0.06); border-radius: 3px; overflow: hidden; margin: 8px 0; }
+.goal-bar-fill { height: 100%; background: linear-gradient(90deg, var(--cyan), var(--green)); border-radius: 3px; transition: width 0.8s var(--ease-out); }
+
+/* Mode badges */
+.mode-row { display: flex; gap: 6px; }
+.mode-badge {
+  padding: 3px 10px; border-radius: 3px; font-size: 9px; font-weight: 700; text-transform: uppercase;
+  border: 1px solid var(--border); color: var(--muted); letter-spacing: 0.06em;
+}
+.mode-badge.active { color: var(--cyan); border-color: rgba(0,242,255,0.3); background: rgba(0,242,255,0.06); }
+
+/* ===== CAPTION BAR ===== */
+.caption-bar {
+  position: absolute; bottom: 60px; left: 50%; transform: translateX(-50%);
+  background: rgba(0,0,0,0.85); border: 1px solid rgba(255,255,255,0.1); border-radius: 4px;
+  padding: 6px 16px; font-size: 12px; color: var(--white); white-space: nowrap;
+  z-index: 20; opacity: 0; transition: opacity 0.3s;
+  pointer-events: none;
+}
+.caption-bar.show { opacity: 1; }
+
+/* ===== PROGRESS BAR ===== */
+.progress-bar-bottom {
+  height: 26px; display: flex; align-items: center; padding: 0 16px;
+  border-top: 1px solid var(--border); gap: 10px;
+}
+.progress-dots-row { display: flex; gap: 4px; }
+.progress-dot-bot {
+  width: 6px; height: 6px; border-radius: 3px; background: rgba(255,255,255,0.1);
+  transition: all 0.4s var(--ease);
+}
+.progress-dot-bot.done { background: var(--cyan); }
+.progress-dot-bot.current { background: var(--cyan); width: 16px; box-shadow: 0 0 6px rgba(0,242,255,0.5); }
+.progress-label { font-size: 10px; color: var(--muted); margin-left: auto; }
+
+/* ===== INTRO SCENE SPECIAL ===== */
+.intro-scene {
+  position: absolute; inset: 0; display: flex; flex-direction: column;
+  align-items: center; justify-content: center; background: var(--bg);
+  opacity: 0; pointer-events: none; transition: opacity 0.5s var(--ease);
+  z-index: 30;
+}
+.intro-scene.active { opacity: 1; pointer-events: all; }
+.intro-logo {
+  width: 64px; height: 64px; background: linear-gradient(135deg, var(--cyan), var(--green));
+  border-radius: 8px; display: flex; align-items: center; justify-content: center;
+  font-size: 26px; font-weight: 900; color: #0a0b10;
+  box-shadow: 0 0 40px rgba(0,242,255,0.3);
+}
+</style>
+</head>
+<body>
+<div class="tour-container" id="tour">
+
+  <!-- INTRO SCENE (Ch 0) -->
+  <div class="intro-scene active" id="introScene">
+    <div class="intro-logo reveal" style="animation-delay:0.2s;">YT</div>
+    <div style="font-size:28px;font-weight:800;margin-top:16px;letter-spacing:-0.03em;" class="reveal" id="introTitle">YT SEO Architect</div>
+    <div style="font-size:14px;color:var(--muted);margin-top:8px;" class="reveal" id="introSub">Complete Dashboard Tour</div>
+  </div>
+
+  <!-- MAIN DASHBOARD UI -->
+  <div id="dashboardUI" style="display:none;">
+
+    <!-- Top Bar -->
+    <div class="topbar" id="topbar">
+      <div class="topbar-logo">YT <span>SEO Architect</span></div>
+      <div class="topbar-spacer"></div>
+      <div class="topbar-badge ai"><div class="ai-dot"></div> AI Online</div>
+      <div class="topbar-badge credits" id="creditBadge">100 credits</div>
+      <div class="topbar-badge plan" id="planBadge">Free</div>
+      <div class="topbar-avatar" id="avatarBadge">YT</div>
+    </div>
+
+    <!-- Main Layout -->
+    <div class="main-layout">
+      <!-- Sidebar -->
+      <div class="sidebar" id="sidebar">
+        <!-- Intelligence Research -->
+        <div class="sb-section">
+          <div class="sb-header" data-hub="research"><span>🔍</span> Intelligence Research <span class="chevron">›</span></div>
+          <div class="sb-items" data-hub="research">
+            <div class="sb-item" data-tool="keyword"><span class="dot"></span> Keyword Discovery</div>
+            <div class="sb-item" data-tool="niche"><span class="dot"></span> Niche Guard</div>
+            <div class="sb-item pro-locked" data-tool="sniper"><span class="dot"></span> Competitor Sniper <span class="lock">🔒</span></div>
+            <div class="sb-item" data-tool="trend"><span class="dot"></span> Trend Pulse</div>
+          </div>
+        </div>
+        <!-- Creative Studio -->
+        <div class="sb-section">
+          <div class="sb-header" data-hub="studio"><span>🎬</span> Creative Studio <span class="chevron">›</span></div>
+          <div class="sb-items" data-hub="studio">
+            <div class="sb-item pro-locked" data-tool="factory"><span class="dot"></span> Video Factory <span class="lock">🔒</span></div>
+            <div class="sb-item" data-tool="thumb"><span class="dot"></span> Thumbnail Lab</div>
+            <div class="sb-item pro-locked" data-tool="shorts"><span class="dot"></span> Script-to-Shorts <span class="lock">🔒</span></div>
+            <div class="sb-item pro-locked" data-tool="chapters"><span class="dot"></span> Chapters Generator <span class="lock">🔒</span></div>
+          </div>
+        </div>
+        <!-- Optics Lab -->
+        <div class="sb-section">
+          <div class="sb-header" data-hub="optics"><span>🔬</span> Optics Lab <span class="chevron">›</span></div>
+          <div class="sb-items" data-hub="optics">
+            <div class="sb-item" data-tool="auditor"><span class="dot"></span> Metadata Auditor</div>
+            <div class="sb-item pro-locked" data-tool="magic"><span class="dot"></span> Pre-Upload Lab <span class="lock">🔒</span></div>
+            <div class="sb-item pro-locked" data-tool="bulk"><span class="dot"></span> Bulk Injector <span class="lock">🔒</span></div>
+            <div class="sb-item pro-locked" data-tool="evergreen"><span class="dot"></span> Evergreen Audit <span class="lock">🔒</span></div>
+          </div>
+        </div>
+        <!-- Autopilot -->
+        <div class="sb-section">
+          <div class="sb-header" data-hub="autopilot"><span>⚡</span> Autopilot <span class="chevron">›</span></div>
+          <div class="sb-items" data-hub="autopilot">
+            <div class="sb-item pro-locked" data-tool="retention"><span class="dot"></span> Retention Re-Order <span class="lock">🔒</span></div>
+            <div class="sb-item pro-locked" data-tool="responder"><span class="dot"></span> Auto-Responder <span class="lock">🔒</span></div>
+            <div class="sb-item pro-locked" data-tool="pipeline"><span class="dot"></span> Automation Pipeline <span class="lock">🔒</span></div>
+            <div class="sb-item pro-locked" data-tool="playlist"><span class="dot"></span> Playlist Growth <span class="lock">🔒</span></div>
+          </div>
+        </div>
+
+        <div class="sb-divider"></div>
+        <div class="sb-nav-item" data-nav="history"><span>📊</span> Optimization History</div>
+        <div class="sb-nav-item" data-nav="growth"><span>📈</span> Growth Engine</div>
+        <div class="sb-nav-item" data-nav="analytics"><span>📉</span> Analytics</div>
+        <div class="sb-nav-item" data-nav="agent"><span>🧠</span> Phronesis Agent</div>
+      </div>
+
+      <!-- Workspace -->
+      <div class="workspace" id="workspace">
+
+        <!-- CHAPTER 1: Connect & Overview -->
+        <div class="chapter active" data-chapter="1" id="ch1">
+          <div class="chapter-title reveal r1">Overview</div>
+          <div class="chapter-heading reveal r2">Channel <span class="cyan">connected.</span> Here's your dashboard.</div>
+
+          <div class="bento reveal r3" style="margin-bottom:12px;">
+            <div class="card" style="text-align:center;">
+              <div class="seo-ring" style="margin:0 auto 8px;">
+                <svg width="80" height="80" viewBox="0 0 120 120"><circle class="bg" cx="60" cy="60" r="54"/><circle class="fill" cx="60" cy="60" r="54" stroke-dasharray="339.292" stroke-dashoffset="95" id="seoRing"/></svg>
+                <div class="score" id="seoScore">72</div>
+              </div>
+              <div style="font-size:10px;color:var(--muted);">SEO Score</div>
+            </div>
+            <div class="card" style="text-align:center;">
+              <div class="stat-md reveal r4" style="color:var(--cyan);">87</div>
+              <div style="font-size:10px;color:var(--muted);">Algorithmic Stability</div>
+              <div class="progress-sm" style="margin-top:6px;"><div class="progress-sm-fill" style="width:87%;"></div></div>
+            </div>
+            <div class="card" style="text-align:center;">
+              <div class="stat-md reveal r4" style="color:var(--green);">100</div>
+              <div style="font-size:10px;color:var(--muted);">Credits</div>
+              <div style="font-size:9px;color:var(--muted);">Refreshes monthly</div>
+            </div>
+            <div class="card" style="text-align:center;">
+              <div class="stat-md reveal r4" style="color:var(--white);">12</div>
+              <div style="font-size:10px;color:var(--muted);">Videos</div>
+              <div style="font-size:9px;color:var(--muted);">Last audit: today</div>
+            </div>
+          </div>
+
+          <div class="card card-highlight reveal r5">
+            <div style="display:flex;align-items:center;gap:8px;margin-bottom:6px;">
+              <span style="font-size:14px;">⚠️</span>
+              <span style="font-size:12px;font-weight:700;">Critical Fixes</span>
+              <span class="tag tag-red" id="fixesCount">3 issues</span>
+            </div>
+            <div style="font-size:11px;color:var(--muted);line-height:1.5;">
+              • 2 titles too short — missing keywords<br>
+              • 1 video has no chapters or timestamps<br>
+              • Description word count below 200 on 3 videos
+            </div>
+          </div>
+        </div>
+
+        <!-- CHAPTER 2: Intelligence Research -->
+        <div class="chapter" data-chapter="2" id="ch2">
+          <div class="chapter-title reveal r1">Intelligence Research</div>
+          <div class="chapter-heading reveal r2">Find what your audience is <span class="cyan">actually searching for.</span></div>
+
+          <div class="card reveal r3" style="margin-bottom:10px;">
+            <div style="font-size:11px;font-weight:700;margin-bottom:6px;">🔍 Keyword Discovery</div>
+            <div style="background:rgba(255,255,255,0.03);border:1px solid var(--border);border-radius:4px;padding:8px 10px;font-size:11px;color:var(--muted);margin-bottom:6px;">how to grow on youtube 2026</div>
+            <div class="feature-row">
+              <span class="feature-chip reveal r4">how to grow on youtube 2026 gaming <span class="tag tag-green">Golden</span></span>
+              <span class="feature-chip reveal r5">how to grow on youtube 2026 shorts</span>
+              <span class="feature-chip reveal r6">how to grow on youtube 2026 without showing face <span class="tag tag-green">Golden</span></span>
+            </div>
+          </div>
+
+          <div class="bento bento-2 reveal r7" style="margin-bottom:10px;">
+            <div class="card">
+              <div style="font-size:11px;font-weight:700;margin-bottom:4px;">🛡️ Niche Guard</div>
+              <div style="font-size:10px;color:var(--muted);margin-bottom:4px;">Relevance Score</div>
+              <div class="stat-md" style="color:var(--green);">94%</div>
+              <div style="font-size:9px;color:var(--muted);">Your content is highly relevant to Gaming niche</div>
+            </div>
+            <div class="card">
+              <div style="font-size:11px;font-weight:700;margin-bottom:4px;">🎯 Competitor Sniper <span class="tag tag-pro">Pro</span></div>
+              <div style="font-size:10px;color:var(--muted);margin-bottom:4px;">Extract keywords from:</div>
+              <div style="font-size:10px;">🎮 ProGamerDaily</div>
+              <div style="font-size:9px;color:var(--muted);">12 overlapping keywords found</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- CHAPTER 3: Creative Studio -->
+        <div class="chapter" data-chapter="3" id="ch3">
+          <div class="chapter-title reveal r1">Creative Studio</div>
+          <div class="chapter-heading reveal r2">Turn keywords into <span class="cyan">clickable content.</span></div>
+
+          <div class="card card-highlight reveal r3" style="margin-bottom:10px;">
+            <div style="font-size:11px;font-weight:700;margin-bottom:6px;">🏭 Video Factory <span class="tag tag-pro">Pro</span></div>
+            <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;">
+              <div class="card" style="padding:10px;">
+                <div style="font-size:9px;color:var(--muted);">Title</div>
+                <div style="font-size:11px;font-weight:600;">10 Gaming Tips Pros Don't Want You to Know (2026)</div>
+                <div class="tag tag-green" style="margin-top:4px;">60 chars ✓</div>
+              </div>
+              <div class="card" style="padding:10px;">
+                <div style="font-size:9px;color:var(--muted);">Description</div>
+                <div style="font-size:9px;color:var(--muted);">230 words with timestamps, CTAs, and 3 hashtags</div>
+                <div class="tag tag-green" style="margin-top:4px;">Optimized</div>
+              </div>
+              <div class="card" style="padding:10px;">
+                <div style="font-size:9px;color:var(--muted);">Tags (12)</div>
+                <div style="font-size:9px;color:var(--muted);">gaming tips 2026, pro gaming guide, youtube gaming...</div>
+                <div class="tag tag-cyan" style="margin-top:4px;">Relevance: 92%</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="bento bento-2 reveal r5">
+            <div class="card">
+              <div style="font-size:11px;font-weight:700;margin-bottom:4px;">🧪 Thumbnail Lab</div>
+              <div style="display:flex;gap:6px;">
+                <div style="width:50px;height:30px;background:linear-gradient(135deg,#1a1a2e,#16213e);border-radius:3px;display:flex;align-items:center;justify-content:center;font-size:14px;">🎮</div>
+                <div style="width:50px;height:30px;background:linear-gradient(135deg,#0f3460,#1a1a2e);border-radius:3px;display:flex;align-items:center;justify-content:center;font-size:14px;">🔥</div>
+                <div style="width:50px;height:30px;background:linear-gradient(135deg,#16213e,#0f3460);border-radius:3px;display:flex;align-items:center;justify-content:center;font-size:14px;">⚡</div>
+              </div>
+              <div style="font-size:9px;color:var(--muted);margin-top:4px;">3 AI-generated concepts</div>
+            </div>
+            <div class="card">
+              <div style="font-size:11px;font-weight:700;margin-bottom:4px;">✂️ Script-to-Shorts <span class="tag tag-pro">Pro</span></div>
+              <div style="display:flex;gap:4px;">
+                <div class="tag tag-cyan">Clip 1: 0:00-0:42</div>
+                <div class="tag tag-cyan">Clip 2: 0:42-1:15</div>
+                <div class="tag tag-cyan">Clip 3: 1:15-2:00</div>
+              </div>
+              <div style="font-size:9px;color:var(--muted);margin-top:4px;">Auto-generate 3 Shorts from long video</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- CHAPTER 4: Optics Lab -->
+        <div class="chapter" data-chapter="4" id="ch4">
+          <div class="chapter-title reveal r1">Optics Lab</div>
+          <div class="chapter-heading reveal r2">Fix broken metadata <span class="green">before or after</span> upload.</div>
+
+          <div class="card card-danger reveal r3" style="margin-bottom:10px;">
+            <div style="display:flex;justify-content:space-between;align-items:center;">
+              <div>
+                <div style="font-size:11px;font-weight:700;">📋 Metadata Auditor</div>
+                <div style="font-size:10px;color:var(--danger);">3 issues found in "Morning Routine vlog"</div>
+              </div>
+              <div class="stat-lg" style="color:var(--danger);">42<span style="font-size:16px;">/100</span></div>
+            </div>
+          </div>
+
+          <div class="ba-row reveal r5" style="margin-bottom:10px;">
+            <div class="ba-col ba-bad">
+              <div class="tag tag-red" style="margin-bottom:4px;">BEFORE</div>
+              <div style="font-size:10px;color:var(--danger);">Morning Routine vlog</div>
+              <div style="font-size:9px;color:var(--muted);margin-top:4px;">18 chars · No chapters · 4 tags</div>
+            </div>
+            <div class="ba-col ba-good">
+              <div class="tag tag-green" style="margin-bottom:4px;">AFTER (Pre-Upload Lab)</div>
+              <div style="font-size:10px;color:var(--green);">My 5AM Morning Routine That Changed My Life (2026)</div>
+              <div style="font-size:9px;color:var(--muted);margin-top:4px;">58 chars · Chapters ✓ · 15 tags</div>
+            </div>
+          </div>
+
+          <div class="bento bento-2 reveal r8">
+            <div class="card">
+              <div style="font-size:11px;font-weight:700;">📦 Bulk Injector <span class="tag tag-pro">Pro</span></div>
+              <table class="mini-table" style="margin-top:6px;">
+                <tr><th>Video</th><th>Status</th></tr>
+                <tr><td>Setup Tour</td><td><span class="tag tag-green">Done</span></td></tr>
+                <tr><td>Tips #12</td><td><span class="tag tag-green">Done</span></td></tr>
+                <tr><td>Vlog #5</td><td><span class="tag tag-cyan">Queued</span></td></tr>
+              </table>
+            </div>
+            <div class="card">
+              <div style="font-size:11px;font-weight:700;">🌱 Evergreen Audit <span class="tag tag-pro">Pro</span></div>
+              <div style="font-size:10px;color:var(--muted);margin-top:6px;">2 videos older than 12 months flagged for title refresh</div>
+              <div style="display:flex;gap:4px;margin-top:4px;">
+                <span class="tag tag-red">"Setup Tour" · 14mo</span>
+                <span class="tag tag-red">"Tips #8" · 16mo</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- CHAPTER 5: Autopilot -->
+        <div class="chapter" data-chapter="5" id="ch5">
+          <div class="chapter-title reveal r1">Autopilot</div>
+          <div class="chapter-heading reveal r2">Set it. <span class="cyan">Forget it.</span> Let it grow.</div>
+
+          <div class="bento bento-2 reveal r3" style="margin-bottom:10px;">
+            <div class="card">
+              <div style="font-size:11px;font-weight:700;">🔀 Retention Re-Order <span class="tag tag-pro">Pro</span></div>
+              <div style="font-size:10px;color:var(--muted);margin-top:6px;">Playlist: "Gaming Guides"</div>
+              <div style="display:flex;gap:4px;margin-top:6px;">
+                <span style="font-size:9px;padding:2px 6px;background:rgba(0,242,255,0.1);border-radius:3px;">#1 Setup</span>
+                <span style="font-size:9px;padding:2px 6px;background:rgba(255,255,255,0.05);border-radius:3px;">#2 Tips →</span>
+                <span style="font-size:9px;padding:2px 6px;background:rgba(255,255,255,0.05);border-radius:3px;">#3 Vlog →</span>
+              </div>
+              <div style="font-size:9px;color:var(--green);margin-top:4px;">Reordered for max session watch time</div>
+            </div>
+            <div class="card">
+              <div style="font-size:11px;font-weight:700;">💬 Auto-Responder <span class="tag tag-pro" style="color:#a78bfa;">Agency</span></div>
+              <div class="chat-stack" style="margin-top:6px;">
+                <div class="chat-msg chat-user" style="font-size:9px;">Great video! How do I do the setup?</div>
+                <div class="chat-msg chat-ai" style="font-size:9px;">Thanks! Here's my full setup guide → [link]</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="card card-highlight reveal r7">
+            <div style="font-size:11px;font-weight:700;">🤖 Automation Pipeline <span class="tag tag-pro" style="color:#a78bfa;">Agency</span></div>
+            <div style="display:flex;gap:8px;align-items:center;margin-top:6px;font-size:10px;">
+              <span style="color:var(--cyan);">📤 Upload</span> →
+              <span style="color:var(--muted);">🏷️ Auto-tag</span> →
+              <span style="color:var(--muted);">📝 Optimize description</span> →
+              <span style="color:var(--muted);">🔗 Add to playlist</span> →
+              <span style="color:var(--green);">✅ Done</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- CHAPTER 6: Phronesis Agent -->
+        <div class="chapter" data-chapter="6" id="ch6">
+          <div class="chapter-title reveal r1">Phronesis Agent</div>
+          <div class="chapter-heading reveal r2">An AI that <span class="cyan">thinks about your channel</span> 24/7.</div>
+
+          <div class="goal-card reveal r3" style="margin-bottom:10px;">
+            <div style="font-size:10px;color:var(--muted);">🎯 ACTIVE GOAL</div>
+            <div style="font-size:16px;font-weight:800;">450 / 1,000 Subscribers</div>
+            <div class="goal-bar"><div class="goal-bar-fill" style="width:45%;" id="agentGoalBar"></div></div>
+            <div style="display:flex;justify-content:space-between;font-size:9px;color:var(--muted);">
+              <span>45% complete</span><span>+12/week · ETA Dec 2026</span>
+            </div>
+          </div>
+
+          <div class="chat-stack reveal r5" style="margin-bottom:10px;">
+            <div class="chat-msg chat-user" style="font-size:10px;">Scan my channel</div>
+            <div class="chat-msg chat-ai" style="font-size:10px;">
+              <span style="color:var(--cyan);font-weight:700;">🧠 Phronesis</span><br>
+              🔍 Analyzing 12 videos... 3 need attention.<br>
+              <span style="color:var(--danger);">"Morning Routine vlog" — Score: 42/100</span><br>
+              <span style="color:var(--danger);">"Gaming Setup Tour" — Score: 38/100</span>
+            </div>
+          </div>
+
+          <div class="reveal r8">
+            <div style="font-size:11px;font-weight:700;margin-bottom:6px;">📥 Command Inbox — 3 proposals</div>
+            <div class="inbox-card">
+              <div>
+                <span class="tag tag-cyan">🔧 Title Fix</span>
+                <span style="font-size:10px;margin-left:6px;">Morning Routine vlog</span>
+              </div>
+              <div style="display:flex;gap:4px;">
+                <span class="btn btn-cyan" style="font-size:9px;padding:3px 10px;">Apply</span>
+                <span class="btn btn-outline" style="font-size:9px;padding:3px 10px;">Skip</span>
+              </div>
+            </div>
+            <div class="inbox-card" style="opacity:0.7;">
+              <div>
+                <span class="tag tag-green">🏷️ Tag Update</span>
+                <span style="font-size:10px;margin-left:6px;">Setup Tour</span>
+              </div>
+              <span class="btn btn-outline" style="font-size:9px;padding:3px 10px;">Apply</span>
+            </div>
+          </div>
+
+          <div class="reveal r12" style="margin-top:8px;">
+            <div style="font-size:10px;color:var(--muted);margin-bottom:4px;">Autonomous Mode</div>
+            <div class="mode-row">
+              <span class="mode-badge">OFF</span>
+              <span class="mode-badge active">MONITORING</span>
+              <span class="mode-badge">SUGGESTING</span>
+              <span class="mode-badge">AUTO</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- CHAPTER 7: Results & CTA -->
+        <div class="chapter" data-chapter="7" id="ch7">
+          <div class="chapter-title reveal r1">Results</div>
+          <div class="chapter-heading reveal r2">Every optimization is <span class="green">tracked and measured.</span></div>
+
+          <div class="bento bento-3 reveal r3" style="margin-bottom:10px;">
+            <div class="card" style="text-align:center;">
+              <div class="stat-lg" style="color:var(--cyan);">12</div>
+              <div style="font-size:10px;color:var(--muted);">Optimization Trials</div>
+            </div>
+            <div class="card" style="text-align:center;">
+              <div class="stat-lg" style="color:var(--green);">75%</div>
+              <div style="font-size:10px;color:var(--muted);">Success Rate</div>
+            </div>
+            <div class="card" style="text-align:center;">
+              <div class="stat-lg" style="color:var(--green);">+23%</div>
+              <div style="font-size:10px;color:var(--muted);">Average Lift</div>
+            </div>
+          </div>
+
+          <table class="mini-table reveal r6" style="margin-bottom:12px;">
+            <tr><th>Video</th><th>Before</th><th>After</th><th>Change</th></tr>
+            <tr><td>Morning Routine</td><td style="color:var(--danger);">42</td><td style="color:var(--green);">78</td><td style="color:var(--green);">+36</td></tr>
+            <tr><td>Setup Tour</td><td style="color:var(--danger);">38</td><td style="color:var(--green);">71</td><td style="color:var(--green);">+33</td></tr>
+            <tr><td>Tips #12</td><td style="color:var(--muted);">55</td><td style="color:var(--green);">67</td><td style="color:var(--green);">+12</td></tr>
+          </table>
+
+          <div style="text-align:center;margin-top:auto;" class="reveal r10">
+            <div style="font-size:18px;font-weight:800;margin-bottom:10px;">Start free — <span class="cyan">100 credits.</span></div>
+            <div class="btn btn-cyan" style="font-size:13px;padding:10px 28px;">Start Free →</div>
+            <div style="font-size:10px;color:var(--muted);margin-top:8px;">yt-seo-architect.vercel.app</div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- Caption Bar -->
+    <div class="caption-bar" id="captionBar"></div>
+
+    <!-- Bottom Progress Bar -->
+    <div class="progress-bar-bottom">
+      <div class="progress-dots-row" id="progressDots"></div>
+      <div class="progress-label" id="progressLabel">Chapter 1/8</div>
+    </div>
+
+  </div><!-- end dashboardUI -->
+
+</div>
+
+<script>
+(function() {
+  var CHAPTERS = 8; // 0 through 7
+  var currentChapter = 0;
+  var timer;
+  var CHAPTER_DURATIONS = [4000, 5500, 7000, 7000, 6000, 5500, 5500, 5000]; // ms per chapter
+
+  var chapterEls = [];
+  var introScene = document.getElementById('introScene');
+  var dashboardUI = document.getElementById('dashboardUI');
+  var captionBar = document.getElementById('captionBar');
+  var seoRing = document.getElementById('seoRing');
+  var seoScore = document.getElementById('seoScore');
+  var fixesCount = document.getElementById('fixesCount');
+  var agentGoalBar = document.getElementById('agentGoalBar');
+  var progressDots = document.getElementById('progressDots');
+  var progressLabel = document.getElementById('progressLabel');
+
+  // Captions for each chapter
+  var captions = [
+    "Hey, I just connected my YouTube channel — let me show you what this dashboard can do.",
+    "Right away, it analyzes my whole channel and gives me a score. 3 critical fixes needed.",
+    "This is where I find what people are actually searching for. Golden keywords, niche guard, competitor intel.",
+    "Once I know my keywords, this hub builds the actual content — titles, thumbnails, scripts.",
+    "This is where broken metadata gets fixed — before or after upload. Scores go from red to green.",
+    "For channels that want to set it and forget it — playlist optimization, auto-replies, full automation.",
+    "And then there's Phronesis — the AI that watches your channel 24/7. Scans, proposes, fixes.",
+    "Start free — 100 credits. No card needed. yt-seo-architect.vercel.app"
+  ];
+
+  // Build progress dots
+  for (var i = 0; i < CHAPTERS; i++) {
+    var dot = document.createElement('div');
+    dot.className = 'progress-dot-bot';
+    progressDots.appendChild(dot);
+  }
+
+  function updateProgress() {
+    var dots = progressDots.children;
+    for (var i = 0; i < CHAPTERS; i++) {
+      dots[i].className = 'progress-dot-bot';
+      if (i < currentChapter) dots[i].classList.add('done');
+      if (i === currentChapter) dots[i].classList.add('current');
+    }
+    progressLabel.textContent = 'Chapter ' + (currentChapter === 0 ? 'Intro' : currentChapter) + '/' + (CHAPTERS - 1);
+  }
+
+  function showCaption() {
+    captionBar.textContent = captions[currentChapter];
+    captionBar.classList.add('show');
+    setTimeout(function() { captionBar.classList.remove('show'); }, CHAPTER_DURATIONS[currentChapter] - 500);
+  }
+
+  function goTo(idx) {
+    if (idx < 0 || idx >= CHAPTERS) return;
+
+    // Hide all chapters
+    var allChapters = document.querySelectorAll('.chapter');
+    for (var i = 0; i < allChapters.length; i++) {
+      allChapters[i].classList.remove('active');
+    }
+
+    // Hide intro scene
+    introScene.classList.remove('active');
+
+    if (idx === 0) {
+      // Show intro
+      introScene.classList.add('active');
+      dashboardUI.style.display = 'none';
+    } else {
+      // Show dashboard with correct chapter
+      dashboardUI.style.display = 'block';
+      var chEl = document.getElementById('ch' + idx);
+      if (chEl) chEl.classList.add('active');
+
+      // Animate SEO ring (chapter 1)
+      if (idx === 1 && seoRing) {
+        seoRing.style.strokeDashoffset = '339.292';
+        setTimeout(function() { seoRing.style.strokeDashoffset = '95'; }, 500);
+      }
+
+      // Highlight correct sidebar hub
+      updateSidebar(idx);
+    }
+
+    currentChapter = idx;
+    updateProgress();
+    showCaption();
+  }
+
+  function updateSidebar(chapterIdx) {
+    // Reset all
+    var headers = document.querySelectorAll('.sb-header');
+    var items = document.querySelectorAll('.sb-items');
+    var navItems = document.querySelectorAll('.sb-nav-item');
+    var toolItems = document.querySelectorAll('.sb-item');
+
+    for (var i = 0; i < headers.length; i++) headers[i].classList.remove('active');
+    for (var i = 0; i < items.length; i++) items[i].classList.remove('open');
+    for (var i = 0; i < navItems.length; i++) navItems[i].classList.remove('active');
+    for (var i = 0; i < toolItems.length; i++) toolItems[i].classList.remove('active');
+
+    // Map chapter to hub
+    var hubMap = { 2: 'research', 3: 'studio', 4: 'optics', 5: 'autopilot' };
+    var hubName = hubMap[chapterIdx];
+
+    if (hubName) {
+      var header = document.querySelector('.sb-header[data-hub="' + hubName + '"]');
+      var itemsList = document.querySelector('.sb-items[data-hub="' + hubName + '"]');
+      if (header) header.classList.add('active');
+      if (itemsList) itemsList.classList.add('open');
+    }
+
+    if (chapterIdx === 6) {
+      var agentNav = document.querySelector('.sb-nav-item[data-nav="agent"]');
+      if (agentNav) agentNav.classList.add('active');
+    }
+    if (chapterIdx === 7) {
+      var historyNav = document.querySelector('.sb-nav-item[data-nav="history"]');
+      if (historyNav) historyNav.classList.add('active');
+    }
+  }
+
+  function next() { goTo((currentChapter + 1) % CHAPTERS); }
+  function prev() { goTo(currentChapter === 0 ? CHAPTERS - 1 : currentChapter - 1); }
+
+  function startTimer() {
+    clearInterval(timer);
+    var dur = CHAPTER_DURATIONS[currentChapter] || 5000;
+    timer = setInterval(next, dur);
+  }
+
+  // Keyboard nav
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'ArrowRight' || e.key === 'ArrowDown') { next(); startTimer(); }
+    if (e.key === 'ArrowLeft'  || e.key === 'ArrowUp')   { prev(); startTimer(); }
+  });
+
+  document.getElementById('tour').addEventListener('click', function() { startTimer(); });
+
+  // Init
+  goTo(0);
+  updateProgress();
+  showCaption();
+  startTimer();
+})();
+</script>
+</body>
+</html>
+```
+
+- [ ] **Step 2: Open in browser and verify**
+
+Open `marketing/dashboard-tour.html` in Chrome. Verify:
+- 960×540 container centered on black page
+- 8 chapters auto-advance
+- Sidebar hubs highlight per chapter
+- SEO ring animates on Chapter 1
+- Progress dots track position
+- Captions appear per chapter
+- Keyboard arrows navigate
+
+- [ ] **Step 3: Commit**
+
+```bash
+git add marketing/dashboard-tour.html docs/superpowers/specs/2026-05-28-dashboard-tour-design.md
+git commit -m "feat: add dashboard product tour (8 chapters, 16:9, Cyber-Luxe Dark)"
+```
+
+---
+
+### Task 2: Write the voiceover script
+
+**Files:**
+- Create: `marketing/dashboard-tour-script.txt`
+
+- [ ] **Step 1: Write the script**
+
+```text
+YT SEO ARCHITECT — DASHBOARD TOUR VOICEOVER SCRIPT
+====================================================
+Format: Long-form YouTube video (~7 minutes)
+Tone: Conversational, excited, "I just discovered this" energy
+Style: One person walking through their dashboard for the first time
+Notes: Each chapter section has a timestamp, narration text, and
+       visual cue notes for the editor. Feed to TTS for voiceover.
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━
+CHAPTER 0: INTRO (0:00 - 0:30)
+━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+[VISUAL: Logo glows in with cyan pulse. "YT SEO Architect" appears.
+         "Complete Dashboard Tour" subtitle fades in.]
+
+NARRATOR:
+"Alright, so I just connected my YouTube channel to YT SEO Architect,
+and I want to show you everything this dashboard can do — because
+honestly, it's kind of insane how much is packed in here. Let's go."
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━
+CHAPTER 1: CONNECT & OVERVIEW (0:30 - 1:15)
+━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+[VISUAL: Dashboard fades in. SEO Score ring animates from 0 to 72.
+         Bento cards reveal: Algorithmic Stability 87, Credits 100, 12 Videos.
+         Critical Fixes panel slides in showing 3 issues.]
+
+NARRATOR:
+"So the second you connect your channel, it instantly analyzes everything.
+I'm talking titles, tags, descriptions, thumbnails — the whole thing.
+
+Right here I get an SEO score. Mine's a 72 out of 100 — not bad, but
+definitely room to grow. It also shows my algorithmic stability score,
+how many credits I have, and how many videos it analyzed.
+
+And down here — this is the part I love — it immediately tells me what's
+broken. Three critical fixes: two titles are too short, one video has
+no chapters, and three descriptions need more words. It just... knows."
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━
+CHAPTER 2: INTELLIGENCE RESEARCH (1:15 - 2:15)
+━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+[VISUAL: Sidebar "Intelligence Research" hub expands. Workspace shows
+         Keyword Discovery input with autocomplete dropdown. Golden Keywords
+         get green badges. Niche Guard card shows 94% relevance. Competitor
+         Sniper shows extracted keywords from a rival channel.]
+
+NARRATOR:
+"Okay, this first hub is called Intelligence Research. This is where you
+figure out what your audience is actually searching for.
+
+So you type in a seed keyword — let's say 'how to grow on youtube 2026' —
+and it auto-generates all these long-tail variations. The ones with green
+'Golden' badges? Those are the high-value, low-competition gems you want
+to target.
+
+There's also Niche Guard, which tells you if your content actually matches
+what your channel is about — mine's at ninety-four percent, so I'm doing
+pretty well there. And the Competitor Sniper — this is crazy — you drop
+in a competitor's channel and it pulls out all their keywords so you know
+exactly what's working for them. That one's a Pro feature."
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━
+CHAPTER 2: CREATIVE STUDIO (2:15 - 3:15)
+━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+[VISUAL: Sidebar "Creative Studio" hub expands. Video Factory shows
+         title, description, and tags generated. Thumbnail Lab shows
+         3 mockup cards. Script-to-Shorts shows clip breakdown.]
+
+NARRATOR:
+"Next is Creative Studio. Once you know your keywords, this is where
+you turn them into actual content.
+
+The Video Factory takes your topic and generates an optimized title,
+a two-hundred-plus-word description with timestamps and hashtags,
+and twelve to fifteen relevant tags — all in one shot. I barely have
+to think.
+
+The Thumbnail Lab gives you AI-generated concepts based on your title
+and niche. Three different styles, so you can pick what fits your brand.
+
+And Script-to-Shorts — this one's wild for repurposing content. You drop
+in a long video, and it automatically finds the best sixty-second clips
+to turn into Shorts. Three Shorts from one video. That's three chances
+to go viral from content you already made."
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━
+CHAPTER 3: OPTICS LAB (3:15 - 4:05)
+━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+[VISUAL: Sidebar "Optics Lab" hub expands. Metadata Auditor shows red
+         42/100 score card. Before/After comparison flips from red to green.
+         Bulk Injector table. Evergreen Audit flags old videos.]
+
+NARRATOR:
+"This is the Optics Lab — and this is where broken metadata goes to die.
+
+The Metadata Auditor scans any video and gives it a score. Here's one of
+mine that scored forty-two out of a hundred — yikes. Title's too short,
+no chapters, only four tags. But check this out — the Pre-Upload Lab
+rewrites everything. Before: 'Morning Routine vlog' — boring. After:
+'My 5AM Morning Routine That Changed My Life' — curiosity, numbers,
+a hook. Way better.
+
+There's also a Bulk Injector if you need to fix a bunch of videos at
+once, and an Evergreen Audit that flags videos older than a year so
+you can refresh their titles and tags to trigger re-indexing. Smart."
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━
+CHAPTER 4: AUTOPILOT (4:05 - 4:50)
+━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+[VISUAL: Sidebar "Autopilot" hub expands. Retention Re-Order shows
+         playlist restructuring. Auto-Responder shows chat bubbles.
+         Automation Pipeline shows upload → tag → optimize flow.]
+
+NARRATOR:
+"Autopilot is for channels that want to set it and forget it.
+
+The Retention Re-Orderer restructures your playlists so the strongest
+video is first — that maximizes session watch time, which is a huge
+ranking signal on YouTube. The Auto-Responder automatically replies
+to comments with links to your other videos, keeping people on your
+channel. And the full Automation Pipeline — that's Agency tier —
+automatically tags, optimizes, and adds every new upload to the right
+playlist. You literally just upload and it handles the rest."
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━
+CHAPTER 5: PHRONESIS AGENT (4:50 - 5:40)
+━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+[VISUAL: Sidebar "Phronesis Agent" nav item highlights. Goal card
+         with 450/1000 progress bar. Chat bubbles show scan request
+         and results. Command Inbox with 3 proposals. Mode badges
+         cycle through OFF → MONITORING → SUGGESTING → AUTO.]
+
+NARRATOR:
+"And then there's Phronesis. This is the AI coach that basically thinks
+about your channel twenty-four seven.
+
+You set a goal — mine is a thousand subscribers by December. Then you
+tell it to scan your channel, and it finds every weak video, generates
+a fix for each one, and puts it in your Command Inbox. You just hit
+Apply and it updates YouTube directly. No copy-pasting, no manual work.
+
+It has four modes — Off, Monitoring where it watches and alerts you,
+Suggesting where it proposes fixes, and full Auto where it just...
+does everything. I keep mine on Suggesting. I like having final say."
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━
+CHAPTER 6: RESULTS & CTA (5:40 - 6:15)
+━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+[VISUAL: Optimization History table with before/after scores.
+         Growth stats: 12 trials, 75% success, +23% avg lift.
+         CTA button with cyan glow. Logo + URL outro.]
+
+NARRATOR:
+"Every single optimization is tracked. You can see exactly what changed,
+the before and after scores, and whether it actually improved performance.
+Seventy-five percent success rate, average twenty-three percent lift —
+those are real numbers from my channel.
+
+And here's the best part — you get a hundred free credits every month.
+No card required. It's completely free to start.
+
+If you're a creator who's tired of guessing what the algorithm wants,
+just go to yt-seo-architect.vercel.app. Everything I showed you is
+waiting for you. See you there."
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━
+END OF SCRIPT
+━━━━━━━━━━━━━━━━━━━━━━━━━━
+```
+
+- [ ] **Step 2: Commit**
+
+```bash
+git add marketing/dashboard-tour-script.txt
+git commit -m "feat: add dashboard tour voiceover script (7 chapters, ~6 min)"
+```
+
+---
+
+### Task 3: Final polish and commit
+
+- [ ] **Step 1: Verify all files are clean**
+
+```bash
+# Check HTML is well-formed
+node -e "
+const fs = require('fs');
+const html = fs.readFileSync('marketing/dashboard-tour.html', 'utf8');
+const divs = (html.match(/<div/g)||[]).length;
+const divClose = (html.match(/<\/div>/g)||[]).length;
+console.log('div balance:', divs === divClose ? 'OK' : 'MISMATCH ('+divs+'/'+divClose+')');
+const match = html.match(/<script>([\s\S]*?)<\/script>/);
+if(match){try{new Function(match[1]);console.log('JS: OK');}catch(e){console.log('JS ERROR:',e.message);}}
+const noPurple = !/purple|violet|indigo|#6366f1|#8b5cf6|f97316/i.test(html);
+console.log('no banned colors:', noPurple ? 'OK' : 'FAIL');
+"
+
+# Check script file exists and has content
+wc -l marketing/dashboard-tour-script.txt
+grep -c "CHAPTER" marketing/dashboard-tour-script.txt
+```
+
+- [ ] **Step 2: Final commit if needed**
+
+```bash
+git add marketing/dashboard-tour.html marketing/dashboard-tour-script.txt
+git commit -m "polish: final review and validation of dashboard tour"
+```
