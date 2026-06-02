@@ -273,6 +273,19 @@ export function renderBlogTemplate(page) {
     contentHTML += generateTLDRBlock(page);
   }
 
+  // AdSense: Post-TL;DR
+  contentHTML += `<div class="adsense-blog-top" style="margin:2rem 0; text-align:center;">
+    <ins class="adsbygoogle"
+         style="display:inline-block;width:728px;height:90px"
+         data-ad-client="ca-pub-3831668789026424"
+         data-ad-slot="8703240267"
+         data-ad-format="auto"
+         data-full-width-responsive="true"></ins>
+    <script>
+         (adsbygoogle = window.adsbygoogle || []).push({});
+    <\/script>
+  </div>`;
+
   // 2. TOC nav
   if (!hasTOC && h2s.length >= 3) {
     const contentH2s = h2s.filter(h => !/faq|key takeaways|conclusion/i.test(h.text));
@@ -348,6 +361,7 @@ export function renderBlogTemplate(page) {
   <meta property="article:published_time" content="${formatDate(publishDate)}" />
   <meta property="article:modified_time" content="${formatDate(updateDate)}" />
 
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3831668789026424" crossorigin="anonymous"></script>
   <script type="application/ld+json">${schemaJSON}</script>
   <link rel="stylesheet" href="/blog/blog.css" />
 </head>
@@ -395,6 +409,19 @@ export function renderBlogTemplate(page) {
         <a href="/dashboard">Get Started Free →</a>
       </div>
 
+      <!-- AdSense: Bottom -->
+      <div class="adsense-blog-bottom" style="margin:2rem 0; text-align:center;">
+        <ins class="adsbygoogle"
+             style="display:block;width:100%;height:250px"
+             data-ad-client="ca-pub-3831668789026424"
+             data-ad-slot="6837670420"
+             data-ad-format="auto"
+             data-full-width-responsive="true"></ins>
+        <script>
+             (adsbygoogle = window.adsbygoogle || []).push({});
+        <\/script>
+      </div>
+
       <!-- Related posts -->
       ${generateRelatedPosts(page)}
 
@@ -402,7 +429,7 @@ export function renderBlogTemplate(page) {
   </main>
 
   <footer class="footer">
-    <p>© 2026 YT SEO Architect · <a href="/blog">All Articles</a> · <a href="/pricing">Pricing</a> · <a href="/privacy-policy">Privacy</a></p>
+    <p>© 2026 YT SEO Architect · <a href="/blog">All Articles</a> · <a href="/privacy-policy">Privacy</a></p>
   </footer>
 </body>
 </html>`;

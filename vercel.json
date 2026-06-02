@@ -23,20 +23,16 @@
     { "source": "/robots.txt", "destination": "/api/index.js" },
     { "source": "/blog", "destination": "/api/index.js" },
     { "source": "/blog/(.+)", "destination": "/api/index.js" },
-    { "source": "/tools/(.+)/(.+)", "destination": "/api/index.js" },
     { "source": "/dashboard", "destination": "/dashboard.html" },
-    { "source": "/pricing", "destination": "/pricing.html" },
     { "source": "/changelog", "destination": "/changelog.html" },
     { "source": "/about", "destination": "/about.html" },
     { "source": "/seo-lab", "destination": "/seo-lab.html" },
     { "source": "/lab", "destination": "/seo-lab.html" },
     { "source": "/tools/tag-generator", "destination": "/tools/tag-generator.html" },
-    { "source": "/tools/tag-generator/(.*)", "destination": "/tools/tag-generator.html" },
     { "source": "/tools/title-optimizer", "destination": "/tools/title-optimizer.html" },
-    { "source": "/tools/title-optimizer/(.*)", "destination": "/tools/title-optimizer.html" },
     { "source": "/tools/description-writer", "destination": "/tools/description-writer.html" },
-    { "source": "/tools/description-writer/(.*)", "destination": "/tools/description-writer.html" },
     { "source": "/api/(.+)", "destination": "/api/index.js" },
+
     { "source": "/(.*)", "destination": "/$1" }
   ],
   "headers": [

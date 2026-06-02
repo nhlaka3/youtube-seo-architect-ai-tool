@@ -250,7 +250,7 @@ app.use(helmet({
 
       defaultSrc: ["'self'"],
 
-      scriptSrc: ["'self'", "'unsafe-inline'", "'unsafe-eval'", "https://js.stripe.com", "https://www.paypal.com", "https://*.paypal.com", "https://*.paypalobjects.com", "https://unpkg.com", "https://apis.google.com", "https://accounts.google.com"],
+      scriptSrc: ["'self'", "'unsafe-inline'", "'unsafe-eval'", "https://js.stripe.com", "https://www.paypal.com", "https://*.paypal.com", "https://*.paypalobjects.com", "https://unpkg.com", "https://apis.google.com", "https://accounts.google.com", "https://pagead2.googlesyndication.com"],
 
       styleSrc: ["'self'", "'unsafe-inline'", "https://fonts.googleapis.com", "https://unpkg.com"],
 
@@ -258,7 +258,7 @@ app.use(helmet({
 
       connectSrc: ["'self'", "https://api.groq.com", "https://www.googleapis.com", "https://*.googleapis.com", "https://api-m.paypal.com", "https://api-m.sandbox.paypal.com", "https://*.paypal.com", "https://unpkg.com", "https://*.sentry.io", "https://*.google-analytics.com"],
 
-      frameSrc: ["'self'", "https://js.stripe.com", "https://www.paypal.com", "https://www.sandbox.paypal.com", "https://*.paypal.com", "https://accounts.google.com"],
+      frameSrc: ["'self'", "https://js.stripe.com", "https://www.paypal.com", "https://www.sandbox.paypal.com", "https://*.paypal.com", "https://accounts.google.com", "https://googleads.g.doubleclick.net", "https://pagead2.googlesyndication.com"],
 
       fontSrc: ["'self'", "https://fonts.gstatic.com"],
 
@@ -1254,7 +1254,8 @@ const APPROVED_BLOG_SLUGS = [
   'youtube-description-templates-2026', 'youtube-end-screens-cards-guide-2026',
   'youtube-metadata-auditor-vs-vidiq-shadow-ban', 'youtube-retention-graph-explained-2026',
   'youtube-seo-audit-diagnostic-fix-2026', 'youtube-thumbnail-ab-testing-guide',
-  'youtube-video-not-getting-views-diagnostic-fix-2026'
+  'youtube-video-not-getting-views-diagnostic-fix-2026',
+  'youtube-shorts-seo-ranking-guide-2026'
 ];
 
 app.get('/api/admin/trash-posts', async (req, res) => {
@@ -1313,9 +1314,9 @@ app.get('/sitemap.xml', async (req, res) => {
     const corePages = [
       { loc: '/', priority: '1.0', changefreq: 'weekly' },
       { loc: '/dashboard', priority: '0.9', changefreq: 'weekly' },
-      { loc: '/blog', priority: '0.9', changefreq: 'weekly' },
-      { loc: '/pricing', priority: '0.8', changefreq: 'weekly' },
-      { loc: '/about', priority: '0.7', changefreq: 'monthly' },
+      { loc: '/blog', priority: '0.9', changefreq: 'daily' },
+      { loc: '/about', priority: '0.5', changefreq: 'monthly' },
+
       { loc: '/changelog', priority: '0.6', changefreq: 'monthly' },
       { loc: '/privacy-policy', priority: '0.3', changefreq: 'yearly' },
       { loc: '/terms-of-service', priority: '0.3', changefreq: 'yearly' },
@@ -1334,21 +1335,8 @@ app.get('/sitemap.xml', async (req, res) => {
       xml += `  <url><loc>https://yt-seo-architect.vercel.app${p.loc}</loc><changefreq>${p.changefreq}</changefreq><priority>${p.priority}</priority></url>\n`;
     }
 
-    // Tag generator niche pages (programmatic SEO)
-    const tagGenNiches = [
-      'gaming','minecraft','fortnite','roblox','vlog','cooking','fitness','technology',
-      'music','travel','education','makeup','football','anime','coding','podcast',
-      'unboxing','youtube-seo','video-editing','python-programming','web-development',
-      'machine-learning','photoshop-tutorial','premiere-pro','ai-tools','chatgpt-tutorial',
-      'crypto-trading','personal-finance','stock-market','iphone-review','gaming-pc-build',
-      'home-workout','morning-routine','study-tips','side-hustle-ideas','real-estate-investing',
-      'fl-studio-tutorial','guitar-tutorial','math-tutorial','language-learning',
-      'how-to-make-money-online','productivity-tips','meditation-guide','resume-tips',
-      'elden-ring','valorant','call-of-duty','data-science','fashion','macbook-pro',
-    ];
-    for (const niche of tagGenNiches) {
-      xml += `  <url><loc>https://yt-seo-architect.vercel.app/tools/tag-generator/${niche}</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>\n`;
-    }
+    // PSEO disabled as per user request
+
 
     // Validated blog posts only
     for (const page of allPages) {

@@ -247,45 +247,14 @@ Generate JSON: { "titles": [{"type":"Hook","text":"title1"},{"type":"Viral","tex
 });
 
 router.post('/assistant', aiLimiter, validateBody(assistantSchema), requireChannelId, async (req, res) => {
-  // ── Admin gate: Ask Phronesis is in testing ──
-  const headerPlan = req.headers['x-plan'] || '';
-  const adminIds = ['UC-vVYFQC_MNjVP03YRZ56Wg', 'UCmcNApL2w7kk7NG14tXinRg'];
-  if (!adminIds.includes(req.channelId)) {
-    const plan = await getPlan(req.channelId);
-    if (plan !== 'agency' && plan !== 'pro') {
-      // Free trial: 3 coaching messages before requiring upgrade
-      const trialKey = 'phronesis_trial_' + req.channelId;
-      let trialCount = 0;
-      try {
-        const { default: dbService } = await import('../src/database/services.js');
-        const s = await import('../src/database/schema.js');
-        const logs = await dbService.db.select().from(s.agentActivityLogs)
-          .where({ channelId: req.channelId, agentName: 'coach' })
-          .orderBy(s.agentActivityLogs.createdAt, 'desc').limit(10);
-        trialCount = logs.length;
-      } catch(e) {}
-      if (trialCount >= 3) {
-        return sendRes(res, 403, { error: 'You\'ve used your 3 free coaching messages. Upgrade to Pro ($5/mo) or Agency ($19/mo) for unlimited access. <a href="/pricing">View Plans</a>' });
-      }
-    }
-  }
-
+  // ── 100% Free: Unlimited Phronesis AI Coaching ──
   try {
     const { message, context, history } = req.body;
     
-    // Agency plan bypass
-    const headerPlan = req.headers['x-plan'] || '';
-    if (headerPlan !== 'agency') {
-      const plan = await getPlan(req.channelId);
-      if (plan !== 'agency') {
-        const creditResult = await deductCredits(req.channelId, CREDIT_COSTS['ai-assistant']);
-        if (!creditResult.success) return sendRes(res, 403, { error: 'Insufficient credits', credits: creditResult.balance });
-      }
-    }
-
     const { askAI } = await import('./_lib/ai-provider.js');
 
     const niche = sanitizePromptInput(context?.niche || 'General', 50);
+
     const credits = context?.credits || 0;
     const healthScore = context?.healthScore || 50;
     const videos = sanitizePromptInput(context?.videos || '', 2000);

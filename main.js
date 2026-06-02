@@ -417,16 +417,14 @@ const CreditsSystem = {
   },
 
   canAfford(action) {
-    const cost = this.costs[action] || 1;
-    return this.remaining >= cost;
+    return true; // 100% Free Mode
   },
 
   deduct(action) {
     const cost = this.costs[action] || 1;
     if (!this.canAfford(action)) {
-      showToast('No credits left! Upgrade to continue.', 'error');
-      setTimeout(() => { window.location.href = '/#pricing'; }, 1500);
-      return false;
+      return true; // Force allow
+
     }
 
     this.used += cost;
@@ -442,16 +440,8 @@ const CreditsSystem = {
 
     this.save();
     this.updateDisplay();
-    showToast(`-${cost} credits`, 'deduction');
+    // showToast(`-${cost} credits`, 'deduction'); // Hidden in 100% Free Mode
 
-    // Check if depleted after deduction - redirect to pricing
-    if (this.remaining <= 0) {
-      setTimeout(() => {
-        if (confirm('You\'ve used all your credits! Upgrade to get more. Go to pricing?')) {
-          window.location.href = '/#pricing';
-        }
-      }, 500);
-    }
     return true;
   },
 
@@ -3194,9 +3184,7 @@ const PLAN_FEATURES = {
 
 function isFeatureAllowed(viewName) {
   if (viewName === 'seo-lab') return isAdmin();
-  if (isAdmin()) return true;
-  const allowed = PLAN_FEATURES[userPlan] || PLAN_FEATURES.free;
-  return allowed.includes(viewName);
+  return true; // 100% Free & Unlimited
 }
 
 async function syncPlanFromBackend() {

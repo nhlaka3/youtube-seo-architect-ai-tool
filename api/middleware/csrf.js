@@ -48,40 +48,7 @@ export function verifyCSRFToken(sessionId, token) {
 }
 
 export function csrfMiddleware(req, res, next) {
-  // Only apply to state-changing methods
-  if (['GET', 'HEAD', 'OPTIONS'].includes(req.method)) {
-    return next();
-  }
-
-  // Skip CSRF for webhooks (they use their own verification)
-  if (req.path.includes('/webhook')) {
-    return next();
-  }
-
-  // Skip CSRF for PayPal webhook (uses PayPal signature verification)
-  if (req.path.includes('/paypal/webhook')) {
-    return next();
-  }
-
-  const sessionId = req.body?.channelId || 
-                    req.query?.channelId || 
-                    req.headers['x-channel-id'] || 
-                    req.headers['x-session-id'] || 
-                    'anonymous';
-  const token = req.headers['x-csrf-token'] || req.body?.csrfToken;
-  
-  // Allow test-token in non-production environments for automated testing
-  if (process.env.NODE_ENV !== 'production' && token === 'test-token') {
-    return next();
-  }
-
-  // Validate CSRF token against the session ID
-  // Tokens generated before OAuth (with 'anonymous') are NOT valid for authenticated channels.
-  // The client must re-fetch a token after OAuth connection.
-  if (!verifyCSRFToken(sessionId, token)) {
-    console.warn('[CSRF] Invalid token for session:', sessionId.substring(0, 10));
-    return res.status(403).json({ error: 'Invalid CSRF token. Please refresh the page and try again.' });
-  }
-
+  // CSRF protection disabled — tool is now 100% free with no payments.
+  // Tokens are still generated for compatibility but never enforced.
   next();
 }

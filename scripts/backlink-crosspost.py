@@ -57,19 +57,22 @@ def extract_meta(html, name):
     return None
 
 def clean_html_for_platform(html, platform="devto"):
-    """Strip template-only elements, keep content."""
-    # Remove header/footer/sidebars that only exist on our site
+    """Strip template-only elements, keep content. Aggressive cleaning for API limits."""
     remove_selectors = [
         r'<header[^>]*>.*?</header>',
         r'<footer[^>]*>.*?</footer>',
         r'<nav\s+class=["\']breadcrumb[^>]*>.*?</nav>',
-        r'<div\s+class=["\']author-box[^>]*>.*?</div>',
-        r'<div\s+class=["\']cta-box[^>]*>.*?</div>',
-        r'<div\s+class=["\']cta-bottom[^>]*>.*?</div>',
-        r'<div\s+class=["\']social-proof[^>]*>.*?</div>',
-        r'<div\s+class=["\']trending-now[^>]*>.*?</div>',
+        r'<nav\s+class=["\']toc[^>]*>.*?</nav>',
         r'<nav\s+class=["\']related-posts[^>]*>.*?</nav>',
+        r'<div\s+class=["\'][^"\']*author-box[^"\']*["\'][^>]*>.*?</div>',
+        r'<div\s+class=["\'][^"\']*cta-box[^"\']*["\'][^>]*>.*?</div>',
+        r'<div\s+class=["\'][^"\']*cta-bottom[^"\']*["\'][^>]*>.*?</div>',
+        r'<div\s+class=["\'][^"\']*social-proof[^"\']*["\'][^>]*>.*?</div>',
+        r'<div\s+class=["\'][^"\']*trending-now[^"\']*["\'][^>]*>.*?</div>',
         r'<script[^>]*>.*?</script>',
+        r'<style[^>]*>.*?</style>',
+        r'<link[^>]*>',
+        r'<meta[^>]*>',
     ]
     for selector in remove_selectors:
         html = re.sub(selector, '', html, flags=re.DOTALL | re.IGNORECASE)
@@ -79,6 +82,10 @@ def clean_html_for_platform(html, platform="devto"):
     html = html.replace("href='/", f"href='{BASE_URL}/")
     html = html.replace('src="/', f'src="{BASE_URL}/')
     html = html.replace("src='/", f"src='{BASE_URL}/")
+
+    # Remove empty divs and excessive whitespace
+    html = re.sub(r'<div[^>]*>\s*</div>', '', html)
+    html = re.sub(r'\n\s*\n\s*\n', '\n\n', html)
 
     return html
 
@@ -146,24 +153,62 @@ def read_blog_post(slug):
 
 # ─── dev.to ────────────────────────────────────────────────────────────
 
+def html_to_markdown(html):
+    """Convert basic HTML to markdown for dev.to compatibility."""
+    # Strip script/style/json-LD first
+    md = re.sub(r'<script[^>]*>.*?</script>', '', html, flags=re.DOTALL | re.IGNORECASE)
+    md = re.sub(r'<style[^>]*>.*?</style>', '', md, flags=re.DOTALL | re.IGNORECASE)
+    md = re.sub(r'<title[^>]*>.*?</title>', '', md, flags=re.DOTALL | re.IGNORECASE)
+    
+    # Strip JSON-like content blocks (schema.org JSON-LD)
+    md = re.sub(r'\{[^{}]*"@context"[^{}]*\}', '', md)
+    md = re.sub(r'\n\s*\n\s*\n+', '\n\n', md)
+    
+    # Headings
+    md = re.sub(r'<h1[^>]*>(.*?)</h1>', r'# \1\n', md, flags=re.DOTALL | re.IGNORECASE)
+    md = re.sub(r'<h2[^>]*>(.*?)</h2>', r'## \1\n', md, flags=re.DOTALL | re.IGNORECASE)
+    md = re.sub(r'<h3[^>]*>(.*?)</h3>', r'### \1\n', md, flags=re.DOTALL | re.IGNORECASE)
+    # Bold and italic
+    md = re.sub(r'<strong[^>]*>(.*?)</strong>', r'**\1**', md, flags=re.DOTALL | re.IGNORECASE)
+    md = re.sub(r'<b[^>]*>(.*?)</b>', r'**\1**', md, flags=re.DOTALL | re.IGNORECASE)
+    md = re.sub(r'<em[^>]*>(.*?)</em>', r'*\1*', md, flags=re.DOTALL | re.IGNORECASE)
+    # Links
+    md = re.sub(r'<a[^>]*href="([^"]*)"[^>]*>(.*?)</a>', r'[\2](\1)', md, flags=re.DOTALL | re.IGNORECASE)
+    # Paragraphs
+    md = re.sub(r'<p[^>]*>(.*?)</p>', r'\1\n\n', md, flags=re.DOTALL | re.IGNORECASE)
+    # Line breaks
+    md = re.sub(r'<br\s*/?>', '\n', md, flags=re.IGNORECASE)
+    # Lists
+    md = re.sub(r'<li[^>]*>(.*?)</li>', r'- \1\n', md, flags=re.DOTALL | re.IGNORECASE)
+    # Remove remaining HTML tags
+    md = re.sub(r'<[^>]+>', '', md)
+    # Clean whitespace
+    md = re.sub(r'\n\s*\n\s*\n+', '\n\n', md)
+    # Remove leading whitespace from lines
+    md = re.sub(r'^\s+', '', md, flags=re.MULTILINE)
+    md = md.strip()
+    return md
+
 def post_to_devto(post, api_key, dry_run=False):
     """Post to dev.to with canonical_url. Returns URL or None."""
-    devto_body = post['body_html']
-    # dev.to uses markdown, but accepts HTML. Add cross-post footer.
-    devto_body += f"""
-<br><br>
-<hr>
-<p><em>Originally published at <a href="{post['canonical_url']}">YT SEO Architect</a>.</em></p>
-"""
+    # Convert body to markdown (dev.to rejects HTML)
+    md_body = html_to_markdown(post['body_html'])
+    
+    # Truncate if too large (dev.to has limits)
+    max_body = 30000
+    if len(md_body) > max_body:
+        md_body = md_body[:max_body] + '\n\n*[Content truncated — read the full guide below]*'
+
+    # Add cross-post footer
+    md_body += f'\n\n---\n\n*Originally published at [YT SEO Architect]({post["canonical_url"]})*'
 
     payload = {
         'article': {
             'title': post['title'],
             'description': post['description'][:200],
-            'body_markdown': '',  # We're sending HTML
-            'body_html': devto_body,
+            'body_markdown': md_body,
             'published': True,
-            'tags': post['tags'],
+            'tags': post['tags'][:4],
             'canonical_url': post['canonical_url'],
         }
     }

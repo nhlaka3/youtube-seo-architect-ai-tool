@@ -20,6 +20,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600;700&family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
   <noscript><link href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600;700&family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet" media="print" onload="this.media='all'"></noscript>
   <script src="https://accounts.google.com/gsi/client" async defer></script>
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3831668789026424" crossorigin="anonymous"></script>
   <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js" defer></script>
 
 
@@ -58,48 +59,11 @@
       /* Variables inherited from style.css — no overrides needed */
      }
 
-    .folder-item.premium-locked, .nav-item.premium-locked {
-      opacity: 0.5;
-      pointer-events: none;
-      filter: blur(2px);
-    }
+    /* Free & Unlimited Overhaul */
+    .gold-lock, .agency-lock { display: none !important; }
+    .premium-locked, .agency-locked { opacity: 1 !important; pointer-events: all !important; filter: none !important; }
+    .premium-locked::after, .agency-locked::after { display: none !important; }
 
-    .folder-item.premium-locked .gold-lock,
-    .folder-item.premium-locked .agency-lock,
-    .nav-item.premium-locked .gold-lock,
-    .nav-item.premium-locked .agency-lock {
-      display: inline-block;
-    }
-
-    .gold-lock { color: #f59e0b !important; font-size: 12px; margin-left: 4px; }
-    .agency-lock { color: #a78bfa !important; font-size: 12px; margin-left: 4px; }
-
-    .folder-item.premium-locked::after,
-    .nav-item.premium-locked::after {
-      content: "Pro \2022 $5/mo";
-      display: block;
-      font-size: 10px;
-      color: #f97316;
-      margin-top: 4px;
-      font-weight: 600;
-    }
-
-    .folder-item.agency-locked {
-      opacity: 0.45;
-      pointer-events: none;
-      filter: blur(2px);
-    }
-
-    .folder-item.agency-locked .agency-lock { display: inline-block; }
-
-    .folder-item.agency-locked::after {
-      content: "Agency \2022 $19/mo";
-      display: block;
-      font-size: 10px;
-      color: #a78bfa;
-      margin-top: 4px;
-      font-weight: 600;
-    }
 
     .plan-badge {
       font-size: 11px;
@@ -776,10 +740,8 @@
           <span>Ask Phronesis</span>
         </a>
 
-        <a href="/pricing" class="nav-item">
-          <i data-lucide="credit-card"></i> 
-          <span>Billing & Upgrades</span>
-        </a>
+        <!-- Removed Billing & Upgrades -->
+
 
         <a class="nav-item" onclick="switchView('settings')">
           <i data-lucide="settings"></i> 
@@ -788,7 +750,18 @@
       </nav>
 
       <div class="sidebar-footer">
+        <!-- AdSense Sidebar -->
+        <ins class="adsbygoogle"
+             style="display:block;width:100%;height:200px"
+             data-ad-client="ca-pub-3831668789026424"
+             data-ad-slot="6739952134"
+             data-ad-format="auto"
+             data-full-width-responsive="true"></ins>
+        <script>
+             (adsbygoogle = window.adsbygoogle || []).push({});
+        </script>
         <div class="sidebar-version">SYSTEM v3.2.0-OLED</div>
+
       </div>
     </aside>
 
@@ -810,9 +783,24 @@
             <span>AI: Checking...</span>
           </div>
         </div>
+        <div class="header-center" style="flex:1; display:flex; justify-content:center;">
+          <!-- AdSense Header -->
+          <ins class="adsbygoogle"
+               style="display:inline-block;width:728px;height:90px"
+               data-ad-client="ca-pub-3831668789026424"
+               data-ad-slot="9394339555"
+               data-ad-format="auto"
+               data-full-width-responsive="true"></ins>
+          <script>
+               (adsbygoogle = window.adsbygoogle || []).push({});
+          </script>
+        </div>
+
         <div class="header-right">
-        <!-- Credits Counter (clickable to upgrade) -->
-        <a href="/pricing" id="credits-display" class="credits-display" aria-live="polite" aria-label="Credits remaining - click to upgrade">
+
+        <!-- Credits Counter (Hidden in 100% Free Mode) -->
+        <a href="#" id="credits-display" class="credits-display" style="display:none !important;">
+
           <i data-lucide="credit-card" class="text-orange-500" aria-hidden="true"></i>
           <span class="credits-count" id="credits-count" aria-label="Current credits">100</span>
           <span class="credits-label" id="credits-label">Monthly refill active</span>
@@ -835,9 +823,8 @@
               <div class="dropdown-item">
                 <i data-lucide="user"></i> Account
               </div>
-              <div class="dropdown-item">
-                <i data-lucide="credit-card"></i> Billing & Upgrades
-              </div>
+              <!-- Removed Billing -->
+
               <div class="dropdown-divider"></div>
               <div class="dropdown-item danger" onclick="logout()">
                 <i data-lucide="log-out"></i> Sign Out
@@ -3319,7 +3306,7 @@ window.closeAssistant = function() {
 
 // Redirect to landing page pricing section for all upgrades
 window.openUpgradeModal = function(plan, amount) {
-  window.location.href = '/#pricing';
+  console.log("Everything is free now!");
 };
 </script>
 

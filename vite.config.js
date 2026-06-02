@@ -18,7 +18,6 @@ export default defineConfig({
         blog: resolve(__dirname, 'blog.html'),
         privacy: resolve(__dirname, 'privacy-policy.html'),
         terms: resolve(__dirname, 'terms-of-service.html'),
-        pricing: resolve(__dirname, 'pricing.html'),
         changelog: resolve(__dirname, 'changelog.html'),
         landing: resolve(__dirname, 'warriorplus-landing.html'),
         redirect: resolve(__dirname, 'redirect.html')
