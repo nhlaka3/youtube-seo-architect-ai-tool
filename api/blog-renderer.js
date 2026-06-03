@@ -260,6 +260,8 @@ export function renderBlogTemplate(page) {
   const hasKeyTakeaways = hasSection(rawContent, 'key-takeaways') || hasSection(rawContent, 'key-takeaways');
   const hasHero = hasHeroImage(rawContent);
   const hasCTA = hasSection(rawContent, 'cta-box');
+  const hasAuthorBox = hasSection(rawContent, 'author-box') || hasSection(rawContent, 'author-info');
+  const hasBreadcrumbs = hasSection(rawContent, 'breadcrumb') || /"BreadcrumbList"/i.test(rawContent);
 
   // Extract structural data from content
   const h2s = extractH2s(rawContent);
@@ -345,7 +347,7 @@ export function renderBlogTemplate(page) {
   <meta property="og:url" content="https://yt-seo-architect.vercel.app/blog/${slug}" />
   <meta property="og:title" content="${title}" />
   <meta property="og:description" content="${metaDesc}" />
-  <meta property="og:image" content="https://yt-seo-architect.vercel.app/og-image.png" />
+  <meta property="og:image" content="https://yt-seo-architect.vercel.app/blog/${slug}-og.png" />
   <meta property="og:image:width" content="1200" />
   <meta property="og:image:height" content="630" />
   <meta property="og:image:type" content="image/png" />
@@ -355,7 +357,7 @@ export function renderBlogTemplate(page) {
   <meta name="twitter:card" content="summary_large_image" />
   <meta name="twitter:title" content="${title}" />
   <meta name="twitter:description" content="${metaDesc}" />
-  <meta name="twitter:image" content="https://yt-seo-architect.vercel.app/og-image.png" />
+  <meta name="twitter:image" content="https://yt-seo-architect.vercel.app/blog/${slug}-og.png" />
 
   <!-- Article: published/modified times -->
   <meta property="article:published_time" content="${formatDate(publishDate)}" />
@@ -375,9 +377,11 @@ export function renderBlogTemplate(page) {
     <article>
 
       <!-- Breadcrumb -->
+      ${hasBreadcrumbs ? '' : `
       <nav class="breadcrumb" aria-label="Breadcrumb">
         <a href="/">Home</a> › <a href="/blog">Blog</a> › <strong>${title.substring(0, 60)}</strong>
       </nav>
+      `}
 
       <h1>${page.h1 || title}</h1>
 
@@ -388,6 +392,7 @@ export function renderBlogTemplate(page) {
       </p>
 
       <!-- E-E-A-T: Author credentials -->
+      ${hasAuthorBox ? '' : `
       <div class="author-box">
         <div class="avatar">YT</div>
         <div class="author-info">
@@ -395,6 +400,7 @@ export function renderBlogTemplate(page) {
           <p>AI-powered YouTube SEO platform. 17 tools used by content creators to rank higher. Built by creators, for creators.</p>
         </div>
       </div>
+      `}
 
       <!-- Hero / Featured Image (auto-detected from content or injected) -->
       ${hasHero ? '' : heroImageHTML(slug, title)}
