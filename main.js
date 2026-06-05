@@ -8022,7 +8022,7 @@ function renderAuditResults(data) {
         </div>
       </div>
     </div>
-  \`;
+  `;
 }
 
 // ── CHECKLIST FIX SYSTEM ──
