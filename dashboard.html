@@ -53,6 +53,67 @@
     window.toggleCoachDrawer = function() { console.warn("toggleCoachDrawer not loaded yet"); };
     window.handleCoachMessage = function() { console.warn("handleCoachMessage not loaded yet"); };
     window.switchView = function(view) { console.warn("switchView not loaded yet"); };
+
+    // Niche Guard UI wrapper (dashboard.html only)
+    window.handleNicheGuardAnalyze = function(btnEl) {
+      try {
+        const input = document.getElementById('niche-leader-url');
+        const out = document.getElementById('relevance-results');
+        const spinner = document.getElementById('niche-guard-inline-spinner');
+
+        const raw = (input?.value || '').trim();
+        if (!raw) {
+          window.showToast?.('Enter a YouTube leader video URL','error');
+          input?.focus?.();
+          return;
+        }
+
+        // Basic YouTube URL validation (accept full URL or ID-like strings)
+        const looksLikeId = /^[a-zA-Z0-9_-]{10}$/.test(raw);
+        const looksLikeUrl = /^(https?:\/\/)?(www\.)?(youtube\.com\/watch\?v=|youtu\.be\/)[a-zA-Z0-9_-]{10}/.test(raw);
+        if (!looksLikeId && !looksLikeUrl) {
+          window.showToast?.('URL must be a YouTube watch link or youtu.be link (video id recommended)','error');
+          input?.focus?.();
+          return;
+        }
+
+        if (btnEl) {
+          btnEl.disabled = true;
+          const original = btnEl.getAttribute('data-original-text');
+          if (!original) btnEl.setAttribute('data-original-text', btnEl.innerText);
+          btnEl.innerText = 'Analyzing…';
+        }
+
+        if (out) out.style.opacity = '0.55';
+        if (spinner) spinner.style.display = 'block';
+        // Clear old UI but keep skeleton
+        const empty = document.getElementById('relevance-empty');
+        if (empty) empty.style.display = 'none';
+
+        // Persist input so user can refresh/revisit
+        try { localStorage.setItem('niche_guard_leader_url', raw); } catch(e) {}
+
+        // Call the existing backend logic in main.js
+        if (typeof window.analyzeNicheRelevance === 'function') {
+          window.analyzeNicheRelevance();
+        } else {
+          window.showToast?.('Niche Guard analysis is not ready yet. Try again in a moment.','error');
+          if (btnEl) btnEl.disabled = false;
+        }
+      } catch (e) {
+        console.error('[Niche Guard] wrapper failed', e);
+        window.showToast?.('Niche Guard failed to start','error');
+      } finally {
+        // main.js owns the analysis lifecycle; keep UI enabled if backend doesn't start
+        if (btnEl && typeof window.analyzeNicheRelevance !== 'function') {
+          btnEl.disabled = false;
+          try {
+            const original = btnEl.getAttribute('data-original-text');
+            if (original) btnEl.innerText = original;
+          } catch (e2) {}
+        }
+      }
+    };
   </script>
   <style>
     :root {
@@ -594,7 +655,6 @@
             </a>
             <a class="folder-item" data-view="competitor" onclick="switchView('competitor')">
               <i data-lucide="target"></i> Competitor Sniper
-              <i data-lucide="lock" class="gold-lock"></i>
             </a>
             <a class="folder-item" data-view="suggested-analytics" onclick="switchView('suggested-analytics')">
               <i data-lucide="line-chart"></i> Suggested Analytics
@@ -1176,7 +1236,7 @@
         <div class="view-container" id="view-factory" style="display: none;">
           <div class="tool-header">
             <h2>Video Factory</h2>
-            <p>AI-powered script generation with 2-column workspace</p>
+            <p>AI-powered SEO-first YouTube scripts with built-in metadata, optimized for 2026.</p>
           </div>
 
           <!-- 2-Column Workspace -->
@@ -1304,6 +1364,40 @@
                   id="script-output">Enter your niche, tone, and length above to generate a script...</pre>
               </div>
 
+              <!-- Strategic Draft Section (Bridged from Niche Guard) -->
+              <div id="factory-seo-draft" class="hidden" style="margin-top: 20px; padding: 20px; background: rgba(139, 92, 246, 0.05); border: 1px solid rgba(139, 92, 246, 0.2); border-radius: 12px;">
+                <h4 style="margin: 0 0 15px 0; display: flex; align-items: center; gap: 8px; font-size: 14px; color: var(--primary);">
+                  <i data-lucide="sparkles" style="width: 16px;"></i> Strategic Project Draft
+                </h4>
+                <div class="input-group-factory" style="margin-bottom: 12px;">
+                  <label style="font-size: 11px; text-transform: uppercase; color: var(--text-muted);">Proposed Title</label>
+                  <input type="text" id="factory-draft-title" style="width: 100%; background: var(--bg-deep); border: 1px solid var(--border-color); color: var(--text-main); padding: 8px; border-radius: 6px; font-size: 13px;">
+                </div>
+                <div class="input-group-factory" style="margin-bottom: 12px;">
+                  <label style="font-size: 11px; text-transform: uppercase; color: var(--text-muted);">Content Hook / Description</label>
+                  <textarea id="factory-draft-desc" style="width: 100%; height: 80px; background: var(--bg-deep); border: 1px solid var(--border-color); color: var(--text-main); padding: 8px; border-radius: 6px; font-size: 13px;"></textarea>
+                </div>
+                <div class="input-group-factory">
+                  <label style="font-size: 11px; text-transform: uppercase; color: var(--text-muted);">Thumbnail Visual Blueprint</label>
+                  <div id="factory-thumbnail-blueprint" style="font-size: 12px; color: var(--text-muted); background: var(--bg-main); padding: 10px; border-radius: 6px; border: 1px dashed var(--border-color);">
+                    No blueprint provided.
+                  </div>
+                </div>
+              </div>
+
+              <div class="factory-seo-quality-panel" id="factory-seo-quality-panel">
+                <div class="seo-panel-header">
+                  <div>
+                    <div class="seo-panel-label">SEO Quality Report</div>
+                    <div class="seo-panel-subtitle">Instant audit of your script and metadata for 2026 YouTube performance.</div>
+                  </div>
+                  <div class="seo-score-badge" id="factory-seo-score">--</div>
+                </div>
+                <div class="seo-panel-content" id="factory-seo-summary">
+                  Generate a script to see SEO signal strength, title length health, tag coverage, and retention notes.
+                </div>
+              </div>
+
               <!-- Export Button -->
             </div>
           </div>
@@ -1315,7 +1409,7 @@
         <div class="view-container" id="view-competitor" style="display: none;">
           <div class="tool-header">
             <h2>Competitor Sniper</h2>
-            <p>Analyze competitor videos and generate infiltration bundles to steal their traffic</p>
+            <p>Reverse-engineer a competitor's tags and generate <strong>bridge tags</strong> designed to get your video into YouTube's Suggested sidebar alongside theirs. Hijack their traffic.</p>
           </div>
 
           <div class="competitor-input-section">
@@ -1419,17 +1513,54 @@
             <h2>Niche-Relevance Guard</h2>
             <p>Analyze any niche leader's video — extract their keywords, compare against your niche, and find gaps you can exploit</p>
           </div>
-          <div class="tool-input-section">
+          <div class="tool-tabs" style="display:flex; gap:12px; margin-bottom:20px; padding:4px; background:rgba(255,255,255,0.03); border-radius:10px; width:fit-content;">
+            <button class="btn-tab active" onclick="setNicheMode('url')" id="tab-niche-url" style="font-size:12px; padding:6px 16px; border-radius:8px;">Analyze URL</button>
+            <button class="btn-tab" onclick="setNicheMode('discovery')" id="tab-niche-discovery" style="font-size:12px; padding:6px 16px; border-radius:8px;">Discovery Mode 🆕</button>
+          </div>
+
+          <div class="tool-input-section" id="niche-url-input-area">
             <div class="input-group large">
               <label for="niche-leader-url">Niche Leader <strong>Video</strong> URL</label>
               <i data-lucide="link" aria-hidden="true"></i>
               <input type="url" id="niche-leader-url" placeholder="Paste a YouTube video URL from a successful creator in your niche" />
-              <button class="btn-primary" onclick="analyzeNicheRelevance()">
+              <button class="btn-primary" id="niche-guard-analyze-btn" onclick="handleNicheGuardAnalyze(this)">
                 <i data-lucide="target" aria-hidden="true"></i> Analyze & Compare
               </button>
             </div>
           </div>
-          <div class="relevance-results" id="relevance-results"></div>
+
+          <div class="tool-input-section" id="niche-discovery-input-area" style="display:none;">
+            <div class="input-group large">
+              <label for="niche-discovery-query">Find Viral Niche <strong>Leaders</strong></label>
+              <i data-lucide="search" aria-hidden="true"></i>
+              <input type="text" id="niche-discovery-query" placeholder="e.g. 'Minecraft 100 Days' or 'AI Trading Bot'..." />
+              <button class="btn-primary" id="niche-discovery-btn" onclick="discoverNicheLeaders(this)">
+                <i data-lucide="zap" aria-hidden="true"></i> Find Top 5 Viral Blueprints
+              </button>
+            </div>
+          </div>
+
+          <div id="discovery-leaderboard" style="display:none; margin-bottom:24px;">
+            <h4 style="font-size:13px; text-transform:uppercase; color:var(--primary); letter-spacing:1px; margin-bottom:12px; display:flex; align-items:center; gap:8px;">
+                <i data-lucide="award" style="width:16px;"></i> Viral Niche Leaderboard
+            </h4>
+            <div id="discovery-grid" class="discovery-grid" style="display:grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap:16px;">
+                <!-- Dynamically populated -->
+            </div>
+          </div>
+
+          <div class="relevance-results" id="relevance-results">
+            <div class="relevance-empty" id="relevance-empty" style="padding:18px 0; color: var(--text-muted); text-align:center;">
+              <i data-lucide="shield-check" style="opacity:0.6;"></i>
+              <div style="margin-top:8px; font-weight:600;">Paste a Niche Leader video URL and run the guard.</div>
+              <div style="font-size:12px; margin-top:4px;">We’ll extract leader keywords, compare them to your niche, and show exploitable gaps.</div>
+            </div>
+          </div>
+
+          <div id="niche-guard-inline-spinner" style="display:none; margin-top:14px; text-align:center; color:var(--text-muted);">
+            <i data-lucide="loader" style="animation:spin 1s linear infinite;"></i>
+            <div style="margin-top:8px; font-size:12px;">Analyzing leader video…</div>
+          </div>
         </div>
 
         <!-- Research: Suggested Analytics -->
@@ -1611,7 +1742,7 @@
         <div class="view-container" id="view-metadata-auditor" style="display: none;">
           <div class="tool-header">
             <h2>Metadata Auditor</h2>
-            <p>Scan any video and get detailed SEO analysis</p>
+            <p>Analyze any video for CTR, search relevance, watch-loop strength, and safety risk. Get prioritized fixes that help you optimize metadata strategically, not just mechanically.</p>
           </div>
           <div class="tool-input-section">
             <div class="input-group large">
@@ -2743,64 +2874,74 @@
   <!-- AI Coach Assistant -->
   <div class="coach-chat-container">
     <div id="coach-window" class="coach-window">
-      <div class="chat-header">
+      <!-- Enhanced Header with Gradient -->
+      <div class="chat-header" style="background: linear-gradient(135deg, rgba(99,102,241,0.1) 0%, rgba(16,185,129,0.05) 100%); border-bottom: 2px solid rgba(99,102,241,0.2);">
         <div class="chat-header-info">
-          <h3>Ask Phronesis</h3>
-          <span id="coach-online-status"><span
-              style="display: inline-block; width: 8px; height: 8px; border-radius: 50%; background: #10b981; vertical-align: middle; margin-right: 6px; animation: pulse-green 2s infinite;"></span>System
-            Online</span>
+          <div style="display: flex; align-items: center; gap: 8px;">
+            <span style="font-size: 24px;">✨</span>
+            <div>
+              <h3 style="margin: 0; font-size: 18px; font-weight: 600;">Ask Phronesis</h3>
+              <span id="coach-online-status" style="font-size: 12px; color: var(--text-muted);"><span
+                style="display: inline-block; width: 8px; height: 8px; border-radius: 50%; background: #10b981; vertical-align: middle; margin-right: 6px; animation: pulse-green 2s infinite;"></span>AI Coach Online</span>
+            </div>
+          </div>
         </div>
         <div style="display: flex; gap: 8px;">
           <button class="chat-close" onclick="SaaS.clearChat()" title="Clear Brain"
-            style="background: transparent; border: none; color: var(--text-muted); cursor: pointer;">
+            style="background: transparent; border: none; color: var(--text-muted); cursor: pointer; padding: 6px; border-radius: 6px; transition: all 0.2s;">
             <i data-lucide="brain"></i>
           </button>
-          <button id="close-coach-btn" class="chat-close" onclick="toggleCoachDrawer(false)">
+          <button id="close-coach-btn" class="chat-close" onclick="toggleCoachDrawer(false)" style="background: transparent; border: none; color: var(--text-muted); cursor: pointer; padding: 6px; border-radius: 6px; transition: all 0.2s;">
             <i data-lucide="x"></i>
           </button>
         </div>
       </div>
 
-      <div id="coach-memory-display" style="background: rgba(0,212,255,0.05); border: 1px solid rgba(0,212,255,0.15); border-radius: 8px; padding: 12px 16px; margin: 0 16px 8px 16px; font-size: 13px; display: none;">
+      <!-- Coach Memory Display (Enhanced) -->
+      <div id="coach-memory-display" style="background: linear-gradient(135deg, rgba(0,212,255,0.08) 0%, rgba(0,212,255,0.02) 100%); border: 1px solid rgba(0,212,255,0.2); border-radius: 10px; padding: 12px 16px; margin: 12px 16px 8px 16px; font-size: 13px; display: none; backdrop-filter: blur(4px);">
         <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
-          <strong style="color:var(--accent);">🧠 Coach Memory</strong>
-          <button onclick="clearCoachMemory()" style="background:none;border:none;color:var(--text-muted);cursor:pointer;font-size:11px;">Clear</button>
+          <strong style="color:var(--accent); display: flex; align-items: center; gap: 6px;"><span style="font-size: 16px;">🧠</span>Coach Memory</strong>
+          <button onclick="clearCoachMemory()" style="background:none;border:none;color:var(--text-muted);cursor:pointer;font-size:11px;padding:4px 8px;border-radius:4px;transition:all 0.2s;hover:background:rgba(99,102,241,0.1);">Clear</button>
         </div>
-        <div id="coach-memory-content" style="color:var(--text-muted);line-height:1.6;"></div>
+        <div id="coach-memory-content" style="color:var(--text-muted);line-height:1.6; max-height: 120px; overflow-y: auto;"></div>
       </div>
 
-      <div id="chat-messages" class="chat-messages">
-        <div class="message ai">
-          Hello! I am the Coach. I've analyzed your channel's Intelligence metrics. How can I help you dominate the
-          algorithm today?
-          <div class="chat-prompts">
-            <div class="suggested-question" onclick="SaaS.ask('Which video should I fix first?')">Which video should
-              I fix first?</div>
-            <div class="suggested-question" onclick="SaaS.ask('How do I use the Sidebar Sniper?')">How do I use the
-              Sidebar Sniper?</div>
-            <div class="suggested-question" onclick="SaaS.ask('Explain Series Signaling')">Explain Series Signaling
+      <!-- Chat Messages (Improved styling) -->
+      <div id="chat-messages" class="chat-messages" style="padding: 16px; gap: 12px;">
+        <div class="message ai" style="background: linear-gradient(135deg, rgba(99,102,241,0.08) 0%, rgba(16,185,129,0.04) 100%); border: 1px solid rgba(99,102,241,0.2); border-radius: 12px; padding: 14px; line-height: 1.5;">
+          <div style="display: flex; align-items: flex-start; gap: 8px;">
+            <span style="font-size: 20px; flex-shrink: 0;">🎯</span>
+            <div style="flex: 1;">
+              <strong style="color: var(--accent);">Welcome to Phronesis!</strong>
+              <p style="margin: 6px 0 0 0; color: var(--text-muted); font-size: 14px;">I've analyzed your channel's potential. Ask me anything about optimizing your YouTube strategy.</p>
             </div>
+          </div>
+          <div class="chat-prompts" style="margin-top: 10px; display: flex; flex-direction: column; gap: 6px;">
+            <div class="suggested-question" onclick="SaaS.ask('Which video should I fix first?')" style="padding: 8px 12px; background: rgba(99,102,241,0.12); border: 1px solid rgba(99,102,241,0.3); border-radius: 8px; cursor: pointer; font-size: 13px; transition: all 0.2s;">💡 Which video should I fix first?</div>
+            <div class="suggested-question" onclick="SaaS.ask('What content strategy would work best for my niche?')" style="padding: 8px 12px; background: rgba(16,185,129,0.12); border: 1px solid rgba(16,185,129,0.3); border-radius: 8px; cursor: pointer; font-size: 13px; transition: all 0.2s;">📈 What content strategy works for my niche?</div>
+            <div class="suggested-question" onclick="SaaS.ask('How can I improve my video rankings?')" style="padding: 8px 12px; background: rgba(245,158,11,0.12); border: 1px solid rgba(245,158,11,0.3); border-radius: 8px; cursor: pointer; font-size: 13px; transition: all 0.2s;">🔍 How can I improve my video rankings?</div>
           </div>
         </div>
       </div>
 
-      <!-- Chat Input Area -->
-      <div class="chat-input-area" style="flex-direction:column;gap:6px;padding:10px 16px;">
-        <div style="display:flex;gap:8px;">
-          <label for="coach-input-field" class="sr-only">Ask the AI Coach</label>
-          <input type="text" id="coach-input-field" placeholder="Ask the Coach anything..."
-            onkeypress="if(event.key==='Enter') SaaS.send()" style="flex:1;">
+      <!-- Chat Input Area (Improved) -->
+      <div class="chat-input-area" style="flex-direction:column;gap:8px;padding:12px 16px;border-top:1px solid rgba(99,102,241,0.1);">
+        <div style="display:flex;gap:8px;align-items:center;">
+          <label for="coach-input-field" class="sr-only">Ask Phronesis</label>
+          <input type="text" id="coach-input-field" placeholder="Ask Phronesis anything..."
+            onkeypress="if(event.key==='Enter') SaaS.send()" style="flex:1;padding:10px 14px;border:1px solid rgba(99,102,241,0.3);border-radius:8px;background:var(--input-bg,rgba(99,102,241,0.04));color:var(--text);font-size:14px;transition:all 0.2s;">
           <button onclick="SaaS.send()"
-            style="background: #f97316; border: none; border-radius: 8px; padding: 8px 12px; cursor: pointer;flex-shrink:0;">
+            style="background: linear-gradient(135deg, #6366f1 0%, #10b981 100%); border: none; border-radius: 8px; padding: 10px 14px; cursor: pointer;flex-shrink:0;transition:all 0.2s;box-shadow:0 2px 8px rgba(99,102,241,0.3);">
             <i data-lucide="send-horizontal" style="color: white;"></i>
           </button>
         </div>
-        <div style="display:flex;gap:4px;overflow-x:auto;">
-          <button onclick="SaaS.quickAction('dashboard')" style="flex-shrink:0;padding:4px 10px;background:rgba(99,102,241,0.08);border:1px solid rgba(99,102,241,0.15);border-radius:12px;font-size:10px;cursor:pointer;color:var(--accent);white-space:nowrap;">📋 Overview</button>
-          <button onclick="SaaS.quickAction('scan')" style="flex-shrink:0;padding:4px 10px;background:rgba(99,102,241,0.08);border:1px solid rgba(99,102,241,0.15);border-radius:12px;font-size:10px;cursor:pointer;color:var(--accent);white-space:nowrap;">🔍 Scan</button>
-          <button onclick="SaaS.quickAction('progress')" style="flex-shrink:0;padding:4px 10px;background:rgba(99,102,241,0.08);border:1px solid rgba(99,102,241,0.15);border-radius:12px;font-size:10px;cursor:pointer;color:var(--accent);white-space:nowrap;">📊 Progress</button>
-          <button onclick="SaaS.quickAction('inbox')" style="flex-shrink:0;padding:4px 10px;background:rgba(99,102,241,0.08);border:1px solid rgba(99,102,241,0.15);border-radius:12px;font-size:10px;cursor:pointer;color:var(--accent);white-space:nowrap;">📥 Inbox</button>
-          <button onclick="SaaS.quickAction('goal')" style="flex-shrink:0;padding:4px 10px;background:rgba(16,185,129,0.08);border:1px solid rgba(16,185,129,0.15);border-radius:12px;font-size:10px;cursor:pointer;color:#10b981;white-space:nowrap;">🎯 Goal</button>
+        <!-- Quick Action Buttons (Enhanced) -->
+        <div style="display:flex;gap:6px;overflow-x:auto;padding-bottom:4px;">
+          <button onclick="SaaS.quickAction('dashboard')" style="flex-shrink:0;padding:6px 12px;background:linear-gradient(135deg,rgba(99,102,241,0.12),rgba(99,102,241,0.04));border:1px solid rgba(99,102,241,0.3);border-radius:8px;font-size:12px;cursor:pointer;color:var(--accent);white-space:nowrap;transition:all 0.2s;font-weight:500;" onmouseover="this.style.background='rgba(99,102,241,0.2)'" onmouseout="this.style.background='linear-gradient(135deg,rgba(99,102,241,0.12),rgba(99,102,241,0.04))'">📋 Overview</button>
+          <button onclick="SaaS.quickAction('scan')" style="flex-shrink:0;padding:6px 12px;background:linear-gradient(135deg,rgba(99,102,241,0.12),rgba(99,102,241,0.04));border:1px solid rgba(99,102,241,0.3);border-radius:8px;font-size:12px;cursor:pointer;color:var(--accent);white-space:nowrap;transition:all 0.2s;font-weight:500;" onmouseover="this.style.background='rgba(99,102,241,0.2)'" onmouseout="this.style.background='linear-gradient(135deg,rgba(99,102,241,0.12),rgba(99,102,241,0.04))'">🔍 Scan</button>
+          <button onclick="SaaS.quickAction('progress')" style="flex-shrink:0;padding:6px 12px;background:linear-gradient(135deg,rgba(99,102,241,0.12),rgba(99,102,241,0.04));border:1px solid rgba(99,102,241,0.3);border-radius:8px;font-size:12px;cursor:pointer;color:var(--accent);white-space:nowrap;transition:all 0.2s;font-weight:500;" onmouseover="this.style.background='rgba(99,102,241,0.2)'" onmouseout="this.style.background='linear-gradient(135deg,rgba(99,102,241,0.12),rgba(99,102,241,0.04))'">📊 Progress</button>
+          <button onclick="SaaS.quickAction('inbox')" style="flex-shrink:0;padding:6px 12px;background:linear-gradient(135deg,rgba(99,102,241,0.12),rgba(99,102,241,0.04));border:1px solid rgba(99,102,241,0.3);border-radius:8px;font-size:12px;cursor:pointer;color:var(--accent);white-space:nowrap;transition:all 0.2s;font-weight:500;" onmouseover="this.style.background='rgba(99,102,241,0.2)'" onmouseout="this.style.background='linear-gradient(135deg,rgba(99,102,241,0.12),rgba(99,102,241,0.04))'">📥 Inbox</button>
+          <button onclick="SaaS.quickAction('goal')" style="flex-shrink:0;padding:6px 12px;background:linear-gradient(135deg,rgba(16,185,129,0.12),rgba(16,185,129,0.04));border:1px solid rgba(16,185,129,0.3);border-radius:8px;font-size:12px;cursor:pointer;color:#10b981;white-space:nowrap;transition:all 0.2s;font-weight:500;" onmouseover="this.style.background='rgba(16,185,129,0.2)'" onmouseout="this.style.background='linear-gradient(135deg,rgba(16,185,129,0.12),rgba(16,185,129,0.04))'">🎯 Goal</button>
         </div>
       </div>
       <!-- AI ASSISTANT DRAWER MOVED TO BODY ROOT -->

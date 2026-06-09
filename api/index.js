@@ -672,31 +672,65 @@ app.post('/api/audit-recs', async (req, res) => {
 
   try {
 
-    const { title, description, tags, titleScore, descScore, tagScore } = req.body || {};
+    const { title, description, tags, titleScore, descScore, tagScore, growthIssues = [] } = req.body || {};
 
     if (!title) return res.status(400).json({ error: 'Missing title' });
 
     const issues = [];
 
     if (titleScore < 85) issues.push('Title (' + titleScore + '/100): ' + title.substring(0, 100));
-
     if (descScore < 85) issues.push('Description (' + descScore + '/100): ' + (description||'').substring(0, 200));
-
     if (tagScore < 85 && Array.isArray(tags)) issues.push('Tags (' + tagScore + '/100): ' + tags.slice(0,12).join(', '));
 
     if (!issues.length) return res.json({ recommendations: null });
 
+    const tagsText = Array.isArray(tags) ? tags.join(', ') : (tags || '');
+    const issueText = issues.join('\n\n');
+    const growthIssueText = Array.isArray(growthIssues) && growthIssues.length > 0
+      ? 'Growth Engine Flagged Issues:\n' + growthIssues.map(i => `- [${i.severity?.toUpperCase() || 'MEDIUM'}] ${i.issue} (${i.type || 'general'})`).join('\n')
+      : '';
+
     const { askAI } = await import('./_lib/ai-provider.js');
 
-    const raw = await askAI('You are a YouTube SEO expert. Return ONLY valid JSON.',
-
-      'Analyze this video metadata and give 2-3 specific fixes.\n\n' + issues.join('\n\n') + '\n\nJSON: { "fixes": [{ "type": "title|description|tags", "issue": "exact problem", "suggestion": "the fix", "reason": "why it helps SEO" }] }',
-
-      { temperature: 0.7, maxTokens: 800, forceJson: true }
-
+    const raw = await askAI(
+      'You are a world-class YouTube SEO strategist for 2026. Return ONLY valid JSON.',
+      [
+        'Analyze this video metadata and provide a strategic, prioritized audit for the creator.',
+        `Title: ${title}`,
+        `Description: ${description || '[none]'}`,
+        `Tags: ${tagsText}`,
+        `Title Score: ${titleScore}`,
+        `Description Score: ${descScore}`,
+        `Tags Score: ${tagScore}`,
+        issueText,
+        growthIssueText,
+        'Return JSON exactly in this format:',
+        '{',
+        '  "strategySummary": "short summary of what matters most and why",',
+        '  "priorities": [{',
+        '    "area": "Title|Description|Tags|Watch Loop|Safety",',
+        '    "importance": "High|Medium|Low",',
+        '    "recommendation": "what to fix first",',
+        '    "impact": "what metric is likely to improve",',
+        '    "why": "why this change matters"',
+        '  }],',
+        '  "fixes": [{',
+        '    "type": "title|description|tags|risk",',
+        '    "issue": "exact problem",',
+        '    "suggestion": "the fix",',
+        '    "reason": "why it helps SEO"',
+        '  }]',
+        '}'
+      ].filter(Boolean).join('\n\n'),
+      { temperature: 0.65, maxTokens: 900, forceJson: true }
     );
 
-    const parsed = JSON.parse(raw.replace(/```json|```/g, '').trim());
+    let parsed;
+    try {
+      parsed = JSON.parse(raw.replace(/```json|```/g, '').trim());
+    } catch (parseError) {
+      parsed = {};
+    }
 
     res.json({ recommendations: parsed });
 
@@ -1476,16 +1510,7 @@ app.get('/api/agent/coach/job/:id', async (req, res) => {
 
 // Direct tool execution — bypasses AI, called by quick action chips
 app.post('/api/agent/coach/tool', async (req, res) => {
-  // ── Admin gate: only agency plan or admin channel IDs ──
-  try {
-    const channelId = req.headers['x-channel-id'] || req.body?.channelId;
-    const adminIds = ['UC-vVYFQC_MNjVP03YRZ56Wg', 'UCmcNApL2w7kk7NG14tXinRg'];
-    if (!adminIds.includes(channelId)) {
-      const { getPlan } = await import('./credits.js');
-      const plan = await getPlan(channelId);
-      if (plan !== 'agency' && plan !== 'pro') return res.status(403).json({ error: 'Ask Phronesis is available on Pro and Agency plans.' });
-    }
-  } catch(e) { /* continue if credit check fails */ }
+  // ── Ask Phronesis is now FREE for all users ──
 
   try {
     const channelId = req.headers['x-channel-id'] || req.body?.channelId;

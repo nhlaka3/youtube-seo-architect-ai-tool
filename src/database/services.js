@@ -946,6 +946,7 @@ class DatabaseService {
       return this.db.insert(s.abTests).values({
         channelId: data.channelId, videoId: data.videoId,
         originalTitle: data.originalTitle, variantA: data.variantA, variantB: data.variantB,
+        phase: 'variant_a', phaseStartedAt: new Date(),
         variantAViewsStart: data.initialViews || 0, status: 'running'
       }).returning();
     }, 'createAbTest');

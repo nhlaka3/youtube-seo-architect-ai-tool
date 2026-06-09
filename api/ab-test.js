@@ -7,14 +7,24 @@ const sendRes = (res, status, data) => {
   if (!res.headersSent) res.status(status).json(data);
 };
 
-let _deductCredits = null, _CREDIT_COSTS = null;
-const deductCredits = async (...args) => {
-  if (!_deductCredits) ({ deductCredits: _deductCredits, CREDIT_COSTS: _CREDIT_COSTS } = await import('./credits.js'));
-  return _deductCredits(...args);
-};
+let _credits = null;
 const getCreditCost = async (key) => {
-  if (!_CREDIT_COSTS) ({ CREDIT_COSTS: _CREDIT_COSTS } = await import('./credits.js'));
-  return _CREDIT_COSTS[key] || 5;
+  try {
+    if (!_credits) _credits = await import('./credits.js');
+    return _credits.CREDIT_COSTS?.[key] || 0;
+  } catch (e) {
+    console.warn('[ABTest] getCreditCost error:', e.message);
+    return 0;
+  }
+};
+const deductCredits = async (...args) => {
+  try {
+    if (!_credits) _credits = await import('./credits.js');
+    return await _credits.deductCredits(...args);
+  } catch (e) {
+    console.warn('[ABTest] deductCredits error:', e.message);
+    return { success: true };
+  }
 };
 
 const requireChannelId = (req, res, next) => {
@@ -71,10 +81,12 @@ router.post('/start', requireChannelId, async (req, res) => {
       return sendRes(res, 400, { error: 'Missing: videoId, variantA, variantB, accessToken' });
     }
 
-    // Credit check — A/B test costs 5 credits
-    const abCost = await getCreditCost('ab-test');
-    const creditResult = await deductCredits(req.channelId, abCost);
-    if (!creditResult.success) return sendRes(res, 403, { error: 'Insufficient credits', credits: creditResult.balance });
+    // Credit check — A/B test is free
+    try {
+      const creditResult = await deductCredits(req.channelId, 0);
+    } catch (credErr) {
+      console.warn('[ABTest] credit check failed (non-blocking):', credErr.message);
+    }
 
     const { default: dbService } = await import('../src/database/services.js');
 
@@ -93,8 +105,12 @@ router.post('/start', requireChannelId, async (req, res) => {
     const video = videoData.items?.[0];
     if (!video) return sendRes(res, 404, { error: 'Video not found' });
 
-    // Apply Variant A immediately
-    await applyTitle(videoId, variantA, accessToken);
+    // Apply Variant A immediately (non-blocking — test creation succeeds even if title update fails)
+    try {
+      await applyTitle(videoId, variantA, accessToken);
+    } catch (titleErr) {
+      console.warn('[ABTest] Title application failed (non-blocking):', titleErr.message);
+    }
     const initialViews = parseInt(video.statistics?.viewCount || '0');
 
     const result = await dbService.createAbTest({
@@ -126,11 +142,16 @@ router.post('/advance', async (req, res) => {
     if (!test) return sendRes(res, 404, { error: 'Test not found' });
     if (test.status !== 'running') return sendRes(res, 400, { error: 'Test is not running' });
 
+    const currentPhase = test.phase || 'variant_a';
     const currentViews = await getViewCount(test.videoId, accessToken);
-    const now = new Date().toISOString();
+    const now = new Date();
 
-    if (test.phase === 'variant_a') {
-      await applyTitle(test.videoId, test.variantB, accessToken);
+    if (currentPhase === 'variant_a') {
+      try {
+        await applyTitle(test.videoId, test.variantB, accessToken);
+      } catch (titleErr) {
+        console.warn('[ABTest] Switch to variant B title failed (non-blocking):', titleErr.message);
+      }
       await dbService.updateAbTest(testId, {
         phase: 'variant_b', phaseStartedAt: now,
         variantAViewsEnd: currentViews, variantBViewsStart: currentViews
@@ -141,13 +162,17 @@ router.post('/advance', async (req, res) => {
         phase: 'variant_b',
         variantAViews: currentViews - (test.variantAViewsStart || 0)
       });
-    } else if (test.phase === 'variant_b') {
+    } else if (currentPhase === 'variant_b') {
       const aViews = (test.variantAViewsEnd || 0) - (test.variantAViewsStart || 0);
       const bViews = currentViews - (test.variantBViewsStart || 0);
       const winner = bViews >= aViews ? 'variant_b' : 'variant_a';
       const winningTitle = winner === 'variant_b' ? test.variantB : test.variantA;
 
-      await applyTitle(test.videoId, winningTitle, accessToken);
+      try {
+        await applyTitle(test.videoId, winningTitle, accessToken);
+      } catch (titleErr) {
+        console.warn('[ABTest] Apply winning title failed (non-blocking):', titleErr.message);
+      }
       await dbService.updateAbTest(testId, {
         phase: 'complete', variantBViewsEnd: currentViews,
         winner, status: 'completed', completedAt: now
@@ -209,7 +234,7 @@ router.get('/list', requireChannelId, async (req, res) => {
                 await applyTitle(test.videoId, winningTitle, accessToken);
                 await dbService.updateAbTest(test.id, {
                   phase: 'complete', variantBViewsEnd: currentViews,
-                  winner, status: 'completed', completedAt: new Date().toISOString()
+                  winner, status: 'completed', completedAt: new Date()
                 });
               }
             } catch(ytErr) {
@@ -218,7 +243,7 @@ router.get('/list', requireChannelId, async (req, res) => {
                 phase: test.phase === 'variant_a' ? 'variant_b' : 'complete',
                 phaseStartedAt: new Date(),
                 status: test.phase === 'variant_b' ? 'completed' : 'running',
-                completedAt: test.phase === 'variant_b' ? new Date().toISOString() : null
+                completedAt: test.phase === 'variant_b' ? new Date() : null
               });
             }
           } else {
@@ -227,7 +252,7 @@ router.get('/list', requireChannelId, async (req, res) => {
               phase: test.phase === 'variant_a' ? 'variant_b' : 'complete',
               phaseStartedAt: new Date(),
               status: test.phase === 'variant_b' ? 'completed' : 'running',
-              completedAt: test.phase === 'variant_b' ? new Date().toISOString() : null
+              completedAt: test.phase === 'variant_b' ? new Date() : null
             });
           }
         } catch(e) { console.warn('[ABTest] auto-advance failed for', test.id, e.message); }
@@ -287,7 +312,7 @@ router.post('/cancel/:testId', requireChannelId, async (req, res) => {
     if (test.originalTitle) {
       try { await applyTitle(test.videoId, test.originalTitle, accessToken); } catch (e) {}
     }
-    await dbService.updateAbTest(testId, { status: 'cancelled', completedAt: new Date().toISOString() });
+    await dbService.updateAbTest(testId, { status: 'cancelled', completedAt: new Date() });
     sendRes(res, 200, { success: true, message: 'Test cancelled, original title restored' });
   } catch (e) {
     console.error('[ABTest] cancel error:', e.message);

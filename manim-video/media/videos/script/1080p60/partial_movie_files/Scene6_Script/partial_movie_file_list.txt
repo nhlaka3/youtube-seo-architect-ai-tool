@@ -1,8 +1,0 @@
-# This file is used internally by FFMPEG.
-file 'file:/mnt/c/Users/nhlaka/Desktop/Youtube seo tool/manim-video/media/videos/script/1080p60/partial_movie_files/Scene6_Script/2873985843_1400475078_223132457.mp4'
-file 'file:/mnt/c/Users/nhlaka/Desktop/Youtube seo tool/manim-video/media/videos/script/1080p60/partial_movie_files/Scene6_Script/3496312638_4270191754_50012152.mp4'
-file 'file:/mnt/c/Users/nhlaka/Desktop/Youtube seo tool/manim-video/media/videos/script/1080p60/partial_movie_files/Scene6_Script/3496312638_2158707010_422743833.mp4'
-file 'file:/mnt/c/Users/nhlaka/Desktop/Youtube seo tool/manim-video/media/videos/script/1080p60/partial_movie_files/Scene6_Script/3496312638_4005427047_3281049540.mp4'
-file 'file:/mnt/c/Users/nhlaka/Desktop/Youtube seo tool/manim-video/media/videos/script/1080p60/partial_movie_files/Scene6_Script/3496312638_2950721455_3037214115.mp4'
-file 'file:/mnt/c/Users/nhlaka/Desktop/Youtube seo tool/manim-video/media/videos/script/1080p60/partial_movie_files/Scene6_Script/3496312638_2113237405_2873729818.mp4'
-file 'file:/mnt/c/Users/nhlaka/Desktop/Youtube seo tool/manim-video/media/videos/script/1080p60/partial_movie_files/Scene6_Script/3496312638_2514011427_210259938.mp4'

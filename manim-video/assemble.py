@@ -1,96 +1,138 @@
 #!/usr/bin/env python3
-"""Assemble the YT SEO Architect explainer video from slides + voiceover."""
-import subprocess, os
+"""Assemble an episode video from generated slide PNGs + optional voiceover.
+
+Usage:
+  python assemble.py --plan manim-video/episode_plans/episode_01.json --mode longform
+  python assemble.py --plan manim-video/episode_plans/episode_01.json --mode shorts
+
+Behavior:
+- Reads slide list + durations from the episode plan JSON.
+- Creates per-slide clips (image loop + fade-in) then concatenates via ffmpeg.
+- If voiceover audio exists at:
+    manim-video/audio/episode_{NN}_{mode}.mp3
+  it muxes it in; otherwise produces video-only.
+"""
+
+import argparse
+import json
+import os
+import subprocess
 
 BASE = "/mnt/c/Users/nhlaka/Desktop/Youtube seo tool/manim-video"
-SLIDES = os.path.join(BASE, "slides")
-OUT = os.path.join(BASE, "output")
-os.makedirs(OUT, exist_ok=True)
+SLIDES_DIR = os.path.join(BASE, "slides")
+OUT_DIR = os.path.join(BASE, "output")
+AUDIO_DIR = os.path.join(BASE, "audio")
 
-# Slide durations matched to audio segments (in seconds)
-slide_durations = [
-    ("01_problem.png", 16.54),
-    ("02_competitor.png", 10.54),
-    ("03_truth.png", 20.09),
-    ("04_intro.png", 21.03),
-    ("05_steps.png", 19.37),
-    ("06_keywords.png", 23.09),
-    ("07_audit.png", 24.44),
-    ("08_pro_tools.png", 16.71),
-    ("09_pricing_free.png", 19.04),
-    ("10_pricing_pro.png", 16.90),
-    ("11_pricing_agency.png", 12.46),
-    ("12_cta.png", 17.67),
-]
+os.makedirs(OUT_DIR, exist_ok=True)
+os.makedirs(AUDIO_DIR, exist_ok=True)
 
-VOICEOVER = os.path.join(BASE, "voiceover.mp3")
 
-# Step 1: Create video clips for each slide
-print("Creating slide video clips...")
-clip_files = []
-for i, (slide, dur) in enumerate(slide_durations):
-    slide_path = os.path.join(SLIDES, slide)
-    clip_file = os.path.join(OUT, f"clip_{i:02d}.mp4")
-    clip_files.append(clip_file)
-    
-    if not os.path.exists(clip_file):
-        # Create a video from the image with fade-in effect
+def ffmpeg_run(cmd: list[str]):
+    subprocess.run(cmd, capture_output=True, text=True, check=False)
+
+
+def main():
+    ap = argparse.ArgumentParser()
+    ap.add_argument("--plan", required=True, help="Path to episode plan JSON")
+    ap.add_argument("--mode", required=True, choices=["longform", "shorts"], help="Which slide set")
+    args = ap.parse_args()
+
+    with open(args.plan, "r", encoding="utf-8") as f:
+        plan = json.load(f)
+
+    episode_number = int(plan["episodeNumber"])
+    slides = plan[args.mode]["slides"]
+
+    print(f"Assembling episode {episode_number} ({args.mode}) with {len(slides)} slides")
+
+    # Step 1: Create slide clips
+    clip_files: list[str] = []
+    for i, slide_obj in enumerate(slides):
+        slide = slide_obj["filename"]
+        dur = float(slide_obj["durationSec"])
+        slide_path = os.path.join(SLIDES_DIR, slide)
+
+        clip_file = os.path.join(OUT_DIR, f"{episode_number:02d}_{args.mode}_clip_{i:02d}.mp4")
+        clip_files.append(clip_file)
+
+        if os.path.exists(clip_file):
+            continue
+
+        if not os.path.exists(slide_path):
+            # If renderer fell back to text placeholders, skip image clip creation.
+            print(f"WARNING: missing slide image: {slide_path}. Skipping clip {i}.")
+            continue
+
         cmd = [
             "ffmpeg", "-y",
             "-loop", "1", "-i", slide_path,
-            "-c:v", "libx264", "-t", str(dur),
-            "-pix_fmt", "yuv420p", "-r", "30",
-            "-vf", f"fade=in:0:30",  # 1 second fade in
-            clip_file
+            "-c:v", "libx264",
+            "-t", str(dur),
+            "-pix_fmt", "yuv420p",
+            "-r", "30",
+            "-vf", "fade=in:0:30",
+            clip_file,
         ]
-        subprocess.run(cmd, capture_output=True)
-        print(f"  clip_{i:02d}.mp4 ({dur:.1f}s)")
+        ffmpeg_run(cmd)
+        print(f"  clip {i+1}/{len(slides)}: {os.path.basename(clip_file)} ({dur:.1f}s)")
 
-# Step 2: Create concat file
-concat_file = os.path.join(OUT, "concat.txt")
-with open(concat_file, "w") as f:
-    for cf in clip_files:
-        f.write(f"file '{cf}'\n")
+    # Step 2: Concatenate
+    concat_file = os.path.join(OUT_DIR, f"{episode_number:02d}_{args.mode}_concat.txt")
+    with open(concat_file, "w", encoding="utf-8") as f:
+        for cf in clip_files:
+            if os.path.exists(cf):
+                f.write(f"file '{cf}'\n")
 
-# Step 3: Concatenate all clips with transitions
-print("Concatenating clips...")
-video_only = os.path.join(OUT, "video_only.mp4")
-cmd_concat = [
-    "ffmpeg", "-y",
-    "-f", "concat", "-safe", "0", "-i", concat_file,
-    "-c:v", "libx264", "-pix_fmt", "yuv420p",
-    video_only
-]
-subprocess.run(cmd_concat, capture_output=True)
-print("Video-only track created.")
+    video_only = os.path.join(OUT_DIR, f"{episode_number:02d}_{args.mode}_video_only.mp4")
 
-# Step 4: Mux video with audio
-print("Muxing with voiceover...")
-final = os.path.join(BASE, "yt-seo-architect-explainer.mp4")
-cmd_mux = [
-    "ffmpeg", "-y",
-    "-i", video_only,
-    "-i", VOICEOVER,
-    "-c:v", "copy", "-c:a", "aac", "-b:a", "128k",
-    "-shortest",
-    "-map", "0:v:0", "-map", "1:a:0",
-    final
-]
-result = subprocess.run(cmd_mux, capture_output=True, text=True)
-print(result.stderr[-500:] if result.stderr else "OK")
+    # If we skipped all clips (e.g., placeholders only), stop early.
+    existing_clips = [p for p in clip_files if os.path.exists(p)]
+    if not existing_clips:
+        print("No slide clips were created (missing ffmpeg inputs). Skipping concat.")
+        final = video_only
+        if os.path.exists(final):
+            size_mb = os.path.getsize(final) / (1024 * 1024)
+            print(f"Output: {final} ({size_mb:.1f} MB)")
+        return
 
-# Check final file
-if os.path.exists(final):
-    size_mb = os.path.getsize(final) / (1024*1024)
-    print(f"\nFinal video: {final}")
-    print(f"Size: {size_mb:.1f} MB")
-    
-    # Get duration
-    probe = subprocess.run(["ffprobe", "-v", "error", "-show_entries", "format=duration", 
-                           "-of", "json", final], capture_output=True, text=True)
-    import json
-    dur = float(json.loads(probe.stdout)["format"]["duration"])
-    print(f"Duration: {dur:.1f}s ({dur/60:.1f} min)")
-else:
-    print("ERROR: Final video not created!")
-    print(result.stderr)
+    cmd_concat = [
+        "ffmpeg", "-y",
+        "-f", "concat", "-safe", "0", "-i", concat_file,
+        "-c:v", "libx264",
+        "-pix_fmt", "yuv420p",
+        video_only,
+    ]
+    ffmpeg_run(cmd_concat)
+    print("Video-only track created.")
+
+    # Step 3: Mux audio (optional)
+    voiceover = os.path.join(AUDIO_DIR, f"episode_{episode_number:02d}_{args.mode}.mp3")
+    final = os.path.join(OUT_DIR, f"episode_{episode_number:02d}_{args.mode}.mp4")
+
+    if os.path.exists(voiceover):
+        print(f"Muxing with voiceover: {voiceover}")
+        cmd_mux = [
+            "ffmpeg", "-y",
+            "-i", video_only,
+            "-i", voiceover,
+            "-c:v", "copy",
+            "-c:a", "aac",
+            "-b:a", "128k",
+            "-shortest",
+            "-map", "0:v:0",
+            "-map", "1:a:0",
+            final,
+        ]
+        ffmpeg_run(cmd_mux)
+        print(f"Final video created: {final}")
+    else:
+        print(f"No voiceover found at {voiceover}. Producing video-only output: {video_only}")
+        final = video_only
+
+    if os.path.exists(final):
+        size_mb = os.path.getsize(final) / (1024 * 1024)
+        print(f"Output: {final} ({size_mb:.1f} MB)")
+
+
+if __name__ == "__main__":
+    main()

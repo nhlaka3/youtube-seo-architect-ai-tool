@@ -1,7 +1,0 @@
-file '/mnt/c/Users/nhlaka/Desktop/Youtube seo tool/manim-video/audio/Scene1_Opening_padded.wav'
-file '/mnt/c/Users/nhlaka/Desktop/Youtube seo tool/manim-video/audio/Scene2_Problem_padded.wav'
-file '/mnt/c/Users/nhlaka/Desktop/Youtube seo tool/manim-video/audio/Scene3_Dashboard_padded.wav'
-file '/mnt/c/Users/nhlaka/Desktop/Youtube seo tool/manim-video/audio/Scene4_Keyword_padded.wav'
-file '/mnt/c/Users/nhlaka/Desktop/Youtube seo tool/manim-video/audio/Scene5_Audit_padded.wav'
-file '/mnt/c/Users/nhlaka/Desktop/Youtube seo tool/manim-video/audio/Scene6_Script_padded.wav'
-file '/mnt/c/Users/nhlaka/Desktop/Youtube seo tool/manim-video/audio/Scene7_CTA_padded.wav'

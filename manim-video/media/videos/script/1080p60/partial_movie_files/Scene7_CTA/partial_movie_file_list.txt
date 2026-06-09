@@ -1,8 +1,0 @@
-# This file is used internally by FFMPEG.
-file 'file:/mnt/c/Users/nhlaka/Desktop/Youtube seo tool/manim-video/media/videos/script/1080p60/partial_movie_files/Scene7_CTA/2873985843_1333211972_223132457.mp4'
-file 'file:/mnt/c/Users/nhlaka/Desktop/Youtube seo tool/manim-video/media/videos/script/1080p60/partial_movie_files/Scene7_CTA/3496312638_3394500337_2416170617.mp4'
-file 'file:/mnt/c/Users/nhlaka/Desktop/Youtube seo tool/manim-video/media/videos/script/1080p60/partial_movie_files/Scene7_CTA/3496312638_2691085620_2064173447.mp4'
-file 'file:/mnt/c/Users/nhlaka/Desktop/Youtube seo tool/manim-video/media/videos/script/1080p60/partial_movie_files/Scene7_CTA/3496312638_1482744903_2945078444.mp4'
-file 'file:/mnt/c/Users/nhlaka/Desktop/Youtube seo tool/manim-video/media/videos/script/1080p60/partial_movie_files/Scene7_CTA/3496312638_3484913905_4229589119.mp4'
-file 'file:/mnt/c/Users/nhlaka/Desktop/Youtube seo tool/manim-video/media/videos/script/1080p60/partial_movie_files/Scene7_CTA/3496312638_2597642216_158459868.mp4'
-file 'file:/mnt/c/Users/nhlaka/Desktop/Youtube seo tool/manim-video/media/videos/script/1080p60/partial_movie_files/Scene7_CTA/3496312638_2318836581_3278671325.mp4'

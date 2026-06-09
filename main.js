@@ -201,6 +201,65 @@ window.checkHealthAndCoach = checkHealthAndCoach;
 // ── NICHE GUARD HELPER FUNCTIONS (module scope) ──
 // Advanced reasoning engine for niche-specific analysis
 
+// Helper to calculate common keyword metrics used across research and niche guard
+function calculateKeywordMetrics(kw) {
+    if (!kw) return null;
+    const kwLower = kw.toLowerCase();
+    const words = kwLower.split(/\s+/).filter(w => w.length > 0);
+    const wordCount = words.length;
+
+    // ── INTENT SCORE (0-100): based on keyword structure ──
+    let intentScore = 50; // base
+    if (wordCount >= 5) intentScore += 25;
+    else if (wordCount >= 4) intentScore += 18;
+    else if (wordCount >= 3) intentScore += 10;
+
+    const highIntentWords = /^(how|what|why|when|where|who|best|top|review|guide|tutorial|vs|versus)/i;
+    if (highIntentWords.test(kwLower)) intentScore += 15;
+    if (/20\d{2}/.test(kwLower)) intentScore += 8;
+    if (/\b(learn|create|make|build|fix|solve|get|find|start|stop)\b/i.test(kwLower)) intentScore += 7;
+    intentScore = Math.min(intentScore, 100);
+
+    // ── COMPETITION SCORE (0-100): real heuristics, NOT random ──
+    let compScore = 25; // base
+    if (wordCount <= 2) compScore += 35;
+    else if (wordCount === 3) compScore += 20;
+    else if (wordCount === 4) compScore += 10;
+    
+    const lastWord = words[words.length - 1];
+    if (/^(a|an|the|and|or|in|on|to|for|of|with|is|it|at|by)$/i.test(lastWord)) compScore += 8;
+    if (/^(how|what|why)/i.test(kwLower)) compScore += 5;
+    const nicheSpecificity = words.filter(w => w.length > 6).length;
+    compScore -= nicheSpecificity * 3;
+    compScore = Math.max(5, Math.min(compScore, 95));
+
+    // ── ESTIMATED MONTHLY SEARCH VOLUME ──
+    const baseVolume = wordCount >= 5 ? 800 : wordCount >= 4 ? 2200 : wordCount >= 3 ? 5500 : 15000;
+    const charSum = kwLower.split('').reduce((s, c) => s + c.charCodeAt(0), 0);
+    const variance = 0.6 + (charSum % 80) / 100;
+    const searchVolume = Math.max(100, Math.round(baseVolume * variance));
+
+    // ── COMPETITION LABEL ──
+    const competition = compScore >= 65 ? 'High' : compScore >= 35 ? 'Medium' : 'Low';
+
+    // ── GOLDEN KEYWORD: high intent + low competition + long-tail ──
+    const isGolden = intentScore >= 70 && compScore < 50 && wordCount >= 3;
+
+    // ── OPPORTUNITY SCORE: intent-to-competition ratio ──
+    const opportunityScore = Math.round((intentScore / Math.max(compScore, 1)) * 50);
+
+    return { 
+      keyword: kw, 
+      intentScore, 
+      competition, 
+      competitionScore: compScore, 
+      searchVolume, 
+      opportunityScore, 
+      wordCount, 
+      isGolden 
+    };
+}
+
 function generateNicheGuardIntelligence(nicheContext) {
   if (!nicheContext) return {
     definition: "Your niche is the specific audience segment your content targets. Define it through content themes, audience pain points, and expertise areas.",
@@ -1472,105 +1531,22 @@ async function runResearch() {
   rawKeywords.forEach((kw) => {
     const kwLower = kw.toLowerCase();
     const words = kwLower.split(/\s+/);
-    const wordCount = words.length;
 
-  // ── RELEVANCE FILTER: adaptive threshold based on seed word count ──
-  // Goal: "vacuum cleaner" must NOT pass for seed "vacuum theory"
-  // But "theory of relativity" SHOULD pass (shares a key concept word)
-  const containsFullSeed = kwLower.includes(seedPhrase);
-  const matchingSeedWords = significantSeedWords.filter(sw => kwLower.includes(sw));
+    // ── RELEVANCE FILTER ──
+    const containsFullSeed = kwLower.includes(seedPhrase);
+    const matchingSeedWords = significantSeedWords.filter(sw => kwLower.includes(sw));
 
-  // Adaptive threshold - stricter for fewer words, more flexible for longer seeds
-  let requiredMatches;
-  if (significantSeedWords.length === 0) {
-    requiredMatches = 0; // No significant words? Allow (single short word seed)
-  } else if (significantSeedWords.length === 1) {
-    requiredMatches = 1; // Must contain the single seed word
-  } else if (significantSeedWords.length === 2) {
-    // For 2-word seeds: require BOTH words (e.g., "vacuum theory" → must contain both "vacuum" AND "theory")
-    // This blocks "vacuum cleaner" and "theory of everything" - they're not relevant to "vacuum theory"
-    requiredMatches = 2;
-  } else {
-    // For 3+ word seeds: require a majority (ceil of 60%)
-    requiredMatches = Math.ceil(significantSeedWords.length * 0.6);
-  }
+    let requiredMatches;
+    if (significantSeedWords.length === 0) requiredMatches = 0;
+    else if (significantSeedWords.length === 1) requiredMatches = 1;
+    else if (significantSeedWords.length === 2) requiredMatches = 2;
+    else requiredMatches = Math.ceil(significantSeedWords.length * 0.6);
 
-  const hasEnoughMatches = matchingSeedWords.length >= requiredMatches;
+    const hasEnoughMatches = matchingSeedWords.length >= requiredMatches;
+    if (!containsFullSeed && !hasEnoughMatches) return;
 
-  // Skip if: not full phrase AND not enough matching seed words
-  if (!containsFullSeed && !hasEnoughMatches) return;
-
-    // ── INTENT SCORE (0-100): based on keyword structure ──
-    let intentScore = 50; // base
-
-    // Long-tail bonus: 4+ words = more specific intent
-    if (wordCount >= 5) intentScore += 25;
-    else if (wordCount >= 4) intentScore += 18;
-    else if (wordCount >= 3) intentScore += 10;
-
-    // Question/intent words signal high purchase/research intent
-    const highIntentWords = /^(how|what|why|when|where|who|best|top|review|guide|tutorial|vs|versus)/i;
-    if (highIntentWords.test(kwLower)) intentScore += 15;
-
-    // Contains year = fresh intent
-    if (/20\d{2}/.test(kwLower)) intentScore += 8;
-
-    // Action words
-    if (/\b(learn|create|make|build|fix|solve|get|find|start|stop)\b/i.test(kwLower)) intentScore += 7;
-
-    intentScore = Math.min(intentScore, 100);
-
-    // ── COMPETITION SCORE (0-100): real heuristics, NOT random ──
-    // Shorter keywords = more competition (broader terms rank harder)
-    // Generic patterns = more competition
-    let compScore = 25; // base
-
-    if (wordCount <= 2) compScore += 35;      // 1-2 word keywords: high competition
-    else if (wordCount === 3) compScore += 20; // 3 words: moderate-high
-    else if (wordCount === 4) compScore += 10; // 4 words: moderate
-    // 5+ words: stays at base (low competition - long tail)
-
-    // Generic single words at end = higher competition (e.g., "vacuum theory" vs "vacuum theory explained")
-    const lastWord = words[words.length - 1];
-    if (/^(a|an|the|and|or|in|on|to|for|of|with|is|it|at|by)$/i.test(lastWord)) compScore += 8;
-
-    // Question format usually has more competing content
-    if (/^(how|what|why)/i.test(kwLower)) compScore += 5;
-
-    // Very specific niche terms = lower competition
-    const nicheSpecificity = words.filter(w => w.length > 6).length;
-    compScore -= nicheSpecificity * 3;
-
-    compScore = Math.max(5, Math.min(compScore, 95));
-
-    // ── ESTIMATED MONTHLY SEARCH VOLUME ──
-    // Based on autocomplete existence (shows people search it) + word count
-    // More words = more specific = lower but real volume
-    const baseVolume = wordCount >= 5 ? 800 : wordCount >= 4 ? 2200 : wordCount >= 3 ? 5500 : 15000;
-    // Deterministic variance based on keyword structure (not random, not sinusoidal)
-    const charSum = kwLower.split('').reduce((s, c) => s + c.charCodeAt(0), 0);
-    const variance = 0.6 + (charSum % 80) / 100; // 0.6 to 1.4 multiplier
-    const estVolume = Math.max(100, Math.round(baseVolume * variance));
-
-    // ── COMPETITION LABEL ──
-    const competition = compScore >= 65 ? 'High' : compScore >= 35 ? 'Medium' : 'Low';
-
-    // ── GOLDEN KEYWORD: high intent + low competition + long-tail ──
-    const isGolden = intentScore >= 70 && compScore < 50 && wordCount >= 3;
-
-    // ── OPPORTUNITY SCORE: intent-to-competition ratio ──
-    const opportunityScore = Math.round((intentScore / Math.max(compScore, 1)) * 50);
-
-    discoveredKeywords.push({
-      keyword: kw,
-      intentScore,
-      competition,
-      competitionScore: compScore,
-      searchVolume: estVolume,
-      opportunityScore,
-      wordCount,
-      isGolden
-    });
+    const metrics = calculateKeywordMetrics(kw);
+    if (metrics) discoveredKeywords.push(metrics);
   });
 
   // Sort by opportunity score (best opportunities first)
@@ -1579,7 +1555,7 @@ async function runResearch() {
   // Fallback: if APIs returned nothing (e.g., typo in seed word, network issues),
   // generate template keywords with proper scoring so the UI is still useful
   if (discoveredKeywords.length === 0) {
-    const fallbackSeed = seedKeyword; // keep the user's exact input
+    const fallbackSeed = seedKeyword;
     const patterns = [
       `best ${fallbackSeed} tips`,
       `${fallbackSeed} tutorial for beginners`,
@@ -1593,53 +1569,9 @@ async function runResearch() {
       `${fallbackSeed} step by step`
     ];
 
-    const seedWordsForFallback = fallbackSeed.toLowerCase().split(/\s+/).filter(w => w.length > 2);
-    const significantFallbackWords = seedWordsForFallback.filter(w => w.length > 3);
-
     for (const kw of patterns) {
-      const kwLower = kw.toLowerCase();
-      const words = kwLower.split(/\s+/);
-      const wordCount = words.length;
-
-      let intentScore = 50;
-      if (wordCount >= 5) intentScore += 25;
-      else if (wordCount >= 4) intentScore += 18;
-      else if (wordCount >= 3) intentScore += 10;
-      if (/^(how|what|why|when|where|who|best|top|review|guide|tutorial|vs|versus)/i.test(kwLower)) intentScore += 15;
-      if (/20\d{2}/.test(kwLower)) intentScore += 8;
-      if (/\b(learn|create|make|build|fix|solve|get|find|start|stop)\b/i.test(kwLower)) intentScore += 7;
-      intentScore = Math.min(intentScore, 100);
-
-      let compScore = 25;
-      if (wordCount <= 2) compScore += 35;
-      else if (wordCount === 3) compScore += 20;
-      else if (wordCount === 4) compScore += 10;
-      const lastWord = words[words.length - 1];
-      if (/^(a|an|the|and|or|in|on|to|for|of|with|is|it|at|by)$/i.test(lastWord)) compScore += 8;
-      if (/^(how|what|why)/i.test(kwLower)) compScore += 5;
-      const nicheSpecificity = words.filter(w => w.length > 6).length;
-      compScore -= nicheSpecificity * 3;
-      compScore = Math.max(5, Math.min(compScore, 95));
-
-      const baseVolume = wordCount >= 5 ? 800 : wordCount >= 4 ? 2200 : wordCount >= 3 ? 5500 : 15000;
-      const charSum = kwLower.split('').reduce((s, c) => s + c.charCodeAt(0), 0);
-      const variance = 0.6 + (charSum % 80) / 100;
-      const estVolume = Math.max(100, Math.round(baseVolume * variance));
-
-      const competition = compScore >= 65 ? 'High' : compScore >= 35 ? 'Medium' : 'Low';
-      const isGolden = intentScore >= 70 && compScore < 50 && wordCount >= 3;
-      const opportunityScore = Math.round((intentScore / Math.max(compScore, 1)) * 50);
-
-      discoveredKeywords.push({
-        keyword: kw,
-        intentScore,
-        competition,
-        competitionScore: compScore,
-        searchVolume: estVolume,
-        opportunityScore,
-        wordCount,
-        isGolden
-      });
+      const metrics = calculateKeywordMetrics(kw);
+      if (metrics) discoveredKeywords.push(metrics);
     }
     discoveredKeywords.sort((a, b) => b.opportunityScore - a.opportunityScore);
   }
@@ -1748,10 +1680,21 @@ function copyKeyword(keyword) {
   showToast('Keyword copied!', 'success');
 }
 
-function sendToFactory(keyword) {
+function sendToFactory(keyword, hook = '', blueprint = '') {
   switchView('factory');
-  document.getElementById('video-concept').value = keyword;
-  showToast(`Sent "${keyword}" to Video Factory`, 'success');
+  const conceptInput = document.getElementById('video-concept');
+  const draftTitleInput = document.getElementById('factory-draft-title');
+  const draftDescInput = document.getElementById('factory-draft-desc');
+  const blueprintEl = document.getElementById('factory-thumbnail-blueprint');
+  const draftSection = document.getElementById('factory-seo-draft');
+
+  if (conceptInput) conceptInput.value = keyword;
+  if (draftTitleInput) draftTitleInput.value = `Winning with ${keyword}: [Your Angle Here]`;
+  if (draftDescInput) draftDescInput.value = hook || `How to capitalize on the ${keyword} trend using audience-validated gaps.`;
+  if (blueprintEl) blueprintEl.innerHTML = blueprint ? `<div style="color:var(--primary-light);">${blueprint}</div>` : 'Target the visual contrast of the niche leader.';
+  if (draftSection) draftSection.classList.remove('hidden');
+
+  showToast(`Strategic plan for "${keyword}" sent to Factory`, 'success');
 }
 
 async function snipeKeyword(keyword) {
@@ -6638,6 +6581,119 @@ function parseDuration(iso) {
   return (parseInt(match[1] || 0) * 3600) + (parseInt(match[2] || 0) * 60) + parseInt(match[3] || 0);
 }
 
+// ── NICHE-RELEVANCE GUARD (PHASE 4: DISCOVERY MODE) ──
+window.setNicheMode = function(mode) {
+    const urlArea = document.getElementById('niche-url-input-area');
+    const discoveryArea = document.getElementById('niche-discovery-input-area');
+    const tabUrl = document.getElementById('tab-niche-url');
+    const tabDiscovery = document.getElementById('tab-niche-discovery');
+    
+    if (mode === 'discovery') {
+        urlArea.style.display = 'none';
+        discoveryArea.style.display = 'block';
+        tabUrl.classList.remove('active');
+        tabDiscovery.classList.add('active');
+    } else {
+        urlArea.style.display = 'block';
+        discoveryArea.style.display = 'none';
+        tabUrl.classList.add('active');
+        tabDiscovery.classList.remove('active');
+    }
+};
+
+window.discoverNicheLeaders = async function(btn) {
+    const query = document.getElementById('niche-discovery-query')?.value?.trim();
+    const grid = document.getElementById('discovery-grid');
+    const leaderboard = document.getElementById('discovery-leaderboard');
+    const results = document.getElementById('relevance-results');
+    
+    if (!query) {
+        showToast('Please enter a niche keyword to discover leaders', 'error');
+        return;
+    }
+
+    if (!CreditsSystem.deduct('niche-discovery-scan')) return;
+    
+    btn.disabled = true;
+    const originalText = btn.innerHTML;
+    btn.innerHTML = '<i data-lucide="loader" class="spin"></i> Discovering Leaders...';
+    if (window.lucide) lucide.createIcons();
+
+    try {
+        const token = accessToken || '';
+        const apiKey = localStorage.getItem('ytseo_api_key') || '';
+        const headers = token ? { Authorization: `Bearer ${token}` } : {};
+        
+        // Step 1: Search for viral videos in the niche
+        const searchRes = await fetch(`https://www.googleapis.com/youtube/v3/search?part=snippet&q=${encodeURIComponent(query)}&type=video&order=viewCount&maxResults=5&publishedAfter=${new Date(Date.now() - 30 * 86400000).toISOString()}${!token && apiKey ? '&key=' + apiKey : ''}`, { headers });
+        if (!searchRes.ok) throw new Error('Search failed. Check your connection or API key.');
+        
+        const searchData = await searchRes.json();
+        const videoIds = (searchData.items || []).map(item => item.id.videoId).join(',');
+        
+        if (!videoIds) {
+            showToast('No viral videos found for this query in the last 30 days.', 'warning');
+            return;
+        }
+
+        // Step 2: Get detailed stats for these videos
+        const statsRes = await fetch(`https://www.googleapis.com/youtube/v3/videos?part=snippet,statistics&id=${videoIds}${!token && apiKey ? '&key=' + apiKey : ''}`, { headers });
+        const statsData = await statsRes.json();
+        
+        // Step 3: Render Leaderboard
+        leaderboard.style.display = 'block';
+        results.style.opacity = '0.3'; // Dim old results
+        
+        grid.innerHTML = (statsData.items || []).map(video => {
+            const views = parseInt(video.statistics?.viewCount || '0');
+            const title = video.snippet.title;
+            const channel = video.snippet.channelTitle;
+            const thumb = video.snippet.thumbnails.medium?.url || video.snippet.thumbnails.default?.url;
+            const vId = video.id;
+            
+            return `
+                <div class="discovery-card" style="background:var(--bg-card); border:1px solid rgba(255,255,255,0.06); border-radius:12px; overflow:hidden; transition:transform 0.2s, border-color 0.2s;" onmouseover="this.style.borderColor='var(--primary)'; this.style.transform='translateY(-4px)'" onmouseout="this.style.borderColor='rgba(255,255,255,0.06)'; this.style.transform='none'">
+                    <div style="position:relative; aspect-ratio:16/9; background:url('${thumb}') center/cover no-repeat;">
+                        <div style="position:absolute; bottom:8px; right:8px; background:rgba(0,0,0,0.8); color:#fff; font-size:10px; padding:2px 6px; border-radius:4px; font-weight:700;">
+                            ${(views > 1000000) ? (views/1000000).toFixed(1)+'M views' : (views/1000).toFixed(0)+'K views'}
+                        </div>
+                    </div>
+                    <div style="padding:12px;">
+                        <div style="font-size:12px; font-weight:700; color:var(--text-main); line-height:1.4; margin-bottom:4px; display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden;">${escapeHTML(title)}</div>
+                        <div style="font-size:11px; color:var(--text-muted); margin-bottom:12px;">👤 ${escapeHTML(channel)}</div>
+                        <button class="btn-primary" style="width:100%; font-size:11px; padding:6px;" onclick="selectDiscoveryLeader('${vId}')">
+                            <i data-lucide="shield-check" style="width:12px;"></i> Analyze Strategy
+                        </button>
+                    </div>
+                </div>
+            `;
+        }).join('');
+        
+        if (window.lucide) lucide.createIcons();
+        showToast('Niche leaders found!', 'success');
+        
+    } catch (e) {
+        console.error('[Discovery] Error:', e);
+        showToast('Discovery failed: ' + e.message, 'error');
+    } finally {
+        btn.disabled = false;
+        btn.innerHTML = originalText;
+    }
+};
+
+window.selectDiscoveryLeader = function(videoId) {
+    const urlInput = document.getElementById('niche-leader-url');
+    if (urlInput) {
+        urlInput.value = `https://www.youtube.com/watch?v=${videoId}`;
+        setNicheMode('url');
+        analyzeNicheRelevance();
+        
+        // Smooth scroll to results
+        const results = document.getElementById('relevance-results');
+        if (results) results.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+};
+
 // ── NICHE-RELEVANCE GUARD ──
 async function analyzeNicheRelevance() {
   const urlInput = document.getElementById('niche-leader-url');
@@ -6655,39 +6711,100 @@ async function analyzeNicheRelevance() {
     return;
   }
   const videoId = videoIdMatch[1];
+  const cacheKey = `ytseo_niche_v4_${videoId}`;
+
+  // Check cache first
+  const cached = localStorage.getItem(cacheKey);
+  if (cached) {
+    try {
+      const cachedData = JSON.parse(cached);
+      const now = Date.now();
+      // 24 hour cache TTL
+      if (now - (cachedData.timestamp || 0) < 24 * 60 * 60 * 1000) {
+        console.log('[Niche Guard] Serving from cache:', videoId);
+        renderNicheResults(cachedData.analysis, cachedData.videoData, videoUrl);
+        return;
+      }
+    } catch (e) { console.error('[Niche Guard] Cache parse failed', e); }
+  }
 
   if (!CreditsSystem.deduct('niche-relevance-guard')) return;
   updateTimeSaved(2);
 
   resultsContainer.innerHTML = '<div class="loading-spinner"><div class="spinner-pro"></div><p>Fetching video data & analyzing niche fit...</p></div>';
 
+  const controller = new AbortController();
+  const timeoutId = setTimeout(() => controller.abort(), 45000); // 45s timeout
+
   try {
     // Fetch video details from YouTube API
     const token = accessToken || '';
     const apiKey = localStorage.getItem('ytseo_api_key') || '';
     const headers = token ? { Authorization: `Bearer ${token}` } : {};
-    const videoRes = await fetch(`https://www.googleapis.com/youtube/v3/videos?part=snippet,statistics&id=${videoId}${!token && apiKey ? '&key=' + apiKey : ''}`, { headers });
+    const videoRes = await fetch(`https://www.googleapis.com/youtube/v3/videos?part=snippet,statistics&id=${videoId}${!token && apiKey ? '&key=' + apiKey : ''}`, { 
+      headers,
+      signal: controller.signal 
+    });
 
     let videoTitle = 'Unknown Video';
     let videoTags = [];
     let videoDescription = '';
     let viewCount = 0;
+    let channelId = '';
+    let channelSubs = 0;
+    let topComments = [];
 
     if (videoRes.ok) {
       const videoData = await videoRes.json();
       if (videoData.items?.[0]) {
         const snippet = videoData.items[0].snippet;
+        const stats = videoData.items[0].statistics;
         videoTitle = snippet?.title || 'Unknown';
         videoTags = snippet?.tags || [];
-        videoDescription = (snippet?.description || '').substring(0, 300);
-        viewCount = parseInt(videoData.items[0].statistics?.viewCount || '0');
+        videoDescription = (snippet?.description || '').substring(0, 500);
+        viewCount = parseInt(stats?.viewCount || '0');
+        channelId = snippet?.channelId || '';
+
+        // Fetch channel stats for Authority vs Rising Star detection
+        if (channelId) {
+          try {
+            const chanRes = await fetch(`https://www.googleapis.com/youtube/v3/channels?part=statistics&id=${channelId}${!token && apiKey ? '&key=' + apiKey : ''}`, { 
+                headers,
+                signal: controller.signal
+            });
+            if (chanRes.ok) {
+              const chanData = await chanRes.json();
+              channelSubs = parseInt(chanData.items?.[0]?.statistics?.subscriberCount || '0');
+            }
+          } catch (e) { console.error('[Niche Guard] Channel fetch failed', e); }
+        }
+
+        // Fetch top comments for Audience Sentiment "Spy"
+        try {
+          const commRes = await fetch(`https://www.googleapis.com/youtube/v3/commentThreads?part=snippet&videoId=${videoId}&maxResults=15&order=relevance${!token && apiKey ? '&key=' + apiKey : ''}`, { 
+              headers,
+              signal: controller.signal
+          });
+          if (commRes.ok) {
+            const commData = await commRes.json();
+            topComments = (commData.items || []).map(item => {
+                const text = item.snippet.topLevelComment.snippet.textDisplay;
+                return text.replace(/<[^>]*>/g, '').substring(0, 150); // Clean HTML and truncate
+            });
+          }
+        } catch (e) { console.error('[Niche Guard] Comment fetch failed', e); }
       }
+    } else {
+        throw new Error(`YouTube API returned ${videoRes.status}. Check your API key/token.`);
     }
 
     // AI analysis
     const csrf = window.csrfToken || localStorage.getItem('csrf_token') || '';
     const chId = localStorage.getItem('ytseo_channel_id') || 'anonymous';
     const userNiche = localStorage.getItem('ytseo_detected_niche') || channelNiche || 'General';
+
+    // Velocity Score Calculation for prompt
+    const vScore = channelSubs > 0 ? (viewCount / channelSubs).toFixed(2) : 0;
 
     const aiRes = await fetch(`${API_BASE_URL}/api/ai/generate`, {
       method: 'POST',
@@ -6696,41 +6813,10 @@ async function analyzeNicheRelevance() {
         'x-csrf-token': csrf,
         'x-channel-id': chId
       },
+      signal: controller.signal,
       body: JSON.stringify({
-        systemPrompt: 'You are a YouTube SEO strategist. Analyze a niche leader video and find content and strategy gaps for a creator in the user' + 's niche. Provide real, specific YouTube tips based on what makes the leader video successful.',
-        userPrompt: `Competitive content gap analysis.\n\nLeader Video: "${videoTitle}"\nTheir Tags: ${videoTags.slice(0, 20).join(', ')}\nViews: ${viewCount.toLocaleString()}\nUser's Niche: ${userNiche}\n\nIdentify TOPIC GAPS - subjects, angles, or keywords this leader covers that a creator in niche "${userNiche}" could also make videos about. Do NOT analyze metrics like CTR/watch time.\n\nReturn JSON:\n{\n  "nicheCategory": "category",\n  "relevanceScore": 85,\n  "gapKeywords": ["kw1","kw2","kw3","kw4","kw5","kw6"],\n  "gapAnalysis": "ONE STRING: the biggest content topic opportunity this video suggests for niche ${userNiche}",\n  "actionableTips": ["tip1","tip2","tip3"]\n}\n\nCRITICAL: gapAnalysis MUST be a string (NOT an object). Focus on CONTENT TOPICS.
-
-6. strategicIntel: An object with:
-   - titlePattern: What pattern does this title follow? (e.g., "Question format", "List format", "How-to format")
-   - hookStyle: How does the leader hook viewers in the first 30 seconds based on title/description?
-   - tagStrategy: What is this leader's tag strategy? (broad vs specific mix, topic clusters, etc.)
-   - descriptionPattern: How is the description structured? What formula does it follow?
-   - ctrTactics: 3 specific CTR tactics this leader uses in title/description
-7. actionableTips: 6 SPECIFIC, ACTIONABLE YouTube tips. Each must reference something specific the leader does and how the user can apply it.
-
-Examples of good tips:
-- "This leader uses a question-based title. Try 'Your Question Here?' format for 15-20% higher CTR."
-- "The description opens with a hook sentence within 2 lines. Do the same - frontload your value proposition."
-- "They use 8-12 tags mixing broad and specific. Aim for 10 tags with 2-3 broad + 7-8 specific."
-- "This leader targets long-tail keywords in titles. Add 2-3 specific phrases to your next title."
-
-Return JSON only. No markdown.
-
-6. strategicIntel: An object with:
-   - titlePattern: What pattern does this title follow? (e.g., "Question format", "List format", "How-to format")
-   - hookStyle: How does the leader hook viewers in the first 30 seconds based on title/description?
-   - tagStrategy: What is this leader's tag strategy? (broad vs specific mix, topic clusters, etc.)
-   - descriptionPattern: How is the description structured? What formula does it follow?
-   - ctrTactics: 3 specific CTR tactics this leader uses in title/description
-7. actionableTips: 6 SPECIFIC, ACTIONABLE YouTube tips. Each must reference something specific the leader does and how the user can apply it.
-
-Examples of good tips:
-- "This leader uses a question-based title. Try 'Your Question Here?' format for 15-20% higher CTR."
-- "The description opens with a hook sentence within 2 lines. Do the same - frontload your value proposition."
-- "They use 8-12 tags mixing broad and specific. Aim for 10 tags with 2-3 broad + 7-8 specific."
-- "This leader targets long-tail keywords in titles. Add 2-3 specific phrases to your next title."
-
-Return JSON only. No markdown.`,
+        systemPrompt: 'You are a YouTube SEO strategist and Visual Designer. Analyze a niche leader video, channel velocity, and audience comments to find high-growth content gaps and visual blueprints. Provide real, specific YouTube tips.',
+        userPrompt: `Strategic Content & Visual Gap Analysis.\n\nLeader Video: "${videoTitle}"\nViews: ${viewCount.toLocaleString()}\nChannel Subs: ${channelSubs.toLocaleString()}\nVelocity Score: ${vScore} (Video Views / Channel Subs)\nUser's Niche: ${userNiche}\n\nTop Comments (Audience Voice):\n${topComments.join('\n')}\n\nAnalyze this data and return JSON only. Focus on what the audience wants that isn't being fully served.\n\nJSON Structure:\n{\n  "nicheCategory": "category",\n  "relevanceScore": 85,\n  "momentumScore": "${vScore > 1.0 ? 'Viral Blueprint' : 'Authority'}",\n  "gapKeywords": ["kw1","kw2","kw3","kw4","kw5","kw6"],\n  "gapAnalysis": "ONE STRING: the biggest content topic opportunity this video suggests for niche ${userNiche}",\n  "audienceSentiment": "Specific gap identified from audience comments (what they are asking for)",\n  "engagementPrediction": "2026 Prediction: Why this specific topic is trending now and how long the momentum will last.",\n  "thumbnailStrategy": {\n    "visualHook": "Visual composition idea to beat this leader",\n    "textOverlay": "Psychological hook text for the thumbnail",\n    "contrastAdvice": "Colors and styles to stand out in Suggested feed"\n  },\n  "strategicIntel": {\n    "titlePattern": "What pattern does this title follow?",\n    "hookStyle": "How they hook viewers in the first 30s",\n    "tagStrategy": "Tag mix (broad vs specific)",\n    "descriptionPattern": "Description formula used",\n    "ctrTactics": ["3 specific CTR tactics used"]\n  },\n  "actionableTips": ["6 SPECIFIC, ACTIONABLE tips referencing the leader's actual strategy"]\n}`,
         taskType: 'metadata-collusion',
         temperatureOverride: 0.3
       })
@@ -6740,31 +6826,69 @@ Return JSON only. No markdown.`,
     if (aiRes.ok) {
       const aiData = await aiRes.json();
       const content = aiData.choices?.[0]?.message?.content || '{}';
-      console.log('[Niche] Raw AI:', content.substring(0, 200));
       try {
         analysis = JSON.parse(content.replace(/```json|```/g, '').trim());
       } catch (e) {
         const match = content.match(/\{[\s\S]*\}/);
         if (match) try { analysis = JSON.parse(match[0]); } catch (_) {}
       }
+    } else {
+        throw new Error(`AI Engine returned ${aiRes.status}. The service might be busy.`);
     }
+
+    const finalData = {
+      analysis,
+      videoData: { videoTitle, videoTags, videoDescription, viewCount, channelId, channelSubs, topComments },
+      timestamp: Date.now()
+    };
+    try {
+        localStorage.setItem(cacheKey, JSON.stringify(finalData));
+    } catch (e) { console.error('[Niche Guard] Cache storage failed:', e); }
+
+    renderNicheResults(analysis, finalData.videoData, videoUrl);
+    showToast('Niche analysis complete', 'success');
+
+  } catch (e) {
+    console.error('[Niche Guard] Error:', e);
+    const msg = e.name === 'AbortError' ? 'Analysis timed out (took over 45s). Try again.' : e.message;
+    resultsContainer.innerHTML = `<div class="error-card"><i data-lucide="alert-triangle"></i><p>Analysis failed: ${msg}</p><button class="btn-outline btn-sm" onclick="analyzeNicheRelevance()">Retry</button></div>`;
+    showToast('Niche analysis failed', 'error');
+  } finally {
+    clearTimeout(timeoutId);
+    // Clean up UI state
+    const spinner = document.getElementById('niche-guard-inline-spinner');
+    if (spinner) spinner.style.display = 'none';
+    const btn = document.getElementById('niche-guard-analyze-btn');
+    if (btn) {
+      btn.disabled = false;
+      const original = btn.getAttribute('data-original-text');
+      if (original) btn.innerText = original;
+    }
+    if (resultsContainer) resultsContainer.style.opacity = '1';
+    if (window.lucide) lucide.createIcons();
+  }
+}
+
+function renderNicheResults(analysis, videoData, videoUrl) {
+    const resultsContainer = document.getElementById('relevance-results');
+    if (!resultsContainer) return;
+
+    const { videoTitle, videoTags, videoDescription, viewCount, channelId, channelSubs, topComments } = videoData;
+    const userNiche = localStorage.getItem('ytseo_detected_niche') || channelNiche || 'General';
+
+    // Velocity Score Calculation (Rising Star Detection)
+    const velocityScore = channelSubs > 0 ? (viewCount / channelSubs).toFixed(2) : 0;
+    const isViralBlueprint = velocityScore > 1.0;
 
     // Extract fields with fallbacks
     const nicheCat = analysis.nicheCategory || videoTags[0] || 'General';
     const score = Math.round(analysis.relevanceScore || 75);
+    const momentum = analysis.momentumScore || (isViralBlueprint ? 'Rising Star' : 'Authority');
     const gapKeywords = analysis.gapKeywords?.length > 0 ? analysis.gapKeywords : videoTags.slice(0, 6);
     const gapText = typeof analysis.gapAnalysis === 'string' ? analysis.gapAnalysis
       : (analysis.gapAnalysis?.title || analysis.gapAnalysis?.text || analysis.gapAnalysis?.summary || 'Analyze this leader\'s keywords to find content gaps in your strategy.');
         
-    // Generate specific strategic advice based on actual video data
-    const intel = {
-      titlePattern: analysis.strategicIntel?.titlePattern || generateTitlePatternAdvice(videoTitle),
-      hookStyle: analysis.strategicIntel?.hookStyle || generateHookStyleAdvice(videoTitle, videoDescription),
-      tagStrategy: analysis.strategicIntel?.tagStrategy || generateTagStrategyAdvice(videoTags),
-      descriptionPattern: analysis.strategicIntel?.descriptionPattern || generateDescriptionPatternAdvice(videoDescription),
-      ctrTactics: analysis.strategicIntel?.ctrTactics || generateCtRTacticsAdvice(videoTitle, videoDescription)
-    };
-    const defaultTips = [
+    const tips = (analysis.actionableTips && analysis.actionableTips.length > 0) ? analysis.actionableTips : [
       `Study how "${videoTitle.substring(0, 40)}..." structures its first 30 seconds`,
       `Target the keyword "${gapKeywords[0] || videoTags[0] || 'your niche'}" in your next video`,
       `Create a response video addressing a question raised by this content`,
@@ -6772,9 +6896,6 @@ Return JSON only. No markdown.`,
       `Mix 2-3 broad tags with 7-8 specific long-tail tags in your metadata`,
       `Frontload your value proposition in the first 2 lines of your description`
     ];
-    const tips = (analysis.actionableTips && analysis.actionableTips.length > 0) ? analysis.actionableTips : defaultTips;
-       
-
 
     // Determine overlap: which of the leader's tags match the user's niche words
     const nicheWords = userNiche.toLowerCase().split(/\s+/).filter(w => w.length > 2);
@@ -6794,6 +6915,10 @@ Return JSON only. No markdown.`,
           </div>
           <div class="niche-category">📂 ${nicheCat}</div>
           <div class="video-title-ref">🎬 ${escapeHTML(videoTitle.substring(0, 60))}${videoTitle.length > 60 ? '...' : ''}</div>
+          <div class="momentum-badge ${momentum === 'Rising Star' || momentum === 'Viral Blueprint' ? 'star' : 'authority'}" style="margin-top:10px;">
+            <i data-lucide="${momentum === 'Rising Star' || momentum === 'Viral Blueprint' ? 'trending-up' : 'award'}"></i>
+            ${momentum === 'Viral Blueprint' ? 'Rising Star' : momentum}
+          </div>
         </div>
 
         <!-- Gap Analysis Card -->
@@ -6802,64 +6927,40 @@ Return JSON only. No markdown.`,
           <p class="gap-text">${escapeHTML(gapText)}</p>
           <div class="gap-keywords">
             <strong>🎯 Keywords you're missing:</strong>
-            <div class="tag-list">${gapKeywords.map(k => `<span class="tag-chip tag-gap" onclick="sendToFactory('${escapeHTML(k).replace(/'/g, "\\'")}');showToast('Sent to Video Factory!','success')" title="Click to send to Video Factory">${escapeHTML(k)}</span>`).join(' ')}</div>
+            <div class="tag-list">
+              ${gapKeywords.map(k => {
+                const metrics = calculateKeywordMetrics(k);
+                const goldenClass = metrics?.isGolden ? 'tag-golden' : 'tag-gap';
+                const goldenIcon = metrics?.isGolden ? '<i data-lucide="award" style="width:10px;height:10px;margin-right:4px;"></i>' : '';
+                return `<span class="tag-chip ${goldenClass}" onclick="sendToFactory('${escapeHTML(k).replace(/'/g, "\\'")}', '${escapeHTML(analysis.thumbnailStrategy?.textOverlay || '').replace(/'/g, "\\'")}', '${escapeHTML(analysis.thumbnailStrategy?.visualHook || '').replace(/'/g, "\\'")}')" title="${metrics?.isGolden ? 'GOLDEN KEYWORD: High intent, low competition' : 'Click to send to Video Factory'}">${goldenIcon}${escapeHTML(k)}</span>`;
+              }).join(' ')}
+            </div>
+          </div>
+          <div class="prediction-section" style="margin-top:12px; padding:10px; background:rgba(16,185,129,0.05); border-radius:8px; border:1px solid rgba(16,185,129,0.1);">
+            <div style="font-size:10px; text-transform:uppercase; color:#10b981; font-weight:700; margin-bottom:3px;">🔮 2026 Trend Pulse</div>
+            <p style="font-size:12px; line-height:1.4; color:var(--text-main); margin:0;">${escapeHTML(analysis.engagementPrediction || 'Momentum is expected to hold for 4-6 weeks based on current search volume velocity.')}</p>
+          </div>
+          <div class="sentiment-section" style="margin-top:15px; padding-top:15px; border-top:1px solid var(--border-color);">
+            <div style="font-size:11px; text-transform:uppercase; color:var(--text-muted); font-weight:700; margin-bottom:5px;">💬 Audience Sentiment</div>
+            <p style="font-size:13px; line-height:1.4; color:var(--text-main); font-style:italic;">"${escapeHTML(analysis.audienceSentiment || 'Audience is highly engaged with the core concepts; focus on specific implementation details.')}"</p>
           </div>
         </div>
 
-        <!-- Strategic Intel Card -->
-        <div class="niche-intel-card">
-          <h4><i data-lucide="zap"></i> Strategic Intel</h4>
+        <!-- Thumbnail Strategy Card -->
+        <div class="niche-intel-card thumbnail-card">
+          <h4><i data-lucide="image"></i> Thumbnail Blueprint</h4>
           <div class="intel-grid">
             <div class="intel-item">
-              <span class="intel-label">Title Pattern</span>
-              <span class="intel-value">${escapeHTML(intel.titlePattern || 'Analyze the leader\'s title formula for patterns')}</span>
+              <span class="intel-label">Visual Hook</span>
+              <span class="intel-value">${escapeHTML(analysis.thumbnailStrategy?.visualHook || 'Use a contrasting visual hook to the leader\'s main frame.')}</span>
             </div>
             <div class="intel-item">
-              <span class="intel-label">Hook Style</span>
-              <span class="intel-value">${escapeHTML(intel.hookStyle || 'Review how the leader opens their video for retention tactics')}</span>
-            </div>
-            <div class="intel-item">
-              <span class="intel-label">Tag Strategy</span>
-              <span class="intel-value">${escapeHTML(intel.tagStrategy || 'Mix broad and specific tags for maximum discoverability')}</span>
-            </div>
-            <div class="intel-item">
-              <span class="intel-label">Description Pattern</span>
-              <span class="intel-value">${escapeHTML(intel.descriptionPattern || 'Study how the leader structures their description')}</span>
+              <span class="intel-label">Text Overlay</span>
+              <span class="intel-value" style="color:var(--primary); font-weight:700;">${escapeHTML(analysis.thumbnailStrategy?.textOverlay || 'Short, punchy curiosity gap text.')}</span>
             </div>
             <div class="intel-item full-width">
-              <span class="intel-label">CTR Tactics</span>
-              <ul class="intel-tips">
-                ${(intel.ctrTactics || ['Use power words in titles', 'Add numbers or dates for urgency', 'Include a clear value proposition in the first 100 chars']).map(t => `<li>${escapeHTML(t)}</li>`).join('')}
-              </ul>
-            </div>
-          </div>
-        </div>
-
-        <!-- Strategic Intel Card -->
-        <div class="niche-intel-card">
-          <h4><i data-lucide="zap"></i> Strategic Intel</h4>
-          <div class="intel-grid">
-            <div class="intel-item">
-              <span class="intel-label">Title Pattern</span>
-              <span class="intel-value">${escapeHTML(intel.titlePattern || 'Analyze the leader\'s title formula for patterns')}</span>
-            </div>
-            <div class="intel-item">
-              <span class="intel-label">Hook Style</span>
-              <span class="intel-value">${escapeHTML(intel.hookStyle || 'Review how the leader opens their video for retention tactics')}</span>
-            </div>
-            <div class="intel-item">
-              <span class="intel-label">Tag Strategy</span>
-              <span class="intel-value">${escapeHTML(intel.tagStrategy || 'Mix broad and specific tags for maximum discoverability')}</span>
-            </div>
-            <div class="intel-item">
-              <span class="intel-label">Description Pattern</span>
-              <span class="intel-value">${escapeHTML(intel.descriptionPattern || 'Study how the leader structures their description')}</span>
-            </div>
-            <div class="intel-item full-width">
-              <span class="intel-label">CTR Tactics</span>
-              <ul class="intel-tips">
-                ${(intel.ctrTactics || ['Use power words in titles', 'Add numbers or dates for urgency', 'Include a clear value proposition in the first 100 chars']).map(t => `<li>${escapeHTML(t)}</li>`).join('')}
-              </ul>
+              <span class="intel-label">Contrast Advice</span>
+              <span class="intel-value">${escapeHTML(analysis.thumbnailStrategy?.contrastAdvice || 'Use bright, saturated colors to pop in the Suggested feed.')}</span>
             </div>
           </div>
         </div>
@@ -6893,6 +6994,7 @@ Return JSON only. No markdown.`,
           <h4><i data-lucide="lightbulb"></i> Actionable Tips</h4>
           <ul class="tips-list">${tips.map((t, i) => `<li><span class="tip-num">${i + 1}</span> ${escapeHTML(t)}</li>`).join('')}</ul>
         </div>
+
       </div>
 
       <div class="niche-actions-bar">
@@ -6912,12 +7014,6 @@ Return JSON only. No markdown.`,
     };
 
     setTimeout(() => { if (window.lucide) lucide.createIcons(); }, 100);
-    showToast('Niche analysis complete', 'success');
-
-  } catch (e) {
-    resultsContainer.innerHTML = '<div class="error-card"><i data-lucide="alert-triangle"></i><p>Analysis failed: ' + e.message + '</p><button class="btn-outline btn-sm" onclick="analyzeNicheRelevance()">Retry</button></div>';
-    showToast('Niche analysis failed', 'error');
-  }
 }
 window.analyzeNicheRelevance = analyzeNicheRelevance;
 
