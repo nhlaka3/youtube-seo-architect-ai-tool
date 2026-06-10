@@ -1,6 +1,6 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version='1.0' encoding='UTF-8'?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  <!-- Core Pages -->
+  
   <url><loc>https://yt-seo-architect.vercel.app/</loc><lastmod>2026-05-23</lastmod><changefreq>weekly</changefreq><priority>1.0</priority></url>
   <url><loc>https://yt-seo-architect.vercel.app/pricing</loc><lastmod>2026-05-23</lastmod><changefreq>weekly</changefreq><priority>0.9</priority></url>
   <url><loc>https://yt-seo-architect.vercel.app/about</loc><lastmod>2026-05-19</lastmod><priority>0.7</priority></url>
@@ -9,17 +9,17 @@
   <url><loc>https://yt-seo-architect.vercel.app/terms-of-service</loc><lastmod>2026-05-19</lastmod><priority>0.3</priority></url>
   <url><loc>https://yt-seo-architect.vercel.app/changelog</loc><lastmod>2026-05-19</lastmod><priority>0.4</priority></url>
 
-  <!-- Free Tools (High Value Pages) -->
+  
   <url><loc>https://yt-seo-architect.vercel.app/tools/tag-generator</loc><lastmod>2026-05-19</lastmod><changefreq>weekly</changefreq><priority>0.9</priority></url>
   <url><loc>https://yt-seo-architect.vercel.app/tools/title-optimizer</loc><lastmod>2026-05-19</lastmod><changefreq>weekly</changefreq><priority>0.9</priority></url>
   <url><loc>https://yt-seo-architect.vercel.app/tools/description-writer</loc><lastmod>2026-05-19</lastmod><changefreq>weekly</changefreq><priority>0.9</priority></url>
 
-  <!-- Blog Posts -->
+  
   <url><loc>https://yt-seo-architect.vercel.app/blog/best-youtube-seo-tools-2026</loc><lastmod>2026-05-23</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
   <url><loc>https://yt-seo-architect.vercel.app/blog/youtube-competitor-analysis-reverse-engineer</loc><lastmod>2026-05-23</lastmod><priority>0.8</priority></url>
   <url><loc>https://yt-seo-architect.vercel.app/blog/youtube-seo-audit-diagnostic-fix-2026</loc><lastmod>2026-05-22</lastmod><priority>0.7</priority></url>
 
-  <!-- Tag Generator Niche Pages (Programmatic SEO) -->
+  
   <url><loc>https://yt-seo-architect.vercel.app/tools/tag-generator/gaming</loc><lastmod>2026-05-19</lastmod><priority>0.8</priority></url>
   <url><loc>https://yt-seo-architect.vercel.app/tools/tag-generator/minecraft</loc><lastmod>2026-05-19</lastmod><priority>0.8</priority></url>
   <url><loc>https://yt-seo-architect.vercel.app/tools/tag-generator/fortnite</loc><lastmod>2026-05-19</lastmod><priority>0.8</priority></url>
@@ -79,4 +79,4 @@
   <url><loc>https://yt-seo-architect.vercel.app/blog/youtube-shorts-seo-ranking-guide-2026</loc><lastmod>2026-05-29</lastmod><changefreq>weekly</changefreq><priority>0.9</priority></url>
   <url><loc>https://yt-seo-architect.vercel.app/blog/youtube-seo-for-gaming-channels-2026</loc><lastmod>2026-06-03</lastmod><changefreq>weekly</changefreq><priority>0.9</priority></url>
   <url><loc>https://yt-seo-architect.vercel.app/blog/youtube-script-writing-for-seo-2026</loc><lastmod>2026-06-04</lastmod><changefreq>weekly</changefreq><priority>0.9</priority></url>
-</urlset>
+<url><loc>https://yt-seo-architect.vercel.app/blog/youtube-tags-2026</loc><lastmod>2026-06-10</lastmod><changefreq>weekly</changefreq><priority>0.9</priority></url><url><loc>https://yt-seo-architect.vercel.app/blog/youtube-algorithm-changes-2026</loc><lastmod>2026-06-10</lastmod><changefreq>weekly</changefreq><priority>0.9</priority></url></urlset>
