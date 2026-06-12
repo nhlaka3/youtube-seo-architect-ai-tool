@@ -1289,7 +1289,10 @@ const APPROVED_BLOG_SLUGS = [
   'youtube-metadata-auditor-vs-vidiq-shadow-ban', 'youtube-retention-graph-explained-2026',
   'youtube-seo-audit-diagnostic-fix-2026', 'youtube-thumbnail-ab-testing-guide',
   'youtube-video-not-getting-views-diagnostic-fix-2026',
-  'youtube-shorts-seo-ranking-guide-2026'
+  'youtube-shorts-seo-ranking-guide-2026',
+  'how-to-increase-youtube-retention-2026',
+  'youtube-shorts-vs-long-form-2026',
+  'youtube-algorithm-checklist-2026'
 ];
 
 app.get('/api/admin/trash-posts', async (req, res) => {
