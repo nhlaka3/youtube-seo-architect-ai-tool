@@ -1,0 +1,565 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=1080, height=1920">
+  <title>Episode 3: How to Plan a YouTube Playlist That Ranks</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --cyan: #00f2ff;
+      --green: #00ff88;
+      --bg: #0a0b10;
+      --oled: #000000;
+      --card: rgba(16, 20, 32, 0.7);
+      --text: #f0f2f5;
+      --muted: #a8b2c1;
+      --border: rgba(0, 242, 255, 0.15);
+      --danger: #ff3366;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: 'Outfit', sans-serif;
+      background: var(--oled);
+      color: var(--text);
+      width: 1080px;
+      height: 1920px;
+      overflow: hidden;
+    }
+
+    /* ═══════════════════════════════════════════
+       LAYOUT BEFORE ANIMATION — Hero frames
+       CSS position is ground truth for all elements
+       ═══════════════════════════════════════════ */
+
+    .scene-content {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      width: 100%;
+      height: 100%;
+      padding: 100px 60px;
+      gap: 24px;
+      box-sizing: border-box;
+      position: relative;
+    }
+
+    /* ── Scene 1: Hook ── */
+    #s1-content { background: radial-gradient(circle at 50% 30%, rgba(0,242,255,0.08) 0%, var(--oled) 70%); }
+
+    #s1-badge {
+      font-size: 28px;
+      font-weight: 700;
+      color: var(--danger);
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+    }
+
+    #s1-heading {
+      font-size: 100px;
+      font-weight: 900;
+      line-height: 1.05;
+      letter-spacing: -4px;
+      color: var(--text);
+    }
+
+    #s1-heading .accent { color: var(--cyan); }
+
+    #s1-sub {
+      font-size: 34px;
+      font-weight: 500;
+      color: var(--muted);
+      line-height: 1.4;
+      max-width: 800px;
+    }
+
+    #s1-big-num {
+      font-size: 200px;
+      font-weight: 900;
+      color: var(--cyan);
+      line-height: 1;
+      text-shadow: 0 0 40px rgba(0,242,255,0.4);
+    }
+
+    /* ── Scene 2: Step 1 — Intent Flow ── */
+    #s2-content { background: radial-gradient(circle at 30% 50%, rgba(0,255,136,0.06) 0%, var(--oled) 70%); }
+
+    #s2-step {
+      font-size: 28px;
+      font-weight: 700;
+      color: var(--green);
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+    }
+
+    #s2-heading {
+      font-size: 100px;
+      font-weight: 900;
+      line-height: 1.1;
+      letter-spacing: -3px;
+      color: var(--text);
+    }
+
+    #s2-heading .accent { color: var(--green); }
+
+    #s2-bullets {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      margin-top: 16px;
+    }
+
+    #s2-bullet1, #s2-bullet2 {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 24px 28px;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .bullet-num {
+      font-size: 60px;
+      font-weight: 900;
+      color: var(--cyan);
+      min-width: 80px;
+      text-align: center;
+    }
+
+    .bullet-text {
+      font-size: 34px;
+      font-weight: 600;
+      color: var(--text);
+      line-height: 1.3;
+    }
+
+    /* ── Scene 3: Step 2 — Metadata ── */
+    #s3-content { background: radial-gradient(circle at 70% 40%, rgba(0,242,255,0.06) 0%, var(--oled) 70%); }
+
+    #s3-step {
+      font-size: 28px;
+      font-weight: 700;
+      color: var(--cyan);
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+    }
+
+    #s3-heading {
+      font-size: 100px;
+      font-weight: 900;
+      line-height: 1.1;
+      letter-spacing: -3px;
+      color: var(--text);
+    }
+
+    #s3-heading .accent { color: var(--cyan); }
+
+    #s3-desc {
+      font-size: 34px;
+      font-weight: 500;
+      color: var(--muted);
+      line-height: 1.5;
+      margin-top: 8px;
+    }
+
+    #s3-chip {
+      display: inline-block;
+      background: rgba(0,242,255,0.12);
+      border: 1px solid var(--border);
+      border-radius: 99px;
+      padding: 12px 24px;
+      font-size: 30px;
+      font-weight: 700;
+      color: var(--cyan);
+      margin-top: 16px;
+    }
+
+    /* ── Scene 4: Step 3 — Autoplay ── */
+    #s4-content { background: radial-gradient(circle at 50% 60%, rgba(0,255,136,0.06) 0%, var(--oled) 70%); }
+
+    #s4-step {
+      font-size: 28px;
+      font-weight: 700;
+      color: var(--green);
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+    }
+
+    #s4-heading {
+      font-size: 100px;
+      font-weight: 900;
+      line-height: 1.1;
+      letter-spacing: -3px;
+      color: var(--text);
+    }
+
+    #s4-heading .accent { color: var(--green); }
+
+    #s4-desc {
+      font-size: 34px;
+      font-weight: 500;
+      color: var(--muted);
+      line-height: 1.5;
+      margin-top: 8px;
+    }
+
+    .stat-row {
+      display: flex;
+      gap: 24px;
+      margin-top: 24px;
+    }
+
+    #s4-stat1, #s4-stat2 {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 24px;
+      flex: 1;
+      text-align: center;
+    }
+
+    .stat-val {
+      font-size: 60px;
+      font-weight: 900;
+      color: var(--green);
+      font-variant-numeric: tabular-nums;
+    }
+
+    .stat-label {
+      font-size: 24px;
+      font-weight: 600;
+      color: var(--muted);
+      margin-top: 4px;
+    }
+
+    /* ── Scene 5: CTA ── */
+    #s5-content {
+      background: radial-gradient(circle at 50% 50%, rgba(0,242,255,0.1) 0%, var(--oled) 70%);
+      align-items: center;
+      text-align: center;
+    }
+
+    #s5-badge {
+      font-size: 28px;
+      font-weight: 700;
+      color: var(--cyan);
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+    }
+
+    #s5-heading {
+      font-size: 100px;
+      font-weight: 900;
+      line-height: 1.05;
+      letter-spacing: -4px;
+      color: var(--text);
+    }
+
+    #s5-heading .accent { color: var(--cyan); }
+
+    #s5-desc {
+      font-size: 34px;
+      font-weight: 500;
+      color: var(--muted);
+      line-height: 1.5;
+      max-width: 800px;
+    }
+
+    #s5-cta {
+      display: inline-block;
+      background: var(--cyan);
+      color: var(--oled);
+      font-size: 40px;
+      font-weight: 800;
+      padding: 24px 48px;
+      border-radius: 12px;
+      margin-top: 24px;
+      text-decoration: none;
+      box-shadow: 0 0 30px rgba(0,242,255,0.4);
+    }
+
+    #s5-url {
+      font-size: 38px;
+      font-weight: 600;
+      color: var(--muted);
+      margin-top: 16px;
+    }
+
+    /* ── Flash transition overlay (on dedicated track, spans full duration) ── */
+    #flash-overlay {
+      position: absolute;
+      inset: 0;
+      background: white;
+      z-index: 50;
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    /* ── Caption bar ── */
+    #caption-bar {
+      position: absolute;
+      bottom: 120px;
+      left: 60px;
+      right: 60px;
+      z-index: 30;
+      text-align: center;
+    }
+
+    #caption-text {
+      font-size: 68px;
+      font-weight: 800;
+      line-height: 1.2;
+      color: rgba(255,255,255,0.45);
+      text-shadow: 0 2px 8px rgba(0,0,0,0.8);
+    }
+
+    /* ── Progress bar ── */
+    #progress-bar {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      height: 6px;
+      background: linear-gradient(90deg, var(--cyan), var(--green));
+      z-index: 40;
+      width: 0%;
+    }
+  </style>
+</head>
+<body>
+
+  <div data-composition-id="ep03-shorts" data-start="0" data-width="1080" data-height="1920">
+
+  <!-- ═══════════════════════════════════════════
+       SCENE 1: HOOK (0-6s)
+       Pattern interrupt — "Stop optimizing like singles"
+       ═══════════════════════════════════════════ -->
+  <div id="s1" class="scene-content clip" data-start="0" data-duration="6" data-track-index="0">
+    <div id="s1-badge" class="clip" data-start="0.1" data-duration="5.5" data-track-index="1">⚡ EPISODE 3</div>
+    <div id="s1-big-num" class="clip" data-start="0.3" data-duration="5.3" data-track-index="2">90%</div>
+    <div id="s1-heading" class="clip" data-start="0.6" data-duration="5.0" data-track-index="3">
+      of creators<br><span class="accent">ignore playlists</span>
+    </div>
+    <div id="s1-sub" class="clip" data-start="1.2" data-duration="4.4" data-track-index="4">
+      YouTube ranks sessions, not uploads.
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════
+       SCENE 2: STEP 1 — INTENT FLOW (6-13s)
+       ═══════════════════════════════════════════ -->
+  <div id="s2" class="scene-content clip" data-start="6" data-duration="7" data-track-index="0">
+    <div id="s2-step" class="clip" data-start="6.3" data-duration="6.3" data-track-index="5">STEP 1</div>
+    <div id="s2-heading" class="clip" data-start="6.5" data-duration="6.1" data-track-index="6">
+      Order by<br><span class="accent">intent flow</span>
+    </div>
+    <div id="s2-bullets">
+      <div id="s2-bullet1" class="clip" data-start="7.5" data-duration="5.1" data-track-index="7">
+        <div class="bullet-num">1</div>
+        <div class="bullet-text">Put the search-ready topic first</div>
+      </div>
+      <div id="s2-bullet2" class="clip" data-start="8.5" data-duration="4.1" data-track-index="8">
+        <div class="bullet-num">2</div>
+        <div class="bullet-text">Chain logical subtopics viewers want to keep watching</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════
+       SCENE 3: STEP 2 — METADATA (13-21s)
+       ═══════════════════════════════════════════ -->
+  <div id="s3" class="scene-content clip" data-start="13" data-duration="8" data-track-index="0">
+    <div id="s3-step" class="clip" data-start="13.3" data-duration="7.3" data-track-index="9">STEP 2</div>
+    <div id="s3-heading" class="clip" data-start="13.5" data-duration="7.1" data-track-index="10">
+      Name with<br><span class="accent">target keywords</span>
+    </div>
+    <div id="s3-desc" class="clip" data-start="15.0" data-duration="5.6" data-track-index="11">
+      Write a description that previews what comes next. Tell YouTube exactly how your series connects.
+    </div>
+    <div id="s3-chip" class="clip" data-start="17.5" data-duration="3.1" data-track-index="12">
+      🏷️ YouTube Playlist That Ranks
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════
+       SCENE 4: STEP 3 — AUTOPLAY (21-28s)
+       ═══════════════════════════════════════════ -->
+  <div id="s4" class="scene-content clip" data-start="21" data-duration="7" data-track-index="0">
+    <div id="s4-step" class="clip" data-start="21.3" data-duration="6.3" data-track-index="13">STEP 3</div>
+    <div id="s4-heading" class="clip" data-start="21.5" data-duration="6.1" data-track-index="14">
+      Enable <span class="accent">autoplay</span>
+    </div>
+    <div id="s4-desc" class="clip" data-start="23.0" data-duration="4.6" data-track-index="15">
+      Sequence your episodes so each one naturally leads to the next.
+    </div>
+    <div class="stat-row">
+      <div id="s4-stat1" class="clip" data-start="25.0" data-duration="2.6" data-track-index="16">
+        <div class="stat-val">↓</div>
+        <div class="stat-label">Reduce drop-off</div>
+      </div>
+      <div id="s4-stat2" class="clip" data-start="25.5" data-duration="2.1" data-track-index="17">
+        <div class="stat-val">↑</div>
+        <div class="stat-label">Boost session depth</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════
+       SCENE 5: CTA (28-42s)
+       ═══════════════════════════════════════════ -->
+  <div id="s5" class="scene-content clip" data-start="28" data-duration="14.3" data-track-index="0">
+    <div id="s5-badge" class="clip" data-start="28.5" data-duration="13.3" data-track-index="18">🎬 NEXT EPISODE</div>
+    <div id="s5-heading" class="clip" data-start="28.8" data-duration="13.0" data-track-index="19">
+      The <span class="accent">tactical</span><br>checklist
+    </div>
+    <div id="s5-desc" class="clip" data-start="30.5" data-duration="11.3" data-track-index="20">
+      Watch it now to apply this strategy today.
+    </div>
+    <div id="s5-cta" class="clip" data-start="32.0" data-duration="9.8" data-track-index="21">
+      WATCH NEXT →
+    </div>
+    <div id="s5-url" class="clip" data-start="33.0" data-duration="8.8" data-track-index="22">
+      Episode 4: Playlist Naming Strategy
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════
+       FLASH OVERLAY (dedicated track, spans full duration)
+       ═══════════════════════════════════════════ -->
+  <div id="flash-overlay" class="clip" data-start="0" data-duration="42.3" data-track-index="25"></div>
+
+  <!-- ═══════════════════════════════════════════
+       CAPTION BAR
+       ═══════════════════════════════════════════ -->
+  <div id="caption-bar" class="clip" data-start="0" data-duration="42.3" data-track-index="30">
+    <div id="caption-text"></div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════
+       PROGRESS BAR
+       ═══════════════════════════════════════════ -->
+  <div id="progress-bar" class="clip" data-start="0" data-duration="42.3" data-track-index="31"></div>
+
+  <!-- ═══════════════════════════════════════════
+       AUDIO
+       ═══════════════════════════════════════════ -->
+  <audio id="narration" class="clip" data-start="0" data-duration="42.3" data-track-index="40" src="narration.wav" data-volume="1"></audio>
+
+  </div><!-- end data-composition-id -->
+
+  <!-- ═══════════════════════════════════════════
+       GSAP ANIMATION
+       Rules: paused:true, window.__timelines, no repeat:-1, sync construction
+       ═══════════════════════════════════════════ -->
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+  <script>
+    window.__timelines = window.__timelines || {};
+    const tl = gsap.timeline({ paused: true });
+
+    // ── Scene 1: Hook entrance animations ──
+    tl.from("#s1-badge", { y: -30, opacity: 0, duration: 0.5, ease: "power3.out" }, 0.1);
+    tl.from("#s1-big-num", { scale: 0.3, opacity: 0, duration: 0.6, ease: "back.out(1.7)" }, 0.3);
+    tl.from("#s1-heading", { y: 40, opacity: 0, duration: 0.6, ease: "power3.out" }, 0.6);
+    tl.from("#s1-sub", { y: 30, opacity: 0, duration: 0.5, ease: "power2.out" }, 1.2);
+
+    // Flash transition at scene 1→2 boundary
+    tl.to("#flash-overlay", { opacity: 1, duration: 0.15, ease: "power2.in" }, 5.5);
+    tl.to("#flash-overlay", { opacity: 0, duration: 0.15, ease: "power2.out" }, 5.65);
+
+    // ── Scene 2: Step 1 entrance animations ──
+    tl.from("#s2-step", { x: -40, opacity: 0, duration: 0.5, ease: "expo.out" }, 6.3);
+    tl.from("#s2-heading", { y: 40, opacity: 0, duration: 0.6, ease: "power3.out" }, 6.5);
+    tl.from("#s2-bullet1", { y: 30, opacity: 0, duration: 0.5, ease: "power2.out" }, 7.5);
+    tl.from("#s2-bullet2", { y: 30, opacity: 0, duration: 0.5, ease: "power2.out" }, 8.5);
+
+    // Flash transition at scene 2→3 boundary
+    tl.to("#flash-overlay", { opacity: 1, duration: 0.15, ease: "power2.in" }, 12.5);
+    tl.to("#flash-overlay", { opacity: 0, duration: 0.15, ease: "power2.out" }, 12.65);
+
+    // ── Scene 3: Step 2 entrance animations ──
+    tl.from("#s3-step", { x: -40, opacity: 0, duration: 0.5, ease: "expo.out" }, 13.3);
+    tl.from("#s3-heading", { y: 40, opacity: 0, duration: 0.6, ease: "power3.out" }, 13.5);
+    tl.from("#s3-desc", { y: 20, opacity: 0, duration: 0.5, ease: "power2.out" }, 15.0);
+    tl.from("#s3-chip", { scale: 0.8, opacity: 0, duration: 0.4, ease: "back.out(1.7)" }, 17.5);
+
+    // Flash transition at scene 3→4 boundary
+    tl.to("#flash-overlay", { opacity: 1, duration: 0.15, ease: "power2.in" }, 20.5);
+    tl.to("#flash-overlay", { opacity: 0, duration: 0.15, ease: "power2.out" }, 20.65);
+
+    // ── Scene 4: Step 3 entrance animations ──
+    tl.from("#s4-step", { x: -40, opacity: 0, duration: 0.5, ease: "expo.out" }, 21.3);
+    tl.from("#s4-heading", { y: 40, opacity: 0, duration: 0.6, ease: "power3.out" }, 21.5);
+    tl.from("#s4-desc", { y: 20, opacity: 0, duration: 0.5, ease: "power2.out" }, 23.0);
+    tl.from("#s4-stat1", { scale: 0.8, opacity: 0, duration: 0.4, ease: "back.out(1.7)" }, 25.0);
+    tl.from("#s4-stat2", { scale: 0.8, opacity: 0, duration: 0.4, ease: "back.out(1.7)" }, 25.5);
+
+    // Flash transition at scene 4→5 boundary
+    tl.to("#flash-overlay", { opacity: 1, duration: 0.15, ease: "power2.in" }, 27.5);
+    tl.to("#flash-overlay", { opacity: 0, duration: 0.15, ease: "power2.out" }, 27.65);
+
+    // ── Scene 5: CTA entrance animations ──
+    tl.from("#s5-badge", { y: -20, opacity: 0, duration: 0.4, ease: "power3.out" }, 28.5);
+    tl.from("#s5-heading", { scale: 0.85, opacity: 0, duration: 0.6, ease: "back.out(1.7)" }, 28.8);
+    tl.from("#s5-desc", { y: 20, opacity: 0, duration: 0.5, ease: "power2.out" }, 30.5);
+    tl.from("#s5-cta", { scale: 0.8, opacity: 0, duration: 0.5, ease: "back.out(1.7)" }, 32.0);
+    tl.from("#s5-url", { y: 20, opacity: 0, duration: 0.4, ease: "power2.out" }, 33.0);
+
+    // CTA pulse (finite repeat: 3 cycles)
+    tl.to("#s5-cta", { scale: 1.05, duration: 0.3, ease: "power2.inOut", repeat: 3, yoyo: true }, 34.0);
+
+    // ── Progress bar animation ──
+    tl.to("#progress-bar", { width: "100%", duration: 42.3, ease: "none" }, 0);
+
+    window.__timelines["ep03-shorts"] = tl;
+
+    // ── Caption system: word-synced highlighting ──
+    (function() {
+      var transcript = [{"id": "w0", "text": "Stop", "start": 0.0, "end": 0.3}, {"id": "w1", "text": "optimizing", "start": 0.3, "end": 0.7}, {"id": "w2", "text": "videos", "start": 0.7, "end": 1.0}, {"id": "w3", "text": "like", "start": 1.0, "end": 1.2}, {"id": "w4", "text": "singles.", "start": 1.2, "end": 1.7}, {"id": "w5", "text": "YouTube", "start": 2.0, "end": 2.3}, {"id": "w6", "text": "ranks", "start": 2.3, "end": 2.6}, {"id": "w7", "text": "playlists", "start": 2.6, "end": 3.0}, {"id": "w8", "text": "as", "start": 3.0, "end": 3.1}, {"id": "w9", "text": "a", "start": 3.1, "end": 3.2}, {"id": "w10", "text": "session,", "start": 3.2, "end": 3.6}, {"id": "w11", "text": "not", "start": 3.6, "end": 3.8}, {"id": "w12", "text": "individual", "start": 3.8, "end": 4.2}, {"id": "w13", "text": "uploads.", "start": 4.2, "end": 4.7}, {"id": "w14", "text": "Here", "start": 5.0, "end": 5.2}, {"id": "w15", "text": "is", "start": 5.2, "end": 5.3}, {"id": "w16", "text": "the", "start": 5.3, "end": 5.4}, {"id": "w17", "text": "playbook.", "start": 5.4, "end": 5.9}, {"id": "w18", "text": "Step", "start": 6.5, "end": 6.7}, {"id": "w19", "text": "one,", "start": 6.7, "end": 6.9}, {"id": "w20", "text": "order", "start": 7.0, "end": 7.3}, {"id": "w21", "text": "by", "start": 7.3, "end": 7.4}, {"id": "w22", "text": "intent", "start": 7.4, "end": 7.7}, {"id": "w23", "text": "flow.", "start": 7.7, "end": 8.1}, {"id": "w24", "text": "Put", "start": 8.3, "end": 8.5}, {"id": "w25", "text": "the", "start": 8.5, "end": 8.6}, {"id": "w26", "text": "search-ready", "start": 8.6, "end": 9.1}, {"id": "w27", "text": "topic", "start": 9.1, "end": 9.4}, {"id": "w28", "text": "first.", "start": 9.4, "end": 9.8}, {"id": "w29", "text": "Then", "start": 10.0, "end": 10.2}, {"id": "w30", "text": "chain", "start": 10.2, "end": 10.5}, {"id": "w31", "text": "logical", "start": 10.5, "end": 10.8}, {"id": "w32", "text": "subtopics", "start": 10.8, "end": 11.3}, {"id": "w33", "text": "that", "start": 11.3, "end": 11.4}, {"id": "w34", "text": "make", "start": 11.4, "end": 11.6}, {"id": "w35", "text": "viewers", "start": 11.6, "end": 11.9}, {"id": "w36", "text": "want", "start": 11.9, "end": 12.1}, {"id": "w37", "text": "to", "start": 12.1, "end": 12.2}, {"id": "w38", "text": "keep", "start": 12.2, "end": 12.4}, {"id": "w39", "text": "watching.", "start": 12.4, "end": 12.9}, {"id": "w40", "text": "Step", "start": 13.5, "end": 13.7}, {"id": "w41", "text": "two,", "start": 13.7, "end": 13.9}, {"id": "w42", "text": "name", "start": 14.0, "end": 14.2}, {"id": "w43", "text": "your", "start": 14.2, "end": 14.3}, {"id": "w44", "text": "playlist", "start": 14.3, "end": 14.7}, {"id": "w45", "text": "with", "start": 14.7, "end": 14.8}, {"id": "w46", "text": "target", "start": 14.8, "end": 15.1}, {"id": "w47", "text": "keywords.", "start": 15.1, "end": 15.6}, {"id": "w48", "text": "Write", "start": 15.8, "end": 16.0}, {"id": "w49", "text": "a", "start": 16.0, "end": 16.1}, {"id": "w50", "text": "description", "start": 16.1, "end": 16.5}, {"id": "w51", "text": "that", "start": 16.5, "end": 16.6}, {"id": "w52", "text": "previews", "start": 16.6, "end": 17.0}, {"id": "w53", "text": "what", "start": 17.0, "end": 17.1}, {"id": "w54", "text": "comes", "start": 17.1, "end": 17.3}, {"id": "w55", "text": "next.", "start": 17.3, "end": 17.7}, {"id": "w56", "text": "This", "start": 17.9, "end": 18.1}, {"id": "w57", "text": "tells", "start": 18.1, "end": 18.3}, {"id": "w58", "text": "YouTube", "start": 18.3, "end": 18.6}, {"id": "w59", "text": "exactly", "start": 18.6, "end": 19.0}, {"id": "w60", "text": "how", "start": 19.0, "end": 19.1}, {"id": "w61", "text": "your", "start": 19.1, "end": 19.2}, {"id": "w62", "text": "series", "start": 19.2, "end": 19.5}, {"id": "w63", "text": "connects.", "start": 19.5, "end": 20.0}, {"id": "w64", "text": "Step", "start": 21.0, "end": 21.2}, {"id": "w65", "text": "three,", "start": 21.2, "end": 21.4}, {"id": "w66", "text": "enable", "start": 21.5, "end": 21.8}, {"id": "w67", "text": "autoplay", "start": 21.8, "end": 22.2}, {"id": "w68", "text": "and", "start": 22.2, "end": 22.3}, {"id": "w69", "text": "reduce", "start": 22.3, "end": 22.6}, {"id": "w70", "text": "drop-off.", "start": 22.6, "end": 23.1}, {"id": "w71", "text": "Sequence", "start": 23.3, "end": 23.7}, {"id": "w72", "text": "your", "start": 23.7, "end": 23.8}, {"id": "w73", "text": "episodes", "start": 23.8, "end": 24.2}, {"id": "w74", "text": "so", "start": 24.2, "end": 24.3}, {"id": "w75", "text": "each", "start": 24.3, "end": 24.5}, {"id": "w76", "text": "one", "start": 24.5, "end": 24.6}, {"id": "w77", "text": "naturally", "start": 24.6, "end": 25.0}, {"id": "w78", "text": "leads", "start": 25.0, "end": 25.2}, {"id": "w79", "text": "to", "start": 25.2, "end": 25.3}, {"id": "w80", "text": "the", "start": 25.3, "end": 25.4}, {"id": "w81", "text": "next.", "start": 25.4, "end": 25.8}, {"id": "w82", "text": "This", "start": 26.0, "end": 26.2}, {"id": "w83", "text": "boosts", "start": 26.2, "end": 26.5}, {"id": "w84", "text": "session", "start": 26.5, "end": 26.8}, {"id": "w85", "text": "depth", "start": 26.8, "end": 27.1}, {"id": "w86", "text": "fast.", "start": 27.1, "end": 27.5}, {"id": "w87", "text": "The", "start": 28.5, "end": 28.6}, {"id": "w88", "text": "next", "start": 28.6, "end": 28.8}, {"id": "w89", "text": "video", "start": 28.8, "end": 29.1}, {"id": "w90", "text": "is", "start": 29.1, "end": 29.2}, {"id": "w91", "text": "the", "start": 29.2, "end": 29.3}, {"id": "w92", "text": "tactical", "start": 29.3, "end": 29.7}, {"id": "w93", "text": "checklist.", "start": 29.7, "end": 30.2}, {"id": "w94", "text": "Watch", "start": 30.5, "end": 30.7}, {"id": "w95", "text": "it", "start": 30.7, "end": 30.8}, {"id": "w96", "text": "now", "start": 30.8, "end": 31.0}, {"id": "w97", "text": "to", "start": 31.0, "end": 31.1}, {"id": "w98", "text": "apply", "start": 31.1, "end": 31.4}, {"id": "w99", "text": "this", "start": 31.4, "end": 31.5}, {"id": "w100", "text": "strategy", "start": 31.5, "end": 31.9}, {"id": "w101", "text": "today.", "start": 31.9, "end": 32.3}];
+      var captionEl = document.getElementById("caption-text");
+      var wordsPerGroup = 5;
+      var groups = [];
+      var i, gi, wi, startTime, endTime, groupHtml, wordStart, wordEnd, wIdx;
+
+      for (i = 0; i < transcript.length; i += wordsPerGroup) {
+        groups.push(transcript.slice(i, i + wordsPerGroup));
+      }
+
+      for (gi = 0; gi < groups.length; gi++) {
+        var group = groups[gi];
+        startTime = group[0].start;
+        endTime = group[group.length - 1].end;
+
+        // Build group HTML
+        groupHtml = "";
+        for (wi = 0; wi < group.length; wi++) {
+          wIdx = gi * wordsPerGroup + wi;
+          groupHtml += '<span id="cw' + wIdx + '">' + group[wi].text + ' </span>';
+        }
+
+        // Set caption text at group start time
+        tl.call(function(html) {
+          captionEl.innerHTML = html;
+        }, [groupHtml], startTime);
+
+        // Highlight each word at its start time
+        for (wi = 0; wi < group.length; wi++) {
+          wIdx = gi * wordsPerGroup + wi;
+          wordStart = group[wi].start;
+          (function(idx) {
+            tl.call(function() {
+              var el = document.getElementById("cw" + idx);
+              if (el) {
+                el.style.color = "#00f2ff";
+                el.style.textShadow = "0 0 20px rgba(0,242,255,0.5)";
+              }
+            }, null, wordStart);
+          })(wIdx);
+        }
+      }
+    })();
+  </script>
+</body>
+</html>
