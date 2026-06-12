@@ -12,7 +12,6 @@ export default defineConfig({
     outDir: 'dist',
     rollupOptions: {
       input: {
-        main: resolve(__dirname, 'index.html'),
         dashboard: resolve(__dirname, 'dashboard.html'),
         about: resolve(__dirname, 'about.html'),
         blog: resolve(__dirname, 'blog.html'),
