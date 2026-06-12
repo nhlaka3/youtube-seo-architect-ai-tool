@@ -1,0 +1,415 @@
+# HyperFrames Video Production Template
+
+High-retention YouTube video production framework. Covers both Shorts (9:16) and Longform (16:9 1920x1080).
+
+> **STOP. READ THIS BEFORE WRITING ANY HTML.**
+>
+> Every composition MUST follow ALL rules below. These are non-negotiable quality gates.
+> For the full technical checklist, see AGENTS.md.
+
+---
+
+## Core Philosophy
+
+Retention is won or lost in seconds. The HyperFrames approach breaks a video into psychologically distinct phases, each with its own job:
+
+- **Capture** attention before the viewer can scroll away
+- **Confirm** they are in the right place
+- **Compound** value so leaving feels like a loss
+- **Climax** with the payoff they were promised
+
+Each frame is a deliberate unit that earns the next few seconds of watch time.
+
+---
+
+## Aspect Ratios
+
+| Format | Resolution | Aspect | Use Case |
+|--------|-----------|--------|----------|
+| **Shorts** | 1080x1920 | 9:16 | Under 60s vertical clips |
+| **Longform** | 1920x1080 | 16:9 | 10+ min horizontal videos |
+
+---
+
+## Pre-Flight Checklist
+
+Before writing ANY composition HTML, complete every item:
+
+- [ ] **Read design.md** -- defines brand colors, fonts, spacing. Use its exact values.
+- [ ] **Read references/beat-direction.md** -- plan scene rhythm, choreography, energy.
+- [ ] **Read references/transitions.md** -- every scene change needs a transition. No jump cuts.
+- [ ] **Read references/motion-principles.md** -- load-bearing GSAP rules.
+- [ ] **Read references/typography.md** -- font pairing, minimum sizes, dark-background adjustments.
+- [ ] **Read references/video-composition.md** -- video-medium rules that override web instincts.
+- [ ] **Read references/captions.md** -- if narration exists.
+- [ ] **If no design.md** -- use the Cyber-Luxe Dark palette below, or ask user for mood/colors.
+
+---
+
+## Layout Before Animation (Non-Negotiable)
+
+Every composition MUST follow this process:
+
+1. **Build the hero frame first** -- position every element at its most visible moment using static CSS.
+2. **Use flexbox + padding** -- .scene-content MUST use width: 100%; height: 100%; padding: Npx; display: flex; flex-direction: column; gap: Npx; box-sizing: border-box.
+3. **NEVER use position: absolute for content containers** -- only for decorative overlays.
+4. **Animate FROM offscreen TO CSS position** -- gsap.from() for entrances, gsap.to() for exits.
+5. **CSS position is ground truth** -- the tween describes the journey, not the destination.
+
+---
+
+## Scene Transitions (Non-Negotiable)
+
+Every multi-scene composition MUST follow ALL of these rules. Violating any one = broken composition.
+
+1. **ALWAYS use transitions between scenes.** No jump cuts. No exceptions.
+2. **ALWAYS use entrance animations on every scene.** Every element animates IN via gsap.from().
+3. **NEVER use exit animations** except on the final scene. The transition IS the exit.
+4. **Final scene only:** The last scene may fade elements out. This is the ONLY scene where gsap.to(..., { opacity: 0 }) is allowed.
+5. **Read references/transitions.md** to pick the right type (crossfade, wipe, reveal, shader).
+
+---
+
+## GSAP Animation Rules (Non-Negotiable)
+
+- **All timelines start { paused: true }** -- the player controls playback.
+- **Register every timeline:** window.__timelines["composition-id"] = tl
+- **Duration comes from data-duration**, not from GSAP timeline length.
+- **Never use repeat: -1** -- calculate exact repeat count.
+- **No Math.random(), Date.now(), or time-based logic** -- use seeded PRNG if needed.
+- **Only animate visual properties:** opacity, x, y, scale, rotation, color, backgroundColor, borderRadius, transforms.
+- **Never animate the same property** on the same element from multiple timelines simultaneously.
+- **Offset first animation 0.1-0.3s** (not t=0).
+- **Vary eases across entrance tweens** -- use at least 3 different eases per scene.
+- **Never repeat an entrance pattern** within a scene.
+- **Synchronous timeline construction** -- never build timelines inside async/await, setTimeout, or Promises.
+
+---
+
+## The Five HyperFrames
+
+### Frame 1: The Cold Hook (0-5 seconds)
+
+The most critical frame. The goal is pattern interruption.
+
+**Hook archetypes:**
+- The contrarian claim ("Everything you know about X is wrong")
+- The visual shock (action shown before context)
+- The stakes statement ("This mistake cost me $40,000")
+- The big number (stat on screen before context)
+
+**Production notes:**
+- Flash white overlay 0.15s in + 0.15s out
+- Big number/counter animation (scale pop from 0)
+- Particle burst on number reveal (8 particles, 45 degree intervals)
+- NO dead air -- audio starts immediately
+
+---
+
+### Frame 2: The Context Bridge (5-30s Shorts / 30-90s Longform)
+
+Justify the hook and set expectations without losing momentum.
+
+**Retention tactic:** Use the open-loop stack -- tease the most valuable point but delay delivering it.
+
+**Longform note:** Include a quick preview of what is coming (chapter markers, numbered list, "by the end of this video..."). This reduces early drop-off.
+
+---
+
+### Frame 3: The Value Spine (30s-80% Shorts / 90s-80% Longform)
+
+The body of the content. Subdivided into micro-frames.
+
+**Micro-frame structure:**
+| Element | Purpose |
+|---------|--------|
+| Mini-hook | Re-engage attention |
+| Core point | Deliver value |
+| Proof/example | Build trust |
+| Transition tease | Pull into next micro-frame |
+
+**Micro-frame duration:**
+- Shorts: 8-15 seconds each
+- Longform: 60-120 seconds each
+
+**Visual pacing:**
+- Shorts: New visual element every 2-3 seconds
+- Longform: New visual element every 5-7 seconds
+- Every major statement must have a visual that directly represents what is being said
+- If holding a frame longer than 5 seconds, add graphs, counters, or new elements
+
+AUDIO PACING IS 1.2X
+
+---
+
+### Frame 4: The Climax Payoff (Final 10-20%)
+
+Deliver the promise made in the hook. This is the emotional and informational peak.
+
+**Longform note:** This is where you deliver the "one big idea" or the framework that ties everything together. Make it the most visually impactful moment.
+
+---
+
+### Frame 5: The Loop Close (Final 10s Shorts / Final 15-30s Longform)
+
+Close by feeding viewers into another video or action.
+
+**Longform note:** Include end screen elements, "next episode" tease for series content.
+
+---
+
+## Retention Engineering Principles
+
+### The 3-Second Rule
+Every frame should contain a "reason to stay" roughly every 3 seconds.
+
+### Open-Loop Layering
+Maintain at least two unresolved loops at all times. As one closes, open another.
+
+### Pace Modulation
+Alternate fast and slow segments. Constant intensity becomes noise; contrast creates emphasis.
+
+### Visual-Speech Sync
+- Pull timestamps from transcript.json (Whisper word-level output)
+- Time GSAP animations to actual narration, not assumed pacing
+- Narrators speak 50-80% slower than written text -- always verify with real timestamps
+
+---
+
+## Style
+
+### Shorts (9:16)
+- MrBeast pacing -- fast cuts, no dead air
+- Bright colors, huge text, constant movement
+- Pattern interrupts every 5 seconds
+- Flash transitions between scenes
+
+### Longform (16:9)
+- MrBeast pacing -- fast cuts, no dead air
+- Scene changes every 5-7 seconds
+- Visual elements every 5 seconds minimum
+- If holding a frame longer, add graphs/counters/new elements
+- Hook in first 5 seconds
+- Every major statement gets a direct visual
+
+---
+
+## Color Palette -- Cyber-Luxe Dark
+
+> For the authoritative brand tokens, read design.md. The table below is a quick reference.
+
+| Color | Hex | Use |
+|-------|-----|-----|
+| **Cyan** | #00f2ff | Primary accent, CTAs, highlights, borders |
+| **Green** | #00ff88 | Success, growth, scores, positive stats |
+| **Background** | #0a0b10 | Main background |
+| **OLED Black** | #000000 | Deepest blacks |
+| **Card** | rgba(16, 20, 32, 0.7) | Glass card surfaces |
+| **Text** | #f0f2f5 | Body text |
+| **Muted** | #a8b2c1 | Secondary text |
+| **Border** | rgba(0, 242, 255, 0.15) | Glowing borders |
+| **Danger** | #ff3366 | Errors, warnings, negative stats |
+
+### Color Rules
+- Cyan = primary accent, always. Use for key stats, CTAs, borders.
+- Green = growth/success. Use for positive numbers, improvements, wins.
+- Red/danger = problems, warnings, negative metrics. Sparingly.
+- Dark background = always. Never white backgrounds.
+- Glowing borders = cyan with low opacity. Cards float on dark.
+- **No full-screen linear gradients on dark backgrounds** -- causes H.264 banding.
+
+---
+
+## Typography
+
+- **Font:** Outfit (Google Fonts or local TTF) -- read design.md for exact spec
+- **Headings:** font-weight: 900, letter-spacing: -2px to -5px
+- **Body:** font-weight: 500-700
+- **Monospace/scores:** font-variant-numeric: tabular-nums
+
+### Minimum Sizes (1920x1080 Longform)
+
+| Element | Min Size |
+|---------|----------|
+| Hero heading | 80px+ |
+| Scene heading | 52px+ |
+| Big number/counter | 160px+ |
+| Medium body text | 28-36px |
+| Badge/label text | 22px |
+| Table row text | 28px |
+| CTA button text | 36px |
+
+### Minimum Sizes (1080x1920 Shorts)
+
+| Element | Min Size |
+|---------|----------|
+| Hero heading | 100px+ |
+| Scene heading | 68px+ |
+| Big number/counter | 200px+ |
+| Medium body text | 32-42px |
+| Karaoke caption | 68px |
+| CTA button text | 40px |
+
+---
+
+## Animations
+
+- **Flash transitions:** White overlay, 0.15s in + 0.15s out between scenes
+- **Entrance:** gsap.from() with y:30-40, opacity:0, duration:0.3-0.7, ease: "power3.out" or "expo.out"
+- **Scale pop:** gsap.from() with scale:0-0.85 for big elements
+- **Stagger:** chips/pills use stagger:{each:0.08, from:"center"}
+- **Counter animations:** gsap.to() with onUpdate for number counting
+- **CTA pulse:** scale:1.05 with repeat:3, yoyo:true
+- **Particle burst:** 8 particles at 45 degree intervals, scale 0 to 2.5, opacity 1 to 0
+- **Vary eases** -- use at least 3 different eases per scene
+- **Offset first animation** 0.1-0.3s, never at t=0
+
+---
+
+## Transitions
+
+> **Every scene change MUST use a transition. No jump cuts.**
+
+- Flash transitions (white overlay) -- default for Shorts
+- Crossfades -- smooth, good for longform
+- Wipes -- energetic, good for feature reveals
+- Shader transitions (WebGL) -- premium, read references/transitions.md
+- Scale-to-black -- dramatic, for major section breaks
+
+---
+
+## Camera
+
+- Fast push-ins
+- Dynamic pans
+- Dramatic reveals
+- Zoom punch on important moments
+
+---
+
+## Graphics
+
+- Explosions (for big reveals)
+- Particle bursts (on number reveals)
+- Glow effects (on CTAs, key stats)
+- Achievement notifications (for milestones)
+- Pop-up graphics (for examples, proof)
+- Progress bars (for section progress)
+- Animated counters (for stats, scores)
+
+---
+
+## Captions (When Narration Exists)
+
+- Large bold captions -- scale-pop animation
+- Word-synced timing from transcript.json
+- Highlight color: var(--cyan), dim color: rgba(255,255,255,0.45)
+- Bottom position: 120px from bottom, centered, z-index:30
+- Group entrance: y:40, opacity:0 to visible
+- Group exit: y:-15, opacity:0
+- Read references/captions.md for full implementation
+
+---
+
+## Audio Setup
+
+### TTS Voice
+Match voice to content type:
+
+| Content Type | Voice | Why |
+|-------------|-------|-----|
+| Product demo | af_heart/af_nova | Warm, professional |
+| Tutorial/how-to | am_adam/bf_emma | Neutral, easy to follow |
+| Marketing/promo | af_sky/am_michael | Energetic or authoritative |
+| Casual/social | af_heart/af_sky | Approachable, natural |
+
+**Default:** am_michael for YouTube content.
+
+### Background Music
+- Volume: 0.2 (20%) -- narration is primary
+- Loop or generate 10-min track for longform
+- Upbeat, modern, matches energy of content
+
+### Narration Pacing
+- Narrators speak 50-80% slower than written text
+- ALWAYS transcribe narration with Whisper after TTS
+- Use word-level timestamps to sync visuals
+- Never assume timing -- verify with transcript.json
+
+---
+
+## Audio-Reactive Visuals (When Music Drives the Video)
+
+Read references/audio-reactive.md to map frequency bands and amplitude to GSAP properties:
+- Beat-synced glow/pulse effects
+- Bass-driven scale animations
+- Treble-driven particle effects
+- Volume-reactive color shifts
+
+---
+
+## Production Workflow
+
+### Step 1: Script
+1. Write narration script following 5-frame structure
+2. Include hooks, open loops, transition teases
+3. Mark visual cues in script [VISUAL: description]
+
+### Step 2: TTS
+```bash
+npx hyperframes tts script.txt --voice am_michael --output narration.wav
+```
+- Chunk if needed for reliability
+- Warmup call before main generation
+
+### Step 3: Transcribe
+```bash
+npx hyperframes transcribe narration.wav  # to transcript.json
+```
+- Get word-level timestamps to transcript.json
+- Identify key phrase timestamps for visual sync
+
+### Step 4: Build Composition
+1. Read design.md FIRST -- extract exact colors, fonts, spacing
+2. Read vidtemplate.txt -- follow 5-frame structure
+3. Read AGENTS.md -- follow HyperFrames Composition Standards
+4. Set up HTML structure (HyperFrames format)
+5. Build static CSS layout (hero frame) -- NO GSAP yet
+6. Add GSAP timeline synced to transcript.json timestamps
+7. Add background music at 20% volume
+8. Add visual elements every 5 seconds (longform) / 2-3 seconds (shorts)
+
+### Step 5: Validate and Render
+```bash
+npx hyperframes lint          # structural errors -- MUST pass
+npx hyperframes validate      # WCAG contrast, layout -- MUST pass
+npx hyperframes inspect       # visual overflow detection
+npx hyperframes render --output video.mp4 --quality draft  # iterate
+npx hyperframes render --output final.mp4 --quality high   # final
+```
+**Quality guidance:** draft while iterating, standard for review, high for final delivery.
+
+---
+
+## Keyword-Driven Data Icons
+
+Match narration keywords to visual icons:
+
+| Keyword | Visual |
+|---------|--------|
+| "Stop!" | Physical Danger/Stop Sign graphic |
+| "Cliff Drop" | Falling retention curve visualization |
+| "Satisfaction" | Brain/Gear icon for algorithm Satisfaction Signal |
+| "45 Seconds" | Countdown/Timer visual for re-hook window |
+| "Micro-Hook" | Magnet graphic showing engagement pull |
+| "Angle Change" | Camera/Aperture visual for pattern interrupts |
+| "12 Channels" | Data verification/Proof chart |
+| "42% Lift" | Explosive growth/Success chart |
+| "Auditor" | UI diagnostic visual for the fix |
+| "Link in Bio" | Final CTA with branding |
+
+---
+
+## Final Note
+
+HyperFrames is a scaffold, not a straitjacket. The structure ensures you never lose a viewer through neglect -- but personality, authenticity, and genuine value remain the irreplaceable core of any video worth watching.
