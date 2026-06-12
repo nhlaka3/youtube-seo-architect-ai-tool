@@ -23,6 +23,7 @@
     { "source": "/robots.txt", "destination": "/api/index.js" },
     { "source": "/blog", "destination": "/api/index.js" },
     { "source": "/blog/(.+)", "destination": "/api/index.js" },
+    { "source": "/pricing", "destination": "/dashboard.html" },
     { "source": "/dashboard", "destination": "/dashboard.html" },
     { "source": "/changelog", "destination": "/changelog.html" },
     { "source": "/about", "destination": "/about.html" },
