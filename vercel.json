@@ -19,7 +19,7 @@
     }
   ],
   "redirects": [
-    { "source": "/pricing", "destination": "/dashboard", "permanent": false }
+    { "source": "/pricing", "destination": "/dashboard.html", "permanent": false }
   ],
   "rewrites": [
     { "source": "/sitemap.xml", "destination": "/api/index.js" },
