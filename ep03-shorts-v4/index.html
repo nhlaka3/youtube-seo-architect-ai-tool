@@ -48,7 +48,7 @@
     }
 
     /* ── Scene 1: Hook ── */
-    #s1-content { background: radial-gradient(circle at 50% 30%, rgba(0,242,255,0.08) 0%, var(--oled) 70%); }
+    #s1 { background: radial-gradient(circle at 50% 30%, rgba(0,242,255,0.08) 0%, var(--oled) 70%); }
 
     #s1-badge {
       font-size: 28px;
@@ -82,10 +82,31 @@
       color: var(--cyan);
       line-height: 1;
       text-shadow: 0 0 40px rgba(0,242,255,0.4);
+      position: relative;
+    }
+
+    /* ── Particle burst container ── */
+    #particles {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 45;
+    }
+    .particle {
+      position: absolute;
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--cyan);
+      box-shadow: 0 0 12px var(--cyan);
+      opacity: 0;
     }
 
     /* ── Scene 2: Step 1 — Intent Flow ── */
-    #s2-content { background: radial-gradient(circle at 30% 50%, rgba(0,255,136,0.06) 0%, var(--oled) 70%); }
+    #s2 { background: radial-gradient(circle at 30% 50%, rgba(0,255,136,0.06) 0%, var(--oled) 70%); }
 
     #s2-step {
       font-size: 28px;
@@ -138,7 +159,7 @@
     }
 
     /* ── Scene 3: Step 2 — Metadata ── */
-    #s3-content { background: radial-gradient(circle at 70% 40%, rgba(0,242,255,0.06) 0%, var(--oled) 70%); }
+    #s3 { background: radial-gradient(circle at 70% 40%, rgba(0,242,255,0.06) 0%, var(--oled) 70%); }
 
     #s3-step {
       font-size: 28px;
@@ -179,7 +200,7 @@
     }
 
     /* ── Scene 4: Step 3 — Autoplay ── */
-    #s4-content { background: radial-gradient(circle at 50% 60%, rgba(0,255,136,0.06) 0%, var(--oled) 70%); }
+    #s4 { background: radial-gradient(circle at 50% 60%, rgba(0,255,136,0.06) 0%, var(--oled) 70%); }
 
     #s4-step {
       font-size: 28px;
@@ -237,7 +258,7 @@
     }
 
     /* ── Scene 5: CTA ── */
-    #s5-content {
+    #s5 {
       background: radial-gradient(circle at 50% 50%, rgba(0,242,255,0.1) 0%, var(--oled) 70%);
       align-items: center;
       text-align: center;
@@ -289,12 +310,12 @@
       margin-top: 16px;
     }
 
-    /* ── Flash transition overlay (on dedicated track, spans full duration) ── */
+    /* ── Flash transition overlay ── */
     #flash-overlay {
       position: absolute;
       inset: 0;
       background: white;
-      z-index: 50;
+      z-index: 55;
       opacity: 0;
       pointer-events: none;
     }
@@ -326,6 +347,22 @@
       background: linear-gradient(90deg, var(--cyan), var(--green));
       z-index: 40;
       width: 0%;
+      border-radius: 99px;
+    }
+
+    /* ── Background glow elements ── */
+    .bg-glow {
+      position: absolute;
+      width: 800px;
+      height: 800px;
+      background: radial-gradient(circle, rgba(0, 242, 255, 0.12) 0%, transparent 70%);
+      border-radius: 50%;
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    .bg-glow-green {
+      background: radial-gradient(circle, rgba(0, 255, 136, 0.08) 0%, transparent 70%);
     }
   </style>
 </head>
@@ -333,13 +370,20 @@
 
   <div data-composition-id="ep03-shorts" data-start="0" data-width="1080" data-height="1920">
 
+  <!-- Background glow elements (continuous ambient motion) -->
+  <div id="glow1" class="bg-glow" style="top: -10%; left: -15%;"></div>
+  <div id="glow2" class="bg-glow bg-glow-green" style="bottom: -10%; right: -15%;"></div>
+
+  <!-- Particle burst container -->
+  <div id="particles"></div>
+
   <!-- ═══════════════════════════════════════════
        SCENE 1: HOOK (0-6s)
        Pattern interrupt — "Stop optimizing like singles"
        ═══════════════════════════════════════════ -->
   <div id="s1" class="scene-content clip" data-start="0" data-duration="6" data-track-index="50">
     <div id="s1-badge" class="clip" data-start="0.1" data-duration="5.5" data-track-index="1">⚡ EPISODE 3</div>
-    <div id="s1-big-num" class="clip" data-start="0.3" data-duration="5.3" data-track-index="2">90%</div>
+    <div id="s1-big-num" class="clip" data-start="0.3" data-duration="5.3" data-track-index="2">0%</div>
     <div id="s1-heading" class="clip" data-start="0.6" data-duration="5.0" data-track-index="3">
       of creators<br><span class="accent">ignore playlists</span>
     </div>
@@ -350,6 +394,7 @@
 
   <!-- ═══════════════════════════════════════════
        SCENE 2: STEP 1 — INTENT FLOW (6-13s)
+       Varied entrance: scale + rotation for step, slide-left for heading
        ═══════════════════════════════════════════ -->
   <div id="s2" class="scene-content clip" data-start="6" data-duration="7" data-track-index="51">
     <div id="s2-step" class="clip" data-start="6.3" data-duration="6.3" data-track-index="5">STEP 1</div>
@@ -370,6 +415,7 @@
 
   <!-- ═══════════════════════════════════════════
        SCENE 3: STEP 2 — METADATA (13-21s)
+       Varied entrance: elastic for heading, skewX for step
        ═══════════════════════════════════════════ -->
   <div id="s3" class="scene-content clip" data-start="13" data-duration="8" data-track-index="52">
     <div id="s3-step" class="clip" data-start="13.3" data-duration="7.3" data-track-index="9">STEP 2</div>
@@ -379,28 +425,31 @@
     <div id="s3-desc" class="clip" data-start="15.0" data-duration="5.6" data-track-index="11">
       Write a description that previews what comes next. Tell YouTube exactly how your series connects.
     </div>
-    <div id="s3-chip" class="clip" data-start="17.5" data-duration="3.1" data-track-index="12">
-      🏷️ YouTube Playlist That Ranks
+    <div id="s3-chips" class="clip" data-start="17.0" data-duration="3.6" data-track-index="12">
+      <div id="s3-chip" class="clip" data-start="17.0" data-duration="1.2" data-track-index="13">🏷️ YouTube Playlist</div>
+      <div id="s3-chip2" class="clip" data-start="17.2" data-duration="1.0" data-track-index="14">📊 That Ranks</div>
+      <div id="s3-chip3" class="clip" data-start="17.4" data-duration="0.8" data-track-index="15">🎯 SEO Strategy</div>
     </div>
   </div>
 
   <!-- ═══════════════════════════════════════════
        SCENE 4: STEP 3 — AUTOPLAY (21-28s)
+       Varied entrance: zoom-punch for heading, counter for stats
        ═══════════════════════════════════════════ -->
   <div id="s4" class="scene-content clip" data-start="21" data-duration="7" data-track-index="53">
-    <div id="s4-step" class="clip" data-start="21.3" data-duration="6.3" data-track-index="13">STEP 3</div>
-    <div id="s4-heading" class="clip" data-start="21.5" data-duration="6.1" data-track-index="14">
+    <div id="s4-step" class="clip" data-start="21.3" data-duration="6.3" data-track-index="16">STEP 3</div>
+    <div id="s4-heading" class="clip" data-start="21.5" data-duration="6.1" data-track-index="17">
       Enable <span class="accent">autoplay</span>
     </div>
-    <div id="s4-desc" class="clip" data-start="23.0" data-duration="4.6" data-track-index="15">
+    <div id="s4-desc" class="clip" data-start="23.0" data-duration="4.6" data-track-index="18">
       Sequence your episodes so each one naturally leads to the next.
     </div>
     <div class="stat-row">
-      <div id="s4-stat1" class="clip" data-start="25.0" data-duration="2.6" data-track-index="16">
+      <div id="s4-stat1" class="clip" data-start="25.0" data-duration="2.6" data-track-index="19">
         <div class="stat-val">↓</div>
         <div class="stat-label">Reduce drop-off</div>
       </div>
-      <div id="s4-stat2" class="clip" data-start="25.5" data-duration="2.1" data-track-index="17">
+      <div id="s4-stat2" class="clip" data-start="25.5" data-duration="2.1" data-track-index="20">
         <div class="stat-val">↑</div>
         <div class="stat-label">Boost session depth</div>
       </div>
@@ -409,19 +458,20 @@
 
   <!-- ═══════════════════════════════════════════
        SCENE 5: CTA (28-42s)
+       Final scene — may fade out elements
        ═══════════════════════════════════════════ -->
   <div id="s5" class="scene-content clip" data-start="28" data-duration="14.3" data-track-index="54">
-    <div id="s5-badge" class="clip" data-start="28.5" data-duration="13.3" data-track-index="18">🎬 NEXT EPISODE</div>
-    <div id="s5-heading" class="clip" data-start="28.8" data-duration="13.0" data-track-index="19">
+    <div id="s5-badge" class="clip" data-start="28.5" data-duration="13.3" data-track-index="21">🎬 NEXT EPISODE</div>
+    <div id="s5-heading" class="clip" data-start="28.8" data-duration="13.0" data-track-index="22">
       The <span class="accent">tactical</span><br>checklist
     </div>
-    <div id="s5-desc" class="clip" data-start="30.5" data-duration="11.3" data-track-index="20">
+    <div id="s5-desc" class="clip" data-start="30.5" data-duration="11.3" data-track-index="23">
       Watch it now to apply this strategy today.
     </div>
-    <div id="s5-cta" class="clip" data-start="32.0" data-duration="9.8" data-track-index="21">
+    <div id="s5-cta" class="clip" data-start="32.0" data-duration="9.8" data-track-index="24">
       WATCH NEXT →
     </div>
-    <div id="s5-url" class="clip" data-start="33.0" data-duration="8.8" data-track-index="22">
+    <div id="s5-url" class="clip" data-start="33.0" data-duration="8.8" data-track-index="25">
       Episode 4: Playlist Naming Strategy
     </div>
   </div>
@@ -429,82 +479,118 @@
   <!-- ═══════════════════════════════════════════
        FLASH OVERLAY (dedicated track, spans full duration)
        ═══════════════════════════════════════════ -->
-  <div id="flash-overlay" class="clip" data-start="0" data-duration="42.3" data-track-index="25"></div>
+  <div id="flash-overlay" class="clip" data-start="0" data-duration="42.3" data-track-index="30"></div>
 
   <!-- ═══════════════════════════════════════════
        CAPTION BAR
        ═══════════════════════════════════════════ -->
-  <div id="caption-bar" class="clip" data-start="0" data-duration="42.3" data-track-index="30">
+  <div id="caption-bar" class="clip" data-start="0" data-duration="42.3" data-track-index="35">
     <div id="caption-text"></div>
   </div>
 
   <!-- ═══════════════════════════════════════════
        PROGRESS BAR
        ═══════════════════════════════════════════ -->
-  <div id="progress-bar" class="clip" data-start="0" data-duration="42.3" data-track-index="31"></div>
+  <div id="progress-bar" class="clip" data-start="0" data-duration="42.3" data-track-index="36"></div>
 
   <!-- ═══════════════════════════════════════════
-       AUDIO
+       AUDIO — Narration + Background Music
        ═══════════════════════════════════════════ -->
   <audio id="narration" class="clip" data-start="0" data-duration="42.3" data-track-index="40" src="narration.wav" data-volume="1"></audio>
+  <audio id="bg-music" class="clip" data-start="0" data-duration="42.3" data-track-index="41" src="bg-music.wav" data-volume="0.2"></audio>
 
   </div><!-- end data-composition-id -->
 
   <!-- ═══════════════════════════════════════════
        GSAP ANIMATION
        Rules: paused:true, window.__timelines, no repeat:-1, sync construction
+       Varied eases per scene, no repeated patterns
        ═══════════════════════════════════════════ -->
   <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
   <script>
     window.__timelines = window.__timelines || {};
     const tl = gsap.timeline({ paused: true });
 
-    // ── Scene 1: Hook entrance animations ──
-    tl.from("#s1-badge", { y: -30, opacity: 0, duration: 0.5, ease: "power3.out" }, 0.1);
+    // ── Background glow continuous motion ──
+    tl.to("#glow1", { x: 60, y: 40, duration: 8, ease: "sine.inOut", yoyo: true, repeat: 3 }, 0);
+    tl.to("#glow2", { x: -50, y: -30, duration: 10, ease: "sine.inOut", yoyo: true, repeat: 2 }, 0);
+
+    // ── Scene 1: Hook — SCALE POP entrance (unique pattern) ──
+    tl.from("#s1-badge", { scale: 0.5, opacity: 0, duration: 0.4, ease: "back.out(2)" }, 0.1);
+    // Counter animation: count from 0 to 90
+    var counter90 = { v: 0 };
+    tl.to(counter90, { v: 90, duration: 0.8, ease: "power2.out", onUpdate: function() {
+      document.getElementById("s1-big-num").textContent = Math.floor(counter90.v) + "%";
+    }}, 0.3);
     tl.from("#s1-big-num", { scale: 0.3, opacity: 0, duration: 0.6, ease: "back.out(1.7)" }, 0.3);
-    tl.from("#s1-heading", { y: 40, opacity: 0, duration: 0.6, ease: "power3.out" }, 0.6);
-    tl.from("#s1-sub", { y: 30, opacity: 0, duration: 0.5, ease: "power2.out" }, 1.2);
+    tl.from("#s1-heading", { y: 60, opacity: 0, duration: 0.7, ease: "power4.out" }, 0.6);
+    tl.from("#s1-sub", { opacity: 0, duration: 0.5, ease: "power2.out" }, 1.2);
+
+    // ── Particle burst on 90% reveal ──
+    (function() {
+      var container = document.getElementById("particles");
+      var cx = 540, cy = 600; // approximate center of big number
+      for (var p = 0; p < 8; p++) {
+        var el = document.createElement("div");
+        el.className = "particle";
+        el.style.left = cx + "px";
+        el.style.top = cy + "px";
+        container.appendChild(el);
+        var angle = (p * 45) * Math.PI / 180;
+        tl.fromTo(el, { scale: 0, opacity: 1 }, {
+          x: Math.cos(angle) * 200,
+          y: Math.sin(angle) * 200,
+          scale: 2.5,
+          opacity: 0,
+          duration: 0.6,
+          ease: "power2.out"
+        }, 0.9);
+      }
+    })();
 
     // Flash transition at scene 1→2 boundary
     tl.to("#flash-overlay", { opacity: 1, duration: 0.15, ease: "power2.in" }, 5.5);
     tl.to("#flash-overlay", { opacity: 0, duration: 0.15, ease: "power2.out" }, 5.65);
 
-    // ── Scene 2: Step 1 entrance animations ──
-    tl.from("#s2-step", { x: -40, opacity: 0, duration: 0.5, ease: "expo.out" }, 6.3);
-    tl.from("#s2-heading", { y: 40, opacity: 0, duration: 0.6, ease: "power3.out" }, 6.5);
-    tl.from("#s2-bullet1", { y: 30, opacity: 0, duration: 0.5, ease: "power2.out" }, 7.5);
-    tl.from("#s2-bullet2", { y: 30, opacity: 0, duration: 0.5, ease: "power2.out" }, 8.5);
+    // ── Scene 2: Step 1 — SLIDE-IN LEFT entrance (unique pattern) ──
+    tl.from("#s2-step", { x: -200, opacity: 0, duration: 0.5, ease: "expo.out" }, 6.3);
+    tl.from("#s2-heading", { x: -150, opacity: 0, duration: 0.6, ease: "power3.out" }, 6.5);
+    tl.from("#s2-bullet1", { x: -100, opacity: 0, duration: 0.5, ease: "back.out(1.4)" }, 7.5);
+    tl.from("#s2-bullet2", { x: -100, opacity: 0, duration: 0.5, ease: "back.out(1.4)" }, 8.5);
 
     // Flash transition at scene 2→3 boundary
     tl.to("#flash-overlay", { opacity: 1, duration: 0.15, ease: "power2.in" }, 12.5);
     tl.to("#flash-overlay", { opacity: 0, duration: 0.15, ease: "power2.out" }, 12.65);
 
-    // ── Scene 3: Step 2 entrance animations ──
-    tl.from("#s3-step", { x: -40, opacity: 0, duration: 0.5, ease: "expo.out" }, 13.3);
-    tl.from("#s3-heading", { y: 40, opacity: 0, duration: 0.6, ease: "power3.out" }, 13.5);
-    tl.from("#s3-desc", { y: 20, opacity: 0, duration: 0.5, ease: "power2.out" }, 15.0);
-    tl.from("#s3-chip", { scale: 0.8, opacity: 0, duration: 0.4, ease: "back.out(1.7)" }, 17.5);
+    // ── Scene 3: Step 2 — ELASTIC + SKEW entrance (unique pattern) ──
+    tl.from("#s3-step", { skewX: 30, opacity: 0, duration: 0.5, ease: "power2.out" }, 13.3);
+    tl.from("#s3-heading", { scale: 0.2, opacity: 0, duration: 0.7, ease: "elastic.out(1, 0.6)" }, 13.5);
+    tl.from("#s3-desc", { y: 40, opacity: 0, duration: 0.5, ease: "power2.out" }, 15.0);
+    // Stagger chips
+    tl.from("#s3-chip", { scale: 0, opacity: 0, duration: 0.3, ease: "back.out(2)" }, 17.0);
+    tl.from("#s3-chip2", { scale: 0, opacity: 0, duration: 0.3, ease: "back.out(2)" }, 17.15);
+    tl.from("#s3-chip3", { scale: 0, opacity: 0, duration: 0.3, ease: "back.out(2)" }, 17.3);
 
     // Flash transition at scene 3→4 boundary
     tl.to("#flash-overlay", { opacity: 1, duration: 0.15, ease: "power2.in" }, 20.5);
     tl.to("#flash-overlay", { opacity: 0, duration: 0.15, ease: "power2.out" }, 20.65);
 
-    // ── Scene 4: Step 3 entrance animations ──
-    tl.from("#s4-step", { x: -40, opacity: 0, duration: 0.5, ease: "expo.out" }, 21.3);
-    tl.from("#s4-heading", { y: 40, opacity: 0, duration: 0.6, ease: "power3.out" }, 21.5);
-    tl.from("#s4-desc", { y: 20, opacity: 0, duration: 0.5, ease: "power2.out" }, 23.0);
-    tl.from("#s4-stat1", { scale: 0.8, opacity: 0, duration: 0.4, ease: "back.out(1.7)" }, 25.0);
-    tl.from("#s4-stat2", { scale: 0.8, opacity: 0, duration: 0.4, ease: "back.out(1.7)" }, 25.5);
+    // ── Scene 4: Step 3 — ZOOM-PUNCH entrance (unique pattern) ──
+    tl.from("#s4-step", { rotation: -10, scale: 0.5, opacity: 0, duration: 0.5, ease: "back.out(2)" }, 21.3);
+    tl.from("#s4-heading", { y: 100, opacity: 0, duration: 0.6, ease: "power4.out" }, 21.5);
+    tl.from("#s4-desc", { opacity: 0, duration: 0.5, ease: "power2.out" }, 23.0);
+    tl.from("#s4-stat1", { rotation: -5, scale: 0.6, opacity: 0, duration: 0.4, ease: "elastic.out(1, 0.7)" }, 25.0);
+    tl.from("#s4-stat2", { rotation: 5, scale: 0.6, opacity: 0, duration: 0.4, ease: "elastic.out(1, 0.7)" }, 25.5);
 
     // Flash transition at scene 4→5 boundary
     tl.to("#flash-overlay", { opacity: 1, duration: 0.15, ease: "power2.in" }, 27.5);
     tl.to("#flash-overlay", { opacity: 0, duration: 0.15, ease: "power2.out" }, 27.65);
 
-    // ── Scene 5: CTA entrance animations ──
-    tl.from("#s5-badge", { y: -20, opacity: 0, duration: 0.4, ease: "power3.out" }, 28.5);
-    tl.from("#s5-heading", { scale: 0.85, opacity: 0, duration: 0.6, ease: "back.out(1.7)" }, 28.8);
-    tl.from("#s5-desc", { y: 20, opacity: 0, duration: 0.5, ease: "power2.out" }, 30.5);
-    tl.from("#s5-cta", { scale: 0.8, opacity: 0, duration: 0.5, ease: "back.out(1.7)" }, 32.0);
+    // ── Scene 5: CTA — DROP-DOWN entrance (unique pattern) ──
+    tl.from("#s5-badge", { y: -80, opacity: 0, duration: 0.5, ease: "bounce.out" }, 28.5);
+    tl.from("#s5-heading", { scale: 0.7, opacity: 0, duration: 0.6, ease: "back.out(1.7)" }, 28.8);
+    tl.from("#s5-desc", { y: 30, opacity: 0, duration: 0.5, ease: "power2.out" }, 30.5);
+    tl.from("#s5-cta", { scale: 0.5, opacity: 0, duration: 0.5, ease: "elastic.out(1, 0.5)" }, 32.0);
     tl.from("#s5-url", { y: 20, opacity: 0, duration: 0.4, ease: "power2.out" }, 33.0);
 
     // CTA pulse (finite repeat: 3 cycles)
@@ -515,48 +601,56 @@
 
     window.__timelines["ep03-shorts"] = tl;
 
-    // ── Caption system: word-synced highlighting ──
+    // ── Caption system: word-synced with entrance/exit animations ──
     (function() {
-      var transcript = [{"id": "w0", "text": "Stop", "start": 0.0, "end": 0.3}, {"id": "w1", "text": "optimizing", "start": 0.3, "end": 0.7}, {"id": "w2", "text": "videos", "start": 0.7, "end": 1.0}, {"id": "w3", "text": "like", "start": 1.0, "end": 1.2}, {"id": "w4", "text": "singles.", "start": 1.2, "end": 1.7}, {"id": "w5", "text": "YouTube", "start": 2.0, "end": 2.3}, {"id": "w6", "text": "ranks", "start": 2.3, "end": 2.6}, {"id": "w7", "text": "playlists", "start": 2.6, "end": 3.0}, {"id": "w8", "text": "as", "start": 3.0, "end": 3.1}, {"id": "w9", "text": "a", "start": 3.1, "end": 3.2}, {"id": "w10", "text": "session,", "start": 3.2, "end": 3.6}, {"id": "w11", "text": "not", "start": 3.6, "end": 3.8}, {"id": "w12", "text": "individual", "start": 3.8, "end": 4.2}, {"id": "w13", "text": "uploads.", "start": 4.2, "end": 4.7}, {"id": "w14", "text": "Here", "start": 5.0, "end": 5.2}, {"id": "w15", "text": "is", "start": 5.2, "end": 5.3}, {"id": "w16", "text": "the", "start": 5.3, "end": 5.4}, {"id": "w17", "text": "playbook.", "start": 5.4, "end": 5.9}, {"id": "w18", "text": "Step", "start": 6.5, "end": 6.7}, {"id": "w19", "text": "one,", "start": 6.7, "end": 6.9}, {"id": "w20", "text": "order", "start": 7.0, "end": 7.3}, {"id": "w21", "text": "by", "start": 7.3, "end": 7.4}, {"id": "w22", "text": "intent", "start": 7.4, "end": 7.7}, {"id": "w23", "text": "flow.", "start": 7.7, "end": 8.1}, {"id": "w24", "text": "Put", "start": 8.3, "end": 8.5}, {"id": "w25", "text": "the", "start": 8.5, "end": 8.6}, {"id": "w26", "text": "search-ready", "start": 8.6, "end": 9.1}, {"id": "w27", "text": "topic", "start": 9.1, "end": 9.4}, {"id": "w28", "text": "first.", "start": 9.4, "end": 9.8}, {"id": "w29", "text": "Then", "start": 10.0, "end": 10.2}, {"id": "w30", "text": "chain", "start": 10.2, "end": 10.5}, {"id": "w31", "text": "logical", "start": 10.5, "end": 10.8}, {"id": "w32", "text": "subtopics", "start": 10.8, "end": 11.3}, {"id": "w33", "text": "that", "start": 11.3, "end": 11.4}, {"id": "w34", "text": "make", "start": 11.4, "end": 11.6}, {"id": "w35", "text": "viewers", "start": 11.6, "end": 11.9}, {"id": "w36", "text": "want", "start": 11.9, "end": 12.1}, {"id": "w37", "text": "to", "start": 12.1, "end": 12.2}, {"id": "w38", "text": "keep", "start": 12.2, "end": 12.4}, {"id": "w39", "text": "watching.", "start": 12.4, "end": 12.9}, {"id": "w40", "text": "Step", "start": 13.5, "end": 13.7}, {"id": "w41", "text": "two,", "start": 13.7, "end": 13.9}, {"id": "w42", "text": "name", "start": 14.0, "end": 14.2}, {"id": "w43", "text": "your", "start": 14.2, "end": 14.3}, {"id": "w44", "text": "playlist", "start": 14.3, "end": 14.7}, {"id": "w45", "text": "with", "start": 14.7, "end": 14.8}, {"id": "w46", "text": "target", "start": 14.8, "end": 15.1}, {"id": "w47", "text": "keywords.", "start": 15.1, "end": 15.6}, {"id": "w48", "text": "Write", "start": 15.8, "end": 16.0}, {"id": "w49", "text": "a", "start": 16.0, "end": 16.1}, {"id": "w50", "text": "description", "start": 16.1, "end": 16.5}, {"id": "w51", "text": "that", "start": 16.5, "end": 16.6}, {"id": "w52", "text": "previews", "start": 16.6, "end": 17.0}, {"id": "w53", "text": "what", "start": 17.0, "end": 17.1}, {"id": "w54", "text": "comes", "start": 17.1, "end": 17.3}, {"id": "w55", "text": "next.", "start": 17.3, "end": 17.7}, {"id": "w56", "text": "This", "start": 17.9, "end": 18.1}, {"id": "w57", "text": "tells", "start": 18.1, "end": 18.3}, {"id": "w58", "text": "YouTube", "start": 18.3, "end": 18.6}, {"id": "w59", "text": "exactly", "start": 18.6, "end": 19.0}, {"id": "w60", "text": "how", "start": 19.0, "end": 19.1}, {"id": "w61", "text": "your", "start": 19.1, "end": 19.2}, {"id": "w62", "text": "series", "start": 19.2, "end": 19.5}, {"id": "w63", "text": "connects.", "start": 19.5, "end": 20.0}, {"id": "w64", "text": "Step", "start": 21.0, "end": 21.2}, {"id": "w65", "text": "three,", "start": 21.2, "end": 21.4}, {"id": "w66", "text": "enable", "start": 21.5, "end": 21.8}, {"id": "w67", "text": "autoplay", "start": 21.8, "end": 22.2}, {"id": "w68", "text": "and", "start": 22.2, "end": 22.3}, {"id": "w69", "text": "reduce", "start": 22.3, "end": 22.6}, {"id": "w70", "text": "drop-off.", "start": 22.6, "end": 23.1}, {"id": "w71", "text": "Sequence", "start": 23.3, "end": 23.7}, {"id": "w72", "text": "your", "start": 23.7, "end": 23.8}, {"id": "w73", "text": "episodes", "start": 23.8, "end": 24.2}, {"id": "w74", "text": "so", "start": 24.2, "end": 24.3}, {"id": "w75", "text": "each", "start": 24.3, "end": 24.5}, {"id": "w76", "text": "one", "start": 24.5, "end": 24.6}, {"id": "w77", "text": "naturally", "start": 24.6, "end": 25.0}, {"id": "w78", "text": "leads", "start": 25.0, "end": 25.2}, {"id": "w79", "text": "to", "start": 25.2, "end": 25.3}, {"id": "w80", "text": "the", "start": 25.3, "end": 25.4}, {"id": "w81", "text": "next.", "start": 25.4, "end": 25.8}, {"id": "w82", "text": "This", "start": 26.0, "end": 26.2}, {"id": "w83", "text": "boosts", "start": 26.2, "end": 26.5}, {"id": "w84", "text": "session", "start": 26.5, "end": 26.8}, {"id": "w85", "text": "depth", "start": 26.8, "end": 27.1}, {"id": "w86", "text": "fast.", "start": 27.1, "end": 27.5}, {"id": "w87", "text": "The", "start": 28.5, "end": 28.6}, {"id": "w88", "text": "next", "start": 28.6, "end": 28.8}, {"id": "w89", "text": "video", "start": 28.8, "end": 29.1}, {"id": "w90", "text": "is", "start": 29.1, "end": 29.2}, {"id": "w91", "text": "the", "start": 29.2, "end": 29.3}, {"id": "w92", "text": "tactical", "start": 29.3, "end": 29.7}, {"id": "w93", "text": "checklist.", "start": 29.7, "end": 30.2}, {"id": "w94", "text": "Watch", "start": 30.5, "end": 30.7}, {"id": "w95", "text": "it", "start": 30.7, "end": 30.8}, {"id": "w96", "text": "now", "start": 30.8, "end": 31.0}, {"id": "w97", "text": "to", "start": 31.0, "end": 31.1}, {"id": "w98", "text": "apply", "start": 31.1, "end": 31.4}, {"id": "w99", "text": "this", "start": 31.4, "end": 31.5}, {"id": "w100", "text": "strategy", "start": 31.5, "end": 31.9}, {"id": "w101", "text": "today.", "start": 31.9, "end": 32.3}];
+      var transcript = [{"id":"w0","text":"Stop","start":0.0,"end":0.3},{"id":"w1","text":"optimizing","start":0.3,"end":0.7},{"id":"w2","text":"videos","start":0.7,"end":1.0},{"id":"w3","text":"like","start":1.0,"end":1.2},{"id":"w4","text":"singles.","start":1.2,"end":1.7},{"id":"w5","text":"YouTube","start":2.0,"end":2.3},{"id":"w6","text":"ranks","start":2.3,"end":2.6},{"id":"w7","text":"playlists","start":2.6,"end":3.0},{"id":"w8","text":"as","start":3.0,"end":3.1},{"id":"w9","text":"a","start":3.1,"end":3.2},{"id":"w10","text":"session,","start":3.2,"end":3.6},{"id":"w11","text":"not","start":3.6,"end":3.8},{"id":"w12","text":"individual","start":3.8,"end":4.2},{"id":"w13","text":"uploads.","start":4.2,"end":4.7},{"id":"w14","text":"And","start":5.0,"end":5.2},{"id":"w15","text":"most","start":5.2,"end":5.4},{"id":"w16","text":"creators","start":5.4,"end":5.7},{"id":"w17","text":"have","start":5.7,"end":5.8},{"id":"w18","text":"this","start":5.8,"end":5.9},{"id":"w19","text":"completely","start":5.9,"end":6.3},{"id":"w20","text":"backwards.","start":6.3,"end":6.8},{"id":"w21","text":"Here","start":7.0,"end":7.2},{"id":"w22","text":"is","start":7.2,"end":7.3},{"id":"w23","text":"the","start":7.3,"end":7.4},{"id":"w24","text":"playbook.","start":7.4,"end":7.9},{"id":"w25","text":"Step","start":8.5,"end":8.7},{"id":"w26","text":"one,","start":8.7,"end":8.9},{"id":"w27","text":"order","start":9.0,"end":9.3},{"id":"w28","text":"by","start":9.3,"end":9.4},{"id":"w29","text":"intent","start":9.4,"end":9.7},{"id":"w30","text":"flow.","start":9.7,"end":10.1},{"id":"w31","text":"Put","start":10.3,"end":10.5},{"id":"w32","text":"the","start":10.5,"end":10.6},{"id":"w33","text":"search-ready","start":10.6,"end":11.1},{"id":"w34","text":"topic","start":11.1,"end":11.4},{"id":"w35","text":"first.","start":11.4,"end":11.8},{"id":"w36","text":"Then","start":12.0,"end":12.2},{"id":"w37","text":"chain","start":12.2,"end":12.5},{"id":"w38","text":"logical","start":12.5,"end":12.8},{"id":"w39","text":"subtopics","start":12.8,"end":13.3},{"id":"w40","text":"that","start":13.3,"end":13.4},{"id":"w41","text":"make","start":13.4,"end":13.6},{"id":"w42","text":"viewers","start":13.6,"end":13.9},{"id":"w43","text":"want","start":13.9,"end":14.1},{"id":"w44","text":"to","start":14.1,"end":14.2},{"id":"w45","text":"keep","start":14.2,"end":14.4},{"id":"w46","text":"watching.","start":14.4,"end":14.9},{"id":"w47","text":"This","start":15.0,"end":15.2},{"id":"w48","text":"one","start":15.2,"end":15.3},{"id":"w49","text":"change","start":15.3,"end":15.5},{"id":"w50","text":"alone","start":15.5,"end":15.8},{"id":"w51","text":"can","start":15.8,"end":16.0},{"id":"w52","text":"double","start":16.0,"end":16.3},{"id":"w53","text":"your","start":16.3,"end":16.4},{"id":"w54","text":"playlist","start":16.4,"end":16.7},{"id":"w55","text":"session","start":16.7,"end":17.0},{"id":"w56","text":"depth.","start":17.0,"end":17.4},{"id":"w57","text":"Step","start":17.5,"end":17.7},{"id":"w58","text":"two,","start":17.7,"end":17.9},{"id":"w59","text":"name","start":18.0,"end":18.2},{"id":"w60","text":"your","start":18.2,"end":18.3},{"id":"w61","text":"playlist","start":18.3,"end":18.7},{"id":"w62","text":"with","start":18.7,"end":18.8},{"id":"w63","text":"target","start":18.8,"end":19.1},{"id":"w64","text":"keywords.","start":19.1,"end":19.6},{"id":"w65","text":"Write","start":19.8,"end":20.0},{"id":"w66","text":"a","start":20.0,"end":20.1},{"id":"w67","text":"description","start":20.1,"end":20.5},{"id":"w68","text":"that","start":20.5,"end":20.6},{"id":"w69","text":"previews","start":20.6,"end":21.0},{"id":"w70","text":"what","start":21.0,"end":21.1},{"id":"w71","text":"comes","start":21.1,"end":21.3},{"id":"w72","text":"next.","start":21.3,"end":21.7},{"id":"w73","text":"This","start":21.9,"end":22.1},{"id":"w74","text":"tells","start":22.1,"end":22.3},{"id":"w75","text":"YouTube","start":22.3,"end":22.6},{"id":"w76","text":"exactly","start":22.6,"end":23.0},{"id":"w77","text":"how","start":23.0,"end":23.1},{"id":"w78","text":"your","start":23.1,"end":23.2},{"id":"w79","text":"series","start":23.2,"end":23.5},{"id":"w80","text":"connects.","start":23.5,"end":24.0},{"id":"w81","text":"Most","start":24.5,"end":24.7},{"id":"w82","text":"creators","start":24.7,"end":25.0},{"id":"w83","text":"skip","start":25.0,"end":25.2},{"id":"w84","text":"this","start":25.2,"end":25.3},{"id":"w85","text":"and","start":25.3,"end":25.4},{"id":"w86","text":"wonder","start":25.4,"end":25.7},{"id":"w87","text":"why","start":25.7,"end":25.8},{"id":"w88","text":"their","start":25.8,"end":25.9},{"id":"w89","text":"playlists","start":25.9,"end":26.2},{"id":"w90","text":"never","start":26.2,"end":26.5},{"id":"w91","text":"surface","start":26.5,"end":26.8},{"id":"w92","text":"in","start":26.8,"end":26.9},{"id":"w93","text":"search.","start":26.9,"end":27.3},{"id":"w94","text":"Step","start":28.0,"end":28.2},{"id":"w95","text":"three,","start":28.2,"end":28.4},{"id":"w96","text":"enable","start":28.5,"end":28.8},{"id":"w97","text":"autoplay","start":28.8,"end":29.2},{"id":"w98","text":"and","start":29.2,"end":29.3},{"id":"w99","text":"reduce","start":29.3,"end":29.6},{"id":"w100","text":"drop-off.","start":29.6,"end":30.1},{"id":"w101","text":"Sequence","start":30.3,"end":30.7},{"id":"w102","text":"your","start":30.7,"end":30.8},{"id":"w103","text":"episodes","start":30.8,"end":31.2},{"id":"w104","text":"so","start":31.2,"end":31.3},{"id":"w105","text":"each","start":31.3,"end":31.5},{"id":"w106","text":"one","start":31.5,"end":31.6},{"id":"w107","text":"naturally","start":31.6,"end":32.0},{"id":"w108","text":"leads","start":32.0,"end":32.2},{"id":"w109","text":"to","start":32.2,"end":32.3},{"id":"w110","text":"the","start":32.3,"end":32.4},{"id":"w111","text":"next.","start":32.4,"end":32.8},{"id":"w112","text":"This","start":33.0,"end":33.2},{"id":"w113","text":"boosts","start":33.2,"end":33.5},{"id":"w114","text":"session","start":33.5,"end":33.8},{"id":"w115","text":"depth","start":33.8,"end":34.1},{"id":"w116","text":"fast.","start":34.1,"end":34.5},{"id":"w117","text":"But","start":35.0,"end":35.2},{"id":"w118","text":"there","start":35.2,"end":35.3},{"id":"w119","text":"is","start":35.3,"end":35.4},{"id":"w120","text":"one","start":35.4,"end":35.5},{"id":"w121","text":"more","start":35.5,"end":35.7},{"id":"w122","text":"ranking","start":35.7,"end":36.0},{"id":"w123","text":"factor","start":36.0,"end":36.3},{"id":"w124","text":"most","start":36.3,"end":36.5},{"id":"w125","text":"people","start":36.5,"end":36.7},{"id":"w126","text":"miss.","start":36.7,"end":37.1},{"id":"w127","text":"The","start":38.0,"end":38.1},{"id":"w128","text":"next","start":38.1,"end":38.3},{"id":"w129","text":"video","start":38.3,"end":38.6},{"id":"w130","text":"is","start":38.6,"end":38.7},{"id":"w131","text":"the","start":38.7,"end":38.8},{"id":"w132","text":"tactical","start":38.8,"end":39.2},{"id":"w133","text":"checklist.","start":39.2,"end":39.7},{"id":"w134","text":"Watch","start":40.0,"end":40.2},{"id":"w135","text":"it","start":40.2,"end":40.3},{"id":"w136","text":"now","start":40.3,"end":40.5},{"id":"w137","text":"to","start":40.5,"end":40.6},{"id":"w138","text":"apply","start":40.6,"end":40.9},{"id":"w139","text":"this","start":40.9,"end":41.0},{"id":"w140","text":"strategy","start":41.0,"end":41.4},{"id":"w141","text":"today.","start":41.4,"end":41.8}];
       var captionEl = document.getElementById("caption-text");
-      var wordsPerGroup = 5;
-      var groups = [];
-      var i, gi, wi, startTime, endTime, groupHtml, wordStart, wordEnd, wIdx;
+      var wordsPerGroup = 4;
 
-      for (i = 0; i < transcript.length; i += wordsPerGroup) {
-        groups.push(transcript.slice(i, i + wordsPerGroup));
-      }
+      for (var gi = 0; gi < transcript.length; gi += wordsPerGroup) {
+        var group = transcript.slice(gi, gi + wordsPerGroup);
+        var startTime = group[0].start;
+        var endTime = group[group.length - 1].end;
 
-      for (gi = 0; gi < groups.length; gi++) {
-        var group = groups[gi];
-        startTime = group[0].start;
-        endTime = group[group.length - 1].end;
-
-        // Build group HTML
-        groupHtml = "";
-        for (wi = 0; wi < group.length; wi++) {
-          wIdx = gi * wordsPerGroup + wi;
-          groupHtml += '<span id="cw' + wIdx + '">' + group[wi].text + ' </span>';
+        // Build group HTML with data-widx attributes
+        var groupHtml = "";
+        for (var wi = 0; wi < group.length; wi++) {
+          var wIdx = gi + wi;
+          groupHtml += '<span data-widx="' + wIdx + '">' + group[wi].text + ' </span>';
         }
 
-        // Set caption text at group start time
+        // Set caption text at group start with ENTRANCE animation
         tl.call(function(html) {
           captionEl.innerHTML = html;
+          gsap.fromTo(captionEl, { y: 40, opacity: 0 }, { y: 0, opacity: 1, duration: 0.2, ease: "power2.out" });
         }, [groupHtml], startTime);
 
+        // EXIT animation before next group (or at end of last group)
+        if (gi + wordsPerGroup < transcript.length) {
+          var nextStart = transcript[Math.min(gi + wordsPerGroup, transcript.length - 1)].start;
+          tl.call(function() {
+            gsap.to(captionEl, { y: -15, opacity: 0, duration: 0.15, ease: "power2.in" });
+          }, null, nextStart - 0.15);
+        } else {
+          // Last group: fade out after it ends
+          tl.call(function() {
+            gsap.to(captionEl, { y: -15, opacity: 0, duration: 0.15, ease: "power2.in" });
+          }, null, endTime);
+        }
+
         // Highlight each word at its start time
-        for (wi = 0; wi < group.length; wi++) {
-          wIdx = gi * wordsPerGroup + wi;
-          wordStart = group[wi].start;
+        for (var wi2 = 0; wi2 < group.length; wi2++) {
+          var wIdx2 = gi + wi2;
+          var wordStart = group[wi2].start;
           (function(idx) {
             tl.call(function() {
-              var el = document.getElementById("cw" + idx);
+              var el = document.querySelector('[data-widx="' + idx + '"]');
               if (el) {
                 el.style.color = "#00f2ff";
                 el.style.textShadow = "0 0 20px rgba(0,242,255,0.5)";
               }
             }, null, wordStart);
-          })(wIdx);
+          })(wIdx2);
         }
       }
     })();
