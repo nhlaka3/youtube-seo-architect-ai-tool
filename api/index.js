@@ -1292,7 +1292,9 @@ const APPROVED_BLOG_SLUGS = [
   'youtube-shorts-seo-ranking-guide-2026',
   'how-to-increase-youtube-retention-2026',
   'youtube-shorts-vs-long-form-2026',
-  'youtube-algorithm-checklist-2026'
+  'youtube-algorithm-checklist-2026',
+  'youtube-community-posts-strategy-2026',
+  'youtube-chapter-timestamps-seo-guide'
 ];
 
 app.get('/api/admin/trash-posts', async (req, res) => {
