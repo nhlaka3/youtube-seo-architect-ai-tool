@@ -481,6 +481,95 @@ th {
 }
 .warning-callout::before { content: '⚠️'; position: absolute; left: -12px; top: 18px; background: var(--bg); padding: 2px; }
 
+/* ── Social Share Buttons ──────────────────────────────── */
+.share-bar {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin: 1.5rem 0;
+  flex-wrap: wrap;
+}
+.share-bar .share-label {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--text3);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-right: 0.25rem;
+}
+.share-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.45rem 0.9rem;
+  border-radius: 8px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  text-decoration: none;
+  transition: all 0.2s ease;
+  border: 1px solid transparent;
+}
+.share-btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+}
+.share-btn svg {
+  width: 14px;
+  height: 14px;
+  flex-shrink: 0;
+}
+.share-btn.reddit {
+  background: rgba(255,69,0,0.12);
+  color: #ff4500;
+  border-color: rgba(255,69,0,0.25);
+}
+.share-btn.reddit:hover {
+  background: rgba(255,69,0,0.2);
+}
+.share-btn.x-twitter {
+  background: rgba(29,155,240,0.12);
+  color: #1d9bf0;
+  border-color: rgba(29,155,240,0.25);
+}
+.share-btn.x-twitter:hover {
+  background: rgba(29,155,240,0.2);
+}
+.share-btn.linkedin {
+  background: rgba(10,102,194,0.12);
+  color: #0a66c2;
+  border-color: rgba(10,102,194,0.25);
+}
+.share-btn.linkedin:hover {
+  background: rgba(10,102,194,0.2);
+}
+.share-btn.facebook {
+  background: rgba(24,119,242,0.12);
+  color: #1877f2;
+  border-color: rgba(24,119,242,0.25);
+}
+.share-btn.facebook:hover {
+  background: rgba(24,119,242,0.2);
+}
+.share-btn.copy-link {
+  background: rgba(255,255,255,0.06);
+  color: var(--text2);
+  border-color: var(--border);
+}
+.share-btn.copy-link:hover {
+  background: rgba(255,255,255,0.12);
+  color: var(--text);
+}
+.share-btn.copy-link.copied {
+  background: rgba(34,197,94,0.15);
+  color: #4ade80;
+  border-color: rgba(34,197,94,0.3);
+}
+.share-bar-bottom {
+  margin-top: 2.5rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--border);
+}
+
 /* ── Responsive ─────────────────────────────────────────── */
 @media (max-width: 600px) {
   h1 { font-size: 1.6rem; }
