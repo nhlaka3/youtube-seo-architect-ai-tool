@@ -177,5 +177,36 @@
 
   </article></main>
   <footer class="footer"><p>© 2026 YT SEO Architect · <a href="/blog">All Articles</a> · <a href="/pricing">Pricing</a> · <a href="/privacy-policy">Privacy</a></p></footer>
+
+  <script>
+  (function(){
+    var bar = document.querySelector('[data-share-bar]');
+    if(!bar) return;
+    var url = encodeURIComponent(window.location.href);
+    var title = encodeURIComponent(document.title.replace(/ — YT SEO Architect$/, '').trim());
+    var links = {
+      twitter: 'https://twitter.com/intent/tweet?text='+title+'&url='+url,
+      linkedin: 'https://linkedin.com/sharing/share-offsite/?url='+url,
+      facebook: 'https://facebook.com/sharer/sharer.php?u='+url,
+      whatsapp: 'https://wa.me/?text='+title+'%20'+url,
+    };
+    bar.querySelectorAll('[data-share]').forEach(function(el){
+      var key = el.getAttribute('data-share');
+      if(links[key]) el.href = links[key];
+      if(key === 'copy'){
+        el.addEventListener('click', function(e){
+          e.preventDefault();
+          navigator.clipboard.writeText(decodeURIComponent(url)).then(function(){
+            el.classList.add('copied');
+            el.textContent = '✓ Copied';
+            setTimeout(function(){ el.classList.remove('copied'); el.innerHTML = '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M7.24 2h9.52A5.24 5.24 0 0122 7.24v9.52A5.24 5.24 0 0116.76 22H7.24A5.24 5.24 0 012 16.76V7.24A5.24 5.24 0 017.24 2zm0 2A3.24 3.24 0 004 7.24v9.52A3.24 3.24 0 007.24 20h9.52A3.24 3.24 0 0020 16.76V7.24A3.24 3.24 0 0016.76 4H7.24zm8.4 3.17c.64.64.64 1.68 0 2.32l-3.17 3.17a1.64 1.64 0 01-2.32 0l-1.9-1.9a1.64 1.64 0 012.32-2.32l.74.74 2.02-2.02c.64-.64 1.68-.64 2.32 0z"/></svg> Copy'; }, 2000);
+          });
+        });
+      }
+    });
+  })();
+  </script>
+
+
 </body>
 </html>
