@@ -279,6 +279,188 @@ function heroImageHTML(slug, title) {
     </div>`;
 }
 
+// ── Affiliate Disclosure + Gear Sections ──────────────────────────────
+
+const AFFILIATE_TAG = '44HlecM';
+const AFFILIATE_URL = `https://amzn.to/${AFFILIATE_TAG}`;
+
+// Specific product URLs from affiliate-mapper.json
+const PRODUCT_URLS = {
+  'Ring Light for YouTube': `https://www.amazon.com/dp/B01LXS2U0U?tag=${AFFILIATE_TAG}`,
+  'Blue Yeti Microphone': `https://www.amazon.com/dp/B00N1YPXW2?tag=${AFFILIATE_TAG}`,
+  'Tripod for YouTube': `https://www.amazon.com/dp/B005KP473Q?tag=${AFFILIATE_TAG}`,
+  'SD Card for Video': `https://www.amazon.com/dp/B08YF7PB14?tag=${AFFILIATE_TAG}`,
+  'Teleprompter for YouTube': `https://www.amazon.com/dp/B0BXD19D79?tag=${AFFILIATE_TAG}`,
+  '4K Monitor for Editing': `https://www.amazon.com/dp/B08YF7PB14?tag=${AFFILIATE_TAG}`,
+  'Sony ZV-1 Camera': `https://www.amazon.com/dp/B08965JV8D?tag=${AFFILIATE_TAG}`,
+  'LED Panel Light': `https://www.amazon.com/dp/B0F99DXC8X?tag=${AFFILIATE_TAG}`,
+  'Green Screen Kit': `https://www.amazon.com/dp/B0743Z892W?tag=${AFFILIATE_TAG}`,
+  'Webcam': `https://www.amazon.com/dp/B006A2Q81M?tag=${AFFILIATE_TAG}`,
+  'Headphones': `https://www.amazon.com/dp/B00HVLUR86?tag=${AFFILIATE_TAG}`,
+  'Audio Interface': `https://www.amazon.com/dp/B07QR6Z1JB?tag=${AFFILIATE_TAG}`,
+  'Studio Monitors': `https://www.amazon.com/dp/B00NESC6LU?tag=${AFFILIATE_TAG}`,
+  'Pop Filter': `https://www.amazon.com/dp/B01N21H9WY?tag=${AFFILIATE_TAG}`,
+  'Boom Arm': `https://www.amazon.com/dp/B07V2FJL54?tag=${AFFILIATE_TAG}`,
+  'Gimbal': `https://www.amazon.com/dp/B0B7XD7R43?tag=${AFFILIATE_TAG}`,
+  'External Hard Drive': `https://www.amazon.com/dp/B0713WPGLL?tag=${AFFILIATE_TAG}`,
+};
+
+function getProductUrl(title) {
+  // Exact match only — no fragile partial matching
+  if (PRODUCT_URLS[title]) return PRODUCT_URLS[title];
+  return AFFILIATE_URL;
+}
+
+function generateAffiliateDisclosure() {
+  return `<div style="padding:0.8rem 1rem;background:rgba(255,255,255,0.03);border-radius:8px;border:1px solid rgba(255,255,255,0.06);font-size:0.82rem;color:#6b7280;margin:1.5rem 0;">
+    <strong>Disclosure:</strong> This post contains affiliate links. If you purchase through these links, I may earn a commission at no extra cost to you. I only recommend products I genuinely use and believe in.
+  </div>`;
+}
+
+function getGearCategory(title) {
+  const t = (title || '').toLowerCase();
+  if (/cook|food|recipe|kitchen/.test(t)) return 'cooking';
+  if (/game|gaming/.test(t)) return 'gaming';
+  if (/\btutorial\b/.test(t)) return 'tutorials';
+  if (/music|song|audio/.test(t)) return 'music';
+  if (/fitness|workout|exercise/.test(t)) return 'fitness';
+  if (/short(s)?/.test(t)) return 'shorts';
+  if (/thumbnail|design|ab.?test/.test(t)) return 'thumbnails';
+  if (/analytics|metric|data|retention/.test(t)) return 'analytics';
+  if (/monetiz|income|revenue|brand|sponsor/.test(t)) return 'monetization';
+  if (/impression|ctr|click/.test(t)) return 'impressions';
+  if (/end.?screen|card/.test(t)) return 'end_screens';
+  return 'seo_metadata';
+}
+
+const GEAR_CATEGORIES = {
+  cooking: {
+    title: '🎥 Gear for Cooking YouTube Channels',
+    intro: 'Cooking channels need great lighting for food close-ups and hands-free audio while you cook.',
+    items: [
+      ['Ring Light for YouTube', '18-inch Ring Light', 'essential for overhead food shots — even lighting makes every dish look appetizing'],
+      ['Blue Yeti Microphone', 'Blue Yeti USB Mic', 'hands-free recording while you cook — mount it on a boom arm above the counter'],
+      ['Tripod for YouTube', 'Overhead Tripod Mount', 'position your camera directly above the cutting board for the classic cooking tutorial angle'],
+    ]
+  },
+  gaming: {
+    title: '🎮 Gear for Gaming YouTube Channels',
+    intro: 'Gaming content requires clean audio capture and good facecam lighting for commentary videos.',
+    items: [
+      ['Blue Yeti Microphone', 'Blue Yeti USB Mic', 'crisp commentary audio without background keyboard noise — use the cardioid pattern'],
+      ['Ring Light for YouTube', 'Ring Light for Facecam', 'even lighting for facecam overlays — viewers notice when your facecam looks dark and grainy'],
+      ['SD Card for Video', '128GB SD Card', 'fast write speeds for recording long gaming sessions without dropped frames'],
+    ]
+  },
+  tutorials: {
+    title: '💻 Gear for Tutorial YouTube Channels',
+    intro: 'Tutorials live and die by audio clarity — viewers will tolerate average video but not muffled sound.',
+    items: [
+      ['Blue Yeti Microphone', 'Blue Yeti USB Mic', 'studio-quality voiceover without the studio — the most popular mic for tutorial creators'],
+      ['Ring Light for YouTube', 'Ring Light', 'professional facecam lighting for intro/outro segments of your tutorials'],
+      ['Teleprompter for YouTube', 'Teleprompter for Scripts', 'read your tutorial scripts naturally without looking down at notes — keeps eye contact with viewers'],
+    ]
+  },
+  music: {
+    title: '🎵 Gear for Music YouTube Channels',
+    intro: 'Music channels need accurate audio monitoring and clean recording setups.',
+    items: [
+      ['Blue Yeti Microphone', 'Blue Yeti USB Mic', 'record vocals and acoustic instruments with studio-quality detail — switchable pickup patterns'],
+      ['Ring Light for YouTube', 'LED Panel Light', 'stage-style lighting for performance videos — consistent color temperature for accurate skin tones'],
+      ['SD Card for Video', '128GB SD Card', 'high-speed recording for 4K music performance videos without buffering'],
+    ]
+  },
+  fitness: {
+    title: '💪 Gear for Fitness YouTube Channels',
+    intro: 'Fitness content needs wide-angle lighting and wireless audio for full-body movement.',
+    items: [
+      ['Ring Light for YouTube', '18-inch Ring Light', 'wide, even lighting for full-body workout demonstrations — eliminates shadows on the floor'],
+      ['Tripod for YouTube', 'Tripod with Pan Head', 'smooth panning for following workout movements — stable base for heavy cameras'],
+      ['Blue Yeti Microphone', 'Wireless Lavalier Mic', 'clip-on microphone for hands-free instruction during high-movement exercises'],
+    ]
+  },
+  shorts: {
+    title: '📱 Gear for Shooting YouTube Shorts',
+    intro: 'Shorts require quick setup and vertical-friendly gear for fast production cycles.',
+    items: [
+      ['Ring Light for YouTube', 'Ring Light', 'essential for face-to-camera Shorts — the algorithm rewards clear, well-lit first frames'],
+      ['Tripod for YouTube', 'Flexible Phone Tripod', 'quick vertical-to-horizontal switching — mount your phone and start recording in seconds'],
+      ['SD Card for Video', '128GB SD Card', 'fast read/write for batching multiple Shorts in a single session'],
+    ]
+  },
+  thumbnails: {
+    title: '🎨 Gear for YouTube Thumbnail & Design Work',
+    intro: 'Thumbnails need accurate color display and good lighting for self-portrait shots.',
+    items: [
+      ['4K Monitor for Editing', '4K Monitor', 'color-accurate display for editing thumbnails — what you see is what viewers get'],
+      ['Ring Light for YouTube', 'Ring Light', 'flawless lighting for thumbnail selfies — even illumination for consistent brand look'],
+      ['SD Card for Video', '128GB SD Card', 'store high-resolution source images and project files for thumbnail creation'],
+    ]
+  },
+  analytics: {
+    title: '📈 Gear for YouTube Analytics & Growth Tracking',
+    intro: 'Deep analytics work benefits from a large display and comfortable workspace setup.',
+    items: [
+      ['4K Monitor for Editing', '4K Monitor', 'spreadsheet and analytics dashboards side-by-side — see trends you\'d miss on a laptop screen'],
+      ['Blue Yeti Microphone', 'Blue Yeti USB Mic', 'record data-driven video essays with clear, professional voiceover'],
+      ['SD Card for Video', '128GB SD Card', 'backup your YouTube Studio exports and analytics screenshots for trend analysis'],
+    ]
+  },
+  monetization: {
+    title: '💰 Gear for YouTube Monetization & Business Content',
+    intro: 'Business-focused content needs to look professional to attract brand deals and sponsors.',
+    items: [
+      ['Blue Yeti Microphone', 'Blue Yeti USB Mic', 'studio-quality audio that signals professionalism to potential brand partners'],
+      ['Ring Light for YouTube', 'Ring Light', 'professional lighting that makes your channel look sponsor-ready'],
+      ['4K Monitor for Editing', '4K Monitor', 'edit revenue dashboards and earnings screenshots with crystal-clear detail'],
+    ]
+  },
+  impressions: {
+    title: '👁️ Gear for YouTube Impressions & CTR Optimization',
+    intro: 'Impressions start with clickable thumbnails — the right gear makes them stand out.',
+    items: [
+      ['Ring Light for YouTube', 'Ring Light', 'professional lighting for thumbnail selfies that catch the eye in search results'],
+      ['4K Monitor for Editing', '4K Monitor', 'preview thumbnails at YouTube\'s display size — test readability before publishing'],
+      ['SD Card for Video', '128GB SD Card', 'store thumbnail source files and A/B test variations without running out of space'],
+    ]
+  },
+  end_screens: {
+    title: '🎯 Gear for YouTube End Screens & Cards Strategy',
+    intro: 'End screens drive session watch time — make sure your linked videos look great.',
+    items: [
+      ['4K Monitor for Editing', '4K Monitor', 'preview end screen layouts at full resolution — ensure text and thumbnails are readable'],
+      ['Blue Yeti Microphone', 'Blue Yeti USB Mic', 'record compelling end screen voiceovers that drive clicks to your next video'],
+      ['Ring Light for YouTube', 'Ring Light', 'consistent lighting across linked videos so your end screen thumbnails match'],
+    ]
+  },
+  seo_metadata: {
+    title: '📊 Gear for YouTube SEO & Metadata Optimization',
+    intro: 'Optimizing metadata is a desk job — the right monitor and audio setup keeps you productive.',
+    items: [
+      ['4K Monitor for Editing', 'Ultrawide Monitor', 'side-by-side comparison of YouTube Analytics and metadata editor — multitask without alt-tabbing'],
+      ['Blue Yeti Microphone', 'Blue Yeti USB Mic', 'record voiceover for metadata-optimized videos with broadcast-quality audio'],
+      ['Ring Light for YouTube', 'Ring Light', 'quick lighting setup for face-to-camera intro segments that pair with your optimized metadata'],
+    ]
+  },
+};
+
+function generateGearSection(title) {
+  const category = getGearCategory(title);
+  const gear = GEAR_CATEGORIES[category];
+  if (!gear) return '';
+  const items = gear.items.map(([linkTitle, displayName, desc]) =>
+    `      <li><strong>${esc(displayName.split(' ')[0])}:</strong> <a href="${getProductUrl(linkTitle)}" class="affiliate-link" rel="nofollow sponsored" title="${escAttr(linkTitle)}">${esc(displayName)}</a> — ${esc(desc)}</li>`
+  ).join('\n');
+  return `  <!-- Recommended Gear (Amazon Affiliate) -->
+  <div style="margin:2.5rem 0;padding:1.5rem;background:linear-gradient(135deg,rgba(6,182,212,0.08) 0%,rgba(99,102,241,0.08) 100%);border-radius:12px;border:1px solid rgba(6,182,212,0.15);">
+    <h3 style="color:#f9fafb;font-size:1.1rem;margin:0 0 0.8rem;">${esc(gear.title)}</h3>
+    <p style="color:#9ca3af;font-size:0.9rem;margin:0 0 1rem;">${esc(gear.intro)}</p>
+    <ul style="color:#d1d5db;font-size:0.9rem;line-height:1.8;padding-left:1.2rem;">
+${items}
+    </ul>
+  </div>`;
+}
+
 // ── Main render function ───────────────────────────────────────────────
 
 export function renderBlogTemplate(page) {
@@ -290,8 +472,10 @@ export function renderBlogTemplate(page) {
   const title = page.title || '';
   const metaDesc = (page.metaDescription || '').replace(/"/g, '&quot;');
   const rawContent = page.content || '';
-  const wordCount = page.wordCount || 0;
-  const readMinutes = Math.max(1, Math.ceil((wordCount || 1200) / 200));
+  // Calculate word count from actual content (strips HTML tags)
+  const contentText = rawContent.replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').trim();
+  const wordCount = contentText.split(/\s+/).filter(w => w.length > 0).length || 0;
+  const readMinutes = Math.max(8, Math.ceil(wordCount / 200));
 
   // Detect existing structural sections in content
   const hasTLDR = hasSection(rawContent, 'tldr');
@@ -450,6 +634,10 @@ export function renderBlogTemplate(page) {
 
       <!-- Article body with auto-generated structural sections -->
       ${contentHTML}
+
+      <!-- Affiliate Disclosure + Gear Recommendations -->
+      ${generateAffiliateDisclosure()}
+      ${generateGearSection(title)}
 
       <!-- Bottom CTA -->
       <div class="cta-box">

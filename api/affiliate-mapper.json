@@ -1,0 +1,189 @@
+{
+  "_comment": "Keyword-to-affiliate URL mappings. Each product links to its specific Amazon product page with affiliate tag 44HlecM.",
+  "_instructions": "Each entry: keyword (case-insensitive) -> { url, product, category }. The mapper wraps the FIRST occurrence of each keyword in an affiliate link. Max 5 links per post to avoid spam.",
+  "keywords": {
+    "thumbnail": {
+      "url": "https://www.canva.com/?via=YTSEO",
+      "product": "Canva Pro",
+      "category": "design",
+      "anchor": "thumbnail tool"
+    },
+    "Canva": {
+      "url": "https://www.canva.com/?via=YTSEO",
+      "product": "Canva Pro",
+      "category": "design",
+      "anchor": null
+    },
+    "camera": {
+      "url": "https://www.amazon.com/dp/B08965JV8D?tag=44HlecM",
+      "product": "Sony ZV-1 Camera",
+      "category": "gear",
+      "anchor": null
+    },
+    "Camera": {
+      "url": "https://www.amazon.com/dp/B08965JV8D?tag=44HlecM",
+      "product": "Sony ZV-1 Camera",
+      "category": "gear",
+      "anchor": null
+    },
+    "microphone": {
+      "url": "https://www.amazon.com/dp/B00N1YPXW2?tag=44HlecM",
+      "product": "Blue Yeti Microphone",
+      "category": "gear",
+      "anchor": null
+    },
+    "Mic": {
+      "url": "https://www.amazon.com/dp/B00N1YPXW2?tag=44HlecM",
+      "product": "Blue Yeti Microphone",
+      "category": "gear",
+      "anchor": null
+    },
+    "mic": {
+      "url": "https://www.amazon.com/dp/B00N1YPXW2?tag=44HlecM",
+      "product": "Blue Yeti Microphone",
+      "category": "gear",
+      "anchor": null
+    },
+    "Premiere": {
+      "url": "https://www.adobe.com/products/premiere.html?sdid=KRQLO&mv=sr&kw=premiere",
+      "product": "Adobe Premiere Pro",
+      "category": "software",
+      "anchor": null
+    },
+    "premiere": {
+      "url": "https://www.adobe.com/products/premiere.html?sdid=KRQLO&mv=sr&kw=premiere",
+      "product": "Adobe Premiere Pro",
+      "category": "software",
+      "anchor": null
+    },
+    "DaVinci": {
+      "url": "https://www.blackmagicdesign.com/products/davinciresolve",
+      "product": "DaVinci Resolve",
+      "category": "software",
+      "anchor": null
+    },
+    "hosting": {
+      "url": "https://www.bluehost.com/track/ytseo",
+      "product": "Bluehost Hosting",
+      "category": "hosting",
+      "anchor": "web hosting"
+    },
+    "editing software": {
+      "url": "https://www.blackmagicdesign.com/products/davinciresolve",
+      "product": "DaVinci Resolve (Free)",
+      "category": "software",
+      "anchor": null
+    },
+    "ring light": {
+      "url": "https://www.amazon.com/dp/B01LXS2U0U?tag=44HlecM",
+      "product": "Neewer 18-inch Ring Light Kit",
+      "category": "gear",
+      "anchor": null
+    },
+    "tripod": {
+      "url": "https://www.amazon.com/dp/B005KP473Q?tag=44HlecM",
+      "product": "AmazonBasics 60-Inch Tripod",
+      "category": "gear",
+      "anchor": null
+    },
+    "webcam": {
+      "url": "https://www.amazon.com/dp/B006A2Q81M?tag=44HlecM",
+      "product": "Logitech C920 HD Pro Webcam",
+      "category": "gear",
+      "anchor": null
+    },
+    "audio interface": {
+      "url": "https://www.amazon.com/dp/B07QR6Z1JB?tag=44HlecM",
+      "product": "Focusrite Scarlett Solo (3rd Gen)",
+      "category": "gear",
+      "anchor": null
+    },
+    "headphones": {
+      "url": "https://www.amazon.com/dp/B00HVLUR86?tag=44HlecM",
+      "product": "Audio-Technica ATH-M50x",
+      "category": "gear",
+      "anchor": null
+    },
+    "studio monitors": {
+      "url": "https://www.amazon.com/dp/B00NESC6LU?tag=44HlecM",
+      "product": "Yamaha HS5 Studio Monitors",
+      "category": "gear",
+      "anchor": null
+    },
+    "green screen": {
+      "url": "https://www.amazon.com/dp/B0743Z892W?tag=44HlecM",
+      "product": "Elgato Collapsible Green Screen",
+      "category": "gear",
+      "anchor": null
+    },
+    "LED light": {
+      "url": "https://www.amazon.com/dp/B0F99DXC8X?tag=44HlecM",
+      "product": "Neewer LED Video Light Panel",
+      "category": "gear",
+      "anchor": null
+    },
+    "teleprompter": {
+      "url": "https://www.amazon.com/dp/B0BXD19D79?tag=44HlecM",
+      "product": "LENSGO TC7S Portable Teleprompter",
+      "category": "gear",
+      "anchor": null
+    },
+    "SD card": {
+      "url": "https://www.amazon.com/dp/B08YF7PB14?tag=44HlecM",
+      "product": "SanDisk 128GB Extreme PRO SDXC",
+      "category": "gear",
+      "anchor": null
+    },
+    "gimbal": {
+      "url": "https://www.amazon.com/dp/B0B7XD7R43?tag=44HlecM",
+      "product": "DJI Osmo Mobile 6",
+      "category": "gear",
+      "anchor": null
+    },
+    "external hard drive": {
+      "url": "https://www.amazon.com/dp/B0713WPGLL?tag=44HlecM",
+      "product": "WD 4TB Elements Portable HDD",
+      "category": "gear",
+      "anchor": null
+    },
+    "pop filter": {
+      "url": "https://www.amazon.com/dp/B01N21H9WY?tag=44HlecM",
+      "product": "Aokeo Professional Pop Filter",
+      "category": "gear",
+      "anchor": null
+    },
+    "boom arm": {
+      "url": "https://www.amazon.com/dp/B07V2FJL54?tag=44HlecM",
+      "product": "InnoGear Microphone Arm Stand",
+      "category": "gear",
+      "anchor": null
+    },
+    "streaming": {
+      "url": "https://www.elgato.com/en/stream-deck",
+      "product": "Elgato Stream Deck",
+      "category": "gear",
+      "anchor": null
+    },
+    "SEO tool": {
+      "url": "https://yt-seo-architect.vercel.app",
+      "product": "YT SEO Architect",
+      "category": "tool",
+      "anchor": null
+    },
+    "editing": {
+      "url": "https://www.blackmagicdesign.com/products/davinciresolve",
+      "product": "DaVinci Resolve (Free)",
+      "category": "software",
+      "anchor": null
+    }
+  },
+  "settings": {
+    "maxLinksPerPost": 5,
+    "minWordDistance": 50,
+    "skipExistingLinks": true,
+    "skipHeadings": true,
+    "linkClass": "affiliate-link",
+    "nofollow": true,
+    "sponsored": true
+  }
+}
