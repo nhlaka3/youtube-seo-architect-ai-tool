@@ -5,7 +5,7 @@
   "description": "YouTube SEO Optimization Platform",
   "main": "api/index.js",
   "engines": {
-    "node": "20"
+    "node": ">=20"
   },
   "scripts": {
     "start": "node api/index.js",
