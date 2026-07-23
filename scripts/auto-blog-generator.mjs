@@ -335,13 +335,13 @@ async function generateSectionViaGroq(apiKey, systemPrompt, sectionPrompt) {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        model: 'llama-3.3-70b-versatile',
+        model: 'llama-3.1-8b-instant',
         messages: [
           { role: 'system', content: systemPrompt },
           { role: 'user', content: sectionPrompt },
         ],
         temperature: 0.7,
-        max_tokens: 2048,
+        max_tokens: 4096,
         top_p: 0.9,
       }),
     }
@@ -755,6 +755,50 @@ function countWords(html) {
 }
 
 // ── Sitemap update ─────────────────────────────────────────────────
+
+// ── Blog listing page update ─────────────────────────────────────
+
+function updateBlogListing(keywordEntry, page, wordCount) {
+  const blogHtmlPath = resolve(PROJECT, 'blog.html');
+  if (!existsSync(blogHtmlPath)) {
+    console.log('  ⚠ blog.html not found, skipping listing update');
+    return;
+  }
+
+  let blogHtml = readFileSync(blogHtmlPath, 'utf-8');
+  const slug = keywordEntry.slug;
+
+  // Don't add if already listed
+  if (blogHtml.includes(`/blog/${slug}`)) {
+    console.log('  Already in blog.html listing');
+    return;
+  }
+
+  const category = keywordEntry.category || 'SEO';
+  const today = new Date();
+  const dateStr = today.toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' });
+
+  const excerpt = page.metaDescription
+    ? page.metaDescription.replace(/Learn how to /i, '').replace(/\. Step-by-step.*$/, '').slice(0, 120)
+    : `Complete guide to ${keywordEntry.keyword}.`;
+
+  const cardHtml = `    <div class="article-card">
+      <span class="category">${category}</span>
+      <h3><a href="/blog/${slug}">${page.title}</a></h3>
+      <div class="excerpt">${excerpt}</div>
+      <div class="meta">${wordCount.toLocaleString()} words · ${dateStr}</div>
+    </div>`;
+
+  // Insert at the top of the articles section (right after <!-- Articles -->)
+  const insertPoint = '    <!-- Articles -->\n';
+  if (blogHtml.includes(insertPoint)) {
+    blogHtml = blogHtml.replace(insertPoint, insertPoint + cardHtml + '\n');
+    writeFileSync(blogHtmlPath, blogHtml);
+    console.log(`  ✅ Added to blog.html listing`);
+  } else {
+    console.log('  ⚠ Could not find insertion point in blog.html');
+  }
+}
 
 function updateSitemap(slug, title) {
   if (!existsSync(SITEMAP_FILE)) {
@@ -1236,6 +1280,10 @@ async function main() {
   // Update sitemap
   console.log('  Updating sitemap...');
   updateSitemap(keywordEntry.slug, page.title);
+
+  // Update blog listing page (blog.html)
+  console.log('  Updating blog listing...');
+  updateBlogListing(keywordEntry, page, wordCount);
 
   // Mark keyword as done
   markDone(data, keywordEntry.slug);
