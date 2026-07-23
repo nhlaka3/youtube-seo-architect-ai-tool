@@ -102,11 +102,12 @@ jobs:
         run: |
           # Add public repo as remote
           git remote add public "$PUBLIC_REPO"
+          git fetch public main --depth=1 2>&1
 
-          # Push only blog files, keywords, and sitemap to public repo
-          # This triggers Vercel auto-deploy via GitHub integration
-          git push public HEAD:main --force 2>&1
-          echo "✅ Mirrored to public repo — Vercel will auto-deploy"
+          # Cherry-pick just the blog file changes onto public/main
+          # This triggers Vercel auto-deploy without overwriting other changes
+          git push public HEAD:main -- public/blog/ scripts/keywords.json sitemap.xml 2>&1
+          echo "✅ Blog files mirrored to public repo — Vercel will auto-deploy"
 
       - name: 📊 Report
         if: always()
