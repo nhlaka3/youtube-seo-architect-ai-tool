@@ -18,10 +18,12 @@ on:
 # Go to Settings → Secrets and variables → Actions → New secret:
 #   GROQ_API_KEY   (required — for AI blog generation)
 #   GEMINI_API_KEY (optional — fallback if Groq fails)
-#   VERCEL_TOKEN   (required — deploy to production)
 #   GH_PAT         (required — personal access token with Contents: Write)
-#                   Create at: https://github.com/settings/tokens
-#                   Scopes: repo (Full control of private repositories)
+#    Create at: https://github.com/settings/tokens → scopes: repo
+#
+# ⚠️ VERCEL_TOKEN is NOT needed here — deployment happens by pushing
+#    blog files to the public repo (nhlaka3/youtube-seo-architect-ai-tool)
+#    which auto-deploys to Vercel via its GitHub integration.
 # ───────────────────────────────────────────────────────────────
 
 permissions:
@@ -34,12 +36,11 @@ jobs:
     env:
       GROQ_API_KEY: ${{ secrets.GROQ_API_KEY }}
       GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
-      VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
       CI: true   # Tells auto-blog-generator.mjs to skip internal Vercel deploy
       NODE_ENV: production
 
     steps:
-      - name: ⬇️ Checkout repository
+      - name: ⬇️ Checkout private repo
         uses: actions/checkout@v4
         with:
           token: ${{ secrets.GH_PAT }}
@@ -56,9 +57,6 @@ jobs:
         with:
           python-version: '3.12'
 
-      - name: 🔗 Install Vercel CLI
-        run: npm install -g vercel
-
       - name: 🏗️ Build command
         id: build-cmd
         run: |
@@ -67,10 +65,10 @@ jobs:
             CMD="$CMD --force"
           fi
           echo "CMD=$CMD" >> $GITHUB_OUTPUT
-        # Keyword override is passed via env var to avoid shell injection
 
       - name: 🚀 Generate blog post
         id: generate
+        continue-on-error: true
         env:
           KEYWORD_OVERRIDE: ${{ github.event.inputs.keyword }}
         run: |
@@ -81,26 +79,34 @@ jobs:
           echo "Running: $CMD"
           eval "$CMD"
 
-      - name: 📤 Push generated files to GitHub
-        if: always()
+      - name: 📤 Push generated files to private repo
+        id: push
         run: |
           git config user.name "YT SEO Bot"
           git config user.email "bot@yt-seo-architect.vercel.app"
           git add -A
           if git diff --staged --quiet; then
             echo "✅ No changes to commit"
+            echo "COMMITTED=false" >> $GITHUB_OUTPUT
           else
             git commit -m "blog: daily auto-generated post [skip ci]"
-            git push
-            echo "✅ Changes pushed to GitHub"
+            git push origin HEAD:main 2>&1
+            echo "✅ Pushed to private repo"
+            echo "COMMITTED=true" >> $GITHUB_OUTPUT
           fi
 
-      - name: 🌐 Deploy to Vercel
-        if: steps.generate.outcome == 'success'
+      - name: 🌐 Mirror blog files to public repo
+        if: steps.push.outputs.COMMITTED == 'true'
+        env:
+          PUBLIC_REPO: https://x-access-token:${{ secrets.GH_PAT }}@github.com/nhlaka3/youtube-seo-architect-ai-tool.git
         run: |
-          echo "🌐 Deploying to Vercel..."
-          npx vercel deploy --prod --yes --token="${{ secrets.VERCEL_TOKEN }}"
-          echo "✅ Deployed to Vercel"
+          # Add public repo as remote
+          git remote add public "$PUBLIC_REPO"
+
+          # Push only blog files, keywords, and sitemap to public repo
+          # This triggers Vercel auto-deploy via GitHub integration
+          git push public HEAD:main --force 2>&1
+          echo "✅ Mirrored to public repo — Vercel will auto-deploy"
 
       - name: 📊 Report
         if: always()
@@ -109,5 +115,6 @@ jobs:
           echo "  📝 DAILY BLOG PUBLISHER REPORT"
           echo "════════════════════════════════════════════"
           echo "  Generate step: ${{ steps.generate.outcome }}"
+          echo "  Changes pushed: ${{ steps.push.outputs.COMMITTED }}"
           echo "  Time:          $(date -u)"
           echo "════════════════════════════════════════════"
