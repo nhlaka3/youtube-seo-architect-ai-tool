@@ -9,10 +9,13 @@
        ELITE SEO/AEO BLOG POST TEMPLATE — YT SEO Architect (v4.1)
        ═══════════════════════════════════════════════════════════════
        
-       STEP 0: KEYWORD COMPETITION CHECK (RUN BEFORE WRITING)
+       STEP 0: KEYWORD COMPETITION + DEMAND CHECK (RUN BEFORE WRITING)
        ═══════════════════════════════════════════════════════════════
        
        Before writing a single word, find a keyword we can actually rank for.
+       ⚠️  CRITICAL: "Low competition" does NOT mean "high demand." 
+       Zero-demand keywords score 95+ on competition but nobody searches them.
+       We MUST check BOTH competition AND demand to avoid writing to zero readers.
        
        1. GENERATE KEYWORD IDEAS from the blog topic:
           • Main topic + "template" (e.g., "youtube description template")
@@ -23,27 +26,47 @@
           • Main topic + "free" (e.g., "free youtube keyword tool")
           • Main topic + platform/niche (e.g., "youtube seo for gaming")
        
-       2. RUN THE COMPETITION CHECKER on each idea:
+       2. RUN THE ENHANCED CHECKER on each idea:
          python3 scripts/check-keyword.py "your keyword idea"
        
-       The script searches DuckDuckGo, analyzes the top 10 SERP results,
-       and returns a competition score (0-100). Higher = easier to rank.
+       The script now checks BOTH:
+       A) COMPETITION SCORE (DuckDuckGo SERP analysis) — 0-100
+       B) DEMAND SCORE (Google Suggest autocomplete) — 0-100
+       C) RANKABILITY SCORE = (Competition + Demand) / 2 — 0-100
        
-       SCORE THRESHOLDS:
-       • 75-100 = 🟢 VERY EASY — Write and publish immediately
-       • 60-74  = 🟢 EASY — Good target, write comprehensive content
-       • 45-59  = 🟡 MEDIUM — Needs better content + 1-2 backlinks
-       • 30-44  = 🟠 HARD — Consider a longer-tail variation
+       A keyword needs BOTH low competition AND real search demand.
+       
+       📈 COMPETITION THRESHOLDS (existing):
+       • 75-100 = 🟢 VERY EASY — Low competition, few brands competing
+       • 60-74  = 🟢 EASY — Manageable competition
+       • 45-59  = 🟡 MEDIUM — Needs backlinks to compete
+       • 30-44  = 🟠 HARD — Too many strong competitors
        • 0-29   = 🔴 VERY HARD — Pick a different keyword
        
-       IF SCORE IS BELOW 60:
-       Run the script again with a longer variation:
+       📊 DEMAND THRESHOLDS (NEW — Google Suggest):
+       • 75-100 = 🟢 VERY HIGH — People actively search this keyword
+       • 55-74  = 🟢 HIGH — Good search volume
+       • 30-54  = 🟡 MEDIUM — Some demand, narrow audience
+       • 15-29  = 🟠 LOW — Very few searches
+       • 0-14   = 🔴 ZERO — ⚠️ STOP. No one searches this. Pick another.
+       
+       🎯 RANKABILITY THRESHOLDS (NEW — combined score):
+       • 70-100 = 🟢 EXCELLENT — WRITE NOW. Perfect target.
+       • 55-69  = 🟢 GOOD — Write with strong on-page SEO
+       • 40-54  = 🟡 OK — Needs backlinks or longer-tail variation
+       • 0-39   = 🔴 WEAK — Too competitive OR zero demand. Skip.
+       
+       DECISION RULES (new, simplified):
+       • IF Demand Score < 15 → STOP. Zero search volume. Pick another keyword.
+         This is the #1 reason our posts aren't ranking. Don't skip this check.
+       • IF Rankability ≥ 55 → Proceed with writing. Post will rank.
+       • IF Rankability < 55 → Try a longer variation:
          python3 scripts/check-keyword.py "your keyword + template 2026"
          python3 scripts/check-keyword.py "your keyword + for beginners"
          python3 scripts/check-keyword.py "free + your keyword + guide"
        
-       Only proceed to writing when the script returns 🟢 (60+).
-       This ensures every blog post targets a keyword we can actually rank for.
+       Only proceed to writing when Rankability ≥ 55 AND Demand ≥ 15.
+       This ensures every blog post targets a keyword people actually search.
        ═══════════════════════════════════════════════════════════════
        
        HOW TO USE:

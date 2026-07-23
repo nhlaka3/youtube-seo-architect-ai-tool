@@ -1,125 +1,125 @@
 {
   "description": "Curated low-competition YouTube SEO keywords. Each entry has a keyword, slug, category, and status (pending/done/skipped). The generator picks the next 'pending' keyword.",
-  "lastUpdated": "2026-07-14",
+  "lastUpdated": "2026-07-23",
   "keywords": [
     {
       "keyword": "youtube community posts strategy 2026",
       "slug": "youtube-community-posts-strategy-2026",
       "category": "Engagement",
-      "status": "done",
-      "notes": "Already published"
+      "status": "skipped",
+      "notes": "Zero demand (Demand < 15) — Already published"
     },
     {
       "keyword": "youtube chapter timestamps seo guide",
       "slug": "youtube-chapter-timestamps-seo-guide",
       "category": "SEO",
-      "status": "done",
-      "notes": "Already published"
+      "status": "skipped",
+      "notes": "Zero demand (Demand < 15) — Already published"
     },
     {
       "keyword": "youtube shorts seo ranking guide 2026",
       "slug": "youtube-shorts-seo-ranking-guide-2026",
       "category": "Shorts",
-      "status": "done",
-      "notes": "Already published"
+      "status": "skipped",
+      "notes": "Zero demand (Demand < 15) — Already published"
     },
     {
       "keyword": "youtube seo for gaming channels 2026",
       "slug": "youtube-seo-for-gaming-channels-2026",
       "category": "Niche",
-      "status": "done",
-      "notes": "Already published"
+      "status": "skipped",
+      "notes": "Zero demand (Demand < 15) — Already published"
     },
     {
       "keyword": "youtube seo checklist beginners 2026",
       "slug": "youtube-seo-checklist-beginners-2026",
       "category": "SEO",
-      "status": "done",
-      "notes": "Already published"
+      "status": "skipped",
+      "notes": "Zero demand (Demand < 15) — Already published"
     },
     {
       "keyword": "youtube seo audit diagnostic fix 2026",
       "slug": "youtube-seo-audit-diagnostic-fix-2026",
       "category": "SEO",
-      "status": "done",
-      "notes": "Already published"
+      "status": "skipped",
+      "notes": "Zero demand (Demand < 15) — Already published"
     },
     {
       "keyword": "youtube retention graph explained 2026",
       "slug": "youtube-retention-graph-explained-2026",
       "category": "Analytics",
-      "status": "done",
-      "notes": "Already published"
+      "status": "skipped",
+      "notes": "Zero demand (Demand < 15) — Already published"
     },
     {
       "keyword": "youtube playlist optimization strategy",
       "slug": "youtube-playlist-optimization-strategy",
       "category": "SEO",
-      "status": "done",
-      "notes": "Already published"
+      "status": "skipped",
+      "notes": "Zero demand (Demand < 15) — Already published"
     },
     {
       "keyword": "youtube monetization tips 2026",
       "slug": "youtube-monetization-tips-2026",
       "category": "Revenue",
-      "status": "done",
-      "notes": "Already published"
+      "status": "skipped",
+      "notes": "Zero demand (Demand < 15) — Already published"
     },
     {
       "keyword": "youtube metadata auditor vs vidiq shadow ban",
       "slug": "youtube-metadata-auditor-vs-vidiq-shadow-ban",
       "category": "Tools",
-      "status": "done",
-      "notes": "Already published"
+      "status": "skipped",
+      "notes": "Zero demand (Demand < 15) — Already published"
     },
     {
       "keyword": "youtube intro hook first 3 seconds",
       "slug": "youtube-intro-hook-first-3-seconds",
       "category": "Content",
-      "status": "done",
-      "notes": "Already published"
+      "status": "skipped",
+      "notes": "Zero demand (Demand < 15) — Already published"
     },
     {
       "keyword": "youtube for tutorials 2026",
       "slug": "youtube-for-tutorials-2026",
       "category": "Niche",
-      "status": "done",
-      "notes": "Already published"
+      "status": "skipped",
+      "notes": "Zero demand (Demand < 15) — Already published"
     },
     {
       "keyword": "youtube end screens cards guide 2026",
       "slug": "youtube-end-screens-cards-guide-2026",
       "category": "Engagement",
-      "status": "done",
-      "notes": "Already published"
+      "status": "skipped",
+      "notes": "Zero demand (Demand < 15) — Already published"
     },
     {
       "keyword": "youtube description templates 2026",
       "slug": "youtube-description-templates-2026",
       "category": "SEO",
-      "status": "done",
-      "notes": "Already published"
+      "status": "skipped",
+      "notes": "Zero demand (Demand < 15) — Already published"
     },
     {
       "keyword": "youtube competitor analysis reverse engineer",
       "slug": "youtube-competitor-analysis-reverse-engineer",
       "category": "Strategy",
-      "status": "done",
-      "notes": "Already published"
+      "status": "skipped",
+      "notes": "Zero demand (Demand < 15) — Already published"
     },
     {
       "keyword": "youtube analytics explained 2026",
       "slug": "youtube-analytics-explained-2026",
       "category": "Analytics",
-      "status": "done",
-      "notes": "Already published"
+      "status": "skipped",
+      "notes": "Zero demand (Demand < 15) — Already published"
     },
     {
       "keyword": "youtube algorithm checklist 2026",
       "slug": "youtube-algorithm-checklist-2026",
       "category": "Algorithm",
-      "status": "done",
-      "notes": "Already published"
+      "status": "skipped",
+      "notes": "Zero demand (Demand < 15) — Already published"
     },
     {
       "keyword": "youtube algorithm changes 2026",
@@ -132,15 +132,15 @@
       "keyword": "youtube ai seo coach phronesis 2026",
       "slug": "youtube-ai-seo-coach-phronesis-2026",
       "category": "Tools",
-      "status": "done",
-      "notes": "Already published"
+      "status": "skipped",
+      "notes": "Zero demand (Demand < 15) — Already published"
     },
     {
       "keyword": "youtube ctr what does it actually mean",
       "slug": "what-does-youtube-ctr-actually-mean",
       "category": "Analytics",
-      "status": "done",
-      "notes": "Already published"
+      "status": "skipped",
+      "notes": "Zero demand (Demand < 15) — Already published"
     },
     {
       "keyword": "how to metadata youtube",
@@ -160,29 +160,29 @@
       "keyword": "how to fix youtube shadow ban 2026",
       "slug": "how-to-fix-youtube-shadow-ban-2026",
       "category": "Troubleshooting",
-      "status": "done",
-      "notes": "Already published"
+      "status": "skipped",
+      "notes": "Zero demand (Demand < 15) — Already published"
     },
     {
       "keyword": "github seo backlinks guide",
       "slug": "github-seo-backlinks-guide",
       "category": "SEO",
-      "status": "done",
-      "notes": "Already published"
+      "status": "skipped",
+      "notes": "Zero demand (Demand < 15) — Already published"
     },
     {
       "keyword": "best youtube seo tools 2026",
       "slug": "best-youtube-seo-tools-2026",
       "category": "Tools",
-      "status": "done",
-      "notes": "Already published"
+      "status": "skipped",
+      "notes": "Zero demand (Demand < 15) — Already published"
     },
     {
       "keyword": "youtube thumbnail ab testing guide",
       "slug": "youtube-thumbnail-ab-testing-guide",
       "category": "Thumbnails",
-      "status": "done",
-      "notes": "Already published"
+      "status": "skipped",
+      "notes": "Zero demand (Demand < 15) — Already published"
     },
     {
       "keyword": "youtube tags 2026",
@@ -195,471 +195,473 @@
       "keyword": "youtube impressions guide 2026",
       "slug": "youtube-impressions-guide-2026",
       "category": "Analytics",
-      "status": "done",
-      "notes": "Already published"
+      "status": "skipped",
+      "notes": "Zero demand (Demand < 15) — Already published"
     },
     {
       "keyword": "youtube title examples 2026",
       "slug": "youtube-title-examples-2026",
       "category": "SEO",
-      "status": "done",
-      "notes": "Already published"
+      "status": "skipped",
+      "notes": "Zero demand (Demand < 15) — Already published"
     },
     {
       "keyword": "youtube video not getting views diagnostic fix 2026",
       "slug": "youtube-video-not-getting-views-diagnostic-fix-2026",
       "category": "Troubleshooting",
-      "status": "done",
-      "notes": "Already published"
+      "status": "skipped",
+      "notes": "Zero demand (Demand < 15) — Already published"
     },
     {
       "keyword": "youtube analytics 4 metrics that matter",
       "slug": "youtube-analytics-4-metrics-that-matter",
       "category": "Analytics",
-      "status": "done",
-      "notes": "Already published"
+      "status": "skipped",
+      "notes": "Zero demand (Demand < 15) — Already published"
     },
     {
       "keyword": "youtube seo for cooking channels 2026",
       "slug": "youtube-seo-for-cooking-channels-2026",
       "category": "Niche",
-      "status": "done",
-      "notes": "Low competition niche keyword",
+      "status": "skipped",
+      "notes": "Zero demand (Demand < 15) — Low competition niche keyword",
       "generatedAt": "2026-07-14T17:56:58.070Z"
     },
     {
       "keyword": "youtube seo for music channels 2026",
       "slug": "youtube-seo-for-music-channels-2026",
       "category": "Niche",
-      "status": "pending",
-      "notes": "Low competition niche keyword"
+      "status": "skipped",
+      "notes": "Zero demand (Demand < 15) — Low competition niche keyword",
+      "generatedAt": "2026-07-17T10:50:55.719Z"
     },
     {
       "keyword": "youtube seo for fitness channels 2026",
       "slug": "youtube-seo-for-fitness-channels-2026",
       "category": "Niche",
-      "status": "pending",
-      "notes": "Low competition niche keyword"
+      "status": "skipped",
+      "notes": "Zero demand (Demand < 15) — Low competition niche keyword",
+      "generatedAt": "2026-07-21T08:26:54.767Z"
     },
     {
       "keyword": "youtube seo for tech review channels 2026",
       "slug": "youtube-seo-for-tech-review-channels-2026",
       "category": "Niche",
-      "status": "pending",
-      "notes": "Low competition niche keyword"
+      "status": "skipped",
+      "notes": "Zero demand (Demand < 15) — auto-skipped by audit"
     },
     {
       "keyword": "youtube seo for vlog channels 2026",
       "slug": "youtube-seo-for-vlog-channels-2026",
       "category": "Niche",
-      "status": "pending",
-      "notes": "Low competition niche keyword"
+      "status": "skipped",
+      "notes": "Zero demand (Demand < 15) — auto-skipped by audit"
     },
     {
       "keyword": "youtube seo for education channels 2026",
       "slug": "youtube-seo-for-education-channels-2026",
       "category": "Niche",
-      "status": "pending",
-      "notes": "Low competition niche keyword"
+      "status": "skipped",
+      "notes": "Zero demand (Demand < 15) — auto-skipped by audit"
     },
     {
       "keyword": "youtube seo for finance channels 2026",
       "slug": "youtube-seo-for-finance-channels-2026",
       "category": "Niche",
-      "status": "pending",
-      "notes": "Low competition niche keyword"
+      "status": "skipped",
+      "notes": "Zero demand (Demand < 15) — auto-skipped by audit"
     },
     {
       "keyword": "youtube seo for travel channels 2026",
       "slug": "youtube-seo-for-travel-channels-2026",
       "category": "Niche",
-      "status": "pending",
-      "notes": "Low competition niche keyword"
+      "status": "skipped",
+      "notes": "Zero demand (Demand < 15) — auto-skipped by audit"
     },
     {
       "keyword": "youtube seo for art channels 2026",
       "slug": "youtube-seo-for-art-channels-2026",
       "category": "Niche",
-      "status": "pending",
-      "notes": "Low competition niche keyword"
+      "status": "skipped",
+      "notes": "Zero demand (Demand < 15) — auto-skipped by audit"
     },
     {
       "keyword": "youtube seo for podcast channels 2026",
       "slug": "youtube-seo-for-podcast-channels-2026",
       "category": "Niche",
-      "status": "pending",
-      "notes": "Low competition niche keyword"
+      "status": "skipped",
+      "notes": "Zero demand (Demand < 15) — auto-skipped by audit"
     },
     {
       "keyword": "youtube playlist seo optimization tips 2026",
       "slug": "youtube-playlist-seo-optimization-tips-2026",
       "category": "SEO",
-      "status": "pending",
-      "notes": "Long-tail playlist keyword"
+      "status": "skipped",
+      "notes": "Zero demand (Demand < 15) — auto-skipped by audit"
     },
     {
       "keyword": "youtube description seo template free 2026",
       "slug": "youtube-description-seo-template-free-2026",
       "category": "SEO",
-      "status": "pending",
-      "notes": "Free template angle"
+      "status": "skipped",
+      "notes": "Zero demand (Demand < 15) — auto-skipped by audit"
     },
     {
       "keyword": "youtube title formula viral 2026",
       "slug": "youtube-title-formula-viral-2026",
       "category": "SEO",
-      "status": "pending",
-      "notes": "Viral title formulas"
+      "status": "skipped",
+      "notes": "Zero demand (Demand < 15) — auto-skipped by audit"
     },
     {
       "keyword": "youtube tag generator free tool 2026",
       "slug": "youtube-tag-generator-free-tool-2026",
       "category": "Tools",
-      "status": "pending",
-      "notes": "Free tool keyword"
+      "status": "skipped",
+      "notes": "Zero demand (Demand < 15) — auto-skipped by audit"
     },
     {
       "keyword": "youtube keyword research free method 2026",
       "slug": "youtube-keyword-research-free-method-2026",
       "category": "SEO",
-      "status": "pending",
-      "notes": "Free method angle"
+      "status": "skipped",
+      "notes": "Zero demand (Demand < 15) — auto-skipped by audit"
     },
     {
       "keyword": "youtube ctr optimization secrets 2026",
       "slug": "youtube-ctr-optimization-secrets-2026",
       "category": "Analytics",
-      "status": "pending",
-      "notes": "CTR deep dive"
+      "status": "skipped",
+      "notes": "Zero demand (Demand < 15) — auto-skipped by audit"
     },
     {
       "keyword": "youtube watch time optimization guide 2026",
       "slug": "youtube-watch-time-optimization-guide-2026",
       "category": "Analytics",
-      "status": "pending",
-      "notes": "Watch time focus"
+      "status": "skipped",
+      "notes": "Zero demand (Demand < 15) — auto-skipped by audit"
     },
     {
       "keyword": "youtube thumbnail design rules 2026",
       "slug": "youtube-thumbnail-design-rules-2026",
       "category": "Thumbnails",
-      "status": "pending",
-      "notes": "Thumbnail design principles"
+      "status": "skipped",
+      "notes": "Zero demand (Demand < 15) — auto-skipped by audit"
     },
     {
       "keyword": "youtube hook examples first 5 seconds 2026",
       "slug": "youtube-hook-examples-first-5-seconds-2026",
       "category": "Content",
-      "status": "pending",
-      "notes": "Hook examples with real data"
+      "status": "skipped",
+      "notes": "Zero demand (Demand < 15) — auto-skipped by audit"
     },
     {
       "keyword": "youtube series signaling playlist algorithm 2026",
       "slug": "youtube-series-signaling-playlist-algorithm-2026",
       "category": "Algorithm",
-      "status": "pending",
-      "notes": "New algorithm feature"
+      "status": "skipped",
+      "notes": "Zero demand (Demand < 15) — auto-skipped by audit"
     },
     {
       "keyword": "youtube community tab engagement strategy 2026",
       "slug": "youtube-community-tab-engagement-strategy-2026",
       "category": "Engagement",
-      "status": "pending",
-      "notes": "Community tab deep dive"
+      "status": "skipped",
+      "notes": "Zero demand (Demand < 15) — auto-skipped by audit"
     },
     {
       "keyword": "youtube shorts vs long form seo comparison 2026",
       "slug": "youtube-shorts-vs-long-form-seo-comparison-2026",
       "category": "Strategy",
-      "status": "pending",
-      "notes": "Shorts vs longform comparison"
+      "status": "skipped",
+      "notes": "Zero demand (Demand < 15) — auto-skipped by audit"
     },
     {
       "keyword": "youtube premiere seo optimization 2026",
       "slug": "youtube-premiere-seo-optimization-2026",
       "category": "Features",
-      "status": "pending",
-      "notes": "Premiere feature SEO"
+      "status": "skipped",
+      "notes": "Zero demand (Demand < 15) — auto-skipped by audit"
     },
     {
       "keyword": "youtube live stream seo tips 2026",
       "slug": "youtube-live-stream-seo-tips-2026",
       "category": "Features",
-      "status": "pending",
-      "notes": "Live stream optimization"
+      "status": "skipped",
+      "notes": "Zero demand (Demand < 15) — auto-skipped by audit"
     },
     {
       "keyword": "youtube chapters seo benefit key moments 2026",
       "slug": "youtube-chapters-seo-benefit-key-moments-2026",
       "category": "SEO",
-      "status": "pending",
-      "notes": "Key moments deep dive"
+      "status": "skipped",
+      "notes": "Zero demand (Demand < 15) — auto-skipped by audit"
     },
     {
       "keyword": "youtube studio analytics dashboard guide 2026",
       "slug": "youtube-studio-analytics-dashboard-guide-2026",
       "category": "Analytics",
-      "status": "pending",
-      "notes": "Studio analytics walkthrough"
+      "status": "skipped",
+      "notes": "Zero demand (Demand < 15) — auto-skipped by audit"
     },
     {
       "keyword": "youtube a b testing titles thumbnails guide 2026",
       "slug": "youtube-ab-testing-titles-thumbnails-guide-2026",
       "category": "Strategy",
-      "status": "pending",
-      "notes": "A/B testing guide"
+      "status": "skipped",
+      "notes": "Zero demand (Demand < 15) — auto-skipped by audit"
     },
     {
       "keyword": "youtube shadow ban fix recovery guide 2026",
       "slug": "youtube-shadow-ban-fix-recovery-guide-2026",
       "category": "Troubleshooting",
-      "status": "pending",
-      "notes": "Shadow ban recovery"
+      "status": "skipped",
+      "notes": "Zero demand (Demand < 15) — auto-skipped by audit"
     },
     {
       "keyword": "youtube copyright claim dispute guide 2026",
       "slug": "youtube-copyright-claim-dispute-guide-2026",
       "category": "Troubleshooting",
-      "status": "pending",
-      "notes": "Copyright claim help"
+      "status": "skipped",
+      "notes": "Zero demand (Demand < 15) — auto-skipped by audit"
     },
     {
       "keyword": "youtube studio mobile app optimization tips 2026",
       "slug": "youtube-studio-mobile-app-optimization-tips-2026",
       "category": "Features",
-      "status": "pending",
-      "notes": "Mobile studio tips"
+      "status": "skipped",
+      "notes": "Zero demand (Demand < 15) — auto-skipped by audit"
     },
     {
       "keyword": "youtube end screen best practices 2026",
       "slug": "youtube-end-screen-best-practices-2026",
       "category": "Engagement",
-      "status": "pending",
-      "notes": "End screen optimization"
+      "status": "skipped",
+      "notes": "Zero demand (Demand < 15) — auto-skipped by audit"
     },
     {
       "keyword": "youtube card placement strategy 2026",
       "slug": "youtube-card-placement-strategy-2026",
       "category": "Engagement",
-      "status": "pending",
-      "notes": "Card placement guide"
+      "status": "skipped",
+      "notes": "Zero demand (Demand < 15) — auto-skipped by audit"
     },
     {
       "keyword": "youtube subscriber growth strategy organic 2026",
       "slug": "youtube-subscriber-growth-strategy-organic-2026",
       "category": "Growth",
-      "status": "pending",
-      "notes": "Organic subscriber growth"
+      "status": "skipped",
+      "notes": "Zero demand (Demand < 15) — auto-skipped by audit"
     },
     {
       "keyword": "youtube video length optimal for algorithm 2026",
       "slug": "youtube-video-length-optimal-for-algorithm-2026",
       "category": "Algorithm",
-      "status": "pending",
-      "notes": "Video length analysis"
+      "status": "skipped",
+      "notes": "Zero demand (Demand < 15) — auto-skipped by audit"
     },
     {
       "keyword": "youtube publish time best hours 2026",
       "slug": "youtube-publish-time-best-hours-2026",
       "category": "Strategy",
-      "status": "pending",
-      "notes": "Best publish times"
+      "status": "skipped",
+      "notes": "Zero demand (Demand < 15) — auto-skipped by audit"
     },
     {
       "keyword": "youtube trending topics how to find 2026",
       "slug": "youtube-trending-topics-how-to-find-2026",
       "category": "Strategy",
-      "status": "pending",
-      "notes": "Finding trending topics"
+      "status": "skipped",
+      "notes": "Zero demand (Demand < 15) — auto-skipped by audit"
     },
     {
       "keyword": "youtube video ideas generator free 2026",
       "slug": "youtube-video-ideas-generator-free-2026",
       "category": "Tools",
-      "status": "pending",
-      "notes": "Free idea generator"
+      "status": "skipped",
+      "notes": "Zero demand (Demand < 15) — auto-skipped by audit"
     },
     {
       "keyword": "youtube channel name ideas seo friendly 2026",
       "slug": "youtube-channel-name-ideas-seo-friendly-2026",
       "category": "Branding",
-      "status": "pending",
-      "notes": "Channel naming for SEO"
+      "status": "skipped",
+      "notes": "Zero demand (Demand < 15) — auto-skipped by audit"
     },
     {
       "keyword": "youtube about section optimization 2026",
       "slug": "youtube-about-section-optimization-2026",
       "category": "SEO",
-      "status": "pending",
-      "notes": "About section SEO"
+      "status": "skipped",
+      "notes": "Zero demand (Demand < 15) — auto-skipped by audit"
     },
     {
       "keyword": "youtube banner art size guide 2026",
       "slug": "youtube-banner-art-size-guide-2026",
       "category": "Branding",
-      "status": "pending",
-      "notes": "Banner dimensions guide"
+      "status": "skipped",
+      "notes": "Zero demand (Demand < 15) — auto-skipped by audit"
     },
     {
       "keyword": "youtube profile picture optimization 2026",
       "slug": "youtube-profile-picture-optimization-2026",
       "category": "Branding",
-      "status": "pending",
-      "notes": "Profile pic optimization"
+      "status": "skipped",
+      "notes": "Zero demand (Demand < 15) — auto-skipped by audit"
     },
     {
       "keyword": "youtube shorts hashtag strategy 2026",
       "slug": "youtube-shorts-hashtag-strategy-2026",
       "category": "Shorts",
-      "status": "pending",
-      "notes": "Shorts hashtag guide"
+      "status": "skipped",
+      "notes": "Zero demand (Demand < 15) — auto-skipped by audit"
     },
     {
       "keyword": "youtube shorts hook formula viral 2026",
       "slug": "youtube-shorts-hook-formula-viral-2026",
       "category": "Shorts",
-      "status": "pending",
-      "notes": "Shorts hook formulas"
+      "status": "skipped",
+      "notes": "Zero demand (Demand < 15) — auto-skipped by audit"
     },
     {
       "keyword": "youtube shorts vs tiktok seo differences 2026",
       "slug": "youtube-shorts-vs-tiktok-seo-differences-2026",
       "category": "Shorts",
-      "status": "pending",
-      "notes": "Shorts vs TikTok comparison"
+      "status": "skipped",
+      "notes": "Zero demand (Demand < 15) — auto-skipped by audit"
     },
     {
       "keyword": "youtube collaboration strategy grow channel 2026",
       "slug": "youtube-collaboration-strategy-grow-channel-2026",
       "category": "Growth",
-      "status": "pending",
-      "notes": "Collab strategy"
+      "status": "skipped",
+      "notes": "Zero demand (Demand < 15) — auto-skipped by audit"
     },
     {
       "keyword": "youtube super thanks revenue optimization 2026",
       "slug": "youtube-super-thanks-revenue-optimization-2026",
       "category": "Revenue",
-      "status": "pending",
-      "notes": "Super Thanks optimization"
+      "status": "skipped",
+      "notes": "Zero demand (Demand < 15) — auto-skipped by audit"
     },
     {
       "keyword": "youtube membership tier pricing strategy 2026",
       "slug": "youtube-membership-tier-pricing-strategy-2026",
       "category": "Revenue",
-      "status": "pending",
-      "notes": "Membership pricing"
+      "status": "skipped",
+      "notes": "Zero demand (Demand < 15) — auto-skipped by audit"
     },
     {
       "keyword": "youtube merch shelf integration guide 2026",
       "slug": "youtube-merch-shelf-integration-guide-2026",
       "category": "Revenue",
-      "status": "pending",
-      "notes": "Merch shelf setup"
+      "status": "skipped",
+      "notes": "Zero demand (Demand < 15) — auto-skipped by audit"
     },
     {
       "keyword": "youtube ad revenue rpm optimization 2026",
       "slug": "youtube-ad-revenue-rpm-optimization-2026",
       "category": "Revenue",
-      "status": "pending",
-      "notes": "RPM optimization"
+      "status": "skipped",
+      "notes": "Zero demand (Demand < 15) — auto-skipped by audit"
     },
     {
       "keyword": "youtube sponsor integration best practices 2026",
       "slug": "youtube-sponsor-integration-best-practices-2026",
       "category": "Revenue",
-      "status": "pending",
-      "notes": "Sponsor integration"
+      "status": "skipped",
+      "notes": "Zero demand (Demand < 15) — auto-skipped by audit"
     },
     {
       "keyword": "youtube comment seo strategy boost engagement 2026",
       "slug": "youtube-comment-seo-strategy-boost-engagement-2026",
       "category": "Engagement",
-      "status": "pending",
-      "notes": "Comment strategy for SEO"
+      "status": "skipped",
+      "notes": "Zero demand (Demand < 15) — auto-skipped by audit"
     },
     {
       "keyword": "youtube pinned comment optimization 2026",
       "slug": "youtube-pinned-comment-optimization-2026",
       "category": "Engagement",
-      "status": "pending",
-      "notes": "Pinned comment strategy"
+      "status": "skipped",
+      "notes": "Zero demand (Demand < 15) — auto-skipped by audit"
     },
     {
       "keyword": "youtube auto generated subtitles seo benefit 2026",
       "slug": "youtube-auto-generated-subtitles-seo-benefit-2026",
       "category": "SEO",
-      "status": "pending",
-      "notes": "Subtitle SEO benefits"
+      "status": "skipped",
+      "notes": "Zero demand (Demand < 15) — auto-skipped by audit"
     },
     {
       "keyword": "youtube closed captions seo optimization 2026",
       "slug": "youtube-closed-captions-seo-optimization-2026",
       "category": "SEO",
-      "status": "pending",
-      "notes": "Caption optimization"
+      "status": "skipped",
+      "notes": "Zero demand (Demand < 15) — auto-skipped by audit"
     },
     {
       "keyword": "youtube translation seo multiple languages 2026",
       "slug": "youtube-translation-seo-multiple-languages-2026",
       "category": "SEO",
-      "status": "pending",
-      "notes": "Multi-language SEO"
+      "status": "skipped",
+      "notes": "Zero demand (Demand < 15) — auto-skipped by audit"
     },
     {
       "keyword": "youtube channel trailer optimization 2026",
       "slug": "youtube-channel-trailer-optimization-2026",
       "category": "Branding",
-      "status": "pending",
-      "notes": "Channel trailer SEO"
+      "status": "skipped",
+      "notes": "Zero demand (Demand < 15) — auto-skipped by audit"
     },
     {
       "keyword": "youtube channel keywords optimization 2026",
       "slug": "youtube-channel-keywords-optimization-2026",
       "category": "SEO",
-      "status": "pending",
-      "notes": "Channel-level keywords"
+      "status": "skipped",
+      "notes": "Zero demand (Demand < 15) — auto-skipped by audit"
     },
     {
       "keyword": "youtube google search integration serp 2026",
       "slug": "youtube-google-search-integration-serp-2026",
       "category": "SEO",
-      "status": "pending",
-      "notes": "YouTube in Google SERPs"
+      "status": "skipped",
+      "notes": "Zero demand (Demand < 15) — auto-skipped by audit"
     },
     {
       "keyword": "youtube suggested videos algorithm hack 2026",
       "slug": "youtube-suggested-videos-algorithm-hack-2026",
       "category": "Algorithm",
-      "status": "pending",
-      "notes": "Suggested videos optimization"
+      "status": "skipped",
+      "notes": "Zero demand (Demand < 15) — auto-skipped by audit"
     },
     {
       "keyword": "youtube browse feature optimization 2026",
       "slug": "youtube-browse-feature-optimization-2026",
       "category": "Algorithm",
-      "status": "pending",
-      "notes": "Browse feature traffic"
+      "status": "skipped",
+      "notes": "Zero demand (Demand < 15) — auto-skipped by audit"
     },
     {
       "keyword": "youtube notification bell strategy 2026",
       "slug": "youtube-notification-bell-strategy-2026",
       "category": "Engagement",
-      "status": "pending",
-      "notes": "Bell notification strategy"
+      "status": "skipped",
+      "notes": "Zero demand (Demand < 15) — auto-skipped by audit"
     },
     {
       "keyword": "youtube community poll engagement boost 2026",
       "slug": "youtube-community-poll-engagement-boost-2026",
       "category": "Engagement",
-      "status": "pending",
-      "notes": "Community polls for engagement"
+      "status": "skipped",
+      "notes": "Zero demand (Demand < 15) — auto-skipped by audit"
     },
     {
       "keyword": "youtube live chat seo engagement strategy 2026",
       "slug": "youtube-live-chat-seo-engagement-strategy-2026",
       "category": "Engagement",
-      "status": "pending",
-      "notes": "Live chat engagement"
+      "status": "skipped",
+      "notes": "Zero demand (Demand < 15) — auto-skipped by audit"
     },
     {
       "keyword": "youtube shorts monetization requirements 2026",
@@ -672,85 +674,156 @@
       "keyword": "youtube music licensing copyright free 2026",
       "slug": "youtube-music-licensing-copyright-free-2026",
       "category": "Troubleshooting",
-      "status": "pending",
-      "notes": "Music licensing guide"
+      "status": "skipped",
+      "notes": "Zero demand (Demand < 15) — auto-skipped by audit"
     },
     {
       "keyword": "youtube thumbnail clickbait vs honest 2026",
       "slug": "youtube-thumbnail-clickbait-vs-honest-2026",
       "category": "Thumbnails",
-      "status": "pending",
-      "notes": "Clickbait ethics comparison"
+      "status": "skipped",
+      "notes": "Zero demand (Demand < 15) — auto-skipped by audit"
     },
     {
       "keyword": "youtube video export settings quality 2026",
       "slug": "youtube-video-export-settings-quality-2026",
       "category": "Technical",
-      "status": "pending",
-      "notes": "Export settings guide"
+      "status": "skipped",
+      "notes": "Zero demand (Demand < 15) — auto-skipped by audit"
     },
     {
       "keyword": "youtube premiere vs live stream comparison 2026",
       "slug": "youtube-premiere-vs-live-stream-comparison-2026",
       "category": "Features",
-      "status": "pending",
-      "notes": "Premiere vs live comparison"
+      "status": "skipped",
+      "notes": "Zero demand (Demand < 15) — auto-skipped by audit"
     },
     {
       "keyword": "youtube analytics realtime views explained 2026",
       "slug": "youtube-analytics-realtime-views-explained-2026",
       "category": "Analytics",
-      "status": "pending",
-      "notes": "Realtime analytics guide"
+      "status": "skipped",
+      "notes": "Zero demand (Demand < 15) — auto-skipped by audit"
     },
     {
       "keyword": "youtube audience retention curve fix 2026",
       "slug": "youtube-audience-retention-curve-fix-2026",
       "category": "Analytics",
-      "status": "pending",
-      "notes": "Retention curve fixes"
+      "status": "skipped",
+      "notes": "Zero demand (Demand < 15) — auto-skipped by audit"
     },
     {
       "keyword": "youtube revenue per mille rpm vs cpm explained 2026",
       "slug": "youtube-revenue-per-mille-rpm-vs-cpm-explained-2026",
       "category": "Revenue",
-      "status": "pending",
-      "notes": "RPM vs CPM explained"
+      "status": "skipped",
+      "notes": "Zero demand (Demand < 15) — auto-skipped by audit"
     },
     {
       "keyword": "youtube channel audit free tool checklist 2026",
       "slug": "youtube-channel-audit-free-tool-checklist-2026",
       "category": "Tools",
-      "status": "pending",
-      "notes": "Free audit tool"
+      "status": "skipped",
+      "notes": "Zero demand (Demand < 15) — auto-skipped by audit"
     },
     {
       "keyword": "youtube competitor keyword spy method 2026",
       "slug": "youtube-competitor-keyword-spy-method-2026",
       "category": "Strategy",
-      "status": "pending",
-      "notes": "Competitor keyword research"
+      "status": "skipped",
+      "notes": "Zero demand (Demand < 15) — auto-skipped by audit"
     },
     {
       "keyword": "youtube video reply strategy backlinks 2026",
       "slug": "youtube-video-reply-strategy-backlinks-2026",
       "category": "Strategy",
-      "status": "pending",
-      "notes": "Video reply for backlinks"
+      "status": "skipped",
+      "notes": "Zero demand (Demand < 15) — auto-skipped by audit"
     },
     {
       "keyword": "youtube community post algorithm boost 2026",
       "slug": "youtube-community-post-algorithm-boost-2026",
       "category": "Algorithm",
-      "status": "pending",
-      "notes": "Community posts and algorithm"
+      "status": "skipped",
+      "notes": "Zero demand (Demand < 15) — auto-skipped by audit"
     },
     {
       "keyword": "youtube channel trailer vs featured video 2026",
       "slug": "youtube-channel-trailer-vs-featured-video-2026",
       "category": "Branding",
+      "status": "skipped",
+      "notes": "Zero demand (Demand < 15) — auto-skipped by audit"
+    },
+    {
+      "keyword": "youtube monetization 2026",
+      "slug": "youtube-monetization-2026",
+      "category": "Revenue",
+      "status": "done",
+      "notes": "High demand (R:100) — from broader keyword audit",
+      "generatedAt": "2026-07-23T10:39:43.039Z"
+    },
+    {
+      "keyword": "youtube seo 2026",
+      "slug": "youtube-seo-2026",
+      "category": "SEO",
       "status": "pending",
-      "notes": "Trailer vs featured comparison"
+      "notes": "High demand (R:95) — from broader keyword audit"
+    },
+    {
+      "keyword": "youtube shorts algorithm 2026",
+      "slug": "youtube-shorts-algorithm-2026",
+      "category": "Algorithm",
+      "status": "pending",
+      "notes": "High demand (R:95) — from broader keyword audit"
+    },
+    {
+      "keyword": "youtube algorithm 2026",
+      "slug": "youtube-algorithm-2026",
+      "category": "Algorithm",
+      "status": "pending",
+      "notes": "High demand (R:92) — from broader keyword audit"
+    },
+    {
+      "keyword": "how to grow youtube channel 2026",
+      "slug": "how-to-grow-youtube-channel-2026",
+      "category": "Growth",
+      "status": "pending",
+      "notes": "High demand (R:91) — from broader keyword audit"
+    },
+    {
+      "keyword": "youtube video ideas 2026",
+      "slug": "youtube-video-ideas-2026",
+      "category": "Content",
+      "status": "pending",
+      "notes": "High demand (R:84) — from broader keyword audit"
+    },
+    {
+      "keyword": "youtube subscriber growth 2026",
+      "slug": "youtube-subscriber-growth-2026",
+      "category": "Growth",
+      "status": "pending",
+      "notes": "High demand (R:83) — from broader keyword audit"
+    },
+    {
+      "keyword": "youtube thumbnail tips 2026",
+      "slug": "youtube-thumbnail-tips-2026",
+      "category": "Thumbnails",
+      "status": "pending",
+      "notes": "High demand (R:77) — from broader keyword audit"
+    },
+    {
+      "keyword": "how youtube algorithm works 2026",
+      "slug": "how-youtube-algorithm-works-2026",
+      "category": "Algorithm",
+      "status": "pending",
+      "notes": "Good demand (R:70) — from broader keyword audit"
+    },
+    {
+      "keyword": "best youtube tags 2026",
+      "slug": "best-youtube-tags-2026",
+      "category": "SEO",
+      "status": "pending",
+      "notes": "Good demand (R:67) — from broader keyword audit"
     }
   ]
 }

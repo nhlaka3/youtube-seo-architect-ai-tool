@@ -1,7 +1,10 @@
 #!/usr/bin/env python3
-"""YouTube Keyword Competition Checker — FULLY AUTOMATIC + DEDUP
-=================================================================
+"""YouTube Keyword Competition Checker + Demand Score — FULLY AUTOMATIC + DEDUP
+=================================================================================
 - Searches DuckDuckGo, analyzes SERP competition
+- Google Suggest autocomplete API for search DEMAND estimation
+- Combined Rankability Score = (Competition + Demand) / 2
+- Filters out zero-demand keywords (the trap we were falling into)
 - Generates keyword ideas from YouTube topics
 - Checks against existing blog posts (no duplicates)
 - Scores and ranks: pick the best untargeted keyword
@@ -41,6 +44,114 @@ MODIFIERS = ['template', 'guide', 'tutorial', 'tips', 'checklist', 'examples',
              'for beginners', '2026', 'free', 'best', 'how to', 'step by step',
              'for small channels', 'for gaming', 'for vlogs', 'for tutorials']
 
+
+# ═══════════════════════════════════════════════════════════════
+# NEW: Google Suggest Demand Estimation
+# ═══════════════════════════════════════════════════════════════
+
+def get_google_suggestions(query):
+    """Query Google Suggest autocomplete API and return suggestions list.
+    
+    If Google returns 0 suggestions → the keyword has near-zero search volume.
+    More suggestions = higher relative demand.
+    """
+    url = 'http://suggestqueries.google.com/complete/search?client=firefox&q=' + urllib.parse.quote(query)
+    try:
+        req = urllib.request.Request(url, headers={
+            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36',
+            'Accept': 'application/json, text/javascript, */*; q=0.01'
+        })
+        with urllib.request.urlopen(req, timeout=10) as resp:
+            data = json.loads(resp.read().decode('utf-8'))
+        # Response format: [query, [suggestions...], ...]
+        suggestions = data[1] if len(data) > 1 else []
+        return suggestions
+    except Exception as e:
+        return None
+
+
+def estimate_demand_score(keyword, suggestions):
+    """Calculate a demand score (0-100) from Google Suggest data.
+    
+    Free proxy for search volume:
+    - 0 suggestions  → 0-10  (ZERO demand — skip these!)
+    - 1-3 suggestions → 15-35 (LOW demand)
+    - 4-7 suggestions → 40-65 (MEDIUM demand)
+    - 8-10 suggestions → 70-100 (HIGH demand)
+    
+    Bonus: If the exact keyword appears as a suggestion itself, boost score.
+    Penalty: If no suggestions at all, score stays near zero.
+    """
+    if suggestions is None:
+        return None, "Google Suggest API failed (no internet?)"
+    
+    if not suggestions:
+        return 5, "ZERO suggestions — keyword has virtually no search volume"
+    
+    count = len(suggestions)
+    keyword_lower = keyword.lower()
+    
+    # Base score from suggestion count
+    if count <= 1:
+        base = 10 + (count * 10)  # 10 or 20
+    elif count <= 3:
+        base = 25 + ((count - 1) * 10)  # 35, 45
+    elif count <= 7:
+        base = 50 + ((count - 3) * 8)  # 50-82
+    else:
+        base = 75 + min((count - 7) * 5, 25)  # 75-100
+    
+    # Check if the exact keyword appears in suggestions (strong demand signal)
+    exact_boost = 0
+    for s in suggestions:
+        if keyword_lower in s.lower():
+            exact_boost = 10
+            break
+    
+    # Penalize extremely long-tail keywords that don't autocomplete naturally
+    word_count = len(keyword.split())
+    length_penalty = 0
+    if word_count >= 6:
+        length_penalty = -10
+    elif word_count >= 5:
+        length_penalty = -5
+    
+    final_score = max(0, min(100, base + exact_boost + length_penalty))
+    
+    # Generate human-readable assessment
+    if final_score < 15:
+        rating = f"ZERO demand ({count} suggestions) — people don't search this"
+    elif final_score <= 30:
+        rating = f"LOW demand ({count} suggestions) — narrow audience"
+    elif final_score <= 55:
+        rating = f"MEDIUM demand ({count} suggestions) — decent search volume"
+    elif final_score <= 75:
+        rating = f"HIGH demand ({count} suggestions) — good search volume"
+    else:
+        rating = f"VERY HIGH demand ({count} suggestions) — people actively search this"
+    
+    return final_score, rating
+
+
+def estimate_serp_results_count(html):
+    """Extract approximate result count from DuckDuckGo HTML response."""
+    # Try to find the result count in various formats
+    patterns = [
+        r'About ([\d,]+) results',
+        r'([\d,]+) results',
+        r'of about ([\d,]+)',
+    ]
+    for pattern in patterns:
+        match = re.search(pattern, html, re.IGNORECASE)
+        if match:
+            return int(match.group(1).replace(',', ''))
+    return None
+
+
+# ═══════════════════════════════════════════════════════════════
+# EXISTING: DuckDuckGo Search + SERP Analysis
+# ═══════════════════════════════════════════════════════════════
+
 def search_duckduckgo(query, num=10):
     """Search DuckDuckGo and return structured results."""
     url = 'https://html.duckduckgo.com/html/'
@@ -55,7 +166,7 @@ def search_duckduckgo(query, num=10):
         with urllib.request.urlopen(req, timeout=15) as resp:
             html = resp.read().decode('utf-8')
     except Exception as e:
-        return None, f"Search failed: {e}"
+        return None, None, f"Search failed: {e}"
     
     results = []
     blocks = re.findall(r'<a rel="nofollow" class="result__a" href="(.*?)">(.*?)</a>', html)
@@ -68,9 +179,13 @@ def search_duckduckgo(query, num=10):
         domain = domain_match.group(1) if domain_match else url
         results.append({'title': title.strip(), 'url': url.strip(), 'domain': domain.strip(), 'snippet': snippet.strip()})
     
-    return results, None
+    # Estimate result count
+    result_count = estimate_serp_results_count(html)
+    
+    return results, result_count, None
 
-def analyze_serp(results, keyword):
+
+def analyze_serp(results, keyword, result_count=None):
     """Analyze SERP results for competition signals."""
     if not results:
         return {'error': 'No results found'}
@@ -122,11 +237,29 @@ def analyze_serp(results, keyword):
     if years:
         signals.append({'name': 'Year-targeted', 'score': +10, 'detail': f'Targeting {years[0]}'})
     
+    # ═══ NEW: SERP result count signal ═══
+    if result_count and result_count > 0:
+        if result_count >= 50000000:  # 50M+ results = very competitive topic
+            signals.append({'name': 'SERP volume', 'score': -10, 'detail': f'~{result_count:,} results — very popular topic'})
+        elif result_count >= 10000000:  # 10M-50M
+            signals.append({'name': 'SERP volume', 'score': 0, 'detail': f'~{result_count:,} results — popular topic'})
+        elif result_count >= 1000000:  # 1M-10M
+            signals.append({'name': 'SERP volume', 'score': +5, 'detail': f'~{result_count:,} results — moderate topic'})
+        else:  # < 1M
+            signals.append({'name': 'SERP volume', 'score': +10, 'detail': f'~{result_count:,} results — niche topic'})
+    
     base_score = 50
     total = sum(s['score'] for s in signals)
-    final = max(0, min(100, base_score + total))
+    competition_score = max(0, min(100, base_score + total))
     
-    return {'keyword': keyword, 'score': final, 'signals': signals, 'top_results': results[:3]}
+    return {
+        'keyword': keyword,
+        'competition_score': competition_score,
+        'signals': signals,
+        'top_results': results[:3],
+        'result_count': result_count
+    }
+
 
 def load_existing_posts():
     """Read blog.html and sitemap to find topics we've already covered."""
@@ -143,7 +276,6 @@ def load_existing_posts():
         for t in titles:
             t_lower = t.lower()
             covered.add(t_lower)
-            # Extract key terms
             words = re.findall(r'[a-z]+', t_lower)
             covered.update(w for w in words if len(w) > 3)
     
@@ -159,13 +291,13 @@ def load_existing_posts():
     
     return covered
 
+
 def generate_keywords(topic, max_count=20):
     """Generate keyword variations from a YouTube topic."""
     topic_lower = topic.lower()
     ideas = []
     topic_words = topic_lower.split()
     
-    # Find matching category
     category = None
     for cat, words in YOUTUBE_TOPICS.items():
         if any(w in topic_lower for w in words):
@@ -173,31 +305,40 @@ def generate_keywords(topic, max_count=20):
             break
     
     if not category:
-        category = 'seo'  # default
+        category = 'seo'
     
-    # Generate variations
     for modifier in MODIFIERS:
         ideas.append(f"{topic_lower} {modifier}")
     
-    # Generate from category keywords
     for word in YOUTUBE_TOPICS[category]:
         if word not in topic_lower:
             ideas.append(f"{word} {topic_lower}")
     
-    # Generate how-to variations
     for word in YOUTUBE_TOPICS[category]:
         if word not in topic_lower:
             ideas.append(f"how to {word} {topic_lower}")
     
-    # Add year
     ideas.append(f"{topic_lower} 2026")
     
-    # Add platform variations
     for platform in ['youtube', 'for beginners', 'for creators']:
         if platform not in topic_lower:
             ideas.append(f"{topic_lower} {platform}")
     
     return list(set(ideas))[:max_count]
+
+
+def print_score_bar(score):
+    """Print a visual bar for any score (competition, demand, rankability)."""
+    if score is None:
+        return "  ⚪ API error"
+    blocks = int(score / 10)
+    bar = "█" * blocks + "░" * (10 - blocks)
+    return f"  [{bar}] {score}/100"
+
+
+# ═══════════════════════════════════════════════════════════════
+# MAIN
+# ═══════════════════════════════════════════════════════════════
 
 def main():
     if len(sys.argv) < 2:
@@ -234,7 +375,6 @@ def main():
         suggest_idx = sys.argv.index('--suggest')
         topic = sys.argv[suggest_idx + 1] if suggest_idx + 1 < len(sys.argv) else 'youtube'
         
-        # Get how many to check
         check_count = 5
         if '--check' in sys.argv:
             check_idx = sys.argv.index('--check')
@@ -246,11 +386,10 @@ def main():
         
         covered = load_existing_posts()
         
-        print(f"   Generated {len(ideas)} variations. Checking competition for top {check_count}...\n")
+        print(f"   Generated {len(ideas)} variations. Checking competition + demand for top {check_count}...\n")
         
         scored = []
         for kw in ideas[:check_count]:
-            # Skip if keyword too similar to existing posts
             kw_words = set(kw.lower().split())
             overlap = len(kw_words & covered)
             if overlap >= 3:
@@ -258,25 +397,50 @@ def main():
                 continue
             
             print(f"   🔍 Checking: \"{kw}\"...", end=' ', flush=True)
-            results, error = search_duckduckgo(kw, 8)
+            results, result_count, error = search_duckduckgo(kw, 8)
             if error or not results:
                 print(f"⚠️  No results")
                 continue
             
-            analysis = analyze_serp(results, kw)
+            # Get demand estimate
+            suggestions = get_google_suggestions(kw)
+            demand_score, demand_rating = estimate_demand_score(kw, suggestions)
+            
+            analysis = analyze_serp(results, kw, result_count)
+            analysis['demand_score'] = demand_score
+            analysis['demand_rating'] = demand_rating
+            
+            # Calculate combined Rankability Score
+            comp = analysis['competition_score']
+            dem = demand_score if demand_score is not None else 50  # default to mid if API fails
+            analysis['rankability_score'] = (comp + dem) / 2
+            
             scored.append(analysis)
-            print(f"Score: {analysis['score']}/100")
+            print(f"Rankability: {analysis['rankability_score']:.0f}/100")
         
-        # Sort by score (highest = easiest)
-        scored.sort(key=lambda x: x['score'], reverse=True)
+        scored.sort(key=lambda x: x['rankability_score'], reverse=True)
         
-        print(f"\n{'='*60}")
-        print(f"   🏆 BEST KEYWORDS TO TARGET (easiest first):")
-        print(f"{'='*60}\n")
+        print(f"\n{'='*65}")
+        print(f"   🏆 BEST KEYWORDS TO TARGET (by Rankability):")
+        print(f"{'='*65}\n")
         for i, s in enumerate(scored[:10], 1):
-            emoji = '🟢' if s['score'] >= 60 else '🟡' if s['score'] >= 45 else '🟠'
-            print(f"   {i}. {emoji} {s['score']}/100 — \"{s['keyword']}\"")
-            if s['score'] >= 60:
+            rank = s['rankability_score']
+            comp = s['competition_score']
+            dem = s['demand_score']
+            dem_str = f"{dem}/100" if dem is not None else "N/A"
+            
+            if rank >= 70:
+                emoji = '🟢'
+            elif rank >= 50:
+                emoji = '🟡'
+            elif rank >= 35:
+                emoji = '🟠'
+            else:
+                emoji = '🔴'
+            
+            print(f"   {i}. {emoji} Rankability: {rank:.0f}/100 — \"{s['keyword']}\"")
+            print(f"      Competition: {comp}/100  |  Demand: {dem_str}")
+            if rank >= 60 and s['top_results']:
                 print(f"      Top result: {s['top_results'][0]['domain']} — {s['top_results'][0]['title'][:70]}")
         
         if not scored:
@@ -289,28 +453,52 @@ def main():
     
     print(f"\n🔍 Searching: \"{keyword}\"\n")
     
-    results, error = search_duckduckgo(keyword)
+    # Step 1: Check Google Suggest first (fast, fails fast for zero-demand)
+    print("   📊 Checking Google Suggest demand...", end=' ', flush=True)
+    suggestions = get_google_suggestions(keyword)
+    demand_score, demand_rating = estimate_demand_score(keyword, suggestions)
+    if demand_score is not None:
+        print(f"{demand_score}/100")
+        print(f"      → {demand_rating}")
+    else:
+        print("⚠️  API unavailable (continuing anyway)")
+    
+    print()
+    
+    # Step 2: Check DuckDuckGo SERP
+    results, result_count, error = search_duckduckgo(keyword)
     
     if error or not results:
-        print(f"⚠️  {error or 'No results'}")
+        print(f"⚠️  {error or 'No SERP results'}")
         word_count = len(keyword.split())
         print(f"   Quick estimate: {'🟢 Low' if word_count >= 4 else '🟡 Medium' if word_count >= 3 else '🔴 High'} competition")
         sys.exit(0)
     
-    # Check if already covered
     covered = load_existing_posts()
     kw_words = set(keyword.lower().split())
     if len(kw_words & covered) >= 3:
         print(f"   ⚠️  WARNING: This topic may overlap with existing blog posts.\n")
     
-    analysis = analyze_serp(results, keyword)
+    analysis = analyze_serp(results, keyword, result_count)
+    analysis['demand_score'] = demand_score
+    analysis['demand_rating'] = demand_rating
     
-    print(f"   Score: {analysis['score']}/100 — ", end='')
-    if analysis['score'] >= 75: print("🟢 VERY EASY")
-    elif analysis['score'] >= 60: print("🟢 EASY")
-    elif analysis['score'] >= 45: print("🟡 MEDIUM")
-    elif analysis['score'] >= 30: print("🟠 HARD")
-    else: print("🔴 VERY HARD")
+    # Combined Rankability Score
+    comp = analysis['competition_score']
+    dem = demand_score if demand_score is not None else 50
+    rankability = (comp + dem) / 2
+    analysis['rankability_score'] = rankability
+    
+    # ── RESULTS ──
+    print(f"{'─'*60}")
+    print(f"   📈 COMPETITION SCORE")
+    print(f"{'─'*60}")
+    print(f"\n   Score: {comp}/100 — ", end='')
+    if comp >= 75: print("🟢 VERY EASY (low competition)")
+    elif comp >= 60: print("🟢 EASY (low competition)")
+    elif comp >= 45: print("🟡 MEDIUM")
+    elif comp >= 30: print("🟠 HARD")
+    else: print("🔴 VERY HARD (too competitive)")
     
     print(f"\n   Signals:")
     for s in analysis['signals']:
@@ -321,16 +509,46 @@ def main():
     for i, r in enumerate(analysis['top_results'][:3], 1):
         print(f"   {i}. {r['domain']} — {r['title'][:80]}")
     
-    print(f"\n   💡 ", end='')
-    if analysis['score'] >= 75:
-        print("WRITE NOW. Strong on-page SEO will rank.")
-    elif analysis['score'] >= 60:
-        print("Good target. Write 1,500+ words with FAQ schema.")
-    elif analysis['score'] >= 45:
-        print("Achievable. Better content + 2 backlinks needed.")
+    print(f"\n{'─'*60}")
+    print(f"   📊 DEMAND SCORE (Google Suggest)")
+    print(f"{'─'*60}")
+    if demand_score is not None:
+        print(f"\n   Score: {demand_score}/100 — ", end='')
+        if demand_score < 15: print("🔴 ZERO DEMAND")
+        elif demand_score <= 30: print("🟠 LOW DEMAND")
+        elif demand_score <= 55: print("🟡 MEDIUM DEMAND")
+        elif demand_score <= 75: print("🟢 HIGH DEMAND")
+        else: print("🟢 VERY HIGH DEMAND")
+        print(f"\n   → {demand_rating}")
     else:
-        print("Try: python3 scripts/check-keyword.py --suggest \"{keyword}\"")
+        print("\n   ⚠️  Could not determine (Google Suggest unavailable)")
+        print("   Proceeding with competition score only.")
+    
+    print(f"\n{'─'*60}")
+    print(f"   🎯 RANKABILITY SCORE (Competition + Demand) / 2")
+    print(f"{'─'*60}")
+    
+    print(f"\n   COMPETITION:   {print_score_bar(comp)}")
+    if demand_score is not None:
+        print(f"   DEMAND:        {print_score_bar(demand_score)}")
+    print(f"   ───────────────────────────────")
+    print(f"   🎯 RANKABILITY: {print_score_bar(int(rankability))}")
+    
+    print(f"\n   💡 ", end='')
+    if demand_score is not None and demand_score < 15:
+        print("🔴 STOP. This keyword has zero search demand. Pick a different keyword.")
+        print(f"      Try: python3 scripts/check-keyword.py --suggest \"{keyword.split()[0]}\"")
+    elif rankability >= 70:
+        print("🟢 WRITE NOW. Low competition + strong demand. Perfect target.")
+    elif rankability >= 55:
+        print("🟢 Good target. Strong on-page SEO should rank this.")
+    elif rankability >= 40:
+        print("🟡 Achievable. Write 1,500+ words with FAQ schema + 1-2 backlinks.")
+    else:
+        print("🔴 Weak target. Either too competitive or zero demand.")
+        print(f"      Try: python3 scripts/check-keyword.py --suggest \"{keyword.split()[0]}\"")
     print()
+
 
 if __name__ == '__main__':
     main()
