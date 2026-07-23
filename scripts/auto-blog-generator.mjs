@@ -1241,21 +1241,26 @@ async function main() {
   markDone(data, keywordEntry.slug);
   saveKeywords(data);
 
-  // Deploy to Vercel
-  console.log('');
-  console.log('  Deploying to Vercel...');
+  // Deploy to Vercel (skip if CI — GitHub Actions handles deployment)
   let deployFailed = false;
-  try {
-    execSync('vercel --prod --yes', {
-      cwd: PROJECT,
-      stdio: 'inherit',
-      timeout: 120000,
-    });
-    console.log('  ✅ Deployed to production');
-  } catch (e) {
-    console.error(`  ❌ Vercel deploy failed: ${e.message}`);
-    console.error('  Blog post saved locally but NOT live. Run: vercel --prod --yes');
-    deployFailed = true;
+  const isCI = process.env.CI === 'true' || process.env.GITHUB_ACTIONS === 'true';
+  if (isCI) {
+    console.log('  ⏭ Skipping Vercel deploy (CI detected — workflow handles this)');
+  } else {
+    console.log('');
+    console.log('  Deploying to Vercel...');
+    try {
+      execSync('vercel --prod --yes', {
+        cwd: PROJECT,
+        stdio: 'inherit',
+        timeout: 120000,
+      });
+      console.log('  ✅ Deployed to production');
+    } catch (e) {
+      console.error(`  ❌ Vercel deploy failed: ${e.message}`);
+      console.error('  Blog post saved locally but NOT live. Run: vercel --prod --yes');
+      deployFailed = true;
+    }
   }
 
   // Summary

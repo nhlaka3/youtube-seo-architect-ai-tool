@@ -1,0 +1,113 @@
+name: 📝 Daily Blog Publisher
+
+on:
+  schedule:
+    - cron: '0 6 * * *'     # 6:00 AM UTC daily (~8 AM SAST)
+  workflow_dispatch:          # Manual trigger from GitHub UI
+    inputs:
+      force:
+        description: 'Skip demand check?'
+        type: boolean
+        default: false
+      keyword:
+        description: 'Override keyword (empty = use next pending)'
+        type: string
+        default: ''
+
+# ── Required GitHub Secrets ─────────────────────────────────────
+# Go to Settings → Secrets and variables → Actions → New secret:
+#   GROQ_API_KEY   (required — for AI blog generation)
+#   GEMINI_API_KEY (optional — fallback if Groq fails)
+#   VERCEL_TOKEN   (required — deploy to production)
+#   GH_PAT         (required — personal access token with Contents: Write)
+#                   Create at: https://github.com/settings/tokens
+#                   Scopes: repo (Full control of private repositories)
+# ───────────────────────────────────────────────────────────────
+
+permissions:
+  contents: write
+
+jobs:
+  generate-and-deploy:
+    runs-on: ubuntu-latest
+
+    env:
+      GROQ_API_KEY: ${{ secrets.GROQ_API_KEY }}
+      GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+      VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+      CI: true   # Tells auto-blog-generator.mjs to skip internal Vercel deploy
+      NODE_ENV: production
+
+    steps:
+      - name: ⬇️ Checkout repository
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GH_PAT }}
+          fetch-depth: 0
+
+      - name: 🔧 Setup Node.js 20
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: 🐍 Setup Python 3.12
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: 🔗 Install Vercel CLI
+        run: npm install -g vercel
+
+      - name: 🏗️ Build command
+        id: build-cmd
+        run: |
+          CMD="node scripts/auto-blog-generator.mjs"
+          if [[ "${{ github.event.inputs.force }}" == "true" ]]; then
+            CMD="$CMD --force"
+          fi
+          echo "CMD=$CMD" >> $GITHUB_OUTPUT
+        # Keyword override is passed via env var to avoid shell injection
+
+      - name: 🚀 Generate blog post
+        id: generate
+        env:
+          KEYWORD_OVERRIDE: ${{ github.event.inputs.keyword }}
+        run: |
+          CMD="${{ steps.build-cmd.outputs.CMD }}"
+          if [[ -n "$KEYWORD_OVERRIDE" ]]; then
+            CMD="$CMD --keyword \"$KEYWORD_OVERRIDE\""
+          fi
+          echo "Running: $CMD"
+          eval "$CMD"
+
+      - name: 📤 Push generated files to GitHub
+        if: always()
+        run: |
+          git config user.name "YT SEO Bot"
+          git config user.email "bot@yt-seo-architect.vercel.app"
+          git add -A
+          if git diff --staged --quiet; then
+            echo "✅ No changes to commit"
+          else
+            git commit -m "blog: daily auto-generated post [skip ci]"
+            git push
+            echo "✅ Changes pushed to GitHub"
+          fi
+
+      - name: 🌐 Deploy to Vercel
+        if: steps.generate.outcome == 'success'
+        run: |
+          echo "🌐 Deploying to Vercel..."
+          npx vercel deploy --prod --yes --token="${{ secrets.VERCEL_TOKEN }}"
+          echo "✅ Deployed to Vercel"
+
+      - name: 📊 Report
+        if: always()
+        run: |
+          echo "════════════════════════════════════════════"
+          echo "  📝 DAILY BLOG PUBLISHER REPORT"
+          echo "════════════════════════════════════════════"
+          echo "  Generate step: ${{ steps.generate.outcome }}"
+          echo "  Time:          $(date -u)"
+          echo "════════════════════════════════════════════"
