@@ -105,7 +105,7 @@ jobs:
           # the push and auto-deploys. No --force needed because private repo is
           # the primary development branch (fast-forward only).
           git remote add public "$PUBLIC_REPO"
-          git push public HEAD:main --force-with-lease 2>&1 && echo "✅ Pushed to public repo — Vercel auto-deploy triggered"
+          git push public HEAD:main --force 2>&1 && echo "✅ Pushed to public repo — Vercel auto-deploy triggered"
 
       - name: 📊 Report
         if: always()
