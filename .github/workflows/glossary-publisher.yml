@@ -30,7 +30,14 @@ jobs:
           node-version: '24'
           cache: 'npm'
 
-      - name: 📖 Generate glossary pages
+      - name: 🔍 Auto-discover new glossary terms via AI
+        id: discover
+        run: |
+          echo "Discovering new YouTube SEO terms..."
+          node scripts/auto-glossary-terms.mjs --count 5 2>&1
+          echo "DISCOVERED=true" >> $GITHUB_OUTPUT
+
+      - name: 📖 Generate glossary pages from data
         id: generate
         run: |
           echo "Generating glossary pages..."
