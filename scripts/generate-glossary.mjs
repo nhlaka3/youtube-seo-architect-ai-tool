@@ -140,7 +140,14 @@ function generateFAQSection(termData) {
   const term = termData.term;
   const lower = term.toLowerCase();
   const category = termData.category;
-  const template = FAQ_QUESTION_TEMPLATES[category] || DEFAULT_FAQ;
+  const slug = termData.slug;
+
+  // Some algorithm-category terms are metrics, not mechanisms — use default FAQ
+  const METRIC_SLUGS = ['session-time', 'dwell-time', 'browse-features', 'topic-authority',
+    'shorts-algorithm', 'youtube-search-ranking-factors'];
+  const effectiveCategory = METRIC_SLUGS.includes(slug) ? 'default' : category;
+
+  const template = FAQ_QUESTION_TEMPLATES[effectiveCategory] || DEFAULT_FAQ;
   const faq = template(term, lower);
 
   // Build JSON-LD FAQ schema
