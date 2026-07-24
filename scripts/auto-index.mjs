@@ -326,7 +326,7 @@ async function main() {
   console.log('════════════════════════════════════════════════════\n');
 
   // Return exit code for CI/CD integration
-  if (indexNowResult.failed > 5 || (googleResult && !googleResult.skipped && googleResult.failed > 5)) {
+  if (indexNowResult.failed > 5 || (!googleResult.skipped && googleResult.failed > 5)) {
     process.exit(1);
   }
 }
