@@ -1380,16 +1380,27 @@ app.get('/sitemap.xml', async (req, res) => {
       xml += `  <url><loc>https://yt-seo-architect.vercel.app${p.loc}</loc><changefreq>${p.changefreq}</changefreq><priority>${p.priority}</priority></url>\n`;
     }
 
-    // Glossary pages (from glossary data)
+    // Glossary pages (from glossary data — slugs built into glossary-data.json)
     try {
       const glossaryData = JSON.parse(
-        readFileSync(resolve(__dirname, '../scripts/glossary-data.json'), 'utf-8')
+        readFileSync(resolve(process.cwd(), 'scripts/glossary-data.json'), 'utf-8')
       );
       for (const term of glossaryData.terms) {
         xml += `  <url><loc>https://yt-seo-architect.vercel.app/glossary/${term.slug}</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>\n`;
       }
     } catch (e) {
-      console.error('[Sitemap] Glossary data error:', e.message);
+      // Fallback: try relative to __dirname
+      try {
+        const glossaryData = JSON.parse(
+          readFileSync(resolve(__dirname, '../scripts/glossary-data.json'), 'utf-8')
+        );
+        for (const term of glossaryData.terms) {
+          xml += `  <url><loc>https://yt-seo-architect.vercel.app/glossary/${term.slug}</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>\n`;
+        }
+      } catch (e2) {
+        // Final fallback: log both errors
+        console.error('[Sitemap] Glossary data error (tried cwd + __dirname):', e.message, e2.message);
+      }
     }
 
     // PSEO disabled as per user request
