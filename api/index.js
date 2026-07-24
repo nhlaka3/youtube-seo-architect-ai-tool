@@ -845,15 +845,76 @@ app.get('/blog', async (req, res) => {
     const { validateBlogPost } = await import('./blog-validation.js');
     pages = pages.filter(p => validateBlogPost({ slug: p.slug, title: p.title, content: p.content, wordCount: p.wordCount }).valid);
 
-    var html = '<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0"><title>YouTube SEO Guides & Tips | YT SEO Architect</title><meta name="description" content="Free YouTube SEO guides, tips, and tutorials. Learn how to grow your channel with AI-powered tools."><link rel="stylesheet" href="/style.css"><style>body{font-family:system-ui,sans-serif;max-width:800px;margin:0 auto;padding:2rem;background:#0a0a0f;color:#eee;line-height:1.7}h1{color:#f97316}.card{background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:10px;padding:16px 20px;margin-bottom:10px}.card a{color:#f97316;text-decoration:none;font-weight:600;font-size:1.1rem}.card a:hover{text-decoration:underline}.card .meta{color:#888;font-size:.8rem;margin-top:4px}nav a{color:#f97316}</style></head><body><nav><a href="/">← YT SEO Architect</a></nav><h1>📚 YouTube SEO Guides</h1><p style="color:#888;">Free guides to help you grow your YouTube channel with AI-powered tools.</p>';
+    var html = '<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0"><link rel="icon" href="/logo.svg" type="image/svg+xml" />'
+      + '<title>YouTube SEO Blog — Guides &amp; Strategies | YT SEO Architect</title>'
+      + '<meta name="description" content="Free YouTube SEO guides, tips, and tutorials. Learn keyword research, title optimization, thumbnail A/B testing, and analytics to grow your channel." />'
+      + '<meta name="robots" content="index, follow" />'
+      + '<link rel="canonical" href="https://yt-seo-architect.vercel.app/blog" />'
+      + '<meta property="og:title" content="YouTube SEO Blog — Guides &amp; Strategies" />'
+      + '<meta property="og:description" content="Free YouTube SEO guides, tips, and tutorials to grow your channel with AI-powered tools." />'
+      + '<meta property="og:image" content="https://yt-seo-architect.vercel.app/og-image.png" />'
+      + '<meta name="twitter:card" content="summary_large_image" />'
+      + '<link rel="preconnect" href="https://fonts.googleapis.com" />'
+      + '<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />'
+      + '<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700;800&display=swap" media="print" onload="this.media=\'all\'" />'
+      + '<noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700;800&display=swap" /></noscript>'
+      + '<script src="https://unpkg.com/lucide@0.460.0/dist/umd/lucide.min.js" crossorigin="anonymous" defer></script>'
+      + '<style>'
+      + ':root{--primary:#f97316;--primary-glow:rgba(249,115,22,0.5);--accent:#fb923c;--bg-oled:#000000;--bg-card:rgba(15,23,42,0.5);--text-primary:#f8fafc;--text-muted:#94a3b8;--border:rgba(249,115,22,0.2)}'
+      + '*{margin:0;padding:0;box-sizing:border-box}'
+      + 'body{font-family:\'Outfit\',\'Geist\',-apple-system,BlinkMacSystemFont,sans-serif;background:var(--bg-oled);color:var(--text-primary);min-height:100vh;overflow-x:hidden;line-height:1.8}'
+      + '.wrap{max-width:900px;margin:0 auto;padding:20px}'
+      + 'header{display:flex;justify-content:space-between;align-items:center;padding:10px 0;margin-bottom:40px}'
+      + '.logo{display:flex;align-items:center;gap:12px;font-size:1.5rem;font-weight:800;letter-spacing:-0.05em;text-decoration:none;color:var(--text-primary)}'
+      + '.logo i{color:var(--primary);filter:drop-shadow(0 0 8px var(--primary-glow))}'
+      + '.logo .text-accent{color:var(--accent)}'
+      + '.header-nav{display:flex;align-items:center;gap:1.25rem}'
+      + '.header-nav a{color:var(--text-muted);text-decoration:none;font-weight:600;font-size:0.9rem;transition:color .2s;display:flex;align-items:center;gap:.35rem}'
+      + '.header-nav a:hover{color:var(--text-primary)}'
+      + '.header-nav a.nav-cta{background:var(--primary);color:#fff;padding:.45rem 1rem;border-radius:8px;font-size:.85rem;transition:background .2s,transform .2s}'
+      + '.header-nav a.nav-cta:hover{background:var(--primary-glow);transform:translateY(-1px)}'
+      + '.hero{padding:3rem 1.5rem;background:linear-gradient(135deg,rgba(249,115,22,0.06),rgba(251,146,60,0.02));border:1px solid var(--border);border-radius:1rem;margin-bottom:2rem;text-align:center}'
+      + '.hero h1{font-size:clamp(1.6rem,4vw,2.2rem);font-weight:800;margin:0 0 .5rem;color:#fff}'
+      + '.hero p{color:var(--text-muted);font-size:1.05rem;max-width:600px;margin:0 auto;line-height:1.7}'
+      + '.hero .stat{display:inline-block;margin-top:1rem;background:rgba(249,115,22,0.1);border:1px solid rgba(249,115,22,0.3);color:var(--primary);padding:.3rem 1rem;border-radius:9999px;font-size:.85rem;font-weight:600}'
+      + '.blog-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:12px}'
+      + '.blog-card{background:var(--bg-card);border:1px solid var(--border);border-radius:12px;padding:1.25rem;transition:all .3s cubic-bezier(.16,1,.3,1);position:relative;overflow:hidden}'
+      + '.blog-card::before{content:\'\';position:absolute;inset:0;background:radial-gradient(circle at top right,rgba(249,115,22,0.1),transparent 70%);opacity:0;transition:opacity .4s ease}'
+      + '.blog-card:hover{border-color:var(--primary);transform:translateY(-4px);background:rgba(30,41,59,0.6);box-shadow:0 12px 24px rgba(0,0,0,0.3)}'
+      + '.blog-card:hover::before{opacity:1}'
+      + '.blog-card a{color:var(--text-primary);text-decoration:none;font-weight:600;display:block;margin-bottom:.35rem;position:relative;z-index:1;transition:color .2s;font-size:1rem;line-height:1.5}'
+      + '.blog-card:hover a{color:var(--primary)}'
+      + '.blog-card .meta{font-size:.8rem;color:var(--text-muted);position:relative;z-index:1}'
+      + '.cta-box{background:linear-gradient(135deg,rgba(249,115,22,0.08),rgba(251,146,60,0.03));border:1px solid rgba(249,115,22,0.3);border-radius:16px;padding:2rem;margin:2.5rem 0;text-align:center}'
+      + '.cta-box h3{font-size:1.25rem;margin:0 0 .75rem;color:#fff;font-weight:700}'
+      + '.cta-box p{color:var(--text-muted);margin:0 0 1.25rem;font-size:1rem}'
+      + '.cta-box a{display:inline-flex;align-items:center;gap:8px;background:var(--primary);color:#fff;padding:.75rem 2rem;border-radius:10px;text-decoration:none;font-weight:700;transition:all .3s cubic-bezier(.16,1,.3,1)}'
+      + '.cta-box a:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(249,115,22,0.4)}'
+      + 'footer{border-top:1px solid var(--border);padding:60px 20px 40px;text-align:center;color:var(--text-muted)}'
+      + 'footer a{color:var(--primary);text-decoration:none}'
+      + '@media(max-width:640px){.hero{padding:2rem 1rem}.hero h1{font-size:1.5rem}header{flex-direction:column;gap:16px}.blog-grid{grid-template-columns:1fr}}'
+      + '</style></head><body><div class="wrap">'
+      + '<header><a href="/" class="logo"><i data-lucide="zap"></i>YT SEO <span class="text-accent">Architect</span></a>'
+      + '<nav class="header-nav" aria-label="Main navigation">'
+      + '<a href="/tools/tag-generator"><i data-lucide="tags" style="width:16px;height:16px"></i> Free Tools</a>'
+      + '<a href="/glossary/"><i data-lucide="book" style="width:16px;height:16px"></i> Glossary</a>'
+      + '<a href="/dashboard" class="nav-cta">Get Started Free</a>'
+      + '</nav></header>'
+      + '<div class="hero"><h1>📚 YouTube SEO Blog</h1><p>Expert guides, tips, and strategies to grow your YouTube channel — all free.</p>'
+      + '<div class="stat">' + pages.length + ' guides · Free</div></div>'
+      + '<div class="blog-grid">';
 
     for (var p of pages) {
 
-      html += '<div class="card"><a href="/blog/'+p.slug+'">'+p.title+'</a><div class="meta">'+p.wordCount+' words · '+new Date(p.publishedAt).toLocaleDateString()+'</div></div>';
+      html += '<div class="blog-card"><a href="/blog/'+p.slug+'">'+p.title+'</a><div class="meta">'+p.wordCount+' words · '+new Date(p.publishedAt).toLocaleDateString()+'</div></div>';
 
     }
 
-    html += '<div style="text-align:center;margin-top:2rem;padding:20px;background:rgba(249,115,22,0.1);border:1px solid rgba(249,115,22,0.3);border-radius:12px;"><h3>🚀 Want to optimize your own channel?</h3><p style="color:#888;">17 AI tools. 100 free credits/month.</p><a href="/dashboard" style="display:inline-block;background:#f97316;color:#fff;padding:12px 24px;border-radius:8px;text-decoration:none;font-weight:700;">Start Free →</a></div></body></html>';
+    html += '</div>'
+      + '<div class="cta-box"><h3>🚀 Ready to Grow Your Channel?</h3><p>17 AI-powered YouTube SEO tools. Free to start. No credit card required.</p>'
+      + '<a href="/dashboard">Start Free →</a></div>'
+      + '<footer><p>&copy; 2026 YT SEO Architect &middot; <a href="/glossary/">Glossary</a> &middot; <a href="/blog">Blog</a> &middot; <a href="/tools/">Free Tools</a> &middot; <a href="/privacy-policy">Privacy</a></p></footer>'
+      + '</div><script defer>lucide.createIcons();</script></body></html>';
 
     res.setHeader('Cache-Control', 'no-store');
     res.send(html);
