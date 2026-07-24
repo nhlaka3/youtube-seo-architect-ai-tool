@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <link rel="icon" href="/logo.svg" type="image/svg+xml" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 
   <title>Playlist SEO — YouTube SEO Glossary | YT SEO Architect</title>
@@ -65,59 +66,107 @@
   }
   </script>
 
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity":     [
+        {
+            "@type": "Question",
+            "name": "Why playlist seo matters for YouTube ranking",
+            "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Playlist SEO is a critical ranking factor because YouTube's search algorithm relies on it to match videos with viewer search intent. Videos with proper playlist seo receive 2-5x more impressions from YouTube Search — the second-largest traffic source on the platform. Without this optimization, even high-quality content struggles to find its audience because the algorithm can't determine what your video is about. Optimizing for playlist seo requires upfront effort but pays dividends for months or years as your content continues to rank for relevant search queries."
+            }
+        },
+        {
+            "@type": "Question",
+            "name": "How to implement playlist seo correctly",
+            "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "To implement playlist seo correctly, start with keyword research to find what your audience is actually searching for. Use tools like YouTube's search suggest feature, TubeBuddy, or YT SEO Architect's free Tag Generator. Once you have target keywords, place them naturally in your title (first 40 characters), description (first 150 characters), and video content (mentioned naturally in the first 30 seconds). Avoid keyword stuffing — YouTube's AI is sophisticated enough to detect and penalize unnatural optimization. Focus on creating content that genuinely addresses the search intent behind your target keywords."
+            }
+        },
+        {
+            "@type": "Question",
+            "name": "Common playlist seo mistakes to avoid",
+            "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "The most common mistakes creators make with playlist seo include: 1) Targeting keywords that are too broad and competitive — go for long-tail, specific phrases instead. 2) Keyword stuffing titles and descriptions — this makes content unreadable and triggers algorithm penalties. 3) Ignoring the first 30 seconds of video content — transcript SEO is powerful. 4) Using the same optimization on every video — each piece of content needs unique keyword targeting. 5) Never updating old videos — refreshing descriptions and tags on existing content can revive search traffic."
+            }
+        }
+    ]
+  }
+  </script>
+
   <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3831668789026424" crossorigin="anonymous"></script>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700;800&display=swap" media="print" onload="this.media='all'">
   <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700;800&display=swap"></noscript>
   <script src="https://unpkg.com/lucide@0.460.0/dist/umd/lucide.min.js" crossorigin="anonymous" defer></script>
   <style>
-    body{font-display:swap;font-family:'Outfit','Geist',-apple-system,BlinkMacSystemFont,sans-serif}
-    :root{--primary:#f97316;--primary-glow:rgba(249,115,22,0.5);--accent:#fb923c;--bg-oled:#000000;--bg-card:rgba(15,23,42,0.5);--text-primary:#f8fafc;--text-muted:#94a3b8;--border:rgba(249,115,22,0.2)}
-    *{margin:0;padding:0;box-sizing:border-box}
-    body{font-family:'Outfit','Geist',-apple-system,BlinkMacSystemFont,sans-serif;background:var(--bg-oled);color:var(--text-primary);min-height:100vh;overflow-x:hidden;line-height:1.8}
-    .term-wrap{max-width:900px;margin:0 auto;padding:20px}
-    header{display:flex;justify-content:space-between;align-items:center;padding:10px 0;margin-bottom:40px}
-    .logo{display:flex;align-items:center;gap:12px;font-size:1.5rem;font-weight:800;letter-spacing:-0.05em;text-decoration:none;color:var(--text-primary)}
-    .logo i{color:var(--primary);filter:drop-shadow(0 0 8px var(--primary-glow))}
-    .logo .text-accent{color:var(--accent)}
-    .header-nav{display:flex;align-items:center;gap:1.25rem}
-    .header-nav a{color:var(--text-muted);text-decoration:none;font-weight:600;font-size:0.9rem;transition:color .2s;display:flex;align-items:center;gap:.35rem}
-    .header-nav a:hover{color:var(--text-primary)}
-    .header-nav a.nav-cta{background:var(--primary);color:#fff;padding:.45rem 1rem;border-radius:8px;font-size:.85rem;transition:background .2s,transform .2s}
-    .header-nav a.nav-cta:hover{background:var(--primary-glow);transform:translateY(-1px)}
-    .breadcrumb{font-size:.85rem;color:var(--text-muted);margin-bottom:1.5rem}
-    .breadcrumb a{color:var(--primary);text-decoration:none}
-    .breadcrumb a:hover{text-decoration:underline}
-    .glossary-hero{padding:2rem 1.5rem;background:linear-gradient(135deg,rgba(249,115,22,0.06),rgba(251,146,60,0.02));border:1px solid var(--border);border-radius:1rem;margin-bottom:2rem}
-    .glossary-hero h1{font-size:clamp(1.6rem,4vw,2.2rem);font-weight:800;margin:0 0 .5rem;color:#fff}
-    .glossary-hero .category-badge{display:inline-block;background:rgba(249,115,22,0.1);border:1px solid rgba(249,115,22,0.3);color:var(--primary);padding:.25rem .75rem;border-radius:9999px;font-size:.8rem;font-weight:600;margin-bottom:.75rem}
-    .glossary-hero p{color:var(--text-muted);font-size:1.05rem;max-width:700px;margin:0;line-height:1.7}
-    .glossary-nav{display:flex;flex-wrap:wrap;gap:.5rem;margin-bottom:1.5rem}
-    .glossary-nav a{background:var(--bg-card);border:1px solid var(--border);color:var(--text-muted);padding:.4rem 1rem;border-radius:9999px;font-size:.85rem;font-weight:600;text-decoration:none;transition:all .2s}
-    .glossary-nav a:hover{background:rgba(249,115,22,0.1);border-color:var(--primary);color:#fff;transform:translateY(-1px)}
-    .glossary-content h2{color:var(--primary);font-size:1.4rem;margin:2.5rem 0 1rem;font-weight:700}
-    .glossary-content p{color:var(--text-muted);line-height:1.8;margin:1rem 0;font-size:1rem}
-    .related-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:12px;margin:1.5rem 0}
-    .related-card{background:var(--bg-card);border:1px solid var(--border);border-radius:12px;padding:1rem;transition:all .3s cubic-bezier(.16,1,.3,1)}
-    .related-card:hover{border-color:var(--primary);transform:translateY(-4px);background:rgba(30,41,59,0.6);box-shadow:0 12px 24px rgba(0,0,0,0.3)}
-    .related-card a{color:var(--text-primary);text-decoration:none;font-weight:600;display:block;margin-bottom:.25rem;transition:color .2s}
-    .related-card:hover a{color:var(--primary)}
-    .related-card p{font-size:.82rem;color:var(--text-muted);margin:0;line-height:1.5}
-    .cta-box{background:linear-gradient(135deg,rgba(249,115,22,0.08),rgba(251,146,60,0.03));border:1px solid rgba(249,115,22,0.3);border-radius:16px;padding:2rem;margin:2.5rem 0;text-align:center}
-    .cta-box h3{font-size:1.25rem;margin:0 0 .75rem;color:#fff;font-weight:700}
-    .cta-box p{color:var(--text-muted);margin:0 0 1.25rem;font-size:1rem}
-    .cta-box a{display:inline-flex;align-items:center;gap:8px;background:var(--primary);color:#fff;padding:.75rem 2rem;border-radius:10px;text-decoration:none;font-weight:700;transition:all .3s cubic-bezier(.16,1,.3,1)}
-    .cta-box a:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(249,115,22,0.4);filter:brightness(1.1)}
-    footer{border-top:1px solid var(--border);padding:60px 20px 40px;text-align:center;color:var(--text-muted)}
-    footer a{color:var(--primary);text-decoration:none}
-    footer a:hover{text-decoration:underline}
-    @media(max-width:640px){.glossary-hero{padding:1.5rem 1rem}.glossary-hero h1{font-size:1.5rem}header{flex-direction:column;gap:16px}}
-    @media(prefers-reduced-motion:reduce){*{animation-duration:.01ms!important;transition-duration:.01ms!important}.related-card:hover,.cta-box a:hover{transform:none}}
+    :root {
+      --primary: #f97316;
+      --primary-glow: rgba(249, 115, 22, 0.5);
+      --accent: #fb923c;
+      --bg-oled: #000000;
+      --bg-card: rgba(15, 23, 42, 0.5);
+      --text-primary: #f8fafc;
+      --text-muted: #94a3b8;
+      --border: rgba(249, 115, 22, 0.2);
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'Outfit', 'Geist', -apple-system, BlinkMacSystemFont, sans-serif;
+      background: var(--bg-oled);
+      color: var(--text-primary);
+      line-height: 1.8;
+    }
+    .term-wrap { max-width: 900px; margin: 0 auto; padding: 20px; }
+    header {
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 10px 0; margin-bottom: 40px;
+    }
+    .logo { display: flex; align-items: center; gap: 12px; font-size: 1.5rem; font-weight: 800; letter-spacing: -0.05em; text-decoration: none; color: var(--text-primary); }
+    .logo i { color: var(--primary); filter: drop-shadow(0 0 8px var(--primary-glow)); }
+    .logo .text-accent { color: var(--accent); }
+    .header-nav { display: flex; align-items: center; gap: 1.25rem; }
+    .header-nav a { color: var(--text-muted); text-decoration: none; font-weight: 600; font-size: 0.9rem; transition: color 0.2s; display: flex; align-items: center; gap: 0.35rem; }
+    .header-nav a:hover { color: var(--text-primary); }
+    .header-nav a.nav-cta { background: var(--primary); color: #fff; padding: 0.45rem 1rem; border-radius: 8px; font-size: 0.85rem; transition: background 0.2s, transform 0.2s; }
+    .header-nav a.nav-cta:hover { background: var(--primary-glow); transform: translateY(-1px); }
+    .breadcrumb { font-size: 0.85rem; color: var(--text-muted); margin-bottom: 1.5rem; }
+    .breadcrumb a { color: var(--primary); text-decoration: none; }
+    .breadcrumb a:hover { text-decoration: underline; }
+    .glossary-hero { padding: 2rem 1.5rem; background: linear-gradient(135deg, rgba(249,115,22,0.06), rgba(251,146,60,0.02)); border: 1px solid var(--border); border-radius: 1rem; margin-bottom: 2rem; }
+    .glossary-hero h1 { font-size: clamp(1.6rem, 4vw, 2.2rem); font-weight: 800; margin: 0 0 0.5rem; color: #fff; }
+    .glossary-hero .category-badge { display: inline-block; background: rgba(249,115,22,0.1); border: 1px solid rgba(249,115,22,0.3); color: var(--primary); padding: 0.25rem 0.75rem; border-radius: 9999px; font-size: 0.8rem; font-weight: 600; margin-bottom: 0.75rem; }
+    .glossary-hero p { color: var(--text-muted); font-size: 1.05rem; max-width: 700px; margin: 0; line-height: 1.7; }
+    .glossary-nav { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-bottom: 1.5rem; }
+    .glossary-nav a { background: var(--bg-card); border: 1px solid var(--border); color: var(--text-muted); padding: 0.4rem 1rem; border-radius: 9999px; font-size: 0.85rem; font-weight: 600; text-decoration: none; transition: all 0.2s; }
+    .glossary-nav a:hover { background: rgba(249,115,22,0.1); border-color: var(--primary); color: #fff; transform: translateY(-1px); }
+    .glossary-content h2 { color: var(--primary); font-size: 1.4rem; margin: 2.5rem 0 1rem; font-weight: 700; }
+    .glossary-content p { color: var(--text-muted); line-height: 1.8; margin: 1rem 0; font-size: 1rem; }
+    .related-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 12px; margin: 1.5rem 0; }
+    .related-card { background: var(--bg-card); border: 1px solid var(--border); border-radius: 12px; padding: 1rem; transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1); position: relative; overflow: hidden; }
+    .related-card:hover { border-color: var(--primary); transform: translateY(-4px); background: rgba(30, 41, 59, 0.6); box-shadow: 0 12px 24px rgba(0,0,0,0.3); }
+    .related-card a { color: var(--text-primary); text-decoration: none; font-weight: 600; display: block; margin-bottom: 0.25rem; transition: color 0.2s; }
+    .related-card:hover a { color: var(--primary); }
+    .related-card p { font-size: 0.82rem; color: var(--text-muted); margin: 0; line-height: 1.5; }
+    .cta-box { background: linear-gradient(135deg, rgba(249,115,22,0.08), rgba(251,146,60,0.03)); border: 1px solid rgba(249,115,22,0.3); border-radius: 16px; padding: 2rem; margin: 2.5rem 0; text-align: center; }
+    .cta-box h3 { font-size: 1.25rem; margin: 0 0 0.75rem; color: #fff; font-weight: 700; }
+    .cta-box p { color: var(--text-muted); margin: 0 0 1.25rem; font-size: 1rem; }
+    .cta-box a { display: inline-flex; align-items: center; gap: 8px; background: var(--primary); color: #fff; padding: 0.75rem 2rem; border-radius: 10px; text-decoration: none; font-weight: 700; transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1); }
+    .cta-box a:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(249,115,22,0.4); filter: brightness(1.1); }
+    footer { border-top: 1px solid var(--border); padding: 60px 20px 40px; text-align: center; color: var(--text-muted); }
+    footer a { color: var(--primary); text-decoration: none; }
+    footer a:hover { text-decoration: underline; }
+    @media (max-width: 640px) { .glossary-hero { padding: 1.5rem 1rem; } .glossary-hero h1 { font-size: 1.5rem; } header { flex-direction: column; gap: 16px; } }
+    @media (prefers-reduced-motion: reduce) { * { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; } .related-card:hover, .cta-box a:hover { transform: none; } }
   </style>
 </head>
 <body>
 
   <div class="term-wrap">
-
     <header>
       <a href="/" class="logo">
         <i data-lucide="zap"></i>
@@ -131,41 +180,47 @@
       </nav>
     </header>
 
-  <main>
-  <article>
+    <main>
 
-    <nav class="breadcrumb" aria-label="Breadcrumb">
-      <a href="/">Home</a> › <a href="/glossary/">Glossary</a> › <a href="/glossary/?category=seo-optimization">SEO & Optimization</a> › <strong>Playlist SEO</strong>
-    </nav>
+      <nav class="breadcrumb" aria-label="Breadcrumb">
+        <a href="/">Home</a> › <a href="/glossary/">Glossary</a> › <a href="/glossary/?category=seo-optimization">SEO & Optimization</a> › <strong>Playlist SEO</strong>
+      </nav>
 
-    <div class="glossary-hero">
-      <span class="category-badge">SEO & Optimization</span>
-      <h1>Playlist SEO</h1>
-      <p>Optimizing YouTube playlists with keyword-rich titles and descriptions so they rank in search and trigger auto-play sessions.</p>
-    </div>
+      <div class="glossary-hero">
+        <span class="category-badge">SEO & Optimization</span>
+        <h1>Playlist SEO</h1>
+        <p>Optimizing YouTube playlists with keyword-rich titles and descriptions so they rank in search and trigger auto-play sessions.</p>
+      </div>
 
-    <nav class="glossary-nav" aria-label="Category navigation">
-      <a href="/glossary/">📖 All Terms</a>
-      <a href="/glossary/?category=analytics">📊 Analytics</a>
-      <a href="/glossary/?category=algorithm">🤖 Algorithm</a>
-      <a href="/glossary/?category=seo-optimization">🔍 SEO</a>
-      <a href="/glossary/?category=monetization">💰 Monetization</a>
-      <a href="/glossary/?category=content-strategy">📝 Content Strategy</a>
-      <a href="/glossary/?category=youtube-features">⚙️ Features</a>
-    </nav>
+      <nav class="glossary-nav" aria-label="Category navigation">
+        <a href="/glossary/">📖 All Terms</a>
+        <a href="/glossary/?category=analytics">📊 Analytics</a>
+        <a href="/glossary/?category=algorithm">🤖 Algorithm</a>
+        <a href="/glossary/?category=seo-optimization">🔍 SEO</a>
+        <a href="/glossary/?category=monetization">💰 Monetization</a>
+        <a href="/glossary/?category=content-strategy">📝 Content Strategy</a>
+        <a href="/glossary/?category=youtube-features">⚙️ Features</a>
+      </nav>
 
-    <div class="glossary-content">
+      <div class="glossary-content">
 
-      <h2>What Is Playlist SEO?</h2>
-      <p>Playlist SEO is the practice of optimizing your YouTube playlists to rank in search results and appear in suggested videos. Playlists have their own search and recommendation presence — they can rank independently of individual videos. Optimized playlists keep viewers watching multiple videos in sequence, dramatically increasing session time. To optimize playlists: give each playlist a keyword-rich title (include your primary topic), write a detailed description (200+ words with keywords), arrange videos in logical order (sequential or by popularity), and use playlist cards and end screens to funnel viewers into the playlist. Playlist entries also count as individual views for each video, compounding your total watch time.</p>
+        <h2>What Is Playlist SEO?</h2>
+        <p>Playlist SEO is the practice of optimizing your YouTube playlists to rank in search results and appear in suggested videos. Playlists have their own search and recommendation presence — they can rank independently of individual videos. Optimized playlists keep viewers watching multiple videos in sequence, dramatically increasing session time. To optimize playlists: give each playlist a keyword-rich title (include your primary topic), write a detailed description (200+ words with keywords), arrange videos in logical order (sequential or by popularity), and use playlist cards and end screens to funnel viewers into the playlist. Playlist entries also count as individual views for each video, compounding your total watch time.</p>
 
-      <h2>Why Playlist SEO Matters for YouTube SEO</h2>
-      <p>Playlist SEO directly affects how YouTube understands and ranks your content in search results. In a platform where over 500 hours of video are uploaded every minute, proper optimization is what separates discovered videos from invisible ones. Videos that implement playlist seo correctly see 2-5x more impressions from YouTube Search — the second largest traffic source on the platform. Without this optimization, even high-quality content struggles to find its audience. The best part: optimizing for playlist seo requires time upfront but pays dividends for months or years as your content continues to rank for relevant search queries.</p>
+        <h2>Why Playlist SEO Matters for YouTube SEO</h2>
+        <p>Playlist SEO directly affects how YouTube understands and ranks your content in search results. In a platform where over 500 hours of video are uploaded every minute, proper optimization is what separates discovered videos from invisible ones. Videos that implement playlist seo correctly see 2-5x more impressions from YouTube Search — the second largest traffic source on the platform. Without this optimization, even high-quality content struggles to find its audience. The best part: optimizing for playlist seo requires time upfront but pays dividends for months or years as your content continues to rank for relevant search queries.</p>
 
-      <h2>How to Optimize for Playlist SEO</h2>
-      <p>To implement effective playlist seo, start with a full audit of your existing content to find current optimization gaps. Use YT SEO Architect's free SEO audit tool to identify specific improvements. Research which keywords your target audience searches for using YouTube's search suggest feature — type your topic in YouTube search and note the auto-complete suggestions. Implement changes on your next 3 videos first, then evaluate the impact on impressions and CTR before scaling to your entire catalog. Create an optimization checklist you follow for every new upload. Re-optimize your top 10 performing videos monthly by refreshing descriptions, tags, and end screens.</p>
+        <h2>How to Optimize for Playlist SEO</h2>
+        <p>To implement effective playlist seo, start with a full audit of your existing content to find current optimization gaps. Use YT SEO Architect's free SEO audit tool to identify specific improvements. Research which keywords your target audience searches for using YouTube's search suggest feature — type your topic in YouTube search and note the auto-complete suggestions. Implement changes on your next 3 videos first, then evaluate the impact on impressions and CTR before scaling to your entire catalog. Create an optimization checklist you follow for every new upload. Re-optimize your top 10 performing videos monthly by refreshing descriptions, tags, and end screens.</p>
 
-      
+        
+      <h2>Common Questions About Playlist SEO</h2>
+      <p>Quick answers to the most common questions about playlist seo for YouTube creators.</p>
+      <div class="faq-item "><div class="faq-question" onclick="this.parentElement.classList.toggle('open')">Why playlist seo matters for YouTube ranking</div><div class="faq-answer"><p>Playlist SEO is a critical ranking factor because YouTube's search algorithm relies on it to match videos with viewer search intent. Videos with proper playlist seo receive 2-5x more impressions from YouTube Search — the second-largest traffic source on the platform. Without this optimization, even high-quality content struggles to find its audience because the algorithm can't determine what your video is about. Optimizing for playlist seo requires upfront effort but pays dividends for months or years as your content continues to rank for relevant search queries.</p></div></div>
+      <div class="faq-item "><div class="faq-question" onclick="this.parentElement.classList.toggle('open')">How to implement playlist seo correctly</div><div class="faq-answer"><p>To implement playlist seo correctly, start with keyword research to find what your audience is actually searching for. Use tools like YouTube's search suggest feature, TubeBuddy, or YT SEO Architect's free <a href="/tools/tag-generator">Tag Generator</a>. Once you have target keywords, place them naturally in your title (first 40 characters), description (first 150 characters), and video content (mentioned naturally in the first 30 seconds). Avoid keyword stuffing — YouTube's AI is sophisticated enough to detect and penalize unnatural optimization. Focus on creating content that genuinely addresses the search intent behind your target keywords.</p></div></div>
+      <div class="faq-item open"><div class="faq-question" onclick="this.parentElement.classList.toggle('open')">Common playlist seo mistakes to avoid</div><div class="faq-answer"><p>The most common mistakes creators make with playlist seo include: 1) Targeting keywords that are too broad and competitive — go for long-tail, specific phrases instead. 2) Keyword stuffing titles and descriptions — this makes content unreadable and triggers algorithm penalties. 3) Ignoring the first 30 seconds of video content — transcript SEO is powerful. 4) Using the same optimization on every video — each piece of content needs unique keyword targeting. 5) Never updating old videos — refreshing descriptions and tags on existing content can revive search traffic.</p></div></div>
+
+        
       <h2>Related Terms</h2>
       <p>Expand your knowledge with these related YouTube SEO concepts:</p>
       <div class="related-grid">
@@ -183,29 +238,24 @@
       </div>
       </div>
 
-      
+        
 
-      <div class="cta-box cta-bottom">
-        <h3>🚀 Master YouTube SEO with Free AI Tools</h3>
-        <p>Use YT SEO Architect's free tools to optimize your titles, tags, descriptions, and more. No credit card required.</p>
-        <a href="/tools/"><i data-lucide="wand" style="width:16px;height:16px;"></i> Try Free Tools</a>
+        <div class="cta-box">
+          <h3>🚀 Master YouTube SEO with Free AI Tools</h3>
+          <p>Use YT SEO Architect's free tools to optimize your titles, tags, descriptions, and more. No credit card required.</p>
+          <a href="/tools/"><i data-lucide="wand" style="width:16px;height:16px;"></i> Try Free Tools</a>
+        </div>
+
       </div>
 
-    </div>
-
-  </article>
-
-  </main>
-
-  </div>
+    </main>
 
     <footer>
       <p>&copy; 2026 YT SEO Architect &middot; <a href="/glossary/">Glossary</a> &middot; <a href="/blog">Blog</a> &middot; <a href="/tools/">Free Tools</a> &middot; <a href="/privacy-policy">Privacy</a></p>
     </footer>
+  </div>
 
-  <script defer>
-    lucide.createIcons();
-  </script>
+  <script defer>lucide.createIcons();</script>
 
 </body>
 </html>

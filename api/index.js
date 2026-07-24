@@ -1339,6 +1339,12 @@ app.get('/sitemap.xml', async (req, res) => {
     const s = await import('../src/database/schema.js');
     const { eq, desc } = await import('drizzle-orm');
     const { validateBlogPost } = await import('./blog-validation.js');
+    const { readFileSync } = await import('fs');
+    const { resolve, dirname } = await import('path');
+    const { fileURLToPath } = await import('url');
+
+    const __filename = fileURLToPath(import.meta.url);
+    const __dirname = dirname(__filename);
 
     const allPages = await dbService.db.select()
       .from(s.seoPages)
@@ -1355,7 +1361,7 @@ app.get('/sitemap.xml', async (req, res) => {
       { loc: '/dashboard', priority: '0.9', changefreq: 'weekly' },
       { loc: '/blog', priority: '0.9', changefreq: 'daily' },
       { loc: '/about', priority: '0.5', changefreq: 'monthly' },
-
+      { loc: '/tools/', priority: '0.9', changefreq: 'weekly' },
       { loc: '/changelog', priority: '0.6', changefreq: 'monthly' },
       { loc: '/privacy-policy', priority: '0.3', changefreq: 'yearly' },
       { loc: '/terms-of-service', priority: '0.3', changefreq: 'yearly' },
@@ -1372,6 +1378,18 @@ app.get('/sitemap.xml', async (req, res) => {
     ];
     for (const p of toolPages) {
       xml += `  <url><loc>https://yt-seo-architect.vercel.app${p.loc}</loc><changefreq>${p.changefreq}</changefreq><priority>${p.priority}</priority></url>\n`;
+    }
+
+    // Glossary pages (from glossary data)
+    try {
+      const glossaryData = JSON.parse(
+        readFileSync(resolve(__dirname, '../scripts/glossary-data.json'), 'utf-8')
+      );
+      for (const term of glossaryData.terms) {
+        xml += `  <url><loc>https://yt-seo-architect.vercel.app/glossary/${term.slug}</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>\n`;
+      }
+    } catch (e) {
+      console.error('[Sitemap] Glossary data error:', e.message);
     }
 
     // PSEO disabled as per user request

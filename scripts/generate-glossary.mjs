@@ -82,6 +82,107 @@ const DEFAULT_WHY = (term) =>
 const DEFAULT_HOW = (term) =>
   `To get started with ${term.toLowerCase()}, begin by researching how other creators in your niche approach this concept. Watch tutorials, read guides, and understand the fundamentals before implementing. Start small — apply one new technique per video rather than overhauling everything at once. Track the results of your changes in YouTube Analytics to see what works for your specific audience. Join creator communities and forums to learn from others' experiences with ${term.toLowerCase()}. As you gain confidence, experiment with advanced techniques and document your process. The goal is continuous improvement, not perfection.`;
 
+// ── FAQ generators (targets rankable long-tail keyword variations) ──
+
+const FAQ_QUESTION_TEMPLATES = {
+  'analytics': (term, lower) => ({
+    q1: `What is a good ${lower} on YouTube?`,
+    a1: `A good ${lower} depends on your niche, audience size, and video length. For established channels, a ${lower} in the top 25th percentile of your niche is considered strong. Check YouTube Analytics > Advanced to see your percentile rankings compared to similar channels. Track your ${lower} trends monthly rather than daily — weekly fluctuations are normal. Use YT SEO Architect's free <a href="/tools/title-optimizer">Title Optimizer</a> and thumbnail testing to systematically improve this metric over 30-60 day periods.`,
+    q2: `How to improve ${lower} for YouTube videos`,
+    a2: `To improve ${lower}, start by auditing your current performance in YouTube Studio Analytics. Identify your bottom 10 performing videos and look for common patterns in where they underperform. Test one variable at a time — try changing your thumbnail style, testing different title formulas, or adjusting your posting schedule. Give each change at least 2 weeks of data before evaluating. Top creators improve their ${lower} by 15-30% within 60 days by consistently testing and optimizing based on real data.`,
+  }),
+  'algorithm': (term, lower) => ({
+    q1: `How does the ${lower} work in 2026?`,
+    a1: `The ${lower} in 2026 operates across three main surfaces: Search (matches your metadata to viewer queries), Suggested Videos (recommends content based on watch sessions and viewer history), and the Homepage (personalized recommendations based on viewing behavior). The algorithm prioritizes session time — how long viewers stay on YouTube after watching your video — over individual video performance. It evaluates titles, thumbnails, description keywords, watch time, CTR, and viewer satisfaction signals (likes, comments, shares). Understanding how these signals work together is the key to consistent growth.`,
+    q2: `What signals does ${lower} use?`,
+    a2: `The ${lower} evaluates over 200 signals, but the most important ones are: (1) Title and description keyword matching — are you using the same words viewers search for? (2) Click-through rate from impressions — does your thumbnail + title combo make people click? (3) Watch time and retention — do viewers stay after clicking? (4) Session time — do viewers watch more YouTube after your video? (5) Engagement — likes, comments, shares. The algorithm weights recency heavily — the first 24-48 hours of performance determine initial reach.`,
+    q3: `How to optimize videos for ${lower}`,
+    a3: `To optimize for the ${lower}, focus on: 1) Front-load your keyword in the title and mention it in the first 30 seconds of your video (transcript SEO). 2) Design thumbnails that create curiosity gaps — the algorithm tracks CTR as an early relevance signal. 3) Structure videos to maximize retention — hook viewers in the first 5 seconds and pace your content to avoid drop-off points. 4) Use end screens and cards to extend session time by funneling viewers to related content. 5) Upload consistently — the algorithm favors channels with predictable publishing schedules. Use YT SEO Architect's <a href="/tools/tag-generator">Tag Generator</a> to find keyword gaps competitors are missing.`,
+  }),
+  'seo-optimization': (term, lower) => ({
+    q1: `Why ${lower} matters for YouTube ranking`,
+    a1: `${term} is a critical ranking factor because YouTube's search algorithm relies on it to match videos with viewer search intent. Videos with proper ${lower.toLowerCase()} receive 2-5x more impressions from YouTube Search — the second-largest traffic source on the platform. Without this optimization, even high-quality content struggles to find its audience because the algorithm can't determine what your video is about. Optimizing for ${lower.toLowerCase()} requires upfront effort but pays dividends for months or years as your content continues to rank for relevant search queries.`,
+    q2: `How to implement ${lower} correctly`,
+    a2: `To implement ${lower.toLowerCase()} correctly, start with keyword research to find what your audience is actually searching for. Use tools like YouTube's search suggest feature, TubeBuddy, or YT SEO Architect's free <a href="/tools/tag-generator">Tag Generator</a>. Once you have target keywords, place them naturally in your title (first 40 characters), description (first 150 characters), and video content (mentioned naturally in the first 30 seconds). Avoid keyword stuffing — YouTube's AI is sophisticated enough to detect and penalize unnatural optimization. Focus on creating content that genuinely addresses the search intent behind your target keywords.`,
+    q3: `Common ${lower} mistakes to avoid`,
+    a3: `The most common mistakes creators make with ${lower.toLowerCase()} include: 1) Targeting keywords that are too broad and competitive — go for long-tail, specific phrases instead. 2) Keyword stuffing titles and descriptions — this makes content unreadable and triggers algorithm penalties. 3) Ignoring the first 30 seconds of video content — transcript SEO is powerful. 4) Using the same optimization on every video — each piece of content needs unique keyword targeting. 5) Never updating old videos — refreshing descriptions and tags on existing content can revive search traffic.`,
+  }),
+  'monetization': (term, lower) => ({
+    q1: `What ${lower} means for YouTube creators`,
+    a1: `${term} directly affects how much revenue your channel generates from ads, memberships, and other income streams. Whether you're just starting out or already monetized, understanding this concept helps you maximize earnings from every view. Channels optimized for ${lower.toLowerCase()} earn 2-4x more per view than those that ignore it. This isn't about gaming the system — it's about understanding YouTube's revenue mechanics so you can structure your content strategy accordingly. Check YT SEO Architect's <a href="/blog/youtube-monetization-tips-2026">monetization guide</a> for actionable strategies.`,
+    q2: `How to improve ${lower} on your channel`,
+    a2: `To improve ${lower.toLowerCase()}, first understand how YouTube's monetization system works for your specific content type. Check YouTube Studio for your current monetization status and any policy warnings. Create videos over 8 minutes to enable mid-roll ads, target topics with high advertiser demand, and build audience in high-CPM countries (US, Canada, UK, Australia). Diversify revenue beyond ads with channel memberships, Super Chat, and affiliate marketing. Track your ${lower.toLowerCase()} trends monthly and compare year-over-year to spot growth opportunities.`,
+  }),
+  'content-strategy': (term, lower) => ({
+    q1: `Why ${lower} is important for channel growth`,
+    a1: `${term} is a foundational concept that shapes how successful YouTube creators plan and produce content. Without a strategy for ${lower.toLowerCase()}, you're creating videos reactively instead of deliberately — and the algorithm notices the difference. Creators with strong ${lower.toLowerCase()} grow 2-4x faster because every video serves a specific purpose. It's the difference between posting random videos and building a channel that consistently delivers value, builds audience loyalty, and ranks well in YouTube search.`,
+    q2: `How to build a ${lower} that works`,
+    a2: `To build an effective ${lower.toLowerCase()}, start by defining your channel's core topic pillars — the 3-5 main subjects you'll consistently create content about. Audit your existing videos and organize them into these pillars using playlists. Create a content calendar planning 4-8 weeks ahead, balancing evergreen content (60-70%) with trending videos (30-40%). Track which content types perform best and adjust your strategy accordingly. Batch-produce videos in your strongest pillar first to build momentum, then expand into adjacent topics.`,
+  }),
+  'youtube-features': (term, lower) => ({
+    q1: `What is ${lower} and how do you use it?`,
+    a1: `${term} is a YouTube feature that can significantly enhance your channel's reach, engagement, or revenue. Many creators overlook this feature, missing out on a tool that can boost performance without extra production effort. Channels that actively use ${lower.toLowerCase()} see higher engagement rates and better algorithm performance. Start by exploring this feature in YouTube Studio to understand its capabilities, then experiment with one aspect per video. Master it before moving to the next feature — YouTube rewards channels that use the platform's full toolkit.`,
+    q2: `Best practices for ${lower}`,
+    a2: `To make the most of ${lower.toLowerCase()}, follow these best practices: (1) Watch YouTube's official tutorials on this feature. (2) Study how top creators in your niche utilize it effectively. (3) Experiment with different approaches, tracking which gets the best results. (4) Document what works so you can build a repeatable system. (5) Don't try to use every feature at once — master this one before moving to the next. Share your learnings with your community; engagement with your experiments often provides valuable feedback and ideas.`,
+  }),
+};
+
+const DEFAULT_FAQ = (term, lower) => ({
+  q1: `What is ${lower} on YouTube?`,
+  a1: `${term} is a YouTube concept that every creator should understand to grow effectively. Whether you're a beginner or experienced, knowing how ${lower.toLowerCase()} works helps you make better content and platform decisions. Creators who understand ${lower.toLowerCase()} consistently outperform those who skip the learning phase. YouTube's landscape changes rapidly, but core concepts like this remain foundational to sustainable success.`,
+  q2: `How to optimize for ${lower} in 2026`,
+  a2: `To optimize for ${lower.toLowerCase()} in 2026, start by researching how top creators in your niche approach this concept. Read guides and understand the fundamentals before implementing changes. Apply one new technique per video rather than overhauling everything at once. Track results in YouTube Analytics to see what works for your specific audience. Join creator communities to learn from others' experiences. The goal is continuous improvement, not perfection — small, consistent optimizations compound over time.`,
+});
+
+// ── Generate FAQ schema + visible section ────────────────────────────
+
+function generateFAQSection(termData) {
+  const term = termData.term;
+  const lower = term.toLowerCase();
+  const category = termData.category;
+  const template = FAQ_QUESTION_TEMPLATES[category] || DEFAULT_FAQ;
+  const faq = template(term, lower);
+
+  // Build JSON-LD FAQ schema
+  const schemaQA = [];
+  const htmlQA = [];
+  let qIndex = 0;
+
+  const addQA = (q, a, isThird) => {
+    if (!q || !a) return;
+    qIndex++;
+    const qId = `faq_${termData.slug}_${qIndex}`;
+    schemaQA.push({
+      '@type': 'Question',
+      name: q,
+      acceptedAnswer: { '@type': 'Answer', text: a.replace(/<[^>]*>/g, '') }
+    });
+    htmlQA.push(
+      `<div class="faq-item ${isThird ? 'open' : ''}">` +
+        `<div class="faq-question" onclick="this.parentElement.classList.toggle('open')">${q}</div>` +
+        `<div class="faq-answer"><p>${a}</p></div>` +
+      `</div>`
+    );
+  };
+
+  addQA(faq.q1, faq.a1);
+  addQA(faq.q2, faq.a2);
+  if (faq.q3) addQA(faq.q3, faq.a3, true);
+
+  // Build FAQ schema as raw JSON-LD string for template replacement
+  const faqSchemaJSON = schemaQA.length > 0
+    ? `<script type="application/ld+json">\n  {\n    "@context": "https://schema.org",\n    "@type": "FAQPage",\n    "mainEntity": ${JSON.stringify(schemaQA, null, 4).replace(/^/gm, '    ')}\n  }\n  </script>`
+    : '';
+
+  // Build visible FAQ HTML section
+  const faqSectionHTML = htmlQA.length > 0
+    ? `\n      <h2>Common Questions About ${term}</h2>\n      <p>Quick answers to the most common questions about ${lower} for YouTube creators.</p>\n` +
+      `      ${htmlQA.join('\n      ')}`
+    : '';
+
+  return { faqSchemaJSON, faqSectionHTML };
+}
+
 // ── Load data ────────────────────────────────────────────────────
 
 function loadData() {
@@ -164,6 +265,7 @@ function truncateForSchema(text, maxLen = 200) {
 function generatePage(termData, template, allTerms, catMeta) {
   const whyItMatters = generateWhyItMatters(termData.term, termData.category);
   const howToOptimize = generateHowToOptimize(termData.term, termData.category);
+  const { faqSchemaJSON, faqSectionHTML } = generateFAQSection(termData);
 
   const replacements = {
     '{{TERM}}': termData.term,
@@ -174,6 +276,8 @@ function generatePage(termData, template, allTerms, catMeta) {
     '{{CATEGORY_NAME}}': catMeta ? catMeta.name : termData.category,
     '{{WHY_IT_MATTERS}}': whyItMatters,
     '{{HOW_TO_OPTIMIZE}}': howToOptimize,
+    '{{FAQ_SCHEMA}}': faqSchemaJSON,
+    '{{COMMON_QUESTIONS_SECTION}}': faqSectionHTML,
     '{{RELATED_TERMS_SECTION}}': generateRelatedTermsSection(termData, allTerms),
     '{{RELATED_BLOGS_SECTION}}': generateRelatedBlogsSection(termData.relatedBlogs),
     '{{SCHEMA_DESCRIPTION}}': truncateForSchema(termData.shortDefinition),
