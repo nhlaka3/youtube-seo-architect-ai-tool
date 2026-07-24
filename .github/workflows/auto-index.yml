@@ -1,0 +1,62 @@
+name: 🌐 Auto-Index Sitemap
+
+on:
+  schedule:
+    - cron: '0 */6 * * *'     # Every 6 hours: 00:00, 06:00, 12:00, 18:00 UTC
+  workflow_dispatch:            # Manual trigger from GitHub UI
+    inputs:
+      deploy:
+        description: 'Use --deploy mode (includes Google Indexing API if key is set)'
+        type: boolean
+        default: false
+
+# ── Required GitHub Secrets ─────────────────────────────────────
+# Go to Settings → Secrets and variables → Actions → New secret:
+#   GOOGLE_INDEXING_KEY (optional — path to Google service account JSON key
+#                        for Google Indexing API submissions)
+#
+# IndexNow (Bing/Yandex) works automatically without any secrets.
+# ───────────────────────────────────────────────────────────────
+
+permissions:
+  contents: read
+
+jobs:
+  auto-index:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: ⬇️ Checkout repo
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+
+      - name: 🔧 Setup Node.js 24
+        uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+
+      - name: 🔍 Run auto-index
+        id: index
+        continue-on-error: true
+        env:
+          GOOGLE_INDEXING_KEY: ${{ secrets.GOOGLE_INDEXING_KEY || '' }}
+        run: |
+          CMD="node scripts/auto-index.mjs"
+          if [[ "${{ github.event.inputs.deploy }}" == "true" ]]; then
+            CMD="$CMD --deploy"
+            echo "  🚀 Using --deploy mode (Google API included if key exists)"
+          fi
+          echo "Running: $CMD"
+          eval "$CMD"
+
+      - name: 📊 Report
+        if: always()
+        run: |
+          echo "════════════════════════════════════════════"
+          echo "  🌐 AUTO-INDEX REPORT"
+          echo "════════════════════════════════════════════"
+          echo "  Index step: ${{ steps.index.outcome }}"
+          echo "  Time:       $(date -u)"
+          echo "  Schedule:   Every 6 hours"
+          echo "════════════════════════════════════════════"

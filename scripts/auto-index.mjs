@@ -15,6 +15,24 @@
  *   node scripts/auto-index.mjs --url https://...      # Submit a specific URL
  *   node scripts/auto-index.mjs --deploy               # Full deploy pipeline: sitemap ping + IndexNow + Google (if key exists)
  *   node scripts/auto-index.mjs --check                # Verify IndexNow key is valid
+ *
+ * ═══════════════════════════════════════════════════════════
+ * GOOGLE INDEXING API SETUP (OPTIONAL)
+ * ═══════════════════════════════════════════════════════════
+ * To enable Google Indexing API submissions:
+ *
+ * 1. Go to https://console.cloud.google.com
+ * 2. Create a project → Enable "Indexing API" in the API library
+ * 3. Create a Service Account: IAM & Admin → Service Accounts → Create
+ *    → Role: Owner → Create a key → Download JSON
+ * 4. Add the service account email as OWNER in Google Search Console:
+ *    → Search Console → Settings → Users → Add User
+ *    → Email: [service-account-email] → Role: Owner
+ * 5. Set the env var: export GOOGLE_INDEXING_KEY=/path/to/key.json
+ *
+ * For GitHub Actions: add GOOGLE_INDEXING_KEY as a repository secret
+ * containing the full contents of the JSON key file.
+ * ═══════════════════════════════════════════════════════════
  */
 
 import { readFileSync, readdirSync, existsSync } from 'fs';

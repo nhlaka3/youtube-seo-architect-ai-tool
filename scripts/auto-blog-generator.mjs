@@ -1330,6 +1330,24 @@ async function main() {
   }
   console.log('═══════════════════════════════════════════════');
 
+  // ── Auto-index the new post for fast search engine discovery ──
+  // auto-index.mjs handles: IndexNow (Bing/Yandex), sitemap ping (Google/Bing)
+  if (!deployFailed) {
+    const postUrl = `https://yt-seo-architect.vercel.app/blog/${keywordEntry.slug}`;
+    console.log(`  📡 Notifying search engines about: ${postUrl}...`);
+    try {
+      execSync(`node scripts/auto-index.mjs --url "${postUrl}"`, {
+        cwd: PROJECT,
+        stdio: 'pipe',
+        timeout: 30000,
+      });
+      console.log('  ✅ Search engines notified via IndexNow + sitemap ping');
+    } catch (e) {
+      const msg = e.stderr ? e.stderr.toString().trim() : e.message;
+      console.log(`  ⚠ Index notification had issues (non-fatal): ${msg.slice(0, 120)}`);
+    }
+  }
+
   if (deployFailed) process.exit(1);
 }
 
