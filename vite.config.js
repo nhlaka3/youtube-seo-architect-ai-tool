@@ -15,7 +15,6 @@ export default defineConfig({
         main: resolve(__dirname, 'index.html'),
         dashboard: resolve(__dirname, 'dashboard.html'),
         about: resolve(__dirname, 'about.html'),
-        blog: resolve(__dirname, 'blog.html'),
         privacy: resolve(__dirname, 'privacy-policy.html'),
         terms: resolve(__dirname, 'terms-of-service.html'),
         changelog: resolve(__dirname, 'changelog.html'),
