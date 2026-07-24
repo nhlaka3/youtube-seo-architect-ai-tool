@@ -173,8 +173,22 @@ async function submitBatchToIndexNow(urls) {
 
 // ── Google Indexing API (optional, requires service account) ──
 
-async function getGoogleAccessToken(keyPath) {
-  const key = JSON.parse(readFileSync(keyPath, 'utf8'));
+function resolveGoogleKey(input) {
+  // Handle both file paths and raw JSON contents
+  if (!input) return null;
+  if (input.startsWith('{')) {
+    // Raw JSON contents (e.g., from GitHub Actions secret)
+    try { return JSON.parse(input); } catch { return null; }
+  }
+  // File path (local development)
+  if (existsSync(input)) {
+    return JSON.parse(readFileSync(input, 'utf8'));
+  }
+  return null;
+}
+
+async function getGoogleAccessToken(key) {
+  if (!key || !key.client_email || !key.private_key) throw new Error('Invalid Google service account key');
   const now = Math.floor(Date.now() / 1000);
 
   const header = Buffer.from(JSON.stringify({ alg: 'RS256', typ: 'JWT' })).toString('base64url');
@@ -203,8 +217,9 @@ async function getGoogleAccessToken(keyPath) {
 }
 
 async function submitBatchToGoogle(urls) {
-  const keyPath = process.env.GOOGLE_INDEXING_KEY;
-  if (!keyPath || !existsSync(keyPath)) {
+  const rawInput = process.env.GOOGLE_INDEXING_KEY;
+  const key = resolveGoogleKey(rawInput);
+  if (!key) {
     return { success: 0, failed: 0, total: 0, skipped: true };
   }
 
@@ -212,7 +227,7 @@ async function submitBatchToGoogle(urls) {
 
   let token;
   try {
-    token = await getGoogleAccessToken(keyPath);
+    token = await getGoogleAccessToken(key);
     console.log('✅ Authenticated with Google\n');
   } catch (e) {
     console.log(`❌ Google auth failed: ${e.message}`);
@@ -289,7 +304,7 @@ async function main() {
 
   // ── Step 3: Google Indexing API (only if key exists) ────
   let googleResult = { success: 0, failed: 0, total: 0, skipped: true };
-  const hasGoogleKey = process.env.GOOGLE_INDEXING_KEY && existsSync(process.env.GOOGLE_INDEXING_KEY);
+  const hasGoogleKey = !!resolveGoogleKey(process.env.GOOGLE_INDEXING_KEY);
   if (deployMode && hasGoogleKey) {
     googleResult = await submitBatchToGoogle(urls);
   } else if (hasGoogleKey) {
@@ -311,7 +326,7 @@ async function main() {
   console.log('════════════════════════════════════════════════════\n');
 
   // Return exit code for CI/CD integration
-  if (indexNowResult.failed > 5 || googleResult.failed > 5) {
+  if (indexNowResult.failed > 5 || (googleResult && !googleResult.skipped && googleResult.failed > 5)) {
     process.exit(1);
   }
 }
