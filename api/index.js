@@ -1095,52 +1095,6 @@ app.get('/blog/:slug', async (req, res) => {
 
     const { renderBlogTemplate } = await import('./blog-renderer.js');
     var html = renderBlogTemplate(page);
-
-    // INLINE GLOSSARY LINKING (bypasses any blog-renderer issues)
-    var content = page.content || '';
-    var linkedContent = content;
-    var glossaryInlineMap = {
-      'YouTube Tags': '/glossary/youtube-tags',
-      'YouTube Algorithm': '/glossary/youtube-algorithm',
-      'CTR': '/glossary/click-through-rate',
-      'Audience Retention': '/glossary/audience-retention',
-      'Watch Time': '/glossary/watch-time',
-      'Impressions': '/glossary/impressions',
-      'Search Volume': '/glossary/search-volume',
-      'Keyword Difficulty': '/glossary/keyword-difficulty',
-      'Title Optimization': '/glossary/title-optimization',
-      'YouTube Keyword Research': '/glossary/youtube-keyword-research',
-      'Thumbnail Optimization': '/glossary/thumbnail-optimization',
-      'Description Optimization': '/glossary/description-optimization',
-      'Video Chapters': '/glossary/video-chapters',
-      'Transcript SEO': '/glossary/transcript-seo',
-      'Evergreen Content': '/glossary/evergreen-content',
-      'Competitor Analysis': '/glossary/competitor-analysis',
-      'Dwell Time': '/glossary/dwell-time',
-      'Session Time': '/glossary/session-time',
-      'YouTube Shorts': '/glossary/youtube-shorts',
-      'A/B Testing': '/glossary/ab-testing',
-      'Call to Action': '/glossary/call-to-action',
-      'Channel Audit': '/glossary/channel-audit',
-      'Keyword Cannibalization': '/glossary/keyword-cannibalization',
-      'Content Pillar': '/glossary/content-pillar',
-      'Video Hook': '/glossary/video-hook'
-    };
-    // Simple string replace — first protect existing links, replace terms, then restore
-    var prot = linkedContent.replace(/<a\s[^>]*>.*?<\/a>/gi, function(m) { return '⛔LK' + btoa(m) + '⛔'; });
-    var glTerms = Object.keys(glossaryInlineMap).sort((a,b) => b.length - a.length);
-    for (var gi = 0; gi < glTerms.length; gi++) {
-      var gt = glTerms[gi];
-      var gs = glossaryInlineMap[gt];
-      var gr = new RegExp('(?<![\\w\\-])(' + gt.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + ')(?![\\w\\-])', 'gi');
-      prot = prot.replace(gr, '<a href="' + gs + '" class="glossary-link">$1</a>');
-    }
-    linkedContent = prot.replace(/⛔LK([A-Za-z0-9+/=]+)⛔/g, function(m, b64) { return atob(b64); });
-    html = html.replace(content, linkedContent);
-
-    // [GLOSSARY_LINKS_ACTIVE] - confirm this code path runs
-    html = html.replace('<head>', '<head><meta name="glossary-links" content="active">');
-
     res.setHeader('Cache-Control', 'no-store, no-cache, must-revalidate, max-age=0');
     res.setHeader('Pragma', 'no-cache');
     res.setHeader('Expires', '0');

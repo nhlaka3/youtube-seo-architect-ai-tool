@@ -616,11 +616,7 @@ export function renderBlogTemplate(page) {
 
   // 3. Body content (the AI-generated or template-generated HTML) — with auto-linked glossary terms
   const linked = linkGlossaryTerms(rawContent);
-  if (linked.indexOf('glossary-link') === -1) {
-    contentHTML += rawContent + '<!-- NO_GLOSSARY_LINKS -->';
-  } else {
-    contentHTML += linked;
-  }
+  contentHTML += linked;
 
   // 4. Mid-article CTA (if no cta-box found in content)
   if (!hasCTA) {

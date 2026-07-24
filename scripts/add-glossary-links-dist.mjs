@@ -61,9 +61,30 @@ const GLOSSARY_MAP = {
 };
 
 function addGlossaryLinks(html) {
+  // STRIP all existing glossary links from the entire HTML first (clean slate)
+  html = html.replace(/<a\s[^>]*class="glossary-link"[^>]*>([\s\S]*?)<\/a>/gi, '$1');
+
+  // Strip any HTML from <title> tag (should be plain text)
+  html = html.replace(/(<title>)([\s\S]*?)(<\/title>)/gi, (match, open, content, close) => {
+    const clean = content.replace(/<[^>]*>/g, '');
+    return open + clean + close;
+  });
+
+  // Strip any HTML from <meta name="description"> content attribute
+  html = html.replace(/(<meta\s+name=["']description["'][^>]*content=["'])([^"']*?)(["'])/gi, (match, open, content, close) => {
+    const clean = content.replace(/<[^>]*>/g, '');
+    return open + clean + close;
+  });
+
+  // Only process content within <article> tags
+  const articleMatch = html.match(/<article>([\s\S]*?)<\/article>/i);
+  if (!articleMatch) return html;
+
+  const articleContent = articleMatch[1];
+
   const protectedLinks = [];
   let idx = 0;
-  const prot = html.replace(/<a\s[^>]*>.*?<\/a>/gi, (m) => {
+  const prot = articleContent.replace(/<a\s[^>]*>.*?<\/a>/gi, (m) => {
     const t = `__GL${idx}__`;
     protectedLinks.push(m);
     idx++;
@@ -86,7 +107,8 @@ function addGlossaryLinks(html) {
     result = result.replace(`__GL${i}__`, protectedLinks[i]);
   }
 
-  return result;
+  // Put the linked content back into the full HTML
+  return html.replace(/<article>([\s\S]*?)<\/article>/i, `<article>${result}</article>`);
 }
 
 try {
