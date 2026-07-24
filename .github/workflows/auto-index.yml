@@ -42,7 +42,7 @@ jobs:
         env:
           GOOGLE_INDEXING_KEY: ${{ secrets.GOOGLE_INDEXING_KEY || '' }}
         run: |
-          CMD="node scripts/auto-index.mjs"
+          CMD="node scripts/auto-index.mjs --deploy"
           if [[ "${{ github.event.inputs.deploy }}" == "true" ]]; then
             CMD="$CMD --deploy"
             echo "  🚀 Using --deploy mode (Google API included if key exists)"
