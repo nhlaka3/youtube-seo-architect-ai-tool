@@ -7,7 +7,7 @@
  *
  * Supports:
  *   - Sitemap ping (Google + Bing — covers ALL pages in one call)
- *   - IndexNow (Bing, Yandex, Seznam) — per-URL notifications
+ *   - IndexNow (Bing, Yandex) — per-URL notifications
  *   - Google Indexing API — requires GOOGLE_INDEXING_KEY env var (optional)
  *
  * Usage:
@@ -89,8 +89,6 @@ async function pingSitemap() {
   for (const { name, url } of endpoints) {
     try {
       const res = await fetch(url, { method: 'GET' });
-      // Google/Bing return 200 even for errors, but a successful ping means
-      // they accepted the sitemap URL for crawling
       results.push({ name, status: res.ok ? 'ok' : `http ${res.status}` });
       console.log(`   ${name}: ${res.ok ? '✅' : '⚠️'} ${res.status}`);
     } catch (e) {
@@ -101,12 +99,13 @@ async function pingSitemap() {
   return results;
 }
 
-// ── IndexNow submission (Bing / Yandex / Seznam) ──────────────
+// ── IndexNow submission (Bing / Yandex) ────────────────────────
 
 async function submitToIndexNow(url) {
   const endpoints = [
     `https://bing.com/indexnow?url=${encodeURIComponent(url)}&key=${INDEXNOW_KEY}`,
     `https://www.bing.com/indexnow?url=${encodeURIComponent(url)}&key=${INDEXNOW_KEY}`,
+    `https://yandex.com/indexnow?url=${encodeURIComponent(url)}&key=${INDEXNOW_KEY}`,
   ];
 
   const results = [];
@@ -237,7 +236,7 @@ async function main() {
 
   console.log('╔══════════════════════════════════════════════════╗');
   console.log('║   Auto-Indexing Engine                          ║');
-  console.log('║   Google · Bing · Yandex · Seznam              ║');
+  console.log('║   Google · Bing · Yandex                        ║');
   console.log('╚══════════════════════════════════════════════════╝');
 
   // ── Check mode ────────────────────────────────────────────
