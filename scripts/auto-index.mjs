@@ -3,64 +3,54 @@
  * scripts/auto-index.mjs
  *
  * Auto-submits all site pages to search engines for faster indexing.
+ * Runs automatically after every deploy to ensure instant indexing.
+ *
  * Supports:
- *   - IndexNow (Bing, Yandex, Seznam) — works immediately, no API key needed
- *   - Google Indexing API — requires service account key (GOOGLE_INDEXING_KEY env var)
+ *   - Sitemap ping (Google + Bing — covers ALL pages in one call)
+ *   - IndexNow (Bing, Yandex, Seznam) — per-URL notifications
+ *   - Google Indexing API — requires GOOGLE_INDEXING_KEY env var (optional)
  *
  * Usage:
- *   node scripts/auto-index.mjs                         # Submit all known pages via IndexNow
- *   node scripts/auto-index.mjs --url https://...       # Submit a specific URL
- *   node scripts/auto-index.mjs --google                # Submit all pages via Google Indexing API
- *   node scripts/auto-index.mjs --url https://... --google  # Submit specific URL to Google
- *   node scripts/auto-index.mjs --check                 # Check IndexNow key is valid
+ *   node scripts/auto-index.mjs                        # Submit all pages via IndexNow + sitemap ping
+ *   node scripts/auto-index.mjs --url https://...      # Submit a specific URL
+ *   node scripts/auto-index.mjs --deploy               # Full deploy pipeline: sitemap ping + IndexNow + Google (if key exists)
+ *   node scripts/auto-index.mjs --check                # Verify IndexNow key is valid
  */
 
 import { readFileSync, readdirSync, existsSync } from 'fs';
-import { resolve, dirname, extname } from 'path';
+import { resolve, dirname } from 'path';
 import { fileURLToPath } from 'url';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const ROOT = resolve(__dirname, '..');
 const SITE_URL = 'https://yt-seo-architect.vercel.app';
+const SITEMAP_URL = `${SITE_URL}/sitemap.xml`;
 
 // IndexNow API key — must match public/{key}.txt verification file
 const INDEXNOW_KEY = '8825c721ac4f49c5b25af78d7418a2b8';
-const INDEXNOW_ENDPOINTS = [
-  `https://bing.com/indexnow?url={URL}&key=${INDEXNOW_KEY}`,
-  `https://yandex.com/indexnow?url={URL}&key=${INDEXNOW_KEY}`,
-  `https://www.bing.com/indexnow?url={URL}&key=${INDEXNOW_KEY}`,
-];
 
 // ── Page discovery ──────────────────────────────────────────────
 
 function discoverAllUrls() {
   const urls = [];
-  const today = new Date().toISOString().split('T')[0];
 
   // Core pages
-  const corePages = [
-    { path: '', priority: '1.0' },
-    { path: 'about', priority: '0.7' },
-    { path: 'changelog', priority: '0.4' },
-    { path: 'contact', priority: '0.8' },
-  ];
-  for (const page of corePages) {
-    urls.push(`${SITE_URL}/${page.path}`);
-  }
+  urls.push(`${SITE_URL}/`);
+  urls.push(`${SITE_URL}/about`);
+  urls.push(`${SITE_URL}/changelog`);
+  urls.push(`${SITE_URL}/contact`);
+  urls.push(`${SITE_URL}/blog`);
+  urls.push(`${SITE_URL}/glossary/`);
+  urls.push(`${SITE_URL}/tools/`);
 
   // Tools pages
   const toolsDir = resolve(ROOT, 'public/tools');
   if (existsSync(toolsDir)) {
     const toolFiles = readdirSync(toolsDir).filter(f => f.endsWith('.html') && f !== 'index.html');
     for (const file of toolFiles) {
-      const slug = file.replace('.html', '');
-      urls.push(`${SITE_URL}/tools/${slug}`);
+      urls.push(`${SITE_URL}/tools/${file.replace('.html', '')}`);
     }
   }
-  urls.push(`${SITE_URL}/tools/`);
-
-  // Glossary hub
-  urls.push(`${SITE_URL}/glossary/`);
 
   // Glossary term pages
   const glossaryDir = resolve(ROOT, 'public/glossary');
@@ -69,91 +59,102 @@ function discoverAllUrls() {
       f => f.endsWith('.html') && f !== 'index.html' && f !== '_template.html'
     );
     for (const file of glossaryFiles) {
-      const slug = file.replace('.html', '');
-      urls.push(`${SITE_URL}/glossary/${slug}`);
+      urls.push(`${SITE_URL}/glossary/${file.replace('.html', '')}`);
     }
   }
 
   // Blog posts
   const blogDir = resolve(ROOT, 'public/blog');
   if (existsSync(blogDir)) {
-    const blogFiles = readdirSync(blogDir).filter(
-      f => f.endsWith('.html') && !f.startsWith('_')
-    );
+    const blogFiles = readdirSync(blogDir).filter(f => f.endsWith('.html') && !f.startsWith('_'));
     for (const file of blogFiles) {
-      const slug = file.replace('.html', '');
-      urls.push(`${SITE_URL}/blog/${slug}`);
+      urls.push(`${SITE_URL}/blog/${file.replace('.html', '')}`);
     }
   }
 
-  // Deduplicate and return
   return [...new Set(urls)];
 }
 
-// ── IndexNow submission (Bing / Yandex) ──────────────────────
+// ── Sitemap ping (fastest way to notify all search engines) ──
 
-async function submitToIndexNow(url) {
+async function pingSitemap() {
+  console.log(`\n🗺️  Pinging sitemap to search engines...\n`);
+
+  const endpoints = [
+    { name: 'Google', url: `https://www.google.com/ping?sitemap=${encodeURIComponent(SITEMAP_URL)}` },
+    { name: 'Bing',   url: `https://www.bing.com/ping?siteMap=${encodeURIComponent(SITEMAP_URL)}` },
+  ];
+
   const results = [];
-  for (const endpointTemplate of INDEXNOW_ENDPOINTS) {
-    const endpoint = endpointTemplate.replace(/{URL}/g, encodeURIComponent(url));
+  for (const { name, url } of endpoints) {
     try {
-      const res = await fetch(endpoint, { method: 'GET' });
-      if (res.ok || res.status === 202) {
-        results.push({ endpoint: new URL(endpoint).hostname, status: 'ok' });
-      } else {
-        results.push({ endpoint: new URL(endpoint).hostname, status: `error ${res.status}` });
-      }
+      const res = await fetch(url, { method: 'GET' });
+      // Google/Bing return 200 even for errors, but a successful ping means
+      // they accepted the sitemap URL for crawling
+      results.push({ name, status: res.ok ? 'ok' : `http ${res.status}` });
+      console.log(`   ${name}: ${res.ok ? '✅' : '⚠️'} ${res.status}`);
     } catch (e) {
-      results.push({ endpoint: new URL(endpoint).hostname, status: `failed: ${e.message}` });
+      results.push({ name, status: `failed: ${e.message}` });
+      console.log(`   ${name}: ❌ ${e.message}`);
     }
   }
   return results;
 }
 
-async function submitBatchToIndexNow(urls, batchSize = 10) {
+// ── IndexNow submission (Bing / Yandex / Seznam) ──────────────
+
+async function submitToIndexNow(url) {
+  const endpoints = [
+    `https://bing.com/indexnow?url=${encodeURIComponent(url)}&key=${INDEXNOW_KEY}`,
+    `https://www.bing.com/indexnow?url=${encodeURIComponent(url)}&key=${INDEXNOW_KEY}`,
+  ];
+
+  const results = [];
+  for (const endpoint of endpoints) {
+    try {
+      const res = await fetch(endpoint, { method: 'GET' });
+      results.push({
+        host: new URL(endpoint).hostname,
+        status: (res.ok || res.status === 202) ? 'ok' : `error ${res.status}`,
+      });
+    } catch (e) {
+      results.push({ host: new URL(endpoint).hostname, status: `failed: ${e.message}` });
+    }
+  }
+  return results;
+}
+
+async function submitBatchToIndexNow(urls) {
+  console.log(`\n📡 Submitting ${urls.length} URLs via IndexNow (Bing/Yandex)...\n`);
+
   let success = 0;
   let failed = 0;
 
-  console.log(`\n📡 Submitting ${urls.length} URLs via IndexNow (Bing/Yandex)...\n`);
-
-  for (let i = 0; i < urls.length; i += batchSize) {
-    const batch = urls.slice(i, i + batchSize);
-    const batchResults = await Promise.allSettled(
-      batch.map(url => submitToIndexNow(url))
-    );
+  for (let i = 0; i < urls.length; i += 10) {
+    const batch = urls.slice(i, i + 10);
+    const batchResults = await Promise.allSettled(batch.map(url => submitToIndexNow(url)));
 
     for (let j = 0; j < batchResults.length; j++) {
-      const result = batchResults[j];
-      if (result.status === 'fulfilled') {
-        const allOk = result.value.every(r => r.status === 'ok');
-        if (allOk) {
-          success++;
-        } else {
-          failed++;
-          const errors = result.value.filter(r => r.status !== 'ok').map(r => r.status).join(', ');
-          if (failed <= 3) console.log(`  ⚠️  ${batch[j]}: ${errors}`);
-        }
+      if (batchResults[j].status === 'fulfilled') {
+        const allOk = batchResults[j].value.every(r => r.status === 'ok');
+        if (allOk) success++;
+        else failed++;
       } else {
         failed++;
-        if (failed <= 3) console.log(`  ❌ ${batch[j]}: ${result.reason.message}`);
       }
     }
 
-    // Progress every 20 URLs
-    if ((i + batchSize) % 20 === 0 || i + batchSize >= urls.length) {
-      console.log(`  Progress: ${Math.min(i + batchSize, urls.length)}/${urls.length} (${success} ok, ${failed} failed)`);
+    if ((i + 10) % 50 === 0 || i + 10 >= urls.length) {
+      console.log(`   ${Math.min(i + 10, urls.length)}/${urls.length} (${success} ok, ${failed} failed)`);
     }
 
-    // Small delay between batches to avoid rate limits
-    if (i + batchSize < urls.length) {
-      await new Promise(r => setTimeout(r, 100));
-    }
+    if (i + 10 < urls.length) await new Promise(r => setTimeout(r, 100));
   }
 
   return { success, failed, total: urls.length };
 }
 
-// ── Google Indexing API submission ──────────────────────────
+// ── Google Indexing API (optional, requires service account) ──
 
 async function getGoogleAccessToken(keyPath) {
   const key = JSON.parse(readFileSync(keyPath, 'utf8'));
@@ -184,23 +185,9 @@ async function getGoogleAccessToken(keyPath) {
   return data.access_token;
 }
 
-async function submitToGoogle(url, token) {
-  const res = await fetch('https://indexing.googleapis.com/v3/urlNotifications:publish', {
-    method: 'POST',
-    headers: {
-      'Authorization': `Bearer ${token}`,
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({ url, type: 'URL_UPDATED' }),
-  });
-  return await res.json();
-}
-
 async function submitBatchToGoogle(urls) {
   const keyPath = process.env.GOOGLE_INDEXING_KEY;
   if (!keyPath || !existsSync(keyPath)) {
-    console.log('\n⚠️  GOOGLE_INDEXING_KEY not found. Skipping Google Indexing API.');
-    console.log('   To enable: set GOOGLE_INDEXING_KEY env var to your service account JSON key path.\n');
     return { success: 0, failed: 0, total: 0, skipped: true };
   }
 
@@ -219,23 +206,21 @@ async function submitBatchToGoogle(urls) {
   let failed = 0;
 
   for (let i = 0; i < urls.length; i++) {
-    const url = urls[i];
     try {
-      const result = await submitToGoogle(url, token);
-      if (result.urlNotificationMetadata) {
-        success++;
-      } else {
-        failed++;
-        if (failed <= 3) console.log(`  ⚠️  ${url}: ${JSON.stringify(result).substring(0, 100)}`);
-      }
+      const res = await fetch('https://indexing.googleapis.com/v3/urlNotifications:publish', {
+        method: 'POST',
+        headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' },
+        body: JSON.stringify({ url: urls[i], type: 'URL_UPDATED' }),
+      });
+      const result = await res.json();
+      if (result.urlNotificationMetadata) success++;
+      else failed++;
     } catch (e) {
       failed++;
-      if (failed <= 3) console.log(`  ❌ ${url}: ${e.message}`);
     }
 
-    // Progress every 10
     if ((i + 1) % 10 === 0 || i === urls.length - 1) {
-      console.log(`  Google: ${i + 1}/${urls.length} (${success} ok, ${failed} failed)`);
+      console.log(`   ${i + 1}/${urls.length} (${success} ok, ${failed} failed)`);
     }
   }
 
@@ -247,7 +232,7 @@ async function submitBatchToGoogle(urls) {
 async function main() {
   const args = process.argv.slice(2);
   const specificUrl = args.includes('--url') ? args[args.indexOf('--url') + 1] : null;
-  const useGoogle = args.includes('--google');
+  const deployMode = args.includes('--deploy');
   const checkMode = args.includes('--check');
 
   console.log('╔══════════════════════════════════════════════════╗');
@@ -255,62 +240,63 @@ async function main() {
   console.log('║   Google · Bing · Yandex · Seznam              ║');
   console.log('╚══════════════════════════════════════════════════╝');
 
+  // ── Check mode ────────────────────────────────────────────
   if (checkMode) {
     console.log(`\n🔑 IndexNow Key: ${INDEXNOW_KEY}`);
-    console.log(`   Verification file: https://yt-seo-architect.vercel.app/${INDEXNOW_KEY}.txt\n`);
-    // Test the key with a simple URL
-    const testUrl = `${SITE_URL}/`;
-    console.log(`   Testing IndexNow with: ${testUrl}`);
-    const results = await submitToIndexNow(testUrl);
-    for (const r of results) {
-      console.log(`   ${r.endpoint}: ${r.status}`);
+    console.log(`   Verification: https://yt-seo-architect.vercel.app/${INDEXNOW_KEY}.txt`);
+    const testResult = await submitToIndexNow(`${SITE_URL}/`);
+    for (const r of testResult) {
+      console.log(`   ${r.host}: ${r.status}`);
     }
-    console.log('');
     return;
   }
 
   const urls = specificUrl ? [specificUrl] : discoverAllUrls();
-
-  console.log(`\n📋 Discovered ${urls.length} URLs to index`);
+  console.log(`\n📋 ${urls.length} URLs discovered`);
 
   if (!specificUrl) {
-    console.log('\nBreakdown:');
-    const core = urls.filter(u => !u.includes('/tools/') && !u.includes('/glossary/') && !u.includes('/blog/'));
-    const tools = urls.filter(u => u.includes('/tools/'));
-    const glossary = urls.filter(u => u.includes('/glossary/'));
-    const blog = urls.filter(u => u.includes('/blog/'));
-    console.log(`   Core pages: ${core.length}`);
-    console.log(`   Tools pages: ${tools.length}`);
-    console.log(`   Glossary terms: ${glossary.length}`);
-    console.log(`   Blog posts: ${blog.length}`);
+    const stats = {
+      core: urls.filter(u => !u.includes('/tools/') && !u.includes('/glossary/') && !u.includes('/blog/')).length,
+      tools: urls.filter(u => u.includes('/tools/')).length,
+      glossary: urls.filter(u => u.includes('/glossary/')).length,
+      blog: urls.filter(u => u.includes('/blog/')).length,
+    };
+    console.log(`   Core: ${stats.core} | Tools: ${stats.tools} | Glossary: ${stats.glossary} | Blog: ${stats.blog}`);
   }
 
-  // Always submit to IndexNow (Bing/Yandex)
+  // ── Step 1: Ping sitemap (always — fastest path) ────────
+  const sitemapResult = await pingSitemap();
+
+  // ── Step 2: IndexNow (always — per-URL notifications) ───
   const indexNowResult = await submitBatchToIndexNow(urls);
 
-  // Optionally submit to Google
+  // ── Step 3: Google Indexing API (only if key exists) ────
   let googleResult = { success: 0, failed: 0, total: 0, skipped: true };
-  if (useGoogle) {
+  const hasGoogleKey = process.env.GOOGLE_INDEXING_KEY && existsSync(process.env.GOOGLE_INDEXING_KEY);
+  if (deployMode && hasGoogleKey) {
     googleResult = await submitBatchToGoogle(urls);
-  } else {
-    const keyPath = process.env.GOOGLE_INDEXING_KEY;
-    if (keyPath && existsSync(keyPath)) {
-      console.log('\nℹ️  Google Indexing API key found. Use --google to submit to Google.');
-    }
+  } else if (hasGoogleKey) {
+    console.log('\nℹ️  Google Indexing API key detected. Use --deploy to submit to Google.');
   }
 
-  // Summary
+  // ── Summary ──────────────────────────────────────────────
   console.log('\n════════════════════════════════════════════════════');
   console.log('📊 INDEXING SUMMARY');
   console.log('──────────────────────────────────────────────────');
-  console.log(`   Total URLs: ${urls.length}`);
-  console.log(`   IndexNow (Bing/Yandex): ${indexNowResult.success} ok, ${indexNowResult.failed} failed`);
+  console.log(`   Total URLs:          ${urls.length}`);
+  console.log(`   Sitemap ping:        ${sitemapResult.map(r => `${r.name}: ${r.status === 'ok' ? '✅' : '⚠️'}`).join(', ')}`);
+  console.log(`   IndexNow:            ${indexNowResult.success} ok, ${indexNowResult.failed} failed`);
   if (!googleResult.skipped) {
-    console.log(`   Google Indexing API: ${googleResult.success} ok, ${googleResult.failed} failed`);
+    console.log(`   Google API:          ${googleResult.success} ok, ${googleResult.failed} failed`);
   } else {
-    console.log('   Google Indexing API: skipped (no key configured)');
+    console.log(`   Google API:          skipped (set GOOGLE_INDEXING_KEY + use --deploy)`);
   }
   console.log('════════════════════════════════════════════════════\n');
+
+  // Return exit code for CI/CD integration
+  if (indexNowResult.failed > 5 || googleResult.failed > 5) {
+    process.exit(1);
+  }
 }
 
 main();
