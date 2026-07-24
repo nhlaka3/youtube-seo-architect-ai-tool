@@ -1361,7 +1361,7 @@ app.get('/sitemap.xml', async (req, res) => {
       { loc: '/dashboard', priority: '0.9', changefreq: 'weekly' },
       { loc: '/blog', priority: '0.9', changefreq: 'daily' },
       { loc: '/about', priority: '0.5', changefreq: 'monthly' },
-      { loc: '/tools/', priority: '0.9', changefreq: 'weekly' },
+      { loc: '/tools', priority: '0.9', changefreq: 'weekly' },
       { loc: '/changelog', priority: '0.6', changefreq: 'monthly' },
       { loc: '/privacy-policy', priority: '0.3', changefreq: 'yearly' },
       { loc: '/terms-of-service', priority: '0.3', changefreq: 'yearly' },
