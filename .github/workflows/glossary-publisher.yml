@@ -1,0 +1,81 @@
+name: 📖 Glossary Publisher
+
+on:
+  schedule:
+    - cron: '0 8 * * 1'      # 8:00 AM UTC every Monday
+  workflow_dispatch:           # Manual trigger from GitHub UI
+    inputs:
+      term:
+        description: 'Specific term slug to generate (empty = all pending)'
+        type: string
+        default: ''
+
+permissions:
+  contents: write
+
+jobs:
+  generate-glossary:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: ⬇️ Checkout private repo
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GH_PAT }}
+          fetch-depth: 0
+
+      - name: 🔧 Setup Node.js 24
+        uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+          cache: 'npm'
+
+      - name: 📖 Generate glossary pages
+        id: generate
+        run: |
+          echo "Generating glossary pages..."
+          node scripts/generate-glossary.mjs
+
+      - name: 🔗 Inject glossary cross-links into blog posts
+        id: inject-links
+        run: |
+          echo "Injecting glossary links into blog posts..."
+          node scripts/add-glossary-links.mjs
+          node scripts/add-glossary-links-dist.mjs
+
+      - name: 📤 Push to private repo
+        id: push
+        run: |
+          git config user.name "YT SEO Bot"
+          git config user.email "bot@yt-seo-architect.vercel.app"
+          git add -A
+          if git diff --staged --quiet; then
+            echo "✅ No changes to commit"
+            echo "COMMITTED=false" >> $GITHUB_OUTPUT
+          else
+            git commit -m "glossary: auto-generated pages [skip ci]"
+            git pull --rebase origin main 2>&1 || true
+            git push origin HEAD:main 2>&1
+            echo "✅ Pushed to private repo"
+            echo "COMMITTED=true" >> $GITHUB_OUTPUT
+          fi
+
+      - name: 🌐 Push to public repo (triggers Vercel deploy)
+        if: steps.push.outputs.COMMITTED == 'true'
+        env:
+          PUBLIC_REPO: https://x-access-token:${{ secrets.GH_PAT }}@github.com/nhlaka3/youtube-seo-architect-ai-tool.git
+        run: |
+          git remote add public "$PUBLIC_REPO"
+          git push public HEAD:main --force 2>&1 && echo "✅ Pushed to public repo — Vercel auto-deploy triggered"
+
+      - name: 📊 Report
+        if: always()
+        run: |
+          echo "════════════════════════════════════════════"
+          echo "  📖 GLOSSARY PUBLISHER REPORT"
+          echo "════════════════════════════════════════════"
+          echo "  Generate step: ${{ steps.generate.outcome }}"
+          echo "  Link inject:   ${{ steps.inject-links.outcome }}"
+          echo "  Changes:       ${{ steps.push.outputs.COMMITTED }}"
+          echo "  Time:          $(date -u)"
+          echo "════════════════════════════════════════════"

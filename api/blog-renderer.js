@@ -31,6 +31,102 @@ function formatDateStr(date, pattern) {
  *   ✓ Dual JSON-LD schema (Article + FAQPage)
  */
 
+// ── Glossary term auto-linking (injects internal links into content) ───
+
+const GLOSSARY_MAP = [
+  ['YouTube Algorithm', '/glossary/youtube-algorithm'],
+  ['YouTube Tags', '/glossary/youtube-tags'],
+  ['Youtube Tags', '/glossary/youtube-tags'],
+  ['CTR', '/glossary/click-through-rate'],
+  ['Click-Through Rate', '/glossary/click-through-rate'],
+  ['Audience Retention', '/glossary/audience-retention'],
+  ['Watch Time', '/glossary/watch-time'],
+  ['Impressions', '/glossary/impressions'],
+  ['YouTube Keyword Research', '/glossary/youtube-keyword-research'],
+  ['Search Volume', '/glossary/search-volume'],
+  ['Keyword Difficulty', '/glossary/keyword-difficulty'],
+  ['Title Optimization', '/glossary/title-optimization'],
+  ['Thumbnail Optimization', '/glossary/thumbnail-optimization'],
+  ['Description Optimization', '/glossary/description-optimization'],
+  ['Video Chapters', '/glossary/video-chapters'],
+  ['Transcript SEO', '/glossary/transcript-seo'],
+  ['Keyword Cannibalization', '/glossary/keyword-cannibalization'],
+  ['Evergreen Content', '/glossary/evergreen-content'],
+  ['Competitor Analysis', '/glossary/competitor-analysis'],
+  ['Dwell Time', '/glossary/dwell-time'],
+  ['Session Time', '/glossary/session-time'],
+  ['Content Pillar', '/glossary/content-pillar'],
+  ['Video Hook', '/glossary/video-hook'],
+  ['Channel Audit', '/glossary/channel-audit'],
+  ['YouTube Shorts', '/glossary/youtube-shorts'],
+  ['A/B Testing', '/glossary/ab-testing'],
+  ['Topic Authority', '/glossary/topic-authority'],
+  ['Shorts Algorithm', '/glossary/shorts-algorithm'],
+  ['YouTube Analytics', '/glossary/youtube-analytics'],
+  ['Playlist Optimization', '/glossary/playlist-optimization'],
+  ['Call to Action', '/glossary/call-to-action'],
+  ['Content Gap Analysis', '/glossary/content-gap-analysis'],
+  ['Ad Revenue', '/glossary/ad-revenue'],
+  ['Demonetization', '/glossary/demonetization'],
+  ['Closed Captions', '/glossary/closed-captions'],
+  ['External Traffic', '/glossary/external-traffic'],
+  ['Long-Tail Keywords', '/glossary/long-tail-keywords'],
+  ['Channel Branding', '/glossary/channel-branding'],
+  ['Competitor Analysis', '/glossary/competitor-analysis'],
+  ['Collaboration', '/glossary/collaboration'],
+  ['Community Tab', '/glossary/community-tab'],
+  ['Cross-Promotion', '/glossary/cross-promotion'],
+  ['Content Calendar', '/glossary/content-calendar'],
+  ['Video Backlinks', '/glossary/video-backlinks'],
+  ['YouTube Studio', '/glossary/youtube-studio'],
+  ['YouTube Premium', '/glossary/youtube-premium'],
+  ['YouTube Creator Academy', '/glossary/youtube-creator-academy'],
+  ['YouTube Partner Program', '/glossary/youtube-partner-program'],
+  ['Community Guidelines', '/glossary/community-guidelines'],
+  ['Gaming on YouTube', '/glossary/gaming-on-youtube'],
+  ['YouTube Hashtags', '/glossary/youtube-hashtags'],
+  ['Mid-Roll Ads', '/glossary/mid-roll-ads'],
+];
+
+function linkGlossaryTerms(html) {
+  const sortedTerms = GLOSSARY_MAP.map(g => g[0]).sort((a, b) => b.length - a.length);
+  let result = html;
+
+  // Protect existing links
+  const LINKED_REGION = /<a\s[^>]*>.*?<\/a>/gi;
+  const protectedRegions = [];
+  let protectedIdx = 0;
+  result = result.replace(LINKED_REGION, (match) => {
+    const token = `__PROTECTED_LINK_${protectedIdx}__`;
+    protectedRegions.push(match);
+    protectedIdx++;
+    return token;
+  });
+
+  for (const term of sortedTerms) {
+    // Find the slug for this term
+    let slug = '';
+    for (const g of GLOSSARY_MAP) {
+      if (g[0].toLowerCase() === term.toLowerCase()) { slug = g[1].replace('/glossary/', ''); break; }
+    }
+    if (!slug) continue;
+
+    const escaped = term.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+    const regex = new RegExp(`(?<![\\w\\-])(${escaped})(?![\\w\\-])`, 'gi');
+
+    result = result.replace(regex, (match) => {
+      return `<a href="/glossary/${slug}" class="glossary-link">${match}</a>`;
+    });
+  }
+
+  // Restore protected regions
+  for (let i = 0; i < protectedRegions.length; i++) {
+    result = result.replace(`__PROTECTED_LINK_${i}__`, protectedRegions[i]);
+  }
+
+  return result;
+}
+
 // ── Section detection ────────────────────────────────────────────────
 
 function hasSection(html, className) {
@@ -518,8 +614,13 @@ export function renderBlogTemplate(page) {
     contentHTML += generateTOCNav(contentH2s);
   }
 
-  // 3. Body content (the AI-generated or template-generated HTML)
-  contentHTML += rawContent;
+  // 3. Body content (the AI-generated or template-generated HTML) — with auto-linked glossary terms
+  const linked = linkGlossaryTerms(rawContent);
+  if (linked.indexOf('glossary-link') === -1) {
+    contentHTML += rawContent + '<!-- NO_GLOSSARY_LINKS -->';
+  } else {
+    contentHTML += linked;
+  }
 
   // 4. Mid-article CTA (if no cta-box found in content)
   if (!hasCTA) {

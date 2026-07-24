@@ -79,6 +79,13 @@ jobs:
           echo "Running: $CMD"
           eval "$CMD"
 
+      - name: 🔗 Inject glossary cross-links into blog posts
+        id: inject-links
+        run: |
+          echo "Injecting glossary links into new blog post..."
+          node scripts/add-glossary-links.mjs
+          node scripts/add-glossary-links-dist.mjs
+
       - name: 📤 Push generated files to private repo
         id: push
         run: |

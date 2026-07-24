@@ -39,6 +39,7 @@ import { initDatabase, checkDatabaseHealth } from '../src/database/connection.js
 process.on('uncaughtException', (err) => {
 
   console.error('CRITICAL: Uncaught Exception:', err);
+  console.error('Build: 2026-07-24-v2');
 
   process.exit(1);
 
@@ -829,6 +830,153 @@ TRASH_SLUGS_410.forEach(slug => {
   app.get(`/blog/${slug}`, (req, res) => res.status(410).send('Gone'));
 });
 
+// ── Blog Categories ──────────────────────────────────────────
+const BLOG_CATEGORIES = {
+  'monetization': { name: 'Monetization', icon: '💰', desc: 'YouTube monetization requirements, ad revenue, YPP, and income strategies', slugMatch: ['monetiz', 'partner-program', 'ad-revenue', 'ypp'] },
+  'shorts': { name: 'Shorts & Vertical Video', icon: '📱', desc: 'YouTube Shorts algorithm, monetization, and growth strategies', slugMatch: ['short'] },
+  'analytics': { name: 'Analytics & Metrics', icon: '📊', desc: 'CTR, retention, impressions, and analytics metrics explained', slugMatch: ['analytic', 'retention', 'ctr', 'impression', 'metric'] },
+  'optimization': { name: 'SEO Optimization', icon: '🔍', desc: 'Tags, titles, descriptions, thumbnails, and metadata optimization', slugMatch: ['tag', 'title', 'description', 'thumbnail', 'metadata', 'chapter', 'caption', 'transcript', 'keyword', 'search-volume', 'keyword-difficulty'] },
+  'strategy': { name: 'Strategy & Planning', icon: '📝', desc: 'Keyword research, competitor analysis, content strategy and planning', slugMatch: ['strategy', 'planning', 'research', 'competitor', 'playlist', 'checklist', 'blueprint'] },
+  'growth': { name: 'Channel Growth', icon: '🚀', desc: 'Small channel growth, community building, and audience development', slugMatch: ['small-channel', 'hook', 'community', 'end-screen', 'card', 'intro'] },
+  'tools': { name: 'Tool Reviews & Comparisons', icon: '🛠️', desc: 'YouTube SEO tool comparisons, reviews, and alternatives', slugMatch: ['tool', 'vs-', 'vidiq', 'tubebuddy', 'coach'] },
+  'niche': { name: 'Niche Channels', icon: '🎯', desc: 'YouTube SEO for gaming, cooking, fitness, music, and business channels', slugMatch: ['gaming', 'cooking', 'fitness', 'music', 'business', 'tutorial'] },
+};
+
+function getPostCategory(slug, title) {
+  const combined = (slug + ' ' + (title || '')).toLowerCase();
+  for (const [key, cat] of Object.entries(BLOG_CATEGORIES)) {
+    for (const m of cat.slugMatch) {
+      if (combined.includes(m)) return key;
+    }
+  }
+  return null;
+}
+
+function renderCategoryHeader(catSlug, pages) {
+  const cat = BLOG_CATEGORIES[catSlug];
+  const html = '<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0"><link rel="icon" href="/logo.svg" type="image/svg+xml" />'
+    + '<title>' + (cat ? cat.icon + ' ' + cat.name : 'All Categories') + ' — YouTube SEO Blog | YT SEO Architect</title>'
+    + '<meta name="description" content="' + (cat ? cat.desc : 'Browse YouTube SEO guides by topic — monetization, analytics, strategy, Shorts, and more') + '" />'
+    + '<meta name="robots" content="index, follow" />'
+    + '<link rel="canonical" href="https://yt-seo-architect.vercel.app/blog' + (catSlug ? '/category/' + catSlug : '/categories') + '" />'
+    + '<meta property="og:title" content="' + (cat ? cat.icon + ' ' + cat.name : 'All Categories') + ' — YouTube SEO Blog" />'
+    + '<meta property="og:description" content="' + (cat ? cat.desc : 'Browse YouTube SEO guides by topic') + '" />'
+    + '<meta name="twitter:card" content="summary_large_image" />'
+    + '<link rel="preconnect" href="https://fonts.googleapis.com" /><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />'
+    + '<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700;800&display=swap" media="print" onload="this.media=\'all\'" />'
+    + '<style>'
+    + ':root{--primary:#f97316;--primary-glow:rgba(249,115,22,0.5);--accent:#fb923c;--bg-oled:#000000;--bg-card:rgba(15,23,42,0.5);--text-primary:#f8fafc;--text-muted:#94a3b8;--border:rgba(249,115,22,0.2)}'
+    + '*{margin:0;padding:0;box-sizing:border-box}'
+    + 'body{font-family:\'Outfit\',\'Geist\',-apple-system,BlinkMacSystemFont,sans-serif;background:var(--bg-oled);color:var(--text-primary);min-height:100vh;overflow-x:hidden;line-height:1.8}'
+    + '.wrap{max-width:900px;margin:0 auto;padding:20px}'
+    + 'header{display:flex;justify-content:space-between;align-items:center;padding:10px 0;margin-bottom:40px}'
+    + '.logo{display:flex;align-items:center;gap:12px;font-size:1.5rem;font-weight:800;letter-spacing:-0.05em;text-decoration:none;color:var(--text-primary)}'
+    + '.logo i{color:var(--primary);filter:drop-shadow(0 0 8px var(--primary-glow))}'
+    + '.logo .text-accent{color:var(--accent)}'
+    + '.header-nav{display:flex;align-items:center;gap:1.25rem}'
+    + '.header-nav a{color:var(--text-muted);text-decoration:none;font-weight:600;font-size:0.9rem;transition:color .2s;display:flex;align-items:center;gap:.35rem}'
+    + '.header-nav a:hover{color:var(--text-primary)}'
+    + '.header-nav a.nav-cta{background:var(--primary);color:#fff;padding:.45rem 1rem;border-radius:8px;font-size:.85rem;transition:background .2s,transform .2s}'
+    + '.header-nav a.nav-cta:hover{background:var(--primary-glow);transform:translateY(-1px)}'
+    + '.hero{padding:3rem 1.5rem;background:linear-gradient(135deg,rgba(249,115,22,0.06),rgba(251,146,60,0.02));border:1px solid var(--border);border-radius:1rem;margin-bottom:2rem;text-align:center}'
+    + '.hero h1{font-size:clamp(1.6rem,4vw,2.2rem);font-weight:800;margin:0 0 .5rem;color:#fff}'
+    + '.hero p{color:var(--text-muted);font-size:1.05rem;max-width:600px;margin:0 auto;line-height:1.7}'
+    + '.hero .stat{display:inline-block;margin-top:1rem;background:rgba(249,115,22,0.1);border:1px solid rgba(249,115,22,0.3);color:var(--primary);padding:.3rem 1rem;border-radius:9999px;font-size:.85rem;font-weight:600}'
+    + '.blog-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:12px}'
+    + '.blog-card{background:var(--bg-card);border:1px solid var(--border);border-radius:12px;padding:1.25rem;transition:all .3s}'
+    + '.blog-card:hover{border-color:var(--primary);transform:translateY(-2px);background:rgba(30,41,59,0.6)}'
+    + '.blog-card a{color:var(--text-primary);text-decoration:none;font-weight:600;display:block;margin-bottom:.35rem;font-size:1rem;line-height:1.5}'
+    + '.blog-card:hover a{color:var(--primary)}'
+    + '.blog-card .meta{font-size:.8rem;color:var(--text-muted)}'
+    + '.badge{display:inline-block;background:rgba(249,115,22,0.15);color:var(--primary);padding:.15rem .55rem;border-radius:9999px;font-size:.7rem;font-weight:600;margin-bottom:.4rem;text-transform:uppercase;letter-spacing:.03em}'
+    + '.cat-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:1rem}'
+    + '.cat-card{background:var(--bg-card);border:1px solid var(--border);border-radius:12px;padding:1.25rem;text-decoration:none;color:var(--text-primary);transition:all .3s}'
+    + '.cat-card:hover{border-color:var(--primary);transform:translateY(-2px)}'
+    + '.cat-card .icon{font-size:2rem;margin-bottom:.5rem}'
+    + '.cat-card h3{font-size:1rem;margin-bottom:.3rem}'
+    + '.cat-card p{font-size:.8rem;color:var(--text-muted);line-height:1.4}'
+    + '.cat-card .count{font-size:.75rem;color:var(--primary);margin-top:.5rem;font-weight:600}'
+    + '.back-link{display:inline-block;color:var(--primary);text-decoration:none;font-size:.9rem;margin-bottom:1rem}'
+    + '.back-link:hover{text-decoration:underline}'
+    + '@media(max-width:640px){.hero{padding:2rem 1rem}.hero h1{font-size:1.5rem}header{flex-direction:column;gap:16px}}'
+    + '</style></head><body><div class="wrap">'
+    + '<header><a href="/" class="logo"><i data-lucide="zap"></i>YT SEO <span class="text-accent">Architect</span></a>'
+    + '<nav class="header-nav"><a href="/tools/tag-generator">Free Tools</a><a href="/glossary/">Glossary</a><a href="/dashboard" class="nav-cta">Get Started Free</a></nav></header>';
+  return { html, cat };
+}
+
+// Category index
+app.get(['/blog/categories', '/blog/category'], async (req, res) => {
+  try {
+    const { default: dbService } = await import('../src/database/services.js');
+    const s = await import('../src/database/schema.js');
+    const { eq, desc } = await import('drizzle-orm');
+    const { validateBlogPost } = await import('./blog-validation.js');
+    var pages = await dbService.db.select({ slug: s.seoPages.slug, title: s.seoPages.title, wordCount: s.seoPages.wordCount, content: s.seoPages.content, publishedAt: s.seoPages.publishedAt }).from(s.seoPages).where(eq(s.seoPages.status,'published')).orderBy(desc(s.seoPages.publishedAt));
+    pages = pages.filter(p => validateBlogPost({ slug: p.slug, title: p.title, content: p.content, wordCount: p.wordCount }).valid);
+
+    // Count posts per category
+    var catCounts = {};
+    for (const p of pages) {
+      const c = getPostCategory(p.slug, p.title);
+      if (c) catCounts[c] = (catCounts[c] || 0) + 1;
+    }
+
+    const rendered = renderCategoryHeader(null, pages);
+    var fullHtml = rendered.html
+      + '<div class="hero"><h1>📚 Blog Categories</h1><p>Browse YouTube SEO guides by topic. Each category clusters related guides for deeper learning.</p>'
+      + '<div class="stat">' + Object.keys(catCounts).length + ' categories · ' + pages.length + ' guides</div></div>'
+      + '<div class="cat-grid">';
+
+    for (const [slug, cat] of Object.entries(BLOG_CATEGORIES)) {
+      const count = catCounts[slug] || 0;
+      if (count === 0) continue;
+      fullHtml += '<a href="/blog/category/' + slug + '" class="cat-card">'
+        + '<div class="icon">' + cat.icon + '</div>'
+        + '<h3>' + cat.name + '</h3>'
+        + '<p>' + cat.desc + '</p>'
+        + '<div class="count">' + count + ' guide' + (count > 1 ? 's' : '') + '</div>'
+        + '</a>';
+    }
+
+    fullHtml += '</div></div></body></html>';
+    res.send(fullHtml);
+  } catch(e) { res.status(500).send('Error'); }
+});
+
+// Individual category page
+app.get('/blog/category/:slug', async (req, res) => {
+  try {
+    const catSlug = req.params.slug;
+    const cat = BLOG_CATEGORIES[catSlug];
+    if (!cat) return res.status(404).send('Category not found');
+
+    const { default: dbService } = await import('../src/database/services.js');
+    const s = await import('../src/database/schema.js');
+    const { eq, desc } = await import('drizzle-orm');
+    const { validateBlogPost } = await import('./blog-validation.js');
+    var allPages = await dbService.db.select({ slug: s.seoPages.slug, title: s.seoPages.title, wordCount: s.seoPages.wordCount, content: s.seoPages.content, publishedAt: s.seoPages.publishedAt }).from(s.seoPages).where(eq(s.seoPages.status,'published')).orderBy(desc(s.seoPages.publishedAt));
+    allPages = allPages.filter(p => validateBlogPost({ slug: p.slug, title: p.title, content: p.content, wordCount: p.wordCount }).valid);
+
+    var catPages = allPages.filter(p => getPostCategory(p.slug, p.title) === catSlug);
+
+    const rendered = renderCategoryHeader(catSlug, catPages);
+    var fullHtml = rendered.html
+      + '<div class="hero"><h1>' + cat.icon + ' ' + cat.name + '</h1><p>' + cat.desc + '</p>'
+      + '<div class="stat">' + catPages.length + ' guide' + (catPages.length > 1 ? 's' : '') + '</div></div>'
+      + '<a href="/blog/categories" class="back-link">← All Categories</a>'
+      + '<div class="blog-grid">';
+
+    for (var p of catPages) {
+      fullHtml += '<div class="blog-card"><a href="/blog/'+p.slug+'">'+p.title+'</a><div class="meta">'+p.wordCount+' words · '+new Date(p.publishedAt).toLocaleDateString()+'</div></div>';
+    }
+
+    fullHtml += '</div></div></body></html>';
+    res.send(fullHtml);
+  } catch(e) { res.status(500).send('Error'); }
+});
+
+
 app.get('/blog', async (req, res) => {
 
   try {
@@ -902,11 +1050,13 @@ app.get('/blog', async (req, res) => {
       + '</nav></header>'
       + '<div class="hero"><h1>📚 YouTube SEO Blog</h1><p>Expert guides, tips, and strategies to grow your YouTube channel — all free.</p>'
       + '<div class="stat">' + pages.length + ' guides · Free</div></div>'
+      + '<div style="text-align:center;margin-bottom:1.5rem"><a href="/blog/categories" style="color:var(--primary);text-decoration:none;font-size:.9rem;font-weight:600;">Browse by Category →</a></div>'
       + '<div class="blog-grid">';
 
     for (var p of pages) {
-
-      html += '<div class="blog-card"><a href="/blog/'+p.slug+'">'+p.title+'</a><div class="meta">'+p.wordCount+' words · '+new Date(p.publishedAt).toLocaleDateString()+'</div></div>';
+      var pCat = getPostCategory(p.slug, p.title);
+      var pBadge = pCat ? '<div class="badge">' + BLOG_CATEGORIES[pCat].icon + ' ' + BLOG_CATEGORIES[pCat].name + '</div>' : '';
+      html += '<div class="blog-card">'+pBadge+'<a href="/blog/'+p.slug+'">'+p.title+'</a><div class="meta">'+p.wordCount+' words · '+new Date(p.publishedAt).toLocaleDateString()+'</div></div>';
 
     }
 
@@ -944,7 +1094,57 @@ app.get('/blog/:slug', async (req, res) => {
     if (!page) return res.status(404).send('Page not found');
 
     const { renderBlogTemplate } = await import('./blog-renderer.js');
-    res.send(renderBlogTemplate(page));
+    var html = renderBlogTemplate(page);
+
+    // INLINE GLOSSARY LINKING (bypasses any blog-renderer issues)
+    var content = page.content || '';
+    var linkedContent = content;
+    var glossaryInlineMap = {
+      'YouTube Tags': '/glossary/youtube-tags',
+      'YouTube Algorithm': '/glossary/youtube-algorithm',
+      'CTR': '/glossary/click-through-rate',
+      'Audience Retention': '/glossary/audience-retention',
+      'Watch Time': '/glossary/watch-time',
+      'Impressions': '/glossary/impressions',
+      'Search Volume': '/glossary/search-volume',
+      'Keyword Difficulty': '/glossary/keyword-difficulty',
+      'Title Optimization': '/glossary/title-optimization',
+      'YouTube Keyword Research': '/glossary/youtube-keyword-research',
+      'Thumbnail Optimization': '/glossary/thumbnail-optimization',
+      'Description Optimization': '/glossary/description-optimization',
+      'Video Chapters': '/glossary/video-chapters',
+      'Transcript SEO': '/glossary/transcript-seo',
+      'Evergreen Content': '/glossary/evergreen-content',
+      'Competitor Analysis': '/glossary/competitor-analysis',
+      'Dwell Time': '/glossary/dwell-time',
+      'Session Time': '/glossary/session-time',
+      'YouTube Shorts': '/glossary/youtube-shorts',
+      'A/B Testing': '/glossary/ab-testing',
+      'Call to Action': '/glossary/call-to-action',
+      'Channel Audit': '/glossary/channel-audit',
+      'Keyword Cannibalization': '/glossary/keyword-cannibalization',
+      'Content Pillar': '/glossary/content-pillar',
+      'Video Hook': '/glossary/video-hook'
+    };
+    // Simple string replace — first protect existing links, replace terms, then restore
+    var prot = linkedContent.replace(/<a\s[^>]*>.*?<\/a>/gi, function(m) { return '⛔LK' + btoa(m) + '⛔'; });
+    var glTerms = Object.keys(glossaryInlineMap).sort((a,b) => b.length - a.length);
+    for (var gi = 0; gi < glTerms.length; gi++) {
+      var gt = glTerms[gi];
+      var gs = glossaryInlineMap[gt];
+      var gr = new RegExp('(?<![\\w\\-])(' + gt.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + ')(?![\\w\\-])', 'gi');
+      prot = prot.replace(gr, '<a href="' + gs + '" class="glossary-link">$1</a>');
+    }
+    linkedContent = prot.replace(/⛔LK([A-Za-z0-9+/=]+)⛔/g, function(m, b64) { return atob(b64); });
+    html = html.replace(content, linkedContent);
+
+    // [GLOSSARY_LINKS_ACTIVE] - confirm this code path runs
+    html = html.replace('<head>', '<head><meta name="glossary-links" content="active">');
+
+    res.setHeader('Cache-Control', 'no-store, no-cache, must-revalidate, max-age=0');
+    res.setHeader('Pragma', 'no-cache');
+    res.setHeader('Expires', '0');
+    res.send(html);
 
     } catch(e) { 
     console.error('[Blog Render Error]:', e.message);
@@ -1336,6 +1536,228 @@ app.post('/api/save-state', (req, res) => {
 
 
 
+// ── Pillar Page: Ultimate Guide to YouTube SEO ──────────────────────────
+
+function renderPillarPage() {
+  const guides = [
+    { slug: 'youtube-algorithm-checklist-2026', title: 'YouTube Algorithm Checklist 2026' },
+    { slug: 'youtube-seo-checklist-beginners-2026', title: 'YouTube SEO Checklist for Beginners 2026' },
+    { slug: 'youtube-tags-2026', title: 'YouTube Tags 2026' },
+    { slug: 'youtube-title-examples-2026', title: 'YouTube Title Examples That Get Clicks' },
+    { slug: 'how-to-keywords-youtube', title: 'How to Find YouTube Keywords' },
+    { slug: 'how-to-metadata-youtube', title: 'How to Optimize YouTube Metadata' },
+    { slug: 'youtube-description-templates-2026', title: 'YouTube Description Templates' },
+    { slug: 'youtube-thumbnail-ab-testing-guide', title: 'Thumbnail A/B Testing Guide' },
+    { slug: 'youtube-analytics-explained-2026', title: 'YouTube Analytics Explained' },
+    { slug: 'youtube-retention-graph-explained-2026', title: 'Retention Graph Explained' },
+    { slug: 'youtube-impressions-guide-2026', title: 'YouTube Impressions Guide' },
+    { slug: 'youtube-competitor-analysis-reverse-engineer', title: 'Competitor Analysis' },
+    { slug: 'youtube-playlist-optimization-strategy', title: 'Playlist Optimization Strategy' },
+    { slug: 'youtube-monetization-2026', title: 'YouTube Monetization 2026' },
+    { slug: 'youtube-shorts-algorithm-2026', title: 'YouTube Shorts Algorithm 2026' },
+    { slug: 'youtube-for-small-channels-2026', title: 'YouTube for Small Channels' },
+    { slug: 'youtube-end-screens-cards-guide-2026', title: 'End Screens & Cards Guide' },
+    { slug: 'best-youtube-seo-tools-2026', title: 'Best YouTube SEO Tools 2026' },
+    { slug: 'github-seo-backlinks-guide', title: 'GitHub SEO Backlinks Guide' },
+  ];
+
+  let guideLinks = guides.map((g, i) =>
+    `<li><a href="/blog/${g.slug}" class="guide-link">${g.title}</a></li>`
+  ).join('\n      ');
+
+  const glossarySections = [
+    { name: 'Analytics', icon: '📊', terms: ['Click-Through Rate', 'Average View Duration', 'Audience Retention', 'Watch Time', 'Impressions', 'YouTube Analytics', 'Traffic Sources'] },
+    { name: 'Algorithm', icon: '🤖', terms: ['YouTube Algorithm', 'Session Time', 'Search Ranking Factors', 'Dwell Time', 'Topic Authority', 'Shorts Algorithm', 'Browse Features'] },
+    { name: 'SEO & Optimization', icon: '🔍', terms: ['Keyword Research', 'Long-Tail Keywords', 'Search Volume', 'Keyword Difficulty', 'Title Optimization', 'YouTube Tags', 'Description Optimization', 'Thumbnail Optimization', 'Video Chapters', 'Transcript SEO'] },
+    { name: 'Monetization', icon: '💰', terms: ['YouTube Partner Program', 'Ad Revenue', 'Demonetization', 'Shorts Monetization', 'RPM', 'CPM', 'Mid-Roll Ads'] },
+    { name: 'Content Strategy', icon: '📝', terms: ['Video Hook', 'Content Pillar', 'Evergreen Content', 'Content Calendar', 'Content Gap Analysis', 'Content Repurposing'] },
+  ];
+
+  let glossaryHTML = glossarySections.map(s =>
+    `<div style="margin-bottom:2rem"><h3 style="color:#fb923c;margin-bottom:.75rem">${s.icon} ${s.name}</h3><div style="display:flex;flex-wrap:wrap;gap:.5rem">${
+      s.terms.map(t => `<a href="/glossary/${t.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '')}" class="glossary-pill" style="display:inline-block;background:rgba(249,115,22,0.1);color:#fb923c;padding:.3rem .8rem;border-radius:9999px;font-size:.85rem;text-decoration:none;border:1px solid rgba(249,115,22,0.2);transition:all .2s">${t}</a>`).join('')
+    }</div></div>`
+  ).join('\n      ');
+
+  return `<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="icon" href="/favicon.ico" />
+  <title>The Ultimate Guide to YouTube SEO (2026) — Complete Resource | YT SEO Architect</title>
+  <meta name="description" content="The complete YouTube SEO resource covering keyword research, title optimization, tags, descriptions, thumbnails, algorithm updates, analytics, and monetization. 33+ guides, 75+ glossary terms, 17 free tools." />
+  <meta name="robots" content="index, follow" />
+  <link rel="canonical" href="https://yt-seo-architect.vercel.app/guide/youtube-seo" />
+  <meta property="og:type" content="article" />
+  <meta property="og:title" content="The Ultimate Guide to YouTube SEO (2026) — Complete Resource" />
+  <meta property="og:description" content="Everything you need to rank on YouTube in 2026. 33 guides, 75 glossary terms, 17 free tools — all in one place." />
+  <meta name="twitter:card" content="summary_large_image" />
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "headline": "The Ultimate Guide to YouTube SEO (2026)",
+    "description": "Complete YouTube SEO resource covering all aspects of ranking on YouTube in 2026.",
+    "datePublished": "2026-07-24",
+    "dateModified": "2026-07-24",
+    "author": { "@type": "Person", "name": "Patrick" },
+    "publisher": { "@type": "Organization", "name": "YT SEO Architect" },
+    "mainEntityOfPage": { "@type": "WebPage", "@id": "https://yt-seo-architect.vercel.app/guide/youtube-seo" }
+  }
+  </script>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <style>
+    :root{--primary:#f97316;--accent:#fb923c;--bg:#000;--surface:rgba(15,23,42,0.5);--text:#f8fafc;--muted:#94a3b8;--border:rgba(249,115,22,0.2)}
+    *{margin:0;padding:0;box-sizing:border-box}
+    body{font-family:'Outfit','Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(--text);line-height:1.8;overflow-x:hidden}
+    .wrap{max-width:800px;margin:0 auto;padding:20px}
+    header{display:flex;justify-content:space-between;align-items:center;padding:1rem 0;margin-bottom:2rem;border-bottom:1px solid var(--border)}
+    .logo{font-size:1.3rem;font-weight:800;text-decoration:none;color:var(--text)}
+    .logo span{color:var(--accent)}
+    .nav-cta{background:var(--primary);color:#fff;padding:.45rem 1.1rem;border-radius:8px;text-decoration:none;font-weight:600;font-size:.85rem}
+    h1{font-size:2.2rem;font-weight:800;line-height:1.3;margin-bottom:1rem;background:linear-gradient(135deg,#fff,var(--accent));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+    h2{font-size:1.5rem;margin:3rem 0 1rem;color:var(--primary);padding-bottom:.5rem;border-bottom:1px solid var(--border)}
+    h3{font-size:1.15rem;margin:1.5rem 0 .75rem;color:var(--text)}
+    p{margin-bottom:1.25rem;color:var(--muted)}
+    .section-card{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:1.5rem;margin-bottom:1.5rem;transition:border-color .2s}
+    .section-card:hover{border-color:var(--primary)}
+    .section-card h3{margin-top:0;color:var(--accent)}
+    .section-card p{font-size:.95rem;margin-bottom:.5rem}
+    .section-card a{color:var(--primary);text-decoration:none;font-weight:600}
+    .section-card a:hover{text-decoration:underline}
+    .pill{display:inline-block;background:rgba(249,115,22,0.1);color:var(--primary);padding:.25rem .7rem;border-radius:9999px;font-size:.8rem;text-decoration:none;margin:.2rem;border:1px solid rgba(249,115,22,0.2)}
+    .pill:hover{background:rgba(249,115,22,0.2)}
+    ul{margin:1rem 0 1.5rem 1.5rem;color:var(--muted)}
+    li{margin-bottom:.4rem}
+    a{color:var(--primary)}
+    .guide-link{color:var(--muted);text-decoration:none;transition:color .2s}
+    .guide-link:hover{color:var(--primary)}
+    .cta-box{background:linear-gradient(135deg,rgba(249,115,22,0.08),rgba(251,146,60,0.03));border:1px solid rgba(249,115,22,0.3);border-radius:16px;padding:2rem;margin:2.5rem 0;text-align:center}
+    .cta-box h3{color:#fff;margin-bottom:.5rem;font-size:1.25rem}
+    .cta-box p{color:var(--muted);margin-bottom:1.25rem}
+    .cta-box a{display:inline-block;background:var(--primary);color:#fff;padding:.75rem 2rem;border-radius:10px;text-decoration:none;font-weight:700}
+    .cta-box a:hover{transform:translateY(-2px)}
+    footer{text-align:center;padding:2rem 0;border-top:1px solid var(--border);color:var(--muted);font-size:.85rem}
+    @media(max-width:640px){h1{font-size:1.6rem}header{flex-direction:column;gap:12px}}
+    .pill-grid{display:flex;flex-wrap:wrap;gap:.4rem}
+    .glossary-pill:hover{background:rgba(249,115,22,0.25)!important;transform:translateY(-1px)}
+  </style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <a href="/" class="logo">⚡ YT SEO <span>Architect</span></a>
+    <a href="/dashboard" class="nav-cta">Start Free →</a>
+  </header>
+
+  <h1>The Ultimate Guide to YouTube SEO (2026)</h1>
+  <p style="font-size:1.05rem;color:#d1d5db">Everything you need to rank higher, get more views, and grow your channel — all from one place. 33 guides, 75+ glossary terms, 17 free tools, and AI-powered automation.</p>
+
+  <div style="display:flex;gap:1rem;flex-wrap:wrap;margin-bottom:2rem">
+    <span style="color:var(--muted);font-size:.9rem">📚 33 guides</span>
+    <span style="color:var(--muted);font-size:.9rem">📖 75+ glossary terms</span>
+    <span style="color:var(--muted);font-size:.9rem">🛠️ 17 free tools</span>
+    <span style="color:var(--muted);font-size:.9rem">🤖 AI-powered</span>
+  </div>
+
+  <h2>1. 🎯 Quick Start — Where to Begin</h2>
+  <p>YouTube SEO starts with understanding what the algorithm wants. The single highest-impact change you can make today is <strong>title optimization</strong> — it directly increases click-through rate, which signals YouTube to promote your video to more viewers.</p>
+  <p>Use our <a href="/tools/tag-generator">Free Tag Generator</a> to see how it works, then read the <a href="/blog/youtube-title-examples-2026">Title Examples Guide</a> for formulas that work.</p>
+
+  <div class="cta-box">
+    <h3>🚀 Start Here: Free Channel Audit</h3>
+    <p>AI analyzes your titles, tags, descriptions, and thumbnails. Get actionable fixes in 60 seconds.</p>
+    <a href="/dashboard">Run My Free Audit →</a>
+  </div>
+
+  <h2>2. 📖 YouTube SEO Guides (33 Articles)</h2>
+  <div class="section-card">
+    <p>Every guide we've written — organized by topic. Click any to dive deep.</p>
+    <ul>
+      ${guideLinks}
+    </ul>
+  </div>
+
+  <h2>3. 🛠️ Free YouTube SEO Tools</h2>
+  <div class="section-card">
+    <p>All 17 tools are 100% free. No login required for most tools.</p>
+    <div style="display:flex;flex-wrap:wrap;gap:.5rem;margin-top:1rem">
+      <a href="/tools/tag-generator" class="pill">🏷️ Tag Generator</a>
+      <a href="/tools/title-optimizer" class="pill">📝 Title Optimizer</a>
+      <a href="/tools/description-writer" class="pill">📄 Description Writer</a>
+      <a href="/dashboard" class="pill">🔍 Channel Audit</a>
+      <a href="/dashboard" class="pill">🎯 Keyword Research</a>
+      <a href="/dashboard" class="pill">🤖 AI Coach</a>
+      <a href="/dashboard" class="pill">👁️ Thumbnail Analyzer</a>
+      <a href="/dashboard" class="pill">📊 Retention Analyzer</a>
+      <a href="/dashboard" class="pill">🔄 A/B Title Tester</a>
+      <a href="/dashboard" class="pill">📈 Trend Pulse</a>
+      <a href="/dashboard" class="pill">🎬 Script Generator</a>
+      <a href="/dashboard" class="pill">💬 Comment Auto-Reply</a>
+      <a href="/dashboard" class="pill">📋 Playlist Strategy</a>
+      <a href="/dashboard" class="pill">🏁 End Screen Planner</a>
+      <a href="/dashboard" class="pill">📑 Metadata Auditor</a>
+      <a href="/dashboard" class="pill">🎯 Competitor Sniper</a>
+      <a href="/dashboard" class="pill">⚡ Bulk Injector</a>
+    </div>
+  </div>
+
+  <h2>4. 📖 YouTube SEO Glossary (75+ Terms)</h2>
+  <p>Every term defined, explained, and linked to relevant guides. Click any term to learn more.</p>
+  ${glossaryHTML}
+
+  <div class="cta-box">
+    <h3>🎯 Compare YT SEO Architect vs The Competition</h3>
+    <p>See how 17 free AI tools stack up against paid alternatives.</p>
+    <div style="display:flex;gap:1rem;justify-content:center;flex-wrap:wrap">
+      <a href="/vs/vidiq" style="background:rgba(249,115,22,0.15);color:#fff;padding:.6rem 1.5rem;border-radius:8px;text-decoration:none;font-weight:600">vs vidIQ →</a>
+      <a href="/vs/tubebuddy" style="background:rgba(249,115,22,0.15);color:#fff;padding:.6rem 1.5rem;border-radius:8px;text-decoration:none;font-weight:600">vs TubeBuddy →</a>
+    </div>
+  </div>
+
+  <h2>5. 💰 Monetization & Growth</h2>
+  <div class="section-card">
+    <p>Learn how to monetize your channel and grow sustainably. From YPP requirements to ad revenue optimization.</p>
+    <div style="display:flex;flex-wrap:wrap;gap:.4rem;margin-top:.75rem">
+      <a href="/blog/youtube-monetization-2026" class="pill">💰 Monetization 2026</a>
+      <a href="/blog/youtube-monetization-tips-2026" class="pill">💡 Monetization Tips</a>
+      <a href="/blog/youtube-shorts-monetization-requirements-2026" class="pill">📱 Shorts Monetization</a>
+      <a href="/blog/youtube-for-small-channels-2026" class="pill">🚀 Small Channels</a>
+    </div>
+  </div>
+
+  <h2>6. 📊 Analytics & Algorithm</h2>
+  <div class="section-card">
+    <p>Understand the data behind your channel's performance and how the algorithm decides what to recommend.</p>
+    <div style="display:flex;flex-wrap:wrap;gap:.4rem;margin-top:.75rem">
+      <a href="/blog/youtube-analytics-explained-2026" class="pill">📊 Analytics Guide</a>
+      <a href="/blog/youtube-analytics-4-metrics-that-matter" class="pill">🎯 4 Key Metrics</a>
+      <a href="/blog/youtube-retention-graph-explained-2026" class="pill">📈 Retention Graph</a>
+      <a href="/blog/youtube-impressions-guide-2026" class="pill">👁️ Impressions</a>
+      <a href="/blog/what-does-youtube-ctr-actually-mean" class="pill">🎯 CTR Explained</a>
+    </div>
+  </div>
+
+  <div class="cta-box">
+    <h3>⚡ Ready to Optimize Your Channel?</h3>
+    <p>Join thousands of creators using YT SEO Architect. 100% free. No credit card required.</p>
+    <a href="/dashboard">Get Started Free →</a>
+  </div>
+
+  <footer>
+    <p>© 2026 YT SEO Architect &middot; <a href="/blog">Blog</a> &middot; <a href="/glossary/">Glossary</a> &middot; <a href="/tools/">Free Tools</a> &middot; <a href="/privacy-policy">Privacy</a></p>
+  </footer>
+</div>
+</body>
+</html>`;
+}
+
+app.get('/guide/youtube-seo', (req, res) => {
+  res.send(renderPillarPage());
+});
+
 // ── Admin: Cleanup programmatic SEO posts (delete everything not in approved list) ──
 // Whitelist: only hand-crafted posts with 8+ min read time following _TEMPLATE.html.
 // Quality gate: word count ≥ 1600 (≈ 8 min read). Shorter posts are excluded.
@@ -1468,6 +1890,13 @@ app.get('/sitemap.xml', async (req, res) => {
 
     // PSEO disabled as per user request
 
+
+    // Blog category pages
+    for (const [catSlug, cat] of Object.entries(BLOG_CATEGORIES)) {
+      xml += `  <url><loc>https://yt-seo-architect.vercel.app/blog/category/${catSlug}</loc><changefreq>weekly</changefreq><priority>0.7</priority></url>\n`;
+    }
+    xml += `  <url><loc>https://yt-seo-architect.vercel.app/blog/categories</loc><changefreq>weekly</changefreq><priority>0.7</priority></url>\n`;
+    xml += `  <url><loc>https://yt-seo-architect.vercel.app/guide/youtube-seo</loc><changefreq>monthly</changefreq><priority>0.9</priority></url>\n`;
 
     // Validated blog posts only
     for (const page of allPages) {

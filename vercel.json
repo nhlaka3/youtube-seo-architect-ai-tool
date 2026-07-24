@@ -35,6 +35,7 @@
     { "source": "/tools/title-optimizer", "destination": "/tools/title-optimizer.html" },
     { "source": "/tools/description-writer", "destination": "/tools/description-writer.html" },
     { "source": "/api/(.+)", "destination": "/api/index.js" },
+    { "source": "/guide/youtube-seo", "destination": "/api/index.js" },
 
     { "source": "/(.*)", "destination": "/$1" }
   ],
