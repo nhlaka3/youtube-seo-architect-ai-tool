@@ -1380,27 +1380,29 @@ app.get('/sitemap.xml', async (req, res) => {
       xml += `  <url><loc>https://yt-seo-architect.vercel.app${p.loc}</loc><changefreq>${p.changefreq}</changefreq><priority>${p.priority}</priority></url>\n`;
     }
 
-    // Glossary pages (from glossary data — slugs built into glossary-data.json)
-    try {
-      const glossaryData = JSON.parse(
-        readFileSync(resolve(process.cwd(), 'scripts/glossary-data.json'), 'utf-8')
-      );
-      for (const term of glossaryData.terms) {
-        xml += `  <url><loc>https://yt-seo-architect.vercel.app/glossary/${term.slug}</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>\n`;
-      }
-    } catch (e) {
-      // Fallback: try relative to __dirname
-      try {
-        const glossaryData = JSON.parse(
-          readFileSync(resolve(__dirname, '../scripts/glossary-data.json'), 'utf-8')
-        );
-        for (const term of glossaryData.terms) {
-          xml += `  <url><loc>https://yt-seo-architect.vercel.app/glossary/${term.slug}</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>\n`;
-        }
-      } catch (e2) {
-        // Final fallback: log both errors
-        console.error('[Sitemap] Glossary data error (tried cwd + __dirname):', e.message, e2.message);
-      }
+    // Glossary pages (slugs inlined for Vercel serverless reliability)
+    const GLOSSARY_SLUGS = [
+      "youtube-algorithm", "session-time", "click-through-rate", "average-view-duration",
+      "audience-retention", "watch-time", "impressions", "revenue-per-mille", "cost-per-mille",
+      "youtube-partner-program", "ad-revenue", "demonetization", "youtube-keyword-research",
+      "long-tail-keywords", "search-volume", "keyword-difficulty", "title-optimization",
+      "youtube-tags", "description-optimization", "transcript-seo", "thumbnail-optimization",
+      "video-chapters", "closed-captions", "video-sitemap", "youtube-search-ranking-factors",
+      "dwell-time", "keyword-cannibalization", "youtube-shorts", "shorts-monetization",
+      "video-hook", "content-pillar", "evergreen-content", "playlist-optimization",
+      "cards-end-screens", "channel-audit", "competitor-analysis", "content-gap-analysis",
+      "call-to-action", "ab-testing", "youtube-live-stream", "super-chat", "channel-memberships",
+      "premieres", "community-tab", "vertical-video", "mobile-seo", "topic-authority",
+      "audience-demographics", "traffic-sources", "shorts-algorithm", "video-intro-structure",
+      "youtube-analytics", "gaming-on-youtube", "youtube-studio", "vidiq-vs-tubebuddy",
+      "youtube-premium", "channel-branding", "creator-music", "copyright-claims",
+      "community-guidelines", "trending-content", "youtube-trending", "browse-features",
+      "content-repurposing", "batch-production", "content-calendar", "cross-promotion",
+      "external-traffic", "video-backlinks", "collaboration", "youtube-hashtags",
+      "mid-roll-ads", "youtube-creator-academy", "playlist-discovery", "channel-trailer"
+    ];
+    for (const slug of GLOSSARY_SLUGS) {
+      xml += `  <url><loc>https://yt-seo-architect.vercel.app/glossary/${slug}</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>\n`;
     }
 
     // PSEO disabled as per user request
