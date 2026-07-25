@@ -1237,28 +1237,25 @@ async function main() {
     return;
   }
 
-  // Write file
-  console.log('  Writing HTML file...');
-  const outputPath = resolve(BLOG_DIR, `${keywordEntry.slug}.html`);
-  writeFileSync(outputPath, fullHTML);
-  console.log(`  ✅ Written: ${outputPath}`);
-  console.log(`  ${fullHTML.length} bytes`);
+  // Write to database only — API serves dynamically (no static HTML files needed)
+  console.log('  Saving to database...');
+  const saveResult = { wroteFile: false, savedToDb: false };
 
-  // Inject affiliate links into the new post
+  // Inject affiliate links into the article content before saving
+  let finalContent = fullHTML;
   try {
     const { injectAffiliateLinks } = await import('./affiliate-mapper-lib.mjs');
     const affiliateConfig = JSON.parse(readFileSync(resolve(PROJECT, 'scripts/affiliate-mapper.json'), 'utf-8'));
-    const postHtml = readFileSync(outputPath, 'utf-8');
-    const affiliateResult = injectAffiliateLinks(postHtml, affiliateConfig);
+    const affiliateResult = injectAffiliateLinks(finalContent, affiliateConfig);
     if (affiliateResult.linksAdded > 0) {
-      writeFileSync(outputPath, affiliateResult.html);
+      finalContent = affiliateResult.html;
       console.log(`  🔗 Affiliate links: ${affiliateResult.linksAdded} added (${affiliateResult.addedKeywords.join(', ')})`);
     }
   } catch (e) {
     console.log(`  ⚠ Affiliate injection skipped: ${e.message}`);
   }
 
-  // Insert into database for dynamic sitemap
+  // Save to database for dynamic sitemap and API serving
   if (dbService) {
     try {
       await dbService.saveSeoPage({
@@ -1266,24 +1263,22 @@ async function main() {
         title: page.title,
         metaDescription: page.metaDescription || `Learn about ${keywordEntry.keyword} in this comprehensive guide.`,
         h1: page.title,
-        content: fullHTML,
+        content: finalContent,
         wordCount: wordCount,
         status: 'published',
         publishedAt: new Date(),
       });
-      console.log('  ✅ Saved to database');
+      saveResult.savedToDb = true;
+      console.log('  ✅ Saved to database — API will serve dynamically');
     } catch (e) {
-      console.log(`  ⚠ DB save failed (non-fatal): ${e.message}`);
+      console.log(`  ⚠ DB save failed: ${e.message}`);
     }
   }
 
-  // Update sitemap
-  console.log('  Updating sitemap...');
-  updateSitemap(keywordEntry.slug, page.title);
+  // Skip static file write — all pages served dynamically via API
+  console.log('  ⏭ Skipping static HTML file (API serves dynamically with glossary-linking)');
 
-  // Update blog listing page (blog.html)
-  console.log('  Updating blog listing...');
-  updateBlogListing(keywordEntry, page, wordCount);
+  // Skip static sitemap and blog listing updates — API handles both dynamically
 
   // Mark keyword as done
   markDone(data, keywordEntry.slug);
@@ -1319,7 +1314,7 @@ async function main() {
   console.log(`  Title:    ${page.title}`);
   console.log(`  Slug:     ${keywordEntry.slug}`);
   console.log(`  Words:    ${wordCount}`);
-  console.log(`  Template: (see generation output above)`);
+  console.log(`  Source:   Database (API-served with glossary links)`);
   console.log(`  File:     public/blog/${keywordEntry.slug}.html`);
   console.log(`  Live at:  https://yt-seo-architect.vercel.app/blog/${keywordEntry.slug}`);
   console.log('');
