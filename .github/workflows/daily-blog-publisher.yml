@@ -86,6 +86,20 @@ jobs:
           node scripts/add-glossary-links.mjs
           node scripts/add-glossary-links-dist.mjs
 
+      - name: 🎬 Generate video from new blog post
+        id: video
+        continue-on-error: true
+        env:
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+          FAL_KEY: ${{ secrets.FAL_KEY }}
+        run: |
+          if [ -n "$OPENAI_API_KEY" ] || [ -n "$FAL_KEY" ]; then
+            echo "Video generation requires OpenMontage setup"
+            echo "Run manually: gh workflow run video-generator.yml -f slug=<slug>"
+          else
+            echo "⚠ No video API keys configured — skipping video generation"
+          fi
+
       - name: 📤 Push generated files to private repo
         id: push
         run: |
