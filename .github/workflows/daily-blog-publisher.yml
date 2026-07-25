@@ -92,10 +92,16 @@ jobs:
         env:
           OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
           FAL_KEY: ${{ secrets.FAL_KEY }}
+          GOOGLE_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          GROQ_API_KEY: ${{ secrets.GROQ_API_KEY }}
         run: |
-          if [ -n "$OPENAI_API_KEY" ] || [ -n "$FAL_KEY" ]; then
-            echo "Video generation requires OpenMontage setup"
-            echo "Run manually: gh workflow run video-generator.yml -f slug=<slug>"
+          if [ -n "$GOOGLE_API_KEY" ]; then
+            echo "🎬 Gemini key found — video generation ready"
+            echo "Run: gh workflow run video-generator.yml -f slug=<slug>"
+            echo ""
+            echo "To enable full video (motion clips), add FAL_KEY secret."
+            echo "With just Gemini: image-based videos with voiceover (~\$0.15/video)."
+            echo "With FAL_KEY added: full motion video with stock clips (~\$0.50/video)."
           else
             echo "⚠ No video API keys configured — skipping video generation"
           fi
