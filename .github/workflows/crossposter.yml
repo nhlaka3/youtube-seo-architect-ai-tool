@@ -41,7 +41,7 @@ jobs:
         env:
           DEVTO_API_KEY: ${{ secrets.DEVTO_API_KEY }}
         run: |
-          if [ -n "${{ secrets.DEVTO_API_KEY }}" ]; then
+          if [ -n "$DEVTO_API_KEY" ]; then
             CMD="python3 scripts/daily-devto-post.py"
             if [ -n "${{ github.event.inputs.slug }}" ]; then
               CMD="$CMD --force ${{ github.event.inputs.slug }}"

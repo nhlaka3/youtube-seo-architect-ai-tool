@@ -43,28 +43,34 @@ jobs:
           python3 scripts/backlink-finder.py \
             "${{ github.event.inputs.keyword || 'youtube seo tools' }}" \
             --pages "${{ github.event.inputs.pages || 5 }}" \
-            --output /tmp/backlink-opportunities.csv
+            --output /tmp/backlink-opportunities.csv 2>&1 | tee /tmp/scan-output.txt
           echo "SCAN_DONE=true" >> $GITHUB_OUTPUT
 
-      - name: 📊 Step 2 — Generate outreach templates
-        id: outreach
-        run: |
-          echo "Generating outreach templates from opportunities..."
-          if [ -f /tmp/backlink-opportunities.csv ]; then
-            wc -l /tmp/backlink-opportunities.csv
-          else
-            echo "No opportunities found this week"
-          fi
-
-      - name: 📋 Step 3 — Save report
+      - name: 💾 Step 2 — Save opportunities to repo for manual review
+        id: save
         run: |
           mkdir -p marketing/backlink-reports
-          cp /tmp/backlink-opportunities.csv marketing/backlink-reports/week-$(date +%Y-%m-%d).csv 2>/dev/null || echo "No data"
+          REPORT="marketing/backlink-reports/opportunities-$(date +%Y-%m-%d).csv"
+          if [ -f /tmp/backlink-opportunities.csv ] && [ -s /tmp/backlink-opportunities.csv ]; then
+            cp /tmp/backlink-opportunities.csv "$REPORT"
+            echo "Saved $(wc -l < "$REPORT") opportunities to $REPORT"
+            echo "OPPORTUNITIES=$(wc -l < "$REPORT")" >> $GITHUB_OUTPUT
+          else
+            echo "No opportunities found this week"
+            echo "OPPORTUNITIES=0" >> $GITHUB_OUTPUT
+          fi
+
+      - name: 📋 Step 3 — Commit report
+        run: |
           git config user.name "YT SEO Bot"
           git config user.email "bot@yt-seo-architect.vercel.app"
           git add marketing/backlink-reports/ 2>/dev/null || true
-          git diff --staged --quiet || git commit -m "backlinks: weekly opportunity scan [skip ci]"
-          git push origin HEAD:main 2>&1 || true
+          if ! git diff --staged --quiet; then
+            git commit -m "backlinks: weekly opportunity scan $(date +%Y-%m-%d) [skip ci]"
+            git push origin HEAD:main 2>&1 || true
+          else
+            echo "No changes to commit"
+          fi
 
       - name: 📊 Report
         if: always()
