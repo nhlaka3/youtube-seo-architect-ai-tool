@@ -36,6 +36,10 @@
     { "source": "/tools/description-writer", "destination": "/tools/description-writer.html" },
     { "source": "/api/(.+)", "destination": "/api/index.js" },
     { "source": "/guide/youtube-seo", "destination": "/api/index.js" },
+    { "source": "/vs/morningfame", "destination": "/vs/morningfame.html" },
+    { "source": "/vs/tubics", "destination": "/vs/tubics.html" },
+    { "source": "/vs/keywordtool", "destination": "/vs/keywordtool.html" },
+    { "source": "/vs/canva", "destination": "/vs/canva.html" },
 
     { "source": "/(.*)", "destination": "/$1" }
   ],

@@ -1,0 +1,79 @@
+name: 🔗 Weekly Backlink Prospecting
+
+on:
+  schedule:
+    - cron: '0 9 * * 1'      # 9:00 AM UTC every Monday (after glossary publisher)
+  workflow_dispatch:           # Manual trigger
+    inputs:
+      keyword:
+        description: 'Search keyword for backlink opportunities'
+        type: string
+        default: 'youtube seo tools'
+      pages:
+        description: 'Number of search result pages to scan'
+        type: number
+        default: 5
+
+permissions:
+  contents: write
+
+jobs:
+  find-backlinks:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: ⬇️ Checkout
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GH_PAT }}
+          fetch-depth: 1
+
+      - name: 🔧 Setup Python + Node
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+
+      - name: 🔍 Step 1 — Scan for broken link opportunities
+        id: scan
+        run: |
+          echo "Searching for '${{ github.event.inputs.keyword || 'youtube seo tools' }}'..."
+          python3 scripts/backlink-finder.py \
+            "${{ github.event.inputs.keyword || 'youtube seo tools' }}" \
+            --pages "${{ github.event.inputs.pages || 5 }}" \
+            --output /tmp/backlink-opportunities.csv
+          echo "SCAN_DONE=true" >> $GITHUB_OUTPUT
+
+      - name: 📊 Step 2 — Generate outreach templates
+        id: outreach
+        run: |
+          echo "Generating outreach templates from opportunities..."
+          if [ -f /tmp/backlink-opportunities.csv ]; then
+            wc -l /tmp/backlink-opportunities.csv
+          else
+            echo "No opportunities found this week"
+          fi
+
+      - name: 📋 Step 3 — Save report
+        run: |
+          mkdir -p marketing/backlink-reports
+          cp /tmp/backlink-opportunities.csv marketing/backlink-reports/week-$(date +%Y-%m-%d).csv 2>/dev/null || echo "No data"
+          git config user.name "YT SEO Bot"
+          git config user.email "bot@yt-seo-architect.vercel.app"
+          git add marketing/backlink-reports/ 2>/dev/null || true
+          git diff --staged --quiet || git commit -m "backlinks: weekly opportunity scan [skip ci]"
+          git push origin HEAD:main 2>&1 || true
+
+      - name: 📊 Report
+        if: always()
+        run: |
+          echo "════════════════════════════════════════════"
+          echo "  🔗 BACKLINK PROSPECTING REPORT"
+          echo "════════════════════════════════════════════"
+          echo "  Scan step:   ${{ steps.scan.outcome }}"
+          echo "  Outreach:    ${{ steps.outreach.outcome }}"
+          echo "  Keyword:     ${{ github.event.inputs.keyword || 'youtube seo tools' }}"
+          echo "  Time:        $(date -u)"
+          echo "════════════════════════════════════════════"

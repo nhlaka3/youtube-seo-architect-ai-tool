@@ -1852,6 +1852,12 @@ app.get('/sitemap.xml', async (req, res) => {
     xml += `  <url><loc>https://yt-seo-architect.vercel.app/blog/categories</loc><changefreq>weekly</changefreq><priority>0.7</priority></url>\n`;
     xml += `  <url><loc>https://yt-seo-architect.vercel.app/guide/youtube-seo</loc><changefreq>monthly</changefreq><priority>0.9</priority></url>\n`;
 
+    // Comparison pages
+    const vsSlugs = ['vidiq', 'tubebuddy', 'morningfame', 'tubics', 'keywordtool', 'canva'];
+    for (const vs of vsSlugs) {
+      xml += `  <url><loc>https://yt-seo-architect.vercel.app/vs/${vs}</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>\n`;
+    }
+
     // Validated blog posts only
     for (const page of allPages) {
       const validation = validateBlogPost({
