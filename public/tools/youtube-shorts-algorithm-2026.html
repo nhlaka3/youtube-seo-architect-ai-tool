@@ -179,6 +179,12 @@ const ToolLogic = {
     if (_topic.includes('tutorial')) {
       return this.optimizeTutorial(input);
     }
+    if (_topic.includes('playlist') || _topic.includes('end-screen') || _topic.includes('chapter')) {
+      return this.optimizePlaylist(input);
+    }
+    if (_topic.includes('shorts')) {
+      return this.optimizeShorts(input);
+    }
     const lower = input.toLowerCase();
     const wordCount = input.split(/\s+/).filter(Boolean).length;
     const suggestions = [];
@@ -265,10 +271,75 @@ const ToolLogic = {
     suggestions.push({ priority: 'low', category: 'Comments', msg: 'Engagement tactic.', action: 'Ask viewers to comment with their results or questions. Tutorials with active comment sections rank higher.' });
 
     return suggestions;
-  }
-};
+  },
 
-function handleTool() {
+  optimizePlaylist(input) {
+    var lower = input.toLowerCase();
+    var wordCount = input.split(/s+/).filter(Boolean).length;
+    var suggestions = [];
+
+    if (lower.includes('series') || lower.includes('episode') || lower.includes('part') || lower.includes('chapter')) {
+      suggestions.push({ priority: 'good', category: 'Structure', msg: 'Series structure detected.', action: 'Number your videos (Ep. 1, Ep. 2...) and create a dedicated playlist for the series.' });
+    } else {
+      suggestions.push({ priority: 'high', category: 'Structure', msg: 'No series structure detected.', action: 'Create a playlist with 5-10 related videos. Playlists with 10+ videos rank 2x better in search.' });
+    }
+
+    suggestions.push({ priority: 'high', category: 'Playlist', msg: 'Playlist SEO.', action: 'Use a keyword-rich playlist title and description. Add the playlist to your channel homepage.' });
+    suggestions.push({ priority: 'medium', category: 'Playlist', msg: 'Playlist ordering.', action: 'Arrange videos logically (beginner → advanced). YouTube auto-plays the next video in sequence.' });
+    suggestions.push({ priority: 'medium', category: 'Playlist', msg: 'Playlist thumbnail.', action: 'Create a custom playlist cover image. 1600x600px works best for channel banners.' });
+    suggestions.push({ priority: 'medium', category: 'End Screen', msg: 'Cross-link playlists.', action: 'Use end screens to recommend the next video in the playlist to maximize session watch time.' });
+    suggestions.push({ priority: 'low', category: 'Analytics', msg: 'Monitor playlists.', action: 'Check YouTube Studio > Analytics > Playlists to identify your best-performing playlists.' });
+
+    if (lower.includes('end screen') || lower.includes('endscreen') || lower.includes('card')) {
+      suggestions.push({ priority: 'good', category: 'End Screen', msg: 'End screens detected.', action: 'Use all 3 end screen slots: 2 video recommendations + 1 subscribe button.' });
+    }
+
+    var numMatch = input.match(/(d+)s*(video|episode|part)/i);
+    if (numMatch) {
+      var count = parseInt(numMatch[1]);
+      if (count < 5) suggestions.push({ priority: 'medium', category: 'Size', msg: count + ' videos in series.', action: 'Aim for 10+ videos in your playlist for maximum SEO benefit.' });
+      else if (count >= 10) suggestions.push({ priority: 'good', category: 'Size', msg: count + ' videos.', action: 'Keep adding videos to maintain momentum and authority.' });
+    } else {
+      suggestions.push({ priority: 'low', category: 'Size', msg: 'Playlist size unknown.', action: 'Aim for at least 5 videos per playlist to trigger YouTube recommendation features.' });
+    }
+    return suggestions;
+  },
+
+  optimizeShorts(input) {
+    var lower = input.toLowerCase();
+    var suggestions = [];
+
+    var secondsMatch = input.match(/(d+)s*(sec|second|min)/i);
+    if (secondsMatch) {
+      var secs = parseInt(secondsMatch[1]);
+      if (secs <= 15) suggestions.push({ priority: 'good', category: 'Duration', msg: secs + 's — perfect Shorts length.', action: 'Make every second count. Use text overlays and fast pacing.' });
+      else if (secs <= 30) suggestions.push({ priority: 'good', category: 'Duration', msg: secs + 's — ideal Shorts length.', action: 'Hook viewers in the first 2 seconds. Maintain fast pacing throughout.' });
+      else if (secs <= 60) suggestions.push({ priority: 'medium', category: 'Duration', msg: secs + 's — longer Short.', action: 'Use pattern interrupts every 5-7 seconds to keep retention high.' });
+    } else {
+      suggestions.push({ priority: 'high', category: 'Duration', msg: 'Duration not specified.', action: 'Shorts under 60s perform best. Aim for 15-30 seconds for maximum completion rate.' });
+    }
+
+    if (lower.includes('tip') || lower.includes('hack') || lower.includes('trick')) {
+      suggestions.push({ priority: 'good', category: 'Format', msg: 'Tips format — proven Shorts winner.', action: 'Use bold text overlays. "3 Tips" formats get 2x more shares.' });
+    } else if (lower.includes('tutorial') || lower.includes('how to')) {
+      suggestions.push({ priority: 'good', category: 'Format', msg: 'How-to format — great for Shorts.', action: 'Show the result in the first 2 seconds, then show the process.' });
+    } else if (lower.includes('funny') || lower.includes('comedy')) {
+      suggestions.push({ priority: 'good', category: 'Format', msg: 'Comedy format — highly shareable.', action: 'Front-load the punchline in the first 3 seconds.' });
+    } else {
+      suggestions.push({ priority: 'medium', category: 'Format', msg: 'Format unclear.', action: 'Best Shorts formats: tips, tutorials, reactions, comparisons, behind-the-scenes.' });
+    }
+
+    suggestions.push({ priority: 'high', category: 'Pacing', msg: 'Shorts pacing.', action: 'Change the visual every 2-3 seconds. Use text overlays at top and bottom (avoid center 70%).' });
+    suggestions.push({ priority: 'medium', category: 'Text', msg: 'Text overlay strategy.', action: 'Use 3-5 large text overlays. Text should be readable in 1 second. White text with black stroke works best.' });
+    suggestions.push({ priority: 'medium', category: 'Hashtags', msg: 'Shorts hashtags.', action: 'Use 3-5 hashtags: #Shorts + topic tags. Hashtagged Shorts get 40% more discovery.' });
+    suggestions.push({ priority: 'medium', category: 'Thumbnail', msg: 'Shorts cover frame.', action: 'Select the most engaging frame as your cover. Clear covers get 25% more clicks from the Shorts shelf.' });
+    suggestions.push({ priority: 'high', category: 'Hook', msg: 'Shorts hook.', action: 'First 2 seconds must hook. Use a surprising visual, bold text, or question to stop the scroll.' });
+
+    if (lower.includes('music') || lower.includes('sound') || lower.includes('audio')) {
+      suggestions.push({ priority: 'good', category: 'Audio', msg: 'Music mentioned.', action: 'Use trending audio from the Shorts library. Trending sounds get algorithmic priority.' });
+    }
+    return suggestions;
+  }
   const input = document.getElementById('tool-input').value.trim();
   if (!input) return;
   var _topic = (window.BLOG_TOPIC || '').toLowerCase();
