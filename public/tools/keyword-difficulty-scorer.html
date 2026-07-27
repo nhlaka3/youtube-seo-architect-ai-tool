@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Keyword Difficulty Checker — Free YouTube SEO Tool</title>
+  <meta name="description" content="Score YouTube keyword difficulty and find low-competition opportunities. Free SEO tool for content creators." />
+  <meta name="robots" content="index, follow" />
+  <link rel="canonical" href="https://yt-seo-architect.vercel.app/tools/keyword-difficulty-scorer" />
+  <meta property="og:title" content="Keyword Difficulty Checker — Free YouTube SEO Tool" />
+  <meta property="og:description" content="Score YouTube keyword difficulty and find low-competition opportunities. Free SEO tool for content creators." />
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3831668789026424" crossorigin="anonymous"></script>
+  <style>
+    *{box-sizing:border-box;margin:0;padding:0}
+    body{font-family:'Outfit','Geist',-apple-system,BlinkMacSystemFont,sans-serif;background:#0a0a0f;color:#e2e8f0;line-height:1.6}
+    .header{display:flex;justify-content:space-between;align-items:center;padding:.75rem 1.5rem;background:#0f0c29;border-bottom:1px solid rgba(255,255,255,.05)}
+    .header a{color:#e2e8f0;text-decoration:none;font-weight:600}
+    .header .cta{background:linear-gradient(135deg,#f97316,#fb923c);color:#fff;padding:.4rem 1rem;border-radius:9999px;font-size:.85rem}
+    main{max-width:720px;margin:0 auto;padding:2rem 1.5rem}
+    h1{font-size:1.8rem;margin-bottom:.5rem;background:linear-gradient(135deg,#f97316,#fb923c);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+    .sub{color:#8b8b9e;font-size:.95rem;margin-bottom:2rem}
+    .tool-card{background:#1e1b4b;border:1px solid #2d2a5e;border-radius:12px;padding:1.5rem;margin-bottom:1.5rem}
+    .tool-card h2{font-size:1.1rem;color:#a5b4fc;margin-bottom:1rem}
+    .input-group{margin-bottom:1rem}
+    .input-group label{display:block;font-size:.85rem;color:#8b8b9e;margin-bottom:.3rem}
+    .input-group input,.input-group select{width:100%;padding:.6rem .8rem;background:#0a0a0f;border:1px solid #2d2a5e;border-radius:8px;color:#e2e8f0;font-size:.95rem;outline:none;transition:border-color .2s}
+    .input-group input:focus,.input-group select:focus{border-color:#6366f1}
+    .input-row{display:grid;grid-template-columns:1fr 1fr;gap:1rem}
+    @media(max-width:480px){.input-row{grid-template-columns:1fr}}
+    button{background:linear-gradient(135deg,#f97316,#fb923c);color:#fff;border:none;padding:.7rem 2rem;border-radius:9999px;font-size:.95rem;font-weight:600;cursor:pointer;transition:transform .2s;width:100%}
+    button:hover{transform:scale(1.02)}
+    .result-box{background:#0a0a0f;border:1px solid #2d2a5e;border-radius:8px;padding:1rem;margin-top:1rem;display:none}
+    .result-box.show{display:block}
+    .result-row{display:flex;justify-content:space-between;padding:.5rem 0;border-bottom:1px solid rgba(255,255,255,.05)}
+    .result-row:last-child{border-bottom:none}
+    .result-row .label{color:#8b8b9e;font-size:.85rem}
+    .result-row .value{color:#e2e8f0;font-weight:600;font-size:1.1rem}
+    .result-big{font-size:2rem;font-weight:800;text-align:center;padding:1rem 0;color:#fb923c}
+    .result-detail{text-align:center;color:#8b8b9e;font-size:.85rem;margin-bottom:.5rem}
+    .factor{display:flex;justify-content:space-between;padding:.4rem 0;font-size:.85rem;color:#8b8b9e;border-bottom:1px solid rgba(255,255,255,.03)}
+    .advice-box{background:rgba(99,102,241,.1);border:1px solid rgba(99,102,241,.3);border-radius:8px;padding:1rem;margin-top:.75rem;font-size:.85rem;color:#a5b4fc;line-height:1.5}
+    .cta-box{border:1px solid #4f46e5;border-radius:12px;padding:1.5rem;text-align:center;margin:2rem 0}
+    .cta-box h3{color:#e2e8f0;margin-bottom:.5rem}
+    .cta-box p{color:#8b8b9e;font-size:.85rem;margin-bottom:1rem}
+    .cta-box a{display:inline-block;background:linear-gradient(135deg,#f97316,#fb923c);color:#fff;padding:.6rem 1.5rem;border-radius:9999px;text-decoration:none;font-weight:600}
+    footer{text-align:center;padding:2rem;color:#6b7280;font-size:.8rem}
+    footer a{color:#8b8b9e;text-decoration:none}
+  </style>
+</head>
+<body>
+  <header class="header">
+    <a href="/">⚡ YT SEO Architect</a>
+    <a href="/tools/" class="cta">All Tools</a>
+  </header>
+  <main>
+    <h1>🔍 Keyword Difficulty Score</h1>
+    <p class="sub">Score any YouTube keyword for competition and opportunity. Find low-competition keywords that are easier to rank for.</p>
+    <div id="tool-root">undefined</div>
+    <div class="cta-box">
+      <h3>🚀 More Free Tools</h3>
+      <p>17 AI-powered tools to optimize your YouTube titles, tags, descriptions, and more.</p>
+      <a href="/tools/">Browse All Tools →</a>
+    </div>
+  </main>
+  <footer>
+    <p>&copy; 2026 YT SEO Architect · <a href="/glossary/">Glossary</a> · <a href="/blog">Blog</a> · <a href="/tools/">Tools</a></p>
+  </footer>
+  <script>
+  
+const ToolLogic = {
+  scoreKeyword() {
+    const kw = document.getElementById('kd-keyword').value.trim();
+    if (!kw) return;
+    const sv = parseFloat(document.getElementById('kd-volume').value) || 0;
+    const comp = parseInt(document.getElementById('kd-competition').value) || 3;
+
+    // Difficulty scoring algorithm
+    const wordCount = kw.split(' ').length;
+    const isLongTail = wordCount >= 3;
+
+    const volumeScore = Math.min(sv / 100, 30);
+    const compScore = comp * 10;
+    const tailBonus = isLongTail ? 15 : 0;
+    const specificityBonus = wordCount >= 4 ? 10 : (wordCount >= 3 ? 5 : 0);
+
+    const total = Math.min(100, volumeScore + compScore - tailBonus - specificityBonus);
+    const opportunity = Math.max(0, 100 - total);
+
+    document.getElementById('kd-score').textContent = Math.round(total);
+    document.getElementById('kd-opportunity').textContent = Math.round(opportunity);
+
+    let grade, color, advice;
+    if (total <= 25) { grade = 'Very Easy'; color = '#22c55e'; advice = 'Go for it — low competition, great opportunity to rank quickly. Create comprehensive content targeting this keyword.'; }
+    else if (total <= 45) { grade = 'Easy'; color = '#86efac'; advice = 'Good opportunity. Target this with well-optimized content and you should see rankings within weeks.'; }
+    else if (total <= 65) { grade = 'Moderate'; color = '#fbbf24'; advice = 'Competitive but achievable. You\'ll need strong content, good metadata, and some existing channel authority.'; }
+    else if (total <= 85) { grade = 'Hard'; color = '#fb923c'; advice = 'Very competitive. Consider targeting a more specific long-tail variation of this keyword instead.'; }
+    else { grade = 'Very Hard'; color = '#ef4444'; advice = 'Extremely competitive. Unless your channel already has strong authority in this niche, target a different keyword.'; }
+
+    document.getElementById('kd-grade').textContent = grade;
+    document.getElementById('kd-grade').style.color = color;
+    document.getElementById('kd-advice').innerHTML = '💡 ' + advice;
+
+    // Factors breakdown
+    document.getElementById('kd-factors').innerHTML =
+      '<div class="factor"><span>Keyword length:</span><span>' + wordCount + ' words ' + (isLongTail ? '(long-tail ✅)' : '(short)') + '</span></div>' +
+      '<div class="factor"><span>Search volume:</span><span>' + sv.toLocaleString() + '/mo</span></div>' +
+      '<div class="factor"><span>Competition level:</span><span>' + ['Very Low','Low','Medium','High','Very High'][comp-1] + '</span></div>' +
+      '<div class="factor"><span>Long-tail bonus:</span><span>+' + tailBonus + '</span></div>';
+  }
+};
+  document.getElementById('tool-root').innerHTML = `undefined`;
+  </script>
+</body>
+</html>
