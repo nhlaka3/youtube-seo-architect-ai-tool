@@ -615,8 +615,14 @@ export function renderBlogTemplate(page) {
   }
 
   // 3. Body content (the AI-generated or template-generated HTML) — with auto-linked glossary terms
-  // Strip any H1 from raw content — the page template already provides an H1 (duplicate H1 is bad for SEO)
-  const bodyContent = rawContent.replace(/<h1[^>]*>.*?<\/h1>/i, '').trim();
+  // Extract just the article body — rawContent is a full HTML page saved in DB,
+  // but the template wraps it in another full page. Strip H1 too (template provides one).
+  let bodyContent = rawContent;
+  const articleMatch = bodyContent.match(/<article>([\s\S]*?)<\/article>/i);
+  if (articleMatch) {
+    bodyContent = articleMatch[1].trim();
+  }
+  bodyContent = bodyContent.replace(/<h1[^>]*>.*?<\/h1>/i, '').trim();
   const linked = linkGlossaryTerms(bodyContent);
   contentHTML += linked;
 
