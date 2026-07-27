@@ -335,6 +335,63 @@ function generateComparisonsSection(termData, allTerms) {
       </div>`;
 }
 
+// ── Hub-and-spoke: related tools ──────────────────────────
+
+const TOOL_BY_CATEGORY = {
+  'analytics': [
+    { slug: 'engagement-rate-calculator', name: 'Engagement Rate Calculator', desc: 'Measure likes, comments, shares per view' },
+    { slug: 'channel-health-score', name: 'Channel Health Score', desc: 'Score your CTR, retention, uploads, growth' },
+    { slug: 'audience-retention-benchmark', name: 'Audience Retention Benchmark', desc: 'Compare retention against niche averages' },
+  ],
+  'algorithm': [
+    { slug: 'keyword-difficulty-scorer', name: 'Keyword Difficulty Scorer', desc: 'Score competition and find opportunities' },
+    { slug: 'title-ab-tester', name: 'Title A/B Tester', desc: 'Compare two titles for CTR potential' },
+    { slug: 'video-length-optimizer', name: 'Video Length Optimizer', desc: 'Find ideal length for your niche' },
+  ],
+  'seo-optimization': [
+    { slug: 'keyword-difficulty-scorer', name: 'Keyword Difficulty Scorer', desc: 'Find low-competition keywords' },
+    { slug: 'tag-relevance-checker', name: 'Tag Relevance Checker', desc: 'Check tags against your content' },
+    { slug: 'description-quality-checker', name: 'Description Quality Checker', desc: 'Score your descriptions for SEO' },
+  ],
+  'monetization': [
+    { slug: 'youtube-revenue-estimator', name: 'Revenue Estimator', desc: 'Estimate earnings from views/CPM/RPM' },
+    { slug: 'monetization-readiness-checker', name: 'Monetization Readiness', desc: 'Check YPP eligibility requirements' },
+    { slug: 'cost-per-view-calculator', name: 'Cost Per View Calculator', desc: 'Track ad spend efficiency and ROI' },
+  ],
+  'content-strategy': [
+    { slug: 'video-idea-generator', name: 'Video Idea Generator', desc: 'Generate niche-specific video ideas' },
+    { slug: 'upload-schedule-optimizer', name: 'Upload Schedule Optimizer', desc: 'Find optimal posting frequency' },
+    { slug: 'best-posting-time-finder', name: 'Best Posting Time Finder', desc: 'Schedule uploads for max engagement' },
+  ],
+  'youtube-features': [
+    { slug: 'end-screen-effectiveness-checker', name: 'End Screen Checker', desc: 'Optimize end screen elements' },
+    { slug: 'playlist-performance-analyzer', name: 'Playlist Analyzer', desc: 'Maximize session time from playlists' },
+    { slug: 'thumbnail-color-analyzer', name: 'Thumbnail Color Analyzer', desc: 'Check contrast and pop potential' },
+  ],
+};
+
+function generateRelatedToolsSection(termData) {
+  const tools = TOOL_BY_CATEGORY[termData.category] || TOOL_BY_CATEGORY['seo-optimization'];
+  if (!tools || tools.length === 0) return '';
+
+  const cards = tools.map(t =>
+    `<a href="/tools/${t.slug}" class="related-card">
+      🛠️ ${t.name}
+      <p style="font-size:0.8rem;color:var(--text-muted);margin:0.25rem 0 0;line-height:1.4">${t.desc}</p>
+    </a>`
+  ).join('\n        ');
+
+  return `
+      <h2>🛠️ Free Tools for ${termData.term}</h2>
+      <p>Use these free interactive tools to put ${termData.term.toLowerCase()} knowledge into practice:</p>
+      <div class="related-grid">
+        ${cards}
+        <a href="/tools/" class="related-card" style="display:flex;align-items:center;justify-content:center;text-align:center;font-weight:600;color:var(--primary);border:1px dashed rgba(249,115,22,0.4)">
+          📂 Browse All 87 Tools →
+        </a>
+      </div>`;
+}
+
 // ── Featured snippet helpers ──────────────────────────────
 
 function generateQuickAnswer(termData) {
@@ -393,6 +450,7 @@ function generatePage(termData, template, allTerms, catMeta) {
     '{{RELATED_TERMS_SECTION}}': generateRelatedTermsSection(termData, allTerms),
     '{{RELATED_BLOGS_SECTION}}': generateRelatedBlogsSection(termData.relatedBlogs),
     '{{COMPARISONS_SECTION}}': generateComparisonsSection(termData, allTerms),
+    '{{RELATED_TOOLS_SECTION}}': generateRelatedToolsSection(termData),
     '{{QUICK_ANSWER}}': generateQuickAnswer(termData),
     '{{KEY_FACTS_TABLE}}': generateKeyFactsTable(termData, catMeta),
     '{{SCHEMA_DESCRIPTION}}': truncateForSchema(termData.shortDefinition),
