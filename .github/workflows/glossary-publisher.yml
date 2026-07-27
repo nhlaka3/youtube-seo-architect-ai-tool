@@ -63,6 +63,12 @@ jobs:
           echo "🔄 Generating comparison pages..."
           node scripts/generate-glossary-comparisons.mjs
 
+      - name: 🌐 Phase 5b — Generate Spanish comparison pages
+        id: comparisons-es
+        run: |
+          echo "🌐 Generating Spanish comparison pages..."
+          node scripts/generate-glossary-comparisons-es.mjs
+
       - name: 🔗 Phase 6 — Inject glossary cross-links into blog posts
         id: inject-links
         run: |
