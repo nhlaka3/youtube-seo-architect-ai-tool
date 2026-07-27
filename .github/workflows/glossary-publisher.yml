@@ -5,10 +5,10 @@ on:
     - cron: '0 8 * * 1'      # 8:00 AM UTC every Monday
   workflow_dispatch:           # Manual trigger from GitHub UI
     inputs:
-      term:
-        description: 'Specific term slug to generate (empty = all pending)'
-        type: string
-        default: ''
+      force-expand:
+        description: 'Run with --force (skip AI discovery, use combinatorial only)'
+        type: boolean
+        default: false
 
 permissions:
   contents: write
@@ -30,23 +30,37 @@ jobs:
           node-version: '24'
           cache: 'npm'
 
-      - name: 🔍 Auto-discover new glossary terms via AI
+      - name: 🔍 Phase 1 — Auto-discover new glossary terms (AI)
         id: discover
+        continue-on-error: true
         run: |
-          echo "Discovering new YouTube SEO terms..."
-          node scripts/auto-glossary-terms.mjs --count 5 2>&1
+          echo "🔍 Auto-discovering new glossary terms..."
+          node scripts/auto-glossary-terms.mjs --count 15 2>&1
           echo "DISCOVERED=true" >> $GITHUB_OUTPUT
 
-      - name: 📖 Generate glossary pages from data
+      - name: 'Phase 2 — Auto-expand: blog scan + combinatorial variants'
+        id: expand
+        run: |
+          echo "🔄 Running glossary auto-expansion engine..."
+          node scripts/glossary-auto-expand.mjs --count 10 2>&1
+          echo "EXPANDED=true" >> $GITHUB_OUTPUT
+
+      - name: 📖 Phase 3 — Generate all glossary term pages
         id: generate
         run: |
-          echo "Generating glossary pages..."
+          echo "📖 Generating glossary pages..."
           node scripts/generate-glossary.mjs
 
-      - name: 🔗 Inject glossary cross-links into blog posts
+      - name: 🗂️ Phase 4 — Generate category landing pages + clusters
+        id: categories
+        run: |
+          echo "🗂️ Generating category pages..."
+          node scripts/generate-glossary-categories.mjs
+
+      - name: 🔗 Phase 5 — Inject glossary cross-links into blog posts
         id: inject-links
         run: |
-          echo "Injecting glossary links into blog posts..."
+          echo "🔗 Injecting glossary links into blog posts..."
           node scripts/add-glossary-links.mjs
           node scripts/add-glossary-links-dist.mjs
 
@@ -60,7 +74,7 @@ jobs:
             echo "✅ No changes to commit"
             echo "COMMITTED=false" >> $GITHUB_OUTPUT
           else
-            git commit -m "glossary: auto-generated pages [skip ci]"
+            git commit -m "glossary: batch auto-generated pages"
             git pull --rebase origin main 2>&1 || true
             git push origin HEAD:main 2>&1
             echo "✅ Pushed to private repo"
@@ -81,8 +95,11 @@ jobs:
           echo "════════════════════════════════════════════"
           echo "  📖 GLOSSARY PUBLISHER REPORT"
           echo "════════════════════════════════════════════"
-          echo "  Generate step: ${{ steps.generate.outcome }}"
-          echo "  Link inject:   ${{ steps.inject-links.outcome }}"
-          echo "  Changes:       ${{ steps.push.outputs.COMMITTED }}"
-          echo "  Time:          $(date -u)"
+          echo "  AI discover:  ${{ steps.discover.outcome }}"
+          echo "  Auto-expand:  ${{ steps.expand.outcome }}"
+          echo "  Pages gen:    ${{ steps.generate.outcome }}"
+          echo "  Categories:   ${{ steps.categories.outcome }}"
+          echo "  Link inject:  ${{ steps.inject-links.outcome }}"
+          echo "  Changes:      ${{ steps.push.outputs.COMMITTED }}"
+          echo "  Time:         $(date -u)"
           echo "════════════════════════════════════════════"

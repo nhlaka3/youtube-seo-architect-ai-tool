@@ -204,6 +204,32 @@ function getCategoryMeta(data, categorySlug) {
   return data.categories.find(c => c.slug === categorySlug);
 }
 
+// ── Combinatorial related-term auto-fill ─────────────────────
+
+function autoFillRelatedTerms(termData, allTerms) {
+  if (termData.relatedTerms && termData.relatedTerms.length >= 3) return;
+
+  const categoryTerms = allTerms.filter(t =>
+    t.slug !== termData.slug &&
+    t.category === termData.category
+  );
+
+  const scored = categoryTerms.map(t => ({
+    slug: t.slug,
+    score: (t.term.length * 1.5) + (t.relatedTerms?.includes(termData.slug) ? 20 : 0)
+  })).sort((a, b) => b.score - a.score);
+
+  const existing = new Set(termData.relatedTerms || []);
+  if (!termData.relatedTerms) termData.relatedTerms = [];
+
+  for (const candidate of scored) {
+    if (termData.relatedTerms.length >= 5) break;
+    if (existing.has(candidate.slug)) continue;
+    termData.relatedTerms.push(candidate.slug);
+    existing.add(candidate.slug);
+  }
+}
+
 // ── Generate expanded content ─────────────────────────────────────
 
 function generateWhyItMatters(term, category) {
@@ -270,6 +296,9 @@ function truncateForSchema(text, maxLen = 200) {
 }
 
 function generatePage(termData, template, allTerms, catMeta) {
+  // Auto-fill related terms if not enough exist
+  autoFillRelatedTerms(termData, allTerms);
+
   const whyItMatters = generateWhyItMatters(termData.term, termData.category);
   const howToOptimize = generateHowToOptimize(termData.term, termData.category);
   const { faqSchemaJSON, faqSectionHTML } = generateFAQSection(termData);
