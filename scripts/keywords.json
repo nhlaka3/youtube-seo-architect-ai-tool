@@ -1,6 +1,6 @@
 {
   "description": "Curated low-competition YouTube SEO keywords. Each entry has a keyword, slug, category, and status (pending/done/skipped). The generator picks the next 'pending' keyword.",
-  "lastUpdated": "2026-07-23",
+  "lastUpdated": "2026-07-27",
   "keywords": [
     {
       "keyword": "youtube community posts strategy 2026",
@@ -799,36 +799,153 @@
       "keyword": "youtube video ideas 2026",
       "slug": "youtube-video-ideas-2026",
       "category": "Content",
-      "status": "pending",
-      "notes": "High demand (R:84) — from broader keyword audit"
+      "status": "done",
+      "notes": "High demand (R:84) — from broader keyword audit",
+      "generatedAt": "2026-07-27T08:49:18.520Z"
     },
     {
       "keyword": "youtube subscriber growth 2026",
       "slug": "youtube-subscriber-growth-2026",
       "category": "Growth",
-      "status": "pending",
-      "notes": "High demand (R:83) — from broader keyword audit"
+      "status": "done",
+      "notes": "High demand (R:83) — from broader keyword audit",
+      "generatedAt": "2026-07-27T09:34:48.036Z"
     },
     {
       "keyword": "youtube thumbnail tips 2026",
       "slug": "youtube-thumbnail-tips-2026",
       "category": "Thumbnails",
-      "status": "pending",
-      "notes": "High demand (R:77) — from broader keyword audit"
+      "status": "done",
+      "notes": "High demand (R:77) — from broader keyword audit",
+      "generatedAt": "2026-07-27T09:44:37.430Z"
     },
     {
       "keyword": "how youtube algorithm works 2026",
       "slug": "how-youtube-algorithm-works-2026",
       "category": "Algorithm",
-      "status": "pending",
-      "notes": "Good demand (R:70) — from broader keyword audit"
+      "status": "done",
+      "notes": "Good demand (R:70) — from broader keyword audit",
+      "generatedAt": "2026-07-27T09:47:18.797Z"
     },
     {
       "keyword": "best youtube tags 2026",
       "slug": "best-youtube-tags-2026",
       "category": "SEO",
+      "status": "done",
+      "notes": "Good demand (R:67) — from broader keyword audit",
+      "generatedAt": "2026-07-27T09:49:18.753Z"
+    },
+    {
+      "keyword": "youtube content strategy for beginners 2026",
+      "slug": "youtube-content-strategy-for-beginners-2026",
+      "category": "Strategy",
       "status": "pending",
-      "notes": "Good demand (R:67) — from broader keyword audit"
+      "notes": "Auto-generated (demand-verified)"
+    },
+    {
+      "keyword": "youtube seo optimization techniques 2026",
+      "slug": "youtube-seo-optimization-techniques-2026",
+      "category": "SEO",
+      "status": "pending",
+      "notes": "Auto-generated"
+    },
+    {
+      "keyword": "increasing youtube watch time with analytics 2026",
+      "slug": "increasing-youtube-watch-time-with-analytics-2026",
+      "category": "Analytics",
+      "status": "pending",
+      "notes": "Auto-generated"
+    },
+    {
+      "keyword": "best youtube growth strategies for new creators 2026",
+      "slug": "best-youtube-growth-strategies-for-new-creators-2026",
+      "category": "Growth",
+      "status": "pending",
+      "notes": "Auto-generated"
+    },
+    {
+      "keyword": "maximizing youtube revenue with sponsorships 2026",
+      "slug": "maximizing-youtube-revenue-with-sponsorships-2026",
+      "category": "Revenue",
+      "status": "pending",
+      "notes": "Auto-generated"
+    },
+    {
+      "keyword": "improving youtube engagement with live streaming 2026",
+      "slug": "improving-youtube-engagement-with-live-streaming-2026",
+      "category": "Engagement",
+      "status": "pending",
+      "notes": "Auto-generated"
+    },
+    {
+      "keyword": "creating effective youtube thumbnails for clicks 2026",
+      "slug": "creating-effective-youtube-thumbnails-for-clicks-2026",
+      "category": "Thumbnails",
+      "status": "pending",
+      "notes": "Auto-generated"
+    },
+    {
+      "keyword": "developing a youtube content calendar strategy 2026",
+      "slug": "developing-a-youtube-content-calendar-strategy-2026",
+      "category": "Content",
+      "status": "pending",
+      "notes": "Auto-generated"
+    },
+    {
+      "keyword": "youtube channel branding tips for consistency 2026",
+      "slug": "youtube-channel-branding-tips-for-consistency-2026",
+      "category": "Branding",
+      "status": "pending",
+      "notes": "Auto-generated"
+    },
+    {
+      "keyword": "youtube seo tools for keyword research 2026",
+      "slug": "youtube-seo-tools-for-keyword-research-2026",
+      "category": "Tools",
+      "status": "pending",
+      "notes": "Auto-generated"
+    },
+    {
+      "keyword": "fixing youtube video playback issues on mobile 2026",
+      "slug": "fixing-youtube-video-playback-issues-on-mobile-2026",
+      "category": "Troubleshooting",
+      "status": "pending",
+      "notes": "Auto-generated"
+    },
+    {
+      "keyword": "youtube shorts strategy for increasing views 2026",
+      "slug": "youtube-shorts-strategy-for-increasing-views-2026",
+      "category": "Shorts",
+      "status": "pending",
+      "notes": "Auto-generated"
+    },
+    {
+      "keyword": "understanding youtube algorithm updates for creators 2026",
+      "slug": "understanding-youtube-algorithm-updates-for-creators-2026",
+      "category": "Algorithm",
+      "status": "pending",
+      "notes": "Auto-generated"
+    },
+    {
+      "keyword": "using youtube features to enhance viewer experience 2026",
+      "slug": "using-youtube-features-to-enhance-viewer-experience-2026",
+      "category": "Features",
+      "status": "pending",
+      "notes": "Auto-generated"
+    },
+    {
+      "keyword": "youtube technical issues and solutions for creators 2026",
+      "slug": "youtube-technical-issues-and-solutions-for-creators-2026",
+      "category": "Technical",
+      "status": "pending",
+      "notes": "Auto-generated"
+    },
+    {
+      "keyword": "niching down on youtube for better audience engagement 2026",
+      "slug": "niching-down-on-youtube-for-better-audience-engagement-2026",
+      "category": "Niche",
+      "status": "pending",
+      "notes": "Auto-generated"
     }
   ]
 }

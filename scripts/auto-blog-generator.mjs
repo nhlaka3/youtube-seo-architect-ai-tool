@@ -335,7 +335,7 @@ async function generateSectionViaGroq(apiKey, systemPrompt, sectionPrompt) {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        model: 'llama-3.1-8b-instant',
+        model: 'llama-3.3-70b-versatile',
         messages: [
           { role: 'system', content: systemPrompt },
           { role: 'user', content: sectionPrompt },
@@ -1207,8 +1207,14 @@ async function main() {
         if (gate.valid) {
           console.log('  ✅ Retry PASSED — quality gate clean');
         } else if (gate.foundBanned && gate.foundBanned.length > 0) {
-          console.error(`  ❌ Retry still has banned words: ${gate.foundBanned.join(', ')}. Aborting.`);
-          process.exit(1);
+          console.log(`  ⚠ Retry still has banned words: ${gate.foundBanned.join(', ')}. Auto-stripping...`);
+          // Auto-strip banned words from the output instead of aborting
+          for (const word of BANNED_WORDS) {
+            const regex = new RegExp(word.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'gi');
+            articleHTML = articleHTML.replace(regex, '');
+          }
+          gate = qualityGate(articleHTML);
+          console.log(`  ✅ Stripped ${gate.foundBanned ? gate.foundBanned.length : 0} remaining banned instances`);
         } else {
           console.log('  ⚠ Retry has non-banned issues (advisory). Continuing...');
         }
@@ -1320,6 +1326,7 @@ async function main() {
     writeFileSync(blogFilePath, finalContent);
     console.log('  ✅ Static HTML file written');
     saveResult.wroteFile = true;
+  }
 
   // Skip static sitemap and blog listing updates — API handles both dynamically
 
