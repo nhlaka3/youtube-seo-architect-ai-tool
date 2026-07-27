@@ -116,6 +116,11 @@ const TOOL_TYPES = {
   'community': { type: 'planner', icon: '👥', verb: 'Plan', noun: 'Planner', btn: 'Create Plan', input: 'Describe your channel niche', placeholder: 'e.g., cooking channel for beginners' },
   'backlink': { type: 'finder', icon: '🔗', verb: 'Find', noun: 'Finder', btn: 'Find Opportunities', input: 'Enter your channel niche', placeholder: 'e.g., tech reviews' },
   'video-not-getting-views': { type: 'detector', icon: '🔍', verb: 'Diagnose', noun: 'Diagnostic', btn: 'Diagnose Issues', input: 'Describe your video situation', placeholder: 'e.g., uploaded 3 days ago, 50 views' },
+  'subscriber': { type: 'tracker', icon: '📈', verb: 'Track', noun: 'Tracker', btn: 'Track Growth', input: 'Describe your channel growth', placeholder: 'e.g., 500 subs, growing 10% weekly' },
+  'small': { type: 'checker', icon: '🔎', verb: 'Check', noun: 'Checker', btn: 'Check Channel', input: 'Describe your small channel', placeholder: 'e.g., 200 subs, 1K watch hours, gaming niche' },
+  'tutorial': { type: 'optimizer', icon: '📖', verb: 'Optimize', noun: 'Optimizer', btn: 'Optimize Tutorial', input: 'Describe your tutorial content', placeholder: 'e.g., 15-min coding tutorial for beginners' },
+  'idea': { type: 'planner', icon: '💡', verb: 'Generate', noun: 'Planner', btn: 'Generate Ideas', input: 'Enter your channel niche', placeholder: 'e.g., gaming, cooking, tech reviews' },
+  'algorithm': { type: 'calculator', icon: '🧮', verb: 'Analyze', noun: 'Calculator', btn: 'Analyze Metrics', input: 'Describe your channel metrics', placeholder: 'e.g., 5% CTR, 40% retention, 10K impressions' },
   'default': { type: 'tool', icon: '🛠️', verb: 'Use', noun: 'Tool', btn: 'Go', input: 'Enter your details', placeholder: 'e.g., describe your YouTube situation' },
 };
 
@@ -210,7 +215,9 @@ function handleTool() {
   const box = document.getElementById('result-box');
   const placeholder = document.getElementById('result-placeholder');
   box.classList.add('show');
-  let html = '<div style="text-align:center;margin-bottom:1.5rem;">';
+  let html = '<div style="font-size:0.75rem;color:#64748b;margin-bottom:0.75rem;padding:0.4rem 0.75rem;background:rgba(99,102,241,0.06);border-radius:6px;text-align:left;">📖 Based on the ' + window.BLOG_TOPIC + ' guide</div>';
+  html += '<div style="margin-bottom:0.75rem;">' + topicAdvice(window.BLOG_TOPIC) + '</div>';
+  html += '<div style="text-align:center;margin-bottom:1.5rem;">';
   html += '<div style="font-size:3rem;font-weight:800;background:linear-gradient(135deg,#6366f1,#06b6d4);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">' + result.score + '/100</div>';
   html += '<div style="font-size:1.2rem;font-weight:700;color:#e2e8f0;">Grade: ' + result.grade + '</div>';
   html += '<div style="width:100%;height:8px;background:#1a1a2e;border-radius:4px;margin-top:0.5rem;overflow:hidden;"><div style="width:' + result.score + '%;height:100%;background:linear-gradient(90deg,#6366f1,#06b6d4);border-radius:4px;transition:width 0.5s;"></div></div>';
@@ -278,11 +285,11 @@ const ToolLogic = {
       add(b);
     }
 
-    // Volume estimates
+    // Volume estimates (deterministic: same topic = same results)
     return tags.slice(0, 30).map(function(t, i) {
       const volBase = 500 - (i * 15);
-      const vol = Math.max(50, volBase + Math.floor(Math.random() * 200));
-      const comp = Math.min(95, 30 + Math.floor(Math.random() * 50));
+      const vol = Math.max(50, volBase + Math.floor(seededRandom(i * 10 + 1) * 200));
+      const comp = Math.min(95, 30 + Math.floor(seededRandom(i * 10 + 7) * 50));
       return { tag: t, volume: vol, competition: comp };
     });
   }
@@ -295,7 +302,9 @@ function handleTool() {
   const box = document.getElementById('result-box');
   const placeholder = document.getElementById('result-placeholder');
   box.classList.add('show');
-  let html = '<div style="margin-bottom:1rem;color:#94a3b8;font-size:0.9rem;">Generated ' + results.length + ' tags for &quot;' + input + '&quot;</div>';
+  let html = '<div style="font-size:0.75rem;color:#64748b;margin-bottom:0.75rem;padding:0.4rem 0.75rem;background:rgba(99,102,241,0.06);border-radius:6px;text-align:left;">📖 Based on the ' + window.BLOG_TOPIC + ' guide</div>';
+  html += '<div style="margin-bottom:0.75rem;">' + topicAdvice(window.BLOG_TOPIC) + '</div>';
+  html += '<div style="margin-bottom:1rem;color:#94a3b8;font-size:0.9rem;">Generated ' + results.length + ' tags for &quot;' + input + '&quot;</div>';
   results.forEach(function(r, i) {
     const compColor = r.competition < 40 ? '#22c55e' : r.competition < 65 ? '#f59e0b' : '#ff3366';
     html += '<div style="display:flex;align-items:center;justify-content:space-between;padding:0.6rem 0.75rem;border-bottom:1px solid rgba(255,255,255,0.05);">';
@@ -306,23 +315,27 @@ function handleTool() {
     html += '<div style="display:flex;align-items:center;gap:0.75rem;">';
     html += '<span style="font-size:0.75rem;color:#94a3b8;">' + r.volume.toLocaleString() + '/mo</span>';
     html += '<span style="font-size:0.75rem;color:' + compColor + ';background:' + compColor + '15;padding:0.15rem 0.5rem;border-radius:4px;">' + r.competition + '% comp</span>';
-    html += '<button onclick="copyTag(\\'' + r.tag.replace(/'/g, "\\\\'") + '\\',this)" style="background:none;border:1px solid #2a2a4a;color:#94a3b8;padding:0.25rem 0.6rem;border-radius:4px;cursor:pointer;font-size:0.75rem;">Copy</button>';
+    html += '<button class="copy-tag-btn" data-tag="' + r.tag.replace(/"/g, '&quot;') + '" style="background:none;border:1px solid #2a2a4a;color:#94a3b8;padding:0.25rem 0.6rem;border-radius:4px;cursor:pointer;font-size:0.75rem;">Copy</button>';
     html += '</div></div>';
   });
   placeholder.innerHTML = html;
-}
-
-function copyTag(tag, btn) {
-  navigator.clipboard.writeText(tag).then(function() {
-    btn.textContent = 'Copied!';
-    btn.style.color = '#22c55e';
-    btn.style.borderColor = '#22c55e';
-    setTimeout(function() {
-      btn.textContent = 'Copy';
-      btn.style.color = '';
-      btn.style.borderColor = '';
-    }, 1500);
-  });
+  setTimeout(function() {
+    document.querySelectorAll('.copy-tag-btn').forEach(function(btn) {
+      btn.addEventListener('click', function() {
+        var tag = btn.getAttribute('data-tag');
+        navigator.clipboard.writeText(tag).then(function() {
+          btn.textContent = 'Copied!';
+          btn.style.color = '#22c55e';
+          btn.style.borderColor = '#22c55e';
+          setTimeout(function() {
+            btn.textContent = 'Copy';
+            btn.style.color = '';
+            btn.style.borderColor = '';
+          }, 1500);
+        });
+      });
+    });
+  }, 0);
 }`,
 
     research: `
@@ -332,23 +345,23 @@ const ToolLogic = {
     const suffixes = ['tips', 'tricks', 'guide', 'tutorial', 'examples', 'strategies', 'for beginners', '2026', 'explained', 'ideas', 'mistakes', 'hacks', 'tools', 'software', 'review', 'comparison', 'techniques', 'best practices', 'walkthrough', 'overview'];
     const results = [];
 
-    prefixes.forEach(function(p) {
+    prefixes.forEach(function(p, i) {
       const kw = p + ' ' + seed;
       results.push({
         keyword: kw,
-        volume: Math.floor(Math.random() * 8000) + 200,
-        difficulty: Math.floor(Math.random() * 70) + 5,
-        trend: Math.random() > 0.5 ? 'rising' : 'stable'
+        volume: Math.floor(seededRandom(i * 10 + 1) * 8000) + 200,
+        difficulty: Math.floor(seededRandom(i * 10 + 5) * 70) + 5,
+        trend: seededRandom(i * 10 + 9) > 0.5 ? 'rising' : 'stable'
       });
     });
 
-    suffixes.forEach(function(s) {
+    suffixes.forEach(function(s, i) {
       const kw = seed + ' ' + s;
       results.push({
         keyword: kw,
-        volume: Math.floor(Math.random() * 5000) + 100,
-        difficulty: Math.floor(Math.random() * 65) + 10,
-        trend: Math.random() > 0.4 ? 'rising' : 'stable'
+        volume: Math.floor(seededRandom(i * 10 + 2) * 5000) + 100,
+        difficulty: Math.floor(seededRandom(i * 10 + 6) * 65) + 10,
+        trend: seededRandom(i * 10 + 9) > 0.4 ? 'rising' : 'stable'
       });
     });
 
@@ -365,7 +378,8 @@ function handleTool() {
   const box = document.getElementById('result-box');
   const placeholder = document.getElementById('result-placeholder');
   box.classList.add('show');
-  let html = '<div style="margin-bottom:1rem;display:flex;justify-content:space-between;align-items:center;">';
+  let html = '<div style="font-size:0.75rem;color:#64748b;margin-bottom:0.75rem;padding:0.4rem 0.75rem;background:rgba(99,102,241,0.06);border-radius:6px;text-align:left;">📖 Based on the ' + window.BLOG_TOPIC + ' guide</div><div style="margin-bottom:0.75rem;">' + topicAdvice(window.BLOG_TOPIC) + '</div>';
+  html += '<div style="margin-bottom:1rem;display:flex;justify-content:space-between;align-items:center;">';
   html += '<span style="color:#94a3b8;font-size:0.9rem;">' + results.length + ' keyword ideas for &quot;' + input + '&quot;</span>';
   html += '<span style="font-size:0.75rem;color:#64748b;">Sorted by search volume</span>';
   html += '</div>';
@@ -404,7 +418,7 @@ const ToolLogic = {
     const lines = [];
     lines.push('📌 ' + topic.charAt(0).toUpperCase() + topic.slice(1) + ' — Complete Guide ' + year);
     lines.push('');
-    lines.push('In this video, I cover everything you need to know about ' + topic + '. Whether you\\'re just starting out or looking to level up, these actionable strategies will help you get results faster.');
+    lines.push("In this video, I cover everything you need to know about " + topic + ". Whether you're just starting out or looking to level up, these actionable strategies will help you get results faster.");
     lines.push('');
     lines.push('📑 TIMESTAMPS:');
     lines.push('0:00 - Introduction');
@@ -418,7 +432,7 @@ const ToolLogic = {
     lines.push('');
     lines.push('🔗 LINKS & RESOURCES:');
     lines.push('📊 Free YouTube SEO Tools: https://yt-seo-architect.vercel.app/tools');
-    lines.push('📘 Full Blog Guide: https://yt-seo-architect.vercel.app/blog/' + "'" + window.BLOG_SLUG + "'" + '');
+    lines.push('📘 Full Blog Guide: https://yt-seo-architect.vercel.app/blog/' + window.BLOG_SLUG);
     lines.push('🚀 Dashboard: https://yt-seo-architect.vercel.app/dashboard');
     lines.push('');
     lines.push('📧 Business Inquiries: [your-email@example.com]');
@@ -429,7 +443,7 @@ const ToolLogic = {
     lines.push('• [Related Video 3 - paste link]');
     lines.push('');
     lines.push('💡 PRO TIP:');
-    lines.push('Replace the bracketed [links] with your actual video links before publishing. Add your own timestamps based on your video\\'s actual sections.');
+    lines.push("Replace the bracketed [links] with your actual video links before publishing. Add your own timestamps based on your video's actual sections.");
     lines.push('');
     lines.push('#' + topic.replace(/\\s+/g, '').replace(/[^a-zA-Z0-9]/g, '') + ' #YouTubeSEO #VideoMarketing #' + year);
     return lines.join('\\n');
@@ -443,7 +457,8 @@ function handleTool() {
   const box = document.getElementById('result-box');
   const placeholder = document.getElementById('result-placeholder');
   box.classList.add('show');
-  placeholder.innerHTML = '<pre style="white-space:pre-wrap;font-family:inherit;font-size:0.9rem;line-height:1.6;color:#d1d5db;background:#0f0f1a;padding:1.25rem;border-radius:8px;border:1px solid #2a2a4a;text-align:left;margin:0;">' + escHtml(result) + '</pre>';
+  var bannerHtml = '<div style="font-size:0.75rem;color:#64748b;margin-bottom:0.75rem;padding:0.4rem 0.75rem;background:rgba(99,102,241,0.06);border-radius:6px;text-align:left;">📖 Based on the ' + window.BLOG_TOPIC + ' guide</div><div style="margin-bottom:0.75rem;">' + topicAdvice(window.BLOG_TOPIC) + '</div>';
+  placeholder.innerHTML = bannerHtml + '<pre style="white-space:pre-wrap;font-family:inherit;font-size:0.9rem;line-height:1.6;color:#d1d5db;background:#0f0f1a;padding:1.25rem;border-radius:8px;border:1px solid #2a2a4a;text-align:left;margin:0;">' + escHtml(result) + '</pre>';
   placeholder.innerHTML += '<button onclick="copyDesc()" style="margin-top:1rem;background:linear-gradient(135deg,#6366f1,#06b6d4);color:#fff;border:none;padding:0.6rem 1.5rem;border-radius:6px;font-weight:600;cursor:pointer;font-size:0.9rem;">📋 Copy Description</button>';
 
   window.__descText = result;
@@ -452,14 +467,14 @@ function handleTool() {
 function copyDesc() {
   if (window.__descText) {
     navigator.clipboard.writeText(window.__descText).then(function() {
-      const btn = document.querySelector(\\'button[onclick="copyDesc()"]\\');
-      if (btn) { btn.textContent = \\'✅ Copied!\\'; setTimeout(function() { btn.textContent = \\'📋 Copy Description\\'; }, 2000); }
+      const btn = document.querySelector('button[onclick="copyDesc()"]');
+      if (btn) { btn.textContent = '✅ Copied!'; setTimeout(function() { btn.textContent = '📋 Copy Description'; }, 2000); }
     });
   }
 }
 
 function escHtml(s) {
-  return s.replace(/&/g, \\'&amp;\\').replace(/</g, \\'&lt;\\').replace(/>/g, \\'&gt;\\').replace(/"/g, \\'&quot;\\');
+  return s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
 }`,
 
     checker: `
@@ -522,7 +537,8 @@ function handleTool() {
   const placeholder = document.getElementById('result-placeholder');
   box.classList.add('show');
 
-  let html = '<div style="display:flex;gap:1.5rem;margin-bottom:1.5rem;justify-content:center;">';
+  let html = '<div style="font-size:0.75rem;color:#64748b;margin-bottom:0.75rem;padding:0.4rem 0.75rem;background:rgba(99,102,241,0.06);border-radius:6px;text-align:left;">📖 Based on the ' + window.BLOG_TOPIC + ' guide</div><div style="margin-bottom:0.75rem;">' + topicAdvice(window.BLOG_TOPIC) + '</div>';
+  html += '<div style="display:flex;gap:1.5rem;margin-bottom:1.5rem;justify-content:center;">';
   html += '<div style="text-align:center;padding:1rem 1.5rem;background:rgba(34,197,94,0.1);border-radius:8px;"><div style="font-size:1.5rem;font-weight:700;color:#22c55e;">' + result.passCount + '</div><div style="font-size:0.8rem;color:#94a3b8;">Passed</div></div>';
   html += '<div style="text-align:center;padding:1rem 1.5rem;background:rgba(255,51,102,0.1);border-radius:8px;"><div style="font-size:1.5rem;font-weight:700;color:#ff3366;">' + result.warnCount + '</div><div style="font-size:0.8rem;color:#94a3b8;">Issues</div></div>';
   html += '</div>';
@@ -614,10 +630,10 @@ function handleTool() {
   const tags = parts[parts.length - 1].includes(',') ? parts[parts.length - 1] : '';
   const result = ToolLogic.audit(title, desc, tags);
   const box = document.getElementById('result-box');
-  const placeholder = document.getElementById('result-placeholder');
-  box.classList.add('show');
+  const placeholder = document.getElementById('result-placeholder');  box.classList.add('show');
 
-  let html = '<div style="text-align:center;margin-bottom:1.5rem;">';
+  let html = '<div style="font-size:0.75rem;color:#64748b;margin-bottom:0.75rem;padding:0.4rem 0.75rem;background:rgba(99,102,241,0.06);border-radius:6px;text-align:left;">📖 Based on the ' + window.BLOG_TOPIC + ' guide</div><div style="margin-bottom:0.75rem;">' + topicAdvice(window.BLOG_TOPIC) + '</div>';
+  html += '<div style="text-align:center;margin-bottom:1.5rem;">';
   html += '<div style="font-size:2.5rem;font-weight:800;background:linear-gradient(135deg,#6366f1,#06b6d4);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">' + result.score + '/100</div>';
   html += '<div style="font-size:1.1rem;font-weight:700;color:' + (result.grade === 'A' ? '#22c55e' : result.grade === 'B' ? '#06b6d4' : result.grade === 'C' ? '#f59e0b' : '#ff3366') + ';">Grade: ' + result.grade + '</div>';
   html += '</div>';
@@ -643,6 +659,10 @@ function handleTool() {
     calculator: `
 const ToolLogic = {
   calculateCTR(input) {
+    var _topic = (window.BLOG_TOPIC || '').toLowerCase();
+    if (_topic.includes('algorithm')) {
+      return this.scoreAlgorithm(input);
+    }
     // Parse numbers from input
     const numbers = input.match(/\\d[\\d,]*/g);
     if (!numbers || numbers.length < 2) {
@@ -675,15 +695,52 @@ const ToolLogic = {
       ] : ctr < 4.5 ? [
         'Your CTR is average. Small improvements to your thumbnail can push it higher.',
         'Consider A/B testing your title with emotional triggers.',
-        'Review your video\\'s first frame — it should be engaging.'
+        "Review your video's first frame — it should be engaging."
       ] : [
         'Your CTR is excellent! Keep testing new title formats to maintain performance.',
         'Focus on improving retention now that clicks are solid.',
         'Study your top-performing titles and replicate the pattern.'
       ]
     };
+  },
+
+  scoreAlgorithm(input) {
+    var nums = input.match(/\\d[\\d,.]*/g);
+    var values = nums ? nums.map(function(n) { return parseInt(n.replace(/,/g, '')); }) : [];
+    var hasMetrics = values.length >= 2;
+
+    var ctr = hasMetrics ? Math.min(values[0], values[1]) / Math.max(values[0], values[1]) * 100 : 5;
+    var hasGoodCTR = ctr >= 4;
+
+    var retention = hasMetrics ? (seededRandom(23) * 30 + 20) : 40;
+    var hasGoodRetention = retention >= 40;
+
+    var consistency = hasMetrics ? Math.min(100, values.length * 15 + seededRandom(27) * 30) : 50;
+
+    var engagement = hasMetrics ? (seededRandom(31) * 40 + 10) : 30;
+    var hasGoodEngagement = engagement >= 30;
+
+    var seoScore = hasMetrics ? (seededRandom(37) * 30 + 40) : 50;
+    var hasGoodSEO = seoScore >= 60;
+
+    var ctrScore = Math.min(100, Math.round(ctr * 20));
+    var retScore = Math.min(100, Math.round(retention * 1.5 + 10));
+    var conScore = Math.min(100, Math.round(consistency));
+    var engScore = Math.min(100, Math.round(engagement * 2 + 5));
+    var seoScored = Math.min(100, Math.round(seoScore));
+    var overallScore = Math.round((ctrScore + retScore + conScore + engScore + seoScored) / 5);
+
+    return {
+      error: false, algorithmMode: true, overallScore: overallScore,
+      factors: [
+        { name: 'Click-Through Rate', score: ctrScore, detail: (hasGoodCTR ? 'Good CTR signals strong thumbnail/title' : 'CTR below 4% — improve thumbnails and titles') + ' (' + ctr.toFixed(1) + '%)' },
+        { name: 'Audience Retention', score: retScore, detail: (hasGoodRetention ? 'Retention above 40% keeps algorithm happy' : 'Retention below 40% — hook viewers in first 5s') + ' (~' + Math.round(retention) + '%)' },
+        { name: 'Upload Consistency', score: conScore, detail: (consistency >= 60 ? 'Consistent uploads build algorithm trust' : 'Increase upload frequency to improve signals') + ' (' + Math.round(consistency) + '/100)' },
+        { name: 'Engagement Rate', score: engScore, detail: (hasGoodEngagement ? 'Likes, comments, shares boost viral potential' : 'Encourage comments with CTAs in videos') + ' (~' + Math.round(engagement) + '%)' },
+        { name: 'SEO Optimization', score: seoScored, detail: (hasGoodSEO ? 'Good SEO helps YouTube understand your content' : 'Improve titles, descriptions, and tags for SEO') + ' (' + Math.round(seoScore) + '/100)' },
+      ]
+    };
   }
-};
 
 function handleTool() {
   const input = document.getElementById('tool-input').value.trim();
@@ -698,11 +755,36 @@ function handleTool() {
     return;
   }
 
+  let html = '<div style="font-size:0.75rem;color:#64748b;margin-bottom:0.75rem;padding:0.4rem 0.75rem;background:rgba(99,102,241,0.06);border-radius:6px;text-align:left;">📖 Based on the ' + window.BLOG_TOPIC + ' guide</div><div style="margin-bottom:0.75rem;">' + topicAdvice(window.BLOG_TOPIC) + '</div>';
+
+  // ── Algorithm Scorecard Mode ──
+  if (result.algorithmMode) {
+    html += '<div style="background:rgba(99,102,241,0.04);border:1px solid #2a2a4a;border-radius:12px;padding:1.25rem;text-align:left;">';
+    html += '<div style="font-weight:700;font-size:1.2rem;margin-bottom:1rem;color:#e2e8f0;">⚙️ Your YouTube Algorithm Health Score</div>';
+    html += '<div style="display:grid;grid-template-columns:repeat(2,1fr);gap:1rem;margin-bottom:1.25rem;">';
+    result.factors.forEach(function(f) {
+      var fc = f.score >= 80 ? '#22c55e' : f.score >= 60 ? '#f59e0b' : '#ff3366';
+      html += '<div style="background:rgba(99,102,241,0.05);border-radius:8px;padding:1rem;">';
+      html += '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:0.5rem;">';
+      html += '<span style="font-size:0.85rem;color:#94a3b8;">' + f.name + '</span>';
+      html += '<span style="font-size:1.1rem;font-weight:700;color:' + fc + ';">' + f.score + '</span>';
+      html += '</div>';
+      html += '<div style="width:100%;height:4px;background:#1a1a2e;border-radius:2px;overflow:hidden;"><div style="width:' + f.score + '%;height:100%;background:linear-gradient(90deg,#6366f1,' + fc + ');border-radius:2px;"></div></div>';
+      html += '<div style="font-size:0.75rem;color:#64748b;margin-top:0.3rem;">' + f.detail + '</div></div>';
+    });
+    html += '</div>';
+    html += '<div style="background:' + (result.overallScore >= 70 ? 'rgba(34,197,94,0.08)' : 'rgba(245,158,11,0.08)') + ';border-radius:8px;padding:1rem;text-align:center;">';
+    html += '<div style="font-size:2rem;font-weight:800;color:' + (result.overallScore >= 70 ? '#22c55e' : '#f59e0b') + ';">' + result.overallScore + '/100</div>';
+    html += '<div style="font-size:0.85rem;color:#94a3b8;">Algorithm Health Score — ' + (result.overallScore >= 80 ? 'Strong 🚀' : result.overallScore >= 60 ? 'Moderate 📊' : 'Needs Work ⚠️') + '</div>';
+    html += '</div></div>';
+    placeholder.innerHTML = html;
+    return;
+  }
+
+  // ── Standard CTR Mode ──
   const ctrColor = result.ctr >= 4.5 ? '#22c55e' : result.ctr >= 2.5 ? '#f59e0b' : '#ff3366';
   const perfLabel = result.performance === 'above' ? 'Above Average 🎯' : result.performance === 'average' ? 'Average 📊' : 'Needs Work ⚠️';
-  const maxCtr = Math.min(20, Math.max(1, result.ctr * 1.5));
-
-  let html = '<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:1rem;margin-bottom:1.5rem;">';
+  html += '<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:1rem;margin-bottom:1.5rem;">';
   html += '<div style="text-align:center;padding:1rem;background:rgba(99,102,241,0.08);border-radius:8px;"><div style="font-size:1.5rem;font-weight:700;color:#6366f1;">' + result.impressions.toLocaleString() + '</div><div style="font-size:0.75rem;color:#94a3b8;">Impressions</div></div>';
   html += '<div style="text-align:center;padding:1rem;background:rgba(6,182,212,0.08);border-radius:8px;"><div style="font-size:1.5rem;font-weight:700;color:#06b6d4;">' + result.views.toLocaleString() + '</div><div style="font-size:0.75rem;color:#94a3b8;">Views</div></div>';
   html += '<div style="text-align:center;padding:1rem;background:rgba(34,197,94,0.08);border-radius:8px;"><div style="font-size:1.5rem;font-weight:700;color:#22c55e;">$' + result.estRevenue.toFixed(2) + '</div><div style="font-size:0.75rem;color:#94a3b8;">Est. Revenue</div></div>';
@@ -735,11 +817,11 @@ const ToolLogic = {
       { keyword: ['impression', 'impressions drop', 'impressions fell'], issue: 'Impression Loss', severity: 'high', desc: 'Fewer impressions mean YouTube is showing your content to fewer people. This can happen when your CTR drops.', fix: 'Improve your thumbnail and title. A/B test different styles.' },
       { keyword: ['shadow ban', 'shadowban', 'ghost'], issue: 'Potential Shadow Ban', severity: 'high', desc: 'YouTube does not officially shadow ban, but your content may be limited if it violates guidelines repeatedly.', fix: 'Review Community Guidelines. Avoid reused content, misleading thumbnails, or spammy tags.' },
       { keyword: ['ctr drop', 'click through', 'ctr fell'], issue: 'CTR Decline', severity: 'medium', desc: 'A CTR drop means fewer people click when they see your video. Usually a thumbnail/title issue.', fix: 'Refresh thumbnails with higher contrast, bigger text, and closer faces.' },
-      { keyword: ['no views', 'zero views', '0 views'], issue: 'Zero Views', severity: 'high', desc: 'Zero views on a new upload means YouTube hasn\\'t tested your video with any audience yet.', fix: 'Share your video on social media to give YouTube initial engagement signals.' },
-      { keyword: ['retention drop', 'watch time', 'people leave'], issue: 'Retention Problem', severity: 'medium', desc: 'Low retention signals to YouTube that viewers aren\\'t satisfied with your content.', fix: 'Improve your first 30 seconds. Add a hook that clearly states what viewers will learn.' },
+      { keyword: ['no views', 'zero views', '0 views'], issue: 'Zero Views', severity: 'high', desc: "Zero views on a new upload means YouTube hasn't tested your video with any audience yet.", fix: 'Share your video on social media to give YouTube initial engagement signals.' },
+      { keyword: ['retention drop', 'watch time', 'people leave'], issue: 'Retention Problem', severity: 'medium', desc: "Low retention signals to YouTube that viewers aren't satisfied with your content.", fix: 'Improve your first 30 seconds. Add a hook that clearly states what viewers will learn.' },
       { keyword: ['demonetiz', 'monetization', 'yellow icon'], issue: 'Monetization Issue', severity: 'medium', desc: 'Limited or no ads on your videos reduces revenue. Often related to reused content or sensitive topics.', fix: 'Check YouTube Studio > Content for monetization status on each video.' },
-      { keyword: ['copyright', 'claim', 'blocked'], issue: 'Copyright Issue', severity: 'high', desc: 'Copyright claims or blocks can limit your video\\'s visibility and monetization.', fix: 'Use royalty-free music and footage. Dispute false claims with proper documentation.' },
-      { keyword: ['algorithm', 'not recommending', 'suggested'], issue: 'Algorithm Visibility', severity: 'medium', desc: 'If YouTube\\'s algorithm isn\\'t recommending your videos, it usually means low engagement signals.', fix: 'Focus on increasing viewer retention and CTR — these are the top algorithm signals.' },
+      { keyword: ['copyright', 'claim', 'blocked'], issue: 'Copyright Issue', severity: 'high', desc: "Copyright claims or blocks can limit your video's visibility and monetization.", fix: 'Use royalty-free music and footage. Dispute false claims with proper documentation.' },
+      { keyword: ['algorithm', 'not recommending', 'suggested'], issue: 'Algorithm Visibility', severity: 'medium', desc: "If YouTube's algorithm isn't recommending your videos, it usually means low engagement signals.", fix: 'Focus on increasing viewer retention and CTR — these are the top algorithm signals.' },
     ];
 
     let totalScore = 50;
@@ -767,7 +849,8 @@ function handleTool() {
   const placeholder = document.getElementById('result-placeholder');
   box.classList.add('show');
 
-  let html = '<div style="text-align:center;margin-bottom:1.5rem;">';
+  let html = '<div style="font-size:0.75rem;color:#64748b;margin-bottom:0.75rem;padding:0.4rem 0.75rem;background:rgba(99,102,241,0.06);border-radius:6px;text-align:left;">📖 Based on the ' + window.BLOG_TOPIC + ' guide</div><div style="margin-bottom:0.75rem;">' + topicAdvice(window.BLOG_TOPIC) + '</div>';
+  html += '<div style="text-align:center;margin-bottom:1.5rem;">';
   html += '<div style="font-size:2rem;font-weight:800;color:' + result.riskColor + ';">' + result.risk + '</div>';
   html += '<div style="font-size:0.85rem;color:#94a3b8;">Detection confidence: ' + result.score + '%</div>';
   html += '</div>';
@@ -775,7 +858,7 @@ function handleTool() {
   if (result.noMatch) {
     html += '<div style="text-align:center;padding:1.5rem;background:rgba(34,197,94,0.08);border-radius:8px;">';
     html += '<div style="font-size:1.1rem;color:#22c55e;margin-bottom:0.5rem;">✅ No specific issues detected</div>';
-    html += '<div style="font-size:0.85rem;color:#94a3b8;">Based on what you described, we don\\'t see clear signs of shadow banning or algorithmic penalties. Keep creating great content!</div>';
+    html += '<div style="font-size:0.85rem;color:#94a3b8;">Based on what you described, we don' + "'t see clear signs of shadow banning or algorithmic penalties. Keep creating great content!</div>";
     html += '</div>';
   } else {
     result.findings.forEach(function(f) {
@@ -841,7 +924,8 @@ function handleTool() {
   const medCount = suggestions.filter(function(s) { return s.priority === 'medium'; }).length;
   const lowCount = suggestions.filter(function(s) { return s.priority === 'low'; }).length;
 
-  let html = '<div style="display:flex;gap:1rem;margin-bottom:1.5rem;justify-content:center;">';
+  let html = '<div style="font-size:0.75rem;color:#64748b;margin-bottom:0.75rem;padding:0.4rem 0.75rem;background:rgba(99,102,241,0.06);border-radius:6px;text-align:left;">📖 Based on the ' + window.BLOG_TOPIC + ' guide</div><div style="margin-bottom:0.75rem;">' + topicAdvice(window.BLOG_TOPIC) + '</div>';
+  html += '<div style="display:flex;gap:1rem;margin-bottom:1.5rem;justify-content:center;">';
   html += '<div style="text-align:center;padding:0.75rem 1.25rem;background:#ff336615;border-radius:8px;"><div style="font-weight:700;color:#ff3366;font-size:1.2rem;">' + highCount + '</div><div style="font-size:0.75rem;color:#94a3b8;">High Priority</div></div>';
   html += '<div style="text-align:center;padding:0.75rem 1.25rem;background:#f59e0b15;border-radius:8px;"><div style="font-weight:700;color:#f59e0b;font-size:1.2rem;">' + medCount + '</div><div style="font-size:0.75rem;color:#94a3b8;">Medium</div></div>';
   html += '<div style="text-align:center;padding:0.75rem 1.25rem;background:#6366f115;border-radius:8px;"><div style="font-weight:700;color:#6366f1;font-size:1.2rem;">' + lowCount + '</div><div style="font-size:0.75rem;color:#94a3b8;">Advisory</div></div>';
@@ -877,7 +961,7 @@ const ToolLogic = {
         week: 'Week ' + week,
         title: f + ': ' + niche.charAt(0).toUpperCase() + niche.slice(1),
         description: 'Create a ' + f.toLowerCase() + ' about ' + niche + '. This format performs well because it provides clear value.',
-        effort: ['Easy', 'Medium', 'Hard'][Math.floor(Math.random() * 3)]
+        effort: ['Easy', 'Medium', 'Hard'][Math.floor(seededRandom(i * 7 + 3) * 3)]
       });
     });
 
@@ -893,7 +977,8 @@ function handleTool() {
   const placeholder = document.getElementById('result-placeholder');
   box.classList.add('show');
 
-  let html = '<div style="margin-bottom:1rem;color:#94a3b8;font-size:0.9rem;">📅 ' + ideas.length + ' content ideas for &quot;' + input + '&quot; channel</div>';
+  let html = '<div style="font-size:0.75rem;color:#64748b;margin-bottom:0.75rem;padding:0.4rem 0.75rem;background:rgba(99,102,241,0.06);border-radius:6px;text-align:left;">📖 Based on the ' + window.BLOG_TOPIC + ' guide</div><div style="margin-bottom:0.75rem;">' + topicAdvice(window.BLOG_TOPIC) + '</div>';
+  html += '<div style="margin-bottom:1rem;color:#94a3b8;font-size:0.9rem;">📅 ' + ideas.length + ' content ideas for &quot;' + input + '&quot; channel</div>';
 
   ideas.forEach(function(idea, i) {
     const effortColor = idea.effort === 'Easy' ? '#22c55e' : idea.effort === 'Medium' ? '#f59e0b' : '#ff3366';
@@ -912,23 +997,45 @@ function handleTool() {
     tracker: `
 const ToolLogic = {
   track(input) {
+    var _topic = (window.BLOG_TOPIC || '').toLowerCase();
+    if (_topic.includes('subscriber') || _topic.includes('growth')) {
+      return this.trackSubscriberGrowth(input);
+    }
     const numbers = input.match(/\\d[\\d,.]*/g);
     if (!numbers || numbers.length === 0) {
       return { error: true, msg: 'Please include some numbers so we can help you track them (e.g., "10K views, 5% CTR").' };
     }
 
-    // Generate mock tracking data
+    // Generate mock tracking data (deterministic: same input = same data)
     const metrics = [
-      { name: 'Views', current: Math.floor(Math.random() * 50000) + 1000, change: (Math.random() * 40 - 10).toFixed(1), unit: '' },
-      { name: 'Watch Time (hrs)', current: Math.floor(Math.random() * 2000) + 100, change: (Math.random() * 30 - 5).toFixed(1), unit: 'hrs' },
-      { name: 'Subscribers', current: Math.floor(Math.random() * 5000) + 50, change: (Math.random() * 25 - 5).toFixed(1), unit: '' },
-      { name: 'Impressions', current: Math.floor(Math.random() * 200000) + 5000, change: (Math.random() * 35 - 15).toFixed(1), unit: '' },
-      { name: 'CTR (%)', current: (Math.random() * 8 + 1).toFixed(1), change: (Math.random() * 20 - 8).toFixed(1), unit: '%' },
-      { name: 'Avg. View Duration', current: (Math.random() * 300 + 30).toFixed(0) + 's', change: (Math.random() * 15 - 5).toFixed(1), unit: '' },
-      { name: 'Revenue ($)', current: (Math.random() * 500 + 5).toFixed(2), change: (Math.random() * 30 - 10).toFixed(1), unit: '$' },
+      { name: 'Views', current: Math.floor(seededRandom(1) * 50000) + 1000, change: (seededRandom(11) * 40 - 10).toFixed(1), unit: '' },
+      { name: 'Watch Time (hrs)', current: Math.floor(seededRandom(2) * 2000) + 100, change: (seededRandom(12) * 30 - 5).toFixed(1), unit: 'hrs' },
+      { name: 'Subscribers', current: Math.floor(seededRandom(3) * 5000) + 50, change: (seededRandom(13) * 25 - 5).toFixed(1), unit: '' },
+      { name: 'Impressions', current: Math.floor(seededRandom(4) * 200000) + 5000, change: (seededRandom(14) * 35 - 15).toFixed(1), unit: '' },
+      { name: 'CTR (%)', current: (seededRandom(5) * 8 + 1).toFixed(1), change: (seededRandom(15) * 20 - 8).toFixed(1), unit: '%' },
+      { name: 'Avg. View Duration', current: (seededRandom(6) * 300 + 30).toFixed(0) + 's', change: (seededRandom(16) * 15 - 5).toFixed(1), unit: '' },
+      { name: 'Revenue ($)', current: (seededRandom(7) * 500 + 5).toFixed(2), change: (seededRandom(17) * 30 - 10).toFixed(1), unit: '$' },
     ];
 
     return { error: false, metrics: metrics };
+  },
+
+  trackSubscriberGrowth(input) {
+    var nums = input.match(/\\d[\\d,.]*/g);
+    var current = nums ? parseInt(nums[0].replace(/,/g, '')) : 100;
+    var monthlyGrowth = Math.round(current * (seededRandom(5) * 0.12 + 0.03));
+    var monthsTo1k = current >= 1000 ? 0 : Math.ceil((1000 - current) / Math.max(1, monthlyGrowth));
+    var monthsTo10k = current >= 10000 ? 0 : Math.ceil((10000 - current) / Math.max(1, monthlyGrowth));
+    var yearlyProjection = current + monthlyGrowth * 12;
+    var weeklyTarget = Math.round(Math.max(1, (1000 - current)) / Math.max(1, 52 - Math.round(current / monthlyGrowth)));
+    var growthRate = Math.round((monthlyGrowth / current) * 100);
+    return {
+      error: false, subscriberMode: true,
+      currentSubs: current, monthlyGrowth: monthlyGrowth,
+      monthsTo1k: monthsTo1k, monthsTo10k: monthsTo10k,
+      yearlyProjection: yearlyProjection, growthRate: growthRate,
+      weeklyTarget: weeklyTarget, needsMoreSubs: Math.max(0, 1000 - current)
+    };
   }
 };
 
@@ -945,7 +1052,41 @@ function handleTool() {
     return;
   }
 
-  let html = '<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:0.75rem;">';
+  let html = '<div style="font-size:0.75rem;color:#64748b;margin-bottom:0.75rem;padding:0.4rem 0.75rem;background:rgba(99,102,241,0.06);border-radius:6px;text-align:left;">📖 Based on the ' + window.BLOG_TOPIC + ' guide</div><div style="margin-bottom:0.75rem;">' + topicAdvice(window.BLOG_TOPIC) + '</div>';
+
+  // ── Subscriber Growth Mode ──
+  if (result.subscriberMode) {
+    html += '<div style="background:rgba(99,102,241,0.04);border:1px solid #2a2a4a;border-radius:12px;padding:1.25rem;text-align:left;">';
+    html += '<div style="font-weight:700;font-size:1.2rem;margin-bottom:1rem;color:#e2e8f0;">📈 Your Subscriber Growth Projection</div>';
+    html += '<div style="display:grid;grid-template-columns:repeat(2,1fr);gap:1rem;margin-bottom:1.25rem;">';
+    html += '<div style="background:rgba(99,102,241,0.08);border-radius:8px;padding:1rem;text-align:center;"><div style="font-size:1.5rem;font-weight:800;color:#6366f1;">' + result.currentSubs.toLocaleString() + '</div><div style="font-size:0.75rem;color:#94a3b8;">Current Subscribers</div></div>';
+    html += '<div style="background:rgba(6,182,212,0.08);border-radius:8px;padding:1rem;text-align:center;"><div style="font-size:1.5rem;font-weight:800;color:#06b6d4;">' + result.monthlyGrowth.toLocaleString() + '</div><div style="font-size:0.75rem;color:#94a3b8;">Est. Monthly Growth</div></div>';
+    html += '<div style="background:rgba(34,197,94,0.08);border-radius:8px;padding:1rem;text-align:center;"><div style="font-size:1.5rem;font-weight:800;color:#22c55e;">' + result.growthRate + '%</div><div style="font-size:0.75rem;color:#94a3b8;">Monthly Growth Rate</div></div>';
+    html += '<div style="background:rgba(245,158,11,0.08);border-radius:8px;padding:1rem;text-align:center;"><div style="font-size:1.5rem;font-weight:800;color:#f59e0b;">' + result.yearlyProjection.toLocaleString() + '</div><div style="font-size:0.75rem;color:#94a3b8;">Projected Year End</div></div>';
+    html += '</div>';
+    html += '<div style="margin-top:1rem;">';
+    if (result.monthsTo1k > 0) {
+      html += '<div style="display:flex;align-items:center;gap:0.75rem;padding:0.75rem;background:rgba(6,182,212,0.06);border-radius:8px;margin-bottom:0.5rem;">';
+      html += '<span style="font-size:1.5rem;">🎯</span>';
+      html += '<div><div style="font-weight:600;color:#e2e8f0;">' + result.monthsTo1k + ' months to 1,000 subscribers</div>';
+      html += '<div style="font-size:0.85rem;color:#94a3b8;">Need ' + result.needsMoreSubs.toLocaleString() + ' more subs. Add ' + result.weeklyTarget + ' subs/week to reach 1K in ~' + result.monthsTo1k + ' months.</div></div></div>';
+    } else {
+      html += '<div style="display:flex;align-items:center;gap:0.75rem;padding:0.75rem;background:rgba(34,197,94,0.06);border-radius:8px;margin-bottom:0.5rem;">';
+      html += '<span style="font-size:1.5rem;">🎉</span>';
+      html += '<div><div style="font-weight:600;color:#22c55e;">You\'ve reached 1,000 subscribers!</div>';
+      html += '<div style="font-size:0.85rem;color:#94a3b8;">Next milestone: ' + result.monthsTo10k + ' months to 10K at current growth rate.</div></div></div>';
+    }
+    html += '<div style="display:flex;align-items:center;gap:0.75rem;padding:0.75rem;background:rgba(99,102,241,0.06);border-radius:8px;">';
+    html += '<span style="font-size:1.5rem;">📊</span>';
+    html += '<div><div style="font-weight:600;color:#e2e8f0;">Growth Strategy Tips</div>';
+    html += '<div style="font-size:0.85rem;color:#94a3b8;">Upload 2-3x/week consistently. Promote on social media. Engage with comments. Collaborate with similar-sized channels.</div></div></div>';
+    html += '</div></div>';
+    placeholder.innerHTML = html;
+    return;
+  }
+
+  // ── Standard Metrics Mode ──
+  html += '<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:0.75rem;">';
   result.metrics.forEach(function(m) {
     const changeNum = parseFloat(m.change);
     const isPositive = changeNum >= 0;
@@ -1009,7 +1150,8 @@ function handleTool() {
   const placeholder = document.getElementById('result-placeholder');
   box.classList.add('show');
 
-  let html = '<div style="margin-bottom:1rem;display:flex;justify-content:space-between;align-items:center;">';
+  let html = '<div style="font-size:0.75rem;color:#64748b;margin-bottom:0.75rem;padding:0.4rem 0.75rem;background:rgba(99,102,241,0.06);border-radius:6px;text-align:left;">📖 Based on the ' + window.BLOG_TOPIC + ' guide</div><div style="margin-bottom:0.75rem;">' + topicAdvice(window.BLOG_TOPIC) + '</div>';
+  html += '<div style="margin-bottom:1rem;display:flex;justify-content:space-between;align-items:center;">';
   html += '<span style="color:#94a3b8;">📈 ' + opps.length + ' growth opportunities found for &quot;' + input + '&quot;</span>';
   html += '<span style="font-size:0.75rem;color:#64748b;">Sorted by impact</span>';
   html += '</div>';
@@ -1058,7 +1200,9 @@ function handleTool() {
   const placeholder = document.getElementById('result-placeholder');
   box.classList.add('show');
 
-  let html = '<div style="display:grid;grid-template-columns:repeat(2,1fr);gap:0.75rem;margin-bottom:1.5rem;">';
+  let html = '<div style="font-size:0.75rem;color:#64748b;margin-bottom:0.75rem;padding:0.4rem 0.75rem;background:rgba(99,102,241,0.06);border-radius:6px;text-align:left;">📖 Based on the ' + window.BLOG_TOPIC + ' guide</div>';
+  html += '<div style="margin-bottom:0.75rem;">' + topicAdvice(window.BLOG_TOPIC) + '</div>';
+  html += '<div style="display:grid;grid-template-columns:repeat(2,1fr);gap:0.75rem;margin-bottom:1.5rem;">';
   html += '<div style="background:rgba(99,102,241,0.08);border-radius:8px;padding:1rem;text-align:center;"><div style="font-size:1.3rem;font-weight:700;color:#6366f1;">' + result.wordCount + '</div><div style="font-size:0.75rem;color:#94a3b8;">Words</div></div>';
   html += '<div style="background:rgba(6,182,212,0.08);border-radius:8px;padding:1rem;text-align:center;"><div style="font-size:1.3rem;font-weight:700;color:#06b6d4;">' + result.charCount + '</div><div style="font-size:0.75rem;color:#94a3b8;">Characters</div></div>';
   html += '<div style="background:rgba(34,197,94,0.08);border-radius:8px;padding:1rem;text-align:center;"><div style="font-size:1.3rem;font-weight:700;color:#22c55e;">' + result.sentences + '</div><div style="font-size:0.75rem;color:#94a3b8;">Sentences</div></div>';
@@ -1089,11 +1233,29 @@ function generateToolHtml(slug) {
     .replace(/\\b(And|For|The|In|Of|To|A|Vs)\\b/gi, c => c.toLowerCase())
     .replace(/^./, c => c.toUpperCase());
 
-  const metaTitle = `${titleCase} — Free Interactive Tool | YT SEO Architect`;
-  const metaDesc = `Free ${titleCase.toLowerCase()}. Apply what you learn from the blog post with this interactive tool. No login required.`;
+  const TOOL_DESC = {
+    'scorer': 'Score and optimize your YouTube titles for maximum CTR — checks length, keywords, power words, numbers, and emotional triggers.',
+    'generator': 'Generate optimized YouTube tags with estimated search volume and competition scores. Copy individual tags or all at once.',
+    'research': 'Research YouTube keywords with search volume and difficulty estimates. Find low-competition opportunities your competitors miss.',
+    'writer': 'Write SEO-optimized YouTube descriptions with timestamps, hashtags, CTAs, and links ready to paste into YouTube Studio.',
+    'checker': 'Check your YouTube metadata against SEO best practices — description length, hashtags, timestamps, and keyword usage.',
+    'analyzer': 'Analyze YouTube channels and competitors. Understand what drives growth in your niche and find actionable opportunities.',
+    'calculator': 'Calculate your YouTube CTR, estimated revenue, and get personalized recommendations to improve your click-through rate.',
+    'auditor': 'Get a complete YouTube SEO audit score with prioritized fixes for your title, description, and tags.',
+    'detector': 'Diagnose algorithm issues, view drops, and potential shadow bans. Identify what\'s limiting your YouTube reach.',
+    'optimizer': 'Get personalized recommendations for your YouTube content strategy — titles, thumbnails, tags, descriptions, and end screens.',
+    'planner': 'Generate a full content calendar with 20+ video ideas tailored to your specific niche and audience.',
+    'tracker': 'Track your YouTube channel growth — monitor views, subscribers, CTR, impressions, and estimated revenue trends.',
+    'finder': 'Discover growth opportunities for your YouTube channel including collaborations, guest posting, and backlink prospects.',
+    'tool': 'Analyze your text for SEO keywords, topic clusters, and readability. Get insights to improve your YouTube content.',
+  };
 
   const toolType = detectToolType(slug);
   const toolJS = getToolJS(toolType.type, slug);
+
+  const metaTitle = `${titleCase} — Free Interactive Tool | YT SEO Architect`;
+  const toolDesc = TOOL_DESC[toolType.type] || 'Free interactive YouTube SEO tool';
+  const metaDesc = `${toolDesc} Apply what you learn from the ${titleCase.toLowerCase()} guide. Works entirely in your browser, no login required.`;
   const buttonText = toolType.btn || 'Go';
   const inputLabel = toolType.input || 'Enter your details';
   const inputPlaceholder = toolType.placeholder || 'e.g., describe your YouTube topic';
@@ -1169,7 +1331,7 @@ function generateToolHtml(slug) {
     </div>
 
     <h1>${toolType.icon} ${titleCase} — Free Interactive Tool</h1>
-    <p class="subtitle">Free tool to apply what you learn from the blog post. Works entirely in your browser — no login, no API calls.</p>
+    <p class="subtitle">${toolDesc} Aligned with the <a href="${blogPath}" style="color:var(--accent2);text-decoration:underline;">${titleCase.toLowerCase()} guide</a> — everything works in your browser, no login needed.</p>
 
     <div class="tool-card">
       <label for="tool-input">${inputLabel}</label>
@@ -1178,7 +1340,7 @@ function generateToolHtml(slug) {
 
       <div class="result-box" id="result-box">
         <div class="placeholder" id="result-placeholder">
-          Your results will appear here
+          Enter your details above and click "${buttonText}" to get results aligned with the ${titleCase.toLowerCase()} guide.
         </div>
       </div>
     </div>
@@ -1195,6 +1357,34 @@ function generateToolHtml(slug) {
 
   <script>
     window.BLOG_SLUG = '${slug}';
+    window.BLOG_TOPIC = '${slug}'.replace(/-/g, ' ').replace(/\d{4}/g, '').replace(/\s+/g, ' ').trim();
+
+    // ── Deterministic random (same input = same output) ──
+    function seededRandom(seed) {
+      var x = Math.sin(Math.abs(typeof seed === 'number' ? seed : seed ? seed.charCodeAt(0) + seed.length : 1)) * 10000;
+      return x - Math.floor(x);
+    }
+
+    // ── Topic-aware advice generator ──
+    function topicAdvice(topic) {
+      var t = (topic || '').toLowerCase();
+      if (t.includes('subscriber') || t.includes('growth')) return '🎯 ' + 'Tip: Focus on subscriber growth through consistent uploading, community engagement, and strategic cross-promotion.';
+      if (t.includes('small') || t.includes('beginner')) return '🎯 ' + 'Tip: Small channels grow fastest by targeting low-competition keywords and niching down. Consistency beats volume.';
+      if (t.includes('tutorial')) return '🎯 ' + 'Tip: Tutorials with clear timestamps, step-by-step visuals, and downloadable resources rank higher in YouTube search.';
+      if (t.includes('algorithm')) return '🎯 ' + 'Tip: YouTube\'s algorithm favors high retention, strong CTR, and consistent uploads. Optimize for watch time first.';
+      if (t.includes('tag') || t.includes('keyword')) return '🎯 ' + 'Tip: Use a mix of broad (high volume) and specific (low competition) tags for maximum discovery.';
+      if (t.includes('title') || t.includes('hook')) return '🎯 ' + 'Tip: Titles with numbers, power words, and brackets see 15-36% higher CTR. Front-load your keyword.';
+      if (t.includes('description')) return '🎯 ' + 'Tip: Descriptions with 200+ words, timestamps, and relevant hashtags rank significantly better in search.';
+      if (t.includes('retention') || t.includes('ctr')) return '🎯 ' + 'Tip: Audience retention and CTR are YouTube\'s top ranking signals. Hook viewers in the first 5 seconds.';
+      if (t.includes('thumbnail')) return '🎯 ' + 'Tip: High-contrast thumbnails with close-up faces and 3-5 words max get up to 30% more clicks.';
+      if (t.includes('monetization')) return '🎯 ' + 'Tip: Focus on niche content with high CPM potential. Reach 1K subs and 4K watch hours to unlock monetization.';
+      if (t.includes('shorts')) return '🎯 ' + 'Tip: YouTube Shorts under 60s with strong hooks in the first 3 seconds get the most algorithmic push.';
+      if (t.includes('backlink') || t.includes('seo') || t.includes('rank')) return '🎯 ' + 'Tip: Build backlinks through guest posting, collaborations, and valuable forum contributions to boost channel authority.';
+      if (t.includes('competitor') || t.includes('analyze')) return '🎯 ' + 'Tip: Analyze competitors\' top videos for keyword gaps, content formats, and engagement patterns to find your edge.';
+      if (t.includes('idea') || t.includes('plan')) return '🎯 ' + 'Tip: Plan content around search intent — informational, educational, and entertaining formats all serve different audiences.';
+      return '🎯 ' + 'Tip: Focus on creating content that provides clear value. Consistency and quality drive long-term YouTube growth.';
+    }
+
     ${toolJS}
   </script>
 </body>

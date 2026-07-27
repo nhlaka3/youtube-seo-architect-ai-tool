@@ -45,6 +45,11 @@ const TOOL_TYPE_MAP = {
   'community': { type: 'planner', icon: '👥', cat: 'Strategy', desc: 'Plan community posts and engagement strategies.' },
   'backlink': { type: 'finder', icon: '🔗', cat: 'Growth', desc: 'Find backlink and outreach opportunities.' },
   'video-not-getting-views': { type: 'detector', icon: '🔍', cat: 'Audit & Diagnostic', desc: 'Diagnose why your videos aren\'t getting views.' },
+  'subscriber': { type: 'tracker', icon: '📈', cat: 'Growth', desc: 'Track and project your subscriber growth over time.' },
+  'small': { type: 'checker', icon: '🔎', cat: 'Audit & Diagnostic', desc: 'Check your small channel for growth opportunities and fixes.' },
+  'tutorial': { type: 'optimizer', icon: '📖', cat: 'Strategy', desc: 'Optimize your tutorial content for better search ranking.' },
+  'idea': { type: 'planner', icon: '💡', cat: 'Strategy', desc: 'Generate video ideas tailored to your channel niche.' },
+  'algorithm': { type: 'calculator', icon: '🧮', cat: 'Analytics', desc: 'Analyze how YouTube algorithm changes affect your channel.' },
 };
 
 const MANUAL_TOOLS = {
