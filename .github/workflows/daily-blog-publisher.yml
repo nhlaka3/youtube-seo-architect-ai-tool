@@ -125,7 +125,7 @@ jobs:
         id: push
         run: |
           git config user.name "YT SEO Bot"
-          git config user.email "thiza3062@gmail.com"
+          git config user.email "hnhlaka142@gmail.com"
           git add -A
           if git diff --staged --quiet; then
             echo "✅ No changes to commit"
