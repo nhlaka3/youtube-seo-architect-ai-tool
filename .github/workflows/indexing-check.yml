@@ -40,7 +40,7 @@ jobs:
         id: commit
         run: |
           git config user.name "YT SEO Bot"
-          git config user.email "bot@yt-seo-architect.vercel.app"
+          git config user.email "thiza3062@gmail.com"
           git add public/indexing-report.json
           if git diff --staged --quiet; then
             echo "No changes"

@@ -63,7 +63,7 @@ jobs:
       - name: 📋 Step 3 — Commit report
         run: |
           git config user.name "YT SEO Bot"
-          git config user.email "bot@yt-seo-architect.vercel.app"
+          git config user.email "thiza3062@gmail.com"
           git add marketing/backlink-reports/ 2>/dev/null || true
           if ! git diff --staged --quiet; then
             git commit -m "backlinks: weekly opportunity scan $(date +%Y-%m-%d) [skip ci]"
