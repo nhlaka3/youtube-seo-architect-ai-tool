@@ -290,6 +290,51 @@ function generateRelatedBlogsSection(relatedBlogs) {
       </div>`;
 }
 
+function generateComparisonsSection(termData, allTerms) {
+  // Find up to 5 comparison pages involving this term
+  const slug = termData.slug;
+  const comparisons = [];
+
+  for (const other of allTerms) {
+    if (other.slug === slug) continue;
+    const slugA = slug < other.slug ? slug : other.slug;
+    const slugB = slug < other.slug ? other.slug : slug;
+    comparisons.push({
+      slug: `${slugA}-vs-${slugB}`,
+      a: slug,
+      b: other.slug,
+      bTerm: other.term,
+    });
+  }
+
+  // Pick 5 most relevant: prefer same-category, then cross-category
+  const sameCat = comparisons.filter(c => {
+    const other = allTerms.find(t => t.slug === c.b);
+    return other && other.category === termData.category;
+  });
+  const crossCat = comparisons.filter(c => {
+    const other = allTerms.find(t => t.slug === c.b);
+    return other && other.category !== termData.category;
+  });
+
+  const picks = [...sameCat.slice(0, 3), ...crossCat.slice(0, 2)].slice(0, 5);
+  if (picks.length === 0) return '';
+
+  const links = picks.map(p => {
+    const other = allTerms.find(t => t.slug === p.b);
+    return `<a href="/glossary/${p.slug}" class="related-card">
+      ⚖️ ${termData.term} vs ${other ? other.term : p.bTerm}
+    </a>`;
+  }).join('\n        ');
+
+  return `
+      <h2>Compare ${termData.term}</h2>
+      <p>See how ${termData.term} stacks up against related concepts:</p>
+      <div class="related-grid">
+        ${links}
+      </div>`;
+}
+
 function truncateForSchema(text, maxLen = 200) {
   if (text.length <= maxLen) return text;
   return text.substring(0, maxLen - 3) + '...';
@@ -316,6 +361,7 @@ function generatePage(termData, template, allTerms, catMeta) {
     '{{COMMON_QUESTIONS_SECTION}}': faqSectionHTML,
     '{{RELATED_TERMS_SECTION}}': generateRelatedTermsSection(termData, allTerms),
     '{{RELATED_BLOGS_SECTION}}': generateRelatedBlogsSection(termData.relatedBlogs),
+    '{{COMPARISONS_SECTION}}': generateComparisonsSection(termData, allTerms),
     '{{SCHEMA_DESCRIPTION}}': truncateForSchema(termData.shortDefinition),
   };
 
