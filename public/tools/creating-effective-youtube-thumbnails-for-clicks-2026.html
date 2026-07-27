@@ -242,7 +242,7 @@ const ToolLogic = {
 
     // Subs check
     if (currentSubs >= 1000) {
-      issues.push({ severity: 'good', area: 'Subscribers', msg: currentSubs.toLocaleString() + ' subs — you're past the first major milestone!', icon: '✅' });
+      issues.push({ severity: 'good', area: 'Subscribers', msg: currentSubs.toLocaleString() + " subs — you're past the first major milestone!", icon: '✅' });
     } else if (currentSubs >= 100) {
       var to1k = 1000 - currentSubs;
       issues.push({ severity: 'medium', area: 'Subscribers', msg: currentSubs.toLocaleString() + ' subs. ' + to1k + ' more to 1K. Small channels with 100+ subs see 2x faster growth.', icon: '🟡' });
@@ -268,7 +268,7 @@ const ToolLogic = {
 
     // SEO check
     if (lower.includes('seo') || lower.includes('title') || lower.includes('tag') || lower.includes('description')) {
-      issues.push({ severity: 'good', area: 'SEO Awareness', msg: 'You're thinking about SEO — that's half the battle. Optimize each video like a landing page.', icon: '✅' });
+      issues.push({ severity: 'good', area: 'SEO Awareness', msg: "You're thinking about SEO — that's half the battle. Optimize each video like a landing page.", icon: '✅' });
     } else {
       issues.push({ severity: 'medium', area: 'SEO Awareness', msg: 'Focus on keyword research. Small channels grow by ranking for low-competition keywords.', icon: '🟡' });
     }

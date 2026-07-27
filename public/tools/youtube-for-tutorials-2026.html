@@ -340,6 +340,9 @@ const ToolLogic = {
     }
     return suggestions;
   }
+};
+
+function handleTool() {
   const input = document.getElementById('tool-input').value.trim();
   if (!input) return;
   var _topic = (window.BLOG_TOPIC || '').toLowerCase();

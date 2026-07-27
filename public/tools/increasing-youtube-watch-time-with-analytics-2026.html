@@ -182,8 +182,8 @@ const ToolLogic = {
 
     // Determine growth stage
     var stage, stageColor, stageAdvice;
-    if (hasSubs >= 100000) { stage = 'Established Creator'; stageColor = '#6366f1'; stageAdvice = 'You're an established creator. Focus on community engagement, collaborations, and diversifying revenue.'; }
-    else if (hasSubs >= 10000) { stage = 'Growing Channel'; stageColor = '#06b6d4'; stageAdvice = 'You've built momentum. Double down on your best content formats and increase upload frequency.'; }
+    if (hasSubs >= 100000) { stage = 'Established Creator'; stageColor = '#6366f1'; stageAdvice = "You're an established creator. Focus on community engagement, collaborations, and diversifying revenue."; }
+    else if (hasSubs >= 10000) { stage = 'Growing Channel'; stageColor = '#06b6d4'; stageAdvice = "You've built momentum. Double down on your best content formats and increase upload frequency."; }
     else if (hasSubs >= 1000) { stage = 'Monetized Creator'; stageColor = '#22c55e'; stageAdvice = 'Congratulations on 1K subs! Focus on watch hours and creating content that keeps viewers on the platform.'; }
     else if (hasSubs >= 100) { stage = 'Building Audience'; stageColor = '#f59e0b'; stageAdvice = 'You have initial traction! Niche down further and focus on low-competition keywords to accelerate growth.'; }
     else { stage = 'Starting Out'; stageColor = '#ff3366'; stageAdvice = 'Every big channel started here. Focus on creating 20-30 videos in a specific niche before evaluating results.'; }

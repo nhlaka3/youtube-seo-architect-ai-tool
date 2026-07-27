@@ -321,7 +321,7 @@ function handleTool() {
   // Show what's missing section
   if (best.missing.length > 0) {
     html += '<div style="margin-top:1.25rem;padding:1rem;background:rgba(255,51,102,0.05);border:1px solid rgba(255,51,102,0.15);border-radius:8px;text-align:left;">';
-    html += '<div style="font-weight:700;font-size:1rem;color:#ff3366;margin-bottom:0.75rem;">⚠️ What\'s Missing From Your Title</div>';
+    html += '<div style="font-weight:700;font-size:1rem;color:#ff3366;margin-bottom:0.75rem;">⚠️ What\\u0027s Missing From Your Title</div>';
     html += '<div style="display:flex;flex-wrap:wrap;gap:0.5rem;">';
     best.missing.forEach(function(m) {
       html += '<span style="background:rgba(255,51,102,0.1);color:#ff6b8a;padding:0.3rem 0.7rem;border-radius:6px;font-size:0.8rem;">' + m + '</span>';
@@ -424,7 +424,7 @@ const ToolLogic = {
       { tag: base, reason: 'Primary keyword — essential for ranking' },
       { tag: base + ' 2026', reason: 'Time-bound keyword — captures trending searches' },
       { tag: 'how to ' + base, reason: 'How-to format — highest search intent' },
-      { tag: base + ' tutorial', reason: 'Tutorial format — YouTube\'s favorite content type' },
+      { tag: base + ' tutorial', reason: "Tutorial format — YouTube's favorite content type" },
       { tag: base + ' for beginners', reason: 'Beginner modifier — broadest search audience' },
     ];
 
@@ -700,7 +700,7 @@ const ToolLogic = {
     var desc1 = [];
     desc1.push('📌 ' + capTopic + ' — Complete Guide ' + year);
     desc1.push('');
-    desc1.push('🎯 WHAT YOU\'LL LEARN:');
+    desc1.push("🎯 WHAT YOU'LL LEARN:");
     desc1.push('• What ' + topic + ' is and why it matters in ' + year);
     desc1.push('• Step-by-step strategies that actually work');
     desc1.push('• Common mistakes to avoid (save you months of trial & error)');
@@ -709,7 +709,7 @@ const ToolLogic = {
     desc1.push('');
     desc1.push('📑 TIMESTAMPS:');
     desc1.push('0:00 - Introduction');
-    desc1.push('0:45 - What You\'ll Learn Today');
+    desc1.push("0:45 - What You'll Learn Today");
     desc1.push('3:15 - The Core Strategy');
     desc1.push('5:30 - Advanced Techniques');
     desc1.push('8:00 - Common Mistakes to Avoid');
@@ -727,11 +727,11 @@ const ToolLogic = {
 
     // Version 2: Story-driven
     var desc2 = [];
-    desc2.push('📌 ' + capTopic + ' — The Only Guide You\'ll Need in ' + year);
+    desc2.push('📌 ' + capTopic + " — The Only Guide You'll Need in " + year);
     desc2.push('');
-    desc2.push('Ever felt overwhelmed by ' + topic + '? You\'re not alone. In this video, I break down everything into simple, actionable steps.');
+    desc2.push('Ever felt overwhelmed by ' + topic + "? You're not alone. In this video, I break down everything into simple, actionable steps.");
     desc2.push('');
-    desc2.push('Here\'s what we\'ll cover:');
+    desc2.push("Here's what we'll cover:");
     desc2.push('⏱️ 0:00 - The Problem');
     desc2.push('⏱️ 1:30 - The 3-Step System');
     desc2.push('⏱️ 4:00 - Real Examples');
@@ -751,7 +751,7 @@ const ToolLogic = {
     var desc3 = [];
     desc3.push('📌 ' + capTopic + ' — Fast-Track Guide ' + year);
     desc3.push('');
-    desc3.push('In this video, I\'ll show you:');
+    desc3.push("In this video, I'll show you:");
     desc3.push('✅ The exact ' + topic + ' strategy used by top creators');
     desc3.push('✅ 5 proven techniques that work in ' + year);
     desc3.push('✅ The #1 mistake killing your results');
@@ -912,7 +912,7 @@ const ToolLogic = {
 
     // Subs check
     if (currentSubs >= 1000) {
-      issues.push({ severity: 'good', area: 'Subscribers', msg: currentSubs.toLocaleString() + ' subs — you\'re past the first major milestone!', icon: '✅' });
+      issues.push({ severity: 'good', area: 'Subscribers', msg: currentSubs.toLocaleString() + " subs — you're past the first major milestone!", icon: '✅' });
     } else if (currentSubs >= 100) {
       var to1k = 1000 - currentSubs;
       issues.push({ severity: 'medium', area: 'Subscribers', msg: currentSubs.toLocaleString() + ' subs. ' + to1k + ' more to 1K. Small channels with 100+ subs see 2x faster growth.', icon: '🟡' });
@@ -938,7 +938,7 @@ const ToolLogic = {
 
     // SEO check
     if (lower.includes('seo') || lower.includes('title') || lower.includes('tag') || lower.includes('description')) {
-      issues.push({ severity: 'good', area: 'SEO Awareness', msg: 'You\'re thinking about SEO — that\'s half the battle. Optimize each video like a landing page.', icon: '✅' });
+      issues.push({ severity: 'good', area: 'SEO Awareness', msg: "You're thinking about SEO — that's half the battle. Optimize each video like a landing page.", icon: '✅' });
     } else {
       issues.push({ severity: 'medium', area: 'SEO Awareness', msg: 'Focus on keyword research. Small channels grow by ranking for low-competition keywords.', icon: '🟡' });
     }
@@ -1243,7 +1243,7 @@ const ToolLogic = {
     const findings = [];
 
     const symptomPatterns = [
-      { keyword: ['views drop', 'views dropped', 'views fell', 'views decreased', 'less views', 'fewer views'], issue: 'Sudden View Drop', severity: 'high', desc: 'A sudden drop in views often indicates an algorithmic change or content mismatch. Check if YouTube changed its recommendation pattern.', fix: 'Review your recent videos\' titles and thumbnails. Test a different content format.' },
+      { keyword: ['views drop', 'views dropped', 'views fell', 'views decreased', 'less views', 'fewer views'], issue: 'Sudden View Drop', severity: 'high', desc: 'A sudden drop in views often indicates an algorithmic change or content mismatch. Check if YouTube changed its recommendation pattern.', fix: "Review your recent videos' titles and thumbnails. Test a different content format." },
       { keyword: ['impression', 'impressions drop', 'impressions fell'], issue: 'Impression Loss', severity: 'high', desc: 'Fewer impressions mean YouTube is showing your content to fewer people. This can happen when your CTR drops.', fix: 'Improve your thumbnail and title. A/B test different styles.' },
       { keyword: ['shadow ban', 'shadowban', 'ghost'], issue: 'Potential Shadow Ban', severity: 'high', desc: 'YouTube does not officially shadow ban, but your content may be limited if it violates guidelines repeatedly.', fix: 'Review Community Guidelines. Avoid reused content, misleading thumbnails, or spammy tags.' },
       { keyword: ['ctr drop', 'click through', 'ctr fell'], issue: 'CTR Decline', severity: 'medium', desc: 'A CTR drop means fewer people click when they see your video. Usually a thumbnail/title issue.', fix: 'Refresh thumbnails with higher contrast, bigger text, and closer faces.' },
@@ -1289,7 +1289,7 @@ const ToolLogic = {
     if (allIssues.some(function(i) { return i.includes('Monetization'); })) {
       today.push('Check YouTube Studio > Earnings to see which videos have limited or no ads.');
     }
-    if (today.length === 0) today.push('Review your latest video\'s analytics — pay attention to the retention graph drop-off points.');
+    if (today.length === 0) today.push("Review your latest video's analytics — pay attention to the retention graph drop-off points.");
     plan.push({ timeframe: 'Today', icon: '⚡', steps: today });
 
     // Step 2: This week
@@ -1313,12 +1313,12 @@ const ToolLogic = {
     // Step 4: Long-term
     var longTerm = ['Build a content library around your best-performing topics. Pillar content creates long-term search traffic.'];
     if (allIssues.some(function(i) { return i.includes('Monetization') || i.includes('Shadow'); })) {
-      longTerm.push('Review YouTube\'s Community Guidelines and Ad-Friendly Content guidelines to ensure compliance.');
+      longTerm.push("Review YouTube's Community Guidelines and Ad-Friendly Content guidelines to ensure compliance.");
     }
     longTerm.push('Collaborate with 2-3 creators in your niche. Cross-promotion is the fastest organic growth strategy.');
     plan.push({ timeframe: 'Long-Term', icon: '🚀', steps: longTerm });
 
-    return { plan: plan, summary: 'Here\'s your personalized recovery roadmap based on your specific issues.' };
+    return { plan: plan, summary: "Here's your personalized recovery roadmap based on your specific issues." };
   }
 };
 
@@ -1540,6 +1540,9 @@ const ToolLogic = {
     }
     return suggestions;
   }
+};
+
+function handleTool() {
   const input = document.getElementById('tool-input').value.trim();
   if (!input) return;
   var _topic = (window.BLOG_TOPIC || '').toLowerCase();
@@ -1755,7 +1758,7 @@ function handleTool() {
     } else {
       html += '<div style="display:flex;align-items:center;gap:0.75rem;padding:0.75rem;background:rgba(34,197,94,0.06);border-radius:8px;margin-bottom:0.5rem;">';
       html += '<span style="font-size:1.5rem;">🎉</span>';
-      html += '<div><div style="font-weight:600;color:#22c55e;">You\'ve reached 1,000 subscribers!</div>';
+      html += '<div><div style="font-weight:600;color:#22c55e;">You\\u0027ve reached 1,000 subscribers!</div>';
       html += '<div style="font-size:0.85rem;color:#94a3b8;">Next milestone: ' + result.monthsTo10k + ' months to 10K at current growth rate.</div></div></div>';
     }
     html += '<div style="display:flex;align-items:center;gap:0.75rem;padding:0.75rem;background:rgba(99,102,241,0.06);border-radius:8px;">';
@@ -1864,8 +1867,8 @@ const ToolLogic = {
 
     // Determine growth stage
     var stage, stageColor, stageAdvice;
-    if (hasSubs >= 100000) { stage = 'Established Creator'; stageColor = '#6366f1'; stageAdvice = 'You\'re an established creator. Focus on community engagement, collaborations, and diversifying revenue.'; }
-    else if (hasSubs >= 10000) { stage = 'Growing Channel'; stageColor = '#06b6d4'; stageAdvice = 'You\'ve built momentum. Double down on your best content formats and increase upload frequency.'; }
+    if (hasSubs >= 100000) { stage = 'Established Creator'; stageColor = '#6366f1'; stageAdvice = "You're an established creator. Focus on community engagement, collaborations, and diversifying revenue."; }
+    else if (hasSubs >= 10000) { stage = 'Growing Channel'; stageColor = '#06b6d4'; stageAdvice = "You've built momentum. Double down on your best content formats and increase upload frequency."; }
     else if (hasSubs >= 1000) { stage = 'Monetized Creator'; stageColor = '#22c55e'; stageAdvice = 'Congratulations on 1K subs! Focus on watch hours and creating content that keeps viewers on the platform.'; }
     else if (hasSubs >= 100) { stage = 'Building Audience'; stageColor = '#f59e0b'; stageAdvice = 'You have initial traction! Niche down further and focus on low-competition keywords to accelerate growth.'; }
     else { stage = 'Starting Out'; stageColor = '#ff3366'; stageAdvice = 'Every big channel started here. Focus on creating 20-30 videos in a specific niche before evaluating results.'; }

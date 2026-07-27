@@ -179,7 +179,7 @@ const ToolLogic = {
     const findings = [];
 
     const symptomPatterns = [
-      { keyword: ['views drop', 'views dropped', 'views fell', 'views decreased', 'less views', 'fewer views'], issue: 'Sudden View Drop', severity: 'high', desc: 'A sudden drop in views often indicates an algorithmic change or content mismatch. Check if YouTube changed its recommendation pattern.', fix: 'Review your recent videos' titles and thumbnails. Test a different content format.' },
+      { keyword: ['views drop', 'views dropped', 'views fell', 'views decreased', 'less views', 'fewer views'], issue: 'Sudden View Drop', severity: 'high', desc: 'A sudden drop in views often indicates an algorithmic change or content mismatch. Check if YouTube changed its recommendation pattern.', fix: "Review your recent videos' titles and thumbnails. Test a different content format." },
       { keyword: ['impression', 'impressions drop', 'impressions fell'], issue: 'Impression Loss', severity: 'high', desc: 'Fewer impressions mean YouTube is showing your content to fewer people. This can happen when your CTR drops.', fix: 'Improve your thumbnail and title. A/B test different styles.' },
       { keyword: ['shadow ban', 'shadowban', 'ghost'], issue: 'Potential Shadow Ban', severity: 'high', desc: 'YouTube does not officially shadow ban, but your content may be limited if it violates guidelines repeatedly.', fix: 'Review Community Guidelines. Avoid reused content, misleading thumbnails, or spammy tags.' },
       { keyword: ['ctr drop', 'click through', 'ctr fell'], issue: 'CTR Decline', severity: 'medium', desc: 'A CTR drop means fewer people click when they see your video. Usually a thumbnail/title issue.', fix: 'Refresh thumbnails with higher contrast, bigger text, and closer faces.' },
@@ -225,7 +225,7 @@ const ToolLogic = {
     if (allIssues.some(function(i) { return i.includes('Monetization'); })) {
       today.push('Check YouTube Studio > Earnings to see which videos have limited or no ads.');
     }
-    if (today.length === 0) today.push('Review your latest video's analytics — pay attention to the retention graph drop-off points.');
+    if (today.length === 0) today.push("Review your latest video's analytics — pay attention to the retention graph drop-off points.");
     plan.push({ timeframe: 'Today', icon: '⚡', steps: today });
 
     // Step 2: This week
@@ -249,12 +249,12 @@ const ToolLogic = {
     // Step 4: Long-term
     var longTerm = ['Build a content library around your best-performing topics. Pillar content creates long-term search traffic.'];
     if (allIssues.some(function(i) { return i.includes('Monetization') || i.includes('Shadow'); })) {
-      longTerm.push('Review YouTube's Community Guidelines and Ad-Friendly Content guidelines to ensure compliance.');
+      longTerm.push("Review YouTube's Community Guidelines and Ad-Friendly Content guidelines to ensure compliance.");
     }
     longTerm.push('Collaborate with 2-3 creators in your niche. Cross-promotion is the fastest organic growth strategy.');
     plan.push({ timeframe: 'Long-Term', icon: '🚀', steps: longTerm });
 
-    return { plan: plan, summary: 'Here's your personalized recovery roadmap based on your specific issues.' };
+    return { plan: plan, summary: "Here's your personalized recovery roadmap based on your specific issues." };
   }
 };
 

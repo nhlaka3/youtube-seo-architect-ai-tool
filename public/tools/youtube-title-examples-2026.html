@@ -348,7 +348,7 @@ function handleTool() {
   // Show what's missing section
   if (best.missing.length > 0) {
     html += '<div style="margin-top:1.25rem;padding:1rem;background:rgba(255,51,102,0.05);border:1px solid rgba(255,51,102,0.15);border-radius:8px;text-align:left;">';
-    html += '<div style="font-weight:700;font-size:1rem;color:#ff3366;margin-bottom:0.75rem;">⚠️ What's Missing From Your Title</div>';
+    html += '<div style="font-weight:700;font-size:1rem;color:#ff3366;margin-bottom:0.75rem;">⚠️ What\u0027s Missing From Your Title</div>';
     html += '<div style="display:flex;flex-wrap:wrap;gap:0.5rem;">';
     best.missing.forEach(function(m) {
       html += '<span style="background:rgba(255,51,102,0.1);color:#ff6b8a;padding:0.3rem 0.7rem;border-radius:6px;font-size:0.8rem;">' + m + '</span>';
