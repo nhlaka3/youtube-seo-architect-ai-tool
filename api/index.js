@@ -1807,14 +1807,29 @@ app.get('/sitemap.xml', async (req, res) => {
       xml += `  <url><loc>https://yt-seo-architect.vercel.app${p.loc}</loc><changefreq>${p.changefreq}</changefreq><priority>${p.priority}</priority></url>\n`;
     }
 
-    // Free tool pages
-    const toolPages = [
-      { loc: '/tools/tag-generator', priority: '0.9', changefreq: 'weekly' },
-      { loc: '/tools/title-optimizer', priority: '0.9', changefreq: 'weekly' },
-      { loc: '/tools/description-writer', priority: '0.9', changefreq: 'weekly' },
+    // Free tool pages (dynamic list synced with blog posts)
+    const TOOL_SLUGS = [
+      "tag-generator", "title-optimizer", "description-writer",
+      "best-youtube-seo-tools-2026", "fix-youtube-shadow-ban-2026",
+      "keywords-youtube", "metadata-youtube", "rank-on-youtube-2026",
+      "youtube-ctr-actually-mean", "youtube-ai-seo-coach-phronesis-2026",
+      "youtube-algorithm-changes-2026", "youtube-analytics-4-metrics-that-matter",
+      "youtube-analytics-explained-2026", "youtube-chapter-timestamps-seo-guide",
+      "youtube-community-posts-strategy-2026", "youtube-competitor-analysis-reverse-engineer",
+      "youtube-description-templates-2026", "youtube-end-screens-cards-guide-2026",
+      "youtube-for-small-channels-2026", "youtube-for-tutorials-2026",
+      "youtube-impressions-guide-2026", "youtube-intro-hook-first-3-seconds",
+      "youtube-metadata-auditor-vs-vidiq-shadow-ban", "youtube-monetization-tips-2026",
+      "youtube-playlist-optimization-strategy", "youtube-retention-graph-explained-2026",
+      "youtube-seo-audit-diagnostic-fix-2026", "youtube-seo-checklist-beginners-2026",
+      "youtube-seo-examples-2026", "youtube-seo-for-business-channels-2026",
+      "youtube-seo-for-gaming-channels-2026", "youtube-seo-template-2026",
+      "youtube-shorts-seo-ranking-guide-2026", "youtube-tags-2026",
+      "youtube-thumbnail-ab-testing-guide", "youtube-title-examples-2026",
+      "youtube-video-not-getting-views-diagnostic-fix-2026",
     ];
-    for (const p of toolPages) {
-      xml += `  <url><loc>https://yt-seo-architect.vercel.app${p.loc}</loc><changefreq>${p.changefreq}</changefreq><priority>${p.priority}</priority></url>\n`;
+    for (const slug of TOOL_SLUGS) {
+      xml += `  <url><loc>https://yt-seo-architect.vercel.app/tools/${slug}</loc><changefreq>weekly</changefreq><priority>0.9</priority></url>\n`;
     }
 
     // Glossary pages (slugs inlined for Vercel serverless reliability)

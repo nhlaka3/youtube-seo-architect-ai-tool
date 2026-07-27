@@ -939,6 +939,7 @@ Rules for category: one of: SEO, Analytics, Growth, Revenue, Engagement, Thumbna
 
     const newKeywords = JSON.parse(text);
     let added = 0;
+    const emergencyCandidates = []; // Track top candidates for emergency fallback
 
     for (const kw of newKeywords) {
       if (!kw.keyword || !kw.slug || existingKeywords.has(kw.keyword.toLowerCase())) continue;
@@ -949,6 +950,20 @@ Rules for category: one of: SEO, Analytics, Growth, Revenue, Engagement, Thumbna
         const demand = checkKeywordDemand(kw.keyword);
         if (demand.demand !== null) {
           process.stdout.write(`D:${demand.demand}/100 R:${demand.rankability}/100 `);
+
+          // Track for emergency fallback — collect candidates even if they fail
+          if (!demand.pass) {
+            emergencyCandidates.push({
+              keyword: kw.keyword,
+              slug: kw.slug,
+              category: kw.category || 'Generated',
+              demand: demand.demand,
+              rankability: demand.rankability,
+            });
+            // Sort by demand score descending, keep top 3
+            emergencyCandidates.sort((a, b) => b.demand - a.demand);
+            if (emergencyCandidates.length > 3) emergencyCandidates.length = 3;
+          }
         }
         if (!demand.pass) {
           console.log('⏭ SKIPPED (zero demand)');
@@ -971,6 +986,28 @@ Rules for category: one of: SEO, Analytics, Growth, Revenue, Engagement, Thumbna
 
     saveKeywords(data);
     console.log(`  ✅ Added ${added} demand-verified keywords (${data.keywords.filter(k => k.status === 'pending').length} pending total)`);
+
+    // ═══ EMERGENCY FALLBACK: If refill produced zero pending keywords ═══
+    if (added === 0 && emergencyCandidates.length > 0) {
+      const pendingTotal = data.keywords.filter(k => k.status === 'pending').length;
+      if (pendingTotal < 3) {
+        console.log(`\n  ⚠️  Emergency fallback: ${emergencyCandidates.length} candidate(s) failed demand check,`);
+        console.log(`     but pipeline is starving (${pendingTotal} pending). Force-adding best candidates...`);
+        for (const c of emergencyCandidates) {
+          data.keywords.push({
+            keyword: c.keyword,
+            slug: c.slug,
+            category: c.category,
+            status: 'pending',
+            notes: `Emergency force-add (demand ${c.demand}/100, rankability ${c.rankability}/100)`,
+          });
+          added++;
+          console.log(`    ➕ "${c.keyword}" — demand: ${c.demand}/100`);
+        }
+        saveKeywords(data);
+        console.log(`  ✅ Emergency: added ${emergencyCandidates.length} keywords to keep pipeline running`);
+      }
+    }
   } catch (e) {
     console.error(`  ❌ Keyword generation failed: ${e.message}`);
   }

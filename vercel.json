@@ -34,6 +34,7 @@
     { "source": "/tools/tag-generator", "destination": "/tools/tag-generator.html" },
     { "source": "/tools/title-optimizer", "destination": "/tools/title-optimizer.html" },
     { "source": "/tools/description-writer", "destination": "/tools/description-writer.html" },
+    { "source": "/tools/(.*)", "destination": "/tools/$1.html" },
     { "source": "/api/(.+)", "destination": "/api/index.js" },
     { "source": "/guide/youtube-seo", "destination": "/api/index.js" },
     { "source": "/vs/morningfame", "destination": "/vs/morningfame.html" },
