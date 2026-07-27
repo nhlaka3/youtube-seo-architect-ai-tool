@@ -57,7 +57,13 @@ jobs:
           echo "🗂️ Generating category pages..."
           node scripts/generate-glossary-categories.mjs
 
-      - name: 🔗 Phase 5 — Inject glossary cross-links into blog posts
+      - name: 🔄 Phase 5 — Generate comparison pages (term-a-vs-term-b)
+        id: comparisons
+        run: |
+          echo "🔄 Generating comparison pages..."
+          node scripts/generate-glossary-comparisons.mjs
+
+      - name: 🔗 Phase 6 — Inject glossary cross-links into blog posts
         id: inject-links
         run: |
           echo "🔗 Injecting glossary links into blog posts..."
@@ -95,11 +101,12 @@ jobs:
           echo "════════════════════════════════════════════"
           echo "  📖 GLOSSARY PUBLISHER REPORT"
           echo "════════════════════════════════════════════"
-          echo "  AI discover:  ${{ steps.discover.outcome }}"
-          echo "  Auto-expand:  ${{ steps.expand.outcome }}"
-          echo "  Pages gen:    ${{ steps.generate.outcome }}"
-          echo "  Categories:   ${{ steps.categories.outcome }}"
-          echo "  Link inject:  ${{ steps.inject-links.outcome }}"
-          echo "  Changes:      ${{ steps.push.outputs.COMMITTED }}"
+          echo "  AI discover:    ${{ steps.discover.outcome }}"
+          echo "  Auto-expand:    ${{ steps.expand.outcome }}"
+          echo "  Pages gen:      ${{ steps.generate.outcome }}"
+          echo "  Categories:     ${{ steps.categories.outcome }}"
+          echo "  Comparisons:    ${{ steps.comparisons.outcome }}"
+          echo "  Link inject:    ${{ steps.inject-links.outcome }}"
+          echo "  Changes:        ${{ steps.push.outputs.COMMITTED }}"
           echo "  Time:         $(date -u)"
           echo "════════════════════════════════════════════"
