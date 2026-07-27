@@ -31,6 +31,14 @@
     .breadcrumb { font-size: 0.85rem; color: var(--text3); margin-bottom: 1rem; }
     .breadcrumb a { color: var(--accent); text-decoration: none; }
     .breadcrumb a:hover { text-decoration: underline; }
+    .copy-btn { display: none; margin-top: 1rem; width: 100%; padding: 0.65rem; background: linear-gradient(135deg, #6366f1, #06b6d4); color: #fff; border: none; border-radius: 8px; font-size: 0.9rem; font-weight: 600; cursor: pointer; transition: opacity 0.3s, transform 0.2s; }
+    .copy-btn:hover { opacity: 0.9; transform: scale(1.01); }
+    .copy-btn:active { transform: scale(0.98); }
+    .copy-btn.copied { background: linear-gradient(135deg, #22c55e, #16a34a); }
+    .result-box.show .copy-btn { display: block; }
+    .copy-btn-small { display: inline-flex; align-items: center; gap: 0.35rem; padding: 0.35rem 0.75rem; background: rgba(99,102,241,0.15); color: #a5b4fc; border: 1px solid rgba(99,102,241,0.25); border-radius: 6px; font-size: 0.75rem; cursor: pointer; transition: all 0.2s; }
+    .copy-btn-small:hover { background: rgba(99,102,241,0.25); color: #c7d2fe; }
+    .copy-btn-small.copied { background: rgba(34,197,94,0.2); color: #22c55e; border-color: #22c55e; }
     .tool-card { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 1.5rem; }
     .tool-card label { display: block; font-weight: 600; margin-bottom: 0.5rem; color: var(--text2); font-size: 0.9rem; }
     .tool-card input, .tool-card textarea { width: 100%; padding: 0.75rem 1rem; background: var(--bg); border: 1px solid var(--border); border-radius: 8px; color: var(--text); font-size: 1rem; margin-bottom: 1rem; outline: none; transition: border-color 0.2s; }
@@ -77,6 +85,10 @@
         <div class="placeholder" id="result-placeholder">
           Enter your details above and click "Audit SEO" to get results aligned with the youtube seo checklist beginners 2026 guide.
         </div>
+        <button class="copy-btn" id="copy-btn" onclick="copyResults()">📋 Copy Results</button>
+        <div style="display:flex;gap:0.5rem;justify-content:flex-end;margin-top:0.4rem;">
+          <button class="copy-btn-small" id="copy-btn-text" onclick="copyResultsTextOnly()">📋 Copy Text</button>
+        </div>
       </div>
     </div>
 
@@ -118,6 +130,46 @@
       if (t.includes('competitor') || t.includes('analyze')) return '🎯 ' + 'Tip: Analyze competitors' top videos for keyword gaps, content formats, and engagement patterns to find your edge.';
       if (t.includes('idea') || t.includes('plan')) return '🎯 ' + 'Tip: Plan content around search intent — informational, educational, and entertaining formats all serve different audiences.';
       return '🎯 ' + 'Tip: Focus on creating content that provides clear value. Consistency and quality drive long-term YouTube growth.';
+    }
+
+    function copyResults() {
+      var box = document.getElementById('result-box');
+      if (!box) return;
+      var text = box.innerText || box.textContent || '';
+      text = text.replace(/📋 Copy Results/g, '').replace(/📋 Copy Text/g, '').replace(/Copys*/g, '').replace(/Copied!/g, '').trim();
+      if (!text) return;
+      navigator.clipboard.writeText(text).then(function() {
+        var btn = document.getElementById('copy-btn');
+        if (btn) { btn.textContent = '✅ Copied!'; btn.classList.add('copied');
+          setTimeout(function() { btn.textContent = '📋 Copy Results'; btn.classList.remove('copied'); }, 2000); }
+      }).catch(function() {
+        var ta = document.createElement('textarea');
+        ta.value = text;
+        document.body.appendChild(ta);
+        ta.select();
+        document.execCommand('copy');
+        document.body.removeChild(ta);
+      });
+    }
+
+    function copyResultsTextOnly() {
+      var box = document.getElementById('result-box');
+      if (!box) return;
+      var text = box.innerText || box.textContent || '';
+      text = text.replace(/📋 Copy Results/g, '').replace(/📋 Copy Text/g, '').replace(/Copys*/g, '').replace(/Copied!/g, '').trim();
+      if (!text) return;
+      navigator.clipboard.writeText(text).then(function() {
+        var btn = document.getElementById('copy-btn-text');
+        if (btn) { btn.textContent = '✅ Copied!'; btn.classList.add('copied');
+          setTimeout(function() { btn.textContent = '📋 Copy Text'; btn.classList.remove('copied'); }, 2000); }
+      }).catch(function() {
+        var ta = document.createElement('textarea');
+        ta.value = text;
+        document.body.appendChild(ta);
+        ta.select();
+        document.execCommand('copy');
+        document.body.removeChild(ta);
+      });
     }
 
     
