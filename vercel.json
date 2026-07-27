@@ -42,6 +42,8 @@
     { "source": "/vs/keywordtool", "destination": "/vs/keywordtool.html" },
     { "source": "/vs/canva", "destination": "/vs/canva.html" },
 
+    { "source": "/glossary/([^/]+)-vs-([^/]+)", "destination": "/api/glossary-comparison" },
+
     { "source": "/(.*)", "destination": "/$1" }
   ],
   "headers": [
