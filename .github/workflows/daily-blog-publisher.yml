@@ -94,6 +94,13 @@ jobs:
           node scripts/generate-blog-tools.mjs
           echo "Interactive tool page generated (or already exists)"
 
+      - name: 📋 Rebuild tools index page
+        id: rebuild-tools-index
+        run: |
+          echo "Rebuilding tools index page with search and filters..."
+          node scripts/generate-tools-index.mjs
+          echo "Tools index page rebuilt"
+
       - name: 🎬 Generate video from new blog post
         id: video
         continue-on-error: true
