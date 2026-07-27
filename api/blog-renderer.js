@@ -622,7 +622,12 @@ export function renderBlogTemplate(page) {
   if (articleMatch) {
     bodyContent = articleMatch[1].trim();
   }
-  bodyContent = bodyContent.replace(/<h1[^>]*>.*?<\/h1>/i, '').trim();
+  // Strip duplicate H1 (template provides one) and any existing related-posts/footer sections
+  bodyContent = bodyContent
+    .replace(/<h1[^>]*>.*?<\/h1>/i, '')
+    .replace(/<nav\s[^>]*class="related-posts"[^>]*>[\s\S]*?<\/nav>/gi, '')
+    .replace(/<footer[\s\S]*?<\/footer>/gi, '')
+    .trim();
   const linked = linkGlossaryTerms(bodyContent);
   contentHTML += linked;
 
