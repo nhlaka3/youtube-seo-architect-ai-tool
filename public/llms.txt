@@ -1,35 +1,56 @@
 # YT SEO Architect
-> 17 AI-powered tools that automate YouTube SEO — competing with vidIQ and TubeBuddy.
+> AI-powered YouTube SEO platform — 50+ free tools for keyword research, tag generation, title optimization, channel audit, and more.
+> Site: https://yt-seo-architect.vercel.app
+> Updated: 2026-07-27
 
-## Overview
-YT SEO Architect is a comprehensive YouTube SEO optimization platform for creators of all sizes. Built for the 2026 YouTube algorithm, it focuses on discoverability, session watch time, and niche authority.
+## Core Platform
+- [Homepage](https://yt-seo-architect.vercel.app/): AI YouTube SEO toolkit: keyword research, script &amp; tag generator, metadata audit, thumbnail analyzer. 100% Free &amp; Unlimited — no credits, no subscription, no catch.
+- [Dashboard](https://yt-seo-architect.vercel.app/dashboard): Full YouTube SEO dashboard with channel connect, AI coach, keyword research, channel audit
+- [Tools](https://yt-seo-architect.vercel.app/tools/): 50+ free AI-powered YouTube SEO tools: tag generator, title optimizer, description writer, keyword research, channel audit, topic guides, and more. No login required.
+- [About](https://yt-seo-architect.vercel.app/about): About YT SEO Architect and its creator
+- [Privacy Policy](https://yt-seo-architect.vercel.app/privacy-policy)
+- [Terms of Service](https://yt-seo-architect.vercel.app/terms-of-service)
 
-## Key Features
-- **AI Coach**: Data-driven YouTube strategy with your real channel metrics
-- **Bulk Injector**: One-click SEO overhaul for entire playlists
-- **Retention Re-Orderer**: Gateway strategy playlist sorting
-- **AI Auto-Responder**: Fetch comments → AI generates reply → posts to YouTube
-- **Playlist Growth Suite**: Weaver, Collusion Tags, Session Linker
-- **17 tools total**: Keyword Discovery, Thumbnail Lab, Competitor Sniper, Script-to-Shorts, Chapters Generator, Trend Pulse, Evergreen Audit, Multi-Language SEO, Video Factory, Metadata Auditor, AI Content Label
+## Blog Posts (2)
+- [7 Real YouTube SEO Examples That Boost Rankings in 2026 (With Data)](https://yt-seo-architect.vercel.app/blog/youtube-seo-examples-2026): 7 real YouTube SEO examples with data, screenshots, and step-by-step breakdowns. See exactly how creators optimize titles, tags, descriptions, and thumbnails to rank #1 in 2026. (2026-07-25)
+- [YouTube Shorts SEO: The Complete 2026 Guide to Ranking Higher](https://yt-seo-architect.vercel.app/blog/youtube-shorts-seo-guide-2026): Complete YouTube Shorts SEO guide for 2026. Learn how to optimize Shorts titles, tags, descriptions, and captions to rank higher in YouTube search and reach more viewers. (2026-07-26)
 
-## How It Works
-1. Connect your YouTube channel via Google OAuth
-2. AI analyzes your videos, playlists, and performance data
-3. Apply optimizations with one click directly to YouTube
-4. Monitor growth through the dashboard
-
-## Pricing
-- **Free**: 100 credits to start, no credit card required
-- **Pro**: $5/month — 1,000 credits, premium features
-- **Agency**: $19/month — unlimited credits, all features
-
-## Technical Details
-- **AI**: Groq (primary) + Google Gemini (automatic failover)
-- **Security**: OAuth 2.0, CSRF protection, Helmet headers, atomic credit transactions
-- **Infrastructure**: Vercel + Neon PostgreSQL
-- **Domain**: https://yt-seo-architect.vercel.app
-
-## Contact
-- **Email**: thiza3062@gmail.com
-- **Dashboard**: https://yt-seo-architect.vercel.app/dashboard
-- **About**: https://yt-seo-architect.vercel.app/about
+## Topic Guides with Interactive Tools (38)
+- [YouTube SEO Tools — Free AI YouTube SEO Tool | YT SEO Architect](https://yt-seo-architect.vercel.app/tools/best-youtube-seo-tools-2026): Compare the best YouTube SEO tools in 2026. Free and paid options ranked by features.
+- [YouTube Description Writer — Free AI Tool 2026 | YT SEO Architect](https://yt-seo-architect.vercel.app/tools/description-writer): 
+- [YouTube Shadow Ban Checker — Free AI YouTube SEO Tool | YT SEO Architect](https://yt-seo-architect.vercel.app/tools/fix-youtube-shadow-ban-2026): Free shadow ban detector. Check if YouTube is limiting your reach and get fixes.
+- [YouTube Backlinks Tool — Free AI YouTube SEO Tool | YT SEO Architect](https://yt-seo-architect.vercel.app/tools/github-seo-backlinks-guide): Free YouTube backlink checker. Find backlink opportunities to grow your channel authority.
+- [YouTube Keyword Research — Free AI YouTube SEO Tool | YT SEO Architect](https://yt-seo-architect.vercel.app/tools/keywords-youtube): Free YouTube keyword research tool. Find high-volume low-competition keywords for your videos.
+- [YouTube Metadata Optimizer — Free AI YouTube SEO Tool | YT SEO Architect](https://yt-seo-architect.vercel.app/tools/metadata-youtube): Optimize your video metadata for YouTube search. Free metadata checker with actionable tips.
+- [YouTube Ranking Tool — Free AI YouTube SEO Tool | YT SEO Architect](https://yt-seo-architect.vercel.app/tools/rank-on-youtube-2026): Free tool to check and improve your YouTube video rankings. See where you rank and how to fix it.
+- [Best YouTube Tags](https://yt-seo-architect.vercel.app/tools/tag-generator): 
+- [YouTube Title Optimizer — AI-Powered in 2026 | YT SEO Architect](https://yt-seo-architect.vercel.app/tools/title-optimizer): 
+- [YouTube AI SEO Tool — Free AI YouTube SEO Tool | YT SEO Architect](https://yt-seo-architect.vercel.app/tools/youtube-ai-seo-coach-phronesis-2026): Free AI-powered YouTube SEO assistant. Get personalized optimization tips.
+- [YouTube Algorithm Updates — Free AI YouTube SEO Tool | YT SEO Architect](https://yt-seo-architect.vercel.app/tools/youtube-algorithm-changes-2026): Track YouTube algorithm changes and see how they affect your channel.
+- [YouTube Analytics Tool — Free AI YouTube SEO Tool | YT SEO Architect](https://yt-seo-architect.vercel.app/tools/youtube-analytics-4-metrics-that-matter): Free YouTube analytics checker. Focus on the metrics that actually grow your channel.
+- [YouTube Analytics Guide — Free AI YouTube SEO Tool | YT SEO Architect](https://yt-seo-architect.vercel.app/tools/youtube-analytics-explained-2026): Free YouTube analytics explainer. Understand every metric in YouTube Studio.
+- [YouTube Chapters Generator — Free AI YouTube SEO Tool | YT SEO Architect](https://yt-seo-architect.vercel.app/tools/youtube-chapter-timestamps-seo-guide): Free YouTube chapter timestamps generator. Boost SEO with optimized video chapters.
+- [YouTube Community Posts — Free AI YouTube SEO Tool | YT SEO Architect](https://yt-seo-architect.vercel.app/tools/youtube-community-posts-strategy-2026): Free YouTube Community tab tool. Plan and schedule engaging community posts.
+- [YouTube Competitor Analyzer — Free AI YouTube SEO Tool | YT SEO Architect](https://yt-seo-architect.vercel.app/tools/youtube-competitor-analysis-reverse-engineer): Free YouTube competitor analysis tool. Reverse-engineer any channel strategy.
+- [YouTube CTR Calculator — Free AI YouTube SEO Tool | YT SEO Architect](https://yt-seo-architect.vercel.app/tools/youtube-ctr-actually-mean): Free YouTube CTR tool. Calculate and improve your click-through rate.
+- [YouTube Description Generator — Free AI YouTube SEO Tool | YT SEO Architect](https://yt-seo-architect.vercel.app/tools/youtube-description-templates-2026): Free YouTube description writer. Generate SEO-optimized descriptions with timestamps.
+- [YouTube End Screens Planner — Free AI YouTube SEO Tool | YT SEO Architect](https://yt-seo-architect.vercel.app/tools/youtube-end-screens-cards-guide-2026): Free YouTube end screen and cards planner. Boost watch time with optimal placement.
+- [YouTube Small Channel Tool — Free AI YouTube SEO Tool | YT SEO Architect](https://yt-seo-architect.vercel.app/tools/youtube-for-small-channels-2026): Free growth tool for small YouTube channels. Get actionable tips to grow from zero.
+- [YouTube Tutorial SEO — Free AI YouTube SEO Tool | YT SEO Architect](https://yt-seo-architect.vercel.app/tools/youtube-for-tutorials-2026): Free SEO tool for tutorial channels. Optimize your how-to videos for search.
+- [YouTube Impressions Checker — Free AI YouTube SEO Tool | YT SEO Architect](https://yt-seo-architect.vercel.app/tools/youtube-impressions-guide-2026): Free YouTube impressions tool. Check why your videos get impressions and how to get more.
+- [YouTube Hook Generator — Free AI YouTube SEO Tool | YT SEO Architect](https://yt-seo-architect.vercel.app/tools/youtube-intro-hook-first-3-seconds): Free YouTube hook tool. Write compelling intros that keep viewers watching.
+- [YouTube Metadata Audit — Free AI YouTube SEO Tool | YT SEO Architect](https://yt-seo-architect.vercel.app/tools/youtube-metadata-auditor-vs-vidiq-shadow-ban): Free YouTube metadata auditor. Check if metadata issues are hurting your reach.
+- [YouTube Monetization Checker — Free AI YouTube SEO Tool | YT SEO Architect](https://yt-seo-architect.vercel.app/tools/youtube-monetization-tips-2026): Free YouTube monetization tool. Check eligibility and get tips to reach YPP faster.
+- [YouTube Playlist Optimizer — Free AI YouTube SEO Tool | YT SEO Architect](https://yt-seo-architect.vercel.app/tools/youtube-playlist-optimization-strategy): Free YouTube playlist SEO tool. Optimize playlist structure for more watch time.
+- [YouTube Retention Analyzer — Free AI YouTube SEO Tool | YT SEO Architect](https://yt-seo-architect.vercel.app/tools/youtube-retention-graph-explained-2026): Free YouTube audience retention tool. Analyze retention graphs and find drop-off points.
+- [YouTube SEO Audit Tool — Free AI YouTube SEO Tool | YT SEO Architect](https://yt-seo-architect.vercel.app/tools/youtube-seo-audit-diagnostic-fix-2026): Free YouTube SEO auditor. Get a complete metadata audit with prioritized fixes.
+- [YouTube SEO Checklist — Free AI YouTube SEO Tool | YT SEO Architect](https://yt-seo-architect.vercel.app/tools/youtube-seo-checklist-beginners-2026): Free YouTube SEO checklist for beginners. Step-by-step optimization guide with tracker.
+- [YouTube SEO Examples — Free AI YouTube SEO Tool | YT SEO Architect](https://yt-seo-architect.vercel.app/tools/youtube-seo-examples-2026): Free YouTube SEO examples and templates. See real optimized videos and copy the strategy.
+- [YouTube Business SEO — Free AI YouTube SEO Tool | YT SEO Architect](https://yt-seo-architect.vercel.app/tools/youtube-seo-for-business-channels-2026): Free YouTube SEO for business channels. Optimize your brand channel for search.
+- [YouTube Gaming SEO — Free AI YouTube SEO Tool | YT SEO Architect](https://yt-seo-architect.vercel.app/tools/youtube-seo-for-gaming-channels-2026): Free SEO tool for gaming channels. Optimize your gaming videos for YouTube search.
+- [YouTube SEO Template — Free AI YouTube SEO Tool | YT SEO Architect](https://yt-seo-architect.vercel.app/tools/youtube-seo-template-2026): Free copy-paste YouTube SEO template. Fill in the blanks and publish optimized videos.
+- [YouTube Shorts SEO Tool — Free AI YouTube SEO Tool | YT SEO Architect](https://yt-seo-architect.vercel.app/tools/youtube-shorts-seo-ranking-guide-2026): Free YouTube Shorts SEO optimizer. Get your Shorts to rank in search.
+- [YouTube Tags Generator — Free AI YouTube SEO Tool | YT SEO Architect](https://yt-seo-architect.vercel.app/tools/youtube-tags-2026): Free YouTube tag generator. Get 15 optimized tags for any video topic.
+- [YouTube Thumbnail Tester — Free AI YouTube SEO Tool | YT SEO Architect](https://yt-seo-architect.vercel.app/tools/youtube-thumbnail-ab-testing-guide): Free YouTube thumbnail A/B testing tool. Compare thumbnails and pick the winner.
+- [YouTube Title Generator — Free AI YouTube SEO Tool | YT SEO Architect](https://yt-seo-architect.vercel.app/tools/youtube-title-examples-2026): Free YouTube title generator. Get proven title formulas that drive clicks.
+- [YouTube Views Analyzer — Free AI YouTube SEO Tool | YT SEO Architect](https://yt-seo-architect.vercel.app/tools/youtube-video-not-getting-views-diagnostic-fix-2026): Free YouTube views diagnostic tool. Find out why your videos aren't getting views.
