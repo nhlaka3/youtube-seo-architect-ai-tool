@@ -123,6 +123,10 @@
     
 const ToolLogic = {
   plan(niche) {
+    var _topic = (window.BLOG_TOPIC || '').toLowerCase();
+    if (_topic.includes('idea') || _topic.includes('plan')) {
+      return this.planIdeas(niche);
+    }
     const ideas = [];
     const formats = ['Tutorial', 'Review', 'Comparison', 'Listicle', 'Case Study', 'Behind the Scenes', 'Q&A', 'Challenge', 'Storytime', 'React', 'How-To', 'Tips and Tricks', 'Beginner Guide', 'Advanced Guide', 'Mistakes to Avoid', 'Tools Review', 'Interview', 'Day in the Life', 'Follow Along', 'Speed Run'];
 
@@ -141,19 +145,54 @@ const ToolLogic = {
     });
 
     return ideas;
+  },
+
+  planIdeas(niche) {
+    var blogTopic = (window.BLOG_TOPIC || '').replace(/d{4}/g, '').trim();
+    var topicWords = blogTopic.split(/s+/).filter(Boolean);
+    var topic = topicWords.length > 1 ? topicWords.slice(0, 3).join(' ') : (niche || blogTopic || 'your niche');
+    var ideas = [];
+    var formats = ['Tutorial', 'How-To Guide', 'Beginner Tips', 'Mistakes to Avoid', 'Advanced Strategies', 'Tools You Need', 'Step-by-Step Plan', 'Case Study', 'Comparison', 'Checklist', 'Q&A Session', 'Expert Interview', 'Behind the Scenes', 'Real Results', 'Weekly Challenge'];
+    var months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+
+    formats.forEach(function(f, i) {
+      var monthIdx = i % 12;
+      var week = Math.min(4, Math.floor(i / 3) + 1);
+      var title;
+      if (i === 0) title = f + ': ' + topic.charAt(0).toUpperCase() + topic.slice(1) + ' for Beginners';
+      else if (i === 2) title = 'Top 5 ' + topic.charAt(0).toUpperCase() + topic.slice(1) + ' ' + f;
+      else if (i === 4) title = f + ' for ' + topic.charAt(0).toUpperCase() + topic.slice(1);
+      else title = f + ': ' + topic.charAt(0).toUpperCase() + topic.slice(1);
+      ideas.push({
+        month: months[monthIdx],
+        week: 'Week ' + week,
+        title: title,
+        description: 'Create a ' + f.toLowerCase() + ' about "' + topic + '". This format targets viewers actively searching for ' + topic + ' content.',
+        effort: ['Easy', 'Medium', 'Hard'][Math.floor(seededRandom(i * 7 + 5) * 3)]
+      });
+    });
+    return ideas;
   }
 };
 
 function handleTool() {
   const input = document.getElementById('tool-input').value.trim();
   if (!input) return;
-  const ideas = ToolLogic.plan(input);
+  var _topic = (window.BLOG_TOPIC || '').toLowerCase();
+  var effectiveNiche = (_topic.includes('idea') || _topic.includes('plan')) ? (_topic.replace(/d{4}/g, '').trim() || input) : input;
+  if ((_topic.includes('idea') || _topic.includes('plan')) && (!input || input.length < 5)) {
+    // Auto-populate with blog topic for idea/plan pages
+    document.getElementById('tool-input').value = effectiveNiche;
+  }
+  const ideas = ToolLogic.plan(_topic.includes('idea') || _topic.includes('plan') ? effectiveNiche : input);
   const box = document.getElementById('result-box');
   const placeholder = document.getElementById('result-placeholder');
   box.classList.add('show');
 
   let html = '<div style="font-size:0.75rem;color:#64748b;margin-bottom:0.75rem;padding:0.4rem 0.75rem;background:rgba(99,102,241,0.06);border-radius:6px;text-align:left;">📖 Based on the ' + window.BLOG_TOPIC + ' guide</div><div style="margin-bottom:0.75rem;">' + topicAdvice(window.BLOG_TOPIC) + '</div>';
-  html += '<div style="margin-bottom:1rem;color:#94a3b8;font-size:0.9rem;">📅 ' + ideas.length + ' content ideas for &quot;' + input + '&quot; channel</div>';
+  var isIdeaMode = _topic.includes('idea') || _topic.includes('plan');
+  var displayNiche = isIdeaMode ? effectiveNiche : input;
+  html += '<div style="margin-bottom:1rem;color:#94a3b8;font-size:0.9rem;">📅 ' + ideas.length + ' content ideas for &quot;' + displayNiche + '&quot;' + (isIdeaMode ? ' (auto-generated from blog topic)' : '') + '</div>';
 
   ideas.forEach(function(idea, i) {
     const effortColor = idea.effort === 'Easy' ? '#22c55e' : idea.effort === 'Medium' ? '#f59e0b' : '#ff3366';

@@ -943,6 +943,10 @@ function handleTool() {
     optimizer: `
 const ToolLogic = {
   optimize(input) {
+    var _topic = (window.BLOG_TOPIC || '').toLowerCase();
+    if (_topic.includes('tutorial')) {
+      return this.optimizeTutorial(input);
+    }
     const lower = input.toLowerCase();
     const wordCount = input.split(/\\s+/).filter(Boolean).length;
     const suggestions = [];
@@ -973,30 +977,99 @@ const ToolLogic = {
     suggestions.push({ priority: 'low', category: 'Playlist', msg: 'Playlist strategy.', action: 'Add this video to a themed playlist to boost watch time across your channel.' });
 
     return suggestions;
+  },
+
+  optimizeTutorial(input) {
+    var lower = input.toLowerCase();
+    var wordCount = input.split(/\\s+/).filter(Boolean).length;
+    var suggestions = [];
+    var blogTopic = (window.BLOG_TOPIC || '').replace(/\d{4}/g, '').trim();
+
+    // Structure check
+    if (wordCount < 30) {
+      suggestions.push({ priority: 'high', category: 'Structure', msg: 'Tutorial description is too brief.', action: 'Describe the 5-7 steps of your tutorial so I can optimize each section.' });
+    }
+
+    // Step-by-step check
+    if (lower.includes('step') || lower.includes('part') || lower.includes('section') || lower.includes('chapter')) {
+      suggestions.push({ priority: 'good', category: 'Structure', msg: 'Step-by-step structure detected — perfect for tutorials.', action: 'Use YouTube chapters with timestamps for each step. Viewers love skippable sections.' });
+    } else {
+      suggestions.push({ priority: 'high', category: 'Structure', msg: 'No step-by-step structure detected.', action: 'Break your tutorial into 5-7 clear steps. Add timestamps for each step in the description.' });
+    }
+
+    // Difficulty check
+    if (lower.includes('beginner') || lower.includes('easy') || lower.includes('simple') || lower.includes('basic')) {
+      suggestions.push({ priority: 'good', category: 'Audience', msg: 'Beginner-friendly tutorial — broadest possible audience.', action: 'Add "for beginners" or "for dummies" to your title to capture search traffic.' });
+    } else if (lower.includes('advanced') || lower.includes('expert') || lower.includes('pro')) {
+      suggestions.push({ priority: 'good', category: 'Audience', msg: 'Advanced tutorial — higher engagement but smaller audience.', action: 'Use specific technical terms in your title to attract the right viewers.' });
+    } else {
+      suggestions.push({ priority: 'medium', category: 'Audience', msg: 'Audience level not specified.', action: 'State the skill level in your title (e.g., "for Beginners" or "Advanced Tips") to set expectations.' });
+    }
+
+    // Tools/software mention
+    if (lower.includes('tool') || lower.includes('software') || lower.includes('app') || lower.includes('using')) {
+      suggestions.push({ priority: 'good', category: 'Resources', msg: 'Tools/software mentioned — helps with searchability.', action: 'List required tools/downloads in the description with links. Add timestamps for installation steps.' });
+    } else {
+      suggestions.push({ priority: 'medium', category: 'Resources', msg: 'No tools or prerequisites mentioned.', action: 'List what viewers need before starting (tools, accounts, knowledge). This reduces drop-off.' });
+    }
+
+    // Duration suggestion
+    var durationMatch = input.match(/(\d+)\s*(min|hour|sec)/i);
+    if (durationMatch) {
+      var mins = parseInt(durationMatch[1]);
+      if (mins < 5) suggestions.push({ priority: 'medium', category: 'Duration', msg: mins + '-minute tutorial — short-form works for quick tips.', action: 'Consider making this a YouTube Short or adding more depth to reach 8+ minutes for mid-roll ads.' });
+      else if (mins < 10) suggestions.push({ priority: 'good', category: 'Duration', msg: mins + '-minute tutorial — good length.', action: 'This length works well for focused tutorials. Make sure every second adds value.' });
+      else if (mins >= 15) suggestions.push({ priority: 'good', category: 'Duration', msg: mins + '-minute tutorial — excellent for watch time.', action: 'Use clear timestamps so viewers can jump to sections. Long tutorials rank well.' });
+    } else {
+      suggestions.push({ priority: 'low', category: 'Duration', msg: 'Tutorial duration not mentioned.', action: 'Aim for 8-15 minutes for a comprehensive tutorial. This maximizes watch time and ad revenue.' });
+    }
+
+    // Tutorial-specific SEO
+    suggestions.push({ priority: 'high', category: 'SEO', msg: 'Tutorial SEO optimization.', action: 'Use "How to " + your topic as the title format. Add "tutorial", "guide", "walkthrough" to tags. Create a thumbnail showing the end result.' });
+
+    // Always add general suggestions
+    suggestions.push({ priority: 'medium', category: 'Thumbnail', msg: 'Tutorial thumbnail tip.', action: 'Show the end result or a before/after split in your thumbnail. This sets viewer expectations.' });
+    suggestions.push({ priority: 'medium', category: 'Description', msg: 'Tutorial description.', action: 'Write a 200+ word description with: what viewers will learn, prerequisites, tools needed, timestamps, and links.' });
+    suggestions.push({ priority: 'low', category: 'Comments', msg: 'Engagement tactic.', action: 'Ask viewers to comment with their results or questions. Tutorials with active comment sections rank higher.' });
+
+    return suggestions;
   }
 };
 
 function handleTool() {
   const input = document.getElementById('tool-input').value.trim();
   if (!input) return;
-  const suggestions = ToolLogic.optimize(input);
+  var _topic = (window.BLOG_TOPIC || '').toLowerCase();
+  // Pre-fill with blog topic for tutorial pages if input is generic
+  if (_topic.includes('tutorial') && (!input || input.length < 10)) {
+    var blogTopic = (window.BLOG_TOPIC || '').replace(/\d{4}/g, '').trim();
+    var filledInput = blogTopic + ' tutorial for beginners';
+    document.getElementById('tool-input').value = filledInput;
+  }
+  var toolInput = typeof filledInput !== 'undefined' ? filledInput : input;
+  const suggestions = ToolLogic.optimize(toolInput);
   const box = document.getElementById('result-box');
   const placeholder = document.getElementById('result-placeholder');
   box.classList.add('show');
 
+  var isTutorialMode = _topic.includes('tutorial');
   const highCount = suggestions.filter(function(s) { return s.priority === 'high'; }).length;
   const medCount = suggestions.filter(function(s) { return s.priority === 'medium'; }).length;
   const lowCount = suggestions.filter(function(s) { return s.priority === 'low'; }).length;
+  var goodCount = suggestions.filter(function(s) { return s.priority === 'good'; }).length;
 
   let html = '<div style="font-size:0.75rem;color:#64748b;margin-bottom:0.75rem;padding:0.4rem 0.75rem;background:rgba(99,102,241,0.06);border-radius:6px;text-align:left;">📖 Based on the ' + window.BLOG_TOPIC + ' guide</div><div style="margin-bottom:0.75rem;">' + topicAdvice(window.BLOG_TOPIC) + '</div>';
   html += '<div style="display:flex;gap:1rem;margin-bottom:1.5rem;justify-content:center;">';
+  if (isTutorialMode) {
+    html += '<div style="text-align:center;padding:0.75rem 1.25rem;background:#22c55e15;border-radius:8px;"><div style="font-weight:700;color:#22c55e;font-size:1.2rem;">' + goodCount + '</div><div style="font-size:0.75rem;color:#94a3b8;">On Track</div></div>';
+  }
   html += '<div style="text-align:center;padding:0.75rem 1.25rem;background:#ff336615;border-radius:8px;"><div style="font-weight:700;color:#ff3366;font-size:1.2rem;">' + highCount + '</div><div style="font-size:0.75rem;color:#94a3b8;">High Priority</div></div>';
   html += '<div style="text-align:center;padding:0.75rem 1.25rem;background:#f59e0b15;border-radius:8px;"><div style="font-weight:700;color:#f59e0b;font-size:1.2rem;">' + medCount + '</div><div style="font-size:0.75rem;color:#94a3b8;">Medium</div></div>';
   html += '<div style="text-align:center;padding:0.75rem 1.25rem;background:#6366f115;border-radius:8px;"><div style="font-weight:700;color:#6366f1;font-size:1.2rem;">' + lowCount + '</div><div style="font-size:0.75rem;color:#94a3b8;">Advisory</div></div>';
   html += '</div>';
 
   suggestions.forEach(function(s) {
-    const priColor = s.priority === 'high' ? '#ff3366' : s.priority === 'medium' ? '#f59e0b' : '#6366f1';
+    const priColor = s.priority === 'high' ? '#ff3366' : s.priority === 'medium' ? '#f59e0b' : s.priority === 'good' ? '#22c55e' : '#6366f1';
     html += '<div style="padding:0.6rem 0.75rem;border:1px solid ' + priColor + '20;border-radius:8px;margin-bottom:0.5rem;text-align:left;">';
     html += '<div style="display:flex;align-items:center;gap:0.5rem;margin-bottom:0.25rem;">';
     html += '<span style="font-size:0.75rem;font-weight:600;color:' + priColor + ';">' + s.category + '</span>';
@@ -1012,6 +1085,10 @@ function handleTool() {
     planner: `
 const ToolLogic = {
   plan(niche) {
+    var _topic = (window.BLOG_TOPIC || '').toLowerCase();
+    if (_topic.includes('idea') || _topic.includes('plan')) {
+      return this.planIdeas(niche);
+    }
     const ideas = [];
     const formats = ['Tutorial', 'Review', 'Comparison', 'Listicle', 'Case Study', 'Behind the Scenes', 'Q&A', 'Challenge', 'Storytime', 'React', 'How-To', 'Tips and Tricks', 'Beginner Guide', 'Advanced Guide', 'Mistakes to Avoid', 'Tools Review', 'Interview', 'Day in the Life', 'Follow Along', 'Speed Run'];
 
@@ -1030,19 +1107,54 @@ const ToolLogic = {
     });
 
     return ideas;
+  },
+
+  planIdeas(niche) {
+    var blogTopic = (window.BLOG_TOPIC || '').replace(/\d{4}/g, '').trim();
+    var topicWords = blogTopic.split(/s+/).filter(Boolean);
+    var topic = topicWords.length > 1 ? topicWords.slice(0, 3).join(' ') : (niche || blogTopic || 'your niche');
+    var ideas = [];
+    var formats = ['Tutorial', 'How-To Guide', 'Beginner Tips', 'Mistakes to Avoid', 'Advanced Strategies', 'Tools You Need', 'Step-by-Step Plan', 'Case Study', 'Comparison', 'Checklist', 'Q&A Session', 'Expert Interview', 'Behind the Scenes', 'Real Results', 'Weekly Challenge'];
+    var months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+
+    formats.forEach(function(f, i) {
+      var monthIdx = i % 12;
+      var week = Math.min(4, Math.floor(i / 3) + 1);
+      var title;
+      if (i === 0) title = f + ': ' + topic.charAt(0).toUpperCase() + topic.slice(1) + ' for Beginners';
+      else if (i === 2) title = 'Top 5 ' + topic.charAt(0).toUpperCase() + topic.slice(1) + ' ' + f;
+      else if (i === 4) title = f + ' for ' + topic.charAt(0).toUpperCase() + topic.slice(1);
+      else title = f + ': ' + topic.charAt(0).toUpperCase() + topic.slice(1);
+      ideas.push({
+        month: months[monthIdx],
+        week: 'Week ' + week,
+        title: title,
+        description: 'Create a ' + f.toLowerCase() + ' about "' + topic + '". This format targets viewers actively searching for ' + topic + ' content.',
+        effort: ['Easy', 'Medium', 'Hard'][Math.floor(seededRandom(i * 7 + 5) * 3)]
+      });
+    });
+    return ideas;
   }
 };
 
 function handleTool() {
   const input = document.getElementById('tool-input').value.trim();
   if (!input) return;
-  const ideas = ToolLogic.plan(input);
+  var _topic = (window.BLOG_TOPIC || '').toLowerCase();
+  var effectiveNiche = (_topic.includes('idea') || _topic.includes('plan')) ? (_topic.replace(/\d{4}/g, '').trim() || input) : input;
+  if ((_topic.includes('idea') || _topic.includes('plan')) && (!input || input.length < 5)) {
+    // Auto-populate with blog topic for idea/plan pages
+    document.getElementById('tool-input').value = effectiveNiche;
+  }
+  const ideas = ToolLogic.plan(_topic.includes('idea') || _topic.includes('plan') ? effectiveNiche : input);
   const box = document.getElementById('result-box');
   const placeholder = document.getElementById('result-placeholder');
   box.classList.add('show');
 
   let html = '<div style="font-size:0.75rem;color:#64748b;margin-bottom:0.75rem;padding:0.4rem 0.75rem;background:rgba(99,102,241,0.06);border-radius:6px;text-align:left;">📖 Based on the ' + window.BLOG_TOPIC + ' guide</div><div style="margin-bottom:0.75rem;">' + topicAdvice(window.BLOG_TOPIC) + '</div>';
-  html += '<div style="margin-bottom:1rem;color:#94a3b8;font-size:0.9rem;">📅 ' + ideas.length + ' content ideas for &quot;' + input + '&quot; channel</div>';
+  var isIdeaMode = _topic.includes('idea') || _topic.includes('plan');
+  var displayNiche = isIdeaMode ? effectiveNiche : input;
+  html += '<div style="margin-bottom:1rem;color:#94a3b8;font-size:0.9rem;">📅 ' + ideas.length + ' content ideas for &quot;' + displayNiche + '&quot;' + (isIdeaMode ? ' (auto-generated from blog topic)' : '') + '</div>';
 
   ideas.forEach(function(idea, i) {
     const effortColor = idea.effort === 'Easy' ? '#22c55e' : idea.effort === 'Medium' ? '#f59e0b' : '#ff3366';
