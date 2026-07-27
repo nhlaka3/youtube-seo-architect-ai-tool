@@ -1,0 +1,80 @@
+name: 🛠️ Tools Publisher
+
+on:
+  workflow_dispatch:            # Manual trigger from GitHub UI
+    inputs:
+      rebuild:
+        description: 'Regenerate ALL tools? Default: only new/missing'
+        type: boolean
+        default: false
+  push:
+    paths:
+      - 'scripts/generate-blog-tools.mjs'
+      - 'scripts/generate-tools-index.mjs'
+      - 'public/tools/_template.html'
+
+permissions:
+  contents: write
+
+jobs:
+  generate-tools:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GH_PAT }}
+          fetch-depth: 0
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+
+      - name: Generate tool pages
+        id: tools
+        run: |
+          FLAG=""
+          if [[ "${{ github.event.inputs.rebuild }}" == "true" ]]; then
+            FLAG="--rebuild"
+          fi
+          node scripts/generate-blog-tools.mjs $FLAG
+
+      - name: Rebuild tools index
+        id: index
+        run: node scripts/generate-tools-index.mjs
+
+      - name: Push to private repo
+        id: push
+        run: |
+          git config user.name "YT SEO Bot"
+          git config user.email "hnhlaka142@gmail.com"
+          git add -A
+          if git diff --staged --quiet; then
+            echo "No changes"
+            echo "COMMITTED=false" >> $GITHUB_OUTPUT
+          else
+            git commit -m "tools: auto-generated pages"
+            git push origin HEAD:main
+            echo "COMMITTED=true" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Push to public repo + deploy
+        if: steps.push.outputs.COMMITTED == 'true'
+        env:
+          PUBLIC_REPO: https://x-access-token:${{ secrets.GH_PAT }}@github.com/nhlaka3/youtube-seo-architect-ai-tool.git
+        run: |
+          git remote add public "$PUBLIC_REPO"
+          git push public HEAD:main --force
+          echo "✅ Pushed to public repo — Vercel deploys"
+
+      - name: Report
+        if: always()
+        run: |
+          echo "════════════════════════════════════════════"
+          echo "  🛠️  TOOLS PUBLISHER REPORT"
+          echo "════════════════════════════════════════════"
+          echo "  Generate:  ${{ steps.tools.outcome }}"
+          echo "  Index:     ${{ steps.index.outcome }}"
+          echo "  Push:      ${{ steps.push.outputs.COMMITTED }}"
+          echo "  Time:      $(date -u)"
+          echo "════════════════════════════════════════════"
