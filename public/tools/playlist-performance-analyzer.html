@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>YouTube Playlist Analyzer — Free Tool</title>
+  <meta name="description" content="Analyze YouTube playlist performance. Optimize for watch time and session duration." />
+  <meta name="robots" content="index, follow" />
+  <link rel="canonical" href="https://yt-seo-architect.vercel.app/tools/playlist-performance-analyzer" />
+  <meta property="og:title" content="YouTube Playlist Analyzer — Free Tool" />
+  <meta property="og:description" content="Analyze YouTube playlist performance. Optimize for watch time and session duration." />
+  <meta property="og:url" content="https://yt-seo-architect.vercel.app/tools/playlist-performance-analyzer" />
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3831668789026424" crossorigin="anonymous"></script>
+  <style>
+    *{box-sizing:border-box;margin:0;padding:0}
+    body{font-family:'Outfit','Geist',-apple-system,BlinkMacSystemFont,sans-serif;background:#0a0a0f;color:#e2e8f0;line-height:1.6}
+    .header{display:flex;justify-content:space-between;align-items:center;padding:.75rem 1.5rem;background:#0f0c29;border-bottom:1px solid rgba(255,255,255,.05)}
+    .header a{color:#e2e8f0;text-decoration:none;font-weight:600}
+    .header .cta{background:linear-gradient(135deg,#f97316,#fb923c);color:#fff;padding:.4rem 1rem;border-radius:9999px;font-size:.85rem}
+    main{max-width:720px;margin:0 auto;padding:2rem 1.5rem}
+    h1{font-size:1.8rem;margin-bottom:.5rem;background:linear-gradient(135deg,#f97316,#fb923c);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+    .sub{color:#8b8b9e;font-size:.95rem;margin-bottom:2rem}
+    .tool-card{background:#1e1b4b;border:1px solid #2d2a5e;border-radius:12px;padding:1.5rem;margin-bottom:1.5rem}
+    .tool-card h2{font-size:1.1rem;color:#a5b4fc;margin-bottom:1rem}
+    .input-group{margin-bottom:1rem}
+    .input-group label{display:block;font-size:.85rem;color:#8b8b9e;margin-bottom:.3rem}
+    .input-group input,.input-group select,.input-group textarea{width:100%;padding:.6rem .8rem;background:#0a0a0f;border:1px solid #2d2a5e;border-radius:8px;color:#e2e8f0;font-size:.95rem;outline:none;transition:border-color .2s;font-family:inherit}
+    .input-group input:focus,.input-group select:focus,.input-group textarea:focus{border-color:#6366f1}
+    .input-row{display:grid;grid-template-columns:1fr 1fr;gap:1rem}
+    @media(max-width:480px){.input-row{grid-template-columns:1fr}}
+    button{background:linear-gradient(135deg,#f97316,#fb923c);color:#fff;border:none;padding:.7rem 2rem;border-radius:9999px;font-size:.95rem;font-weight:600;cursor:pointer;transition:transform .2s;width:100%}
+    button:hover{transform:scale(1.02)}
+    .result-box{background:#0a0a0f;border:1px solid #2d2a5e;border-radius:8px;padding:1rem;margin-top:1rem;display:none}
+    .result-box.show{display:block}
+    .result-row{display:flex;justify-content:space-between;padding:.5rem 0;border-bottom:1px solid rgba(255,255,255,.05)}
+    .result-row:last-child{border-bottom:none}
+    .result-row .label{color:#8b8b9e;font-size:.85rem}
+    .result-row .value{color:#e2e8f0;font-weight:600;font-size:1.1rem}
+    .result-big{font-size:2rem;font-weight:800;text-align:center;padding:1rem 0;color:#fb923c}
+    .result-detail{text-align:center;color:#8b8b9e;font-size:.85rem;margin-bottom:.5rem}
+    .factor{display:flex;justify-content:space-between;padding:.4rem 0;font-size:.85rem;color:#8b8b9e;border-bottom:1px solid rgba(255,255,255,.03)}
+    .advice-box{background:rgba(99,102,241,.1);border:1px solid rgba(99,102,241,.3);border-radius:8px;padding:1rem;margin-top:.75rem;font-size:.85rem;color:#a5b4fc;line-height:1.5}
+    .cta-box{border:1px solid #4f46e5;border-radius:12px;padding:1.5rem;text-align:center;margin:2rem 0}
+    .cta-box h3{color:#e2e8f0;margin-bottom:.5rem}
+    .cta-box p{color:#8b8b9e;font-size:.85rem;margin-bottom:1rem}
+    .cta-box a{display:inline-block;background:linear-gradient(135deg,#f97316,#fb923c);color:#fff;padding:.6rem 1.5rem;border-radius:9999px;text-decoration:none;font-weight:600}
+    footer{text-align:center;padding:2rem;color:#6b7280;font-size:.8rem}
+    footer a{color:#8b8b9e;text-decoration:none}
+    .progress-bar{height:8px;background:#2d2a5e;border-radius:4px;overflow:hidden;margin:.5rem 0}
+    .progress-fill{height:100%;border-radius:4px;background:linear-gradient(90deg,#f97316,#fb923c);transition:width .5s}
+    .idea-card{background:rgba(99,102,241,.08);border:1px solid rgba(99,102,241,.15);border-radius:8px;padding:.75rem 1rem;margin-bottom:.5rem}
+    .idea-card .idea-title{color:#e2e8f0;font-weight:600;font-size:.9rem}
+    .idea-card .idea-meta{color:#8b8b9e;font-size:.8rem;margin-top:.25rem}
+    input[type="color"]{height:48px;padding:4px;cursor:pointer}
+  </style>
+</head>
+<body>
+  <header class="header">
+    <a href="/">⚡ YT SEO Architect</a>
+    <a href="/tools/" class="cta">All Tools</a>
+  </header>
+  <main>
+    <h1>📋 Playlist Performance Analyzer</h1>
+    <p class="sub">Analyze your YouTube playlists for watch time, retention, and ranking potential. Optimize for maximum session time.</p>
+    <div class="tool-card">
+      <div class="input-row"><div class="input-group"><label>Videos in Playlist</label><input id="pp-videos" type="number" min="1" placeholder="e.g., 10" /></div><div class="input-group"><label>Avg Video Length (minutes)</label><input id="pp-length" type="number" step="0.5" min="1" placeholder="e.g., 10" /></div><div class="input-group"><label>Playlist Topic</label><select id="pp-topic"><option value="tutorial">Tutorial / How-to</option><option value="series">Series / Episodic</option><option value="collection">Collection / Mix</option></select></div></div>
+      <button onclick="ToolLogic.analyze() {
+    const videos = parseFloat(document.getElementById('pp-videos').value) || 5;
+    const len = parseFloat(document.getElementById('pp-length').value) || 10;
+    const topic = document.getElementById('pp-topic').value;
+
+    const totalMinutes = videos * len;
+    const totalHours = totalMinutes / 60;
+    const estViewsPerVideo = videos > 5 ? totalMinutes * 5()">Calculate →</button>
+      <div id="result" class="result-box"></div>
+    </div>
+    <div class="cta-box">
+      <h3>🚀 More Free Tools</h3>
+      <p>17 AI-powered tools to optimize your YouTube titles, tags, descriptions, and more.</p>
+      <a href="/tools/">Browse All Tools →</a>
+    </div>
+  </main>
+  <footer>
+    <p>&copy; 2026 YT SEO Architect · <a href="/glossary/">Glossary</a> · <a href="/blog">Blog</a> · <a href="/tools/">Tools</a></p>
+  </footer>
+  <script>
+const ToolLogic = {
+  analyze() {
+    const videos = parseFloat(document.getElementById('pp-videos').value) || 5;
+    const len = parseFloat(document.getElementById('pp-length').value) || 10;
+    const topic = document.getElementById('pp-topic').value;
+
+    const totalMinutes = videos * len;
+    const totalHours = totalMinutes / 60;
+    const estViewsPerVideo = videos > 5 ? totalMinutes * 5 : totalMinutes * 3;
+    const estSessionTime = videos * len * 0.6;
+
+    document.getElementById('pp-total-time').textContent = totalHours.toFixed(1) + ' hours';
+    document.getElementById('pp-avg-per-viewer').textContent = Math.round(estSessionTime) + ' minutes';
+    document.getElementById('pp-est-views').textContent = Math.round(estViewsPerVideo).toLocaleString() + ' (estimated)';
+
+    let grade;
+    if (totalHours >= 5) grade = 'Great — this playlist could drive significant session time';
+    else if (totalHours >= 2) grade = 'Good — expand to 10+ videos for better algorithm performance';
+    else grade = 'Short — add more videos (aim for 8-15 per playlist)';
+    document.getElementById('pp-grade').textContent = grade;
+
+    document.getElementById('pp-tip').innerHTML =
+      '💡 Playlists with 10+ videos rank 2x more in YouTube Search. Order by <strong>' +
+      (topic === 'tutorial' ? 'beginner to advanced' : topic === 'series' ? 'chronological' : 'most popular first') +
+      '</strong> for best retention.';
+    document.getElementById('pp-result').classList.add('show');
+  }
+};</script>
+</body>
+</html>

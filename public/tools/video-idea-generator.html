@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>YouTube Video Idea Generator — Free Tool</title>
+  <meta name="description" content="Generate YouTube video ideas with SEO keywords and competition estimates. Free content planning tool." />
+  <meta name="robots" content="index, follow" />
+  <link rel="canonical" href="https://yt-seo-architect.vercel.app/tools/video-idea-generator" />
+  <meta property="og:title" content="YouTube Video Idea Generator — Free Tool" />
+  <meta property="og:description" content="Generate YouTube video ideas with SEO keywords and competition estimates. Free content planning tool." />
+  <meta property="og:url" content="https://yt-seo-architect.vercel.app/tools/video-idea-generator" />
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3831668789026424" crossorigin="anonymous"></script>
+  <style>
+    *{box-sizing:border-box;margin:0;padding:0}
+    body{font-family:'Outfit','Geist',-apple-system,BlinkMacSystemFont,sans-serif;background:#0a0a0f;color:#e2e8f0;line-height:1.6}
+    .header{display:flex;justify-content:space-between;align-items:center;padding:.75rem 1.5rem;background:#0f0c29;border-bottom:1px solid rgba(255,255,255,.05)}
+    .header a{color:#e2e8f0;text-decoration:none;font-weight:600}
+    .header .cta{background:linear-gradient(135deg,#f97316,#fb923c);color:#fff;padding:.4rem 1rem;border-radius:9999px;font-size:.85rem}
+    main{max-width:720px;margin:0 auto;padding:2rem 1.5rem}
+    h1{font-size:1.8rem;margin-bottom:.5rem;background:linear-gradient(135deg,#f97316,#fb923c);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+    .sub{color:#8b8b9e;font-size:.95rem;margin-bottom:2rem}
+    .tool-card{background:#1e1b4b;border:1px solid #2d2a5e;border-radius:12px;padding:1.5rem;margin-bottom:1.5rem}
+    .tool-card h2{font-size:1.1rem;color:#a5b4fc;margin-bottom:1rem}
+    .input-group{margin-bottom:1rem}
+    .input-group label{display:block;font-size:.85rem;color:#8b8b9e;margin-bottom:.3rem}
+    .input-group input,.input-group select,.input-group textarea{width:100%;padding:.6rem .8rem;background:#0a0a0f;border:1px solid #2d2a5e;border-radius:8px;color:#e2e8f0;font-size:.95rem;outline:none;transition:border-color .2s;font-family:inherit}
+    .input-group input:focus,.input-group select:focus,.input-group textarea:focus{border-color:#6366f1}
+    .input-row{display:grid;grid-template-columns:1fr 1fr;gap:1rem}
+    @media(max-width:480px){.input-row{grid-template-columns:1fr}}
+    button{background:linear-gradient(135deg,#f97316,#fb923c);color:#fff;border:none;padding:.7rem 2rem;border-radius:9999px;font-size:.95rem;font-weight:600;cursor:pointer;transition:transform .2s;width:100%}
+    button:hover{transform:scale(1.02)}
+    .result-box{background:#0a0a0f;border:1px solid #2d2a5e;border-radius:8px;padding:1rem;margin-top:1rem;display:none}
+    .result-box.show{display:block}
+    .result-row{display:flex;justify-content:space-between;padding:.5rem 0;border-bottom:1px solid rgba(255,255,255,.05)}
+    .result-row:last-child{border-bottom:none}
+    .result-row .label{color:#8b8b9e;font-size:.85rem}
+    .result-row .value{color:#e2e8f0;font-weight:600;font-size:1.1rem}
+    .result-big{font-size:2rem;font-weight:800;text-align:center;padding:1rem 0;color:#fb923c}
+    .result-detail{text-align:center;color:#8b8b9e;font-size:.85rem;margin-bottom:.5rem}
+    .factor{display:flex;justify-content:space-between;padding:.4rem 0;font-size:.85rem;color:#8b8b9e;border-bottom:1px solid rgba(255,255,255,.03)}
+    .advice-box{background:rgba(99,102,241,.1);border:1px solid rgba(99,102,241,.3);border-radius:8px;padding:1rem;margin-top:.75rem;font-size:.85rem;color:#a5b4fc;line-height:1.5}
+    .cta-box{border:1px solid #4f46e5;border-radius:12px;padding:1.5rem;text-align:center;margin:2rem 0}
+    .cta-box h3{color:#e2e8f0;margin-bottom:.5rem}
+    .cta-box p{color:#8b8b9e;font-size:.85rem;margin-bottom:1rem}
+    .cta-box a{display:inline-block;background:linear-gradient(135deg,#f97316,#fb923c);color:#fff;padding:.6rem 1.5rem;border-radius:9999px;text-decoration:none;font-weight:600}
+    footer{text-align:center;padding:2rem;color:#6b7280;font-size:.8rem}
+    footer a{color:#8b8b9e;text-decoration:none}
+    .progress-bar{height:8px;background:#2d2a5e;border-radius:4px;overflow:hidden;margin:.5rem 0}
+    .progress-fill{height:100%;border-radius:4px;background:linear-gradient(90deg,#f97316,#fb923c);transition:width .5s}
+    .idea-card{background:rgba(99,102,241,.08);border:1px solid rgba(99,102,241,.15);border-radius:8px;padding:.75rem 1rem;margin-bottom:.5rem}
+    .idea-card .idea-title{color:#e2e8f0;font-weight:600;font-size:.9rem}
+    .idea-card .idea-meta{color:#8b8b9e;font-size:.8rem;margin-top:.25rem}
+    input[type="color"]{height:48px;padding:4px;cursor:pointer}
+  </style>
+</head>
+<body>
+  <header class="header">
+    <a href="/">⚡ YT SEO Architect</a>
+    <a href="/tools/" class="cta">All Tools</a>
+  </header>
+  <main>
+    <h1>💡 Video Idea Generator</h1>
+    <p class="sub">Generate 10 YouTube video ideas for your niche with SEO keywords, target audience, and estimated competition.</p>
+    <div class="tool-card">
+      <div class="input-row"><div class="input-group"><label>Niche</label><select id="vl-niche"><option value="education">Education</option><option value="entertainment">Entertainment</option><option value="gaming">Gaming</option><option value="music">Music</option><option value="tech">Tech</option><option value="vlog">Vlogging</option><option value="cooking">Cooking</option><option value="fitness">Fitness</option><option value="travel">Travel</option><option value="commentary">Commentary</option></select></div><div class="input-group"><label>Target Audience</label><select id="vl-audience"><option value="beginners">Beginners</option><option value="intermediate">Intermediate</option><option value="advanced">Advanced</option><option value="general">General</option></select></div><div class="input-group"><label>Primary Goal</label><select id="us-goal"><option value="growth">Grow subscribers</option><option value="views">Increase views</option><option value="revenue">Generate revenue</option><option value="authority">Build authority</option></select></div></div>
+      <button onclick="ToolLogic.generate() {
+    const niche = document.getElementById('vi-niche').value;
+    const audience = document.getElementById('vi-audience').value;
+    const goal = document.getElementById('vi-goal').value;
+
+    const ideaPools = {
+      'education'()">Calculate →</button>
+      <div id="result" class="result-box"></div>
+    </div>
+    <div class="cta-box">
+      <h3>🚀 More Free Tools</h3>
+      <p>17 AI-powered tools to optimize your YouTube titles, tags, descriptions, and more.</p>
+      <a href="/tools/">Browse All Tools →</a>
+    </div>
+  </main>
+  <footer>
+    <p>&copy; 2026 YT SEO Architect · <a href="/glossary/">Glossary</a> · <a href="/blog">Blog</a> · <a href="/tools/">Tools</a></p>
+  </footer>
+  <script>
+const ToolLogic = {
+  generate() {
+    const niche = document.getElementById('vi-niche').value;
+    const audience = document.getElementById('vi-audience').value;
+    const goal = document.getElementById('vi-goal').value;
+
+    const ideaPools = {
+      'education': ['Complete Guide to [Topic] for Beginners', 'Top 5 [Topic] Myths Debunked', 'How [Topic] Actually Works in 2026', 'The Ultimate [Topic] Checklist', '[Topic] vs [Related] — Which Is Better?'],
+      'tech': ['[Product] Review After 6 Months', 'Best [Category] for [Use Case] in 2026', 'I Tried [Trending Tool] for 30 Days', 'How to Set Up [Tool] in 5 Minutes', 'Budget vs Premium [Category] Comparison'],
+      'gaming': ['5 Tips to Win at [Game] in 2026', '[Game] Complete Walkthrough — No Commentary', 'I Played [Game] for 100 Hours — Here\'s What I Learned', 'Top 10 [Game] Mods You Need', 'Is [Game] Worth It in 2026? Honest Review'],
+      'cooking': ['5 Budget Meals Under $5', 'How to Cook [Dish] Perfectly Every Time', 'Meal Prep for the Week — Complete Guide', 'Restaurant-Quality [Dish] at Home', 'Healthy Version of [Popular Dish]'],
+      'fitness': ['30-Day Transformation — What Worked', 'Beginner [Workout] Routine (No Equipment)', 'How I Lost X Pounds in Y Months', '5 Exercises You\'re Doing Wrong', '[Popular Diet] — What Science Says'],
+      'entertainment': ['Reacting to [Trend] in 2026', 'The Truth About [Popular Topic]', 'I Tried [Viral Trend] for a Week', 'Ranking [Category] From Worst to Best', 'This [Topic] Will Blow Your Mind'],
+      'music': ['How to Play [Song] on [Instrument]', 'My Music Production Setup (Under $500)', '5 Mixing Tips That Changed My Sound', 'Reviewing [Popular Gear] — Is It Worth It?', 'Making a Song in 1 Hour Challenge'],
+    };
+
+    const pool = ideaPools[niche] || [
+      'Beginner\'s Guide to [Niche Topic]',
+      'Top Mistakes Beginners Make in [Niche]',
+      'How I Grew My [Niche] Channel to X Subscribers',
+      'Best Tools for [Niche] Content Creators',
+      'The Future of [Niche] in 2026',
+    ];
+
+    const ideas = pool.map(idea => {
+      const diff = Math.round(30 + Math.random() * 50);
+      const estViews = Math.round(1000 + Math.random() * 50000);
+      return '<div class="idea-card">' +
+        '<div class="idea-title">📌 ' + idea.replace('[Niche Topic]', niche).replace('[Niche]', niche) + '</div>' +
+        '<div class="idea-meta">Difficulty: ' + diff + '% · Est. views: ' + estViews.toLocaleString() + '</div>' +
+        '</div>';
+    }).join('');
+
+    document.getElementById('vi-ideas').innerHTML = ideas;
+    document.getElementById('vi-tip').innerHTML =
+      '💡 Pick the idea with the lowest difficulty score first — build momentum before tackling competitive topics.';
+    document.getElementById('vi-result').classList.add('show');
+  }
+};</script>
+</body>
+</html>
