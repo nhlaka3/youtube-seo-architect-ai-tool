@@ -287,6 +287,8 @@ const ToolLogic = {
       suggestions: suggestions.slice(0, 3)
     };
   }
+};
+
 function handleTool() {
   const input = document.getElementById('tool-input').value.trim();
   if (!input) return;
@@ -441,6 +443,7 @@ const ToolLogic = {
       tip: 'Use your primary keyword as the first tag. Mix exact match, broad match, and long-tail tags. Aim for 10-15 tags total.'
     };
   }
+};
 
 function handleTool() {
   const input = document.getElementById('tool-input').value.trim();
@@ -590,6 +593,7 @@ const ToolLogic = {
 
     return selected;
   }
+};
 
 function handleTool() {
   const input = document.getElementById('tool-input').value.trim();
@@ -1165,7 +1169,8 @@ const ToolLogic = {
         { name: 'SEO Optimization', score: seoScored, detail: (hasGoodSEO ? 'Good SEO helps YouTube understand your content' : 'Improve titles, descriptions, and tags for SEO') + ' (' + Math.round(seoScore) + '/100)' },
       ]
     };
-  };
+  }
+};
 
 function handleTool() {
   const input = document.getElementById('tool-input').value.trim();
@@ -1315,6 +1320,7 @@ const ToolLogic = {
 
     return { plan: plan, summary: 'Here\'s your personalized recovery roadmap based on your specific issues.' };
   }
+};
 
 function handleTool() {
   const input = document.getElementById('tool-input').value.trim();
