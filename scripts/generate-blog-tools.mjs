@@ -340,11 +340,20 @@ function handleTool() {
     });
     html += '</div>';
 
-    // Setup copy buttons for titles
-    html += '<script>(function(){setTimeout(function(){document.querySelectorAll(".copy-title-btn").forEach(function(b){b.addEventListener("click",function(){var t=b.getAttribute("data-title");navigator.clipboard.writeText(t).then(function(){b.textContent="Copied!";setTimeout(function(){b.textContent="📋 Use"},1500)})})})},100)})();</script>';
   }
 
   placeholder.innerHTML = html;
+  setTimeout(function() {
+    document.querySelectorAll('.copy-title-btn').forEach(function(b) {
+      b.addEventListener('click', function() {
+        var t = b.getAttribute('data-title');
+        navigator.clipboard.writeText(t).then(function() {
+          b.textContent = 'Copied!';
+          setTimeout(function() { b.textContent = '📋 Use'; }, 1500);
+        });
+      });
+    });
+  }, 100);
 }`,
 
     generator: `
