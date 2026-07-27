@@ -131,7 +131,7 @@ jobs:
             echo "✅ No changes to commit"
             echo "COMMITTED=false" >> $GITHUB_OUTPUT
           else
-            git commit -m "blog: daily auto-generated post [skip ci]"
+            git commit -m "blog: daily auto-generated post"
             git pull --rebase origin main 2>&1 || true
             git push origin HEAD:main 2>&1
             echo "✅ Pushed to private repo"
