@@ -615,7 +615,9 @@ export function renderBlogTemplate(page) {
   }
 
   // 3. Body content (the AI-generated or template-generated HTML) — with auto-linked glossary terms
-  const linked = linkGlossaryTerms(rawContent);
+  // Strip any H1 from raw content — the page template already provides an H1 (duplicate H1 is bad for SEO)
+  const bodyContent = rawContent.replace(/<h1[^>]*>.*?<\/h1>/i, '').trim();
+  const linked = linkGlossaryTerms(bodyContent);
   contentHTML += linked;
 
   // 3b. Try-the-Tool CTA (if a corresponding interactive tool page exists)
