@@ -142,17 +142,10 @@ jobs:
         if: steps.push.outputs.COMMITTED == 'true'
         env:
           PUBLIC_REPO: https://x-access-token:${{ secrets.GH_PAT }}@github.com/nhlaka3/youtube-seo-architect-ai-tool.git
-          VERCEL_ORG_ID: team_SwgbCfb3wmcCloCXM97WsYmi
-          VERCEL_PROJECT_ID: prj_zFR23Jec8XyIIqBni9FqgaTOF1ET
-        run: |          
-          # Push to public repo (for code history)
+        run: |
+          # Push to public repo — Vercel auto-deploys via GitHub integration
           git remote add public "$PUBLIC_REPO"
-          git push public HEAD:main --force 2>&1 && echo "✅ Pushed to public repo"
-          
-          # Deploy directly to Vercel (bypasses broken GitHub integration)
-          echo "🚀 Deploying to Vercel..."
-          npx vercel --prod --yes --token ${{ secrets.VERCEL_TOKEN }} 2>&1
-          echo "✅ Deployed to Vercel"
+          git push public HEAD:main --force 2>&1 && echo "✅ Pushed to public repo — Vercel auto-deploy triggered"
 
       - name: 📊 Report
         if: always()
