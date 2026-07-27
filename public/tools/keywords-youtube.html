@@ -202,17 +202,59 @@ const ToolLogic = {
     // Sort by volume descending, return top 25
     results.sort(function(a, b) { return b.volume - a.volume; });
     return results.slice(0, 25);
+  },
+
+  recommendKeywords(seed, allResults) {
+    // Pick the best 3-5 keywords: balance volume vs difficulty
+    var scored = allResults.map(function(r) {
+      // Score: volume / difficulty + trend bonus
+      var difficultyFactor = Math.max(1, 100 - r.difficulty);
+      var trendBonus = r.trend === 'rising' ? 1.3 : 1.0;
+      var score = Math.round((r.volume / difficultyFactor) * trendBonus);
+      return { keyword: r.keyword, volume: r.volume, difficulty: r.difficulty, trend: r.trend, score: score };
+    });
+
+    // Sort by score descending
+    scored.sort(function(a, b) { return b.score - a.score; });
+
+    // Add rationale
+    var selected = scored.slice(0, 3);
+    selected.forEach(function(k) {
+      if (k.difficulty < 30 && k.volume > 500) k.reason = 'High volume, low competition — target this first!';
+      else if (k.difficulty < 40) k.reason = 'Low competition — great for ranking quickly';
+      else if (k.volume > 2000) k.reason = 'High search volume — worth the effort';
+      else if (k.trend === 'rising') k.reason = 'Trending up — catch the wave early';
+      else k.reason = 'Balanced opportunity';
+    });
+
+    return selected;
   }
-};
 
 function handleTool() {
   const input = document.getElementById('tool-input').value.trim();
   if (!input) return;
   const results = ToolLogic.research(input);
+  var bestKeywords = ToolLogic.recommendKeywords(input, results);
   const box = document.getElementById('result-box');
   const placeholder = document.getElementById('result-placeholder');
   box.classList.add('show');
   let html = '<div style="font-size:0.75rem;color:#64748b;margin-bottom:0.75rem;padding:0.4rem 0.75rem;background:rgba(99,102,241,0.06);border-radius:6px;text-align:left;">📖 Based on the ' + window.BLOG_TOPIC + ' guide</div><div style="margin-bottom:0.75rem;">' + topicAdvice(window.BLOG_TOPIC) + '</div>';
+
+  // Show best keyword recommendations FIRST
+  html += '<div style="margin-bottom:1rem;padding:1rem;background:rgba(34,197,94,0.04);border:1px solid rgba(34,197,94,0.15);border-radius:8px;text-align:left;">';
+  html += '<div style="font-weight:700;font-size:1rem;color:#22c55e;margin-bottom:0.75rem;">🎯 Top 3 Keywords to Target</div>';
+  bestKeywords.forEach(function(k, i) {
+    var diffLabel = k.difficulty < 35 ? 'Easy' : k.difficulty < 60 ? 'Medium' : 'Hard';
+    var diffColor = k.difficulty < 35 ? '#22c55e' : k.difficulty < 60 ? '#f59e0b' : '#ff3366';
+    html += '<div style="display:flex;align-items:center;gap:0.5rem;padding:0.5rem 0.75rem;margin-bottom:0.4rem;background:rgba(34,197,94,0.06);border-radius:6px;">';
+    html += '<span style="font-weight:700;color:#22c55e;font-size:0.9rem;min-width:1.5rem;">#' + (i + 1) + '</span>';
+    html += '<div style="flex:1;"><span style="font-size:0.9rem;color:#e2e8f0;">' + k.keyword + '</span>';
+    html += '<div style="font-size:0.75rem;color:#64748b;">' + k.volume.toLocaleString() + '/mo · <span style="color:' + diffColor + ';">' + diffLabel + '</span> · ' + k.trend + '</div></div>';
+    html += '<div style="font-size:0.7rem;color:#6366f1;max-width:150px;text-align:right;">' + k.reason + '</div>';
+    html += '</div>';
+  });
+  html += '</div>';
+
   html += '<div style="margin-bottom:1rem;display:flex;justify-content:space-between;align-items:center;">';
   html += '<span style="color:#94a3b8;font-size:0.9rem;">' + results.length + ' keyword ideas for &quot;' + input + '&quot;</span>';
   html += '<span style="font-size:0.75rem;color:#64748b;">Sorted by search volume</span>';

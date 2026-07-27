@@ -204,8 +204,58 @@ const ToolLogic = {
     const riskColor = totalScore >= 70 ? '#ff3366' : totalScore >= 45 ? '#f59e0b' : '#22c55e';
 
     return { score: totalScore, risk: risk, riskColor: riskColor, findings: findings, noMatch: findings.length === 0 };
+  },
+
+  generateRecoveryPlan(findings) {
+    if (!findings || findings.length === 0) {
+      return { plan: [], summary: 'No issues detected. Keep creating great content!' };
+    }
+
+    var plan = [];
+    var allIssues = findings.map(function(f) { return f.issue; });
+
+    // Step 1: Immediate (today)
+    var today = [];
+    if (allIssues.some(function(i) { return i.includes('View Drop') || i.includes('Impression') || i.includes('CTR'); })) {
+      today.push('Refresh your thumbnail and title for your last 3 videos. High-contrast thumbnails with close-up faces work best.');
+    }
+    if (allIssues.some(function(i) { return i.includes('Zero') || i.includes('Copyright'); })) {
+      today.push('Check your latest upload for copyright claims or content restrictions in YouTube Studio.');
+    }
+    if (allIssues.some(function(i) { return i.includes('Monetization'); })) {
+      today.push('Check YouTube Studio > Earnings to see which videos have limited or no ads.');
+    }
+    if (today.length === 0) today.push('Review your latest video's analytics — pay attention to the retention graph drop-off points.');
+    plan.push({ timeframe: 'Today', icon: '⚡', steps: today });
+
+    // Step 2: This week
+    var thisWeek = ['Optimize your next upload: front-load keyword in title, write 200+ word description with timestamps.'];
+    if (allIssues.some(function(i) { return i.includes('Retention'); })) {
+      thisWeek.push('Improve retention: add a stronger hook in the first 5 seconds. State exactly what viewers will learn.');
+    }
+    if (allIssues.some(function(i) { return i.includes('Algorithm') || i.includes('Shadow'); })) {
+      thisWeek.push('Post a community poll asking what content your audience wants. This signals engagement to the algorithm.');
+    }
+    plan.push({ timeframe: 'This Week', icon: '📅', steps: thisWeek });
+
+    // Step 3: This month
+    var thisMonth = ['Upload consistently — 3-4 videos per week if possible. Consistency is the #1 growth signal.'];
+    if (allIssues.some(function(i) { return i.includes('View Drop') || i.includes('Impression'); })) {
+      thisMonth.push('Analyze your top 3 performing vs bottom 3 performing videos. Identify patterns in titles, topics, and formats.');
+    }
+    thisMonth.push('Engage with similar channels in your niche — leave thoughtful comments to drive traffic back to your channel.');
+    plan.push({ timeframe: 'This Month', icon: '📈', steps: thisMonth });
+
+    // Step 4: Long-term
+    var longTerm = ['Build a content library around your best-performing topics. Pillar content creates long-term search traffic.'];
+    if (allIssues.some(function(i) { return i.includes('Monetization') || i.includes('Shadow'); })) {
+      longTerm.push('Review YouTube's Community Guidelines and Ad-Friendly Content guidelines to ensure compliance.');
+    }
+    longTerm.push('Collaborate with 2-3 creators in your niche. Cross-promotion is the fastest organic growth strategy.');
+    plan.push({ timeframe: 'Long-Term', icon: '🚀', steps: longTerm });
+
+    return { plan: plan, summary: 'Here's your personalized recovery roadmap based on your specific issues.' };
   }
-};
 
 function handleTool() {
   const input = document.getElementById('tool-input').value.trim();
@@ -239,6 +289,21 @@ function handleTool() {
       html += '</div>';
     });
   }
+  
+
+    // Recovery plan
+    var recoveryPlan = ToolLogic.generateRecoveryPlan(result.findings);
+    html += '<div style="margin-top:1.25rem;padding:1rem;background:rgba(6,182,212,0.04);border:1px solid rgba(6,182,212,0.15);border-radius:8px;text-align:left;">';
+    html += '<div style="font-weight:700;font-size:1rem;color:#06b6d4;margin-bottom:0.75rem;">🛠️ Your Recovery Plan</div>';
+    recoveryPlan.plan.forEach(function(p) {
+      html += '<div style="margin-bottom:0.75rem;">';
+      html += '<div style="font-weight:600;font-size:0.85rem;color:#06b6d4;margin-bottom:0.3rem;">' + p.icon + ' ' + p.timeframe + '</div>';
+      p.steps.forEach(function(s) {
+        html += '<div style="font-size:0.8rem;color:#d1d5db;padding:0.2rem 0;padding-left:0.5rem;border-left:2px solid rgba(6,182,212,0.3);margin-bottom:0.2rem;">→ ' + s + '</div>';
+      });
+      html += '</div>';
+    });
+    html += '</div>';
   placeholder.innerHTML = html;
 }
   </script>

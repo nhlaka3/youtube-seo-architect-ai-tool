@@ -209,8 +209,92 @@ const ToolLogic = {
     lines.push('');
     lines.push('#' + topic.replace(/\s+/g, '').replace(/[^a-zA-Z0-9]/g, '') + ' #YouTubeSEO #VideoMarketing #' + year);
     return lines.join('\n');
+  },
+
+  generateBestDescription(topic) {
+    var now = new Date();
+    var year = now.getFullYear();
+    var capTopic = topic.charAt(0).toUpperCase() + topic.slice(1);
+    var suggestions = [];
+
+    // Version 1: Hook-focused description
+    var desc1 = [];
+    desc1.push('📌 ' + capTopic + ' — Complete Guide ' + year);
+    desc1.push('');
+    desc1.push('🎯 WHAT YOU'LL LEARN:');
+    desc1.push('• What ' + topic + ' is and why it matters in ' + year);
+    desc1.push('• Step-by-step strategies that actually work');
+    desc1.push('• Common mistakes to avoid (save you months of trial & error)');
+    desc1.push('• Advanced tips used by top creators');
+    desc1.push('• Actionable next steps to implement today');
+    desc1.push('');
+    desc1.push('📑 TIMESTAMPS:');
+    desc1.push('0:00 - Introduction');
+    desc1.push('0:45 - What You'll Learn Today');
+    desc1.push('3:15 - The Core Strategy');
+    desc1.push('5:30 - Advanced Techniques');
+    desc1.push('8:00 - Common Mistakes to Avoid');
+    desc1.push('10:30 - Real Examples & Case Studies');
+    desc1.push('12:00 - Action Plan & Next Steps');
+    desc1.push('');
+    desc1.push('🔗 FREE RESOURCES:');
+    desc1.push('📊 YouTube SEO Toolkit: https://yt-seo-architect.vercel.app/tools');
+    desc1.push('📘 Read the Full Guide: https://yt-seo-architect.vercel.app/blog/' + window.BLOG_SLUG);
+    desc1.push('');
+    desc1.push('💬 Drop a comment if you have questions — I reply to every single one!');
+    desc1.push('');
+    desc1.push('#' + topic.replace(/s+/g, '').replace(/[^a-zA-Z0-9]/g, '') + ' #YouTubeSEO #VideoMarketing #' + year);
+    suggestions.push(desc1.join('\n'));
+
+    // Version 2: Story-driven
+    var desc2 = [];
+    desc2.push('📌 ' + capTopic + ' — The Only Guide You'll Need in ' + year);
+    desc2.push('');
+    desc2.push('Ever felt overwhelmed by ' + topic + '? You're not alone. In this video, I break down everything into simple, actionable steps.');
+    desc2.push('');
+    desc2.push('Here's what we'll cover:');
+    desc2.push('⏱️ 0:00 - The Problem');
+    desc2.push('⏱️ 1:30 - The 3-Step System');
+    desc2.push('⏱️ 4:00 - Real Examples');
+    desc2.push('⏱️ 7:30 - Common Mistakes');
+    desc2.push('⏱️ 10:00 - Your Action Plan');
+    desc2.push('');
+    desc2.push('🔗 LINKS:');
+    desc2.push('• Free Tools: https://yt-seo-architect.vercel.app/tools');
+    desc2.push('• Blog Guide: https://yt-seo-architect.vercel.app/blog/' + window.BLOG_SLUG);
+    desc2.push('');
+    desc2.push('💡 Watch until the end for a bonus strategy most creators miss!');
+    desc2.push('');
+    desc2.push('#' + topic.replace(/s+/g, '').replace(/[^a-zA-Z0-9]/g, '') + ' #YouTubeTips #Growth #' + year);
+    suggestions.push(desc2.join('\n'));
+
+    // Version 3: Bullet-point focused
+    var desc3 = [];
+    desc3.push('📌 ' + capTopic + ' — Fast-Track Guide ' + year);
+    desc3.push('');
+    desc3.push('In this video, I'll show you:');
+    desc3.push('✅ The exact ' + topic + ' strategy used by top creators');
+    desc3.push('✅ 5 proven techniques that work in ' + year);
+    desc3.push('✅ The #1 mistake killing your results');
+    desc3.push('✅ Tools to automate the process');
+    desc3.push('');
+    desc3.push('📑 TIMESTAMPS:');
+    desc3.push('0:00 - Introduction');
+    desc3.push('0:30 - Prerequisites');
+    desc3.push('2:00 - Step 1: Foundation');
+    desc3.push('4:30 - Step 2: Execution');
+    desc3.push('7:00 - Step 3: Optimization');
+    desc3.push('9:30 - Step 4: Scale');
+    desc3.push('12:00 - Results & Next Steps');
+    desc3.push('');
+    desc3.push('📊 Free Tools: https://yt-seo-architect.vercel.app/tools');
+    desc3.push('');
+    desc3.push('#' + topic.replace(/s+/g, '').replace(/[^a-zA-Z0-9]/g, '') + ' #YouTubeSEO #GrowthHacks #' + year);
+    suggestions.push(desc3.join('\n'));
+
+    return { suggestions: suggestions };
   }
-};
+};;
 
 function handleTool() {
   const input = document.getElementById('tool-input').value.trim();
@@ -223,7 +307,25 @@ function handleTool() {
   placeholder.innerHTML = bannerHtml + '<pre style="white-space:pre-wrap;font-family:inherit;font-size:0.9rem;line-height:1.6;color:#d1d5db;background:#0f0f1a;padding:1.25rem;border-radius:8px;border:1px solid #2a2a4a;text-align:left;margin:0;">' + escHtml(result) + '</pre>';
   placeholder.innerHTML += '<button onclick="copyDesc()" style="margin-top:1rem;background:linear-gradient(135deg,#6366f1,#06b6d4);color:#fff;border:none;padding:0.6rem 1.5rem;border-radius:6px;font-weight:600;cursor:pointer;font-size:0.9rem;">📋 Copy Description</button>';
 
+  // Show best description alternatives
+  var bestDescs = ToolLogic.generateBestDescription(input);
+  var descHtml = '<div style="margin-top:1.25rem;padding:1rem;background:rgba(99,102,241,0.04);border:1px solid rgba(99,102,241,0.12);border-radius:8px;text-align:left;">';
+  descHtml += '<div style="font-weight:700;font-size:1rem;color:#6366f1;margin-bottom:0.75rem;">🏆 Best Descriptions for Your Video</div>';
+  bestDescs.suggestions.forEach(function(s, i) {
+    var preview = s.substring(0, 120).replace(/\n/g, ' ') + '...';
+    descHtml += '<div style="display:flex;align-items:flex-start;gap:0.5rem;padding:0.5rem 0.75rem;margin-bottom:0.4rem;background:rgba(99,102,241,0.06);border-radius:6px;cursor:pointer;" onclick="selectDesc(' + i + ')">';
+    descHtml += '<span style="font-weight:700;color:#6366f1;font-size:0.9rem;min-width:1.5rem;">' + (i + 1) + '.</span>';
+    descHtml += '<div style="flex:1;"><div style="font-size:0.8rem;color:#e2e8f0;">' + preview + '</div>';
+    descHtml += '<div style="font-size:0.7rem;color:#6366f1;margin-top:0.2rem;">Click to use this version →</div></div>';
+    descHtml += '</div>';
+  });
+  descHtml += '</div>';
+  descHtml += '<div id="desc-preview" style="display:none;margin-top:1rem;padding:1rem;background:#0f0f1a;border:1px solid #2a2a4a;border-radius:8px;white-space:pre-wrap;font-family:inherit;font-size:0.9rem;line-height:1.6;color:#d1d5db;text-align:left;"></div>';
+  descHtml += '<div id="desc-preview-btn" style="display:none;margin-top:0.5rem;"><button onclick="copyDescPreview()" style="background:linear-gradient(135deg,#22c55e,#16a34a);color:#fff;border:none;padding:0.6rem 1.5rem;border-radius:6px;font-weight:600;cursor:pointer;font-size:0.9rem;">📋 Use This Description</button></div>';
+  placeholder.innerHTML += descHtml;
+
   window.__descText = result;
+  window.__bestDescs = bestDescs.suggestions;
 }
 
 function copyDesc() {
@@ -233,6 +335,28 @@ function copyDesc() {
       if (btn) { btn.textContent = '✅ Copied!'; setTimeout(function() { btn.textContent = '📋 Copy Description'; }, 2000); }
     });
   }
+}
+
+function selectDesc(idx) {
+  var descs = window.__bestDescs;
+  if (!descs || !descs[idx]) return;
+  var preview = document.getElementById('desc-preview');
+  var btn = document.getElementById('desc-preview-btn');
+  if (preview) { preview.style.display = 'block'; preview.textContent = descs[idx]; }
+  if (btn) btn.style.display = 'block';
+  window.__selectedDesc = descs[idx];
+}
+
+function copyDescPreview() {
+  var text = window.__selectedDesc || window.__descText;
+  if (!text) return;
+  navigator.clipboard.writeText(text).then(function() {
+    var btn = document.querySelector('#desc-preview-btn button');
+    if (btn) { btn.textContent = '✅ Copied!'; setTimeout(function() { btn.textContent = '📋 Use This Description'; }, 2000); }
+  }).catch(function() {
+    var ta = document.createElement('textarea');
+    ta.value = text; document.body.appendChild(ta); ta.select(); document.execCommand('copy'); document.body.removeChild(ta);
+  });
 }
 
 function escHtml(s) {

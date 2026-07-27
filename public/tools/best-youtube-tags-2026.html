@@ -229,8 +229,34 @@ const ToolLogic = {
       const comp = Math.min(95, 30 + Math.floor(seededRandom(i * 10 + 7) * 50));
       return { tag: t, volume: vol, competition: comp };
     });
+  },
+
+  analyzeTags(topic) {
+    var base = topic.toLowerCase().trim();
+    // Generate the best 5 tags with rationale
+    var bestTags = [
+      { tag: base, reason: 'Primary keyword — essential for ranking' },
+      { tag: base + ' 2026', reason: 'Time-bound keyword — captures trending searches' },
+      { tag: 'how to ' + base, reason: 'How-to format — highest search intent' },
+      { tag: base + ' tutorial', reason: 'Tutorial format — YouTube's favorite content type' },
+      { tag: base + ' for beginners', reason: 'Beginner modifier — broadest search audience' },
+    ];
+
+    // Tag gap analysis
+    var gaps = ['Long-tail tag (3-5 words targeting specific search intent)'];
+    if (base.split(/s+/).length < 3) {
+      gaps.push('Broad category tag (e.g., "youtube seo tips" instead of just "seo")');
+    }
+    if (!base.includes('2026') && !base.includes('2025')) {
+      gaps.push('Year-specific tag to capture "2026" searches');
+    }
+
+    return {
+      best: bestTags,
+      gaps: gaps,
+      tip: 'Use your primary keyword as the first tag. Mix exact match, broad match, and long-tail tags. Aim for 10-15 tags total.'
+    };
   }
-};
 
 function handleTool() {
   const input = document.getElementById('tool-input').value.trim();
@@ -273,6 +299,54 @@ function handleTool() {
       });
     });
   }, 0);
+
+  // Add tag gap analysis
+  var tagAnalysis = ToolLogic.analyzeTags(input);
+
+  // Best 5 tags section
+  html += '<div style="margin-top:1.25rem;padding:1rem;background:rgba(99,102,241,0.04);border:1px solid rgba(99,102,241,0.12);border-radius:8px;text-align:left;">';
+  html += '<div style="font-weight:700;font-size:1rem;color:#6366f1;margin-bottom:0.75rem;">🎯 Top 5 Recommended Tags</div>';
+  tagAnalysis.best.forEach(function(t, i) {
+    html += '<div style="display:flex;align-items:center;gap:0.5rem;padding:0.4rem 0.6rem;margin-bottom:0.3rem;background:rgba(99,102,241,0.06);border-radius:6px;">';
+    html += '<span style="font-weight:700;color:#6366f1;font-size:0.85rem;min-width:1.5rem;">#' + (i + 1) + '</span>';
+    html += '<div style="flex:1;"><span style="font-family:monospace;font-size:0.85rem;color:#e2e8f0;">' + t.tag + '</span>';
+    html += '<div style="font-size:0.7rem;color:#64748b;">' + t.reason + '</div></div>';
+    html += '<button class="copy-best-btn" data-tag="' + t.tag.replace(/"/g, '&quot;') + '" style="background:none;border:1px solid #6366f1;color:#6366f1;padding:0.2rem 0.6rem;border-radius:4px;cursor:pointer;font-size:0.7rem;white-space:nowrap;">Copy</button>';
+    html += '</div>';
+  });
+
+  // Tag gaps section
+  if (tagAnalysis.gaps.length > 0) {
+    html += '<div style="margin-top:0.75rem;padding:0.75rem;background:rgba(245,158,11,0.05);border:1px solid rgba(245,158,11,0.12);border-radius:6px;">';
+    html += '<div style="font-weight:600;font-size:0.85rem;color:#f59e0b;margin-bottom:0.4rem;">💡 Tag Strategy Tips</div>';
+    tagAnalysis.gaps.forEach(function(g) {
+      html += '<div style="font-size:0.8rem;color:#d1d5db;padding:0.15rem 0;">→ ' + g + '</div>';
+    });
+    html += '<div style="font-size:0.8rem;color:#6366f1;margin-top:0.4rem;">💡 ' + tagAnalysis.tip + '</div>';
+    html += '</div>';
+  }
+  html += '</div>';
+
+  // Setup copy buttons for best tags
+  setTimeout(function() {
+    document.querySelectorAll('.copy-best-btn').forEach(function(btn) {
+      btn.addEventListener('click', function() {
+        var tag = btn.getAttribute('data-tag');
+        navigator.clipboard.writeText(tag).then(function() {
+          btn.textContent = 'Copied!';
+          btn.style.color = '#22c55e';
+          btn.style.borderColor = '#22c55e';
+          setTimeout(function() {
+            btn.textContent = 'Copy';
+            btn.style.color = '';
+            btn.style.borderColor = '';
+          }, 1500);
+        });
+      });
+    });
+  }, 100);
+
+  placeholder.innerHTML = html;
 }
   </script>
 </body>

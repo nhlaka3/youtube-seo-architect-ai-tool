@@ -231,9 +231,89 @@ const ToolLogic = {
 
     score = Math.max(0, Math.min(100, score));
     return { score, checks, grade: score >= 85 ? 'A' : score >= 70 ? 'B' : score >= 55 ? 'C' : score >= 40 ? 'D' : 'F' };
-  }
-};
+  },
 
+  generateBestTitle(title, keyword) {
+    var lower = title.toLowerCase();
+    var kwLower = (keyword || '').toLowerCase();
+    var missing = [];
+    var improvements = [];
+
+    // Analyze what's missing
+    if (title.length < 20) missing.push('Title is too short');
+    else if (title.length > 70) missing.push('Title gets truncated on mobile');
+
+    if (kwLower && !lower.includes(kwLower)) missing.push('Target keyword missing');
+
+    var hasNumber = /d/.test(title);
+    if (!hasNumber) missing.push('No numbers (they boost CTR by 36%)');
+
+    var hasBracket = /[[]()]/.test(title);
+    if (!hasBracket) missing.push('No brackets/parentheses');
+
+    var hasQuestion = title.includes('?');
+    var powerWords = ['ultimate','best','top','guide','how to','tips','tricks','secret','easy','fast','proven','essential','complete','simple','powerful','expert','step by step','effective','amazing','incredible'];
+    var foundPower = powerWords.filter(function(w) { return lower.includes(w); });
+    if (foundPower.length < 2) missing.push('Add power words (e.g., Ultimate, Best, Easy, Proven)');
+
+    var emotional = ['amazing','incredible','shocking','unbelievable','huge','massive','crazy','insane','mind blowing','life changing'];
+    var foundEmo = emotional.filter(function(w) { return lower.includes(w); });
+    if (foundEmo.length === 0) missing.push('No emotional triggers');
+
+    var words = title.split(' ');
+    var longWords = words.filter(function(w) { return w.length > 3; });
+    var cappedLongWords = longWords.filter(function(w) { return w[0] === w[0].toUpperCase(); });
+    var caseRatio = longWords.length > 0 ? cappedLongWords.length / longWords.length : 1;
+    if (caseRatio < 0.3) missing.push('Use proper title case');
+
+    // Generate 3 improved titles
+    var cleanTopic = title.replace(/[[]()]/g, '').replace(/d{4}/g, '').replace(/^(top|best|how to|ultimate|guide|tips|tricks|easy|simple|complete)s*/i, '').trim();
+    if (!cleanTopic) cleanTopic = kwLower || title;
+
+    // Title 1: Number + Power Word + Topic
+    var t1;
+    if (!hasNumber && hasBracket) {
+      t1 = '5 ' + (foundPower.length < 2 ? 'Essential ' : '') + cleanTopic.charAt(0).toUpperCase() + cleanTopic.slice(1) + ' [2026 Guide]';
+    } else if (!hasNumber) {
+      t1 = '5 ' + (foundPower.length < 2 ? 'Best ' : '') + cleanTopic.charAt(0).toUpperCase() + cleanTopic.slice(1) + ' (2026)';
+    } else if (hasBracket) {
+      t1 = title.replace(/[[]()]/g, '').trim() + ' [2026 Updated]';
+    } else {
+      t1 = (foundPower.length < 2 ? 'Ultimate ' : '') + cleanTopic.charAt(0).toUpperCase() + cleanTopic.slice(1) + ' — Complete Guide';
+    }
+
+    // Title 2: How-To / Question format
+    var t2;
+    if (!hasQuestion) {
+      t2 = 'How to ' + cleanTopic + ' in 2026 (Step-by-Step)';
+    } else {
+      t2 = cleanTopic.charAt(0).toUpperCase() + cleanTopic.slice(1) + ': ' + (foundPower.length < 2 ? 'Ultimate ' : '') + 'Tips & Tricks';
+    }
+
+    // Title 3: Beginner-friendly
+    var t3;
+    if (!lower.includes('beginner') && !lower.includes('beginners')) {
+      t3 = cleanTopic.charAt(0).toUpperCase() + cleanTopic.slice(1) + ' for Beginners — ' + (foundPower.length < 2 ? 'Easy ' : '') + 'Step-by-Step 2026';
+    } else {
+      t3 = (hasNumber ? 'Top 10 ' : '') + cleanTopic.charAt(0).toUpperCase() + cleanTopic.slice(1) + ' Strategies That Actually Work';
+    }
+
+    var suggestions = [];
+    if (t1 && t1.length <= 70) suggestions.push(t1);
+    if (t2 && t2.length <= 70) suggestions.push(t2);
+    if (t3 && t3.length <= 70) suggestions.push(t3);
+    // Fallback: generate a generic one if all are too long
+    if (suggestions.length < 3) {
+      var fallback = 'The ' + (foundPower[0] || 'Ultimate') + ' Guide to ' + cleanTopic.charAt(0).toUpperCase() + cleanTopic.slice(1);
+      if (fallback.length <= 70) suggestions.push(fallback);
+    }
+
+    return {
+      missing: missing,
+      improvements: improvements,
+      suggestions: suggestions.slice(0, 3)
+    };
+  }
 function handleTool() {
   const input = document.getElementById('tool-input').value.trim();
   if (!input) return;
@@ -259,6 +339,38 @@ function handleTool() {
     html += '</div>';
   });
   html += '</div>';
+
+  // Generate best title suggestions
+  var best = ToolLogic.generateBestTitle(input, keyword);
+
+  // Show what's missing section
+  if (best.missing.length > 0) {
+    html += '<div style="margin-top:1.25rem;padding:1rem;background:rgba(255,51,102,0.05);border:1px solid rgba(255,51,102,0.15);border-radius:8px;text-align:left;">';
+    html += '<div style="font-weight:700;font-size:1rem;color:#ff3366;margin-bottom:0.75rem;">⚠️ What's Missing From Your Title</div>';
+    html += '<div style="display:flex;flex-wrap:wrap;gap:0.5rem;">';
+    best.missing.forEach(function(m) {
+      html += '<span style="background:rgba(255,51,102,0.1);color:#ff6b8a;padding:0.3rem 0.7rem;border-radius:6px;font-size:0.8rem;">' + m + '</span>';
+    });
+    html += '</div></div>';
+  }
+
+  // Show best title suggestions
+  if (best.suggestions.length > 0) {
+    html += '<div style="margin-top:1rem;padding:1rem;background:rgba(34,197,94,0.05);border:1px solid rgba(34,197,94,0.15);border-radius:8px;text-align:left;">';
+    html += '<div style="font-weight:700;font-size:1rem;color:#22c55e;margin-bottom:0.75rem;">🏆 Best Titles for You</div>';
+    best.suggestions.forEach(function(s, i) {
+      html += '<div style="display:flex;align-items:center;gap:0.5rem;padding:0.5rem 0.75rem;margin-bottom:0.4rem;background:rgba(34,197,94,0.08);border-radius:6px;">';
+      html += '<span style="font-weight:700;color:#22c55e;font-size:0.9rem;min-width:1.5rem;">' + (i + 1) + '.</span>';
+      html += '<span style="font-size:0.9rem;color:#e2e8f0;flex:1;">' + s + '</span>';
+      html += '<button class="copy-title-btn" data-title="' + s.replace(/"/g, '&quot;') + '" style="background:none;border:1px solid #22c55e;color:#22c55e;padding:0.2rem 0.6rem;border-radius:4px;cursor:pointer;font-size:0.75rem;white-space:nowrap;">📋 Use</button>';
+      html += '</div>';
+    });
+    html += '</div>';
+
+    // Setup copy buttons for titles
+    html += '<script>(function(){setTimeout(function(){document.querySelectorAll(".copy-title-btn").forEach(function(b){b.addEventListener("click",function(){var t=b.getAttribute("data-title");navigator.clipboard.writeText(t).then(function(){b.textContent="Copied!";setTimeout(function(){b.textContent="📋 Use"},1500)})})})},100)})();</script>';
+  }
+
   placeholder.innerHTML = html;
 }
   </script>

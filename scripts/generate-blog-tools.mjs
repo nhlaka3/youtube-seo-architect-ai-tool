@@ -204,9 +204,89 @@ const ToolLogic = {
 
     score = Math.max(0, Math.min(100, score));
     return { score, checks, grade: score >= 85 ? 'A' : score >= 70 ? 'B' : score >= 55 ? 'C' : score >= 40 ? 'D' : 'F' };
-  }
-};
+  },
 
+  generateBestTitle(title, keyword) {
+    var lower = title.toLowerCase();
+    var kwLower = (keyword || '').toLowerCase();
+    var missing = [];
+    var improvements = [];
+
+    // Analyze what's missing
+    if (title.length < 20) missing.push('Title is too short');
+    else if (title.length > 70) missing.push('Title gets truncated on mobile');
+
+    if (kwLower && !lower.includes(kwLower)) missing.push('Target keyword missing');
+
+    var hasNumber = /\d/.test(title);
+    if (!hasNumber) missing.push('No numbers (they boost CTR by 36%)');
+
+    var hasBracket = /[\[\]()]/.test(title);
+    if (!hasBracket) missing.push('No brackets/parentheses');
+
+    var hasQuestion = title.includes('?');
+    var powerWords = ['ultimate','best','top','guide','how to','tips','tricks','secret','easy','fast','proven','essential','complete','simple','powerful','expert','step by step','effective','amazing','incredible'];
+    var foundPower = powerWords.filter(function(w) { return lower.includes(w); });
+    if (foundPower.length < 2) missing.push('Add power words (e.g., Ultimate, Best, Easy, Proven)');
+
+    var emotional = ['amazing','incredible','shocking','unbelievable','huge','massive','crazy','insane','mind blowing','life changing'];
+    var foundEmo = emotional.filter(function(w) { return lower.includes(w); });
+    if (foundEmo.length === 0) missing.push('No emotional triggers');
+
+    var words = title.split(' ');
+    var longWords = words.filter(function(w) { return w.length > 3; });
+    var cappedLongWords = longWords.filter(function(w) { return w[0] === w[0].toUpperCase(); });
+    var caseRatio = longWords.length > 0 ? cappedLongWords.length / longWords.length : 1;
+    if (caseRatio < 0.3) missing.push('Use proper title case');
+
+    // Generate 3 improved titles
+    var cleanTopic = title.replace(/[\[\]()]/g, '').replace(/\d{4}/g, '').replace(/^(top|best|how to|ultimate|guide|tips|tricks|easy|simple|complete)\s*/i, '').trim();
+    if (!cleanTopic) cleanTopic = kwLower || title;
+
+    // Title 1: Number + Power Word + Topic
+    var t1;
+    if (!hasNumber && hasBracket) {
+      t1 = '5 ' + (foundPower.length < 2 ? 'Essential ' : '') + cleanTopic.charAt(0).toUpperCase() + cleanTopic.slice(1) + ' [2026 Guide]';
+    } else if (!hasNumber) {
+      t1 = '5 ' + (foundPower.length < 2 ? 'Best ' : '') + cleanTopic.charAt(0).toUpperCase() + cleanTopic.slice(1) + ' (2026)';
+    } else if (hasBracket) {
+      t1 = title.replace(/[\[\]()]/g, '').trim() + ' [2026 Updated]';
+    } else {
+      t1 = (foundPower.length < 2 ? 'Ultimate ' : '') + cleanTopic.charAt(0).toUpperCase() + cleanTopic.slice(1) + ' — Complete Guide';
+    }
+
+    // Title 2: How-To / Question format
+    var t2;
+    if (!hasQuestion) {
+      t2 = 'How to ' + cleanTopic + ' in 2026 (Step-by-Step)';
+    } else {
+      t2 = cleanTopic.charAt(0).toUpperCase() + cleanTopic.slice(1) + ': ' + (foundPower.length < 2 ? 'Ultimate ' : '') + 'Tips & Tricks';
+    }
+
+    // Title 3: Beginner-friendly
+    var t3;
+    if (!lower.includes('beginner') && !lower.includes('beginners')) {
+      t3 = cleanTopic.charAt(0).toUpperCase() + cleanTopic.slice(1) + ' for Beginners — ' + (foundPower.length < 2 ? 'Easy ' : '') + 'Step-by-Step 2026';
+    } else {
+      t3 = (hasNumber ? 'Top 10 ' : '') + cleanTopic.charAt(0).toUpperCase() + cleanTopic.slice(1) + ' Strategies That Actually Work';
+    }
+
+    var suggestions = [];
+    if (t1 && t1.length <= 70) suggestions.push(t1);
+    if (t2 && t2.length <= 70) suggestions.push(t2);
+    if (t3 && t3.length <= 70) suggestions.push(t3);
+    // Fallback: generate a generic one if all are too long
+    if (suggestions.length < 3) {
+      var fallback = 'The ' + (foundPower[0] || 'Ultimate') + ' Guide to ' + cleanTopic.charAt(0).toUpperCase() + cleanTopic.slice(1);
+      if (fallback.length <= 70) suggestions.push(fallback);
+    }
+
+    return {
+      missing: missing,
+      improvements: improvements,
+      suggestions: suggestions.slice(0, 3)
+    };
+  }
 function handleTool() {
   const input = document.getElementById('tool-input').value.trim();
   if (!input) return;
@@ -232,6 +312,38 @@ function handleTool() {
     html += '</div>';
   });
   html += '</div>';
+
+  // Generate best title suggestions
+  var best = ToolLogic.generateBestTitle(input, keyword);
+
+  // Show what's missing section
+  if (best.missing.length > 0) {
+    html += '<div style="margin-top:1.25rem;padding:1rem;background:rgba(255,51,102,0.05);border:1px solid rgba(255,51,102,0.15);border-radius:8px;text-align:left;">';
+    html += '<div style="font-weight:700;font-size:1rem;color:#ff3366;margin-bottom:0.75rem;">⚠️ What\'s Missing From Your Title</div>';
+    html += '<div style="display:flex;flex-wrap:wrap;gap:0.5rem;">';
+    best.missing.forEach(function(m) {
+      html += '<span style="background:rgba(255,51,102,0.1);color:#ff6b8a;padding:0.3rem 0.7rem;border-radius:6px;font-size:0.8rem;">' + m + '</span>';
+    });
+    html += '</div></div>';
+  }
+
+  // Show best title suggestions
+  if (best.suggestions.length > 0) {
+    html += '<div style="margin-top:1rem;padding:1rem;background:rgba(34,197,94,0.05);border:1px solid rgba(34,197,94,0.15);border-radius:8px;text-align:left;">';
+    html += '<div style="font-weight:700;font-size:1rem;color:#22c55e;margin-bottom:0.75rem;">🏆 Best Titles for You</div>';
+    best.suggestions.forEach(function(s, i) {
+      html += '<div style="display:flex;align-items:center;gap:0.5rem;padding:0.5rem 0.75rem;margin-bottom:0.4rem;background:rgba(34,197,94,0.08);border-radius:6px;">';
+      html += '<span style="font-weight:700;color:#22c55e;font-size:0.9rem;min-width:1.5rem;">' + (i + 1) + '.</span>';
+      html += '<span style="font-size:0.9rem;color:#e2e8f0;flex:1;">' + s + '</span>';
+      html += '<button class="copy-title-btn" data-title="' + s.replace(/"/g, '&quot;') + '" style="background:none;border:1px solid #22c55e;color:#22c55e;padding:0.2rem 0.6rem;border-radius:4px;cursor:pointer;font-size:0.75rem;white-space:nowrap;">📋 Use</button>';
+      html += '</div>';
+    });
+    html += '</div>';
+
+    // Setup copy buttons for titles
+    html += '<script>(function(){setTimeout(function(){document.querySelectorAll(".copy-title-btn").forEach(function(b){b.addEventListener("click",function(){var t=b.getAttribute("data-title");navigator.clipboard.writeText(t).then(function(){b.textContent="Copied!";setTimeout(function(){b.textContent="📋 Use"},1500)})})})},100)})();</script>';
+  }
+
   placeholder.innerHTML = html;
 }`,
 
@@ -292,8 +404,34 @@ const ToolLogic = {
       const comp = Math.min(95, 30 + Math.floor(seededRandom(i * 10 + 7) * 50));
       return { tag: t, volume: vol, competition: comp };
     });
+  },
+
+  analyzeTags(topic) {
+    var base = topic.toLowerCase().trim();
+    // Generate the best 5 tags with rationale
+    var bestTags = [
+      { tag: base, reason: 'Primary keyword — essential for ranking' },
+      { tag: base + ' 2026', reason: 'Time-bound keyword — captures trending searches' },
+      { tag: 'how to ' + base, reason: 'How-to format — highest search intent' },
+      { tag: base + ' tutorial', reason: 'Tutorial format — YouTube\'s favorite content type' },
+      { tag: base + ' for beginners', reason: 'Beginner modifier — broadest search audience' },
+    ];
+
+    // Tag gap analysis
+    var gaps = ['Long-tail tag (3-5 words targeting specific search intent)'];
+    if (base.split(/\s+/).length < 3) {
+      gaps.push('Broad category tag (e.g., "youtube seo tips" instead of just "seo")');
+    }
+    if (!base.includes('2026') && !base.includes('2025')) {
+      gaps.push('Year-specific tag to capture "2026" searches');
+    }
+
+    return {
+      best: bestTags,
+      gaps: gaps,
+      tip: 'Use your primary keyword as the first tag. Mix exact match, broad match, and long-tail tags. Aim for 10-15 tags total.'
+    };
   }
-};
 
 function handleTool() {
   const input = document.getElementById('tool-input').value.trim();
@@ -336,6 +474,54 @@ function handleTool() {
       });
     });
   }, 0);
+
+  // Add tag gap analysis
+  var tagAnalysis = ToolLogic.analyzeTags(input);
+
+  // Best 5 tags section
+  html += '<div style="margin-top:1.25rem;padding:1rem;background:rgba(99,102,241,0.04);border:1px solid rgba(99,102,241,0.12);border-radius:8px;text-align:left;">';
+  html += '<div style="font-weight:700;font-size:1rem;color:#6366f1;margin-bottom:0.75rem;">🎯 Top 5 Recommended Tags</div>';
+  tagAnalysis.best.forEach(function(t, i) {
+    html += '<div style="display:flex;align-items:center;gap:0.5rem;padding:0.4rem 0.6rem;margin-bottom:0.3rem;background:rgba(99,102,241,0.06);border-radius:6px;">';
+    html += '<span style="font-weight:700;color:#6366f1;font-size:0.85rem;min-width:1.5rem;">#' + (i + 1) + '</span>';
+    html += '<div style="flex:1;"><span style="font-family:monospace;font-size:0.85rem;color:#e2e8f0;">' + t.tag + '</span>';
+    html += '<div style="font-size:0.7rem;color:#64748b;">' + t.reason + '</div></div>';
+    html += '<button class="copy-best-btn" data-tag="' + t.tag.replace(/"/g, '&quot;') + '" style="background:none;border:1px solid #6366f1;color:#6366f1;padding:0.2rem 0.6rem;border-radius:4px;cursor:pointer;font-size:0.7rem;white-space:nowrap;">Copy</button>';
+    html += '</div>';
+  });
+
+  // Tag gaps section
+  if (tagAnalysis.gaps.length > 0) {
+    html += '<div style="margin-top:0.75rem;padding:0.75rem;background:rgba(245,158,11,0.05);border:1px solid rgba(245,158,11,0.12);border-radius:6px;">';
+    html += '<div style="font-weight:600;font-size:0.85rem;color:#f59e0b;margin-bottom:0.4rem;">💡 Tag Strategy Tips</div>';
+    tagAnalysis.gaps.forEach(function(g) {
+      html += '<div style="font-size:0.8rem;color:#d1d5db;padding:0.15rem 0;">→ ' + g + '</div>';
+    });
+    html += '<div style="font-size:0.8rem;color:#6366f1;margin-top:0.4rem;">💡 ' + tagAnalysis.tip + '</div>';
+    html += '</div>';
+  }
+  html += '</div>';
+
+  // Setup copy buttons for best tags
+  setTimeout(function() {
+    document.querySelectorAll('.copy-best-btn').forEach(function(btn) {
+      btn.addEventListener('click', function() {
+        var tag = btn.getAttribute('data-tag');
+        navigator.clipboard.writeText(tag).then(function() {
+          btn.textContent = 'Copied!';
+          btn.style.color = '#22c55e';
+          btn.style.borderColor = '#22c55e';
+          setTimeout(function() {
+            btn.textContent = 'Copy';
+            btn.style.color = '';
+            btn.style.borderColor = '';
+          }, 1500);
+        });
+      });
+    });
+  }, 100);
+
+  placeholder.innerHTML = html;
 }`,
 
     research: `
@@ -368,17 +554,59 @@ const ToolLogic = {
     // Sort by volume descending, return top 25
     results.sort(function(a, b) { return b.volume - a.volume; });
     return results.slice(0, 25);
+  },
+
+  recommendKeywords(seed, allResults) {
+    // Pick the best 3-5 keywords: balance volume vs difficulty
+    var scored = allResults.map(function(r) {
+      // Score: volume / difficulty + trend bonus
+      var difficultyFactor = Math.max(1, 100 - r.difficulty);
+      var trendBonus = r.trend === 'rising' ? 1.3 : 1.0;
+      var score = Math.round((r.volume / difficultyFactor) * trendBonus);
+      return { keyword: r.keyword, volume: r.volume, difficulty: r.difficulty, trend: r.trend, score: score };
+    });
+
+    // Sort by score descending
+    scored.sort(function(a, b) { return b.score - a.score; });
+
+    // Add rationale
+    var selected = scored.slice(0, 3);
+    selected.forEach(function(k) {
+      if (k.difficulty < 30 && k.volume > 500) k.reason = 'High volume, low competition — target this first!';
+      else if (k.difficulty < 40) k.reason = 'Low competition — great for ranking quickly';
+      else if (k.volume > 2000) k.reason = 'High search volume — worth the effort';
+      else if (k.trend === 'rising') k.reason = 'Trending up — catch the wave early';
+      else k.reason = 'Balanced opportunity';
+    });
+
+    return selected;
   }
-};
 
 function handleTool() {
   const input = document.getElementById('tool-input').value.trim();
   if (!input) return;
   const results = ToolLogic.research(input);
+  var bestKeywords = ToolLogic.recommendKeywords(input, results);
   const box = document.getElementById('result-box');
   const placeholder = document.getElementById('result-placeholder');
   box.classList.add('show');
   let html = '<div style="font-size:0.75rem;color:#64748b;margin-bottom:0.75rem;padding:0.4rem 0.75rem;background:rgba(99,102,241,0.06);border-radius:6px;text-align:left;">📖 Based on the ' + window.BLOG_TOPIC + ' guide</div><div style="margin-bottom:0.75rem;">' + topicAdvice(window.BLOG_TOPIC) + '</div>';
+
+  // Show best keyword recommendations FIRST
+  html += '<div style="margin-bottom:1rem;padding:1rem;background:rgba(34,197,94,0.04);border:1px solid rgba(34,197,94,0.15);border-radius:8px;text-align:left;">';
+  html += '<div style="font-weight:700;font-size:1rem;color:#22c55e;margin-bottom:0.75rem;">🎯 Top 3 Keywords to Target</div>';
+  bestKeywords.forEach(function(k, i) {
+    var diffLabel = k.difficulty < 35 ? 'Easy' : k.difficulty < 60 ? 'Medium' : 'Hard';
+    var diffColor = k.difficulty < 35 ? '#22c55e' : k.difficulty < 60 ? '#f59e0b' : '#ff3366';
+    html += '<div style="display:flex;align-items:center;gap:0.5rem;padding:0.5rem 0.75rem;margin-bottom:0.4rem;background:rgba(34,197,94,0.06);border-radius:6px;">';
+    html += '<span style="font-weight:700;color:#22c55e;font-size:0.9rem;min-width:1.5rem;">#' + (i + 1) + '</span>';
+    html += '<div style="flex:1;"><span style="font-size:0.9rem;color:#e2e8f0;">' + k.keyword + '</span>';
+    html += '<div style="font-size:0.75rem;color:#64748b;">' + k.volume.toLocaleString() + '/mo · <span style="color:' + diffColor + ';">' + diffLabel + '</span> · ' + k.trend + '</div></div>';
+    html += '<div style="font-size:0.7rem;color:#6366f1;max-width:150px;text-align:right;">' + k.reason + '</div>';
+    html += '</div>';
+  });
+  html += '</div>';
+
   html += '<div style="margin-bottom:1rem;display:flex;justify-content:space-between;align-items:center;">';
   html += '<span style="color:#94a3b8;font-size:0.9rem;">' + results.length + ' keyword ideas for &quot;' + input + '&quot;</span>';
   html += '<span style="font-size:0.75rem;color:#64748b;">Sorted by search volume</span>';
@@ -447,8 +675,92 @@ const ToolLogic = {
     lines.push('');
     lines.push('#' + topic.replace(/\\s+/g, '').replace(/[^a-zA-Z0-9]/g, '') + ' #YouTubeSEO #VideoMarketing #' + year);
     return lines.join('\\n');
+  },
+
+  generateBestDescription(topic) {
+    var now = new Date();
+    var year = now.getFullYear();
+    var capTopic = topic.charAt(0).toUpperCase() + topic.slice(1);
+    var suggestions = [];
+
+    // Version 1: Hook-focused description
+    var desc1 = [];
+    desc1.push('📌 ' + capTopic + ' — Complete Guide ' + year);
+    desc1.push('');
+    desc1.push('🎯 WHAT YOU\'LL LEARN:');
+    desc1.push('• What ' + topic + ' is and why it matters in ' + year);
+    desc1.push('• Step-by-step strategies that actually work');
+    desc1.push('• Common mistakes to avoid (save you months of trial & error)');
+    desc1.push('• Advanced tips used by top creators');
+    desc1.push('• Actionable next steps to implement today');
+    desc1.push('');
+    desc1.push('📑 TIMESTAMPS:');
+    desc1.push('0:00 - Introduction');
+    desc1.push('0:45 - What You\'ll Learn Today');
+    desc1.push('3:15 - The Core Strategy');
+    desc1.push('5:30 - Advanced Techniques');
+    desc1.push('8:00 - Common Mistakes to Avoid');
+    desc1.push('10:30 - Real Examples & Case Studies');
+    desc1.push('12:00 - Action Plan & Next Steps');
+    desc1.push('');
+    desc1.push('🔗 FREE RESOURCES:');
+    desc1.push('📊 YouTube SEO Toolkit: https://yt-seo-architect.vercel.app/tools');
+    desc1.push('📘 Read the Full Guide: https://yt-seo-architect.vercel.app/blog/' + window.BLOG_SLUG);
+    desc1.push('');
+    desc1.push('💬 Drop a comment if you have questions — I reply to every single one!');
+    desc1.push('');
+    desc1.push('#' + topic.replace(/\s+/g, '').replace(/[^a-zA-Z0-9]/g, '') + ' #YouTubeSEO #VideoMarketing #' + year);
+    suggestions.push(desc1.join('\\n'));
+
+    // Version 2: Story-driven
+    var desc2 = [];
+    desc2.push('📌 ' + capTopic + ' — The Only Guide You\'ll Need in ' + year);
+    desc2.push('');
+    desc2.push('Ever felt overwhelmed by ' + topic + '? You\'re not alone. In this video, I break down everything into simple, actionable steps.');
+    desc2.push('');
+    desc2.push('Here\'s what we\'ll cover:');
+    desc2.push('⏱️ 0:00 - The Problem');
+    desc2.push('⏱️ 1:30 - The 3-Step System');
+    desc2.push('⏱️ 4:00 - Real Examples');
+    desc2.push('⏱️ 7:30 - Common Mistakes');
+    desc2.push('⏱️ 10:00 - Your Action Plan');
+    desc2.push('');
+    desc2.push('🔗 LINKS:');
+    desc2.push('• Free Tools: https://yt-seo-architect.vercel.app/tools');
+    desc2.push('• Blog Guide: https://yt-seo-architect.vercel.app/blog/' + window.BLOG_SLUG);
+    desc2.push('');
+    desc2.push('💡 Watch until the end for a bonus strategy most creators miss!');
+    desc2.push('');
+    desc2.push('#' + topic.replace(/\s+/g, '').replace(/[^a-zA-Z0-9]/g, '') + ' #YouTubeTips #Growth #' + year);
+    suggestions.push(desc2.join('\\n'));
+
+    // Version 3: Bullet-point focused
+    var desc3 = [];
+    desc3.push('📌 ' + capTopic + ' — Fast-Track Guide ' + year);
+    desc3.push('');
+    desc3.push('In this video, I\'ll show you:');
+    desc3.push('✅ The exact ' + topic + ' strategy used by top creators');
+    desc3.push('✅ 5 proven techniques that work in ' + year);
+    desc3.push('✅ The #1 mistake killing your results');
+    desc3.push('✅ Tools to automate the process');
+    desc3.push('');
+    desc3.push('📑 TIMESTAMPS:');
+    desc3.push('0:00 - Introduction');
+    desc3.push('0:30 - Prerequisites');
+    desc3.push('2:00 - Step 1: Foundation');
+    desc3.push('4:30 - Step 2: Execution');
+    desc3.push('7:00 - Step 3: Optimization');
+    desc3.push('9:30 - Step 4: Scale');
+    desc3.push('12:00 - Results & Next Steps');
+    desc3.push('');
+    desc3.push('📊 Free Tools: https://yt-seo-architect.vercel.app/tools');
+    desc3.push('');
+    desc3.push('#' + topic.replace(/\s+/g, '').replace(/[^a-zA-Z0-9]/g, '') + ' #YouTubeSEO #GrowthHacks #' + year);
+    suggestions.push(desc3.join('\\n'));
+
+    return { suggestions: suggestions };
   }
-};
+};;
 
 function handleTool() {
   const input = document.getElementById('tool-input').value.trim();
@@ -461,7 +773,25 @@ function handleTool() {
   placeholder.innerHTML = bannerHtml + '<pre style="white-space:pre-wrap;font-family:inherit;font-size:0.9rem;line-height:1.6;color:#d1d5db;background:#0f0f1a;padding:1.25rem;border-radius:8px;border:1px solid #2a2a4a;text-align:left;margin:0;">' + escHtml(result) + '</pre>';
   placeholder.innerHTML += '<button onclick="copyDesc()" style="margin-top:1rem;background:linear-gradient(135deg,#6366f1,#06b6d4);color:#fff;border:none;padding:0.6rem 1.5rem;border-radius:6px;font-weight:600;cursor:pointer;font-size:0.9rem;">📋 Copy Description</button>';
 
+  // Show best description alternatives
+  var bestDescs = ToolLogic.generateBestDescription(input);
+  var descHtml = '<div style="margin-top:1.25rem;padding:1rem;background:rgba(99,102,241,0.04);border:1px solid rgba(99,102,241,0.12);border-radius:8px;text-align:left;">';
+  descHtml += '<div style="font-weight:700;font-size:1rem;color:#6366f1;margin-bottom:0.75rem;">🏆 Best Descriptions for Your Video</div>';
+  bestDescs.suggestions.forEach(function(s, i) {
+    var preview = s.substring(0, 120).replace(/\\n/g, ' ') + '...';
+    descHtml += '<div style="display:flex;align-items:flex-start;gap:0.5rem;padding:0.5rem 0.75rem;margin-bottom:0.4rem;background:rgba(99,102,241,0.06);border-radius:6px;cursor:pointer;" onclick="selectDesc(' + i + ')">';
+    descHtml += '<span style="font-weight:700;color:#6366f1;font-size:0.9rem;min-width:1.5rem;">' + (i + 1) + '.</span>';
+    descHtml += '<div style="flex:1;"><div style="font-size:0.8rem;color:#e2e8f0;">' + preview + '</div>';
+    descHtml += '<div style="font-size:0.7rem;color:#6366f1;margin-top:0.2rem;">Click to use this version →</div></div>';
+    descHtml += '</div>';
+  });
+  descHtml += '</div>';
+  descHtml += '<div id="desc-preview" style="display:none;margin-top:1rem;padding:1rem;background:#0f0f1a;border:1px solid #2a2a4a;border-radius:8px;white-space:pre-wrap;font-family:inherit;font-size:0.9rem;line-height:1.6;color:#d1d5db;text-align:left;"></div>';
+  descHtml += '<div id="desc-preview-btn" style="display:none;margin-top:0.5rem;"><button onclick="copyDescPreview()" style="background:linear-gradient(135deg,#22c55e,#16a34a);color:#fff;border:none;padding:0.6rem 1.5rem;border-radius:6px;font-weight:600;cursor:pointer;font-size:0.9rem;">📋 Use This Description</button></div>';
+  placeholder.innerHTML += descHtml;
+
   window.__descText = result;
+  window.__bestDescs = bestDescs.suggestions;
 }
 
 function copyDesc() {
@@ -471,6 +801,28 @@ function copyDesc() {
       if (btn) { btn.textContent = '✅ Copied!'; setTimeout(function() { btn.textContent = '📋 Copy Description'; }, 2000); }
     });
   }
+}
+
+function selectDesc(idx) {
+  var descs = window.__bestDescs;
+  if (!descs || !descs[idx]) return;
+  var preview = document.getElementById('desc-preview');
+  var btn = document.getElementById('desc-preview-btn');
+  if (preview) { preview.style.display = 'block'; preview.textContent = descs[idx]; }
+  if (btn) btn.style.display = 'block';
+  window.__selectedDesc = descs[idx];
+}
+
+function copyDescPreview() {
+  var text = window.__selectedDesc || window.__descText;
+  if (!text) return;
+  navigator.clipboard.writeText(text).then(function() {
+    var btn = document.querySelector('#desc-preview-btn button');
+    if (btn) { btn.textContent = '✅ Copied!'; setTimeout(function() { btn.textContent = '📋 Use This Description'; }, 2000); }
+  }).catch(function() {
+    var ta = document.createElement('textarea');
+    ta.value = text; document.body.appendChild(ta); ta.select(); document.execCommand('copy'); document.body.removeChild(ta);
+  });
 }
 
 function escHtml(s) {
@@ -902,8 +1254,58 @@ const ToolLogic = {
     const riskColor = totalScore >= 70 ? '#ff3366' : totalScore >= 45 ? '#f59e0b' : '#22c55e';
 
     return { score: totalScore, risk: risk, riskColor: riskColor, findings: findings, noMatch: findings.length === 0 };
+  },
+
+  generateRecoveryPlan(findings) {
+    if (!findings || findings.length === 0) {
+      return { plan: [], summary: 'No issues detected. Keep creating great content!' };
+    }
+
+    var plan = [];
+    var allIssues = findings.map(function(f) { return f.issue; });
+
+    // Step 1: Immediate (today)
+    var today = [];
+    if (allIssues.some(function(i) { return i.includes('View Drop') || i.includes('Impression') || i.includes('CTR'); })) {
+      today.push('Refresh your thumbnail and title for your last 3 videos. High-contrast thumbnails with close-up faces work best.');
+    }
+    if (allIssues.some(function(i) { return i.includes('Zero') || i.includes('Copyright'); })) {
+      today.push('Check your latest upload for copyright claims or content restrictions in YouTube Studio.');
+    }
+    if (allIssues.some(function(i) { return i.includes('Monetization'); })) {
+      today.push('Check YouTube Studio > Earnings to see which videos have limited or no ads.');
+    }
+    if (today.length === 0) today.push('Review your latest video\'s analytics — pay attention to the retention graph drop-off points.');
+    plan.push({ timeframe: 'Today', icon: '⚡', steps: today });
+
+    // Step 2: This week
+    var thisWeek = ['Optimize your next upload: front-load keyword in title, write 200+ word description with timestamps.'];
+    if (allIssues.some(function(i) { return i.includes('Retention'); })) {
+      thisWeek.push('Improve retention: add a stronger hook in the first 5 seconds. State exactly what viewers will learn.');
+    }
+    if (allIssues.some(function(i) { return i.includes('Algorithm') || i.includes('Shadow'); })) {
+      thisWeek.push('Post a community poll asking what content your audience wants. This signals engagement to the algorithm.');
+    }
+    plan.push({ timeframe: 'This Week', icon: '📅', steps: thisWeek });
+
+    // Step 3: This month
+    var thisMonth = ['Upload consistently — 3-4 videos per week if possible. Consistency is the #1 growth signal.'];
+    if (allIssues.some(function(i) { return i.includes('View Drop') || i.includes('Impression'); })) {
+      thisMonth.push('Analyze your top 3 performing vs bottom 3 performing videos. Identify patterns in titles, topics, and formats.');
+    }
+    thisMonth.push('Engage with similar channels in your niche — leave thoughtful comments to drive traffic back to your channel.');
+    plan.push({ timeframe: 'This Month', icon: '📈', steps: thisMonth });
+
+    // Step 4: Long-term
+    var longTerm = ['Build a content library around your best-performing topics. Pillar content creates long-term search traffic.'];
+    if (allIssues.some(function(i) { return i.includes('Monetization') || i.includes('Shadow'); })) {
+      longTerm.push('Review YouTube\'s Community Guidelines and Ad-Friendly Content guidelines to ensure compliance.');
+    }
+    longTerm.push('Collaborate with 2-3 creators in your niche. Cross-promotion is the fastest organic growth strategy.');
+    plan.push({ timeframe: 'Long-Term', icon: '🚀', steps: longTerm });
+
+    return { plan: plan, summary: 'Here\'s your personalized recovery roadmap based on your specific issues.' };
   }
-};
 
 function handleTool() {
   const input = document.getElementById('tool-input').value.trim();
@@ -937,6 +1339,21 @@ function handleTool() {
       html += '</div>';
     });
   }
+  
+
+    // Recovery plan
+    var recoveryPlan = ToolLogic.generateRecoveryPlan(result.findings);
+    html += '<div style="margin-top:1.25rem;padding:1rem;background:rgba(6,182,212,0.04);border:1px solid rgba(6,182,212,0.15);border-radius:8px;text-align:left;">';
+    html += '<div style="font-weight:700;font-size:1rem;color:#06b6d4;margin-bottom:0.75rem;">🛠️ Your Recovery Plan</div>';
+    recoveryPlan.plan.forEach(function(p) {
+      html += '<div style="margin-bottom:0.75rem;">';
+      html += '<div style="font-weight:600;font-size:0.85rem;color:#06b6d4;margin-bottom:0.3rem;">' + p.icon + ' ' + p.timeframe + '</div>';
+      p.steps.forEach(function(s) {
+        html += '<div style="font-size:0.8rem;color:#d1d5db;padding:0.2rem 0;padding-left:0.5rem;border-left:2px solid rgba(6,182,212,0.3);margin-bottom:0.2rem;">→ ' + s + '</div>';
+      });
+      html += '</div>';
+    });
+    html += '</div>';
   placeholder.innerHTML = html;
 }`,
 
@@ -1354,20 +1771,71 @@ function handleTool() {
     tool: `
 const ToolLogic = {
   analyze(input) {
-    const wordCount = input.split(/\\s+/).filter(Boolean).length;
-    const charCount = input.length;
-    const sentences = input.split(/[.!?]+/).filter(Boolean).length;
-    const avgWordLength = wordCount > 0 ? Math.round((charCount / wordCount) * 10) / 10 : 0;
+    var lower = input.toLowerCase();
+    var nums = input.match(/\\d[\\d,.]*/g);
+    var hasSubs = nums ? parseInt(nums[0].replace(/,/g, '')) : 0;
+    var hasHours = nums && nums.length > 1 ? parseInt(nums[1].replace(/,/g, '')) : 0;
 
-    const topics = [];
-    const words = input.toLowerCase().replace(/[^a-z\\s]/g, '').split(/\\s+/).filter(function(w) { return w.length > 4; });
-    const freq = {};
-    words.forEach(function(w) { freq[w] = (freq[w] || 0) + 1; });
-    Object.keys(freq).sort(function(a, b) { return freq[b] - freq[a]; }).slice(0, 5).forEach(function(w) {
-      topics.push({ word: w, count: freq[w] });
-    });
+    // Determine growth stage
+    var stage, stageColor, stageAdvice;
+    if (hasSubs >= 100000) { stage = 'Established Creator'; stageColor = '#6366f1'; stageAdvice = 'You\'re an established creator. Focus on community engagement, collaborations, and diversifying revenue.'; }
+    else if (hasSubs >= 10000) { stage = 'Growing Channel'; stageColor = '#06b6d4'; stageAdvice = 'You\'ve built momentum. Double down on your best content formats and increase upload frequency.'; }
+    else if (hasSubs >= 1000) { stage = 'Monetized Creator'; stageColor = '#22c55e'; stageAdvice = 'Congratulations on 1K subs! Focus on watch hours and creating content that keeps viewers on the platform.'; }
+    else if (hasSubs >= 100) { stage = 'Building Audience'; stageColor = '#f59e0b'; stageAdvice = 'You have initial traction! Niche down further and focus on low-competition keywords to accelerate growth.'; }
+    else { stage = 'Starting Out'; stageColor = '#ff3366'; stageAdvice = 'Every big channel started here. Focus on creating 20-30 videos in a specific niche before evaluating results.'; }
 
-    return { wordCount: wordCount, charCount: charCount, sentences: sentences, avgWordLength: avgWordLength, topics: topics };
+    // Daily upload recommendation
+    var uploadRec = hasSubs < 1000 ? 'Post 3-4 times per week. Consistency is everything at this stage.' :
+      hasSubs < 10000 ? 'Post 2-3 times per week. Quality + consistency = growth.' :
+      'Post 1-2 times per week. Focus on high-quality, high-retention content.';
+
+    // Niche recommendations
+    var nicheRecs = [
+      'Find 5 successful channels in your niche and analyze their top 3 videos',
+      'Target keywords with search volume 100-1000/mo and competition under 40%',
+      'Create content that answers specific questions your audience is asking',
+      'Optimize your channel homepage with playlists organized by topic'
+    ];
+
+    // Recommended video length
+    var videoLen = hasSubs < 1000 ? '8-12 minutes (long enough for good retention, short enough for new viewers)' :
+      hasSubs < 10000 ? '10-15 minutes (sweet spot for watch time and ad revenue)' :
+      '12-20 minutes (your audience trusts you to watch longer content)';
+
+    // Calculate growth health score
+    var healthScore = 50;
+    if (hasSubs > 0) healthScore += 10;
+    if (hasSubs >= 100) healthScore += 10;
+    if (hasSubs >= 1000) healthScore += 10;
+    if (hasHours >= 1000) healthScore += 10;
+    if (hasHours >= 4000) healthScore += 10;
+    if (lower.includes('weekly') || lower.includes('daily')) healthScore += 10;
+    if (lower.includes('niche') || lower.includes('topic')) healthScore += 5;
+    if (lower.includes('thumbnail') || lower.includes('title')) healthScore += 5;
+    if (lower.includes('seo') || lower.includes('keyword')) healthScore += 5;
+    if (lower.includes('engage') || lower.includes('comment') || lower.includes('community')) healthScore += 5;
+    healthScore = Math.min(100, healthScore);
+
+    // Milestone tracker
+    var milestones = [];
+    if (hasSubs < 100) milestones.push({ target: '100 subs', remaining: 100 - hasSubs, color: '#f59e0b' });
+    if (hasSubs < 1000) milestones.push({ target: '1,000 subs', remaining: 1000 - hasSubs, color: '#06b6d4' });
+    if (hasSubs < 10000) milestones.push({ target: '10,000 subs', remaining: 10000 - hasSubs, color: '#6366f1' });
+    if (hasHours < 4000) milestones.push({ target: '4,000 watch hours', remaining: 4000 - hasHours > 0 ? 4000 - hasHours : 0, color: '#22c55e' });
+
+    return {
+      subs: hasSubs,
+      watchHours: hasHours,
+      stage: stage,
+      stageColor: stageColor,
+      stageAdvice: stageAdvice,
+      uploadRec: uploadRec,
+      videoLen: videoLen,
+      nicheRecs: nicheRecs,
+      milestones: milestones,
+      healthScore: healthScore,
+      healthLabel: healthScore >= 80 ? 'Strong' : healthScore >= 60 ? 'Building' : healthScore >= 40 ? 'Early' : 'Starting'
+    };
   }
 };
 
@@ -1381,21 +1849,59 @@ function handleTool() {
 
   let html = '<div style="font-size:0.75rem;color:#64748b;margin-bottom:0.75rem;padding:0.4rem 0.75rem;background:rgba(99,102,241,0.06);border-radius:6px;text-align:left;">📖 Based on the ' + window.BLOG_TOPIC + ' guide</div>';
   html += '<div style="margin-bottom:0.75rem;">' + topicAdvice(window.BLOG_TOPIC) + '</div>';
-  html += '<div style="display:grid;grid-template-columns:repeat(2,1fr);gap:0.75rem;margin-bottom:1.5rem;">';
-  html += '<div style="background:rgba(99,102,241,0.08);border-radius:8px;padding:1rem;text-align:center;"><div style="font-size:1.3rem;font-weight:700;color:#6366f1;">' + result.wordCount + '</div><div style="font-size:0.75rem;color:#94a3b8;">Words</div></div>';
-  html += '<div style="background:rgba(6,182,212,0.08);border-radius:8px;padding:1rem;text-align:center;"><div style="font-size:1.3rem;font-weight:700;color:#06b6d4;">' + result.charCount + '</div><div style="font-size:0.75rem;color:#94a3b8;">Characters</div></div>';
-  html += '<div style="background:rgba(34,197,94,0.08);border-radius:8px;padding:1rem;text-align:center;"><div style="font-size:1.3rem;font-weight:700;color:#22c55e;">' + result.sentences + '</div><div style="font-size:0.75rem;color:#94a3b8;">Sentences</div></div>';
-  html += '<div style="background:rgba(245,158,11,0.08);border-radius:8px;padding:1rem;text-align:center;"><div style="font-size:1.3rem;font-weight:700;color:#f59e0b;">' + result.avgWordLength + '</div><div style="font-size:0.75rem;color:#94a3b8;">Avg Word Length</div></div>';
+
+  // Health score
+  var hsColor = result.healthScore >= 80 ? '#22c55e' : result.healthScore >= 60 ? '#06b6d4' : result.healthScore >= 40 ? '#f59e0b' : '#ff3366';
+  html += '<div style="text-align:center;padding:1.25rem;background:rgba(99,102,241,0.04);border:1px solid #2a2a4a;border-radius:12px;margin-bottom:1rem;">';
+  html += '<div style="font-weight:700;font-size:0.85rem;color:#94a3b8;margin-bottom:0.5rem;">CHANNEL HEALTH</div>';
+  html += '<div style="font-size:2.5rem;font-weight:800;color:' + hsColor + ';">' + result.healthScore + '/100</div>';
+  html += '<div style="font-size:0.85rem;color:' + hsColor + ';margin-bottom:0.5rem;">' + result.healthLabel + '</div>';
+  html += '<div style="width:100%;height:6px;background:#1a1a2e;border-radius:3px;overflow:hidden;"><div style="width:' + result.healthScore + '%;height:100%;background:linear-gradient(90deg,#6366f1,' + hsColor + ');border-radius:3px;"></div></div>';
   html += '</div>';
 
-  if (result.topics.length > 0) {
-    html += '<div style="background:#1a1a2e;border-radius:8px;padding:1rem;text-align:left;">';
-    html += '<div style="font-weight:600;color:#06b6d4;margin-bottom:0.5rem;">🔑 Key Topics Detected</div>';
-    result.topics.forEach(function(t) {
-      html += '<div style="display:flex;justify-content:space-between;padding:0.3rem 0;font-size:0.85rem;color:#d1d5db;border-bottom:1px solid rgba(255,255,255,0.05);"><span>' + t.word + '</span><span style="color:#6366f1;">' + t.count + 'x</span></div>';
+  // Growth stage
+  html += '<div style="margin-bottom:1rem;padding:1rem;background:rgba(99,102,241,0.04);border:1px solid #2a2a4a;border-radius:8px;text-align:left;">';
+  html += '<div style="display:flex;align-items:center;gap:0.5rem;margin-bottom:0.5rem;">';
+  html += '<span style="font-weight:700;font-size:1.1rem;color:' + result.stageColor + ';">' + result.stage + '</span>';
+  if (result.subs > 0) html += '<span style="font-size:0.8rem;color:#94a3b8;">(' + result.subs.toLocaleString() + ' subs)</span>';
+  html += '</div>';
+  html += '<div style="font-size:0.85rem;color:#d1d5db;padding:0.5rem;background:rgba(255,255,255,0.03);border-radius:6px;">' + result.stageAdvice + '</div>';
+  html += '</div>';
+
+  // Key metrics
+  html += '<div style="display:grid;grid-template-columns:repeat(2,1fr);gap:0.75rem;margin-bottom:1rem;">';
+  if (result.subs > 0) html += '<div style="background:rgba(99,102,241,0.08);border-radius:8px;padding:0.75rem;text-align:center;"><div style="font-size:1.1rem;font-weight:700;color:#6366f1;">' + result.subs.toLocaleString() + '</div><div style="font-size:0.7rem;color:#94a3b8;">Subscribers</div></div>';
+  if (result.watchHours > 0) html += '<div style="background:rgba(6,182,212,0.08);border-radius:8px;padding:0.75rem;text-align:center;"><div style="font-size:1.1rem;font-weight:700;color:#06b6d4;">' + result.watchHours.toLocaleString() + '</div><div style="font-size:0.7rem;color:#94a3b8;">Watch Hours</div></div>';
+  html += '<div style="background:rgba(34,197,94,0.08);border-radius:8px;padding:0.75rem;text-align:center;"><div style="font-size:1.1rem;font-weight:700;color:#22c55e;">' + result.videoLen.split(' ')[0] + '</div><div style="font-size:0.7rem;color:#94a3b8;">Recommended Length</div></div>';
+  html += '<div style="background:rgba(245,158,11,0.08);border-radius:8px;padding:0.75rem;text-align:center;"><div style="font-size:1.1rem;font-weight:700;color:#f59e0b;">' + (result.milestones.length > 0 ? result.milestones[0].target : 'Milestone Reached') + '</div><div style="font-size:0.7rem;color:#94a3b8;">Next Goal</div></div>';
+  html += '</div>';
+
+  // Milestones
+  if (result.milestones.length > 0) {
+    html += '<div style="margin-bottom:1rem;padding:1rem;background:rgba(99,102,241,0.03);border:1px solid #2a2a4a;border-radius:8px;text-align:left;">';
+    html += '<div style="font-weight:600;font-size:0.85rem;color:#06b6d4;margin-bottom:0.5rem;">🎯 Upcoming Milestones</div>';
+    result.milestones.forEach(function(m) {
+      var pct = m.remaining > 0 ? Math.min(95, Math.round(((m.target === '1,000 subs' ? 1000 : m.target === '10,000 subs' ? 10000 : m.target === '100 subs' ? 100 : 4000) - m.remaining) / (m.target === '1,000 subs' ? 1000 : m.target === '10,000 subs' ? 10000 : m.target === '100 subs' ? 100 : 4000) * 100)) : 100;
+      html += '<div style="display:flex;align-items:center;gap:0.5rem;padding:0.35rem 0;">';
+      html += '<span style="font-size:0.8rem;color:#e2e8f0;min-width:100px;">' + m.target + '</span>';
+      html += '<div style="flex:1;height:4px;background:#1a1a2e;border-radius:2px;overflow:hidden;"><div style="width:' + pct + '%;height:100%;background:' + m.color + ';border-radius:2px;"></div></div>';
+      html += '<span style="font-size:0.75rem;color:' + m.color + ';min-width:60px;text-align:right;">' + m.remaining.toLocaleString() + ' left</span>';
+      html += '</div>';
     });
     html += '</div>';
   }
+
+  // Recommendations
+  html += '<div style="margin-bottom:1rem;padding:1rem;background:rgba(6,182,212,0.04);border:1px solid rgba(6,182,212,0.12);border-radius:8px;text-align:left;">';
+  html += '<div style="font-weight:600;font-size:0.85rem;color:#06b6d4;margin-bottom:0.5rem;">💡 Recommendations</div>';
+  html += '<div style="font-size:0.85rem;color:#d1d5db;padding:0.35rem 0;">📅 ' + result.uploadRec + '</div>';
+  html += '<div style="font-size:0.85rem;color:#d1d5db;padding:0.35rem 0;">⏱️ Recommended video length: ' + result.videoLen + '</div>';
+  html += '<div style="font-weight:600;font-size:0.8rem;color:#6366f1;margin-top:0.5rem;margin-bottom:0.35rem;">🎯 To grow faster:</div>';
+  result.nicheRecs.forEach(function(r) {
+    html += '<div style="font-size:0.8rem;color:#d1d5db;padding:0.2rem 0;padding-left:0.5rem;border-left:2px solid rgba(6,182,212,0.3);margin-bottom:0.15rem;">→ ' + r + '</div>';
+  });
+  html += '</div>';
+
   placeholder.innerHTML = html;
 }`,
   };

@@ -175,20 +175,71 @@
     
 const ToolLogic = {
   analyze(input) {
-    const wordCount = input.split(/\s+/).filter(Boolean).length;
-    const charCount = input.length;
-    const sentences = input.split(/[.!?]+/).filter(Boolean).length;
-    const avgWordLength = wordCount > 0 ? Math.round((charCount / wordCount) * 10) / 10 : 0;
+    var lower = input.toLowerCase();
+    var nums = input.match(/\d[\d,.]*/g);
+    var hasSubs = nums ? parseInt(nums[0].replace(/,/g, '')) : 0;
+    var hasHours = nums && nums.length > 1 ? parseInt(nums[1].replace(/,/g, '')) : 0;
 
-    const topics = [];
-    const words = input.toLowerCase().replace(/[^a-z\s]/g, '').split(/\s+/).filter(function(w) { return w.length > 4; });
-    const freq = {};
-    words.forEach(function(w) { freq[w] = (freq[w] || 0) + 1; });
-    Object.keys(freq).sort(function(a, b) { return freq[b] - freq[a]; }).slice(0, 5).forEach(function(w) {
-      topics.push({ word: w, count: freq[w] });
-    });
+    // Determine growth stage
+    var stage, stageColor, stageAdvice;
+    if (hasSubs >= 100000) { stage = 'Established Creator'; stageColor = '#6366f1'; stageAdvice = 'You're an established creator. Focus on community engagement, collaborations, and diversifying revenue.'; }
+    else if (hasSubs >= 10000) { stage = 'Growing Channel'; stageColor = '#06b6d4'; stageAdvice = 'You've built momentum. Double down on your best content formats and increase upload frequency.'; }
+    else if (hasSubs >= 1000) { stage = 'Monetized Creator'; stageColor = '#22c55e'; stageAdvice = 'Congratulations on 1K subs! Focus on watch hours and creating content that keeps viewers on the platform.'; }
+    else if (hasSubs >= 100) { stage = 'Building Audience'; stageColor = '#f59e0b'; stageAdvice = 'You have initial traction! Niche down further and focus on low-competition keywords to accelerate growth.'; }
+    else { stage = 'Starting Out'; stageColor = '#ff3366'; stageAdvice = 'Every big channel started here. Focus on creating 20-30 videos in a specific niche before evaluating results.'; }
 
-    return { wordCount: wordCount, charCount: charCount, sentences: sentences, avgWordLength: avgWordLength, topics: topics };
+    // Daily upload recommendation
+    var uploadRec = hasSubs < 1000 ? 'Post 3-4 times per week. Consistency is everything at this stage.' :
+      hasSubs < 10000 ? 'Post 2-3 times per week. Quality + consistency = growth.' :
+      'Post 1-2 times per week. Focus on high-quality, high-retention content.';
+
+    // Niche recommendations
+    var nicheRecs = [
+      'Find 5 successful channels in your niche and analyze their top 3 videos',
+      'Target keywords with search volume 100-1000/mo and competition under 40%',
+      'Create content that answers specific questions your audience is asking',
+      'Optimize your channel homepage with playlists organized by topic'
+    ];
+
+    // Recommended video length
+    var videoLen = hasSubs < 1000 ? '8-12 minutes (long enough for good retention, short enough for new viewers)' :
+      hasSubs < 10000 ? '10-15 minutes (sweet spot for watch time and ad revenue)' :
+      '12-20 minutes (your audience trusts you to watch longer content)';
+
+    // Calculate growth health score
+    var healthScore = 50;
+    if (hasSubs > 0) healthScore += 10;
+    if (hasSubs >= 100) healthScore += 10;
+    if (hasSubs >= 1000) healthScore += 10;
+    if (hasHours >= 1000) healthScore += 10;
+    if (hasHours >= 4000) healthScore += 10;
+    if (lower.includes('weekly') || lower.includes('daily')) healthScore += 10;
+    if (lower.includes('niche') || lower.includes('topic')) healthScore += 5;
+    if (lower.includes('thumbnail') || lower.includes('title')) healthScore += 5;
+    if (lower.includes('seo') || lower.includes('keyword')) healthScore += 5;
+    if (lower.includes('engage') || lower.includes('comment') || lower.includes('community')) healthScore += 5;
+    healthScore = Math.min(100, healthScore);
+
+    // Milestone tracker
+    var milestones = [];
+    if (hasSubs < 100) milestones.push({ target: '100 subs', remaining: 100 - hasSubs, color: '#f59e0b' });
+    if (hasSubs < 1000) milestones.push({ target: '1,000 subs', remaining: 1000 - hasSubs, color: '#06b6d4' });
+    if (hasSubs < 10000) milestones.push({ target: '10,000 subs', remaining: 10000 - hasSubs, color: '#6366f1' });
+    if (hasHours < 4000) milestones.push({ target: '4,000 watch hours', remaining: 4000 - hasHours > 0 ? 4000 - hasHours : 0, color: '#22c55e' });
+
+    return {
+      subs: hasSubs,
+      watchHours: hasHours,
+      stage: stage,
+      stageColor: stageColor,
+      stageAdvice: stageAdvice,
+      uploadRec: uploadRec,
+      videoLen: videoLen,
+      nicheRecs: nicheRecs,
+      milestones: milestones,
+      healthScore: healthScore,
+      healthLabel: healthScore >= 80 ? 'Strong' : healthScore >= 60 ? 'Building' : healthScore >= 40 ? 'Early' : 'Starting'
+    };
   }
 };
 
@@ -202,21 +253,59 @@ function handleTool() {
 
   let html = '<div style="font-size:0.75rem;color:#64748b;margin-bottom:0.75rem;padding:0.4rem 0.75rem;background:rgba(99,102,241,0.06);border-radius:6px;text-align:left;">📖 Based on the ' + window.BLOG_TOPIC + ' guide</div>';
   html += '<div style="margin-bottom:0.75rem;">' + topicAdvice(window.BLOG_TOPIC) + '</div>';
-  html += '<div style="display:grid;grid-template-columns:repeat(2,1fr);gap:0.75rem;margin-bottom:1.5rem;">';
-  html += '<div style="background:rgba(99,102,241,0.08);border-radius:8px;padding:1rem;text-align:center;"><div style="font-size:1.3rem;font-weight:700;color:#6366f1;">' + result.wordCount + '</div><div style="font-size:0.75rem;color:#94a3b8;">Words</div></div>';
-  html += '<div style="background:rgba(6,182,212,0.08);border-radius:8px;padding:1rem;text-align:center;"><div style="font-size:1.3rem;font-weight:700;color:#06b6d4;">' + result.charCount + '</div><div style="font-size:0.75rem;color:#94a3b8;">Characters</div></div>';
-  html += '<div style="background:rgba(34,197,94,0.08);border-radius:8px;padding:1rem;text-align:center;"><div style="font-size:1.3rem;font-weight:700;color:#22c55e;">' + result.sentences + '</div><div style="font-size:0.75rem;color:#94a3b8;">Sentences</div></div>';
-  html += '<div style="background:rgba(245,158,11,0.08);border-radius:8px;padding:1rem;text-align:center;"><div style="font-size:1.3rem;font-weight:700;color:#f59e0b;">' + result.avgWordLength + '</div><div style="font-size:0.75rem;color:#94a3b8;">Avg Word Length</div></div>';
+
+  // Health score
+  var hsColor = result.healthScore >= 80 ? '#22c55e' : result.healthScore >= 60 ? '#06b6d4' : result.healthScore >= 40 ? '#f59e0b' : '#ff3366';
+  html += '<div style="text-align:center;padding:1.25rem;background:rgba(99,102,241,0.04);border:1px solid #2a2a4a;border-radius:12px;margin-bottom:1rem;">';
+  html += '<div style="font-weight:700;font-size:0.85rem;color:#94a3b8;margin-bottom:0.5rem;">CHANNEL HEALTH</div>';
+  html += '<div style="font-size:2.5rem;font-weight:800;color:' + hsColor + ';">' + result.healthScore + '/100</div>';
+  html += '<div style="font-size:0.85rem;color:' + hsColor + ';margin-bottom:0.5rem;">' + result.healthLabel + '</div>';
+  html += '<div style="width:100%;height:6px;background:#1a1a2e;border-radius:3px;overflow:hidden;"><div style="width:' + result.healthScore + '%;height:100%;background:linear-gradient(90deg,#6366f1,' + hsColor + ');border-radius:3px;"></div></div>';
   html += '</div>';
 
-  if (result.topics.length > 0) {
-    html += '<div style="background:#1a1a2e;border-radius:8px;padding:1rem;text-align:left;">';
-    html += '<div style="font-weight:600;color:#06b6d4;margin-bottom:0.5rem;">🔑 Key Topics Detected</div>';
-    result.topics.forEach(function(t) {
-      html += '<div style="display:flex;justify-content:space-between;padding:0.3rem 0;font-size:0.85rem;color:#d1d5db;border-bottom:1px solid rgba(255,255,255,0.05);"><span>' + t.word + '</span><span style="color:#6366f1;">' + t.count + 'x</span></div>';
+  // Growth stage
+  html += '<div style="margin-bottom:1rem;padding:1rem;background:rgba(99,102,241,0.04);border:1px solid #2a2a4a;border-radius:8px;text-align:left;">';
+  html += '<div style="display:flex;align-items:center;gap:0.5rem;margin-bottom:0.5rem;">';
+  html += '<span style="font-weight:700;font-size:1.1rem;color:' + result.stageColor + ';">' + result.stage + '</span>';
+  if (result.subs > 0) html += '<span style="font-size:0.8rem;color:#94a3b8;">(' + result.subs.toLocaleString() + ' subs)</span>';
+  html += '</div>';
+  html += '<div style="font-size:0.85rem;color:#d1d5db;padding:0.5rem;background:rgba(255,255,255,0.03);border-radius:6px;">' + result.stageAdvice + '</div>';
+  html += '</div>';
+
+  // Key metrics
+  html += '<div style="display:grid;grid-template-columns:repeat(2,1fr);gap:0.75rem;margin-bottom:1rem;">';
+  if (result.subs > 0) html += '<div style="background:rgba(99,102,241,0.08);border-radius:8px;padding:0.75rem;text-align:center;"><div style="font-size:1.1rem;font-weight:700;color:#6366f1;">' + result.subs.toLocaleString() + '</div><div style="font-size:0.7rem;color:#94a3b8;">Subscribers</div></div>';
+  if (result.watchHours > 0) html += '<div style="background:rgba(6,182,212,0.08);border-radius:8px;padding:0.75rem;text-align:center;"><div style="font-size:1.1rem;font-weight:700;color:#06b6d4;">' + result.watchHours.toLocaleString() + '</div><div style="font-size:0.7rem;color:#94a3b8;">Watch Hours</div></div>';
+  html += '<div style="background:rgba(34,197,94,0.08);border-radius:8px;padding:0.75rem;text-align:center;"><div style="font-size:1.1rem;font-weight:700;color:#22c55e;">' + result.videoLen.split(' ')[0] + '</div><div style="font-size:0.7rem;color:#94a3b8;">Recommended Length</div></div>';
+  html += '<div style="background:rgba(245,158,11,0.08);border-radius:8px;padding:0.75rem;text-align:center;"><div style="font-size:1.1rem;font-weight:700;color:#f59e0b;">' + (result.milestones.length > 0 ? result.milestones[0].target : 'Milestone Reached') + '</div><div style="font-size:0.7rem;color:#94a3b8;">Next Goal</div></div>';
+  html += '</div>';
+
+  // Milestones
+  if (result.milestones.length > 0) {
+    html += '<div style="margin-bottom:1rem;padding:1rem;background:rgba(99,102,241,0.03);border:1px solid #2a2a4a;border-radius:8px;text-align:left;">';
+    html += '<div style="font-weight:600;font-size:0.85rem;color:#06b6d4;margin-bottom:0.5rem;">🎯 Upcoming Milestones</div>';
+    result.milestones.forEach(function(m) {
+      var pct = m.remaining > 0 ? Math.min(95, Math.round(((m.target === '1,000 subs' ? 1000 : m.target === '10,000 subs' ? 10000 : m.target === '100 subs' ? 100 : 4000) - m.remaining) / (m.target === '1,000 subs' ? 1000 : m.target === '10,000 subs' ? 10000 : m.target === '100 subs' ? 100 : 4000) * 100)) : 100;
+      html += '<div style="display:flex;align-items:center;gap:0.5rem;padding:0.35rem 0;">';
+      html += '<span style="font-size:0.8rem;color:#e2e8f0;min-width:100px;">' + m.target + '</span>';
+      html += '<div style="flex:1;height:4px;background:#1a1a2e;border-radius:2px;overflow:hidden;"><div style="width:' + pct + '%;height:100%;background:' + m.color + ';border-radius:2px;"></div></div>';
+      html += '<span style="font-size:0.75rem;color:' + m.color + ';min-width:60px;text-align:right;">' + m.remaining.toLocaleString() + ' left</span>';
+      html += '</div>';
     });
     html += '</div>';
   }
+
+  // Recommendations
+  html += '<div style="margin-bottom:1rem;padding:1rem;background:rgba(6,182,212,0.04);border:1px solid rgba(6,182,212,0.12);border-radius:8px;text-align:left;">';
+  html += '<div style="font-weight:600;font-size:0.85rem;color:#06b6d4;margin-bottom:0.5rem;">💡 Recommendations</div>';
+  html += '<div style="font-size:0.85rem;color:#d1d5db;padding:0.35rem 0;">📅 ' + result.uploadRec + '</div>';
+  html += '<div style="font-size:0.85rem;color:#d1d5db;padding:0.35rem 0;">⏱️ Recommended video length: ' + result.videoLen + '</div>';
+  html += '<div style="font-weight:600;font-size:0.8rem;color:#6366f1;margin-top:0.5rem;margin-bottom:0.35rem;">🎯 To grow faster:</div>';
+  result.nicheRecs.forEach(function(r) {
+    html += '<div style="font-size:0.8rem;color:#d1d5db;padding:0.2rem 0;padding-left:0.5rem;border-left:2px solid rgba(6,182,212,0.3);margin-bottom:0.15rem;">→ ' + r + '</div>';
+  });
+  html += '</div>';
+
   placeholder.innerHTML = html;
 }
   </script>
