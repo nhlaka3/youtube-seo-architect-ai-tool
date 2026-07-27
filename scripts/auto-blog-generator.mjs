@@ -286,11 +286,16 @@ function qualityGate(html) {
 
 // ── API calls with retry + fallback ────────────────────────────────
 
+const FETCH_TIMEOUT_MS = 60000; // 60s max per fetch attempt
+
 async function fetchWithRetry(url, options, retries = MAX_RETRIES) {
   let lastError;
   for (let attempt = 1; attempt <= retries; attempt++) {
+    const controller = new AbortController();
+    const timer = setTimeout(() => controller.abort(), FETCH_TIMEOUT_MS);
     try {
-      const res = await fetch(url, options);
+      const res = await fetch(url, { ...options, signal: controller.signal });
+      clearTimeout(timer);
       if (res.ok) return res;
       const body = await res.text();
 
@@ -315,9 +320,10 @@ async function fetchWithRetry(url, options, retries = MAX_RETRIES) {
       // Client error — don't retry
       throw new Error(`API error ${res.status}: ${body}`);
     } catch (e) {
+      clearTimeout(timer);
       if (attempt === retries) throw e;
       lastError = e;
-      // Network error — retry with backoff
+      // Network error or timeout — retry with backoff
       console.log(`    ⚠ Request failed: ${e.message}. Retrying in ${RETRY_BASE_DELAY_MS * attempt / 1000}s (attempt ${attempt}/${retries})...`);
       await new Promise(r => setTimeout(r, RETRY_BASE_DELAY_MS * attempt));
     }
