@@ -142,7 +142,9 @@
     .related-card { background: var(--bg-card); border: 1px solid var(--border); border-radius: 12px; padding: 1rem; transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1); position: relative; overflow: hidden; }
     .related-card:hover { border-color: var(--primary); transform: translateY(-4px); background: rgba(30, 41, 59, 0.6); box-shadow: 0 12px 24px rgba(0,0,0,0.3); }
     .related-card a { color: var(--text-primary); text-decoration: none; font-weight: 600; display: block; margin-bottom: 0.25rem; transition: color 0.2s; }
+    a.related-card { color: #a5b4fc; text-decoration: none; font-weight: 600; display: block; }
     .related-card:hover a { color: var(--primary); }
+    a.related-card:hover { color: #fff; }
     .related-card p { font-size: 0.82rem; color: var(--text-muted); margin: 0; line-height: 1.5; }
     .cta-box { background: linear-gradient(135deg, rgba(249,115,22,0.08), rgba(251,146,60,0.03)); border: 1px solid rgba(249,115,22,0.3); border-radius: 16px; padding: 2rem; margin: 2.5rem 0; text-align: center; }
     .cta-box h3 { font-size: 1.25rem; margin: 0 0 0.75rem; color: #fff; font-weight: 700; }
@@ -154,6 +156,16 @@
     footer a:hover { text-decoration: underline; }
     @media (max-width: 640px) { .glossary-hero { padding: 1.5rem 1rem; } .glossary-hero h1 { font-size: 1.5rem; } header { flex-direction: column; gap: 16px; } }
     @media (prefers-reduced-motion: reduce) { * { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; } .related-card:hover, .cta-box a:hover { transform: none; } }
+    /* Featured snippet styles */
+    .snippet-box{background:rgba(34,197,94,.05);border:1px solid rgba(34,197,94,.2);border-radius:10px;padding:1.25rem;margin:1.5rem 0;position:relative}
+    .snippet-box::before{content:'📌 Quick Answer';position:absolute;top:-.6rem;left:1rem;background:#0a0a0f;padding:0 .5rem;font-size:.7rem;color:#22c55e;font-weight:600;text-transform:uppercase;letter-spacing:.5px}
+    .snippet-answer{font-size:1rem;line-height:1.7;color:#e2e8f0}
+    .snippet-answer strong{color:#fb923c}
+    .snippet-table{width:100%;border-collapse:collapse;font-size:.85rem;margin:1.5rem 0;background:#1e1b4b;border-radius:8px;overflow:hidden}
+    .snippet-table th{background:#312e81;color:#a5b4fc;padding:.6rem .8rem;text-align:left;font-weight:600}
+    .snippet-table td{padding:.6rem .8rem;border-bottom:1px solid rgba(255,255,255,.05);color:#94a3b8}
+    .snippet-table tr:last-child td{border-bottom:none}
+    .snippet-table td strong{color:#e2e8f0}
   </style>
 </head>
 <body>
@@ -176,6 +188,7 @@
 
       <nav class="breadcrumb" aria-label="Breadcrumb">
         <a href="/">Home</a> › <a href="/glossary/">Glossary</a> › <a href="/glossary/?category=youtube-features">YouTube Features</a> › <strong>Vertical Video (9:16)</strong>
+ <a href="/glossary/es/vertical-video" class="lang-switch" hreflang="es" style="display:inline-flex;align-items:center;gap:4px;font-size:.75rem;color:var(--text-dim);margin-left:.5rem;text-decoration:none;padding:2px 8px;border:1px solid var(--border);border-radius:9999px">🇪🇸 Español</a>
       </nav>
 
       <div class="glossary-hero">
@@ -196,8 +209,28 @@
 
       <div class="glossary-content">
 
+        <div class="snippet-box" itemscope itemtype="https://schema.org/Question">
+    <div itemprop="name" style="display:none">What is Vertical Video (9:16) on YouTube?</div>
+    <div itemscope itemprop="acceptedAnswer" itemtype="https://schema.org/Answer">
+      <div itemprop="text" class="snippet-answer">
+        <strong>Vertical Video (9:16)</strong> is video shot in portrait orientation (9:16 aspect ratio) optimized for mobile-first viewing on YouTube Shorts and mobile feeds.
+      </div>
+    </div>
+  </div>
+
         <h2>What Is Vertical Video (9:16)?</h2>
         <p>Vertical video is recorded in portrait orientation (9:16 aspect ratio), optimized for mobile viewing without rotating the phone. YouTube supports vertical video for both Shorts (60-second max) and regular uploads. For Shorts, vertical format is mandatory. For regular uploads, vertical video fills the full mobile screen but appears with black bars on desktop. Vertical video best practices: frame subjects in the center third of the screen (not horizontally), use large text (72pt+ for mobile readability), keep key visual elements in the safe zone (center 60%), and ensure lighting and audio quality work without dedicated filmmaking equipment. Vertical video consumption has grown 300%+ in recent years, driven by mobile-first viewing habits.</p>
+
+        <table class="snippet-table">
+    <caption style="caption-side:bottom;font-size:.75rem;color:#6b7280;padding-top:.5rem">Quick facts about Vertical Video (9:16)</caption>
+    <thead><tr><th>Property</th><th>Details</th></tr></thead>
+    <tbody>
+      <tr><td><strong>Term</strong></td><td>Vertical Video (9:16)</td></tr>
+      <tr><td><strong>Category</strong></td><td>YouTube Features</td></tr>
+      <tr><td><strong>Definition</strong></td><td>Video shot in portrait orientation (9:16 aspect ratio) optimized for mobile-first viewing on YouTube Shorts and mobile f...</td></tr>
+      <tr><td><strong>Why It Matters</strong></td><td>Directly impacts your YouTube youtube features strategy and channel performance.</td></tr>
+    </tbody>
+  </table>
 
         <h2>Why Vertical Video (9:16) Matters for YouTube SEO</h2>
         <p>Vertical Video (9:16) is a powerful YouTube feature that can significantly enhance your channel's reach, engagement, or revenue when used correctly. Many creators overlook or underutilize YouTube's built-in features, missing out on free tools that can boost performance without additional production effort. Channels that actively leverage vertical video (9:16) see higher engagement rates, better retention, and stronger algorithm performance because they're using the platform's native advantages. Mastering this feature gives you a competitive edge over creators who focus only on content quality while ignoring the distribution and engagement tools YouTube provides.</p>
@@ -228,6 +261,48 @@
       <a href="/blog/youtube-shorts-seo-ranking-guide-2026" class="related-card" style="display:inline-block;margin-right:.5rem;margin-bottom:.5rem;padding:.5rem 1rem">
         📖 Youtube Shorts Seo Ranking Guide 2026
       </a>
+      </div>
+
+        
+      <h2>Compare Vertical Video (9:16)</h2>
+      <p>See how Vertical Video (9:16) stacks up against related concepts:</p>
+      <div class="related-grid">
+        <a href="/glossary/vertical-video-vs-youtube-shorts" class="related-card">
+      ⚖️ Vertical Video (9:16) vs YouTube Shorts
+    </a>
+        <a href="/glossary/cards-end-screens-vs-vertical-video" class="related-card">
+      ⚖️ Vertical Video (9:16) vs Cards and End Screens
+    </a>
+        <a href="/glossary/ab-testing-vs-vertical-video" class="related-card">
+      ⚖️ Vertical Video (9:16) vs A/B Testing (Thumbnail Testing)
+    </a>
+        <a href="/glossary/vertical-video-vs-youtube-algorithm" class="related-card">
+      ⚖️ Vertical Video (9:16) vs YouTube Algorithm
+    </a>
+        <a href="/glossary/session-time-vs-vertical-video" class="related-card">
+      ⚖️ Vertical Video (9:16) vs Session Time
+    </a>
+      </div>
+
+        
+      <h2>🛠️ Free Tools for Vertical Video (9:16)</h2>
+      <p>Use these free interactive tools to put vertical video (9:16) knowledge into practice:</p>
+      <div class="related-grid">
+        <a href="/tools/end-screen-effectiveness-checker" class="related-card">
+      🛠️ End Screen Checker
+      <p style="font-size:0.8rem;color:var(--text-muted);margin:0.25rem 0 0;line-height:1.4">Optimize end screen elements</p>
+    </a>
+        <a href="/tools/playlist-performance-analyzer" class="related-card">
+      🛠️ Playlist Analyzer
+      <p style="font-size:0.8rem;color:var(--text-muted);margin:0.25rem 0 0;line-height:1.4">Maximize session time from playlists</p>
+    </a>
+        <a href="/tools/thumbnail-color-analyzer" class="related-card">
+      🛠️ Thumbnail Color Analyzer
+      <p style="font-size:0.8rem;color:var(--text-muted);margin:0.25rem 0 0;line-height:1.4">Check contrast and pop potential</p>
+    </a>
+        <a href="/tools/" class="related-card" style="display:flex;align-items:center;justify-content:center;text-align:center;font-weight:600;color:var(--primary);border:1px dashed rgba(249,115,22,0.4)">
+          📂 Browse All 87 Tools →
+        </a>
       </div>
 
         <div class="cta-box">

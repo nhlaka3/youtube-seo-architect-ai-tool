@@ -142,7 +142,9 @@
     .related-card { background: var(--bg-card); border: 1px solid var(--border); border-radius: 12px; padding: 1rem; transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1); position: relative; overflow: hidden; }
     .related-card:hover { border-color: var(--primary); transform: translateY(-4px); background: rgba(30, 41, 59, 0.6); box-shadow: 0 12px 24px rgba(0,0,0,0.3); }
     .related-card a { color: var(--text-primary); text-decoration: none; font-weight: 600; display: block; margin-bottom: 0.25rem; transition: color 0.2s; }
+    a.related-card { color: #a5b4fc; text-decoration: none; font-weight: 600; display: block; }
     .related-card:hover a { color: var(--primary); }
+    a.related-card:hover { color: #fff; }
     .related-card p { font-size: 0.82rem; color: var(--text-muted); margin: 0; line-height: 1.5; }
     .cta-box { background: linear-gradient(135deg, rgba(249,115,22,0.08), rgba(251,146,60,0.03)); border: 1px solid rgba(249,115,22,0.3); border-radius: 16px; padding: 2rem; margin: 2.5rem 0; text-align: center; }
     .cta-box h3 { font-size: 1.25rem; margin: 0 0 0.75rem; color: #fff; font-weight: 700; }
@@ -154,6 +156,16 @@
     footer a:hover { text-decoration: underline; }
     @media (max-width: 640px) { .glossary-hero { padding: 1.5rem 1rem; } .glossary-hero h1 { font-size: 1.5rem; } header { flex-direction: column; gap: 16px; } }
     @media (prefers-reduced-motion: reduce) { * { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; } .related-card:hover, .cta-box a:hover { transform: none; } }
+    /* Featured snippet styles */
+    .snippet-box{background:rgba(34,197,94,.05);border:1px solid rgba(34,197,94,.2);border-radius:10px;padding:1.25rem;margin:1.5rem 0;position:relative}
+    .snippet-box::before{content:'📌 Quick Answer';position:absolute;top:-.6rem;left:1rem;background:#0a0a0f;padding:0 .5rem;font-size:.7rem;color:#22c55e;font-weight:600;text-transform:uppercase;letter-spacing:.5px}
+    .snippet-answer{font-size:1rem;line-height:1.7;color:#e2e8f0}
+    .snippet-answer strong{color:#fb923c}
+    .snippet-table{width:100%;border-collapse:collapse;font-size:.85rem;margin:1.5rem 0;background:#1e1b4b;border-radius:8px;overflow:hidden}
+    .snippet-table th{background:#312e81;color:#a5b4fc;padding:.6rem .8rem;text-align:left;font-weight:600}
+    .snippet-table td{padding:.6rem .8rem;border-bottom:1px solid rgba(255,255,255,.05);color:#94a3b8}
+    .snippet-table tr:last-child td{border-bottom:none}
+    .snippet-table td strong{color:#e2e8f0}
   </style>
 </head>
 <body>
@@ -176,6 +188,7 @@
 
       <nav class="breadcrumb" aria-label="Breadcrumb">
         <a href="/">Home</a> › <a href="/glossary/">Glossary</a> › <a href="/glossary/?category=analytics">Analytics</a> › <strong>Traffic Sources</strong>
+ <a href="/glossary/es/traffic-sources" class="lang-switch" hreflang="es" style="display:inline-flex;align-items:center;gap:4px;font-size:.75rem;color:var(--text-dim);margin-left:.5rem;text-decoration:none;padding:2px 8px;border:1px solid var(--border);border-radius:9999px">🇪🇸 Español</a>
       </nav>
 
       <div class="glossary-hero">
@@ -196,8 +209,28 @@
 
       <div class="glossary-content">
 
+        <div class="snippet-box" itemscope itemtype="https://schema.org/Question">
+    <div itemprop="name" style="display:none">What is Traffic Sources on YouTube?</div>
+    <div itemscope itemprop="acceptedAnswer" itemtype="https://schema.org/Answer">
+      <div itemprop="text" class="snippet-answer">
+        <strong>Traffic Sources</strong> is the channels through which viewers find your videos — YouTube Search, Suggested Videos, Browse, External, Playlists, and Notifications.
+      </div>
+    </div>
+  </div>
+
         <h2>What Is Traffic Sources?</h2>
         <p>Traffic sources in YouTube Analytics show where your views come from. The main sources are: YouTube Search (keyword-driven), Suggested Videos (algorithm recommendations), Browse Features (homepage), Playlists (platform or your playlists), Notifications (subscriber bell), External (embedded on other sites), and Direct/Unknown (direct links, apps). Each traffic source requires different optimization: Search needs keyword targeting, Suggested needs strong retention and session time, Browse needs good CTR from subscribers, and External needs off-platform promotion. A healthy channel has diversified traffic sources — if 80%+ of your views come from one source, your channel is vulnerable to algorithm changes in that area.</p>
+
+        <table class="snippet-table">
+    <caption style="caption-side:bottom;font-size:.75rem;color:#6b7280;padding-top:.5rem">Quick facts about Traffic Sources</caption>
+    <thead><tr><th>Property</th><th>Details</th></tr></thead>
+    <tbody>
+      <tr><td><strong>Term</strong></td><td>Traffic Sources</td></tr>
+      <tr><td><strong>Category</strong></td><td>Analytics</td></tr>
+      <tr><td><strong>Definition</strong></td><td>The channels through which viewers find your videos — YouTube Search, Suggested Videos, Browse, External, Playlists, and...</td></tr>
+      <tr><td><strong>Why It Matters</strong></td><td>Directly impacts your YouTube analytics strategy and channel performance.</td></tr>
+    </tbody>
+  </table>
 
         <h2>Why Traffic Sources Matters for YouTube SEO</h2>
         <p>Traffic Sources is a critical metric in YouTube Analytics that directly impacts your content strategy and channel growth decisions. By monitoring this data point regularly, you can identify what's working, spot problems early, and make data-driven decisions instead of guessing. Channels that actively track their analytics grow 3x faster because they double down on what works and fix what doesn't. Without understanding traffic sources, you're creating content blind — hoping for results rather than engineering them. Top YouTube creators check their traffic sources metrics at least weekly and use the insights to plan their next 5-10 videos.</p>
@@ -236,6 +269,48 @@
       <a href="/blog/youtube-analytics-explained-2026" class="related-card" style="display:inline-block;margin-right:.5rem;margin-bottom:.5rem;padding:.5rem 1rem">
         📖 Youtube Analytics Explained 2026
       </a>
+      </div>
+
+        
+      <h2>Compare Traffic Sources</h2>
+      <p>See how Traffic Sources stacks up against related concepts:</p>
+      <div class="related-grid">
+        <a href="/glossary/click-through-rate-vs-traffic-sources" class="related-card">
+      ⚖️ Traffic Sources vs Click-Through Rate (CTR)
+    </a>
+        <a href="/glossary/average-view-duration-vs-traffic-sources" class="related-card">
+      ⚖️ Traffic Sources vs Average View Duration (AVD)
+    </a>
+        <a href="/glossary/audience-retention-vs-traffic-sources" class="related-card">
+      ⚖️ Traffic Sources vs Audience Retention
+    </a>
+        <a href="/glossary/traffic-sources-vs-youtube-algorithm" class="related-card">
+      ⚖️ Traffic Sources vs YouTube Algorithm
+    </a>
+        <a href="/glossary/session-time-vs-traffic-sources" class="related-card">
+      ⚖️ Traffic Sources vs Session Time
+    </a>
+      </div>
+
+        
+      <h2>🛠️ Free Tools for Traffic Sources</h2>
+      <p>Use these free interactive tools to put traffic sources knowledge into practice:</p>
+      <div class="related-grid">
+        <a href="/tools/engagement-rate-calculator" class="related-card">
+      🛠️ Engagement Rate Calculator
+      <p style="font-size:0.8rem;color:var(--text-muted);margin:0.25rem 0 0;line-height:1.4">Measure likes, comments, shares per view</p>
+    </a>
+        <a href="/tools/channel-health-score" class="related-card">
+      🛠️ Channel Health Score
+      <p style="font-size:0.8rem;color:var(--text-muted);margin:0.25rem 0 0;line-height:1.4">Score your CTR, retention, uploads, growth</p>
+    </a>
+        <a href="/tools/audience-retention-benchmark" class="related-card">
+      🛠️ Audience Retention Benchmark
+      <p style="font-size:0.8rem;color:var(--text-muted);margin:0.25rem 0 0;line-height:1.4">Compare retention against niche averages</p>
+    </a>
+        <a href="/tools/" class="related-card" style="display:flex;align-items:center;justify-content:center;text-align:center;font-weight:600;color:var(--primary);border:1px dashed rgba(249,115,22,0.4)">
+          📂 Browse All 87 Tools →
+        </a>
       </div>
 
         <div class="cta-box">
