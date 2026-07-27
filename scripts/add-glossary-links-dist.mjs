@@ -3,7 +3,7 @@
 import { readFileSync, writeFileSync, readdirSync } from 'fs';
 import { join } from 'path';
 
-const BLOG_DIR = '/mnt/c/Users/nhlaka/Desktop/Youtube seo tool/dist/blog/';
+const BLOG_DIR = './dist/blog/';
 
 const GLOSSARY_MAP = {
   'YouTube Algorithm': '/glossary/youtube-algorithm',
