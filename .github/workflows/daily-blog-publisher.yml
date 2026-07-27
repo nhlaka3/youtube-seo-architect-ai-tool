@@ -87,6 +87,13 @@ jobs:
           node scripts/add-glossary-links.mjs
           node scripts/add-glossary-links-dist.mjs
 
+      - name: 🛠️ Generate interactive tool page for new blog post
+        id: generate-tool
+        run: |
+          echo "Generating interactive tool page for new blog post..."
+          node scripts/generate-blog-tools.mjs
+          echo "Interactive tool page generated (or already exists)"
+
       - name: 🎬 Generate video from new blog post
         id: video
         continue-on-error: true

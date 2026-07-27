@@ -619,27 +619,30 @@ export function renderBlogTemplate(page) {
   contentHTML += linked;
 
   // 3b. Try-the-Tool CTA (if a corresponding interactive tool page exists)
+  // Dynamically check if a tool file exists for this blog slug
   const blogSlug = (page.slug || '').replace(/^(how-to-|what-does-|why-|when-to-)/, '');
-  const TOOL_BLOG_MAP = [
-    "best-youtube-seo-tools-2026", "fix-youtube-shadow-ban-2026", "keywords-youtube",
-    "metadata-youtube", "rank-on-youtube-2026", "youtube-ctr-actually-mean",
-    "youtube-ai-seo-coach-phronesis-2026", "youtube-algorithm-changes-2026",
-    "youtube-analytics-4-metrics-that-matter", "youtube-analytics-explained-2026",
-    "youtube-chapter-timestamps-seo-guide", "youtube-community-posts-strategy-2026",
-    "youtube-competitor-analysis-reverse-engineer", "youtube-description-templates-2026",
-    "youtube-end-screens-cards-guide-2026", "youtube-for-small-channels-2026",
-    "youtube-for-tutorials-2026", "youtube-impressions-guide-2026",
-    "youtube-intro-hook-first-3-seconds", "youtube-metadata-auditor-vs-vidiq-shadow-ban",
-    "youtube-monetization-tips-2026", "youtube-playlist-optimization-strategy",
-    "youtube-retention-graph-explained-2026", "youtube-seo-audit-diagnostic-fix-2026",
-    "youtube-seo-checklist-beginners-2026", "youtube-seo-examples-2026",
-    "youtube-seo-for-business-channels-2026", "youtube-seo-for-gaming-channels-2026",
-    "youtube-seo-template-2026", "youtube-shorts-seo-ranking-guide-2026", "youtube-tags-2026",
-    "youtube-thumbnail-ab-testing-guide", "youtube-title-examples-2026",
-    "youtube-video-not-getting-views-diagnostic-fix-2026",
-  ];
-  if (TOOL_BLOG_MAP.includes(blogSlug) || TOOL_BLOG_MAP.includes(page.slug)) {
-    const toolSlug = TOOL_BLOG_MAP.includes(blogSlug) ? blogSlug : page.slug;
+  let toolExists = false;
+  const STATIC_TOOL_SLUGS = [
+      "best-youtube-seo-tools-2026", "fix-youtube-shadow-ban-2026", "keywords-youtube",
+      "metadata-youtube", "rank-on-youtube-2026", "youtube-ctr-actually-mean",
+      "youtube-ai-seo-coach-phronesis-2026", "youtube-algorithm-changes-2026",
+      "youtube-analytics-4-metrics-that-matter", "youtube-analytics-explained-2026",
+      "youtube-chapter-timestamps-seo-guide", "youtube-community-posts-strategy-2026",
+      "youtube-competitor-analysis-reverse-engineer", "youtube-description-templates-2026",
+      "youtube-end-screens-cards-guide-2026", "youtube-for-small-channels-2026",
+      "youtube-for-tutorials-2026", "youtube-impressions-guide-2026",
+      "youtube-intro-hook-first-3-seconds", "youtube-metadata-auditor-vs-vidiq-shadow-ban",
+      "youtube-monetization-tips-2026", "youtube-playlist-optimization-strategy",
+      "youtube-retention-graph-explained-2026", "youtube-seo-audit-diagnostic-fix-2026",
+      "youtube-seo-checklist-beginners-2026", "youtube-seo-examples-2026",
+      "youtube-seo-for-business-channels-2026", "youtube-seo-for-gaming-channels-2026",
+      "youtube-seo-template-2026", "youtube-shorts-seo-ranking-guide-2026", "youtube-tags-2026",
+      "youtube-thumbnail-ab-testing-guide", "youtube-title-examples-2026",
+      "youtube-video-not-getting-views-diagnostic-fix-2026",
+    ];
+    toolExists = STATIC_TOOL_SLUGS.includes(blogSlug) || STATIC_TOOL_SLUGS.includes(page.slug);
+  if (toolExists) {
+    const toolSlug = blogSlug || page.slug;
     const toolUrl = `/tools/${toolSlug}`;
     contentHTML += `\n      <div class="tool-cta" style="margin:2.5rem 0;padding:1.5rem;background:linear-gradient(135deg,#1a1a2e,#16213e);border:1px solid #6366f1;border-radius:12px;text-align:center;">
         <h3 style="color:#e2e8f0;margin-bottom:0.5rem;">🛠️ Try the Interactive Tool</h3>
