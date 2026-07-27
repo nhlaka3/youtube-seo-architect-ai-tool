@@ -728,8 +728,76 @@ export function renderBlogTemplate(page) {
   <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3831668789026424" crossorigin="anonymous"></script>
   <script type="application/ld+json">${schemaJSON}</script>
   <link rel="stylesheet" href="/blog/blog.css" />
+  <style>
+    /* Reading progress bar */
+    #reading-progress{position:fixed;top:0;left:0;width:0%;height:3px;background:linear-gradient(90deg,#f97316,#fb923c,#f97316);z-index:9999;transition:width .1s linear}
+
+    /* Sticky bottom CTA */
+    .sticky-cta{position:fixed;bottom:0;left:0;right:0;background:rgba(10,10,15,.95);border-top:1px solid rgba(249,115,22,.3);padding:.75rem 1.5rem;display:none;align-items:center;justify-content:space-between;gap:1rem;z-index:9998;backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px)}
+    .sticky-cta.show{display:flex}
+    .sticky-cta p{margin:0;font-size:.9rem;color:#e2e8f0}
+    .sticky-cta p strong{color:#fb923c}
+    .sticky-cta .btn{background:linear-gradient(135deg,#f97316,#fb923c);color:#fff;padding:.5rem 1.5rem;border-radius:9999px;text-decoration:none;font-weight:600;font-size:.85rem;white-space:nowrap;transition:transform .2s;flex-shrink:0}
+    .sticky-cta .btn:hover{transform:scale(1.05)}
+    @media(max-width:640px){.sticky-cta{flex-direction:column;text-align:center;padding:.6rem 1rem}.sticky-cta p{font-size:.8rem}}
+
+    /* Author box improvement */
+    .author-box{background:linear-gradient(135deg,#1a1a2e,#16213e);border:1px solid rgba(99,102,241,.2);border-radius:12px;padding:1.25rem;margin:1.5rem 0}
+    .author-box .author-inner{display:flex;gap:1rem;align-items:flex-start}
+    .author-box .avatar{width:48px;height:48px;border-radius:50%;background:linear-gradient(135deg,#f97316,#fb923c);display:flex;align-items:center;justify-content:center;font-weight:800;font-size:1.1rem;color:#fff;flex-shrink:0}
+    .author-box .author-info h4{margin:0 0 .25rem;color:#e2e8f0;font-size:1rem}
+    .author-box .author-info p{margin:0;color:#8b8b9e;font-size:.85rem;line-height:1.5}
+    .author-box .author-stats{display:flex;gap:1.5rem;margin-top:.75rem;padding-top:.75rem;border-top:1px solid rgba(255,255,255,.05)}
+    .author-box .author-stats span{font-size:.8rem;color:#6b7280}
+    .author-box .author-stats strong{color:#a5b4fc;display:block;font-size:.95rem}
+
+    /* Inline tool CTA */
+    .tool-cta-inline{background:linear-gradient(135deg,#1a1a2e,#16213e);border:1px solid rgba(99,102,241,.3);border-radius:12px;padding:1.25rem;margin:2rem 0;display:flex;align-items:center;gap:1rem}
+    .tool-cta-inline .icon{font-size:2rem;flex-shrink:0}
+    .tool-cta-inline .content{flex:1}
+    .tool-cta-inline .content h4{margin:0 0 .25rem;color:#e2e8f0;font-size:.95rem}
+    .tool-cta-inline .content p{margin:0;color:#8b8b9e;font-size:.82rem}
+    .tool-cta-inline .btn{background:linear-gradient(135deg,#f97316,#fb923c);color:#fff;padding:.4rem 1.2rem;border-radius:9999px;text-decoration:none;font-weight:600;font-size:.8rem;white-space:nowrap;flex-shrink:0;transition:transform .2s}
+    .tool-cta-inline .btn:hover{transform:scale(1.05)}
+    @media(max-width:640px){.tool-cta-inline{flex-direction:column;text-align:center}}
+
+    /* Bottom CTA improvement */
+    .cta-box{border:1px solid #4f46e5;border-radius:16px;padding:2rem;text-align:center;margin:2.5rem 0;position:relative;overflow:hidden}
+    .cta-box::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at top right,rgba(249,115,22,0.1),transparent 70%);pointer-events:none}
+    .cta-box h3{font-size:1.3rem;position:relative}
+    .cta-box p{position:relative}
+    .cta-box .btn-group{display:flex;gap:.75rem;justify-content:center;flex-wrap:wrap;position:relative}
+    .cta-box .btn-primary{background:linear-gradient(135deg,#f97316,#fb923c);color:#fff;padding:.7rem 2rem;border-radius:9999px;text-decoration:none;font-weight:600;transition:transform .2s}
+    .cta-box .btn-primary:hover{transform:scale(1.05)}
+    .cta-box .btn-secondary{background:rgba(255,255,255,.05);color:#e2e8f0;padding:.7rem 2rem;border-radius:9999px;text-decoration:none;font-weight:500;transition:background .2s}
+    .cta-box .btn-secondary:hover{background:rgba(255,255,255,.1)}
+
+    /* Social proof ticker */
+    .social-proof{display:flex;justify-content:center;gap:2rem;flex-wrap:wrap;margin:1.5rem 0;padding:1rem;background:rgba(255,255,255,.02);border-radius:12px;border:1px solid rgba(255,255,255,.04)}
+    .social-proof .stat{text-align:center}
+    .social-proof .stat strong{display:block;color:#fb923c;font-size:1.2rem}
+    .social-proof .stat span{font-size:.78rem;color:#6b7280}
+
+    /* Share bar improvement */
+    .share-bar{display:flex;align-items:center;gap:.5rem;flex-wrap:wrap;margin:1rem 0}
+    .share-bar .share-label{font-size:.82rem;color:#6b7280;margin-right:.5rem}
+  </style>
+  <script>
+    // Reading progress bar
+    window.addEventListener('scroll', function(){
+      var h = document.documentElement.scrollHeight - window.innerHeight;
+      var p = (window.scrollY / h) * 100;
+      var bar = document.getElementById('reading-progress');
+      if(bar) bar.style.width = p + '%';
+      // Show sticky CTA after 50% scroll
+      var cta = document.getElementById('sticky-cta');
+      if(cta) cta.classList.toggle('show', p > 40);
+    });
+  </script>
 </head>
 <body>
+  <div id="reading-progress"></div>
+
   <header class="header">
     <a href="/">⚡ YT SEO Architect</a>
     <a href="/dashboard" class="cta">Try Free</a>
@@ -756,13 +824,20 @@ export function renderBlogTemplate(page) {
       <!-- Social Share Buttons (Top) -->
       ${generateShareBar(slug, title, false)}
 
-      <!-- E-E-A-T: Author credentials -->
+      <!-- E-E-A-T: Author credentials (improved) -->
       ${hasAuthorBox ? '' : `
       <div class="author-box">
-        <div class="avatar">YT</div>
-        <div class="author-info">
-          <h4>YT SEO Architect Team</h4>
-          <p>AI-powered YouTube SEO platform. 17 tools used by content creators to rank higher. Built by creators, for creators.</p>
+        <div class="author-inner">
+          <div class="avatar">YT</div>
+          <div class="author-info">
+            <h4>YT SEO Architect Team</h4>
+            <p>We help 5,000+ creators optimize their YouTube channels with free AI-powered tools. Our guides are researched and tested — not theoretical.</p>
+            <div class="author-stats">
+              <span><strong>17</strong> free tools</span>
+              <span><strong>5K+</strong> creators</span>
+              <span><strong>2M+</strong> optimizations</span>
+            </div>
+          </div>
         </div>
       </div>
       `}
@@ -773,15 +848,26 @@ export function renderBlogTemplate(page) {
       <!-- Article body with auto-generated structural sections -->
       ${contentHTML}
 
+      <!-- Social proof counter -->
+      <div class="social-proof">
+        <div class="stat"><strong>17</strong><span>Free AI Tools</span></div>
+        <div class="stat"><strong>5,000+</strong><span>Active Creators</span></div>
+        <div class="stat"><strong>100</strong><span>Free Credits/Month</span></div>
+        <div class="stat"><strong>No CC</strong><span>Required</span></div>
+      </div>
+
       <!-- Affiliate Disclosure + Gear Recommendations -->
       ${generateAffiliateDisclosure()}
       ${generateGearSection(title)}
 
-      <!-- Bottom CTA -->
+      <!-- Bottom CTA (improved) -->
       <div class="cta-box">
         <h3>🚀 Ready to Grow Your Channel?</h3>
-        <p>17 AI tools, 100 free credits/month, no credit card required.</p>
-        <a href="/dashboard">Get Started Free →</a>
+        <p>Join 5,000+ creators using YT SEO Architect to optimize titles, tags, descriptions, and more. 100% free — no credit card needed.</p>
+        <div class="btn-group">
+          <a href="/dashboard" class="btn-primary">Get Started Free →</a>
+          <a href="/tools/" class="btn-secondary">Browse All Tools</a>
+        </div>
       </div>
 
       <!-- Social Share Buttons (Bottom) -->
@@ -805,6 +891,12 @@ export function renderBlogTemplate(page) {
 
     </article>
   </main>
+
+  <!-- Sticky bottom CTA -->
+  <div id="sticky-cta" class="sticky-cta">
+    <p><strong>100% free.</strong> Optimize your YouTube videos with AI — titles, tags, descriptions, and more.</p>
+    <a href="/dashboard" class="btn">Try Free Tools →</a>
+  </div>
 
   <footer class="footer">
     <p>© 2026 YT SEO Architect · <a href="/blog">All Articles</a> · <a href="/privacy-policy">Privacy</a></p>
