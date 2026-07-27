@@ -1091,7 +1091,19 @@ app.get('/blog/:slug', async (req, res) => {
 
     var page = pages[0];
 
-    if (!page) return res.status(404).send('Page not found');
+    if (!page) {
+      // Fallback: serve from static file if DB doesn't have it
+      try {
+        const { readFileSync, existsSync } = await import('fs');
+        const { resolve } = await import('path');
+        const staticPath = resolve(process.cwd(), 'public', 'blog', slug + '.html');
+        if (existsSync(staticPath)) {
+          var staticHtml = readFileSync(staticPath, 'utf-8');
+          return res.send(staticHtml);
+        }
+      } catch (_) { /* ignore fs errors */ }
+      return res.status(404).send('Page not found');
+    }
 
     const { renderBlogTemplate } = await import('./blog-renderer.js');
     var html = renderBlogTemplate(page);

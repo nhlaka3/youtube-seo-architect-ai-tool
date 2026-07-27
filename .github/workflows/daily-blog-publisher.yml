@@ -36,6 +36,7 @@ jobs:
     env:
       GROQ_API_KEY: ${{ secrets.GROQ_API_KEY }}
       GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+      DATABASE_URL: ${{ secrets.DATABASE_URL }}
       CI: true   # Tells auto-blog-generator.mjs to skip internal Vercel deploy
       NODE_ENV: production
 

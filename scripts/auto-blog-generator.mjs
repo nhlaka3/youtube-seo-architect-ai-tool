@@ -1309,11 +1309,17 @@ async function main() {
       console.log('  ✅ Saved to database — API will serve dynamically');
     } catch (e) {
       console.log(`  ⚠ DB save failed: ${e.message}`);
+      console.log('  → Falling back to static HTML file');
     }
   }
 
-  // Skip static file write — all pages served dynamically via API
-  console.log('  ⏭ Skipping static HTML file (API serves dynamically with glossary-linking)');
+  // Fallback: write static HTML file if DB save failed
+  if (!saveResult.savedToDb) {
+    const blogFilePath = resolve(BLOG_DIR, `${keywordEntry.slug}.html`);
+    console.log(`  Writing static HTML to ${blogFilePath}...`);
+    writeFileSync(blogFilePath, finalContent);
+    console.log('  ✅ Static HTML file written');
+    saveResult.wroteFile = true;
 
   // Skip static sitemap and blog listing updates — API handles both dynamically
 
