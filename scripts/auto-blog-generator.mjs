@@ -101,7 +101,7 @@ const KEYWORD_OVERRIDE = args.includes('--keyword')
 
 // ── Constants ──────────────────────────────────────────────────────
 
-const MAX_RETRIES = 3;
+const MAX_RETRIES = 2;
 const RETRY_BASE_DELAY_MS = 2000;
 const MIN_SECTIONS_RATIO = 0.5; // At least 50% of sections must succeed
 const MIN_WORD_COUNT = 1600;
@@ -286,7 +286,7 @@ function qualityGate(html) {
 
 // ── API calls with retry + fallback ────────────────────────────────
 
-const FETCH_TIMEOUT_MS = 60000; // 60s max per fetch attempt
+const FETCH_TIMEOUT_MS = 30000; // 30s max per fetch attempt — prevents indefinite hangs on slow API
 
 async function fetchWithRetry(url, options, retries = MAX_RETRIES) {
   let lastError;
