@@ -39,6 +39,10 @@ jobs:
           fi
           node scripts/generate-blog-tools.mjs $FLAG
 
+      - name: Generate metric calculator tools
+        id: metrics
+        run: node scripts/generate-metric-tools.mjs
+
       - name: Rebuild tools index
         id: index
         run: node scripts/generate-tools-index.mjs
