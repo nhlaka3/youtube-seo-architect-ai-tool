@@ -131,6 +131,16 @@
     footer a:hover { text-decoration: underline; }
     @media (max-width: 640px) { .glossary-hero { padding: 1.5rem 1rem; } .glossary-hero h1 { font-size: 1.5rem; } header { flex-direction: column; gap: 16px; } }
     @media (prefers-reduced-motion: reduce) { * { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; } .related-card:hover, .cta-box a:hover { transform: none; } }
+    /* Featured snippet styles */
+    .snippet-box{background:rgba(34,197,94,.05);border:1px solid rgba(34,197,94,.2);border-radius:10px;padding:1.25rem;margin:1.5rem 0;position:relative}
+    .snippet-box::before{content:'📌 Quick Answer';position:absolute;top:-.6rem;left:1rem;background:#0a0a0f;padding:0 .5rem;font-size:.7rem;color:#22c55e;font-weight:600;text-transform:uppercase;letter-spacing:.5px}
+    .snippet-answer{font-size:1rem;line-height:1.7;color:#e2e8f0}
+    .snippet-answer strong{color:#fb923c}
+    .snippet-table{width:100%;border-collapse:collapse;font-size:.85rem;margin:1.5rem 0;background:#1e1b4b;border-radius:8px;overflow:hidden}
+    .snippet-table th{background:#312e81;color:#a5b4fc;padding:.6rem .8rem;text-align:left;font-weight:600}
+    .snippet-table td{padding:.6rem .8rem;border-bottom:1px solid rgba(255,255,255,.05);color:#94a3b8}
+    .snippet-table tr:last-child td{border-bottom:none}
+    .snippet-table td strong{color:#e2e8f0}
   </style>
 </head>
 <body>
@@ -173,8 +183,12 @@
 
       <div class="glossary-content">
 
+        {{QUICK_ANSWER}}
+
         <h2>What Is {{TERM}}?</h2>
         <p>{{EXPANDED_DEFINITION}}</p>
+
+        {{KEY_FACTS_TABLE}}
 
         <h2>Why {{TERM}} Matters for YouTube SEO</h2>
         <p>{{WHY_IT_MATTERS}}</p>

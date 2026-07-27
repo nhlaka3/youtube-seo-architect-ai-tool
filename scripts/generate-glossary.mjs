@@ -335,6 +335,37 @@ function generateComparisonsSection(termData, allTerms) {
       </div>`;
 }
 
+// ── Featured snippet helpers ──────────────────────────────
+
+function generateQuickAnswer(termData) {
+  const term = termData.term;
+  const def = termData.shortDefinition || termData.expandedDefinition || '';
+  // Craft a snippet-friendly answer: direct, concise, starts with the term
+  const answer = def.length > 200 ? def.substring(0, 197) + '...' : def;
+  return `<div class="snippet-box" itemscope itemtype="https://schema.org/Question">
+    <div itemprop="name" style="display:none">What is ${term} on YouTube?</div>
+    <div itemscope itemprop="acceptedAnswer" itemtype="https://schema.org/Answer">
+      <div itemprop="text" class="snippet-answer">
+        <strong>${term}</strong> is ${answer.charAt(0).toLowerCase() + answer.slice(1)}
+      </div>
+    </div>
+  </div>`;
+}
+
+function generateKeyFactsTable(termData, catMeta) {
+  const catName = catMeta ? catMeta.name : termData.category;
+  return `<table class="snippet-table">
+    <caption style="caption-side:bottom;font-size:.75rem;color:#6b7280;padding-top:.5rem">Quick facts about ${termData.term}</caption>
+    <thead><tr><th>Property</th><th>Details</th></tr></thead>
+    <tbody>
+      <tr><td><strong>Term</strong></td><td>${termData.term}</td></tr>
+      <tr><td><strong>Category</strong></td><td>${catName}</td></tr>
+      <tr><td><strong>Definition</strong></td><td>${termData.shortDefinition.substring(0, 120)}...</td></tr>
+      <tr><td><strong>Why It Matters</strong></td><td>Directly impacts your YouTube ${catName.toLowerCase()} strategy and channel performance.</td></tr>
+    </tbody>
+  </table>`;
+}
+
 function truncateForSchema(text, maxLen = 200) {
   if (text.length <= maxLen) return text;
   return text.substring(0, maxLen - 3) + '...';
@@ -362,6 +393,8 @@ function generatePage(termData, template, allTerms, catMeta) {
     '{{RELATED_TERMS_SECTION}}': generateRelatedTermsSection(termData, allTerms),
     '{{RELATED_BLOGS_SECTION}}': generateRelatedBlogsSection(termData.relatedBlogs),
     '{{COMPARISONS_SECTION}}': generateComparisonsSection(termData, allTerms),
+    '{{QUICK_ANSWER}}': generateQuickAnswer(termData),
+    '{{KEY_FACTS_TABLE}}': generateKeyFactsTable(termData, catMeta),
     '{{SCHEMA_DESCRIPTION}}': truncateForSchema(termData.shortDefinition),
   };
 
