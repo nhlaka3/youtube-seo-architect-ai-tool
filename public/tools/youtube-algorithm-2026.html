@@ -170,7 +170,10 @@ const ToolLogic = {
 
   scoreAlgorithm(input) {
     var nums = input.match(/\d[\d,.]*/g);
-    var values = nums ? nums.map(function(n) { return parseInt(n.replace(/,/g, '')); }) : [];
+    if (!nums || nums.length < 2) {
+      return { error: true, msg: 'Enter your channel metrics to get an algorithm health score. For example: "5% CTR, 2000 views, 40% retention" or "10K views, 500 subs, 4% CTR".' };
+    }
+    var values = nums.map(function(n) { return parseInt(n.replace(/,/g, '')); });
     var hasMetrics = values.length >= 2;
 
     var ctr = hasMetrics ? Math.min(values[0], values[1]) / Math.max(values[0], values[1]) * 100 : 5;
@@ -204,7 +207,7 @@ const ToolLogic = {
         { name: 'SEO Optimization', score: seoScored, detail: (hasGoodSEO ? 'Good SEO helps YouTube understand your content' : 'Improve titles, descriptions, and tags for SEO') + ' (' + Math.round(seoScore) + '/100)' },
       ]
     };
-  }
+  };
 
 function handleTool() {
   const input = document.getElementById('tool-input').value.trim();

@@ -149,7 +149,10 @@ const ToolLogic = {
   trackSubscriberGrowth(input) {
     var nums = input.match(/\d[\d,.]*/g);
     var current = nums ? parseInt(nums[0].replace(/,/g, '')) : 100;
-    var monthlyGrowth = Math.round(current * (seededRandom(5) * 0.12 + 0.03));
+    var growthRate = seededRandom(current) * 0.15 + 0.02;
+    if (current < 100) growthRate = Math.max(growthRate, 0.08);
+    if (current > 1000) growthRate = Math.min(growthRate, 0.06);
+    var monthlyGrowth = Math.round(current * growthRate);
     var monthsTo1k = current >= 1000 ? 0 : Math.ceil((1000 - current) / Math.max(1, monthlyGrowth));
     var monthsTo10k = current >= 10000 ? 0 : Math.ceil((10000 - current) / Math.max(1, monthlyGrowth));
     var yearlyProjection = current + monthlyGrowth * 12;

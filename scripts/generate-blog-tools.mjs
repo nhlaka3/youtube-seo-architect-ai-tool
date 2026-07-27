@@ -526,13 +526,74 @@ const ToolLogic = {
     }
 
     return { issues, passCount: issues.filter(function(i) { return i.severity === 'good'; }).length, warnCount: issues.filter(function(i) { return i.severity !== 'good'; }).length };
+  },
+
+  checkSmallChannel(text) {
+    var nums = text.match(/\\d[\\d,.]*/g);
+    var currentSubs = nums ? parseInt(nums[0].replace(/,/g, '')) : 0;
+    var watchHours = nums && nums.length > 1 ? parseInt(nums[1].replace(/,/g, '')) : 0;
+    var lower = text.toLowerCase();
+
+    var issues = [];
+
+    // Niche check
+    var niches = ['gaming', 'tech', 'cooking', 'music', 'vlog', 'education', 'comedy', 'sports', 'beauty', 'fashion', 'travel', 'finance', 'fitness', 'tutorial', 'review', 'unboxing', 'podcast', 'art', 'diy', 'animation'];
+    var foundNiche = niches.filter(function(n) { return lower.includes(n); });
+    if (foundNiche.length > 0) {
+      issues.push({ severity: 'good', area: 'Niche', msg: 'Clear niche identified: ' + foundNiche[0] + '. Niche channels grow 3x faster.', icon: '✅' });
+    } else {
+      issues.push({ severity: 'high', area: 'Niche', msg: 'No clear niche detected. Small channels without a niche struggle to grow. Pick one topic and own it.', icon: '🔴' });
+    }
+
+    // Subs check
+    if (currentSubs >= 1000) {
+      issues.push({ severity: 'good', area: 'Subscribers', msg: currentSubs.toLocaleString() + ' subs — you\'re past the first major milestone!', icon: '✅' });
+    } else if (currentSubs >= 100) {
+      var to1k = 1000 - currentSubs;
+      issues.push({ severity: 'medium', area: 'Subscribers', msg: currentSubs.toLocaleString() + ' subs. ' + to1k + ' more to 1K. Small channels with 100+ subs see 2x faster growth.', icon: '🟡' });
+    } else {
+      issues.push({ severity: 'high', area: 'Subscribers', msg: 'Under 100 subs. Focus on quality content & consistent uploads. Every big channel started here.', icon: '🔴' });
+    }
+
+    // Watch hours check
+    if (watchHours >= 4000) {
+      issues.push({ severity: 'good', area: 'Watch Hours', msg: watchHours.toLocaleString() + ' hours — you qualify for monetization!', icon: '✅' });
+    } else if (watchHours >= 1000) {
+      issues.push({ severity: 'medium', area: 'Watch Hours', msg: watchHours.toLocaleString() + ' hours. Great progress! Keep creating longer content to boost watch time.', icon: '🟡' });
+    } else {
+      issues.push({ severity: 'high', area: 'Watch Hours', msg: 'Watch time is low. Focus on retention — hook viewers in the first 5 seconds.', icon: '🔴' });
+    }
+
+    // Upload consistency guess
+    if (lower.includes('weekly') || lower.includes('daily') || lower.includes('regular')) {
+      issues.push({ severity: 'good', area: 'Consistency', msg: 'Regular uploads detected. Consistency is the #1 growth factor for small channels.', icon: '✅' });
+    } else {
+      issues.push({ severity: 'medium', area: 'Consistency', msg: 'No upload schedule mentioned. Posting weekly gives you 4x more growth than irregular posting.', icon: '🟡' });
+    }
+
+    // SEO check
+    if (lower.includes('seo') || lower.includes('title') || lower.includes('tag') || lower.includes('description')) {
+      issues.push({ severity: 'good', area: 'SEO Awareness', msg: 'You\'re thinking about SEO — that\'s half the battle. Optimize each video like a landing page.', icon: '✅' });
+    } else {
+      issues.push({ severity: 'medium', area: 'SEO Awareness', msg: 'Focus on keyword research. Small channels grow by ranking for low-competition keywords.', icon: '🟡' });
+    }
+
+    // Thumbnail strategy
+    if (lower.includes('thumbnail') || lower.includes('thumb')) {
+      issues.push({ severity: 'good', area: 'Thumbnails', msg: 'You know thumbnails matter. High contrast, close-up faces, and text overlays boost CTR by 30%.', icon: '✅' });
+    } else {
+      issues.push({ severity: 'medium', area: 'Thumbnails', msg: 'No thumbnail strategy mentioned. Custom thumbnails increase CTR by 2-3x over auto-generated ones.', icon: '🟡' });
+    }
+
+    return { issues, passCount: issues.filter(function(i) { return i.severity === 'good'; }).length, warnCount: issues.filter(function(i) { return i.severity !== 'good'; }).length };
   }
 };
 
 function handleTool() {
   const input = document.getElementById('tool-input').value.trim();
   if (!input) return;
-  const result = ToolLogic.checkMetadata(input);
+  var _topic = (window.BLOG_TOPIC || '').toLowerCase();
+  var result = (_topic.includes('small') || _topic.includes('beginner') || _topic.includes('monetiz')) ? ToolLogic.checkSmallChannel(input) : ToolLogic.checkMetadata(input);
   const box = document.getElementById('result-box');
   const placeholder = document.getElementById('result-placeholder');
   box.classList.add('show');
@@ -706,7 +767,10 @@ const ToolLogic = {
 
   scoreAlgorithm(input) {
     var nums = input.match(/\\d[\\d,.]*/g);
-    var values = nums ? nums.map(function(n) { return parseInt(n.replace(/,/g, '')); }) : [];
+    if (!nums || nums.length < 2) {
+      return { error: true, msg: 'Enter your channel metrics to get an algorithm health score. For example: "5% CTR, 2000 views, 40% retention" or "10K views, 500 subs, 4% CTR".' };
+    }
+    var values = nums.map(function(n) { return parseInt(n.replace(/,/g, '')); });
     var hasMetrics = values.length >= 2;
 
     var ctr = hasMetrics ? Math.min(values[0], values[1]) / Math.max(values[0], values[1]) * 100 : 5;
@@ -740,7 +804,7 @@ const ToolLogic = {
         { name: 'SEO Optimization', score: seoScored, detail: (hasGoodSEO ? 'Good SEO helps YouTube understand your content' : 'Improve titles, descriptions, and tags for SEO') + ' (' + Math.round(seoScore) + '/100)' },
       ]
     };
-  }
+  };
 
 function handleTool() {
   const input = document.getElementById('tool-input').value.trim();
@@ -1023,7 +1087,10 @@ const ToolLogic = {
   trackSubscriberGrowth(input) {
     var nums = input.match(/\\d[\\d,.]*/g);
     var current = nums ? parseInt(nums[0].replace(/,/g, '')) : 100;
-    var monthlyGrowth = Math.round(current * (seededRandom(5) * 0.12 + 0.03));
+    var growthRate = seededRandom(current) * 0.15 + 0.02;
+    if (current < 100) growthRate = Math.max(growthRate, 0.08);
+    if (current > 1000) growthRate = Math.min(growthRate, 0.06);
+    var monthlyGrowth = Math.round(current * growthRate);
     var monthsTo1k = current >= 1000 ? 0 : Math.ceil((1000 - current) / Math.max(1, monthlyGrowth));
     var monthsTo10k = current >= 10000 ? 0 : Math.ceil((10000 - current) / Math.max(1, monthlyGrowth));
     var yearlyProjection = current + monthlyGrowth * 12;
