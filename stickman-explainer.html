@@ -1,0 +1,985 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Stickman Explainer — How AI Learns</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    background: #1a1a2e;
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    min-height: 100vh; font-family: 'Segoe UI', system-ui, sans-serif;
+    color: #e0e0e0; overflow: hidden;
+  }
+  #wrap {
+    position: relative; width: 960px; max-width: 100vw;
+    background: #fff; border-radius: 12px; overflow: hidden;
+    box-shadow: 0 8px 32px rgba(0,0,0,.4);
+  }
+  canvas { display: block; width: 100%; height: auto; background: #fafafa; }
+  #controls {
+    position: absolute; bottom: 0; left: 0; right: 0;
+    background: linear-gradient(transparent, rgba(0,0,0,.6));
+    padding: 40px 20px 16px; display: flex; align-items: center; gap: 12px;
+  }
+  #playBtn {
+    width: 40px; height: 40px; border: none; border-radius: 50%;
+    background: #ff6b6b; color: #fff; font-size: 18px; cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    transition: transform .15s, background .2s;
+  }
+  #playBtn:hover { transform: scale(1.1); background: #ee5a24; }
+  #progressWrap {
+    flex: 1; height: 6px; background: rgba(255,255,255,.2);
+    border-radius: 3px; cursor: pointer; position: relative;
+  }
+  #progressBar {
+    height: 100%; background: #ff6b6b; border-radius: 3px;
+    width: 0%; transition: width .1s linear;
+  }
+  #timeLabel { font-size: 13px; color: rgba(255,255,255,.8); min-width: 80px; text-align: right; font-variant-numeric: tabular-nums; }
+  #sceneLabel { font-size: 13px; color: rgba(255,255,255,.6); flex: 1; text-align: center; }
+  #replayBtn {
+    display: none; position: absolute; top: 50%; left: 50%;
+    transform: translate(-50%,-50%); padding: 14px 32px;
+    background: #ff6b6b; color: #fff; border: none; border-radius: 8px;
+    font-size: 18px; font-weight: 600; cursor: pointer;
+    box-shadow: 0 4px 16px rgba(255,107,107,.5);
+    transition: transform .15s;
+  }
+  #replayBtn:hover { transform: translate(-50%,-50%) scale(1.05); }
+</style>
+</head>
+<body>
+<div id="wrap">
+  <canvas id="c" width="960" height="540"></canvas>
+  <button id="replayBtn" onclick="restart()">↻ Replay</button>
+  <div id="controls">
+    <button id="playBtn" onclick="togglePlay()">▶</button>
+    <div id="progressWrap" onclick="seek(event)"><div id="progressBar"></div></div>
+    <div id="timeLabel">0:00 / 0:00</div>
+    <div id="sceneLabel"></div>
+  </div>
+</div>
+
+<script>
+// ── Canvas Setup ──────────────────────────────────────────────
+const canvas = document.getElementById('c');
+const ctx = canvas.getContext('2d');
+const W = 960, H = 540;
+
+// ── Colors ────────────────────────────────────────────────────
+const C = {
+  stick: '#2d3436', head: '#2d3436', accent: '#ff6b6b',
+  blue: '#0984e3', green: '#00b894', yellow: '#fdcb6e',
+  purple: '#a29bfe', orange: '#e17055', white: '#fff',
+  bg: '#fafafa', text: '#2d3436', sub: '#636e72',
+  data: '#74b9ff', brain: '#a29bfe', correct: '#00b894', wrong: '#ff6b6b',
+};
+
+// ── Stickman Drawing ──────────────────────────────────────────
+function lerp(a, b, t) { return a + (b - a) * t; }
+function lerpAngle(a, b, t) {
+  let d = b - a;
+  while (d > Math.PI) d -= Math.PI * 2;
+  while (d < -Math.PI) d += Math.PI * 2;
+  return a + d * t;
+}
+function easeInOut(t) { return t < .5 ? 2*t*t : -1+(4-2*t)*t; }
+function easeOut(t) { return 1 - Math.pow(1 - t, 3); }
+function easeIn(t) { return t * t * t; }
+
+function drawStickman(cx, cy, scale, pose, color) {
+  ctx.save();
+  ctx.translate(cx, cy);
+  ctx.scale(scale, scale);
+  ctx.strokeStyle = color || C.stick;
+  ctx.lineWidth = 3;
+  ctx.lineCap = 'round';
+  ctx.lineJoin = 'round';
+
+  const s = pose.shoulder || 0;
+  const h = pose.hip || 0;
+
+  // Limb lengths
+  const upperArm = 22, lowerArm = 20;
+  const upperLeg = 24, lowerLeg = 24;
+  const bodyLen = 32;
+
+  // Shoulders & hips
+  const sx = 0, sy = -bodyLen;
+  const hx = 0, hy = 0;
+
+  // Left arm
+  const la1 = s + (pose.leftArm || .5);
+  const la2 = la1 + (pose.leftForearm || .6);
+  const lax1 = sx + Math.sin(la1) * upperArm;
+  const lay1 = sy + Math.cos(la1) * upperArm;
+  const lax2 = lax1 + Math.sin(la2) * lowerArm;
+  const lay2 = lay1 + Math.cos(la2) * lowerArm;
+
+  // Right arm
+  const ra1 = s - (pose.rightArm || .5);
+  const ra2 = ra1 - (pose.rightForearm || .6);
+  const rax1 = sx + Math.sin(ra1) * upperArm;
+  const ray1 = sy + Math.cos(ra1) * upperArm;
+  const rax2 = rax1 + Math.sin(ra2) * lowerArm;
+  const ray2 = ray1 + Math.cos(ra2) * lowerArm;
+
+  // Left leg
+  const ll1 = h + (pose.leftLeg || .3);
+  const ll2 = ll1 + (pose.leftShin || .4);
+  const llx1 = hx + Math.sin(ll1) * upperLeg;
+  const lly1 = hy + Math.cos(ll1) * upperLeg;
+  const llx2 = llx1 + Math.sin(ll2) * lowerLeg;
+  const lly2 = lly1 + Math.cos(ll2) * lowerLeg;
+
+  // Right leg
+  const rl1 = h - (pose.rightLeg || .3);
+  const rl2 = rl1 - (pose.rightShin || .4);
+  const rlx1 = hx + Math.sin(rl1) * upperLeg;
+  const rly1 = hy + Math.cos(rl1) * upperLeg;
+  const rlx2 = rlx1 + Math.sin(rl2) * lowerLeg;
+  const rly2 = rly1 + Math.cos(rl2) * lowerLeg;
+
+  // Draw body
+  ctx.beginPath();
+  ctx.moveTo(hx, hy); ctx.lineTo(sx, sy); ctx.stroke();
+
+  // Arms
+  ctx.beginPath();
+  ctx.moveTo(sx, sy); ctx.lineTo(lax1, lay1); ctx.lineTo(lax2, lay2); ctx.stroke();
+  ctx.beginPath();
+  ctx.moveTo(sx, sy); ctx.lineTo(rax1, ray1); ctx.lineTo(rax2, ray2); ctx.stroke();
+
+  // Legs
+  ctx.beginPath();
+  ctx.moveTo(hx, hy); ctx.lineTo(llx1, lly1); ctx.lineTo(llx2, lly2); ctx.stroke();
+  ctx.beginPath();
+  ctx.moveTo(hx, hy); ctx.lineTo(rlx1, rly1); ctx.lineTo(rlx2, rly2); ctx.stroke();
+
+  // Head
+  const headR = pose.headSize || 10;
+  ctx.fillStyle = C.bg;
+  ctx.strokeStyle = color || C.stick;
+  ctx.beginPath();
+  ctx.arc(sx, sy - headR - 2, headR, 0, Math.PI * 2);
+  ctx.fill(); ctx.stroke();
+
+  // Face
+  if (pose.face) {
+    ctx.fillStyle = color || C.stick;
+    const fy = sy - headR - 2;
+    if (pose.face === 'happy') {
+      ctx.beginPath();
+      ctx.arc(sx, fy - 1, 1.5, 0, Math.PI * 2); ctx.fill();
+      ctx.beginPath();
+      ctx.arc(sx - 3, fy - 1, 1.5, 0, Math.PI * 2); ctx.fill();
+      ctx.beginPath();
+      ctx.arc(sx, fy + 2, 4, .1, Math.PI - .1); ctx.stroke();
+    } else if (pose.face === 'sad') {
+      ctx.beginPath();
+      ctx.arc(sx, fy - 1, 1.5, 0, Math.PI * 2); ctx.fill();
+      ctx.beginPath();
+      ctx.arc(sx - 3, fy - 1, 1.5, 0, Math.PI * 2); ctx.fill();
+      ctx.beginPath();
+      ctx.arc(sx, fy + 5, 4, Math.PI + .1, -.1); ctx.stroke();
+    } else if (pose.face === 'excited') {
+      ctx.beginPath();
+      ctx.arc(sx, fy - 1, 2, 0, Math.PI * 2); ctx.fill();
+      ctx.beginPath();
+      ctx.arc(sx - 3.5, fy - 1, 2, 0, Math.PI * 2); ctx.fill();
+      ctx.beginPath();
+      ctx.ellipse(sx, fy + 3, 3.5, 4, 0, 0, Math.PI * 2); ctx.stroke();
+    } else if (pose.face === 'think') {
+      ctx.beginPath();
+      ctx.arc(sx + 1, fy - 1, 1.5, 0, Math.PI * 2); ctx.fill();
+      ctx.beginPath();
+      ctx.arc(sx - 2.5, fy - 1, 1.5, 0, Math.PI * 2); ctx.fill();
+      // Raised eyebrow
+      ctx.beginPath();
+      ctx.moveTo(sx - 5, fy - 5);
+      ctx.quadraticCurveTo(sx, fy - 7, sx + 4, fy - 5);
+      ctx.stroke();
+    }
+  }
+
+  // Props
+  if (pose.props) {
+    for (const p of pose.props) drawProp(p, sx, sy);
+  }
+
+  ctx.restore();
+}
+
+function drawProp(p, sx, sy) {
+  ctx.save();
+  if (p.type === 'screen') {
+    ctx.fillStyle = '#dfe6e9';
+    ctx.strokeStyle = C.stick;
+    ctx.lineWidth = 2;
+    const rx = sx + 40, ry = sy - 20;
+    ctx.fillRect(rx, ry, 36, 28);
+    ctx.strokeRect(rx, ry, 36, 28);
+    // Screen content
+    if (p.content === 'data') {
+      ctx.fillStyle = C.data;
+      for (let i = 0; i < 4; i++) {
+        ctx.fillRect(rx + 4, ry + 4 + i * 6, 10 + Math.random() * 18, 3);
+      }
+    } else if (p.content === 'brain') {
+      ctx.fillStyle = C.brain;
+      ctx.beginPath();
+      ctx.arc(rx + 18, ry + 14, 8, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.fillStyle = '#fff';
+      ctx.font = '10px sans-serif';
+      ctx.fillText('AI', rx + 12, ry + 17);
+    } else if (p.content === 'check') {
+      ctx.strokeStyle = C.correct;
+      ctx.lineWidth = 3;
+      ctx.beginPath();
+      ctx.moveTo(rx + 8, ry + 14);
+      ctx.lineTo(rx + 15, ry + 22);
+      ctx.lineTo(rx + 28, ry + 6);
+      ctx.stroke();
+    } else if (p.content === 'x') {
+      ctx.strokeStyle = C.wrong;
+      ctx.lineWidth = 3;
+      ctx.beginPath();
+      ctx.moveTo(rx + 8, ry + 8); ctx.lineTo(rx + 28, ry + 22); ctx.stroke();
+      ctx.beginPath();
+      ctx.moveTo(rx + 28, ry + 8); ctx.lineTo(rx + 8, ry + 22); ctx.stroke();
+    }
+    // Stand
+    ctx.strokeStyle = C.stick;
+    ctx.lineWidth = 2;
+    ctx.beginPath();
+    ctx.moveTo(rx + 18, ry + 28); ctx.lineTo(rx + 18, ry + 40);
+    ctx.moveTo(rx + 10, ry + 40); ctx.lineTo(rx + 26, ry + 40);
+    ctx.stroke();
+  } else if (p.type === 'question') {
+    ctx.fillStyle = C.yellow;
+    ctx.font = 'bold 28px sans-serif';
+    ctx.fillText('?', sx - 60, sy - 50);
+  } else if (p.type === 'exclaim') {
+    ctx.fillStyle = C.accent;
+    ctx.font = 'bold 28px sans-serif';
+    ctx.fillText('!', sx + 50, sy - 50);
+  } else if (p.type === 'sparkles') {
+    ctx.fillStyle = C.yellow;
+    const t = Date.now() / 300;
+    for (let i = 0; i < 5; i++) {
+      const a = t + i * 1.2;
+      const r = 30 + Math.sin(t + i) * 8;
+      const px = sx + Math.cos(a) * r;
+      const py = sy - 30 + Math.sin(a) * r * .5;
+      ctx.beginPath();
+      ctx.arc(px, py, 2, 0, Math.PI * 2);
+      ctx.fill();
+    }
+  } else if (p.type === 'arrow') {
+    ctx.strokeStyle = C.blue;
+    ctx.lineWidth = 2;
+    ctx.beginPath();
+    ctx.moveTo(sx + 30, sy - 30);
+    ctx.lineTo(sx + 60, sy - 30);
+    ctx.lineTo(sx + 55, sy - 35);
+    ctx.moveTo(sx + 60, sy - 30);
+    ctx.lineTo(sx + 55, sy - 25);
+    ctx.stroke();
+  }
+  ctx.restore();
+}
+
+// ── Drawing Helpers ───────────────────────────────────────────
+function drawText(text, x, y, opts = {}) {
+  ctx.save();
+  ctx.font = `${opts.weight || '400'} ${opts.size || 16}px ${opts.font || "'Segoe UI', system-ui, sans-serif"}`;
+  ctx.fillStyle = opts.color || C.text;
+  ctx.textAlign = opts.align || 'center';
+  ctx.textBaseline = opts.baseline || 'middle';
+  if (opts.shadow) {
+    ctx.shadowColor = 'rgba(0,0,0,.1)';
+    ctx.shadowBlur = 4;
+    ctx.shadowOffsetY = 2;
+  }
+  ctx.fillText(text, x, y);
+  ctx.restore();
+}
+
+function drawTitle(text, sub) {
+  drawText(text, W/2, H/2 - 20, { size: 36, weight: '700', color: C.text, shadow: true });
+  if (sub) drawText(sub, W/2, H/2 + 24, { size: 18, color: C.sub });
+}
+
+function drawProgressBar(x, y, w, progress, color) {
+  ctx.fillStyle = '#dfe6e9';
+  ctx.beginPath(); ctx.roundRect(x, y, w, 8, 4); ctx.fill();
+  ctx.fillStyle = color || C.blue;
+  ctx.beginPath(); ctx.roundRect(x, y, w * progress, 8, 4); ctx.fill();
+}
+
+function drawDataParticles(cx, cy, count, spread, t) {
+  ctx.fillStyle = C.data;
+  for (let i = 0; i < count; i++) {
+    const a = (i / count) * Math.PI * 2 + t * .5;
+    const r = spread + Math.sin(t * 2 + i) * 10;
+    const px = cx + Math.cos(a) * r;
+    const py = cy + Math.sin(a) * r * .6;
+    ctx.globalAlpha = .4 + Math.sin(t * 3 + i) * .3;
+    ctx.beginPath(); ctx.arc(px, py, 3, 0, Math.PI * 2); ctx.fill();
+  }
+  ctx.globalAlpha = 1;
+}
+
+function drawBrainGlow(cx, cy, size, t) {
+  const s = size + Math.sin(t * 2) * 3;
+  ctx.save();
+  ctx.globalAlpha = .15 + Math.sin(t * 2) * .05;
+  ctx.fillStyle = C.purple;
+  ctx.beginPath(); ctx.arc(cx, cy, s * 1.5, 0, Math.PI * 2); ctx.fill();
+  ctx.globalAlpha = .3;
+  ctx.beginPath(); ctx.arc(cx, cy, s, 0, Math.PI * 2); ctx.fill();
+  ctx.globalAlpha = 1;
+  ctx.fillStyle = C.purple;
+  ctx.beginPath(); ctx.arc(cx, cy, s * .6, 0, Math.PI * 2); ctx.fill();
+  ctx.fillStyle = '#fff';
+  ctx.font = 'bold 14px sans-serif';
+  ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+  ctx.fillText('🧠', cx, cy);
+  ctx.restore();
+}
+
+function drawCheckmark(cx, cy, size, t) {
+  const s = easeOut(Math.min(t * 3, 1));
+  ctx.save();
+  ctx.translate(cx, cy);
+  ctx.scale(s, s);
+  ctx.fillStyle = C.correct;
+  ctx.beginPath(); ctx.arc(0, 0, size, 0, Math.PI * 2); ctx.fill();
+  ctx.strokeStyle = '#fff';
+  ctx.lineWidth = 3;
+  ctx.beginPath();
+  ctx.moveTo(-size * .4, 0);
+  ctx.lineTo(-size * .1, size * .35);
+  ctx.lineTo(size * .45, -size * .3);
+  ctx.stroke();
+  ctx.restore();
+}
+
+function drawCross(cx, cy, size, t) {
+  const s = easeOut(Math.min(t * 3, 1));
+  ctx.save();
+  ctx.translate(cx, cy);
+  ctx.scale(s, s);
+  ctx.fillStyle = C.wrong;
+  ctx.beginPath(); ctx.arc(0, 0, size, 0, Math.PI * 2); ctx.fill();
+  ctx.strokeStyle = '#fff';
+  ctx.lineWidth = 3;
+  ctx.beginPath();
+  ctx.moveTo(-size * .35, -size * .35);
+  ctx.lineTo(size * .35, size * .35);
+  ctx.moveTo(size * .35, -size * .35);
+  ctx.lineTo(-size * .35, size * .35);
+  ctx.stroke();
+  ctx.restore();
+}
+
+// ── Scenes ────────────────────────────────────────────────────
+const scenes = [
+  // Scene 0: Title
+  {
+    name: 'Title',
+    duration: 3.5,
+    draw(t) {
+      ctx.fillStyle = C.bg;
+      ctx.fillRect(0, 0, W, H);
+      // Decorative circles
+      ctx.globalAlpha = .06;
+      ctx.fillStyle = C.blue;
+      ctx.beginPath(); ctx.arc(150, 200, 120, 0, Math.PI * 2); ctx.fill();
+      ctx.fillStyle = C.purple;
+      ctx.beginPath(); ctx.arc(800, 350, 100, 0, Math.PI * 2); ctx.fill();
+      ctx.globalAlpha = 1;
+
+      const titleAlpha = easeOut(Math.min(t * 2, 1));
+      ctx.globalAlpha = titleAlpha;
+      drawText('How AI Learns', W/2, H/2 - 30, { size: 42, weight: '700', color: C.text, shadow: true });
+      drawText('A Stickman Explainer', W/2, H/2 + 24, { size: 18, color: C.sub });
+      ctx.globalAlpha = 1;
+
+      // Stickman wave
+      if (t > .5) {
+        const waveT = (t - .5) * 2;
+        const wave = Math.sin(waveT * 6) * .3;
+        drawStickman(W/2, H/2 + 110, 2, {
+          shoulder: wave, rightArm: -.8 + wave * .5, rightForearm: -1.2,
+          leftArm: .5, leftForearm: .3,
+          leftLeg: .3, leftShin: .1,
+          rightLeg: -.3, rightShin: -.1,
+          face: 'happy'
+        }, C.stick);
+      }
+    }
+  },
+
+  // Scene 1: Meet the AI
+  {
+    name: 'Meet the AI',
+    duration: 4,
+    draw(t) {
+      ctx.fillStyle = C.bg; ctx.fillRect(0, 0, W, H);
+
+      // Intro text
+      const textA = easeOut(Math.min(t * 2, 1));
+      ctx.globalAlpha = textA;
+      drawText('Imagine a blank brain...', W/2, 60, { size: 24, weight: '600', color: C.text });
+      drawText('It knows nothing yet.', W/2, 95, { size: 16, color: C.sub });
+      ctx.globalAlpha = 1;
+
+      // Brain appears
+      if (t > .8) {
+        const brainT = t - .8;
+        drawBrainGlow(W/2, H/2 - 20, 40 + brainT * 10, t);
+      }
+
+      // Stickman looks at brain
+      if (t > 1.5) {
+        drawStickman(W/2 - 160, H/2 + 60, 1.8, {
+          shoulder: .1, rightArm: .6, rightForearm: .4,
+          leftArm: -.5, leftForearm: -.3,
+          leftLeg: .25, leftShin: .15,
+          rightLeg: -.25, rightShin: -.15,
+          face: 'think'
+        }, C.stick);
+
+        // Thought bubble
+        if (t > 2.5) {
+          const ba = easeOut(Math.min((t - 2.5) * 2, 1));
+          ctx.globalAlpha = ba;
+          ctx.fillStyle = '#fff';
+          ctx.strokeStyle = '#b2bec3';
+          ctx.lineWidth = 1.5;
+          // Bubble
+          const bx = W/2 - 120, by = H/2 - 50;
+          ctx.beginPath(); ctx.arc(bx + 30, by - 10, 3, 0, Math.PI*2); ctx.fill(); ctx.stroke();
+          ctx.beginPath(); ctx.arc(bx + 15, by + 5, 5, 0, Math.PI*2); ctx.fill(); ctx.stroke();
+          ctx.beginPath();
+          ctx.moveTo(bx + 70, by - 45);
+          ctx.quadraticCurveTo(bx + 30, by - 45, bx + 30, by - 25);
+          ctx.quadraticCurveTo(bx + 30, by - 5, bx + 70, by - 5);
+          ctx.quadraticCurveTo(bx + 110, by - 5, bx + 110, by - 25);
+          ctx.quadraticCurveTo(bx + 110, by - 45, bx + 70, by - 45);
+          ctx.fill(); ctx.stroke();
+          drawText('🤔', bx + 70, by - 25, { size: 20 });
+          ctx.globalAlpha = 1;
+        }
+      }
+    }
+  },
+
+  // Scene 2: Data In
+  {
+    name: 'Data In',
+    duration: 5,
+    draw(t) {
+      ctx.fillStyle = C.bg; ctx.fillRect(0, 0, W, H);
+
+      drawText('Step 1: Feed It Data', W/2, 50, { size: 24, weight: '600', color: C.blue });
+
+      // Stickman at computer
+      drawStickman(260, H/2 + 40, 1.8, {
+        shoulder: .15, rightArm: .7, rightForearm: .5,
+        leftArm: -.3, leftForearm: -.2,
+        leftLeg: .3, leftShin: .1,
+        rightLeg: -.3, rightShin: -.1,
+        face: 'happy',
+        props: [{ type: 'screen', content: 'data' }]
+      }, C.stick);
+
+      // Data flowing to brain
+      if (t > 1) {
+        const flowT = (t - 1) * 1.5;
+        for (let i = 0; i < 12; i++) {
+          const progress = (flowT + i * .3) % 4;
+          if (progress < 1) {
+            const px = lerp(380, W/2 + 50, easeInOut(progress));
+            const py = lerp(H/2 - 10, H/2 - 30, progress) + Math.sin(progress * Math.PI) * -30;
+            ctx.globalAlpha = 1 - progress * .5;
+            ctx.fillStyle = C.data;
+            ctx.beginPath(); ctx.arc(px, py, 4, 0, Math.PI * 2); ctx.fill();
+            ctx.globalAlpha = 1;
+          }
+        }
+      }
+
+      // Brain receiving
+      drawBrainGlow(W/2 + 80, H/2 - 20, 35, t);
+
+      // Labels
+      if (t > 2) {
+        const la = easeOut(Math.min((t - 2) * 2, 1));
+        ctx.globalAlpha = la;
+        drawText('📚 Thousands of examples', W/2, H/2 + 120, { size: 16, color: C.sub });
+        drawText('Images, text, sounds...', W/2, H/2 + 145, { size: 14, color: '#b2bec3' });
+        ctx.globalAlpha = 1;
+      }
+
+      // Animated data particles
+      if (t > 1.5) {
+        drawDataParticles(W/2 + 80, H/2 - 20, 8, 50 + t * 5, t);
+      }
+    }
+  },
+
+  // Scene 3: Making Guesses
+  {
+    name: 'Guessing',
+    duration: 5,
+    draw(t) {
+      ctx.fillStyle = C.bg; ctx.fillRect(0, 0, W, H);
+
+      drawText('Step 2: Make Guesses', W/2, 50, { size: 24, weight: '600', color: C.purple });
+
+      // Brain on left
+      drawBrainGlow(200, H/2 - 40, 45, t);
+
+      // Stickman thinking
+      drawStickman(200, H/2 + 100, 1.5, {
+        shoulder: .05, rightArm: .4, rightForearm: .3,
+        leftArm: -.4, leftForearm: -.2,
+        leftLeg: .25, leftShin: .1,
+        rightLeg: -.25, rightShin: -.1,
+        face: 'think'
+      }, C.stick);
+
+      // Prediction bubbles
+      if (t > 1) {
+        const predictions = ['🐱 Cat?', '🐕 Dog?', '🐦 Bird?'];
+        for (let i = 0; i < 3; i++) {
+          const delay = i * .6;
+          if (t > 1 + delay) {
+            const ba = easeOut(Math.min((t - 1 - delay) * 3, 1));
+            const bx = 380 + i * 130;
+            const by = H/2 - 20 + Math.sin(t * 2 + i) * 5;
+            ctx.globalAlpha = ba;
+            ctx.fillStyle = '#fff';
+            ctx.strokeStyle = C.purple;
+            ctx.lineWidth = 2;
+            ctx.beginPath();
+            ctx.roundRect(bx - 45, by - 18, 90, 36, 12);
+            ctx.fill(); ctx.stroke();
+            drawText(predictions[i], bx, by, { size: 15, weight: '600', color: C.text });
+            ctx.globalAlpha = 1;
+          }
+        }
+      }
+
+      // Arrow showing flow
+      if (t > 1.5) {
+        ctx.globalAlpha = .3 + Math.sin(t * 3) * .2;
+        ctx.strokeStyle = C.purple;
+        ctx.lineWidth = 2;
+        ctx.setLineDash([5, 5]);
+        ctx.beginPath();
+        ctx.moveTo(260, H/2 - 40);
+        ctx.lineTo(340, H/2 - 20);
+        ctx.stroke();
+        ctx.setLineDash([]);
+        ctx.globalAlpha = 1;
+      }
+    }
+  },
+
+  // Scene 4: Getting It Wrong
+  {
+    name: 'Wrong Answer',
+    duration: 4.5,
+    draw(t) {
+      ctx.fillStyle = C.bg; ctx.fillRect(0, 0, W, H);
+
+      drawText('Step 3: Get Feedback', W/2, 50, { size: 24, weight: '600', color: C.wrong });
+
+      // Stickman shows answer
+      drawStickman(280, H/2 + 30, 1.8, {
+        shoulder: .2, rightArm: .8, rightForearm: .6,
+        leftArm: -.3, leftForearm: -.2,
+        leftLeg: .3, leftShin: .1,
+        rightLeg: -.3, rightShin: -.1,
+        face: 'happy',
+        props: [{ type: 'screen', content: 'x' }]
+      }, C.stick);
+
+      // Wrong answer feedback
+      if (t > 1) {
+        drawCross(W/2 + 50, H/2 - 30, 30, t - 1);
+      }
+      if (t > 1.5) {
+        const fa = easeOut(Math.min((t - 1.5) * 2, 1));
+        ctx.globalAlpha = fa;
+        drawText('❌ Wrong!', W/2 + 50, H/2 + 20, { size: 20, weight: '700', color: C.wrong });
+        drawText('That\'s not a cat — it\'s a dog!', W/2 + 50, H/2 + 50, { size: 14, color: C.sub });
+        ctx.globalAlpha = 1;
+      }
+
+      // Sad stickman reaction
+      if (t > 2.5) {
+        const ra = easeOut(Math.min((t - 2.5) * 2, 1));
+        ctx.globalAlpha = ra;
+        drawStickman(280, H/2 + 30, 1.8, {
+          shoulder: -.1, rightArm: .3, rightForearm: .4,
+          leftArm: -.2, leftForearm: .3,
+          leftLeg: .25, leftShin: .1,
+          rightLeg: -.25, rightShin: -.1,
+          face: 'sad'
+        }, C.stick);
+        ctx.globalAlpha = 1;
+      }
+
+      // Learning arrow
+      if (t > 3) {
+        const la = easeOut(Math.min((t - 3) * 2, 1));
+        ctx.globalAlpha = la;
+        drawText('💡 "I need to adjust my understanding"', W/2, H/2 + 120, { size: 16, weight: '500', color: C.blue });
+        ctx.globalAlpha = 1;
+      }
+    }
+  },
+
+  // Scene 5: Learning from Mistakes
+  {
+    name: 'Learning',
+    duration: 5,
+    draw(t) {
+      ctx.fillStyle = C.bg; ctx.fillRect(0, 0, W, H);
+
+      drawText('Step 4: Adjust & Learn', W/2, 50, { size: 24, weight: '600', color: C.green });
+
+      // Brain processing
+      const pulse = Math.sin(t * 3) * 5;
+      drawBrainGlow(W/2, H/2 - 30, 50 + pulse, t);
+
+      // Neural network visualization
+      const layers = [[-80, 40], [0, 40], [80, 40]];
+      const nodes = [[-30, -15, 0, 15, 30], [-20, 0, 20], [-10, 10]];
+      ctx.strokeStyle = C.purple;
+      ctx.lineWidth = 1;
+      ctx.globalAlpha = .4;
+      for (let l = 0; l < layers.length - 1; l++) {
+        for (let i = 0; i < nodes[l].length; i++) {
+          for (let j = 0; j < nodes[l+1].length; j++) {
+            ctx.beginPath();
+            ctx.moveTo(W/2 + layers[l][0], H/2 - 30 + nodes[l][i]);
+            ctx.lineTo(W/2 + layers[l+1][0], H/2 - 30 + nodes[l+1][j]);
+            ctx.stroke();
+          }
+        }
+      }
+      // Nodes
+      ctx.globalAlpha = 1;
+      for (let l = 0; l < layers.length; l++) {
+        for (let i = 0; i < nodes[l].length; i++) {
+          const glow = Math.sin(t * 4 + l + i * .5) > 0;
+          ctx.fillStyle = glow ? C.purple : '#b2bec3';
+          ctx.beginPath();
+          ctx.arc(W/2 + layers[l][0], H/2 - 30 + nodes[l][i], 4, 0, Math.PI * 2);
+          ctx.fill();
+        }
+      }
+
+      // Stickman watching
+      drawStickman(W/2 - 180, H/2 + 80, 1.5, {
+        shoulder: .1, rightArm: .5, rightForearm: .4,
+        leftArm: -.4, leftForearm: -.3,
+        leftLeg: .25, leftShin: .1,
+        rightLeg: -.25, rightShin: -.1,
+        face: 'think'
+      }, C.stick);
+
+      // Progress indicator
+      if (t > 1.5) {
+        const prog = Math.min((t - 1.5) / 2.5, 1);
+        drawProgressBar(W/2 - 100, H/2 + 120, 200, prog, C.green);
+        drawText(`Training: ${Math.round(prog * 100)}%`, W/2, H/2 + 145, { size: 13, color: C.sub });
+      }
+
+      // Adjusting weights text
+      if (t > 2) {
+        const ta = easeOut(Math.min((t - 2) * 2, 1));
+        ctx.globalAlpha = ta;
+        drawText('Adjusting connections...', W/2, H/2 + 170, { size: 14, color: C.green });
+        ctx.globalAlpha = 1;
+      }
+    }
+  },
+
+  // Scene 6: Getting It Right!
+  {
+    name: 'Success!',
+    duration: 4.5,
+    draw(t) {
+      ctx.fillStyle = C.bg; ctx.fillRect(0, 0, W, H);
+
+      drawText('Step 5: Get It Right! 🎉', W/2, 50, { size: 24, weight: '600', color: C.correct });
+
+      // Stickman confident
+      drawStickman(280, H/2 + 30, 1.8, {
+        shoulder: .15, rightArm: .9, rightForearm: .7,
+        leftArm: -.6, leftForearm: -.4,
+        leftLeg: .3, leftShin: .1,
+        rightLeg: -.3, rightShin: -.1,
+        face: 'excited',
+        props: [{ type: 'screen', content: 'check' }, { type: 'sparkles' }]
+      }, C.stick);
+
+      // Big checkmark
+      if (t > .8) {
+        drawCheckmark(W/2 + 60, H/2 - 40, 35, t - .8);
+      }
+
+      if (t > 1.3) {
+        const sa = easeOut(Math.min((t - 1.3) * 2, 1));
+        ctx.globalAlpha = sa;
+        drawText('✅ Correct!', W/2 + 60, H/2 + 10, { size: 22, weight: '700', color: C.correct });
+        drawText('That IS a cat! Nailed it!', W/2 + 60, H/2 + 40, { size: 14, color: C.sub });
+        ctx.globalAlpha = 1;
+      }
+
+      // Confidence meter
+      if (t > 2) {
+        const prog = Math.min((t - 2) / 1.5, 1);
+        drawProgressBar(W/2 - 80, H/2 + 100, 160, prog, C.correct);
+        drawText(`Confidence: ${Math.round(prog * 95)}%`, W/2, H/2 + 125, { size: 13, color: C.sub });
+      }
+
+      // Celebration
+      if (t > 3) {
+        const colors = [C.accent, C.yellow, C.blue, C.green, C.purple];
+        for (let i = 0; i < 15; i++) {
+          const ct = (t - 3) * 2;
+          const angle = (i / 15) * Math.PI * 2;
+          const dist = 80 + ct * 30;
+          const px = W/2 + 60 + Math.cos(angle) * dist;
+          const py = H/2 - 40 + Math.sin(angle) * dist * .6;
+          if (py < H && py > 0) {
+            ctx.globalAlpha = Math.max(0, 1 - ct * .3);
+            ctx.fillStyle = colors[i % colors.length];
+            ctx.beginPath(); ctx.arc(px, py, 4, 0, Math.PI * 2); ctx.fill();
+          }
+        }
+        ctx.globalAlpha = 1;
+      }
+    }
+  },
+
+  // Scene 7: Summary
+  {
+    name: 'Summary',
+    duration: 5,
+    draw(t) {
+      ctx.fillStyle = C.bg; ctx.fillRect(0, 0, W, H);
+
+      drawText('The AI Learning Loop', W/2, 55, { size: 28, weight: '700', color: C.text, shadow: true });
+
+      // Four steps in a cycle
+      const steps = [
+        { icon: '📊', label: 'Data', color: C.blue, x: W/2, y: 150 },
+        { icon: '🤔', label: 'Guess', color: C.purple, x: W/2 + 160, y: 270 },
+        { icon: '❌', label: 'Feedback', color: C.wrong, x: W/2, y: 390 },
+        { icon: '🧠', label: 'Learn', color: C.green, x: W/2 - 160, y: 270 },
+      ];
+
+      // Draw connecting arrows
+      ctx.strokeStyle = '#b2bec3';
+      ctx.lineWidth = 2;
+      ctx.setLineDash([6, 4]);
+      for (let i = 0; i < steps.length; i++) {
+        const from = steps[i];
+        const to = steps[(i + 1) % steps.length];
+        const arrowProgress = Math.min(t * 1.5 - i * .4, 1);
+        if (arrowProgress > 0) {
+          ctx.globalAlpha = easeOut(arrowProgress);
+          ctx.beginPath();
+          ctx.moveTo(from.x, from.y);
+          ctx.lineTo(
+            lerp(from.x, to.x, easeOut(arrowProgress)),
+            lerp(from.y, to.y, easeOut(arrowProgress))
+          );
+          ctx.stroke();
+        }
+      }
+      ctx.setLineDash([]);
+      ctx.globalAlpha = 1;
+
+      // Draw steps
+      for (let i = 0; i < steps.length; i++) {
+        const s = steps[i];
+        const delay = i * .5;
+        if (t > delay) {
+          const sa = easeOut(Math.min((t - delay) * 2, 1));
+          const scale = .5 + sa * .5;
+          ctx.save();
+          ctx.translate(s.x, s.y);
+          ctx.scale(scale, scale);
+          ctx.globalAlpha = sa;
+
+          // Circle bg
+          ctx.fillStyle = '#fff';
+          ctx.strokeStyle = s.color;
+          ctx.lineWidth = 3;
+          ctx.beginPath(); ctx.arc(0, 0, 35, 0, Math.PI * 2);
+          ctx.fill(); ctx.stroke();
+
+          drawText(s.icon, 0, -2, { size: 24 });
+          drawText(s.label, 0, 55, { size: 14, weight: '600', color: s.color });
+
+          ctx.restore();
+          ctx.globalAlpha = 1;
+        }
+      }
+
+      // Bottom text
+      if (t > 3) {
+        const ba = easeOut(Math.min((t - 3) * 2, 1));
+        ctx.globalAlpha = ba;
+        drawText('Repeat millions of times → Intelligence emerges', W/2, H/2 + 140, { size: 16, weight: '500', color: C.sub });
+        ctx.globalAlpha = 1;
+      }
+    }
+  },
+
+  // Scene 8: End
+  {
+    name: 'The End',
+    duration: 4,
+    draw(t) {
+      ctx.fillStyle = C.bg; ctx.fillRect(0, 0, W, H);
+
+      // Stickman bow
+      const bowT = Math.min(t * 1.5, 1);
+      const bow = easeInOut(bowT) * .3;
+      drawStickman(W/2, H/2 + 20, 2.2, {
+        shoulder: bow, rightArm: .5 + bow, rightForearm: .4,
+        leftArm: -.5 - bow, leftForearm: -.4,
+        leftLeg: .3, leftShin: .1,
+        rightLeg: -.3, rightShin: -.1,
+        face: 'happy',
+        props: [{ type: 'sparkles' }]
+      }, C.stick);
+
+      const fa = easeOut(Math.min(t * 2, 1));
+      ctx.globalAlpha = fa;
+      drawText('Thanks for watching!', W/2, 80, { size: 32, weight: '700', color: C.text, shadow: true });
+      drawText('Now you know how AI learns 🧠', W/2, 125, { size: 16, color: C.sub });
+      ctx.globalAlpha = 1;
+
+      // Subscribe hint
+      if (t > 2) {
+        const sa = easeOut(Math.min((t - 2) * 2, 1));
+        ctx.globalAlpha = sa * .6;
+        drawText('Made with HTML5 Canvas + JavaScript', W/2, H/2 + 100, { size: 13, color: '#b2bec3' });
+        ctx.globalAlpha = 1;
+      }
+    }
+  }
+];
+
+// ── Playback Engine ───────────────────────────────────────────
+let currentScene = 0;
+let sceneTime = 0;
+let totalTime = 0;
+let playing = false;
+let lastFrame = 0;
+const totalDuration = scenes.reduce((sum, s) => sum + s.duration, 0);
+
+function getSceneAt(time) {
+  let acc = 0;
+  for (let i = 0; i < scenes.length; i++) {
+    if (time < acc + scenes[i].duration) {
+      return { index: i, localTime: time - acc };
+    }
+    acc += scenes[i].duration;
+  }
+  return { index: scenes.length - 1, localTime: scenes[scenes.length-1].duration - .01 };
+}
+
+function formatTime(s) {
+  const m = Math.floor(s / 60);
+  const sec = Math.floor(s % 60);
+  return `${m}:${sec.toString().padStart(2, '0')}`;
+}
+
+let globalTime = 0;
+
+function render(timestamp) {
+  if (!lastFrame) lastFrame = timestamp;
+  const dt = (timestamp - lastFrame) / 1000;
+  lastFrame = timestamp;
+
+  if (playing) {
+    globalTime += dt;
+    if (globalTime >= totalDuration) {
+      globalTime = totalDuration;
+      playing = false;
+      document.getElementById('playBtn').textContent = '▶';
+      document.getElementById('replayBtn').style.display = 'block';
+    }
+  }
+
+  const { index, localTime } = getSceneAt(globalTime);
+  currentScene = index;
+
+  // Clear
+  ctx.clearRect(0, 0, W, H);
+
+  // Draw current scene
+  scenes[index].draw(localTime);
+
+  // Update UI
+  const progress = (globalTime / totalDuration) * 100;
+  document.getElementById('progressBar').style.width = progress + '%';
+  document.getElementById('timeLabel').textContent = `${formatTime(globalTime)} / ${formatTime(totalDuration)}`;
+  document.getElementById('sceneLabel').textContent = scenes[index].name;
+
+  requestAnimationFrame(render);
+}
+
+function togglePlay() {
+  if (globalTime >= totalDuration) {
+    globalTime = 0;
+    document.getElementById('replayBtn').style.display = 'none';
+  }
+  playing = !playing;
+  document.getElementById('playBtn').textContent = playing ? '⏸' : '▶';
+}
+
+function restart() {
+  globalTime = 0;
+  playing = true;
+  lastFrame = 0;
+  document.getElementById('playBtn').textContent = '⏸';
+  document.getElementById('replayBtn').style.display = 'none';
+}
+
+function seek(e) {
+  const rect = e.currentTarget.getBoundingClientRect();
+  const pct = (e.clientX - rect.left) / rect.width;
+  globalTime = pct * totalDuration;
+  document.getElementById('replayBtn').style.display = 'none';
+}
+
+// Keyboard shortcuts
+document.addEventListener('keydown', (e) => {
+  if (e.code === 'Space') { e.preventDefault(); togglePlay(); }
+  if (e.code === 'ArrowRight') { globalTime = Math.min(globalTime + 1, totalDuration); }
+  if (e.code === 'ArrowLeft') { globalTime = Math.max(globalTime - 1, 0); }
+});
+
+// Start
+requestAnimationFrame(render);
+</script>
+</body>
+</html>
