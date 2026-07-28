@@ -107,6 +107,58 @@ def is_broken(status_code):
         return True
     return False
 
+# ─── Email extraction ─────────────────────────────────────────────────
+
+def extract_emails(html, source_url):
+    """Extract contact emails from page HTML.
+    Returns the first likely contact email, or None.
+    """
+    parsed = urllib.parse.urlparse(source_url)
+    domain = re.sub(r"^www\.", "", parsed.netloc).lower()
+
+    found = set()
+    # mailto: links
+    mailtos = re.findall(r'mailto:([a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,})', html)
+    found.update(mailtos)
+    # CloudFlare email protection (data-cfemail is hex-encoded)
+    cf_encoded = re.findall(r'data-cfemail="([a-fA-F0-9]+)"', html)
+    for cf in cf_encoded:
+        try:
+            decoded = bytes.fromhex(cf)
+            key = decoded[0]
+            email = ''.join(chr(b ^ key) for b in decoded[1:])
+            if '@' in email:
+                found.add(email)
+        except Exception:
+            pass
+    # Plain email patterns
+    plain = re.findall(r'[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}', html)
+    found.update(plain)
+
+    # Filter out noreply, example.com, etc.
+    skip_hard = {"noreply", "no-reply", "donotreply", "mailer-daemon", "postmaster"}
+    image_exts = {".png", ".jpg", ".jpeg", ".svg", ".gif", ".webp", ".ico", ".css", ".js"}
+    fake_domains = {"example.com", "example.org", "example.net", "domain.com"}
+
+    candidates = []
+    for e in found:
+        el = e.lower()
+        if any(s in el for s in skip_hard):
+            continue
+        if any(el.endswith(ext) for ext in image_exts):
+            continue
+        email_domain = el.split("@")[1] if "@" in el else ""
+        if email_domain in fake_domains:
+            continue
+        candidates.append(e)
+
+    # Prefer domain-matching emails
+    domain_emails = [e for e in candidates if domain in e.lower()]
+    if domain_emails:
+        return domain_emails[0]
+    return candidates[0] if candidates else None
+
+
 # ─── Page fetching ────────────────────────────────────────────────────
 
 def fetch_page(url):
@@ -198,8 +250,10 @@ def main():
             base = f"{parsed.scheme}://{parsed.netloc}"
             links = extract_outbound_links(html, base)
             if links:
-                page_data[url] = {'html': html, 'links': links, 'base': base}
-                print(f"  [OK] {url[:80]} — {len(links)} outbound links")
+                contact_email = extract_emails(html, url)
+                page_data[url] = {'html': html, 'links': links, 'base': base, 'contact_email': contact_email or ''}
+                email_hint = f", email: {contact_email}" if contact_email else ""
+                print(f"  [OK] {url[:80]} — {len(links)} links{email_hint}")
 
     print(f"\n  Successfully fetched {len(page_data)} pages\n")
 
@@ -250,14 +304,20 @@ def main():
     print("Step 4: Outreach opportunities")
     print(f"{'='*60}")
     
+    # Build a lookup of source_page -> contact_email from page_data
+    page_email_map = {url: data.get('contact_email', '') for url, data in page_data.items()}
+
     opportunities = []
     for i, bl in enumerate(broken_links, 1):
         outreach = generate_outreach(our_page, bl['broken_url'], bl['source_page'])
+        # Add contact_email from page_data if found
+        outreach['contact_email'] = page_email_map.get(bl['source_page'], '')
         opportunities.append(outreach)
         
         print(f"\n--- Opportunity #{i} ---")
         print(f"Source page: {outreach['source_page']}")
         print(f"Broken link: {outreach['broken_url']}")
+        print(f"Contact:     {outreach['contact_email'] or 'NOT FOUND'}")
         print(f"Our replacement: {outreach['our_replacement']}")
         print(f"Email subject: {outreach['subject']}")
         print(f"\n{outreach['body']}")
@@ -266,8 +326,9 @@ def main():
     # Step 5: Save to CSV if requested
     if args.output:
         import csv
+        fieldnames = ['source_page', 'broken_url', 'contact_email', 'our_replacement', 'subject', 'body']
         with open(args.output, 'w', newline='', encoding='utf-8') as f:
-            writer = csv.DictWriter(f, fieldnames=['source_page', 'broken_url', 'our_replacement', 'subject', 'body'])
+            writer = csv.DictWriter(f, fieldnames=fieldnames)
             writer.writeheader()
             for o in opportunities:
                 writer.writerow(o)
