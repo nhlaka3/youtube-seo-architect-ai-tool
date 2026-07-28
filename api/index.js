@@ -2072,12 +2072,12 @@ if (Sentry && Sentry.Handlers) {
 
 // Fallback 404 handler
 
-app.get('/api/glossary-comparison', async (req, res) => {
-  // moved here to avoid catch-all 404
+app.get('*', async (req, res, next) => {
+  // Check if this is a glossary comparison request
+  if (!req.query.slugA || !req.query.slugB) return next();
   try {
     const slugA = req.query.slugA;
     const slugB = req.query.slugB;
-    if (!slugA || !slugB) return sendJSON(res, 400, { error: 'Missing slugA or slugB' });
     const isES = req.url.includes('/es/');
     const { readFileSync, existsSync } = await import('fs');
     const { resolve, dirname } = await import('path');
