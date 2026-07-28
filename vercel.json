@@ -5,7 +5,6 @@
   "builds": [
     { "src": "api/index.js", "use": "@vercel/node" },
     { "src": "api/[...path].js", "use": "@vercel/node" },
-    { "src": "api/glossary-comparison.js", "use": "@vercel/node" },
     { "src": "package.json", "use": "@vercel/static-build", "config": { "distDir": "dist" } },
     { "src": "public/**", "use": "@vercel/static" }
   ],
@@ -36,7 +35,7 @@
     { "source": "/tools/title-optimizer", "destination": "/tools/title-optimizer.html" },
     { "source": "/tools/description-writer", "destination": "/tools/description-writer.html" },
     { "source": "/tools/(.*)", "destination": "/tools/$1.html" },
-    { "source": "/glossary/([^/]+)-vs-([^/]+)", "destination": "/api/glossary-comparison" },
+    { "source": "/glossary/(.+)", "destination": "/api/index.js" },
     { "source": "/guide/youtube-seo", "destination": "/api/index.js" },
     { "source": "/vs/morningfame", "destination": "/vs/morningfame.html" },
     { "source": "/vs/tubics", "destination": "/vs/tubics.html" },
