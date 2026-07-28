@@ -8,12 +8,15 @@ on:
       - 'public/vs/**'
       - 'public/widgets/**'
       - 'public/tools/converters/**'
+      - 'public/guides/**'
       - 'api/pseo/**'
       - 'api/programmatic-seo/**'
       - 'scripts/vs-data.js'
       - 'scripts/generate-vs-pages.mjs'
       - 'scripts/generate-converters.mjs'
       - 'scripts/converters-data.js'
+      - 'scripts/generate-guides.mjs'
+      - 'scripts/guides-data.js'
       - 'vercel.json'
   workflow_dispatch:
 
@@ -46,6 +49,12 @@ jobs:
           echo "Regenerating interactive converter calculators..."
           node scripts/generate-converters.mjs 2>&1
           echo "✅ Converter pages regenerated"
+
+      - name: 📚 Regenerate how-to guides
+        run: |
+          echo "Regenerating how-to guides..."
+          node scripts/generate-guides.mjs 2>&1
+          echo "✅ Guide pages regenerated"
 
       - name: 📦 Commit regenerated pages
         run: |

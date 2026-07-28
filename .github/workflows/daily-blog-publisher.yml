@@ -113,6 +113,12 @@ jobs:
           node scripts/generate-converters.mjs 2>&1
           echo "✅ Converter pages regenerated"
 
+      - name: 📚 Regenerate how-to guides
+        run: |
+          echo "Regenerating how-to guides..."
+          node scripts/generate-guides.mjs 2>&1
+          echo "✅ Guide pages regenerated"
+
       - name: 🎬 Generate video from new blog post
         id: video
         continue-on-error: true

@@ -36,6 +36,8 @@
     { "source": "/tools/description-writer", "destination": "/tools/description-writer.html" },
     { "source": "/tools/converters", "destination": "/tools/converters/index.html" },
     { "source": "/tools/converters/(.*)", "destination": "/tools/converters/$1.html" },
+    { "source": "/guides", "destination": "/guides/index.html" },
+    { "source": "/guides/(.*)", "destination": "/guides/$1.html" },
     { "source": "/tools/(.*)", "destination": "/tools/$1.html" },
     { "source": "/glossary/(.+)", "destination": "/api/index.js" },
     { "source": "/guide/youtube-seo", "destination": "/api/index.js" },
