@@ -1128,10 +1128,81 @@ async function main() {
     return;
   }
 
-  // Pick keyword
-  const keywordEntry = pickNextKeyword(data, KEYWORD_OVERRIDE);
+  // ── Pick keyword with demand loop ──────────────────────────────
+  let keywordEntry = null;
+  let demandResults = [];
+
+  if (KEYWORD_OVERRIDE) {
+    keywordEntry = pickNextKeyword(data, KEYWORD_OVERRIDE);
+    if (!keywordEntry) {
+      console.log('  ⚠ No pending keywords. Auto-refilling...');
+      await refillKeywords();
+      const refreshed = loadKeywords();
+      keywordEntry = pickNextKeyword(refreshed, KEYWORD_OVERRIDE);
+    }
+  } else {
+    const pending = [...data.keywords.filter(k => k.status === 'pending')];
+    if (pending.length === 0) {
+      console.log('  ⚠ No pending keywords. Auto-refilling...');
+      await refillKeywords();
+      const refreshed = loadKeywords();
+      const newPending = refreshed.keywords.filter(k => k.status === 'pending');
+      if (newPending.length > 0) {
+        keywordEntry = newPending[0];
+      }
+    } else {
+      for (const candidate of pending) {
+        const dedup = checkDeduplication(candidate.keyword, candidate.slug);
+        if (dedup.duplicate) {
+          console.log(`  ⏭ "${candidate.keyword}" — duplicate, skipping`);
+          markDone(data, candidate.slug);
+          saveKeywords(data);
+          continue;
+        }
+        console.log(`  📊 Checking: "${candidate.keyword}"`);
+        const demandResult = checkKeywordDemand(candidate.keyword);
+        demandResults.push({ keyword: candidate, demand: demandResult });
+        if (demandResult.demand !== null) {
+          console.log(`    Demand: ${demandResult.demand}/100  Rankability: ${demandResult.rankability}/100`);
+        }
+        if (demandResult.pass) {
+          keywordEntry = candidate;
+          console.log('  ✅ Demand check PASSED');
+          break;
+        } else {
+          const reasons = [];
+          if (!demandResult.demandOk) reasons.push(`Demand ${demandResult.demand} < ${DEMAND_THRESHOLD}`);
+          if (!demandResult.rankabilityOk) reasons.push(`Rankability ${demandResult.rankability} < ${RANKABILITY_THRESHOLD}`);
+          console.log(`  ⏭ SKIPPING: ${reasons.join(', ')}`);
+          markDone(data, candidate.slug);
+          saveKeywords(data);
+        }
+      }
+    }
+
+    if (!keywordEntry) {
+      console.log('');
+      console.log('  ⚠ No keyword passed demand check. Auto-refilling...');
+      await refillKeywords();
+      const refreshed = loadKeywords();
+      const newPending = refreshed.keywords.filter(k => k.status === 'pending');
+      if (newPending.length > 0) {
+        keywordEntry = newPending[0];
+        console.log(`  ⚡ Forcing best candidate: "${keywordEntry.keyword}"`);
+      } else if (demandResults.length > 0) {
+        demandResults.sort((a, b) => (b.demand?.demand || 0) - (a.demand?.demand || 0));
+        const best = demandResults[0];
+        keywordEntry = best.keyword;
+        console.log(`  ⚡ Forcing best available: "${keywordEntry.keyword}" (D:${best.demand?.demand || '?'})`);
+      } else {
+        console.log('  ✅ No keywords available after refill. Nothing to generate.');
+        process.exit(0);
+      }
+    }
+  }
+
   if (!keywordEntry) {
-    console.log('  ✅ No pending keywords! Run with --refill to generate more.');
+    console.log('  ✅ No keywords available. Nothing to generate.');
     process.exit(0);
   }
 
@@ -1140,39 +1211,15 @@ async function main() {
   console.log(`  Category: ${keywordEntry.category}`);
   console.log('');
 
-  // Check for duplicates
-  const dedup = checkDeduplication(keywordEntry.keyword, keywordEntry.slug);
-  if (dedup.duplicate) {
-    console.log(`  ⚠ Duplicate detected: ${dedup.reason}`);
-    console.log('  Marking as done and skipping...');
-    markDone(data, keywordEntry.slug);
-    saveKeywords(data);
-    process.exit(0);
-  }
-
-  // ═══ NEW: Demand check gate ═══
-  if (!FORCE_MODE) {
-    console.log('  📊 Checking keyword demand...');
-    const demandResult = checkKeywordDemand(keywordEntry.keyword);
-    if (demandResult.demand !== null) {
-      console.log(`    Demand: ${demandResult.demand}/100  Rankability: ${demandResult.rankability}/100`);
-    }
-    if (!demandResult.pass) {
-      const reasons = [];
-      if (!demandResult.demandOk) reasons.push(`Demand ${demandResult.demand} < ${DEMAND_THRESHOLD}`);
-      if (!demandResult.rankabilityOk) reasons.push(`Rankability ${demandResult.rankability} < ${RANKABILITY_THRESHOLD}`);
-      console.log(`  ⏭ SKIPPING: ${reasons.join(', ')}`);
-      console.log('  Use --force to bypass this check.');
-      markDone(data, keywordEntry.slug);
-      saveKeywords(data);
+  if (!KEYWORD_OVERRIDE) {
+    const dedup = checkDeduplication(keywordEntry.keyword, keywordEntry.slug);
+    if (dedup.duplicate) {
+      console.log(`  ⚠ Duplicate detected: ${dedup.reason}`);
+      console.log('  Nothing to generate.');
       process.exit(0);
     }
-    console.log('  ✅ Demand check PASSED');
-    console.log('');
-  } else {
-    console.log('  ⚡ --force: Skipping demand check');
-    console.log('');
   }
+
 
   // Generate article
   console.log('  Generating article...');
