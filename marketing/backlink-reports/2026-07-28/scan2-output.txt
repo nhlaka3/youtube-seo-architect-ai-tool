@@ -1,0 +1,322 @@
+
+============================================================
+COMPETITOR BACKLINK REPLICATOR
+Scanning for pages that link to YouTube SEO tool competitors
+Our site: https://yt-seo-architect.vercel.app
+Competitors tracked: 10
+============================================================
+
+🔄 Stage 1: Searching for relevant pages...
+  [1/26] "best youtube seo tools"
+  [2/26] "best free youtube seo tools"
+  [3/26] "youtube seo tools 2026"
+  [4/26] "youtube keyword research tools"
+  [5/26] "youtube tag generator tools"
+  [6/26] "best tools for youtube growth"
+  [7/26] "youtube optimization tools"
+  [8/26] "youtube analytics tools"
+  [9/26] "alternatives to vidiq"
+  [10/26] "alternatives to tubebuddy"
+  [11/26] "free alternatives to vidiq"
+  [12/26] "vidiq vs tubebuddy"
+  [13/26] "vidiq alternative free"
+  [14/26] "tubebuddy alternative free"
+  [15/26] "youtube tools list"
+  [16/26] "youtube seo resources"
+  [17/26] "tools for youtube creators"
+  [18/26] "youtube marketing tools"
+  [19/26] "best free tools for youtubers"
+  [20/26] "youtube creator toolkit"
+  [21/26] "essential youtube tools"
+  [22/26] "youtube growth tools"
+  [23/26] "how to optimize youtube videos tools"
+  [24/26] "youtube seo guide tools"
+  [25/26] "youtube thumbnail maker tools"
+  [26/26] "youtube description generator tools"
+  Found 45 unique results across all queries
+
+  Raw results saved: /home/runner/work/yt-seo-architect-private/yt-seo-architect-private/marketing/backlink-reports/competitor-raw-results-2026-07-28.json
+
+🔄 Stage 2: Fetching pages and analyzing links...
+  [1/15] 🎯 MISSING https://contentmavericks.com/best-youtube-seo-tool
+       Links to: TubeBuddy
+  [SKIP] https://joseangelostudios.com/best-youtube-seo-tools/ — HTTP Error 403: Forbidden
+  [SKIP] https://www.tastyedits.com/youtube-seo-tools/ — HTTP Error 403: Forbidden
+  [4/15] 🎯 MISSING https://www.braiv.co/articles/best-youtube-seo-too
+       Links to: KeywordTool.io + TubeBuddy + Tubics + vidIQ
+  [5/15] 🎯 MISSING https://vidiq.com/youtube-seo-tools/
+       Links to: vidIQ
+  [6/15] [SKIP] https://rankxdigital.com/blog/youtube-seo-tools/ — 0-0 competitor links
+  [SKIP] https://stuartkerrs.com/best-seo-tools-for-youtube/ — HTTP Error 403: Forbidden
+  [8/15] 🎯 MISSING https://vidiq.com/features/keyword-tools/
+       Links to: vidIQ
+  [9/15] [SKIP] https://www.collabpals.com/tools/youtube-keyword-r — 0-0 competitor links
+  [SKIP] https://tuberanker.com/youtube-keyword-tool — HTTP Error 403: Forbidden
+  [11/15] [SKIP] https://www.digimau.com/youtube-seo-guide-2026/ — 0-0 competitor links
+  [12/15] [SKIP] https://www.ryrob.com/youtube-keyword-tool/ — 0-0 competitor links
+  [13/15] 🎯 MISSING https://vidiq.com/ai-keyword-generator/
+       Links to: vidIQ
+  [14/15] 🎯 MISSING https://vidiq.com/video-tags-generator/
+       Links to: vidIQ
+  [15/15] 🎯 MISSING https://alanspicer.com/best-youtube-seo-tools-2026
+       Links to: vidIQ
+
+  Analyzed 7 pages with competitor links
+
+🔄 Stage 3: Finding pages that DON'T link to us yet...
+  Missing our link: 7 pages
+
+  Top opportunities:
+    🎯 [links 4 comps] https://www.braiv.co/articles/best-youtube-seo-tools-2026
+         Competitors: KeywordTool.io + TubeBuddy + Tubics + vidIQ
+    🎯 [links 1 comps] https://contentmavericks.com/best-youtube-seo-tools/
+         Competitors: TubeBuddy
+    🎯 [links 1 comps] https://vidiq.com/youtube-seo-tools/
+         Competitors: vidIQ
+    🎯 [links 1 comps] https://vidiq.com/features/keyword-tools/
+         Competitors: vidIQ
+    🎯 [links 1 comps] https://vidiq.com/ai-keyword-generator/
+         Competitors: vidIQ
+    🎯 [links 1 comps] https://vidiq.com/video-tags-generator/
+         Competitors: vidIQ
+    🎯 [links 1 comps] https://alanspicer.com/best-youtube-seo-tools-2026/
+         Competitors: vidIQ
+
+🔄 Stage 4: Generating personalized outreach templates...
+
+  --- Opportunity #1 ---
+  Source:    https://www.braiv.co/articles/best-youtube-seo-tools-2026
+  Title:     Best YouTube SEO Tools 2026 — 7 Platforms Creators Actually 
+  Links to:  KeywordTool.io + TubeBuddy + Tubics + vidIQ
+  Subject:   Your www.braiv.co list is missing a free YouTube SEO tool
+  Body:
+Hi there,
+
+I came across your excellent resource at https://www.braiv.co/articles/best-youtube-seo-tools-2026 — great roundup of KeywordTool.io, TubeBuddy, Tubics and vidIQ and other YouTube tools.
+
+I noticed you're not yet listing YT SEO Architect, a completely free platform with 17+ tools for YouTube creators, including:
+
+• AI title optimizer — scores titles out of 100 before you publish
+• Tag generator — finds 15+ optimized tags with relevance scores
+• Description writer — writes SEO-optimized descriptions with timestamps
+• Full channel audit — finds metadata issues across all your videos
+• Bulk metadata updater — fix titles/tags/descriptions in batches
+
+It's 100% free, no account required, and used by thousands of creators. I think it would be a valuable addition to your list — especially as a free alternative to tools like KeywordTool.io, TubeBuddy, Tubics and vidIQ that have paid tiers.
+
+You can check it out here: https://yt-seo-architect.vercel.app/tools/youtube-seo-audit-diagnostic-fix-2026
+
+Happy to provide screenshots, a demo video, or additional details if helpful.
+
+Best,
+[NHLAKA]
+Founder, YT SEO Architect
+https://yt-seo-architect.vercel.app
+
+
+  --- Opportunity #2 ---
+  Source:    https://contentmavericks.com/best-youtube-seo-tools/
+  Title:     7 Best YouTube SEO Tools 2026 (50 Tools Reviewed)
+  Links to:  TubeBuddy
+  Subject:   Free alternative to TubeBuddy for your contentmavericks.com audience
+  Body:
+Hi there,
+
+I enjoyed reading your content at https://contentmavericks.com/best-youtube-seo-tools/ — great work on covering TubeBuddy and YouTube tools in general.
+
+I wanted to let you know about YT SEO Architect, a completely free alternative to paid tools like TubeBuddy. Key features:
+
+• AI-powered title scoring and optimization
+• Smart tag generation with relevance scoring
+• SEO-optimized description writer
+• Full YouTube channel audit
+• Bulk metadata updates
+
+The best part: it's 100% free forever. No credits, no limits, no trial period. Just useful tools for YouTube creators.
+
+I'd love for you to check it out and consider adding it to your resource list: https://yt-seo-architect.vercel.app/dashboard
+
+Happy to answer any questions.
+
+Best,
+[NHLAKA]
+Founder, YT SEO Architect
+https://yt-seo-architect.vercel.app
+
+
+  --- Opportunity #3 ---
+  Source:    https://vidiq.com/youtube-seo-tools/
+  Title:     YouTube SEO Tools | Help Your Videos Rank Higher | vidIQ
+  Links to:  vidIQ
+  Subject:   Free alternative to vidIQ for your vidiq.com audience
+  Body:
+Hi there,
+
+I enjoyed reading your content at https://vidiq.com/youtube-seo-tools/ — great work on covering vidIQ and YouTube tools in general.
+
+I wanted to let you know about YT SEO Architect, a completely free alternative to paid tools like vidIQ. Key features:
+
+• AI-powered title scoring and optimization
+• Smart tag generation with relevance scoring
+• SEO-optimized description writer
+• Full YouTube channel audit
+• Bulk metadata updates
+
+The best part: it's 100% free forever. No credits, no limits, no trial period. Just useful tools for YouTube creators.
+
+I'd love for you to check it out and consider adding it to your resource list: https://yt-seo-architect.vercel.app/tools/tag-generator
+
+Happy to answer any questions.
+
+Best,
+[NHLAKA]
+Founder, YT SEO Architect
+https://yt-seo-architect.vercel.app
+
+
+  --- Opportunity #4 ---
+  Source:    https://vidiq.com/features/keyword-tools/
+  Title:     YouTube Keyword Research Tool — Find Keywords Free | vidIQ
+  Links to:  vidIQ
+  Subject:   Free alternative to vidIQ for your vidiq.com audience
+  Body:
+Hi there,
+
+I enjoyed reading your content at https://vidiq.com/features/keyword-tools/ — great work on covering vidIQ and YouTube tools in general.
+
+I wanted to let you know about YT SEO Architect, a completely free alternative to paid tools like vidIQ. Key features:
+
+• AI-powered title scoring and optimization
+• Smart tag generation with relevance scoring
+• SEO-optimized description writer
+• Full YouTube channel audit
+• Bulk metadata updates
+
+The best part: it's 100% free forever. No credits, no limits, no trial period. Just useful tools for YouTube creators.
+
+I'd love for you to check it out and consider adding it to your resource list: https://yt-seo-architect.vercel.app/tools/tag-generator
+
+Happy to answer any questions.
+
+Best,
+[NHLAKA]
+Founder, YT SEO Architect
+https://yt-seo-architect.vercel.app
+
+
+  --- Opportunity #5 ---
+  Source:    https://vidiq.com/ai-keyword-generator/
+  Title:     Free AI YouTube Keyword Generator | vidIQ
+  Links to:  vidIQ
+  Subject:   Free alternative to vidIQ for your vidiq.com audience
+  Body:
+Hi there,
+
+I enjoyed reading your content at https://vidiq.com/ai-keyword-generator/ — great work on covering vidIQ and YouTube tools in general.
+
+I wanted to let you know about YT SEO Architect, a completely free alternative to paid tools like vidIQ. Key features:
+
+• AI-powered title scoring and optimization
+• Smart tag generation with relevance scoring
+• SEO-optimized description writer
+• Full YouTube channel audit
+• Bulk metadata updates
+
+The best part: it's 100% free forever. No credits, no limits, no trial period. Just useful tools for YouTube creators.
+
+I'd love for you to check it out and consider adding it to your resource list: https://yt-seo-architect.vercel.app/tools/tag-generator
+
+Happy to answer any questions.
+
+Best,
+[NHLAKA]
+Founder, YT SEO Architect
+https://yt-seo-architect.vercel.app
+
+
+  --- Opportunity #6 ---
+  Source:    https://vidiq.com/video-tags-generator/
+  Title:     Free YouTube Tag Generator: Find Ranking Tags from One Promp
+  Links to:  vidIQ
+  Subject:   Free alternative to vidIQ for your vidiq.com audience
+  Body:
+Hi there,
+
+I enjoyed reading your content at https://vidiq.com/video-tags-generator/ — great work on covering vidIQ and YouTube tools in general.
+
+I wanted to let you know about YT SEO Architect, a completely free alternative to paid tools like vidIQ. Key features:
+
+• AI-powered title scoring and optimization
+• Smart tag generation with relevance scoring
+• SEO-optimized description writer
+• Full YouTube channel audit
+• Bulk metadata updates
+
+The best part: it's 100% free forever. No credits, no limits, no trial period. Just useful tools for YouTube creators.
+
+I'd love for you to check it out and consider adding it to your resource list: https://yt-seo-architect.vercel.app/tools/tag-generator
+
+Happy to answer any questions.
+
+Best,
+[NHLAKA]
+Founder, YT SEO Architect
+https://yt-seo-architect.vercel.app
+
+
+  --- Opportunity #7 ---
+  Source:    https://alanspicer.com/best-youtube-seo-tools-2026/
+  Title:     Best YouTube SEO Tools 2026: The Complete Ranking (From a Yo
+  Links to:  vidIQ
+  Subject:   Free alternative to vidIQ for your alanspicer.com audience
+  Body:
+Hi there,
+
+I enjoyed reading your content at https://alanspicer.com/best-youtube-seo-tools-2026/ — great work on covering vidIQ and YouTube tools in general.
+
+I wanted to let you know about YT SEO Architect, a completely free alternative to paid tools like vidIQ. Key features:
+
+• AI-powered title scoring and optimization
+• Smart tag generation with relevance scoring
+• SEO-optimized description writer
+• Full YouTube channel audit
+• Bulk metadata updates
+
+The best part: it's 100% free forever. No credits, no limits, no trial period. Just useful tools for YouTube creators.
+
+I'd love for you to check it out and consider adding it to your resource list: https://yt-seo-architect.vercel.app/tools/tag-generator
+
+Happy to answer any questions.
+
+Best,
+[NHLAKA]
+Founder, YT SEO Architect
+https://yt-seo-architect.vercel.app
+
+  New opportunities: 7
+  Skipped (already seen): 0
+
+🔄 Stage 5: Exporting to CSV...
+  Saved 7 opportunities to: /tmp/backlink-scans/opportunities-competitor.csv
+  Marked 7 pages as processed (won't re-process)
+
+============================================================
+SUMMARY
+============================================================
+  Pages searched:    45
+  Pages fetched:     15
+  With competitor links: 7
+  Already link to us:    0
+  Missing our link:      7
+  New opportunities:     7
+  Output:                /tmp/backlink-scans/opportunities-competitor.csv
+============================================================
+
+Next steps:
+1. Review the CSV at: /tmp/backlink-scans/opportunities-competitor.csv
+2. Send outreach via: python3 scripts/backlink-outreach-sender.py --file "/tmp/backlink-scans/opportunities-competitor.csv"
+3. Or preview first:  python3 scripts/backlink-outreach-sender.py --file "/tmp/backlink-scans/opportunities-competitor.csv" --dry-run
+
+Expected response rate: 15-25% for "you're missing from this awesome list" emails
+Typical result: 3-5 backlinks from 20 outreach attempts
+
