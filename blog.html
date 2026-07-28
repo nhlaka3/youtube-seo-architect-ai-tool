@@ -1,0 +1,447 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="google-site-verification" content="google6368748a920a2add" />
+  <title>YouTube SEO Blog — Tips, Guides & Strategies | YT SEO Architect</title>
+  <meta name="description" content="Free YouTube SEO guides, tips, and tutorials. Learn keyword research, title optimization, thumbnail A/B testing, and analytics to grow your channel with AI-powered tools." />
+  <meta name="keywords" content="YouTube SEO blog, YouTube growth tips, video optimization, YouTube algorithm, content creator guides" />
+  <meta name="robots" content="index, follow" />
+  <link rel="canonical" href="https://yt-seo-architect.vercel.app/blog" />
+
+  <!-- Geist font (non-render-blocking) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Geist:wght@100..900&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Geist+Mono:wght@100..900&display=swap" rel="stylesheet" />
+
+  <link rel="dns-prefetch" href="https://www.google-analytics.com" />
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3831668789026424" crossorigin="anonymous"></script>
+
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://yt-seo-architect.vercel.app/blog" />
+  <meta property="og:title" content="YouTube SEO Blog — Tips & Strategies" />
+  <meta property="og:description" content="Free YouTube SEO guides, tips, and tutorials. Learn keyword research, title optimization, thumbnail A/B testing, and analytics to grow your channel." />
+  <meta property="og:image" content="https://yt-seo-architect.vercel.app/og-image.png" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta property="og:site_name" content="YT SEO Architect" />
+
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="YouTube SEO Blog — Tips & Strategies" />
+  <meta name="twitter:description" content="Free YouTube SEO guides, tips, and tutorials to grow your YouTube channel with AI-powered tools." />
+  <meta name="twitter:image" content="https://yt-seo-architect.vercel.app/og-image.png" />
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Blog",
+    "name": "YT SEO Architect Blog",
+    "description": "YouTube SEO tips, guides, and growth strategies for content creators.",
+    "url": "https://yt-seo-architect.vercel.app/blog",
+    "publisher": {
+      "@type": "Organization",
+      "name": "YT SEO Architect",
+      "url": "https://yt-seo-architect.vercel.app/"
+    }
+  }
+  </script>
+
+  <style>
+    :root {
+      --cyan: #00f2ff;
+      --cyan-hover: #00d7e6;
+      --cyan-glow: rgba(0, 242, 255, 0.25);
+      --green: #00ff88;
+      --green-glow: rgba(0, 255, 136, 0.25);
+      --bg: #0a0b10;
+      --bg-oled: #000000;
+      --surface: rgba(16, 20, 32, 0.6);
+      --surface-hover: rgba(16, 20, 32, 0.85);
+      --glass: rgba(10, 11, 16, 0.7);
+      --border: rgba(0, 242, 255, 0.12);
+      --border-hover: rgba(0, 242, 255, 0.3);
+      --text: #ffffff;
+      --text-primary: #f0f2f5;
+      --text-secondary: #a8b2c1;
+      --text-muted: #5d6676;
+      --danger: #ff3366;
+      --font: 'Geist', 'Outfit', -apple-system, BlinkMacSystemFont, sans-serif;
+      --font-mono: 'Geist Mono', 'Fira Code', monospace;
+      --radius-sm: 0.375rem;
+      --radius-md: 0.5rem;
+      --radius-lg: 0.75rem;
+      --radius-xl: 1rem;
+      --ease-precise: cubic-bezier(0.23, 1, 0.32, 1);
+      --glass-shadow: 0 10px 40px -10px rgba(0, 0, 0, 0.9), 0 0 20px rgba(0, 242, 255, 0.05);
+      --glow-cyan: 0 0 25px rgba(0, 242, 255, 0.15);
+      --glow-green: 0 0 25px rgba(0, 255, 136, 0.15);
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      background: var(--bg);
+      color: var(--text-primary);
+      font-family: var(--font);
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+
+    /* Header */
+    .header {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: rgba(10, 11, 16, 0.8);
+      backdrop-filter: blur(24px);
+      -webkit-backdrop-filter: blur(24px);
+      border-bottom: 1px solid var(--border);
+      padding: 0.875rem 2rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .header a {
+      color: var(--text);
+      text-decoration: none;
+      font-weight: 700;
+      font-size: 1.1rem;
+      transition: opacity 0.2s var(--ease-precise);
+    }
+    .header a:hover { opacity: 0.85; }
+    .header .cta {
+      background: var(--cyan);
+      color: var(--bg-oled);
+      padding: 0.5rem 1.25rem;
+      border-radius: var(--radius-md);
+      font-size: 0.85rem;
+      font-weight: 700;
+      transition: all 0.3s var(--ease-precise);
+      box-shadow: 0 0 12px var(--cyan-glow);
+    }
+    .header .cta:hover {
+      opacity: 1;
+      transform: translateY(-1px);
+      box-shadow: 0 0 24px var(--cyan-glow);
+    }
+    .header-logo {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      text-decoration: none;
+      color: var(--text);
+      font-weight: 700;
+      font-size: 1.1rem;
+    }
+    .header-logo span { color: var(--cyan); }
+
+    /* Hero */
+    .blog-hero {
+      text-align: center;
+      padding: 4rem 2rem 3rem;
+      position: relative;
+      overflow: hidden;
+    }
+    .blog-hero::before {
+      content: '';
+      position: absolute;
+      top: -30%;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 600px;
+      height: 600px;
+      background: radial-gradient(circle, rgba(0, 242, 255, 0.06), transparent 70%);
+      pointer-events: none;
+    }
+    .blog-hero h1 {
+      font-size: 2.5rem;
+      font-weight: 900;
+      letter-spacing: -0.03em;
+      background: linear-gradient(135deg, var(--text), var(--cyan));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin-bottom: 0.75rem;
+    }
+    .blog-hero p {
+      color: var(--text-secondary);
+      font-size: 1.05rem;
+      max-width: 560px;
+      margin: 0 auto;
+    }
+
+    /* Article Grid */
+    .articles {
+      max-width: 860px;
+      margin: 0 auto;
+      padding: 0 2rem 4rem;
+    }
+
+    .article-card {
+      background: var(--surface);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 1.5rem;
+      margin-bottom: 1rem;
+      transition: all 0.3s var(--ease-precise);
+      position: relative;
+      overflow: hidden;
+    }
+    .article-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: radial-gradient(circle at var(--mouse-x, 50%) var(--mouse-y, 50%), rgba(0, 242, 255, 0.04), transparent 60%);
+      opacity: 0;
+      transition: opacity 0.3s var(--ease-precise);
+      pointer-events: none;
+    }
+    .article-card:hover {
+      border-color: var(--border-hover);
+      transform: translateY(-4px);
+      box-shadow: var(--glass-shadow);
+    }
+    .article-card:hover::before { opacity: 1; }
+
+    .article-card .category {
+      display: inline-block;
+      background: rgba(0, 242, 255, 0.08);
+      color: var(--cyan);
+      border: 1px solid rgba(0, 242, 255, 0.15);
+      padding: 0.15rem 0.6rem;
+      border-radius: 999px;
+      font-size: 0.7rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-bottom: 0.6rem;
+    }
+    .article-card h3 {
+      font-size: 1.15rem;
+      font-weight: 700;
+      margin-bottom: 0.5rem;
+      line-height: 1.4;
+    }
+    .article-card h3 a {
+      color: var(--text-primary);
+      text-decoration: none;
+      transition: color 0.2s var(--ease-precise);
+    }
+    .article-card h3 a:hover { color: var(--cyan); }
+    .article-card .excerpt {
+      color: var(--text-secondary);
+      font-size: 0.88rem;
+      margin-bottom: 0.75rem;
+      line-height: 1.6;
+    }
+    .article-card .meta {
+      font-size: 0.78rem;
+      color: var(--text-muted);
+      font-weight: 500;
+    }
+
+    /* CTA Widget */
+    .cta-widget {
+      background: linear-gradient(135deg, rgba(0, 242, 255, 0.06), rgba(0, 255, 136, 0.03));
+      border: 1px solid rgba(0, 242, 255, 0.2);
+      border-radius: var(--radius-lg);
+      padding: 2rem;
+      margin: 2rem 0;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+      transition: all 0.3s var(--ease-precise);
+    }
+    .cta-widget::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: radial-gradient(circle at center, rgba(0, 242, 255, 0.06), transparent 70%);
+      opacity: 0;
+      transition: opacity 0.4s var(--ease-precise);
+      pointer-events: none;
+    }
+    .cta-widget:hover::before { opacity: 1; }
+    .cta-widget:hover {
+      border-color: rgba(0, 242, 255, 0.45);
+      box-shadow: var(--glow-cyan);
+      transform: translateY(-2px);
+    }
+    .cta-widget h3 {
+      font-size: 1.3rem;
+      font-weight: 800;
+      color: var(--text);
+      margin-bottom: 0.5rem;
+      position: relative;
+    }
+    .cta-widget p {
+      color: var(--text-secondary);
+      margin-bottom: 1.25rem;
+      font-size: 0.92rem;
+      position: relative;
+    }
+    .cta-widget .audit-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      background: var(--cyan);
+      color: var(--bg-oled);
+      padding: 0.75rem 2rem;
+      border-radius: var(--radius-md);
+      text-decoration: none;
+      font-weight: 700;
+      font-size: 0.92rem;
+      position: relative;
+      transition: all 0.3s var(--ease-precise);
+      box-shadow: 0 0 16px var(--cyan-glow);
+    }
+    .cta-widget .audit-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 0 28px var(--cyan-glow);
+      background: var(--cyan-hover);
+    }
+    .cta-widget .benefits {
+      display: flex;
+      gap: 1.5rem;
+      justify-content: center;
+      margin-top: 1.25rem;
+      flex-wrap: wrap;
+      position: relative;
+    }
+    .cta-widget .benefit {
+      font-size: 0.82rem;
+      color: var(--text-secondary);
+      font-weight: 500;
+    }
+    .cta-widget .benefit::before {
+      content: '✓ ';
+      color: var(--green);
+    }
+
+    /* Footer */
+    .footer {
+      text-align: center;
+      padding: 2rem;
+      border-top: 1px solid var(--border);
+      color: var(--text-muted);
+      font-size: 0.82rem;
+      background: rgba(10, 11, 16, 0.5);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+    }
+    .footer a {
+      color: var(--cyan);
+      text-decoration: none;
+      font-weight: 500;
+      margin: 0 0.5rem;
+    }
+    .footer a:hover { text-decoration: underline; }
+    .footer p { margin-top: 0.5rem; }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      .blog-hero h1 { font-size: 1.7rem; }
+      .blog-hero { padding: 2.5rem 1.5rem 2rem; }
+      .articles { padding: 0 1rem 3rem; }
+      .header { padding: 0.75rem 1rem; }
+    }
+    @media (max-width: 480px) {
+      .blog-hero h1 { font-size: 1.4rem; }
+      .cta-widget { padding: 1.5rem; }
+      .article-card { padding: 1.25rem; }
+    }
+    /* Focus-visible states for keyboard accessibility */
+    a:focus-visible, .audit-btn:focus-visible, .cta:focus-visible {
+      outline: 2px solid var(--cyan);
+      outline-offset: 3px;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        transition-duration: 0.01ms !important;
+      }
+    }
+
+    /* Fade-in animation on load */
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .article-card {
+      animation: fadeInUp 0.5s var(--ease-precise) both;
+    }
+    .article-card:nth-child(1) { animation-delay: 0.05s; }
+    .article-card:nth-child(2) { animation-delay: 0.1s; }
+    .article-card:nth-child(3) { animation-delay: 0.15s; }
+  </style>
+</head>
+<body>
+
+  <header class="header">
+    <a href="/" class="header-logo">
+      ⚡ <span>YT SEO Architect</span>
+    </a>
+    <a href="/dashboard" class="cta">Try Free</a>
+  </header>
+
+  <section class="blog-hero">
+    <h1>YouTube SEO Blog</h1>
+    <p>Expert guides, tips, and strategies to grow your YouTube channel with AI-powered tools.</p>
+  </section>
+
+  <section class="articles">
+
+    <!-- CTA Widget (top) -->
+    <div class="cta-widget">
+      <h3>🔍 Is Your YouTube Channel Optimized?</h3>
+      <p>Get a free AI-powered audit of your channel's SEO — titles, tags, descriptions, and more — in 60 seconds.</p>
+      <a href="/dashboard" class="audit-btn">Audit My Channel — Free</a>
+      <div class="benefits">
+        <span class="benefit">17 AI tools</span>
+        <span class="benefit">No credit card</span>
+        <span class="benefit">60-second setup</span>
+      </div>
+    </div>
+
+    <!-- Articles -->
+
+    <!-- CTA Widget (bottom) -->
+    <div class="cta-widget" style="margin-top:2rem;">
+      <h3>🚀 Ready to Grow Your Channel?</h3>
+      <p>17 AI-powered YouTube SEO tools. Free to start. No credit card required.</p>
+      <a href="/dashboard" class="audit-btn">Start Free Now</a>
+      <div class="benefits">
+        <span class="benefit">Tag Generator</span>
+        <span class="benefit">Title Optimizer</span>
+        <span class="benefit">AI Coach</span>
+        <span class="benefit">Bulk Injector</span>
+      </div>
+    </div>
+
+  </section>
+
+  <footer class="footer">
+    <p>
+      <a href="/">Home</a> |
+      <a href="/dashboard">Dashboard</a> |
+      <a href="/about">About</a> |
+      <a href="/privacy-policy">Privacy</a> |
+      <a href="/terms-of-service">Terms</a> |
+      <a href="/tools/tag-generator">Free Tag Generator</a>
+    </p>
+    <p>© 2026 YT SEO Architect. AI-powered YouTube growth platform.</p>
+  </footer>
+</body>
+</html>

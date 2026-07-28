@@ -48,6 +48,9 @@ graphify-out/
 *.sqlite
 db.sqlite
 
+# API credentials (OAuth tokens, API keys — NEVER commit these!)
+api-credentials.json
+
 # Sensitive files
 CRON_SECRET.txt
 secret*.txt

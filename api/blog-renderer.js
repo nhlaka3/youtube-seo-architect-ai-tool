@@ -253,13 +253,30 @@ function generateFAQBlock(page) {
 
 function generateRelatedPosts(page) {
   // Core pillar posts — validated, template-compliant, 1,500+ words
-  return `<nav class="related-posts" aria-label="Related articles" style="margin-top:3rem;padding-top:2rem;border-top:1px solid var(--border);">
-    <h3 style="margin-bottom:1rem;color:var(--text);">📖 Related Articles</h3>
-    <a href="/blog/best-youtube-seo-tools-2026" style="display:block;color:var(--accent);text-decoration:none;padding:0.4rem 0;font-size:0.95rem;">Best YouTube SEO Tools in 2026: Compared by Use Case</a>
-    <a href="/blog/youtube-competitor-analysis-reverse-engineer" style="display:block;color:var(--accent);text-decoration:none;padding:0.4rem 0;font-size:0.95rem;">YouTube Competitor Analysis: Reverse-Engineer Top Channels</a>
-    <a href="/blog/youtube-analytics-explained-2026" style="display:block;color:var(--accent);text-decoration:none;padding:0.4rem 0;font-size:0.95rem;">YouTube Analytics Explained 2026: Read Your Data Like a Pro</a>
-    <a href="/blog/youtube-seo-audit-diagnostic-fix-2026" style="display:block;color:var(--accent);text-decoration:none;padding:0.4rem 0;font-size:0.95rem;">YouTube SEO Audit: The 5-Minute Diagnostic That Finds What's Killing Your Views</a>
-    <a href="/blog/youtube-thumbnail-ab-testing-guide" style="display:block;color:var(--accent);text-decoration:none;padding:0.4rem 0;font-size:0.95rem;">YouTube Thumbnail A/B Testing: Double Your CTR in 30 Days</a>
+  return `<nav class="related-posts" aria-label="Related articles">
+    <h3>📖 Related Articles</h3>
+    <div class="related-posts-grid">
+      <a href="/blog/best-youtube-seo-tools-2026" class="related-post-card">
+        <span class="rp-title">Best YouTube SEO Tools in 2026</span>
+        <span class="rp-meta">Compared by use case &amp; price</span>
+      </a>
+      <a href="/blog/youtube-competitor-analysis-reverse-engineer" class="related-post-card">
+        <span class="rp-title">YouTube Competitor Analysis</span>
+        <span class="rp-meta">Reverse-engineer top channels</span>
+      </a>
+      <a href="/blog/youtube-analytics-explained-2026" class="related-post-card">
+        <span class="rp-title">YouTube Analytics Explained 2026</span>
+        <span class="rp-meta">Read your data like a pro</span>
+      </a>
+      <a href="/blog/youtube-seo-audit-diagnostic-fix-2026" class="related-post-card">
+        <span class="rp-title">YouTube SEO Audit Guide</span>
+        <span class="rp-meta">5-min diagnostic for more views</span>
+      </a>
+      <a href="/blog/youtube-thumbnail-ab-testing-guide" class="related-post-card">
+        <span class="rp-title">YouTube Thumbnail A/B Testing</span>
+        <span class="rp-meta">Double your CTR in 30 days</span>
+      </a>
+    </div>
   </nav>`;
 }
 
@@ -657,10 +674,10 @@ export function renderBlogTemplate(page) {
   if (toolExists) {
     const toolSlug = blogSlug || page.slug;
     const toolUrl = `/tools/${toolSlug}`;
-    contentHTML += `\n      <div class="tool-cta" style="margin:2.5rem 0;padding:1.5rem;background:linear-gradient(135deg,#1a1a2e,#16213e);border:1px solid #6366f1;border-radius:12px;text-align:center;">
-        <h3 style="color:#e2e8f0;margin-bottom:0.5rem;">🛠️ Try the Interactive Tool</h3>
-        <p style="color:#94a3b8;margin-bottom:1rem;">Apply what you learned — use our free interactive tool to optimize your YouTube content right now.</p>
-        <a href="${toolUrl}" style="display:inline-block;background:linear-gradient(135deg,#6366f1,#06b6d4);color:#fff;padding:0.75rem 2rem;border-radius:8px;text-decoration:none;font-weight:600;">Launch the Tool →</a>
+    contentHTML += `\n      <div class="tool-cta" style="margin:2.5rem 0;padding:1.5rem;background:rgba(0,242,255,0.04);border:1px solid rgba(0,242,255,0.2);border-radius:12px;text-align:center;">
+        <h3 style="color:var(--cyan, #00f2ff);margin-bottom:0.5rem;">🛠️ Try the Interactive Tool</h3>
+        <p style="color:#a8b2c1;margin-bottom:1rem;">Apply what you learned — use our free interactive tool to optimize your YouTube content right now.</p>
+        <a href="${toolUrl}" style="display:inline-block;background:var(--cyan, #00f2ff);color:#000;padding:0.75rem 2rem;border-radius:8px;text-decoration:none;font-weight:700;">Launch the Tool →</a>
       </div>`;
   }
 
@@ -730,78 +747,37 @@ export function renderBlogTemplate(page) {
   <meta property="article:published_time" content="${formatDate(publishDate)}" />
   <meta property="article:modified_time" content="${formatDate(updateDate)}" />
 
+  <!-- Geist font (non-render-blocking) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Geist:wght@100..900&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Geist+Mono:wght@100..900&display=swap" rel="stylesheet" />
+
   <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3831668789026424" crossorigin="anonymous"></script>
   <script type="application/ld+json">${schemaJSON}</script>
   <link rel="stylesheet" href="/blog/blog.css" />
-  <style>
-    /* Reading progress bar */
-    #reading-progress{position:fixed;top:0;left:0;width:0%;height:3px;background:linear-gradient(90deg,#f97316,#fb923c,#f97316);z-index:9999;transition:width .1s linear}
-
-    /* Sticky bottom CTA */
-    .sticky-cta{position:fixed;bottom:0;left:0;right:0;background:rgba(10,10,15,.95);border-top:1px solid rgba(249,115,22,.3);padding:.75rem 1.5rem;display:none;align-items:center;justify-content:space-between;gap:1rem;z-index:9998;backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px)}
-    .sticky-cta.show{display:flex}
-    .sticky-cta p{margin:0;font-size:.9rem;color:#e2e8f0}
-    .sticky-cta p strong{color:#fb923c}
-    .sticky-cta .btn{background:linear-gradient(135deg,#f97316,#fb923c);color:#fff;padding:.5rem 1.5rem;border-radius:9999px;text-decoration:none;font-weight:600;font-size:.85rem;white-space:nowrap;transition:transform .2s;flex-shrink:0}
-    .sticky-cta .btn:hover{transform:scale(1.05)}
-    @media(max-width:640px){.sticky-cta{flex-direction:column;text-align:center;padding:.6rem 1rem}.sticky-cta p{font-size:.8rem}}
-
-    /* Author box improvement */
-    .author-box{background:linear-gradient(135deg,#1a1a2e,#16213e);border:1px solid rgba(99,102,241,.2);border-radius:12px;padding:1.25rem;margin:1.5rem 0}
-    .author-box .author-inner{display:flex;gap:1rem;align-items:flex-start}
-    .author-box .avatar{width:48px;height:48px;border-radius:50%;background:linear-gradient(135deg,#f97316,#fb923c);display:flex;align-items:center;justify-content:center;font-weight:800;font-size:1.1rem;color:#fff;flex-shrink:0}
-    .author-box .author-info h4{margin:0 0 .25rem;color:#e2e8f0;font-size:1rem}
-    .author-box .author-info p{margin:0;color:#8b8b9e;font-size:.85rem;line-height:1.5}
-    .author-box .author-stats{display:flex;gap:1.5rem;margin-top:.75rem;padding-top:.75rem;border-top:1px solid rgba(255,255,255,.05)}
-    .author-box .author-stats span{font-size:.8rem;color:#6b7280}
-    .author-box .author-stats strong{color:#a5b4fc;display:block;font-size:.95rem}
-
-    /* Inline tool CTA */
-    .tool-cta-inline{background:linear-gradient(135deg,#1a1a2e,#16213e);border:1px solid rgba(99,102,241,.3);border-radius:12px;padding:1.25rem;margin:2rem 0;display:flex;align-items:center;gap:1rem}
-    .tool-cta-inline .icon{font-size:2rem;flex-shrink:0}
-    .tool-cta-inline .content{flex:1}
-    .tool-cta-inline .content h4{margin:0 0 .25rem;color:#e2e8f0;font-size:.95rem}
-    .tool-cta-inline .content p{margin:0;color:#8b8b9e;font-size:.82rem}
-    .tool-cta-inline .btn{background:linear-gradient(135deg,#f97316,#fb923c);color:#fff;padding:.4rem 1.2rem;border-radius:9999px;text-decoration:none;font-weight:600;font-size:.8rem;white-space:nowrap;flex-shrink:0;transition:transform .2s}
-    .tool-cta-inline .btn:hover{transform:scale(1.05)}
-    @media(max-width:640px){.tool-cta-inline{flex-direction:column;text-align:center}}
-
-    /* Bottom CTA improvement */
-    .cta-box{border:1px solid #4f46e5;border-radius:16px;padding:2rem;text-align:center;margin:2.5rem 0;position:relative;overflow:hidden}
-    .cta-box::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at top right,rgba(249,115,22,0.1),transparent 70%);pointer-events:none}
-    .cta-box h3{font-size:1.3rem;position:relative}
-    .cta-box p{position:relative}
-    .cta-box .btn-group{display:flex;gap:.75rem;justify-content:center;flex-wrap:wrap;position:relative}
-    .cta-box .btn-primary{background:linear-gradient(135deg,#f97316,#fb923c);color:#fff;padding:.7rem 2rem;border-radius:9999px;text-decoration:none;font-weight:600;transition:transform .2s}
-    .cta-box .btn-primary:hover{transform:scale(1.05)}
-    .cta-box .btn-secondary{background:rgba(255,255,255,.05);color:#e2e8f0;padding:.7rem 2rem;border-radius:9999px;text-decoration:none;font-weight:500;transition:background .2s}
-    .cta-box .btn-secondary:hover{background:rgba(255,255,255,.1)}
-
-    /* Social proof ticker */
-    .social-proof{display:flex;justify-content:center;gap:2rem;flex-wrap:wrap;margin:1.5rem 0;padding:1rem;background:rgba(255,255,255,.02);border-radius:12px;border:1px solid rgba(255,255,255,.04)}
-    .social-proof .stat{text-align:center}
-    .social-proof .stat strong{display:block;color:#fb923c;font-size:1.2rem}
-    .social-proof .stat span{font-size:.78rem;color:#6b7280}
-
-    /* Share bar improvement */
-    .share-bar{display:flex;align-items:center;gap:.5rem;flex-wrap:wrap;margin:1rem 0}
-    .share-bar .share-label{font-size:.82rem;color:#6b7280;margin-right:.5rem}
-  </style>
+  <style>body{font-display:swap;font-family:'Geist','Outfit',-apple-system,BlinkMacSystemFont,sans-serif}</style>
   <script>
-    // Reading progress bar
-    window.addEventListener('scroll', function(){
-      var h = document.documentElement.scrollHeight - window.innerHeight;
-      var p = (window.scrollY / h) * 100;
-      var bar = document.getElementById('reading-progress');
-      if(bar) bar.style.width = p + '%';
-      // Show sticky CTA after 50% scroll
-      var cta = document.getElementById('sticky-cta');
-      if(cta) cta.classList.toggle('show', p > 40);
-    });
+    // Reading progress bar (passive scroll for performance)
+    (function(){
+      var bar = document.getElementById('readingProgress');
+      if(!bar) return;
+      var stickyCta = document.getElementById('sticky-cta');
+      var update = function(){
+        var scrollTop = window.scrollY || document.documentElement.scrollTop;
+        var docHeight = document.documentElement.scrollHeight - window.innerHeight;
+        var pct = docHeight > 0 ? (scrollTop / docHeight) * 100 : 0;
+        bar.style.setProperty('--scroll-pct', pct + '%');
+        if(stickyCta) stickyCta.style.display = pct > 40 ? 'flex' : 'none';
+      };
+      window.addEventListener('scroll', update, { passive: true });
+      window.addEventListener('resize', update, { passive: true });
+      update();
+    })();
   </script>
 </head>
 <body>
-  <div id="reading-progress"></div>
+  <div class="reading-progress" id="readingProgress" aria-hidden="true"></div>
 
   <header class="header">
     <a href="/">⚡ YT SEO Architect</a>
@@ -832,17 +808,10 @@ export function renderBlogTemplate(page) {
       <!-- E-E-A-T: Author credentials (improved) -->
       ${hasAuthorBox ? '' : `
       <div class="author-box">
-        <div class="author-inner">
-          <div class="avatar">YT</div>
-          <div class="author-info">
-            <h4>YT SEO Architect Team</h4>
-            <p>We help 5,000+ creators optimize their YouTube channels with free AI-powered tools. Our guides are researched and tested — not theoretical.</p>
-            <div class="author-stats">
-              <span><strong>17</strong> free tools</span>
-              <span><strong>5K+</strong> creators</span>
-              <span><strong>2M+</strong> optimizations</span>
-            </div>
-          </div>
+        <div class="avatar">YT</div>
+        <div class="author-info">
+          <h4>YT SEO Architect Team</h4>
+          <p>We help 5,000+ creators optimize their YouTube channels with free AI-powered tools. Our guides are researched and tested — not theoretical.</p>
         </div>
       </div>
       `}
@@ -897,10 +866,10 @@ export function renderBlogTemplate(page) {
     </article>
   </main>
 
-  <!-- Sticky bottom CTA -->
-  <div id="sticky-cta" class="sticky-cta">
-    <p><strong>100% free.</strong> Optimize your YouTube videos with AI — titles, tags, descriptions, and more.</p>
-    <a href="/dashboard" class="btn">Try Free Tools →</a>
+  <!-- Sticky bottom CTA (styled via blog.css) -->
+  <div id="sticky-cta" class="sticky-cta" style="position:fixed;bottom:0;left:0;right:0;background:rgba(10,11,16,0.95);border-top:1px solid rgba(0,242,255,0.2);padding:0.75rem 1.5rem;display:none;align-items:center;justify-content:space-between;gap:1rem;z-index:9998;backdrop-filter:blur(12px);">
+    <p style="margin:0;font-size:0.9rem;color:#f0f2f5;"><strong style="color:#00f2ff;">100% free.</strong> Optimize your YouTube videos with AI — titles, tags, descriptions, and more.</p>
+    <a href="/dashboard" style="background:#00f2ff;color:#000;padding:0.5rem 1.5rem;border-radius:8px;text-decoration:none;font-weight:700;font-size:0.85rem;white-space:nowrap;flex-shrink:0;box-shadow:0 0 12px rgba(0,242,255,0.25);">Try Free Tools →</a>
   </div>
 
   <footer class="footer">

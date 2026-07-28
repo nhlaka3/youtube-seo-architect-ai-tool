@@ -168,6 +168,9 @@
   <!-- ── Performance ───────────────────────────────────────────────── -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <!-- Geist font via Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Geist:wght@100..900&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Geist+Mono:wght@100..900&display=swap" rel="stylesheet" />
 
   <!-- ── Title ────────────────────────────────────────────────────── -->
   <title>[POST_TITLE] — YT SEO Architect</title>
@@ -323,9 +326,12 @@
   <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3831668789026424" crossorigin="anonymous"></script>
   <link rel="stylesheet" href="/blog/blog.css" media="print" onload="this.media='all'">
   <noscript><link rel="stylesheet" href="/blog/blog.css"></noscript>
-  <style>body{font-display:swap;font-family:'Outfit','Geist',-apple-system,BlinkMacSystemFont,sans-serif}</style>
+  <style>body{font-display:swap;font-family:'Geist','Outfit',-apple-system,BlinkMacSystemFont,sans-serif}</style>
 </head>
 <body>
+
+  <!-- ── Reading Progress Bar ──────────────────────────── -->
+  <div class="reading-progress" id="readingProgress" aria-hidden="true"></div>
 
   <header class="header">
     <a href="/">⚡ YT SEO Architect</a>
@@ -572,8 +578,20 @@
 
   <nav class="related-posts" aria-label="Related articles">
     <h3>📖 Related Articles</h3>
-    <a href="/blog/youtube-seo-checklist-beginners-2026">YouTube SEO Guide 2026</a>
-    <a href="/blog/youtube-seo-audit-diagnostic-fix-2026">YouTube Keyword Research Tutorial</a>
+    <div class="related-posts-grid">
+      <a href="/blog/youtube-seo-checklist-beginners-2026" class="related-post-card">
+        <span class="rp-title">YouTube SEO Guide 2026</span>
+        <span class="rp-meta">Complete beginner's checklist</span>
+      </a>
+      <a href="/blog/youtube-seo-audit-diagnostic-fix-2026" class="related-post-card">
+        <span class="rp-title">YouTube Keyword Research Tutorial</span>
+        <span class="rp-meta">Find winning keywords in 5 steps</span>
+      </a>
+      <a href="/blog/youtube-description-templates" class="related-post-card">
+        <span class="rp-title">YouTube Description Templates</span>
+        <span class="rp-meta">Boost SEO with proven templates</span>
+      </a>
+    </div>
   </nav>
 
   </main>
@@ -584,6 +602,22 @@
 
 
   <script>
+  /* ── Reading Progress Bar ──────────────────────────── */
+  (function(){
+    var bar = document.getElementById('readingProgress');
+    if(!bar) return;
+    var update = function(){
+      var scrollTop = window.scrollY || document.documentElement.scrollTop;
+      var docHeight = document.documentElement.scrollHeight - window.innerHeight;
+      var pct = docHeight > 0 ? (scrollTop / docHeight) * 100 : 0;
+      bar.style.setProperty('--scroll-pct', pct + '%');
+    };
+    window.addEventListener('scroll', update, { passive: true });
+    window.addEventListener('resize', update, { passive: true });
+    update();
+  })();
+
+  /* ── Social Share Bar ─────────────────────────────── */
   (function(){
     var bar = document.querySelector('[data-share-bar]');
     if(!bar) return;

@@ -168,23 +168,35 @@
 
   <link rel="stylesheet" href="./style.css" media="print" onload="this.media='all'">
   <noscript><link rel="stylesheet" href="./style.css"></noscript>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700;800&display=swap" media="print" onload="this.media='all'">
-  <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700;800&display=swap"></noscript>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Geist:wght@100..900&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Geist+Mono:wght@100..900&display=swap" rel="stylesheet" />
   <script src="https://unpkg.com/lucide@0.460.0/dist/umd/lucide.min.js" crossorigin="anonymous" defer></script>
   <style>
     :root {
-       --primary: #f97316;
-       --primary-glow: rgba(249, 115, 22, 0.5);
-       --accent: #fb923c;
-       --accent-glow: rgba(251, 146, 60, 0.5);
-       --bg-dark: #020617;
+       --primary: #00f2ff;
+       --primary-hover: #00d7e6;
+       --primary-glow: rgba(0, 242, 255, 0.3);
+       --accent: #00ff88;
+       --accent-hover: #00e67a;
+       --accent-glow: rgba(0, 255, 136, 0.3);
+       --bg-dark: #0a0b10;
        --bg-oled: #000000;
-       --bg-card: rgba(15, 23, 42, 0.5);
-       --text-primary: #f8fafc;
-       --text-muted: #94a3b8;
-       --border: rgba(249, 115, 22, 0.2);
-       --success: #10b981;
+       --bg-card: rgba(16, 20, 32, 0.6);
+       --surface-hover: rgba(16, 20, 32, 0.85);
+       --text-primary: #f0f2f5;
+       --text-muted: #a8b2c1;
+       --text-dim: #5d6676;
+       --border: rgba(0, 242, 255, 0.12);
+       --border-hover: rgba(0, 242, 255, 0.35);
+       --success: #00ff88;
+       --danger: #ff3366;
+       --font: 'Geist', 'Outfit', -apple-system, BlinkMacSystemFont, sans-serif;
+       --font-mono: 'Geist Mono', 'Fira Code', monospace;
+       --glass-shadow: 0 10px 40px -10px rgba(0, 0, 0, 0.9), 0 0 20px rgba(0, 242, 255, 0.05);
+       --glow-cyan: 0 0 25px rgba(0, 242, 255, 0.15);
+       --glow-green: 0 0 25px rgba(0, 255, 136, 0.15);
      }
 
     @keyframes fadeInUp {
@@ -204,8 +216,8 @@
     }
 
     @keyframes pulse-glow {
-        0%, 100% { box-shadow: 0 0 20px rgba(249, 115, 22, 0.4); }
-        50% { box-shadow: 0 0 40px rgba(249, 115, 22, 0.8); }
+        0%, 100% { box-shadow: 0 0 20px rgba(0, 242, 255, 0.3); }
+        50% { box-shadow: 0 0 40px rgba(0, 242, 255, 0.6); }
     }
 
     @keyframes pulse-ring {
@@ -217,7 +229,7 @@
     * { margin: 0; padding: 0; box-sizing: border-box; }
 
     body {
-      font-family: 'Outfit', 'Geist', -apple-system, BlinkMacSystemFont, sans-serif;
+      font-family: var(--font);
       font-display: swap;
       background: var(--bg-oled);
       color: var(--text-primary);
@@ -238,7 +250,7 @@
        left: -10%;
        width: 120%;
        height: 120%;
-       background: radial-gradient(circle at center, rgba(249, 115, 22, 0.08) 0%, transparent 50%);
+       background: radial-gradient(circle at center, rgba(0, 242, 255, 0.06) 0%, transparent 50%);
        pointer-events: none;
        z-index: 0;
        animation: float 10s ease-in-out infinite;
@@ -299,8 +311,8 @@
     .badge-new {
       display: inline-block;
       padding: 6px 16px;
-      background: rgba(249, 115, 22, 0.1);
-      border: 1px solid rgba(249, 115, 22, 0.3);
+      background: rgba(0, 242, 255, 0.06);
+      border: 1px solid rgba(0, 242, 255, 0.2);
       color: var(--primary);
       border-radius: 99px;
       font-size: 0.8rem;
@@ -319,7 +331,7 @@
     }
 
     .gradient-text {
-      background: linear-gradient(135deg, #fff 0%, var(--primary) 50%, var(--accent) 100%);
+      background: linear-gradient(135deg, var(--text), var(--primary));
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
       background-clip: text;
@@ -357,13 +369,13 @@
     .btn-main {
       background: var(--primary);
       color: white;
-      box-shadow: 0 4px 20px rgba(249, 115, 22, 0.4);
+      box-shadow: 0 4px 20px rgba(0, 242, 255, 0.3);
       animation: pulse-glow 2s ease-in-out infinite;
     }
 
     .btn-main:hover {
       transform: translateY(-2px);
-      box-shadow: 0 8px 30px rgba(249, 115, 22, 0.6);
+      box-shadow: 0 8px 30px rgba(0, 242, 255, 0.4);
       filter: brightness(1.1);
     }
 
@@ -374,9 +386,12 @@
     }
 
     .btn-outline:hover {
-      background: rgba(249, 115, 22, 0.08);
+      background: rgba(0, 242, 255, 0.08);
       border-color: var(--primary);
     }
+
+    .stat-num { font-size: 1.5rem; font-weight: 700; color: var(--primary); }
+    .stat-label { font-size: 0.8rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.05em; }
 
     .hero-stats {
       display: flex;
@@ -442,7 +457,7 @@
       content: '';
       position: absolute;
       inset: 0;
-      background: radial-gradient(circle at top right, rgba(249, 115, 22, 0.1), transparent 70%);
+      background: radial-gradient(circle at top right, rgba(0, 242, 255, 0.08), transparent 70%);
       opacity: 0;
       transition: opacity 0.4s ease;
     }
@@ -458,7 +473,7 @@
     .pillar-icon {
       width: 56px;
       height: 56px;
-      background: rgba(249, 115, 22, 0.1);
+      background: rgba(0, 242, 255, 0.08);
       border-radius: 16px;
       display: flex;
       align-items: center;
@@ -514,8 +529,8 @@
     .case-study-badge {
       display: inline-block;
       padding: 4px 12px;
-      background: rgba(249, 115, 22, 0.1);
-      border: 1px solid rgba(249, 115, 22, 0.3);
+      background: rgba(0, 242, 255, 0.06);
+      border: 1px solid rgba(0, 242, 255, 0.2);
       color: var(--primary);
       border-radius: 99px;
       font-size: 0.75rem;
@@ -595,9 +610,10 @@
        content: '';
        position: absolute;
        inset: 0;
-       background: radial-gradient(circle at top right, rgba(249, 115, 22, 0.1), transparent 70%);
+       background: radial-gradient(circle at top right, rgba(0, 242, 255, 0.08), transparent 70%);
        opacity: 0;
        transition: opacity 0.4s ease;
+     }
      }
 
     .bento-card:hover {
@@ -768,6 +784,15 @@
       }
     }
 
+    /* Purple ban — matches style.css global rule */
+    [style*="violet"], [style*="purple"], [style*="indigo"],
+    [class*="violet"], [class*="purple"], [class*="indigo"],
+    .violet-glow, .purple-glow {
+      display: none !important;
+      opacity: 0 !important;
+      visibility: hidden !important;
+    }
+
     .trust-strip { display:flex; flex-wrap:wrap; gap:16px; justify-content:center; align-items:center; margin-top:40px; opacity:0.7; }
     .trust-badge { display:flex; align-items:center; gap:8px; background:rgba(255,255,255,0.03); border:1px solid var(--border); border-radius:12px; padding:12px 20px; }
     .trust-badge-icon { font-size:1.5rem; }
@@ -780,10 +805,8 @@
     .result-stat-label { color:var(--text-muted); font-size:0.9rem; }
     .result-stat--green  { background:rgba(16,185,129,0.05); border:1px solid rgba(16,185,129,0.2); }
     .result-stat--green .result-stat-num { color:#10b981; }
-    .result-stat--indigo { background:rgba(99,102,241,0.05); border:1px solid rgba(99,102,241,0.2); }
-    .result-stat--indigo .result-stat-num { color:#6366f1; }
-    .result-stat--orange { background:rgba(249,115,22,0.05); border:1px solid rgba(249,115,22,0.2); }
-    .result-stat--orange .result-stat-num { color:var(--primary); }
+    .result-stat--green { background:rgba(0,255,136,0.05); border:1px solid rgba(0,255,136,0.2); }
+    .result-stat--green .result-stat-num { color:var(--accent); }
 
     .tool-pill-wrap { display:flex; flex-wrap:wrap; gap:12px; justify-content:center; margin-top:32px; }
     .tool-pill { background:rgba(255,255,255,0.04); border:1px solid var(--border); border-radius:10px; padding:10px 18px; color:var(--text-muted); text-decoration:none; font-size:0.9rem; transition:all 0.2s; }
@@ -808,8 +831,8 @@
 
     /* Pricing card glow */
     @keyframes borderGlow {
-      0%, 100% { box-shadow: 0 0 8px rgba(249,115,22,0.3), 0 0 20px rgba(249,115,22,0.1); }
-      50% { box-shadow: 0 0 16px rgba(249,115,22,0.5), 0 0 40px rgba(249,115,22,0.2); }
+      0%, 100% { box-shadow: 0 0 8px rgba(0,242,255,0.3), 0 0 20px rgba(0,242,255,0.1); }
+      50% { box-shadow: 0 0 16px rgba(0,242,255,0.5), 0 0 40px rgba(0,242,255,0.2); }
     }
     .price-card.popular { animation: borderGlow 3s ease-in-out infinite; }
 
@@ -834,7 +857,7 @@
   <a href="#pricing" class="skip-link">Skip to pricing</a>
 
   <noscript>
-    <div style="background:#f97316;color:#fff;padding:16px;text-align:center;font-family:sans-serif;">
+    <div style="background:var(--primary);color:var(--bg-oled);padding:16px;text-align:center;font-family:var(--font);">
       JavaScript is required for the full experience. Please enable JavaScript to use YT SEO Architect.
     </div>
   </noscript>
@@ -1058,7 +1081,7 @@
                   <div class="mock-score-ring">
                     <svg viewBox="0 0 36 36" class="mock-score-svg">
                       <path d="M18 2.0845 a 15.9157 15.9157 0 0 1 0 31.8306" fill="none" stroke="#1e293b" stroke-width="3" />
-                      <path d="M18 2.0845 a 15.9157 15.9157 0 0 1 0 31.8306" fill="none" stroke="#f97316" stroke-width="3" stroke-dasharray="73, 100" stroke-linecap="round" />
+                      <path d="M18 2.0845 a 15.9157 15.9157 0 0 1 0 31.8306" fill="none" stroke="#00f2ff" stroke-width="3" stroke-dasharray="73, 100" stroke-linecap="round" />
                     </svg>
                     <div class="mock-score-inner"><span class="mock-score-num">73</span><span class="mock-score-label">/100</span></div>
                   </div>
@@ -1237,11 +1260,11 @@
           <div class="result-stat-num">30-50%</div>
           <div class="result-stat-label">Average CTR improvement after optimization</div>
         </div>
-        <div class="result-stat result-stat--indigo">
+        <div class="result-stat result-stat--green">
           <div class="result-stat-num">2-4 Weeks</div>
           <div class="result-stat-label">Typical time to see ranking improvements</div>
         </div>
-        <div class="result-stat result-stat--orange">
+        <div class="result-stat result-stat--green">
           <div class="result-stat-num">17 Tools</div>
           <div class="result-stat-label">AI-powered optimization features, all from one dashboard</div>
         </div>
