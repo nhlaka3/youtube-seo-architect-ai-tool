@@ -53,9 +53,9 @@ OUR_DOMAINS = [
 # ─── Search queries to find resource pages ────────────────────────────
 
 SEARCH_QUERIES = [
-    # "Best tools" listicles
+    # "Best tools" listicles (broad)
     "best youtube tools for creators",
-    "best youtube seo tools 2026",
+    "best youtube seo tools",
     "best free youtube tools",
     "best tools for youtube growth",
     "best youtube analytics tools",
@@ -65,6 +65,13 @@ SEARCH_QUERIES = [
     "top youtube tools every creator needs",
     "best free tools for youtubers",
     "best youtube marketing tools",
+    "top free youtube tools",
+    # Shortened/broader queries (more likely to return results)
+    "youtube seo tools list",
+    "free youtube tools",
+    "youtube creator tools",
+    "youtube tools guide",
+    "tools for youtube channels",
     # Resource roundups
     "youtube creator toolkit",
     "youtube tools list",
@@ -72,13 +79,11 @@ SEARCH_QUERIES = [
     "essential youtube tools",
     "tools for youtube creators",
     "youtube growth resources",
-    "youtube optimization tools",
     # "Helpful Resources" pages
     "helpful resources youtube creators",
     "youtube resources page",
-    "tools i use youtube",
-    "gear and tools for youtube",
-    "youtube studio tools",
+    "tools i use for youtube",
+    "tools i use as a youtuber",
     "youtube content creation tools",
     "youtube video optimization tools",
     # Community resource pages
@@ -86,6 +91,21 @@ SEARCH_QUERIES = [
     "youtube creator resources",
     "free tools for youtube channels",
     "youtube seo checklist tools",
+    # "Resources I recommend" style pages
+    "resources for youtube creators",
+    "youtube toolkit",
+    "tools i recommend for youtube",
+    "my favorite youtube tools",
+    # Niche queries
+    "free youtube tag generator",
+    "youtube thumbnail tools",
+    "youtube keyword tool",
+    "youtube title generator",
+    "youtube description templates tools",
+    # Curated lists
+    "curated list of youtube tools",
+    "youtube tool roundup",
+    "best free seo tools for youtube",
 ]
 
 # ─── Our linkable asset pages ─────────────────────────────────────────
