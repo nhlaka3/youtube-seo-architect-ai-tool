@@ -2119,7 +2119,6 @@ if (process.env.NODE_ENV !== 'production' && !process.env.VERCEL) {
 
 
 
-export default app;
 
 // ── Dynamic glossary comparison pages ────────────────────
 app.get('/api/glossary-comparison', async (req, res) => {
@@ -2177,3 +2176,5 @@ app.get('/api/glossary-comparison', async (req, res) => {
     res.status(500).json({ error: e.message });
   }
 });
+
+export default app;
