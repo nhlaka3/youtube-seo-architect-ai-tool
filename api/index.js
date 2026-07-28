@@ -2083,8 +2083,17 @@ app.get('/api/glossary-comparison', async (req, res) => {
     const { resolve, dirname } = await import('path');
     const { fileURLToPath } = await import('url');
     const __dirname = dirname(fileURLToPath(import.meta.url));
-    const dataFile = isES ? resolve(__dirname, '..', 'scripts', 'glossary-data-es.json') : resolve(__dirname, '..', 'scripts', 'glossary-data.json');
-    if (!existsSync(dataFile)) return sendJSON(res, 500, { error: 'Data file not found' });
+    // Try multiple path strategies for serverless compatibility
+    const paths = [
+      resolve(__dirname, '..', 'scripts', isES ? 'glossary-data-es.json' : 'glossary-data.json'),
+      resolve(process.cwd(), 'scripts', isES ? 'glossary-data-es.json' : 'glossary-data.json'),
+      resolve(__dirname, 'scripts', isES ? 'glossary-data-es.json' : 'glossary-data.json'),
+    ];
+    let dataFile = null;
+    for (const p of paths) {
+      if (existsSync(p)) { dataFile = p; break; }
+    }
+    if (!dataFile) return sendJSON(res, 500, { error: 'Data file not found. Tried: ' + paths.join(', ') });
     const data = JSON.parse(readFileSync(dataFile, 'utf-8'));
     const termA = data.terms.find(t => t.slug === slugA);
     const termB = data.terms.find(t => t.slug === slugB);
