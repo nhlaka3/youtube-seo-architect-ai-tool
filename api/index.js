@@ -2085,9 +2085,8 @@ app.get('/api/glossary-comparison', async (req, res) => {
     const __dirname = dirname(fileURLToPath(import.meta.url));
     // Try multiple path strategies for serverless compatibility
     const paths = [
-      resolve(__dirname, '..', 'scripts', isES ? 'glossary-data-es.json' : 'glossary-data.json'),
+      resolve(__dirname, isES ? 'glossary-data-es.json' : 'glossary-data.json'),
       resolve(process.cwd(), 'scripts', isES ? 'glossary-data-es.json' : 'glossary-data.json'),
-      resolve(__dirname, 'scripts', isES ? 'glossary-data-es.json' : 'glossary-data.json'),
     ];
     let dataFile = null;
     for (const p of paths) {
