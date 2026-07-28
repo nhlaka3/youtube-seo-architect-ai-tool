@@ -10,17 +10,22 @@ const __dirname = dirname(fileURLToPath(import.meta.url));
 const PROJECT = resolve(__dirname, '..');
 
 export default async function handler(req, res) {
-  const url = req.url.split('?')[0].replace(/\/+$/, '');
-  const parts = url.split('/');
-  const last = parts[parts.length - 1];
+  // Get slug parts from query params (passed via vercel.json rewrite rule)
+  let slugA = req.query.slugA;
+  let slugB = req.query.slugB;
+  
+  // Fallback: parse from URL path (for direct access)
+  if (!slugA || !slugB) {
+    const url = req.url.split('?')[0].replace(/\/+$/, '');
+    const parts = url.split('/');
+    const last = parts[parts.length - 1];
+    const vsMatch = last.match(/^(.+)-vs-(.+)$/);
+    if (!vsMatch) return res.status(404).json({ error: 'Not a comparison URL' });
+    slugA = vsMatch[1];
+    slugB = vsMatch[2];
+  }
 
-  // Match patterns: /glossary/{a}-vs-{b} or /glossary/es/{a}-vs-{b}
-  const vsMatch = last.match(/^(.+)-vs-(.+)$/);
-  if (!vsMatch) return res.status(404).json({ error: 'Not a comparison URL' });
-
-  const isES = url.includes('/es/');
-  const slugA = vsMatch[1];
-  const slugB = vsMatch[2];
+  const isES = req.url.includes('/es/');
   const dataFile = isES
     ? resolve(PROJECT, 'scripts/glossary-data-es.json')
     : resolve(PROJECT, 'scripts/glossary-data.json');
