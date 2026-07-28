@@ -5,6 +5,7 @@
   "builds": [
     { "src": "api/index.js", "use": "@vercel/node" },
     { "src": "api/[...path].js", "use": "@vercel/node" },
+    { "src": "api/glossary-comparison.js", "use": "@vercel/node" },
     { "src": "package.json", "use": "@vercel/static-build", "config": { "distDir": "dist" } },
     { "src": "public/**", "use": "@vercel/static" }
   ],
