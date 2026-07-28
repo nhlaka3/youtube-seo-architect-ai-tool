@@ -40,5 +40,12 @@
     "to_email": "contact@videodubber.ai",
     "subject": "Found a broken link on your videodubber.ai page",
     "sent_at": "2026-07-28T10:03:53Z"
+  },
+  {
+    "source_page": "https://www.youngurbanproject.com/youtube-seo-tools/",
+    "broken_url": "https://joseangelostudios.com/b2b-seo/",
+    "to_email": "hello@youngurbanproject.com",
+    "subject": "Found a broken link on your www.youngurbanproject.com page",
+    "sent_at": "2026-07-28T10:58:29Z"
   }
 ]

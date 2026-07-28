@@ -10,39 +10,38 @@ Step 1: Searching for resource pages...
 
 Step 2: Fetching pages and extracting links...
   [SKIP] https://tuberanker.com/ — HTTP Error 403: Forbidden
-  [OK] https://www.youtool.io/ — 2 links
-  [OK] https://vidiq.com/youtube-seo-tools/ — 4 links, email: support@vidiq.com
-  [OK] https://contentmavericks.com/best-youtube-seo-tools/ — 4 links, email: support@contentmavericks.com
   [SKIP] https://www.tastyedits.com/youtube-seo-tools/ — HTTP Error 403: Forbidden
-  [OK] https://videodubber.ai/tools/youtube/video-seo-score-checker/ — 6 links, email: contact@videodubber.ai
-  [OK] https://rankxdigital.com/blog/youtube-seo-tools/ — 1 links, email: info@rankxdigital.com
+  [OK] https://contentmavericks.com/best-youtube-seo-tools/ — 4 links, email: support@contentmavericks.com
+  [OK] https://vidiq.com/youtube-seo-tools/ — 4 links, email: support@vidiq.com
+  [OK] https://vidiq.com/ — 4 links, email: support@vidiq.com
+  [OK] https://www.youtool.io/ — 2 links
+  [OK] https://www.youngurbanproject.com/youtube-seo-tools/ — 4 links, email: hello@youngurbanproject.com
+  [SKIP] https://thecmo.com/tools/youtube-seo-tools/ — HTTP Error 403: Forbidden
   [OK] https://www.tubebuddy.com/ — 7 links
-  [OK] https://prnews.io/blog/youtube-seo-tools.html — 16 links
-  [OK] https://www.syscality.com/best-seo-tools-for-youtube/ — 4 links, email: support@syscality.com
+  [OK] https://rankxdigital.com/blog/youtube-seo-tools/ — 1 links, email: info@rankxdigital.com
 
-  Successfully fetched 8 pages
+  Successfully fetched 7 pages
 
 Step 3: Checking links for broken URLs...
-  Checking 42 unique links...
-    Checked 20/42...
-    Checked 40/42...
-  Found 10 broken links
+  Checking 22 unique links...
+    Checked 20/22...
+  Found 3 broken links
 
 Step 4: Outreach opportunities
 ============================================================
 
 --- Opportunity #1 ---
-Source page: https://contentmavericks.com/best-youtube-seo-tools/
-Broken link: https://circle.so/
-Contact:     support@contentmavericks.com
+Source page: https://www.youngurbanproject.com/youtube-seo-tools/
+Broken link: https://joseangelostudios.com/b2b-seo/
+Contact:     hello@youngurbanproject.com
 Our replacement: https://yt-seo-architect.vercel.app/blog
-Email subject: Found a broken link on your contentmavericks.com page
+Email subject: Found a broken link on your www.youngurbanproject.com page
 
 Hi there,
 
-I was reading your excellent resource at https://contentmavericks.com/best-youtube-seo-tools/ and noticed a broken link:
+I was reading your excellent resource at https://www.youngurbanproject.com/youtube-seo-tools/ and noticed a broken link:
 
-  Broken link: https://circle.so/
+  Broken link: https://joseangelostudios.com/b2b-seo/
 
 It points to a page that no longer exists. 
 
@@ -60,174 +59,6 @@ YT SEO Architect
 ----------------------------------------
 
 --- Opportunity #2 ---
-Source page: https://videodubber.ai/tools/youtube/video-seo-score-checker/
-Broken link: https://theresanaiforthat.com/ai/videodubber/
-Contact:     contact@videodubber.ai
-Our replacement: https://yt-seo-architect.vercel.app/blog
-Email subject: Found a broken link on your videodubber.ai page
-
-Hi there,
-
-I was reading your excellent resource at https://videodubber.ai/tools/youtube/video-seo-score-checker/ and noticed a broken link:
-
-  Broken link: https://theresanaiforthat.com/ai/videodubber/
-
-It points to a page that no longer exists. 
-
-I've written a comprehensive guide on this topic that could be a great replacement:
-
-  https://yt-seo-architect.vercel.app/blog
-
-It covers [specific angle] with [data/examples/steps] that your readers would find useful.
-
-No pressure — just wanted to flag the broken link and offer a fix.
-
-Best,
-Patrick
-YT SEO Architect
-----------------------------------------
-
---- Opportunity #3 ---
-Source page: https://prnews.io/blog/youtube-seo-tools.html
-Broken link: https://www.semrush.com/
-Contact:     NOT FOUND
-Our replacement: https://yt-seo-architect.vercel.app/blog
-Email subject: Found a broken link on your prnews.io page
-
-Hi there,
-
-I was reading your excellent resource at https://prnews.io/blog/youtube-seo-tools.html and noticed a broken link:
-
-  Broken link: https://www.semrush.com/
-
-It points to a page that no longer exists. 
-
-I've written a comprehensive guide on this topic that could be a great replacement:
-
-  https://yt-seo-architect.vercel.app/blog
-
-It covers [specific angle] with [data/examples/steps] that your readers would find useful.
-
-No pressure — just wanted to flag the broken link and offer a fix.
-
-Best,
-Patrick
-YT SEO Architect
-----------------------------------------
-
---- Opportunity #4 ---
-Source page: https://videodubber.ai/tools/youtube/video-seo-score-checker/
-Broken link: https://theresanaiforthat.com/ai/videodubber/#rw
-Contact:     contact@videodubber.ai
-Our replacement: https://yt-seo-architect.vercel.app/blog
-Email subject: Found a broken link on your videodubber.ai page
-
-Hi there,
-
-I was reading your excellent resource at https://videodubber.ai/tools/youtube/video-seo-score-checker/ and noticed a broken link:
-
-  Broken link: https://theresanaiforthat.com/ai/videodubber/#rw
-
-It points to a page that no longer exists. 
-
-I've written a comprehensive guide on this topic that could be a great replacement:
-
-  https://yt-seo-architect.vercel.app/blog
-
-It covers [specific angle] with [data/examples/steps] that your readers would find useful.
-
-No pressure — just wanted to flag the broken link and offer a fix.
-
-Best,
-Patrick
-YT SEO Architect
-----------------------------------------
-
---- Opportunity #5 ---
-Source page: https://prnews.io/blog/youtube-seo-tools.html
-Broken link: https://www.canva.com/
-Contact:     NOT FOUND
-Our replacement: https://yt-seo-architect.vercel.app/blog
-Email subject: Found a broken link on your prnews.io page
-
-Hi there,
-
-I was reading your excellent resource at https://prnews.io/blog/youtube-seo-tools.html and noticed a broken link:
-
-  Broken link: https://www.canva.com/
-
-It points to a page that no longer exists. 
-
-I've written a comprehensive guide on this topic that could be a great replacement:
-
-  https://yt-seo-architect.vercel.app/blog
-
-It covers [specific angle] with [data/examples/steps] that your readers would find useful.
-
-No pressure — just wanted to flag the broken link and offer a fix.
-
-Best,
-Patrick
-YT SEO Architect
-----------------------------------------
-
---- Opportunity #6 ---
-Source page: https://www.tubebuddy.com/
-Broken link: https://youtu.be/HQ6-nOuCl4A?si=92wltJmjxU23tZRr
-Contact:     NOT FOUND
-Our replacement: https://yt-seo-architect.vercel.app/blog
-Email subject: Found a broken link on your www.tubebuddy.com page
-
-Hi there,
-
-I was reading your excellent resource at https://www.tubebuddy.com/ and noticed a broken link:
-
-  Broken link: https://youtu.be/HQ6-nOuCl4A?si=92wltJmjxU23tZRr
-
-It points to a page that no longer exists. 
-
-I've written a comprehensive guide on this topic that could be a great replacement:
-
-  https://yt-seo-architect.vercel.app/blog
-
-It covers [specific angle] with [data/examples/steps] that your readers would find useful.
-
-No pressure — just wanted to flag the broken link and offer a fix.
-
-Best,
-Patrick
-YT SEO Architect
-----------------------------------------
-
---- Opportunity #7 ---
-Source page: https://prnews.io/blog/youtube-seo-tools.html
-Broken link: https://claude.ai/
-Contact:     NOT FOUND
-Our replacement: https://yt-seo-architect.vercel.app/blog
-Email subject: Found a broken link on your prnews.io page
-
-Hi there,
-
-I was reading your excellent resource at https://prnews.io/blog/youtube-seo-tools.html and noticed a broken link:
-
-  Broken link: https://claude.ai/
-
-It points to a page that no longer exists. 
-
-I've written a comprehensive guide on this topic that could be a great replacement:
-
-  https://yt-seo-architect.vercel.app/blog
-
-It covers [specific angle] with [data/examples/steps] that your readers would find useful.
-
-No pressure — just wanted to flag the broken link and offer a fix.
-
-Best,
-Patrick
-YT SEO Architect
-----------------------------------------
-
---- Opportunity #8 ---
 Source page: https://www.tubebuddy.com/
 Broken link: https://support.tubebuddy.com/hc/en-us
 Contact:     NOT FOUND
@@ -255,18 +86,18 @@ Patrick
 YT SEO Architect
 ----------------------------------------
 
---- Opportunity #9 ---
-Source page: https://www.tubebuddy.com/
-Broken link: https://youtu.be/DOwcIJEQb4M?si=2hlZLo9fngHN1u0Z
-Contact:     NOT FOUND
+--- Opportunity #3 ---
+Source page: https://contentmavericks.com/best-youtube-seo-tools/
+Broken link: https://circle.so/
+Contact:     support@contentmavericks.com
 Our replacement: https://yt-seo-architect.vercel.app/blog
-Email subject: Found a broken link on your www.tubebuddy.com page
+Email subject: Found a broken link on your contentmavericks.com page
 
 Hi there,
 
-I was reading your excellent resource at https://www.tubebuddy.com/ and noticed a broken link:
+I was reading your excellent resource at https://contentmavericks.com/best-youtube-seo-tools/ and noticed a broken link:
 
-  Broken link: https://youtu.be/DOwcIJEQb4M?si=2hlZLo9fngHN1u0Z
+  Broken link: https://circle.so/
 
 It points to a page that no longer exists. 
 
@@ -283,38 +114,10 @@ Patrick
 YT SEO Architect
 ----------------------------------------
 
---- Opportunity #10 ---
-Source page: https://prnews.io/blog/youtube-seo-tools.html
-Broken link: https://morningfa.me/
-Contact:     NOT FOUND
-Our replacement: https://yt-seo-architect.vercel.app/blog
-Email subject: Found a broken link on your prnews.io page
-
-Hi there,
-
-I was reading your excellent resource at https://prnews.io/blog/youtube-seo-tools.html and noticed a broken link:
-
-  Broken link: https://morningfa.me/
-
-It points to a page that no longer exists. 
-
-I've written a comprehensive guide on this topic that could be a great replacement:
-
-  https://yt-seo-architect.vercel.app/blog
-
-It covers [specific angle] with [data/examples/steps] that your readers would find useful.
-
-No pressure — just wanted to flag the broken link and offer a fix.
-
-Best,
-Patrick
-YT SEO Architect
-----------------------------------------
-
-Saved 10 outreach templates to /tmp/backlink-scans/opportunities-broken.csv
+Saved 3 outreach templates to /tmp/backlink-scans/opportunities-broken.csv
 
 ============================================================
-SUMMARY: 10 broken links found on 8 pages
+SUMMARY: 3 broken links found on 7 pages
 ============================================================
 
 Next steps:
