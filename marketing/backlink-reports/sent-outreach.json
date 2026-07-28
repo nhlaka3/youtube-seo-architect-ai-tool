@@ -19,5 +19,26 @@
     "to_email": "hello@alanspicer.com",
     "subject": "Free alternative to vidIQ for your alanspicer.com audience",
     "sent_at": "2026-07-28T08:47:28Z"
+  },
+  {
+    "source_page": "https://contentmavericks.com/best-youtube-seo-tools/",
+    "broken_url": "https://circle.so/",
+    "to_email": "support@contentmavericks.com",
+    "subject": "Found a broken link on your contentmavericks.com page",
+    "sent_at": "2026-07-28T10:02:21Z"
+  },
+  {
+    "source_page": "https://videodubber.ai/tools/youtube/video-seo-score-checker/",
+    "broken_url": "https://theresanaiforthat.com/ai/videodubber/",
+    "to_email": "contact@videodubber.ai",
+    "subject": "Found a broken link on your videodubber.ai page",
+    "sent_at": "2026-07-28T10:03:06Z"
+  },
+  {
+    "source_page": "https://videodubber.ai/tools/youtube/video-seo-score-checker/",
+    "broken_url": "https://theresanaiforthat.com/ai/videodubber/#rw",
+    "to_email": "contact@videodubber.ai",
+    "subject": "Found a broken link on your videodubber.ai page",
+    "sent_at": "2026-07-28T10:03:53Z"
   }
 ]
