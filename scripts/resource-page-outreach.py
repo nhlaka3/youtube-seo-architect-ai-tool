@@ -37,6 +37,7 @@ from concurrent.futures import ThreadPoolExecutor, as_completed
 PROJECT = Path(__file__).resolve().parent.parent
 REPORTS_DIR = PROJECT / "marketing" / "backlink-reports"
 SEEN_DB = REPORTS_DIR / "resource-page-seen.json"
+RESOURCE_PAGES_DB = REPORTS_DIR / "resource-pages-db.json"
 
 USER_AGENT = "Mozilla/5.0 (compatible; ResourceOutreach/1.0; +https://yt-seo-architect.vercel.app)"
 OUR_URL = "https://yt-seo-architect.vercel.app"
@@ -48,6 +49,57 @@ OUR_DOMAINS = [
     "yt-seo-architect.vercel.app",
     "youtube-seo-architect.vercel.app",
     "youtube-seo-tool.vercel.app",
+]
+
+# ─── Curated fallback resource pages (when DDG returns 0) ─────────────
+# These are known resource/list pages that list YouTube SEO tools.
+# Updated periodically as new ones are discovered.
+
+FALLBACK_RESOURCE_PAGES = [
+    # Known resource pages from past successful scans
+    "https://contentmavericks.com/best-youtube-seo-tools/",
+    "https://vidiq.com/youtube-seo-tools/",
+    "https://www.youngurbanproject.com/youtube-seo-tools/",
+    "https://rankxdigital.com/blog/youtube-seo-tools/",
+    "https://syscality.com/best-seo-tools-for-youtube/",
+    "https://tuberanker.com/",
+    "https://www.tastyedits.com/youtube-seo-tools/",
+    "https://thecmo.com/tools/youtube-seo-tools/",
+    "https://joseangelostudios.com/best-youtube-seo-tools/",
+    "https://impressivemagazine.com/best-youtube-seo-tools-2026/",
+    "https://stuartkerrs.com/best-seo-tools-for-youtube/",
+    # Resource/tool roundup pages from popular sites
+    "https://blog.hubspot.com/marketing/youtube-seo-tools",
+    "https://backlinko.com/youtube-seo-tools",
+    "https://neilpatel.com/blog/youtube-seo-tools/",
+    "https://socialmediaexaminer.com/youtube-marketing-tools/",
+    "https://later.com/blog/youtube-tools/",
+    "https://buffer.com/resources/youtube-tools/",
+    "https://sproutsocial.com/insights/youtube-marketing-tools/",
+    "https://hootsuite.com/resources/youtube-marketing-tools",
+    "https://semrush.com/blog/youtube-seo/",
+    "https://moz.com/blog/youtube-seo",
+    "https://influencermarketinghub.com/youtube-seo-tools/",
+    "https://www.shopify.com/blog/youtube-tools",
+    "https://www.wix.com/blog/youtube-tools",
+    "https://www.canva.com/learn/youtube-tools/",
+    "https://www.adobe.com/express/learn/video/youtube-tools",
+    "https://noxinfluencer.com/blog/youtube-tools/",
+    "https://www.oberlo.com/blog/youtube-tools",
+    "https://www.ryrob.com/youtube-keyword-tool/",
+    "https://ahrefs.com/youtube-keyword-tool",
+    "https://www.collabpals.com/tools/youtube-keyword-research-tool",
+    "https://prnews.io/blog/youtube-tools/",
+    "https://www.braiv.co/resources/youtube-tools",
+    # Tool directories and curated lists
+    "https://alternative.me/youtube-seo",
+    "https://www.g2.com/categories/youtube-tools",
+    "https://www.getapp.com/marketing-software/youtube-tools/",
+    "https://www.capterra.com/youtube-tools/",
+    "https://geekflare.com/youtube-seo-tools/",
+    "https://www.techsmith.com/blog/youtube-tools/",
+    "https://zapier.com/blog/best-youtube-tools/",
+    "https://www.userguiding.com/blog/youtube-tools",
 ]
 
 # ─── Search queries to find resource pages ────────────────────────────
@@ -120,6 +172,32 @@ OUR_PAGES = {
     "audit": f"{OUR_URL}/tools/youtube-seo-audit-diagnostic-fix-2026",
     "blog": f"{OUR_URL}/blog",
 }
+
+# ─── Resource pages database (self-improving) ─────────────────────────
+# Saves successful DDG results so they can be reused when DDG fails.
+
+def load_resource_db():
+    """Load known resource pages from the database file."""
+    if RESOURCE_PAGES_DB.exists():
+        try:
+            return json.loads(RESOURCE_PAGES_DB.read_text())
+        except (json.JSONDecodeError, Exception):
+            return []
+    return []
+
+def save_resource_db(pages, max_pages=500):
+    """Save known resource pages to the database file.
+    Merges with existing entries, deduplicates, and caps at max_pages.
+    """
+    REPORTS_DIR.mkdir(parents=True, exist_ok=True)
+    existing = load_resource_db()
+    combined = list(dict.fromkeys(existing + pages))
+    valid = [p for p in combined if p.startswith("http")]
+    # Keep newest entries (last max_pages) to prevent unbounded growth
+    valid = valid[-max_pages:]
+    RESOURCE_PAGES_DB.write_text(json.dumps(valid, indent=2))
+    return valid
+
 
 # ─── Utility ──────────────────────────────────────────────────────────
 
@@ -404,16 +482,40 @@ def run_scan(max_pages=15, min_resource_score=2, output_path=None, dry_run=False
         time.sleep(0.5)
 
     unique_results = list(dict.fromkeys(all_results))
-    print(f"  Found {len(unique_results)} unique results\n")
+    print(f"  Found {len(unique_results)} unique results from DDG")
+
+    # Fallback chain: DDG search → Resource DB → Curated list
+    if not unique_results:
+        print("  DDG returned 0 results. Trying fallback sources...")
+
+        # Fallback 1: Resource pages database (successful past DDG results)
+        resource_db = load_resource_db()
+        if resource_db:
+            print(f"  📂 Using resource database: {len(resource_db)} known pages")
+            unique_results = resource_db[:max_pages * 2]
 
     if not unique_results:
-        print("No results found. Try again later.")
+        # Fallback 2: Curated list of known resource pages
+        print(f"  📋 Using curated fallback list: {len(FALLBACK_RESOURCE_PAGES)} known pages")
+        unique_results = FALLBACK_RESOURCE_PAGES
+        # Save curated list to DB so seen pages get tracked across runs
+        save_resource_db(FALLBACK_RESOURCE_PAGES)
+
+    if not unique_results:
+        print("  ❌ All fallback sources exhausted. No pages to scan.")
         return True
 
-    # Save raw results
+    print(f"  Total pages to scan: {len(unique_results)}\n")
+
+    # Save raw results (from whatever source)
     raw_path = REPORTS_DIR / f"resource-raw-results-{datetime.now().strftime('%Y-%m-%d')}.json"
     REPORTS_DIR.mkdir(parents=True, exist_ok=True)
     raw_path.write_text(json.dumps(unique_results, indent=2))
+
+    # Save to resource database for future fallback (only new DDG results, not fallback)
+    if all_results and unique_results:
+        saved_count = len(save_resource_db(unique_results))
+        print(f"  💾 Saved {saved_count} pages to resource database for future runs")
 
     # Stage 2: Fetch and analyze
     print(f"🔄 Stage 2: Fetching and analyzing up to {max_pages} pages...")
