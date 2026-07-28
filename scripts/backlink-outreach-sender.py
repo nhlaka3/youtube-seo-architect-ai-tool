@@ -47,6 +47,9 @@ from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 from pathlib import Path
 
+import dns.resolver
+import requests
+
 PROJECT = Path(__file__).resolve().parent.parent
 SENT_DB = PROJECT / "marketing" / "backlink-reports" / "sent-outreach.json"
 RATE_LIMIT_SECONDS = 45  # delay between sends to avoid spam flags
@@ -103,6 +106,71 @@ def load_opportunities(csv_path):
             opportunities.append(row)
     return opportunities
 
+# ─── DNS & RDAP helpers ────────────────────────────────────────────────
+
+KNOWN_SPAM_DOMAINS = {
+    "example.com", "example.org", "example.net",
+    "domain.com", "domain.net", "domain.org",
+    "test.com", "test.org", "test.net",
+    "sample.com", "yourdomain.com", "mydomain.com",
+    "email.com", "mail.com", "tempmail.com",
+}
+
+def has_mx_record(domain):
+    """Check if a domain has valid MX records (accepts email)."""
+    try:
+        mx_records = dns.resolver.resolve(domain, "MX", lifetime=5)
+        return len(mx_records) > 0
+    except (dns.resolver.NoAnswer, dns.resolver.NXDOMAIN, dns.exception.Timeout):
+        pass
+    # Fallback: check for A/AAAA records
+    try:
+        a_records = dns.resolver.resolve(domain, "A", lifetime=5)
+        return len(a_records) > 0
+    except Exception:
+        return False
+
+
+def rdap_lookup(domain):
+    """
+    RDAP fallback for email discovery via public RDAP servers.
+    Returns a set of email addresses found.
+    """
+    rdap_urls = [
+        f"https://rdap.verisign.com/com/v1/domain/{domain}",
+        f"https://rdap.nominet.uk/uk/v1/domain/{domain}",
+        f"https://rdap.registry.name/v1/domain/{domain}",
+    ]
+    emails = set()
+    for url in rdap_urls:
+        try:
+            r = requests.get(url, timeout=8, headers={"User-Agent": "OutreachBot/1.0"})
+            if r.status_code != 200:
+                continue
+            data = r.json()
+            if not isinstance(data, dict):
+                continue
+            # Extract emails from entities' vcard data
+            for entity in data.get("entities", []):
+                if not isinstance(entity, dict):
+                    continue
+                for vcard_arr in entity.get("vcardArray", []):
+                    if not isinstance(vcard_arr, list):
+                        continue
+                    for vcard_entry in vcard_arr:
+                        if not isinstance(vcard_entry, list):
+                            continue
+                        for item in vcard_entry:
+                            if (isinstance(item, list) and len(item) >= 3
+                                    and str(item[0]).lower() == "email"):
+                                addr = item[-1]  # email is last element
+                                if isinstance(addr, str) and "@" in addr:
+                                    emails.add(addr)
+        except Exception:
+            continue
+    return emails
+
+
 # ─── Enhanced email finder ────────────────────────────────────────────
 
 def find_contact_email(source_page):
@@ -114,7 +182,9 @@ def find_contact_email(source_page):
     1. Parse the source page HTML for mailto: links (catches footer emails)
     2. Check common contact pages: /contact, /about, /team, /support
     3. Check /.well-known/security.txt
-    4. WHOIS lookup (falls back gracefully if 'whois' command unavailable)
+    4. RDAP lookup (registrar/abuse contacts via HTTP RDAP protocol)
+    5. WHOIS lookup (falls back gracefully if 'whois' command unavailable)
+    6. DNS MX check to validate email domains
 
     Returns None if all strategies fail.
     """
@@ -126,7 +196,7 @@ def find_contact_email(source_page):
     all_emails = set()
 
     def extract_emails(html_content):
-        """Extract mailto: protected, and plain email addresses from HTML."""
+        """Extract mailto, CloudFlare-protected, and plain email addresses from HTML."""
         found = set()
         # mailto: links
         mailtos = re.findall(r'mailto:([a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,})', html_content)
@@ -183,7 +253,14 @@ def find_contact_email(source_page):
     if html:
         all_emails.update(extract_emails(html))
 
-    # Strategy 4: WHOIS lookup (if 'whois' command is available)
+    # Strategy 4: RDAP lookup
+    try:
+        rdap_emails = rdap_lookup(domain_clean)
+        all_emails.update(rdap_emails)
+    except Exception:
+        pass
+
+    # Strategy 5: WHOIS lookup (if 'whois' command is available)
     try:
         result = subprocess.run(
             ["whois", domain_clean],
@@ -203,17 +280,40 @@ def find_contact_email(source_page):
     # Filter results
     skip_hard = {"noreply", "no-reply", "donotreply", "mailer-daemon", "postmaster"}
     image_exts = {".png", ".jpg", ".jpeg", ".svg", ".gif", ".webp", ".ico", ".css", ".js"}
-    real_emails = [
-        e for e in all_emails
-        if not any(s in e.lower() for s in skip_hard)
-        and not any(e.lower().endswith(ext) for ext in image_exts)
-    ]
+    fake_domains = KNOWN_SPAM_DOMAINS
 
-    # Prefer emails containing the domain (more likely real)
-    domain_emails = [e for e in real_emails if domain_clean in e.lower()]
+    # Filter + deduplicate by normalized email
+    seen_norm = set()
+    filtered = []
+    for e in all_emails:
+        el = e.lower()
+        # Skip noreply patterns, image extensions, fake domains
+        if any(s in el for s in skip_hard):
+            continue
+        if any(el.endswith(ext) for ext in image_exts):
+            continue
+        email_domain = el.split("@")[1] if "@" in el else ""
+        if email_domain in fake_domains:
+            continue
+        # Dedup by normalized email
+        if el not in seen_norm:
+            seen_norm.add(el)
+            filtered.append(e)
+
+    # Validate via DNS MX check
+    validated = []
+    for e in filtered:
+        email_domain = e.split("@")[1] if "@" in e else ""
+        if email_domain and has_mx_record(email_domain):
+            validated.append(e)
+    # Fall back to unvalidated if none pass MX
+    final_emails = validated if validated else filtered
+
+    # Prefer emails containing the domain (more likely real contact)
+    domain_emails = [e for e in final_emails if domain_clean in e.lower()]
     if domain_emails:
         return domain_emails[0]
-    return real_emails[0] if real_emails else None
+    return final_emails[0] if final_emails else None
 
 
 # ─── Email building ───────────────────────────────────────────────────
