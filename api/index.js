@@ -2118,4 +2118,62 @@ if (process.env.NODE_ENV !== 'production' && !process.env.VERCEL) {
 
 
 
+
 export default app;
+
+// ── Dynamic glossary comparison pages ────────────────────
+app.get('/api/glossary-comparison', async (req, res) => {
+  try {
+    const slugA = req.query.slugA;
+    const slugB = req.query.slugB;
+    if (!slugA || !slugB) return res.status(400).json({ error: 'Missing slugA or slugB' });
+
+    const isES = req.url.includes('/es/');
+    const { readFileSync, existsSync } = await import('fs');
+    const { resolve } = await import('path');
+    const dataFile = isES
+      ? resolve(process.cwd(), 'scripts', 'glossary-data-es.json')
+      : resolve(process.cwd(), 'scripts', 'glossary-data.json');
+
+    if (!existsSync(dataFile)) return res.status(500).json({ error: 'Data file not found' });
+
+    const data = JSON.parse(readFileSync(dataFile, 'utf-8'));
+    const termA = data.terms.find(t => t.slug === slugA);
+    const termB = data.terms.find(t => t.slug === slugB);
+    if (!termA || !termB) return res.status(404).json({ error: 'Terms not found' });
+
+    const aName = termA.term_es || termA.term;
+    const bName = termB.term_es || termB.term;
+    const aDef = termA.shortDefinition_es || termA.shortDefinition;
+    const bDef = termB.shortDefinition_es || termB.shortDefinition;
+    const site = 'https://yt-seo-architect.vercel.app';
+    const esUrl = '/glossary/es/' + slugA + '-vs-' + slugB;
+    const enUrl = '/glossary/' + slugA + '-vs-' + slugB;
+
+    const html = '<!DOCTYPE html><html lang="' + (isES ? 'es' : 'en') + '"><head>' +
+      '<meta charset="UTF-8"/><title>' + aName + ' vs ' + bName + ' | YT SEO Architect</title>' +
+      '<link rel="canonical" href="' + site + (isES ? esUrl : enUrl) + '"/>' +
+      '<link rel="alternate" hreflang="en" href="' + site + enUrl + '"/>' +
+      '<link rel="alternate" hreflang="es" href="' + site + esUrl + '"/>' +
+      '<meta name="viewport" content="width=device-width,initial-scale=1.0"/>' +
+      '<style>*{margin:0;padding:0;box-sizing:border-box}body{font-family:Outfit,Geist,sans-serif;background:#0a0a0f;color:#e2e8f0;line-height:1.6}.header{display:flex;justify-content:space-between;align-items:center;padding:.75rem 1.5rem;background:#0f0c29;border-bottom:1px solid rgba(255,255,255,.05)}.header a{color:#e2e8f0;text-decoration:none;font-weight:600}.header .cta{background:linear-gradient(135deg,#f97316,#fb923c);color:#fff;padding:.4rem 1rem;border-radius:9999px;font-size:.85rem}main{max-width:720px;margin:0 auto;padding:2rem 1.5rem}h1{font-size:1.8rem;margin-bottom:.5rem;background:linear-gradient(135deg,#f97316,#fb923c);-webkit-background-clip:text;-webkit-text-fill-color:transparent}.sub{color:#8b8b9e;font-size:.95rem;margin-bottom:2rem}.card{background:#1e1b4b;border:1px solid #2d2a5e;border-radius:12px;padding:1.5rem;margin-bottom:1.5rem}.card h2{color:#a5b4fc;font-size:1.1rem;margin-bottom:.75rem}.card p{color:#94a3b8;line-height:1.7;margin:.5rem 0}.vs{text-align:center;font-size:1.5rem;font-weight:800;color:#f97316;padding:.5rem 0}.dw{display:flex;justify-content:space-between;padding:.6rem 0;border-bottom:1px solid rgba(255,255,255,.05);font-size:.9rem}.dw:last-child{border-bottom:none}.dw .lb{color:#8b8b9e}.dw .va{color:#fb923c;font-weight:600}.dw .vb{color:#a5b4fc;font-weight:600}.ln{text-align:center;font-size:.8rem;color:#8b8b9e;margin-bottom:1.5rem}.ln a{color:#a5b4fc}.cta-box{border:1px solid #4f46e5;border-radius:12px;padding:1.5rem;text-align:center;margin:2rem 0}.cta-box h3{color:#e2e8f0;margin-bottom:.5rem}.cta-box a{display:inline-block;background:linear-gradient(135deg,#f97316,#fb923c);color:#fff;padding:.6rem 1.5rem;border-radius:9999px;text-decoration:none;font-weight:600}footer{text-align:center;padding:2rem;color:#6b7280;font-size:.8rem}footer a{color:#8b8b9e;text-decoration:none}</style></head><body>' +
+      '<header class="header"><a href="/">⚡ YT SEO Architect</a><a href="/glossary/" class="cta">📖 Glossary</a></header>' +
+      '<main>' +
+      '<div class="ln">' + (isES ? '🇪🇸 Español · <a href="' + enUrl + '" hreflang="en">🇺🇸 English</a>' : '🇺🇸 English · <a href="' + esUrl + '" hreflang="es">🇪🇸 Español</a>') + '</div>' +
+      '<h1>' + aName + ' vs ' + bName + '</h1>' +
+      '<p class="sub">' + (isES ? 'Comparación detallada.' : 'Detailed comparison.') + '</p>' +
+      '<div class="card"><h2>📖 ' + aName + '</h2><p>' + aDef + '</p></div>' +
+      '<div class="vs">⚡ VS ⚡</div>' +
+      '<div class="card"><h2>📖 ' + bName + '</h2><p>' + bDef + '</p></div>' +
+      '<div class="card"><h2>⚖️ ' + (isES ? 'Diferencias' : 'Differences') + '</h2>' +
+      '<div class="dw"><span class="lb">' + (isES ? 'Categoría' : 'Category') + '</span><span class="va">' + aName + '</span><span class="vb">' + bName + '</span></div></div>' +
+      '<div class="cta-box"><h3>🚀 Master YouTube SEO</h3><a href="/tools/">Try Free Tools →</a></div>' +
+      '</main><footer><p>&copy; 2026 YT SEO Architect</p></footer></body></html>';
+
+    res.setHeader('Content-Type', 'text/html; charset=utf-8');
+    res.setHeader('Cache-Control', 'public, max-age=3600, s-maxage=3600');
+    return res.status(200).send(html);
+  } catch (e) {
+    res.status(500).json({ error: e.message });
+  }
+});
