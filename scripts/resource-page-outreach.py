@@ -123,6 +123,58 @@ def extract_page_title(html):
     match = re.search(r"<title[^>]*>(.*?)</title>", html, re.DOTALL | re.IGNORECASE)
     return match.group(1).strip()[:120] if match else ""
 
+# ─── Email extraction ─────────────────────────────────────────────────
+
+def extract_emails(html, source_url):
+    """Extract contact emails from page HTML.
+    Returns the first likely contact email, or None.
+    """
+    parsed = urllib.parse.urlparse(source_url)
+    domain = re.sub(r"^www\.", "", parsed.netloc).lower()
+
+    found = set()
+    # mailto: links
+    mailtos = re.findall(r'mailto:([a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,})', html)
+    found.update(mailtos)
+    # CloudFlare email protection (data-cfemail is hex-encoded)
+    cf_encoded = re.findall(r'data-cfemail="([a-fA-F0-9]+)"', html)
+    for cf in cf_encoded:
+        try:
+            decoded = bytes.fromhex(cf)
+            key = decoded[0]
+            email = ''.join(chr(b ^ key) for b in decoded[1:])
+            if '@' in email:
+                found.add(email)
+        except Exception:
+            pass
+    # Plain email patterns
+    plain = re.findall(r'[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}', html)
+    found.update(plain)
+
+    # Filter out noreply, example.com, etc.
+    skip_hard = {"noreply", "no-reply", "donotreply", "mailer-daemon", "postmaster"}
+    image_exts = {".png", ".jpg", ".jpeg", ".svg", ".gif", ".webp", ".ico", ".css", ".js"}
+    fake_domains = {"example.com", "example.org", "example.net", "domain.com"}
+
+    candidates = []
+    for e in found:
+        el = e.lower()
+        if any(s in el for s in skip_hard):
+            continue
+        if any(el.endswith(ext) for ext in image_exts):
+            continue
+        email_domain = el.split("@")[1] if "@" in el else ""
+        if email_domain in fake_domains:
+            continue
+        candidates.append(e)
+
+    # Prefer domain-matching emails
+    domain_emails = [e for e in candidates if domain in e.lower()]
+    if domain_emails:
+        return domain_emails[0]
+    return candidates[0] if candidates else None
+
+
 # ─── Search (DuckDuckGo Lite — no API key needed) ─────────────────────
 
 def search_ddg(query, max_results=20):
@@ -227,7 +279,7 @@ def analyze_page(html, url):
 
 # ─── Outreach template ────────────────────────────────────────────────
 
-def generate_outreach(page):
+def generate_outreach(page, contact_email=None):
     """Generate an outreach email asking to be added to the resource page."""
     domain = page["base_domain"]
     page_url = page["url"]
@@ -267,7 +319,7 @@ Founder, YT SEO Architect
         "our_replacement": OUR_PAGES["tools"],
         "subject": subject,
         "body": body,
-        "contact_email": "",  # Will be auto-discovered by sender
+        "contact_email": contact_email or "",  # From scanner extraction or empty for auto-discovery
     }
 
 # ─── Seen tracker ─────────────────────────────────────────────────────
@@ -362,11 +414,15 @@ def run_scan(max_pages=15, min_resource_score=2, output_path=None, dry_run=False
                 continue
 
             analysis = analyze_page(html, url)
+            # Extract contact email from the page
+            contact_email = extract_emails(html, url)
+            analysis['contact_email'] = contact_email or ''
 
             if analysis["resource_score"] >= min_resource_score:
                 status = "✅ (has our link)" if analysis["has_our_link"] else "🎯 OPPORTUNITY"
+                email_hint = f", email: {contact_email}" if contact_email else ""
                 page_analyses.append(analysis)
-                print(f"  [{fetched_count}/{len(pages_to_scan)}] {status} {url[:50]}")
+                print(f"  [{fetched_count}/{len(pages_to_scan)}] {status} {url[:50]}{email_hint}")
                 print(f"       Score: {analysis['resource_score']} | Title: {analysis['title'][:50]}")
             else:
                 print(f"  [{fetched_count}/{len(pages_to_scan)}] [SKIP] {url[:50]} — score {analysis['resource_score']} < {min_resource_score}")
@@ -402,13 +458,14 @@ def run_scan(max_pages=15, min_resource_score=2, output_path=None, dry_run=False
             skipped_seen += 1
             continue
 
-        outreach = generate_outreach(page)
+        outreach = generate_outreach(page, contact_email=page.get('contact_email', ''))
         opportunities.append(outreach)
 
+        email_hint = f", email: {outreach['contact_email']}" if outreach['contact_email'] else ""
         print(f"\n  --- Opportunity #{len(opportunities)} ---")
         print(f"  Source:  {outreach['source_page']}")
         print(f"  Title:   {outreach['page_title'][:60]}")
-        print(f"  Score:   {outreach['resource_score']}")
+        print(f"  Score:   {outreach['resource_score']}{email_hint}")
         print(f"  Subject: {outreach['subject']}")
 
         if len(opportunities) >= 20:
