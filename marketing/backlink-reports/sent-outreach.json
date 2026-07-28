@@ -47,5 +47,40 @@
     "to_email": "hello@youngurbanproject.com",
     "subject": "Found a broken link on your www.youngurbanproject.com page",
     "sent_at": "2026-07-28T10:58:29Z"
+  },
+  {
+    "source_page": "https://www.youngurbanproject.com/youtube-seo-tools/",
+    "broken_url": "Resource page (20 Best YouTube SEO Tools in 2026)",
+    "to_email": "hello@youngurbanproject.com",
+    "subject": "Suggestion for your www.youngurbanproject.com resource page",
+    "sent_at": "2026-07-28T11:26:39Z"
+  },
+  {
+    "source_page": "https://contentmavericks.com/best-youtube-seo-tools/",
+    "broken_url": "Resource page (7 Best YouTube SEO Tools 2026 (50 Tools Reviewed))",
+    "to_email": "support@contentmavericks.com",
+    "subject": "Suggestion for your contentmavericks.com resource page",
+    "sent_at": "2026-07-28T11:27:25Z"
+  },
+  {
+    "source_page": "https://vidiq.com/youtube-seo-tools/",
+    "broken_url": "Resource page (YouTube SEO Tools | Help Your Videos Rank Higher |)",
+    "to_email": "support@vidiq.com",
+    "subject": "Suggestion for your vidiq.com resource page",
+    "sent_at": "2026-07-28T11:28:11Z"
+  },
+  {
+    "source_page": "https://rankxdigital.com/blog/youtube-seo-tools/",
+    "broken_url": "Resource page (Best YouTube SEO Tools In 2026: Free &amp; Paid (4)",
+    "to_email": "info@rankxdigital.com",
+    "subject": "Suggestion for your rankxdigital.com resource page",
+    "sent_at": "2026-07-28T11:28:57Z"
+  },
+  {
+    "source_page": "https://syscality.com/best-seo-tools-for-youtube/",
+    "broken_url": "Resource page (Best SEO Tools for YouTube to Boost Video Rankings)",
+    "to_email": "support@syscality.com",
+    "subject": "Suggestion for your syscality.com resource page",
+    "sent_at": "2026-07-28T11:29:43Z"
   }
 ]

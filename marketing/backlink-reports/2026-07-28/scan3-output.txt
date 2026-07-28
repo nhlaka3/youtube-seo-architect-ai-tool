@@ -51,6 +51,92 @@ Our site: https://yt-seo-architect.vercel.app
   [43/45] "curated list of youtube tools"
   [44/45] "youtube tool roundup"
   [45/45] "best free seo tools for youtube"
-  Found 0 unique results
+  Found 0 unique results from DDG
+  DDG returned 0 results. Trying fallback sources...
+  📋 Using curated fallback list: 41 known pages
+  Total pages to scan: 41
 
-No results found. Try again later.
+🔄 Stage 2: Fetching and analyzing up to 15 pages...
+  [1/15] 🎯 OPPORTUNITY https://www.youngurbanproject.com/youtube-seo-tool, email: hello@youngurbanproject.com
+       Score: 7 | Title: 20 Best YouTube SEO Tools in 2026
+  [2/15] 🎯 OPPORTUNITY https://contentmavericks.com/best-youtube-seo-tool, email: support@contentmavericks.com
+       Score: 4 | Title: 7 Best YouTube SEO Tools 2026 (50 Tools Reviewed)
+  [3/15] [SKIP] https://tuberanker.com/ — HTTP Error 403: Forbidden
+  [4/15] 🎯 OPPORTUNITY https://vidiq.com/youtube-seo-tools/, email: support@vidiq.com
+       Score: 2 | Title: YouTube SEO Tools | Help Your Videos Rank Higher |
+  [5/15] [SKIP] https://thecmo.com/tools/youtube-seo-tools/ — HTTP Error 403: Forbidden
+  [6/15] [SKIP] https://www.tastyedits.com/youtube-seo-tools/ — HTTP Error 403: Forbidden
+  [7/15] [SKIP] https://impressivemagazine.com/best-youtube-seo-to — HTTP Error 403: Forbidden
+  [8/15] [SKIP] https://joseangelostudios.com/best-youtube-seo-too — HTTP Error 403: Forbidden
+  [9/15] [SKIP] https://stuartkerrs.com/best-seo-tools-for-youtube — HTTP Error 403: Forbidden
+  [10/15] 🎯 OPPORTUNITY https://rankxdigital.com/blog/youtube-seo-tools/, email: info@rankxdigital.com
+       Score: 4 | Title: Best YouTube SEO Tools In 2026: Free &amp; Paid (4
+  [11/15] [SKIP] https://neilpatel.com/blog/youtube-seo-tools/ — HTTP Error 404: Not Found
+  [12/15] [SKIP] https://blog.hubspot.com/marketing/youtube-seo-too — HTTP Error 404: Not Found
+  [13/15] [SKIP] https://socialmediaexaminer.com/youtube-marketing- — HTTP Error 404: Not Found
+  [14/15] [SKIP] https://backlinko.com/youtube-seo-tools — HTTP Error 404: Not Found
+  [15/15] 🎯 OPPORTUNITY https://syscality.com/best-seo-tools-for-youtube/, email: support@syscality.com
+       Score: 7 | Title: Best SEO Tools for YouTube to Boost Video Rankings
+
+  Analyzed 5 relevant resource pages
+
+  Missing our link: 5 pages
+
+🔄 Stage 4: Generating outreach templates...
+
+  --- Opportunity #1 ---
+  Source:  https://www.youngurbanproject.com/youtube-seo-tools/
+  Title:   20 Best YouTube SEO Tools in 2026
+  Score:   7, email: hello@youngurbanproject.com
+  Subject: Suggestion for your www.youngurbanproject.com resource page
+
+  --- Opportunity #2 ---
+  Source:  https://contentmavericks.com/best-youtube-seo-tools/
+  Title:   7 Best YouTube SEO Tools 2026 (50 Tools Reviewed)
+  Score:   4, email: support@contentmavericks.com
+  Subject: Suggestion for your contentmavericks.com resource page
+
+  --- Opportunity #3 ---
+  Source:  https://vidiq.com/youtube-seo-tools/
+  Title:   YouTube SEO Tools | Help Your Videos Rank Higher | vidIQ
+  Score:   2, email: support@vidiq.com
+  Subject: Suggestion for your vidiq.com resource page
+
+  --- Opportunity #4 ---
+  Source:  https://rankxdigital.com/blog/youtube-seo-tools/
+  Title:   Best YouTube SEO Tools In 2026: Free &amp; Paid (40+ Options
+  Score:   4, email: info@rankxdigital.com
+  Subject: Suggestion for your rankxdigital.com resource page
+
+  --- Opportunity #5 ---
+  Source:  https://syscality.com/best-seo-tools-for-youtube/
+  Title:   Best SEO Tools for YouTube to Boost Video Rankings
+  Score:   7, email: support@syscality.com
+  Subject: Suggestion for your syscality.com resource page
+
+  New opportunities: 5
+  Skipped (seen): 0
+
+  Saved to: /tmp/backlink-scans/opportunities-resource.csv
+  Marked 5 as processed
+
+============================================================
+SUMMARY
+============================================================
+  Pages searched:    41
+  Pages fetched:     15
+  Relevant pages:    5
+  Already link to us: 0
+  Missing our link:  5
+  New opportunities: 5
+  Output:            /tmp/backlink-scans/opportunities-resource.csv
+============================================================
+
+Next steps:
+1. Review CSV: /tmp/backlink-scans/opportunities-resource.csv
+2. Send outreach: python3 scripts/backlink-outreach-sender.py --file "/tmp/backlink-scans/opportunities-resource.csv"
+3. Or preview first: python3 scripts/backlink-outreach-sender.py --file "/tmp/backlink-scans/opportunities-resource.csv" --dry-run
+
+Expected response rate: 10-20% for resource page requests
+Typical result: 2-4 backlinks from 20 outreach attempts
+

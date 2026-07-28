@@ -44,43 +44,46 @@ Competitors tracked: 10
   [SKIP] https://www.tastyedits.com/youtube-seo-tools/ — HTTP Error 403: Forbidden
   [4/15] 🎯 MISSING https://vidiq.com/youtube-seo-tools/
        Links to: vidIQ
-  [SKIP] https://thecmo.com/tools/youtube-seo-tools/ — HTTP Error 403: Forbidden
-  [6/15] 🎯 MISSING https://influencermarketinghub.com/youtube-seo-too
-       Links to: Canva + vidIQ + TubeBuddy + RapidTags + KeywordTool.io
-  [7/15] [SKIP] https://rankxdigital.com/blog/youtube-seo-tools/ — 0-0 competitor links
+  [5/15] 🎯 MISSING https://www.braiv.co/articles/best-youtube-seo-too
+       Links to: TubeBuddy + Tubics + vidIQ + KeywordTool.io
+  [6/15] 🎯 MISSING https://rankioz.com/best-youtube-seo-tools/
+       Links to: TubeBuddy + RapidTags + vidIQ + Canva
   [SKIP] https://stuartkerrs.com/best-seo-tools-for-youtube/ — HTTP Error 403: Forbidden
-  [9/15] 🎯 MISSING https://www.braiv.co/articles/best-youtube-seo-too
-       Links to: KeywordTool.io + vidIQ + TubeBuddy + Tubics
+  [8/15] [SKIP] https://rankxdigital.com/blog/youtube-seo-tools/ — 0-0 competitor links
   [SKIP] https://impressivemagazine.com/best-youtube-seo-tools-2026/ — HTTP Error 403: Forbidden
-  [11/15] 🎯 MISSING https://vidiq.com/features/keyword-tools/
+  [10/15] 🎯 MISSING https://vidiq.com/features/keyword-tools/
        Links to: vidIQ
-  [12/15] [SKIP] https://www.collabpals.com/tools/youtube-keyword-r — 0-0 competitor links
-  [13/15] [SKIP] https://www.ryrob.com/youtube-keyword-tool/ — 0-0 competitor links
+  [11/15] [SKIP] https://www.collabpals.com/tools/youtube-keyword-r — 0-0 competitor links
+  [12/15] [SKIP] https://www.ryrob.com/youtube-keyword-tool/ — 0-0 competitor links
+  [13/15] 🎯 MISSING https://vidiq.com/ai-keyword-generator/
+       Links to: vidIQ
   [14/15] [SKIP] https://ahrefs.com/youtube-keyword-tool — 0-0 competitor links
   [15/15] 🎯 MISSING https://alanspicer.com/best-youtube-seo-tools-2026
        Links to: vidIQ
 
-  Analyzed 6 pages with competitor links
+  Analyzed 7 pages with competitor links
 
 🔄 Stage 3: Finding pages that DON'T link to us yet...
-  Missing our link: 6 pages
+  Missing our link: 7 pages
 
   Top opportunities:
-    🎯 [links 5 comps] https://influencermarketinghub.com/youtube-seo-tools/
-         Competitors: Canva + vidIQ + TubeBuddy + RapidTags + KeywordTool.io
     🎯 [links 4 comps] https://www.braiv.co/articles/best-youtube-seo-tools-2026
-         Competitors: KeywordTool.io + vidIQ + TubeBuddy + Tubics
+         Competitors: TubeBuddy + Tubics + vidIQ + KeywordTool.io
+    🎯 [links 4 comps] https://rankioz.com/best-youtube-seo-tools/
+         Competitors: TubeBuddy + RapidTags + vidIQ + Canva
     🎯 [links 1 comps] https://contentmavericks.com/best-youtube-seo-tools/
          Competitors: TubeBuddy
     🎯 [links 1 comps] https://vidiq.com/youtube-seo-tools/
          Competitors: vidIQ
     🎯 [links 1 comps] https://vidiq.com/features/keyword-tools/
          Competitors: vidIQ
+    🎯 [links 1 comps] https://vidiq.com/ai-keyword-generator/
+         Competitors: vidIQ
     🎯 [links 1 comps] https://alanspicer.com/best-youtube-seo-tools-2026/
          Competitors: vidIQ
 
 🔄 Stage 4: Generating personalized outreach templates...
   New opportunities: 0
-  Skipped (already seen): 6
+  Skipped (already seen): 7
 
 No new opportunities found. Run with more search queries or different terms.
