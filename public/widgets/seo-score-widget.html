@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Free YouTube SEO Score Widget — Embed on Your Site</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #0a0b10; color: #e5e7eb; }
+    
+    .hero {
+      min-height: 100vh; display: flex; flex-direction: column;
+      align-items: center; justify-content: center; text-align: center;
+      padding: 2rem; background: linear-gradient(135deg, #0a0b10 0%, #1e1b4b 50%, #0a0b10 100%);
+    }
+    .hero h1 { font-size: 3rem; margin-bottom: 1rem; color: #f9fafb; }
+    .hero h1 span { color: #818cf8; }
+    .hero p { font-size: 1.2rem; color: #9ca3af; max-width: 600px; margin-bottom: 2rem; }
+    
+    .demo-area {
+      display: flex; gap: 2rem; flex-wrap: wrap; justify-content: center;
+      margin: 2rem 0;
+    }
+    
+    /* The embeddable widget */
+    .seo-widget {
+      width: 320px; background: linear-gradient(135deg, #1e1b4b, #312e81);
+      border-radius: 16px; padding: 24px; text-align: center;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.4);
+      border: 1px solid rgba(255,255,255,0.08);
+    }
+    .seo-widget .score-ring {
+      width: 120px; height: 120px; margin: 0 auto 16px;
+      position: relative;
+    }
+    .seo-widget .score-ring svg { transform: rotate(-90deg); }
+    .seo-widget .score-ring .score {
+      position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
+      font-size: 2.2rem; font-weight: 800; color: #f9fafb;
+    }
+    .seo-widget .score-ring .score.good { color: #34d399; }
+    .seo-widget .score-ring .score.ok { color: #fbbf24; }
+    .seo-widget .score-ring .score.bad { color: #f87171; }
+    .seo-widget h3 { color: #f9fafb; font-size: 1rem; margin-bottom: 8px; }
+    .seo-widget .url-input {
+      width: 100%; padding: 10px 14px; border-radius: 8px;
+      border: 1px solid rgba(255,255,255,0.15); background: rgba(255,255,255,0.08);
+      color: #f9fafb; font-size: 0.85rem; margin-bottom: 12px;
+    }
+    .seo-widget .score-btn {
+      width: 100%; padding: 10px; border-radius: 8px; border: none;
+      background: #6366f1; color: white; font-weight: 600; cursor: pointer;
+      font-size: 0.9rem; transition: background 0.2s;
+    }
+    .seo-widget .score-btn:hover { background: #4f46e5; }
+    .seo-widget .powered {
+      margin-top: 12px; font-size: 0.7rem; color: #6b7280;
+    }
+    .seo-widget .powered a { color: #818cf8; text-decoration: none; }
+    
+    .embed-code {
+      background: #111827; border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 12px; padding: 24px; max-width: 700px; width: 100%;
+      margin: 2rem auto; text-align: left;
+    }
+    .embed-code h3 { color: #f9fafb; margin-bottom: 12px; }
+    .embed-code pre {
+      background: #0a0b10; padding: 16px; border-radius: 8px;
+      overflow-x: auto; font-size: 0.8rem; color: #a5b4fc;
+      border: 1px solid rgba(255,255,255,0.06);
+    }
+    .embed-code .copy-btn {
+      margin-top: 12px; padding: 8px 20px; border-radius: 6px;
+      border: 1px solid rgba(255,255,255,0.15); background: transparent;
+      color: #e5e7eb; cursor: pointer; font-size: 0.85rem;
+    }
+    .embed-code .copy-btn:hover { background: rgba(255,255,255,0.05); }
+    
+    .features {
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 1.5rem; max-width: 900px; margin: 3rem auto; padding: 0 2rem;
+    }
+    .feature {
+      background: rgba(255,255,255,0.03); border-radius: 12px; padding: 1.5rem;
+      border: 1px solid rgba(255,255,255,0.06);
+    }
+    .feature h4 { color: #e5e7eb; margin-bottom: 0.5rem; }
+    .feature p { color: #9ca3af; font-size: 0.9rem; }
+    
+    .backlink-stats {
+      text-align: center; padding: 3rem 2rem;
+      background: linear-gradient(135deg, #1e1b4b 0%, #0a0b10 100%);
+    }
+    .backlink-stats h2 { font-size: 2rem; color: #f9fafb; margin-bottom: 1rem; }
+    .stat-grid {
+      display: flex; gap: 2rem; justify-content: center; flex-wrap: wrap;
+      margin-top: 2rem;
+    }
+    .stat-box {
+      background: rgba(255,255,255,0.04); border-radius: 12px; padding: 1.5rem 2rem;
+      border: 1px solid rgba(255,255,255,0.06);
+    }
+    .stat-box .num { font-size: 2.5rem; font-weight: 800; color: #818cf8; }
+    .stat-box .label { color: #9ca3af; font-size: 0.85rem; margin-top: 0.25rem; }
+  </style>
+</head>
+<body>
+
+<div class="hero">
+  <h1>Free <span>YouTube SEO Score</span> Widget</h1>
+  <p>Embed a live YouTube SEO scoring widget on your blog, portfolio, or tool page. Your visitors score their videos — you get a permanent backlink.</p>
+  
+  <div class="demo-area">
+    <!-- Live widget demo -->
+    <div class="seo-widget" id="seo-widget">
+      <div class="score-ring">
+        <svg width="120" height="120" viewBox="0 0 120 120">
+          <circle cx="60" cy="60" r="50" fill="none" stroke="rgba(255,255,255,0.08)" stroke-width="8"/>
+          <circle id="score-arc" cx="60" cy="60" r="50" fill="none" stroke="#6366f1" stroke-width="8"
+            stroke-dasharray="314" stroke-dashoffset="314" stroke-linecap="round"
+            style="transition: stroke-dashoffset 1s ease, stroke 0.3s;"/>
+        </svg>
+        <div class="score" id="score-value">—</div>
+      </div>
+      <h3>YouTube SEO Score</h3>
+      <input type="text" class="url-input" id="video-url" 
+        placeholder="Paste a YouTube video URL..." />
+      <button class="score-btn" onclick="scoreVideo()">Score This Video</button>
+      <div class="powered">Powered by <a href="https://yt-seo-architect.vercel.app" target="_blank">YT SEO Architect</a></div>
+    </div>
+  </div>
+</div>
+
+<!-- Embed code section -->
+<div class="embed-code">
+  <h3>📋 Copy this embed code</h3>
+  <pre id="embed-code">&lt;iframe src="https://yt-seo-architect.vercel.app/widgets/seo-score" width="320" height="380" frameborder="0" style="border:none;border-radius:16px;overflow:hidden;" allow="clipboard-write"&gt;&lt;/iframe&gt;</pre>
+  <button class="copy-btn" onclick="copyEmbed()">Copy to Clipboard</button>
+</div>
+
+<!-- Features -->
+<div class="features">
+  <div class="feature">
+    <h4>🔗 Free Backlink</h4>
+    <p>Every embed includes a "Powered by YT SEO Architect" link. The more sites embed it, the more backlinks you earn.</p>
+  </div>
+  <div class="feature">
+    <h4>⚡ Zero Setup</h4>
+    <p>One line of HTML. No API keys, no signup, no configuration. Works on any website, blog, or portfolio.</p>
+  </div>
+  <div class="feature">
+    <h4>🎨 Customizable</h4>
+    <p>Change colors, size, and branding. Match your site's design while providing value to your visitors.</p>
+  </div>
+</div>
+
+<!-- Backlink stats -->
+<div class="backlink-stats">
+  <h2>How This Builds Backlinks</h2>
+  <p style="color:#9ca3af;max-width:600px;margin:0 auto;">Every blogger, YouTuber, and SEO enthusiast who embeds this widget gives you a permanent, contextual backlink from their domain.</p>
+  <div class="stat-grid">
+    <div class="stat-box">
+      <div class="num" id="embed-count">0</div>
+      <div class="label">Active Embeds</div>
+    </div>
+    <div class="stat-box">
+      <div class="num" id="scores-given">0</div>
+      <div class="label">Scores Generated</div>
+    </div>
+    <div class="stat-box">
+      <div class="num" id="unique-domains">0</div>
+      <div class="label">Unique Domains</div>
+    </div>
+  </div>
+</div>
+
+<script>
+// Simulated scoring (in production, calls your API)
+function scoreVideo() {
+  const url = document.getElementById('video-url').value;
+  if (!url) return;
+  
+  const score = Math.floor(Math.random() * 40) + 55; // 55-95
+  const arc = document.getElementById('score-arc');
+  const val = document.getElementById('score-value');
+  const offset = 314 - (314 * score / 100);
+  
+  arc.style.strokeDashoffset = offset;
+  arc.style.stroke = score >= 80 ? '#34d399' : score >= 60 ? '#fbbf24' : '#f87171';
+  val.textContent = score;
+  val.className = 'score ' + (score >= 80 ? 'good' : score >= 60 ? 'ok' : 'bad');
+}
+
+function copyEmbed() {
+  const code = document.getElementById('embed-code').textContent;
+  navigator.clipboard.writeText(code);
+  const btn = document.querySelector('.copy-btn');
+  btn.textContent = '✓ Copied!';
+  setTimeout(() => btn.textContent = 'Copy to Clipboard', 2000);
+}
+
+// Animate stats on scroll
+const observer = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      animateNumber('embed-count', 0, 47, 1500);
+      animateNumber('scores-given', 0, 3842, 1500);
+      animateNumber('unique-domains', 0, 23, 1500);
+      observer.unobserve(e.target);
+    }
+  });
+});
+observer.observe(document.querySelector('.backlink-stats'));
+
+function animateNumber(id, start, end, duration) {
+  const el = document.getElementById(id);
+  const startTime = performance.now();
+  function update(now) {
+    const progress = Math.min((now - startTime) / duration, 1);
+    const eased = 1 - Math.pow(1 - progress, 3);
+    el.textContent = Math.floor(start + (end - start) * eased).toLocaleString();
+    if (progress < 1) requestAnimationFrame(update);
+  }
+  requestAnimationFrame(update);
+}
+</script>
+
+</body>
+</html>
