@@ -2084,16 +2084,19 @@ app.get('/api/glossary-comparison', async (req, res) => {
     const { fileURLToPath } = await import('url');
     const __dirname = dirname(fileURLToPath(import.meta.url));
 
-    // Load glossary data — handle both serverless and local paths
     let data;
     const dataFileName = isES ? 'glossary-data-es.json' : 'glossary-data.json';
     try {
-      data = JSON.parse(readFileSync(resolve(__dirname, dataFileName), 'utf-8'));
+      // In serverless, files in api/ dir are available via relative import
+      const { default: enData } = await import('./glossary-data.json', { assert: { type: 'json' } });
+      const { default: esData } = await import('./glossary-data-es.json', { assert: { type: 'json' } });
+      data = isES ? esData : enData;
     } catch {
+      // Local dev fallback: read from scripts/
       try {
         data = JSON.parse(readFileSync(resolve(process.cwd(), 'scripts', dataFileName), 'utf-8'));
       } catch {
-        return sendJSON(res, 500, { error: 'Data file not found for ' + dataFileName });
+        return sendJSON(res, 500, { error: 'Data not found' });
       }
     }
     const termA = data.terms.find(t => t.slug === slugA);
