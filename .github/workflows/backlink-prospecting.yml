@@ -53,7 +53,7 @@ jobs:
         run: mkdir -p /tmp/backlink-scans
 
       # ── Scan 1: Broken link opportunities ──
-      - name: 🔍 Scan 1/3 — Broken link opportunities
+      - name: 🔍 Scan 1/6 — Broken link opportunities
         id: scan-broken
         continue-on-error: true
         run: |
@@ -63,7 +63,7 @@ jobs:
             --output /tmp/backlink-scans/opportunities-broken.csv 2>&1 | tee /tmp/backlink-scans/scan1-output.txt
 
       # ── Scan 2: Competitor backlink gaps ──
-      - name: 🔍 Scan 2/3 — Competitor backlink gaps
+      - name: 🔍 Scan 2/6 — Competitor backlink gaps
         id: scan-competitor
         continue-on-error: true
         run: |
@@ -72,13 +72,40 @@ jobs:
             --output /tmp/backlink-scans/opportunities-competitor.csv 2>&1 | tee /tmp/backlink-scans/scan2-output.txt
 
       # ── Scan 3: Resource page opportunities ──
-      - name: 🔍 Scan 3/3 — Resource page opportunities
+      - name: 🔍 Scan 3/6 — Resource page opportunities
         id: scan-resource
         continue-on-error: true
         run: |
           python3 scripts/resource-page-outreach.py \
             --pages 15 \
             --output /tmp/backlink-scans/opportunities-resource.csv 2>&1 | tee /tmp/backlink-scans/scan3-output.txt
+
+      # ── Scan 4: Skyscraper Technique (competitor alternative pitch) ──
+      - name: 🔍 Scan 4/6 — Skyscraper competitor alternative pitch
+        id: scan-skyscraper
+        continue-on-error: true
+        run: |
+          python3 scripts/skyscraper-technique.py \
+            --pages 15 \
+            --output /tmp/backlink-scans/opportunities-skyscraper.csv 2>&1 | tee /tmp/backlink-scans/scan4-output.txt
+
+      # ── Scan 5: Guest Blogging opportunities ──
+      - name: 🔍 Scan 5/6 — Guest Blogging opportunities
+        id: scan-guest
+        continue-on-error: true
+        run: |
+          python3 scripts/guest-blogging-scanner.py \
+            --pages 15 \
+            --output /tmp/backlink-scans/opportunities-guest.csv 2>&1 | tee /tmp/backlink-scans/scan5-output.txt
+
+      # ── Scan 6: Link Swap opportunities ──
+      - name: 🔍 Scan 6/6 — Link Swap opportunities
+        id: scan-swap
+        continue-on-error: true
+        run: |
+          python3 scripts/link-swap-scanner.py \
+            --pages 15 \
+            --output /tmp/backlink-scans/opportunities-swap.csv 2>&1 | tee /tmp/backlink-scans/scan6-output.txt
 
       # ── Count opportunities per scan (display only, no combine) ──
       - name: 📋 Count opportunities
@@ -141,8 +168,70 @@ jobs:
             echo "No resource page opportunities to send"
           fi
 
-      # ── Scan 4: Backlink audit (if any CSVs were found) ──
-      - name: 🔬 Scan 4/4 — Backlink health audit
+      # ── Send outreach: skyscraper competitor pitch opportunities ──
+      - name: 📧 Send outreach — skyscraper competitor pitches
+        continue-on-error: true
+        run: |
+          FILE=/tmp/backlink-scans/opportunities-skyscraper.csv
+          if [ -f "$FILE" ] && [ -s "$FILE" ]; then
+            LINES=$(wc -l < "$FILE")
+            if [ "$LINES" -gt 1 ]; then
+              python3 scripts/backlink-outreach-sender.py --file "$FILE" --limit 5
+            fi
+          else
+            echo "No skyscraper opportunities to send"
+          fi
+
+      # ── Send outreach: guest blog pitching opportunities ──
+      - name: 📧 Send outreach — guest blog pitches
+        continue-on-error: true
+        run: |
+          FILE=/tmp/backlink-scans/opportunities-guest.csv
+          if [ -f "$FILE" ] && [ -s "$FILE" ]; then
+            LINES=$(wc -l < "$FILE")
+            if [ "$LINES" -gt 1 ]; then
+              python3 scripts/backlink-outreach-sender.py --file "$FILE" --limit 5
+            fi
+          else
+            echo "No guest blog opportunities to send"
+          fi
+
+      # ── Send outreach: link swap opportunities ──
+      - name: 📧 Send outreach — link swap proposals
+        continue-on-error: true
+        run: |
+          FILE=/tmp/backlink-scans/opportunities-swap.csv
+          if [ -f "$FILE" ] && [ -s "$FILE" ]; then
+            LINES=$(wc -l < "$FILE")
+            if [ "$LINES" -gt 1 ]; then
+              python3 scripts/backlink-outreach-sender.py --file "$FILE" --limit 5
+            fi
+          else
+            echo "No link swap opportunities to send"
+          fi
+
+      # ── HARO/Connectively journalist query responder ──
+      - name: 📰 HARO journalist query responder
+        continue-on-error: true
+        run: |
+          if [ -f scripts/haro-automator.py ]; then
+            python3 scripts/haro-automator.py --dry-run 2>&1 | tee /tmp/backlink-scans/haro-output.txt || true
+          else
+            echo "HARO script not found, skipping"
+          fi
+
+      # ── Backlink cross-post (dev.to, Hashnode) ──
+      - name: 📝 Backlink cross-post to dev.to / Hashnode
+        continue-on-error: true
+        run: |
+          if [ -f scripts/backlink-crosspost.py ]; then
+            python3 scripts/backlink-crosspost.py --list --dry-run 2>&1 | tee /tmp/backlink-scans/crosspost-output.txt || true
+          else
+            echo "Crosspost script not found, skipping"
+          fi
+
+      # ── Scan 7: Backlink health audit (if any CSVs were found) ──
+      - name: 🔬 Scan 7/7 — Backlink health audit
         id: scan-audit
         continue-on-error: true
         run: |
@@ -180,9 +269,17 @@ jobs:
           cp /tmp/backlink-scans/opportunities-broken.csv "$REPORT_DIR/" 2>/dev/null || true
           cp /tmp/backlink-scans/opportunities-competitor.csv "$REPORT_DIR/" 2>/dev/null || true
           cp /tmp/backlink-scans/opportunities-resource.csv "$REPORT_DIR/" 2>/dev/null || true
+          cp /tmp/backlink-scans/opportunities-skyscraper.csv "$REPORT_DIR/" 2>/dev/null || true
+          cp /tmp/backlink-scans/opportunities-guest.csv "$REPORT_DIR/" 2>/dev/null || true
+          cp /tmp/backlink-scans/opportunities-swap.csv "$REPORT_DIR/" 2>/dev/null || true
           cp /tmp/backlink-scans/scan1-output.txt "$REPORT_DIR/" 2>/dev/null || true
           cp /tmp/backlink-scans/scan2-output.txt "$REPORT_DIR/" 2>/dev/null || true
           cp /tmp/backlink-scans/scan3-output.txt "$REPORT_DIR/" 2>/dev/null || true
+          cp /tmp/backlink-scans/scan4-output.txt "$REPORT_DIR/" 2>/dev/null || true
+          cp /tmp/backlink-scans/scan5-output.txt "$REPORT_DIR/" 2>/dev/null || true
+          cp /tmp/backlink-scans/scan6-output.txt "$REPORT_DIR/" 2>/dev/null || true
+          cp /tmp/backlink-scans/haro-output.txt "$REPORT_DIR/" 2>/dev/null || true
+          cp /tmp/backlink-scans/crosspost-output.txt "$REPORT_DIR/" 2>/dev/null || true
 
       # ── Commit and push results (including sent DB for dedup) ──
       - name: 📋 Commit reports and sent DB
@@ -205,9 +302,12 @@ jobs:
           echo "════════════════════════════════════════════"
           echo "  🔗 DAILY BACKLINK OUTREACH REPORT"
           echo "════════════════════════════════════════════"
-          echo "  Broken links:   ${{ steps.scan-broken.outcome }}"
-          echo "  Competitor:     ${{ steps.scan-competitor.outcome }}"
-          echo "  Resource pages: ${{ steps.scan-resource.outcome }}"
-          echo "  Total opps:     ${{ steps.count.outputs.TOTAL }}"
-          echo "  Time:           $(date -u)"
+          echo "  Broken links:    ${{ steps.scan-broken.outcome }}"
+          echo "  Competitor:      ${{ steps.scan-competitor.outcome }}"
+          echo "  Resource pages:  ${{ steps.scan-resource.outcome }}"
+          echo "  Skyscraper:      ${{ steps.scan-skyscraper.outcome }}"
+          echo "  Guest blogging:  ${{ steps.scan-guest.outcome }}"
+          echo "  Link swap:       ${{ steps.scan-swap.outcome }}"
+          echo "  Total opps:      ${{ steps.count.outputs.TOTAL }}"
+          echo "  Time:            $(date -u)"
           echo "════════════════════════════════════════════"
