@@ -384,7 +384,7 @@ def analyze_toxicity(links):
     domain_scores = collections.defaultdict(lambda: {"score": 0, "reasons": [], "count": 0, "anchors": []})
 
     for link in links:
-        source = link.get("source_url", "")
+        source = link.get("source_url", "") or link.get("source_page", "")
         anchor = link.get("anchor_text", "")
         domain = extract_domain(source)
 
@@ -508,8 +508,9 @@ def print_report(toxicity, anchor_diversity, velocity):
             print(f"      • Over-optimized ({dist['exact_match']}% exact match). Add branded/generic links.")
         if dist.get("commercial", 0) > 20:
             print(f"      • High commercial anchor ratio ({dist['commercial']}%). Diversify.")
-        if dist.get("branded", 0) < 10:
-            print(f"      • Low branded anchor ratio ({dist['branded']}%). Build brand mentions.")
+        branded_pct = dist.get("branded", 0)
+        if branded_pct < 10:
+            print(f"      • Low branded anchor ratio ({branded_pct}%). Build brand mentions.")
 
     # Link velocity section
     print(f"\n  ⏱ LINK VELOCITY")

@@ -43,6 +43,11 @@ jobs:
         with:
           python-version: '3.12'
 
+      - name: 📦 Install Python dependencies
+        run: |
+          pip install --upgrade pip
+          pip install dnspython requests
+
       # ── Prepare output directory ──
       - name: 📁 Create output directory
         run: mkdir -p /tmp/backlink-scans
@@ -134,6 +139,34 @@ jobs:
             fi
           else
             echo "No resource page opportunities to send"
+          fi
+
+      # ── Scan 4: Backlink audit (if any CSVs were found) ──
+      - name: 🔬 Scan 4/4 — Backlink health audit
+        id: scan-audit
+        continue-on-error: true
+        run: |
+          # Combine all opportunity CSVs into a single backlink list for audit
+          AUDIT_CSV=/tmp/backlink-scans/audit-input.csv
+          OUTFILE=/tmp/backlink-scans/audit-report.json
+          FIRST=1
+          for f in /tmp/backlink-scans/opportunities-*.csv; do
+            if [ -f "$f" ] && [ -s "$f" ]; then
+              if [ "$FIRST" -eq 1 ]; then
+                cp "$f" "$AUDIT_CSV"
+                FIRST=0
+              else
+                tail -n +2 "$f" >> "$AUDIT_CSV"
+              fi
+            fi
+          done
+          if [ -f "$AUDIT_CSV" ] && [ -s "$AUDIT_CSV" ]; then
+            python3 scripts/backlink-auditor.py --file "$AUDIT_CSV" 2>&1 | tee /tmp/backlink-scans/audit-output.txt
+            # Copy audit report to reports dir
+            cp marketing/backlink-reports/audit-*.json /tmp/backlink-scans/ 2>/dev/null || true
+            echo "✅ Backlink audit complete"
+          else
+            echo "No data for backlink audit"
           fi
 
       # ── Save reports to repo ──

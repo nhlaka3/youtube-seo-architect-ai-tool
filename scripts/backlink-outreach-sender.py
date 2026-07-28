@@ -134,26 +134,88 @@ def has_mx_record(domain):
 def rdap_lookup(domain):
     """
     RDAP fallback for email discovery via public RDAP servers.
+    Queries TLD-appropriate RDAP servers + common fallbacks.
     Returns a set of email addresses found.
     """
-    rdap_urls = [
-        f"https://rdap.verisign.com/com/v1/domain/{domain}",
-        f"https://rdap.nominet.uk/uk/v1/domain/{domain}",
-        f"https://rdap.registry.name/v1/domain/{domain}",
+    tld = domain.split(".")[-1].lower() if "." in domain else ""
+
+    # Build RDAP URLs based on TLD
+    rdap_urls = []
+
+    # Common TLD → RDAP server mappings
+    tld_rdap_map = {
+        "com": "https://rdap.verisign.com/com/v1/domain/",
+        "net": "https://rdap.verisign.com/net/v1/domain/",
+        "org": "https://rdap.publicinterestregistry.org/rdap/org/v1/domain/",
+        "uk": "https://rdap.nominet.uk/uk/v1/domain/",
+        "co.uk": "https://rdap.nominet.uk/uk/v1/domain/",
+        "org.uk": "https://rdap.nominet.uk/uk/v1/domain/",
+        "io": "https://rdap.nic.io/v1/domain/",
+        "ai": "https://rdap.nic.ai/v1/domain/",
+        "co": "https://rdap.nic.co/v1/domain/",
+        "me": "https://rdap.nic.me/v1/domain/",
+        "dev": "https://rdap.nominet.uk/dev/v1/domain/",
+        "app": "https://rdap.nominet.uk/app/v1/domain/",
+        "info": "https://rdap.afilias.net/rdap/info/v1/domain/",
+        "biz": "https://rdap.afilias.net/rdap/biz/v1/domain/",
+        "cloud": "https://rdap.registry.cloud/rdap/v1/domain/",
+        "de": "https://rdap.denic.de/rdap/v1/domain/",
+        "eu": "https://rdap.eu/v1/domain/",
+    }
+
+    # Add TLD-specific URL
+    if tld in tld_rdap_map:
+        rdap_urls.append(f"{tld_rdap_map[tld]}{domain}")
+
+    # Also check for co.uk pattern (two-part TLD)
+    if len(domain.split(".")) > 2:
+        two_part_tld = ".".join(domain.split(".")[-2:])
+        if two_part_tld in tld_rdap_map:
+            rdap_urls.append(f"{tld_rdap_map[two_part_tld]}{domain}")
+
+    # Generic fallbacks
+    rdap_urls.append(f"https://rdap.registry.name/v1/domain/{domain}")
+
+    # Try common registrar RDAP servers as additional fallback
+    registrar_rdap = [
+        f"https://rdap.gandi.net/domain/{domain}",
+        f"https://rdap.namecheap.com/domain/{domain}",
+        f"https://rdap.godaddy.com/v1/domain/{domain}",
+        f"https://rdap.cloudflare.com/v1/domain/{domain}",
     ]
+    rdap_urls.extend(registrar_rdap)
+
     emails = set()
+    seen_urls = set()
+    tld_success = False  # Track if TLD-specific RDAP returned successfully
+
     for url in rdap_urls:
+        if url in seen_urls:
+            continue
+        seen_urls.add(url)
+
+        # Short-circuit: if a TLD-specific server returned 200 (even without emails),
+        # don't try registrar fallbacks — the authoritative data is already fetched
+        is_registrar = any(r in url for r in ["gandi.net", "namecheap.com", "godaddy.com", "cloudflare.com"])
+        if is_registrar and tld_success:
+            continue
+
         try:
-            r = requests.get(url, timeout=8, headers={"User-Agent": "OutreachBot/1.0"})
+            r = requests.get(url, timeout=6, headers={"User-Agent": "OutreachBot/1.0"})
             if r.status_code != 200:
                 continue
+
+            # Mark success for TLD-specific servers
+            if not is_registrar:
+                tld_success = True
+
             data = r.json()
             if not isinstance(data, dict):
                 continue
-            # Extract emails from entities' vcard data
-            for entity in data.get("entities", []):
-                if not isinstance(entity, dict):
-                    continue
+
+            def extract_from_vcard(entity):
+                """Extract emails from RDAP entity vcard data."""
+                found = set()
                 for vcard_arr in entity.get("vcardArray", []):
                     if not isinstance(vcard_arr, list):
                         continue
@@ -163,9 +225,29 @@ def rdap_lookup(domain):
                         for item in vcard_entry:
                             if (isinstance(item, list) and len(item) >= 3
                                     and str(item[0]).lower() == "email"):
-                                addr = item[-1]  # email is last element
+                                addr = item[-1]
                                 if isinstance(addr, str) and "@" in addr:
-                                    emails.add(addr)
+                                    found.add(addr)
+                # Recurse into sub-entities
+                for sub in entity.get("entities", []):
+                    if isinstance(sub, dict):
+                        found.update(extract_from_vcard(sub))
+                return found
+
+            # Extract from top-level entities
+            for entity in data.get("entities", []):
+                if isinstance(entity, dict):
+                    emails.update(extract_from_vcard(entity))
+
+            # Also check variants for some registries that use different structures
+            for variant in data.get("variants", []):
+                if isinstance(variant, dict):
+                    for entity in variant.get("entities", []):
+                        if isinstance(entity, dict):
+                            emails.update(extract_from_vcard(entity))
+
+        except (requests.exceptions.Timeout, requests.exceptions.ConnectionError):
+            continue
         except Exception:
             continue
     return emails
