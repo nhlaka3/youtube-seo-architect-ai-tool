@@ -41,6 +41,8 @@
     { "source": "/vs/tubics", "destination": "/vs/tubics.html" },
     { "source": "/vs/keywordtool", "destination": "/vs/keywordtool.html" },
     { "source": "/vs/canva", "destination": "/vs/canva.html" },
+    { "source": "/vs", "destination": "/vs/index.html" },
+    { "source": "/vs/(.*)", "destination": "/vs/$1.html" },
 
     { "source": "/(.*)", "destination": "/$1" }
   ],
