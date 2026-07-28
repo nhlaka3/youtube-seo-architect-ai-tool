@@ -2086,9 +2086,8 @@ app.get('/api/glossary-comparison', async (req, res) => {
 
     let data;
     try {
-      const { default: glossaryData } = await import('./glossary-data.json');
-      const { default: glossaryDataEs } = await import('./glossary-data-es.json');
-      data = isES ? glossaryDataEs : glossaryData;
+      const { getAll } = await import('./glossary-data-embedded.js');
+      data = { terms: getAll(isES) };
     } catch {
       return sendJSON(res, 500, { error: 'Data not found' });
     }
