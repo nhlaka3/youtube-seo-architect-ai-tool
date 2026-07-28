@@ -13,6 +13,7 @@ on:
       - 'scripts/vs-data.js'
       - 'scripts/generate-vs-pages.mjs'
       - 'scripts/generate-converters.mjs'
+      - 'scripts/converters-data.js'
       - 'vercel.json'
   workflow_dispatch:
 
