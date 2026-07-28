@@ -2087,12 +2087,11 @@ app.get('/api/glossary-comparison', async (req, res) => {
     let data;
     const dataFileName = isES ? 'glossary-data-es.json' : 'glossary-data.json';
     try {
-      // In serverless, files in api/ dir are available via relative import
-      const { default: enData } = await import('./glossary-data.json', { assert: { type: 'json' } });
-      const { default: esData } = await import('./glossary-data-es.json', { assert: { type: 'json' } });
-      data = isES ? esData : enData;
+      // Use require.resolve to find bundled file in serverless
+      const { createRequire } = await import('module');
+      const req = createRequire(import.meta.url);
+      data = req(dataFileName);
     } catch {
-      // Local dev fallback: read from scripts/
       try {
         data = JSON.parse(readFileSync(resolve(process.cwd(), 'scripts', dataFileName), 'utf-8'));
       } catch {
