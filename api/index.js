@@ -2080,8 +2080,10 @@ app.get('/api/glossary-comparison', async (req, res) => {
     if (!slugA || !slugB) return sendJSON(res, 400, { error: 'Missing slugA or slugB' });
     const isES = req.url.includes('/es/');
     const { readFileSync, existsSync } = await import('fs');
-    const { resolve } = await import('path');
-    const dataFile = isES ? resolve(process.cwd(), 'scripts', 'glossary-data-es.json') : resolve(process.cwd(), 'scripts', 'glossary-data.json');
+    const { resolve, dirname } = await import('path');
+    const { fileURLToPath } = await import('url');
+    const __dirname = dirname(fileURLToPath(import.meta.url));
+    const dataFile = isES ? resolve(__dirname, '..', 'scripts', 'glossary-data-es.json') : resolve(__dirname, '..', 'scripts', 'glossary-data.json');
     if (!existsSync(dataFile)) return sendJSON(res, 500, { error: 'Data file not found' });
     const data = JSON.parse(readFileSync(dataFile, 'utf-8'));
     const termA = data.terms.find(t => t.slug === slugA);
