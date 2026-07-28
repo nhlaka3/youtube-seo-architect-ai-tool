@@ -2094,10 +2094,10 @@ app.get('/api/glossary-comparison', async (req, res) => {
     const termA = data.terms.find(t => t.slug === slugA);
     const termB = data.terms.find(t => t.slug === slugB);
     if (!termA || !termB) return sendJSON(res, 404, { error: 'Terms not found' });
-    const aName = termA.term_es || termA.term;
-    const bName = termB.term_es || termB.term;
-    const aDef = termA.shortDefinition_es || termA.shortDefinition;
-    const bDef = termB.shortDefinition_es || termB.shortDefinition;
+    const aName = termA.term_es || termA.name;
+    const bName = termB.term_es || termB.name;
+    const aDef = termA.shortDefinition_es || termA.def;
+    const bDef = termB.shortDefinition_es || termB.def;
     const site = 'https://yt-seo-architect.vercel.app';
     const esUrl = '/glossary/es/' + slugA + '-vs-' + slugB;
     const enUrl = '/glossary/' + slugA + '-vs-' + slugB;
