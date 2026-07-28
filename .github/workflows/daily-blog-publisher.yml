@@ -101,6 +101,18 @@ jobs:
           node scripts/generate-tools-index.mjs
           echo "Tools index page rebuilt"
 
+      - name: 📊 Regenerate comparison vs/ pages
+        run: |
+          echo "Regenerating comparison pages from data..."
+          node scripts/generate-vs-pages.mjs 2>&1
+          echo "✅ vs/ pages regenerated"
+
+      - name: 🧮 Regenerate converter calculators
+        run: |
+          echo "Regenerating interactive converter calculators..."
+          node scripts/generate-converters.mjs 2>&1
+          echo "✅ Converter pages regenerated"
+
       - name: 🎬 Generate video from new blog post
         id: video
         continue-on-error: true
