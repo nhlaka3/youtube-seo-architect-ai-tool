@@ -35,47 +35,61 @@ jobs:
       - name: 📤 Commit via GitHub API
         env:
           GH_TOKEN: ${{ secrets.GH_PAT }}
+        shell: python3
         run: |
-          # Create a tree with updated files via gh api
-          HEAD_SHA=$(gh api repos/nhlaka3/yt-seo-architect-private/git/refs/heads/main --jq '.object.sha')
-          BASE_TREE=$(gh api repos/nhlaka3/yt-seo-architect-private/git/commits/$HEAD_SHA --jq '.tree.sha')
-          
-          echo "HEAD: $HEAD_SHA  Tree: $BASE_TREE"
-          
-          # Add files that exist and have changed
-          FILES=""
-          for f in scripts/niches-data.js scripts/vs-data.js public/niches/index.html; do
-            if [ -f "$f" ]; then
-              BLOB=$(gh api repos/nhlaka3/yt-seo-architect-private/git/blobs -f content=@$f -f encoding=utf-8 --jq '.sha')
-              FILES="$FILES{\"path\":\"$f\",\"mode\":\"100644\",\"type\":\"blob\",\"sha\":\"$BLOB\"},"
-              echo "  Added: $f"
-            fi
-          done
-          
-          if [ -z "$FILES" ]; then
-            echo "No files to commit"
-            exit 0
-          fi
-          
-          NEW_TREE=$(echo "{\"base_tree\":\"$BASE_TREE\",\"tree\":[$FILES]}" | \
-            gh api repos/nhlaka3/yt-seo-architect-private/git/trees --input - --jq '.sha')
-          
-          echo "New tree: $NEW_TREE"
-          
-          if [ "$NEW_TREE" = "$BASE_TREE" ]; then
-            echo "No changes - tree unchanged"
-            exit 0
-          fi
-          
-          NEW_COMMIT=$(echo "{\"message\":\"discovery: weekly auto-discovered content [skip ci]\",\"tree\":\"$NEW_TREE\",\"parents\":[\"$HEAD_SHA\"]}" | \
-            gh api repos/nhlaka3/yt-seo-architect-private/git/commits --input - --jq '.sha')
-          
-          echo "New commit: $NEW_COMMIT"
-          
-          gh api repos/nhlaka3/yt-seo-architect-private/git/refs/heads/main \
-            -X PATCH -f sha=$NEW_COMMIT -f force=true --jq '.ref'
-          
-          echo "✅ Committed via API"
+          import json, os, subprocess, sys
+
+          repo = "nhlaka3/yt-seo-architect-private"
+          files_to_check = ["scripts/niches-data.js", "scripts/vs-data.js",
+                            "public/niches/index.html", "public/vs/index.html"]
+
+          # Get current HEAD and base tree
+          def gh(*args, input_data=None):
+            cmd = ["gh", "api"] + list(args)
+            if input_data is not None:
+              cmd += ["--input", "-"]
+            p = subprocess.run(cmd, capture_output=True, text=True, input=input_data)
+            if p.returncode != 0:
+              print(f"gh error: {p.stderr}")
+              return None
+            return json.loads(p.stdout)
+
+          head = gh(f"repos/{repo}/git/refs/heads/main", "--jq", ".object.sha")
+          base_tree = gh(f"repos/{repo}/git/commits/{head}", "--jq", ".tree.sha")
+          print(f"HEAD: {head}  Tree: {base_tree}")
+
+          # Create blobs for changed files
+          tree_entries = []
+          for f in files_to_check:
+            if os.path.exists(f):
+              with open(f, "r", encoding="utf-8") as fh:
+                content = fh.read()
+              blob = gh(f"repos/{repo}/git/blobs", input_data=json.dumps({"content": content, "encoding": "utf-8"}), "--jq", ".sha")
+              if blob:
+                tree_entries.append({"path": f, "mode": "100644", "type": "blob", "sha": blob})
+                print(f"  Added: {f} ({len(content)} bytes)")
+
+          if not tree_entries:
+            print("No files to commit")
+            sys.exit(0)
+
+          # Create new tree
+          new_tree = gh(f"repos/{repo}/git/trees", input_data=json.dumps({"base_tree": base_tree, "tree": tree_entries}), "--jq", ".sha")
+          if not new_tree or new_tree == base_tree:
+            print("No changes - tree unchanged")
+            sys.exit(0)
+          print(f"New tree: {new_tree}")
+
+          # Create commit
+          new_commit = gh(f"repos/{repo}/git/commits", input_data=json.dumps({
+            "message": "discovery: weekly auto-discovered content [skip ci]",
+            "tree": new_tree, "parents": [head]
+          }), "--jq", ".sha")
+          print(f"New commit: {new_commit}")
+
+          # Update ref
+          result = gh(f"repos/{repo}/git/refs/heads/main", "-X", "PATCH", input_data=json.dumps({"sha": new_commit, "force": True}), "--jq", ".ref")
+          print(f"✅ Committed via API: {result}")
 
       - name: 🌐 Deploy to Vercel
         env:
