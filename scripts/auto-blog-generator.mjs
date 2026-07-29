@@ -1107,11 +1107,15 @@ async function main() {
     // Reload after refill
     const refreshed = loadKeywords();
     const newPending = refreshed.keywords.filter(k => k.status === 'pending');
-    if (newPending.length === 0) {
+    if (newPending.length === 0 && pending.length === 0) {
       console.error('  ❌ No keywords available even after refill. Aborting.');
       process.exit(1);
     }
-    return main(); // Restart with fresh data
+    if (newPending.length > 0) {
+      keywordEntry = newPending[0];
+    } else {
+      keywordEntry = pending[0];
+    }
   }
 
   // List mode
