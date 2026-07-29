@@ -24,3 +24,13 @@ __pycache__/
 *.wav
 *.svg
 *.pyc
+
+# Exclude auto-generated glossary comparison pages (thousands of files)
+public/glossary/*-vs-*.html
+public/glossary/es/*-vs-*.html
+public/blog/_archive/
+node_modules/
+.git/
+.hg/
+.bzr/
+.svn/
