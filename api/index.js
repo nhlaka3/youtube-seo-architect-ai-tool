@@ -863,45 +863,41 @@ function renderCategoryHeader(catSlug, pages) {
     + '<meta property="og:description" content="' + (cat ? cat.desc : 'Browse YouTube SEO guides by topic') + '" />'
     + '<meta name="twitter:card" content="summary_large_image" />'
     + '<link rel="preconnect" href="https://fonts.googleapis.com" /><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />'
-    + '<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700;800&display=swap" media="print" onload="this.media=\'all\'" />'
+    + '<link href="https://fonts.googleapis.com/css2?family=Geist:wght@100..900&display=swap" rel="stylesheet" />'
+    + '<link href="https://fonts.googleapis.com/css2?family=Geist+Mono:wght@100..900&display=swap" rel="stylesheet" />'
+    + '<link rel="stylesheet" href="/design-tokens.css" media="print" onload="this.media=\'all\'">'
+    + '<link rel="stylesheet" href="/utilities.css" media="print" onload="this.media=\'all\'">'
+    + '<link rel="stylesheet" href="/nav.css" media="print" onload="this.media=\'all\'">'
+    + '<link rel="stylesheet" href="/blog-article.css" media="print" onload="this.media=\'all\'">'
     + '<style>'
-    + ':root{--primary:#f97316;--primary-glow:rgba(249,115,22,0.5);--accent:#fb923c;--bg-oled:#000000;--bg-card:rgba(15,23,42,0.5);--text-primary:#f8fafc;--text-muted:#94a3b8;--border:rgba(249,115,22,0.2)}'
-    + '*{margin:0;padding:0;box-sizing:border-box}'
-    + 'body{font-family:\'Outfit\',\'Geist\',-apple-system,BlinkMacSystemFont,sans-serif;background:var(--bg-oled);color:var(--text-primary);min-height:100vh;overflow-x:hidden;line-height:1.8}'
-    + '.wrap{max-width:900px;margin:0 auto;padding:20px}'
-    + 'header{display:flex;justify-content:space-between;align-items:center;padding:10px 0;margin-bottom:40px}'
-    + '.logo{display:flex;align-items:center;gap:12px;font-size:1.5rem;font-weight:800;letter-spacing:-0.05em;text-decoration:none;color:var(--text-primary)}'
-    + '.logo i{color:var(--primary);filter:drop-shadow(0 0 8px var(--primary-glow))}'
-    + '.logo .text-accent{color:var(--accent)}'
-    + '.header-nav{display:flex;align-items:center;gap:1.25rem}'
-    + '.header-nav a{color:var(--text-muted);text-decoration:none;font-weight:600;font-size:0.9rem;transition:color .2s;display:flex;align-items:center;gap:.35rem}'
-    + '.header-nav a:hover{color:var(--text-primary)}'
-    + '.header-nav a.nav-cta{background:var(--primary);color:#fff;padding:.45rem 1rem;border-radius:8px;font-size:.85rem;transition:background .2s,transform .2s}'
-    + '.header-nav a.nav-cta:hover{background:var(--primary-glow);transform:translateY(-1px)}'
-    + '.hero{padding:3rem 1.5rem;background:linear-gradient(135deg,rgba(249,115,22,0.06),rgba(251,146,60,0.02));border:1px solid var(--border);border-radius:1rem;margin-bottom:2rem;text-align:center}'
-    + '.hero h1{font-size:clamp(1.6rem,4vw,2.2rem);font-weight:800;margin:0 0 .5rem;color:#fff}'
-    + '.hero p{color:var(--text-muted);font-size:1.05rem;max-width:600px;margin:0 auto;line-height:1.7}'
-    + '.hero .stat{display:inline-block;margin-top:1rem;background:rgba(249,115,22,0.1);border:1px solid rgba(249,115,22,0.3);color:var(--primary);padding:.3rem 1rem;border-radius:9999px;font-size:.85rem;font-weight:600}'
     + '.blog-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:12px}'
-    + '.blog-card{background:var(--bg-card);border:1px solid var(--border);border-radius:12px;padding:1.25rem;transition:all .3s}'
-    + '.blog-card:hover{border-color:var(--primary);transform:translateY(-2px);background:rgba(30,41,59,0.6)}'
+    + '.blog-card{background:var(--bg-surface);border:1px solid var(--border-solid);border-radius:12px;padding:1.25rem;transition:all .3s var(--ease-precise)}'
+    + '.blog-card:hover{border-color:var(--border-hover);transform:translateY(-2px);box-shadow:var(--card-shadow-hover)}'
     + '.blog-card a{color:var(--text-primary);text-decoration:none;font-weight:600;display:block;margin-bottom:.35rem;font-size:1rem;line-height:1.5}'
-    + '.blog-card:hover a{color:var(--primary)}'
+    + '.blog-card:hover a{color:var(--cyan)}'
     + '.blog-card .meta{font-size:.8rem;color:var(--text-muted)}'
-    + '.badge{display:inline-block;background:rgba(249,115,22,0.15);color:var(--primary);padding:.15rem .55rem;border-radius:9999px;font-size:.7rem;font-weight:600;margin-bottom:.4rem;text-transform:uppercase;letter-spacing:.03em}'
+    + '.badge{display:inline-block;background:rgba(0,242,255,0.08);color:var(--cyan);border:1px solid rgba(0,242,255,0.15);padding:.15rem .55rem;border-radius:9999px;font-size:.7rem;font-weight:600;margin-bottom:.4rem;text-transform:uppercase;letter-spacing:.03em}'
     + '.cat-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:1rem}'
-    + '.cat-card{background:var(--bg-card);border:1px solid var(--border);border-radius:12px;padding:1.25rem;text-decoration:none;color:var(--text-primary);transition:all .3s}'
-    + '.cat-card:hover{border-color:var(--primary);transform:translateY(-2px)}'
+    + '.cat-card{background:var(--bg-surface);border:1px solid var(--border-solid);border-radius:12px;padding:1.25rem;text-decoration:none;color:var(--text-primary);transition:all .3s var(--ease-precise)}'
+    + '.cat-card:hover{border-color:var(--border-hover);transform:translateY(-2px);box-shadow:var(--card-shadow-hover)}'
     + '.cat-card .icon{font-size:2rem;margin-bottom:.5rem}'
     + '.cat-card h3{font-size:1rem;margin-bottom:.3rem}'
     + '.cat-card p{font-size:.8rem;color:var(--text-muted);line-height:1.4}'
-    + '.cat-card .count{font-size:.75rem;color:var(--primary);margin-top:.5rem;font-weight:600}'
-    + '.back-link{display:inline-block;color:var(--primary);text-decoration:none;font-size:.9rem;margin-bottom:1rem}'
+    + '.cat-card .count{font-size:.75rem;color:var(--cyan);margin-top:.5rem;font-weight:600}'
+    + '.back-link{display:inline-block;color:var(--cyan);text-decoration:none;font-size:.9rem;margin-bottom:1rem}'
     + '.back-link:hover{text-decoration:underline}'
-    + '@media(max-width:640px){.hero{padding:2rem 1rem}.hero h1{font-size:1.5rem}header{flex-direction:column;gap:16px}}'
-    + '</style></head><body><div class="wrap">'
-    + '<header><a href="/" class="logo"><i data-lucide="zap"></i>YT SEO <span class="text-accent">Architect</span></a>'
-    + '<nav class="header-nav"><a href="/tools/tag-generator">Free Tools</a><a href="/glossary/">Glossary</a><a href="/dashboard" class="nav-cta">Get Started Free</a></nav></header>';
+    + '.blog-hero{padding:var(--space-12) var(--space-6);background:radial-gradient(ellipse at center, rgba(0,242,255,0.06), transparent 70%);border-radius:1rem;margin-bottom:2rem;text-align:center}'
+    + '.blog-hero h1{font-size:clamp(1.6rem,4vw,2.2rem);font-weight:800;letter-spacing:var(--tracking-display);margin:0 0 .5rem;color:var(--text-white)}'
+    + '.blog-hero p{color:var(--text-secondary);font-size:1.05rem;max-width:600px;margin:0 auto;line-height:1.7}'
+    + '.blog-hero .stat{display:inline-block;margin-top:1rem;background:rgba(0,242,255,0.08);border:1px solid rgba(0,242,255,0.15);color:var(--cyan);padding:.3rem 1rem;border-radius:9999px;font-size:.85rem;font-weight:600}'
+    + '@media(max-width:640px){.blog-hero{padding:2rem 1rem}.blog-hero h1{font-size:1.5rem}}'
+    + '</style></head><body>'
+    + '<a href="#blog-content" class="skip-link">Skip to content</a>'
+    + '<header class="site-header"><div class="header-inner">'
+    + '<a href="/" class="header-logo"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#00f2ff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="9.75 15.02 15.5 12 9.75 8.98 9.75 15.02"/><circle cx="12" cy="12" r="10"/></svg>YT <span>SEO</span> Architect</a>'
+    + '<nav class="header-nav"><a href="/tools.html">Tools</a><a href="/blog">Blog</a><a href="/public/glossary">Glossary</a><a href="/public/tools">Free Tools</a><a href="/dashboard.html" class="header-cta">Dashboard</a></nav>'
+    + '<button class="mobile-menu-btn" aria-label="Menu" onclick="document.getElementById(\'header-nav\').classList.toggle(\'open\')">☰</button></div></header>'
+    + '<main id="blog-content"><div class="section">';
   return { html, cat };
 }
 
@@ -924,7 +920,7 @@ app.get(['/blog/categories', '/blog/category'], async (req, res) => {
 
     const rendered = renderCategoryHeader(null, pages);
     var fullHtml = rendered.html
-      + '<div class="hero"><h1>📚 Blog Categories</h1><p>Browse YouTube SEO guides by topic. Each category clusters related guides for deeper learning.</p>'
+      + '<div class="blog-hero"><h1>📚 Blog Categories</h1><p>Browse YouTube SEO guides by topic. Each category clusters related guides for deeper learning.</p>'
       + '<div class="stat">' + Object.keys(catCounts).length + ' categories · ' + pages.length + ' guides</div></div>'
       + '<div class="cat-grid">';
 
@@ -939,7 +935,7 @@ app.get(['/blog/categories', '/blog/category'], async (req, res) => {
         + '</a>';
     }
 
-    fullHtml += '</div></div></body></html>';
+    fullHtml += '</div></div><footer class="site-footer"><div class="footer-inner"><div class="footer-col"><h4>Product</h4><a href="/public/tools">Free Tools</a><a href="/dashboard.html">Dashboard</a><a href="/changelog.html">Changelog</a></div><div class="footer-col"><h4>Resources</h4><a href="/blog">Blog</a><a href="/public/glossary">Glossary</a><a href="/public/guides">Guides</a></div><div class="footer-col"><h4>Company</h4><a href="/about.html">About</a><a href="/contact.html">Contact</a><a href="/privacy-policy.html">Privacy</a><a href="/terms-of-service.html">Terms</a></div><div class="footer-col"><h4>Social</h4><a href="https://twitter.com/YTSEOArchitect" target="_blank" rel="noopener">Twitter / X</a><a href="https://youtube.com" target="_blank" rel="noopener">YouTube</a><a href="https://github.com/nhlaka3" target="_blank" rel="noopener">GitHub</a></div></div><div class="footer-bottom"><span>&copy; 2026 YT SEO Architect. All rights reserved.</span><div class="footer-social"><a href="https://twitter.com/YTSEOArchitect" target="_blank" rel="noopener" aria-label="Twitter">𝕏</a><a href="https://github.com/nhlaka3" target="_blank" rel="noopener" aria-label="GitHub">GH</a></div></div></footer><script defer src="/js/blog-enhancements.js"></script></body></html>';
     res.send(fullHtml);
   } catch(e) { res.status(500).send('Error'); }
 });
@@ -962,7 +958,7 @@ app.get('/blog/category/:slug', async (req, res) => {
 
     const rendered = renderCategoryHeader(catSlug, catPages);
     var fullHtml = rendered.html
-      + '<div class="hero"><h1>' + cat.icon + ' ' + cat.name + '</h1><p>' + cat.desc + '</p>'
+      + '<div class="blog-hero"><h1>' + cat.icon + ' ' + cat.name + '</h1><p>' + cat.desc + '</p>'
       + '<div class="stat">' + catPages.length + ' guide' + (catPages.length > 1 ? 's' : '') + '</div></div>'
       + '<a href="/blog/categories" class="back-link">← All Categories</a>'
       + '<div class="blog-grid">';
@@ -971,7 +967,7 @@ app.get('/blog/category/:slug', async (req, res) => {
       fullHtml += '<div class="blog-card"><a href="/blog/'+p.slug+'">'+p.title+'</a><div class="meta">'+p.wordCount+' words · '+new Date(p.publishedAt).toLocaleDateString()+'</div></div>';
     }
 
-    fullHtml += '</div></div></body></html>';
+    fullHtml += '</div></div><footer class="site-footer"><div class="footer-inner"><div class="footer-col"><h4>Product</h4><a href="/public/tools">Free Tools</a><a href="/dashboard.html">Dashboard</a><a href="/changelog.html">Changelog</a></div><div class="footer-col"><h4>Resources</h4><a href="/blog">Blog</a><a href="/public/glossary">Glossary</a><a href="/public/guides">Guides</a></div><div class="footer-col"><h4>Company</h4><a href="/about.html">About</a><a href="/contact.html">Contact</a><a href="/privacy-policy.html">Privacy</a><a href="/terms-of-service.html">Terms</a></div><div class="footer-col"><h4>Social</h4><a href="https://twitter.com/YTSEOArchitect" target="_blank" rel="noopener">Twitter / X</a><a href="https://youtube.com" target="_blank" rel="noopener">YouTube</a><a href="https://github.com/nhlaka3" target="_blank" rel="noopener">GitHub</a></div></div><div class="footer-bottom"><span>&copy; 2026 YT SEO Architect. All rights reserved.</span><div class="footer-social"><a href="https://twitter.com/YTSEOArchitect" target="_blank" rel="noopener" aria-label="Twitter">𝕏</a><a href="https://github.com/nhlaka3" target="_blank" rel="noopener" aria-label="GitHub">GH</a></div></div></footer><script defer src="/js/blog-enhancements.js"></script></body></html>';
     res.send(fullHtml);
   } catch(e) { res.status(500).send('Error'); }
 });
