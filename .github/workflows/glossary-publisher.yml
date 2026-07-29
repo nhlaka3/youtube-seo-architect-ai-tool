@@ -16,6 +16,9 @@ permissions:
 jobs:
   generate-glossary:
     runs-on: ubuntu-latest
+    env:
+      GROQ_API_KEY: ${{ secrets.GROQ_API_KEY }}
+      GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
 
     steps:
       - name: ⬇️ Checkout private repo
