@@ -185,8 +185,17 @@ function generateComparisonPage(termA, termB, slugA, slugB, dataA, dataB) {
   </script>
 
   <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3831668789026424" crossorigin="anonymous"></script>
-  <link rel="stylesheet" href="/blog/blog.css" media="print" onload="this.media='all'" />
-  <noscript><link rel="stylesheet" href="/blog/blog.css" /></noscript>
+  <link rel="stylesheet" href="/design-tokens.css" media="print" onload="this.media='all'">
+  <link rel="stylesheet" href="/utilities.css" media="print" onload="this.media='all'">
+  <link rel="stylesheet" href="/nav.css" media="print" onload="this.media='all'">
+  <link rel="stylesheet" href="/blog-article.css" media="print" onload="this.media='all'">
+  <noscript>
+    <link rel="stylesheet" href="/design-tokens.css">
+    <link rel="stylesheet" href="/utilities.css">
+    <link rel="stylesheet" href="/nav.css">
+    <link rel="stylesheet" href="/blog-article.css">
+  </noscript>
+  
   <style>
     body{font-display:swap;font-family:'Outfit','Geist',-apple-system,BlinkMacSystemFont,sans-serif;background:#0a0a0f;color:#e2e8f0;line-height:1.7}
     .hero{background:linear-gradient(135deg,#0f0c29,#302b63,#24243e);padding:2.5rem 1.5rem;text-align:center;margin-bottom:2rem;border-radius:1rem}

@@ -518,8 +518,17 @@ function generateIndexPage(data) {
   }
   </script>
   <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3831668789026424" crossorigin="anonymous"></script>
-  <link rel="stylesheet" href="/blog/blog.css" media="print" onload="this.media='all'" />
-  <noscript><link rel="stylesheet" href="/blog/blog.css" /></noscript>
+  <link rel="stylesheet" href="/design-tokens.css" media="print" onload="this.media='all'">
+  <link rel="stylesheet" href="/utilities.css" media="print" onload="this.media='all'">
+  <link rel="stylesheet" href="/nav.css" media="print" onload="this.media='all'">
+  <link rel="stylesheet" href="/blog-article.css" media="print" onload="this.media='all'">
+  <noscript>
+    <link rel="stylesheet" href="/design-tokens.css">
+    <link rel="stylesheet" href="/utilities.css">
+    <link rel="stylesheet" href="/nav.css">
+    <link rel="stylesheet" href="/blog-article.css">
+  </noscript>
+  
   <style>
     body{font-display:swap;font-family:'Outfit','Geist',-apple-system,BlinkMacSystemFont,sans-serif}
     .glossary-hero{padding:3rem 1.5rem;background:linear-gradient(135deg,#0f0c29,#302b63,#24243e);border-radius:1rem;margin-bottom:2rem;text-align:center}

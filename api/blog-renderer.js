@@ -755,33 +755,40 @@ export function renderBlogTemplate(page) {
 
   <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3831668789026424" crossorigin="anonymous"></script>
   <script type="application/ld+json">${schemaJSON}</script>
-  <link rel="stylesheet" href="/blog/blog.css" />
-  <style>body{font-display:swap;font-family:'Geist','Outfit',-apple-system,BlinkMacSystemFont,sans-serif}</style>
-  <script>
-    // Reading progress bar (passive scroll for performance)
-    (function(){
-      var bar = document.getElementById('readingProgress');
-      if(!bar) return;
-      var stickyCta = document.getElementById('sticky-cta');
-      var update = function(){
-        var scrollTop = window.scrollY || document.documentElement.scrollTop;
-        var docHeight = document.documentElement.scrollHeight - window.innerHeight;
-        var pct = docHeight > 0 ? (scrollTop / docHeight) * 100 : 0;
-        bar.style.setProperty('--scroll-pct', pct + '%');
-        if(stickyCta) stickyCta.style.display = pct > 40 ? 'flex' : 'none';
-      };
-      window.addEventListener('scroll', update, { passive: true });
-      window.addEventListener('resize', update, { passive: true });
-      update();
-    })();
-  </script>
+  <link rel="stylesheet" href="/design-tokens.css" media="print" onload="this.media='all'">
+  <link rel="stylesheet" href="/utilities.css" media="print" onload="this.media='all'">
+  <link rel="stylesheet" href="/nav.css" media="print" onload="this.media='all'">
+  <link rel="stylesheet" href="/blog-article.css" media="print" onload="this.media='all'">
+  <noscript>
+    <link rel="stylesheet" href="/design-tokens.css">
+    <link rel="stylesheet" href="/utilities.css">
+    <link rel="stylesheet" href="/nav.css">
+    <link rel="stylesheet" href="/blog-article.css">
+  </noscript>
 </head>
 <body>
-  <div class="reading-progress" id="readingProgress" aria-hidden="true"></div>
+  <!-- Skip to content -->
+  <a href="#main-content" class="skip-link">Skip to content</a>
 
-  <header class="header">
-    <a href="/">⚡ YT SEO Architect</a>
-    <a href="/dashboard" class="cta">Try Free</a>
+  <!-- Reading Progress Bar -->
+  <div class="reading-progress" id="reading-progress"></div>
+
+  <!-- Shared Header -->
+  <header class="site-header">
+    <div class="header-inner">
+      <a href="/" class="header-logo">
+        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#00f2ff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="9.75 15.02 15.5 12 9.75 8.98 9.75 15.02"/><circle cx="12" cy="12" r="10"/></svg>
+        YT <span>SEO</span> Architect
+      </a>
+      <nav class="header-nav" id="header-nav">
+        <a href="/tools.html">Tools</a>
+        <a href="/blog">Blog</a>
+        <a href="/public/glossary">Glossary</a>
+        <a href="/public/tools">Free Tools</a>
+        <a href="/dashboard.html" class="header-cta">Dashboard</a>
+      </nav>
+      <button class="mobile-menu-btn" aria-label="Menu" onclick="document.getElementById('header-nav').classList.toggle('open')">☰</button>
+    </div>
   </header>
 
   <main>
@@ -872,9 +879,45 @@ export function renderBlogTemplate(page) {
     <a href="/dashboard" style="background:#00f2ff;color:#000;padding:0.5rem 1.5rem;border-radius:8px;text-decoration:none;font-weight:700;font-size:0.85rem;white-space:nowrap;flex-shrink:0;box-shadow:0 0 12px rgba(0,242,255,0.25);">Try Free Tools →</a>
   </div>
 
-  <footer class="footer">
-    <p>© 2026 YT SEO Architect · <a href="/blog">All Articles</a> · <a href="/privacy-policy">Privacy</a></p>
+  <!-- Footer -->
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <div class="footer-col">
+        <h4>Product</h4>
+        <a href="/public/tools">Free Tools</a>
+        <a href="/dashboard.html">Dashboard</a>
+        <a href="/changelog.html">Changelog</a>
+      </div>
+      <div class="footer-col">
+        <h4>Resources</h4>
+        <a href="/blog">Blog</a>
+        <a href="/public/glossary">Glossary</a>
+        <a href="/public/guides">Guides</a>
+      </div>
+      <div class="footer-col">
+        <h4>Company</h4>
+        <a href="/about.html">About</a>
+        <a href="/contact.html">Contact</a>
+        <a href="/privacy-policy.html">Privacy</a>
+        <a href="/terms-of-service.html">Terms</a>
+      </div>
+      <div class="footer-col">
+        <h4>Social</h4>
+        <a href="https://twitter.com/YTSEOArchitect" target="_blank" rel="noopener">Twitter / X</a>
+        <a href="https://youtube.com" target="_blank" rel="noopener">YouTube</a>
+        <a href="https://github.com/nhlaka3" target="_blank" rel="noopener">GitHub</a>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>&copy; 2026 YT SEO Architect. All rights reserved.</span>
+      <div class="footer-social">
+        <a href="https://twitter.com/YTSEOArchitect" target="_blank" rel="noopener" aria-label="Twitter">𝕏</a>
+        <a href="https://github.com/nhlaka3" target="_blank" rel="noopener" aria-label="GitHub">GH</a>
+      </div>
+    </div>
   </footer>
+
+  <script defer src="/js/blog-enhancements.js"></script>
 </body>
 </html>`;
 }
