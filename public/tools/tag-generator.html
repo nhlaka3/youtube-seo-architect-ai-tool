@@ -387,17 +387,51 @@
       .header { padding: 0.75rem 1rem; }
     }
   </style>
+    <link rel="stylesheet" href="/design-tokens.css" media="print" onload="this.media='all'">
+  <link rel="stylesheet" href="/utilities.css" media="print" onload="this.media='all'">
+  <link rel="stylesheet" href="/nav.css" media="print" onload="this.media='all'">
+  <link rel="stylesheet" href="/blog-article.css" media="print" onload="this.media='all'">
+  <noscript>
+    <link rel="stylesheet" href="/design-tokens.css">
+    <link rel="stylesheet" href="/utilities.css">
+    <link rel="stylesheet" href="/nav.css">
+    <link rel="stylesheet" href="/blog-article.css">
+  </noscript>
 </head>
 <body>
 
-  <!-- HEADER -->
-  <header class="header">
-    <a href="/" class="header-logo">
-      <img src="/logo.svg" alt="YT SEO Architect" width="32" height="32" loading="eager" fetchpriority="high" />
-      YT SEO Architect
-    </a>
-    <a href="/dashboard" class="header-cta">🚀 Get Started Free</a>
+  <!-- Skip to content -->
+  <a href="#main-content" class="skip-link">Skip to content</a>
+
+  <!-- Reading Progress Bar -->
+  <div class="reading-progress" id="reading-progress"></div>
+
+  <!-- Shared Header -->
+  <header class="site-header">
+    <div class="header-inner">
+      <a href="/" class="header-logo">
+        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#00f2ff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="9.75 15.02 15.5 12 9.75 8.98 9.75 15.02"/><circle cx="12" cy="12" r="10"/></svg>
+        YT <span>SEO</span> Architect
+      </a>
+      <nav class="header-nav" id="header-nav">
+        <a href="/tools.html">Tools</a>
+        <a href="/blog">Blog</a>
+        <a href="/public/glossary">Glossary</a>
+        <a href="/public/tools">Free Tools</a>
+        <a href="/dashboard.html" class="header-cta">Dashboard</a>
+      </nav>
+      <button class="mobile-menu-btn" aria-label="Menu" onclick="document.getElementById('header-nav').classList.toggle('open')">\u2630</button>
+    </div>
   </header>
+
+  <!-- Breadcrumbs -->
+  <div class="breadcrumbs">
+    <a href="/">Home</a>
+    <span class="sep">/</span>
+    <a href="/tools.html">Tools</a>
+    <span class="sep">/</span>
+    <span class="current">Tool</span>
+  </div>
 
   <!-- HERO -->
   <section class="hero">

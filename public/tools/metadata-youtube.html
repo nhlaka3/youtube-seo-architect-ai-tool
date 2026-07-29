@@ -58,6 +58,16 @@
     .footer a { color: var(--accent2); text-decoration: none; }
     @media (max-width: 600px) { .container { padding: 1rem; } h1 { font-size: 1.5rem; } .header { padding: 0.75rem 1rem; } }
   </style>
+    <link rel="stylesheet" href="/design-tokens.css" media="print" onload="this.media='all'">
+  <link rel="stylesheet" href="/utilities.css" media="print" onload="this.media='all'">
+  <link rel="stylesheet" href="/nav.css" media="print" onload="this.media='all'">
+  <link rel="stylesheet" href="/blog-article.css" media="print" onload="this.media='all'">
+  <noscript>
+    <link rel="stylesheet" href="/design-tokens.css">
+    <link rel="stylesheet" href="/utilities.css">
+    <link rel="stylesheet" href="/nav.css">
+    <link rel="stylesheet" href="/blog-article.css">
+  </noscript>
 </head>
 <body data-keyword="metadata youtube">
   <div class="header">
@@ -309,5 +319,44 @@ function handleTool() {
   placeholder.innerHTML = html;
 }
   </script>
+  <!-- Footer -->
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <div class="footer-col">
+        <h4>Product</h4>
+        <a href="/public/tools">Free Tools</a>
+        <a href="/dashboard.html">Dashboard</a>
+        <a href="/changelog.html">Changelog</a>
+      </div>
+      <div class="footer-col">
+        <h4>Resources</h4>
+        <a href="/blog">Blog</a>
+        <a href="/public/glossary">Glossary</a>
+        <a href="/public/guides">Guides</a>
+      </div>
+      <div class="footer-col">
+        <h4>Company</h4>
+        <a href="/about.html">About</a>
+        <a href="/contact.html">Contact</a>
+        <a href="/privacy-policy.html">Privacy</a>
+        <a href="/terms-of-service.html">Terms</a>
+      </div>
+      <div class="footer-col">
+        <h4>Social</h4>
+        <a href="https://twitter.com/YTSEOArchitect" target="_blank" rel="noopener">Twitter / X</a>
+        <a href="https://youtube.com" target="_blank" rel="noopener">YouTube</a>
+        <a href="https://github.com/nhlaka3" target="_blank" rel="noopener">GitHub</a>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>&copy; 2026 YT SEO Architect. All rights reserved.</span>
+      <div class="footer-social">
+        <a href="https://twitter.com/YTSEOArchitect" target="_blank" rel="noopener" aria-label="Twitter">\u1d54\u1d43</a>
+        <a href="https://github.com/nhlaka3" target="_blank" rel="noopener" aria-label="GitHub">GH</a>
+      </div>
+    </div>
+  </footer>
+
+  <script defer src="/js/blog-enhancements.js"></script>
 </body>
 </html>
