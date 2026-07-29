@@ -44,15 +44,15 @@ jobs:
                             "public/niches/index.html", "public/vs/index.html"]
 
           def gh(args, input_data=None):
-              cmd = ["gh", "api"] + args
+              cmd = ["gh", "api", "--jq", "."] + args
               p = subprocess.run(cmd, input=input_data, capture_output=True, text=True)
               if p.returncode != 0:
-                  print(f"gh error ({p.returncode}): {p.stderr[:200]}")
+                  print(f"gh error: {p.stderr[:200]}")
                   return None
               return json.loads(p.stdout)
 
-          head = gh(["repos/" + repo + "/git/refs/heads/main", "--jq", ".object.sha"])
-          base_tree = gh(["repos/" + repo + "/git/commits/" + head, "--jq", ".tree.sha"])
+          head = gh(["repos/" + repo + "/git/refs/heads/main"])["object"]["sha"]
+          base_tree = gh(["repos/" + repo + "/git/commits/" + head])["tree"]["sha"]
           print(f"HEAD: {head}  Tree: {base_tree}")
 
           tree_entries = []
@@ -60,30 +60,37 @@ jobs:
             if os.path.exists(f):
               with open(f, "r", encoding="utf-8") as fh:
                 content = fh.read()
-              blob = gh(["repos/" + repo + "/git/blobs", "--input", "-", "--jq", ".sha"],
-                        input_data=json.dumps({"content": content, "encoding": "utf-8"}))
-              if blob:
-                tree_entries.append({"path": f, "mode": "100644", "type": "blob", "sha": blob})
+              blob_resp = gh(["repos/" + repo + "/git/blobs", "--input", "-"],
+                            input_data=json.dumps({"content": content, "encoding": "utf-8"}))
+              if blob_resp:
+                tree_entries.append({"path": f, "mode": "100644", "type": "blob", "sha": blob_resp["sha"]})
                 print(f"  Added: {f} ({len(content)} bytes)")
 
           if not tree_entries:
             print("No files to commit")
             sys.exit(0)
 
-          new_tree = gh(["repos/" + repo + "/git/trees", "--input", "-", "--jq", ".sha"],
-                       input_data=json.dumps({"base_tree": base_tree, "tree": tree_entries}))
-          if not new_tree or new_tree == base_tree:
+          tree_resp = gh(["repos/" + repo + "/git/trees", "--input", "-"],
+                        input_data=json.dumps({"base_tree": base_tree, "tree": tree_entries}))
+          if not tree_resp:
+            sys.exit(1)
+          if tree_resp.get("sha") == base_tree:
             print("No changes - tree unchanged")
             sys.exit(0)
+          new_tree = tree_resp["sha"]
           print(f"New tree: {new_tree}")
 
-          new_commit = gh(["repos/" + repo + "/git/commits", "--input", "-", "--jq", ".sha"],
-                         input_data=json.dumps({"message": "discovery: weekly auto-discovered content [skip ci]", "tree": new_tree, "parents": [head]}))
+          commit_resp = gh(["repos/" + repo + "/git/commits", "--input", "-"],
+                          input_data=json.dumps({"message": "discovery: weekly auto-discovered content [skip ci]", "tree": new_tree, "parents": [head]}))
+          if not commit_resp:
+            sys.exit(1)
+          new_commit = commit_resp["sha"]
           print(f"New commit: {new_commit}")
 
-          result = gh(["repos/" + repo + "/git/refs/heads/main", "-X", "PATCH", "--input", "-", "--jq", ".ref"],
-                     input_data=json.dumps({"sha": new_commit, "force": True}))
-          print(f"✅ Committed via API: {result}")
+          ref_resp = gh(["repos/" + repo + "/git/refs/heads/main", "-X", "PATCH", "--input", "-"],
+                       input_data=json.dumps({"sha": new_commit, "force": True}))
+          if ref_resp:
+            print(f"✅ Committed via API: {ref_resp['ref']}")
           PYEOF
 
       - name: 🌐 Deploy to Vercel
