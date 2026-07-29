@@ -1,0 +1,75 @@
+name: 🔄 Weekly Content Discovery
+
+on:
+  schedule:
+    - cron: '0 10 * * 3'     # 10:00 AM UTC every Wednesday
+  workflow_dispatch:
+    inputs:
+      count:
+        description: 'Number of new items to discover per category'
+        type: number
+        default: 2
+      niches:
+        description: 'Discover new niches?'
+        type: boolean
+        default: true
+      tools:
+        description: 'Discover new comparison tools?'
+        type: boolean
+        default: true
+
+permissions:
+  contents: write
+
+jobs:
+  discover:
+    runs-on: ubuntu-latest
+    env:
+      GROQ_API_KEY: ${{ secrets.GROQ_API_KEY }}
+
+    steps:
+      - name: ⬇️ Checkout private repo
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GH_PAT }}
+          fetch-depth: 0
+
+      - name: 🔧 Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+
+      - name: 🔍 Discover new niches
+        if: ${{ github.event.inputs.niches != 'false' }}
+        run: |
+          COUNT=${{ github.event.inputs.count || '2' }}
+          echo "🔍 Discovering $COUNT new niche(s)..."
+          node scripts/auto-discover-niches.mjs --count $COUNT 2>&1
+
+      - name: 🔍 Discover new comparison tools
+        if: ${{ github.event.inputs.tools != 'false' }}
+        run: |
+          COUNT=${{ github.event.inputs.count || '2' }}
+          echo "🔍 Discovering $COUNT new tool(s)..."
+          node scripts/auto-discover-tools.mjs --count $COUNT 2>&1
+
+      - name: 📤 Push new discoveries to private repo
+        run: |
+          git config user.name "YT SEO Bot"
+          git config user.email "hnhlaka142@gmail.com"
+          git add -A
+          if git diff --staged --quiet; then
+            echo "✅ No new discoveries to commit"
+          else
+            git commit -m "discovery: weekly auto-discovered content [skip ci]"
+            git pull --rebase origin main 2>&1 || true
+            git push origin HEAD:main 2>&1
+            echo "✅ New discoveries committed and pushed"
+          fi
+
+      - name: 🌐 Deploy to Vercel
+        env:
+          PUBLIC_REPO: https://x-access-token:${{ secrets.GH_PAT }}@github.com/nhlaka3/youtube-seo-architect-ai-tool.git
+        run: |
+          git remote add public "$PUBLIC_REPO"
+          git push public HEAD:main --force 2>&1 && echo "✅ Pushed to public repo — Vercel auto-deploy triggered"
