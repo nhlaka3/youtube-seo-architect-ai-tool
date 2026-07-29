@@ -324,18 +324,41 @@
   </script>
 
   <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3831668789026424" crossorigin="anonymous"></script>
-  <link rel="stylesheet" href="/blog/blog.css" media="print" onload="this.media='all'">
-  <noscript><link rel="stylesheet" href="/blog/blog.css"></noscript>
-  <style>body{font-display:swap;font-family:'Geist','Outfit',-apple-system,BlinkMacSystemFont,sans-serif}</style>
+  <link rel="stylesheet" href="/design-tokens.css" media="print" onload="this.media='all'">
+  <link rel="stylesheet" href="/utilities.css" media="print" onload="this.media='all'">
+  <link rel="stylesheet" href="/nav.css" media="print" onload="this.media='all'">
+  <link rel="stylesheet" href="/blog-article.css" media="print" onload="this.media='all'">
+  <noscript>
+    <link rel="stylesheet" href="/design-tokens.css">
+    <link rel="stylesheet" href="/utilities.css">
+    <link rel="stylesheet" href="/nav.css">
+    <link rel="stylesheet" href="/blog-article.css">
+  </noscript>
 </head>
 <body>
 
-  <!-- ── Reading Progress Bar ──────────────────────────── -->
-  <div class="reading-progress" id="readingProgress" aria-hidden="true"></div>
+  <!-- Skip to content -->
+  <a href="#main-content" class="skip-link">Skip to content</a>
 
-  <header class="header">
-    <a href="/">⚡ YT SEO Architect</a>
-    <a href="/dashboard" class="cta">Try Free</a>
+  <!-- Reading Progress Bar -->
+  <div class="reading-progress" id="reading-progress"></div>
+
+  <!-- Shared Header -->
+  <header class="site-header">
+    <div class="header-inner">
+      <a href="/" class="header-logo">
+        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#00f2ff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="9.75 15.02 15.5 12 9.75 8.98 9.75 15.02"/><circle cx="12" cy="12" r="10"/></svg>
+        YT <span>SEO</span> Architect
+      </a>
+      <nav class="header-nav" id="header-nav">
+        <a href="/tools.html">Tools</a>
+        <a href="/blog">Blog</a>
+        <a href="/public/glossary">Glossary</a>
+        <a href="/public/tools">Free Tools</a>
+        <a href="/dashboard.html" class="header-cta">Dashboard</a>
+      </nav>
+      <button class="mobile-menu-btn" aria-label="Menu" onclick="document.getElementById('header-nav').classList.toggle('open')">☰</button>
+    </div>
   </header>
 
   <main>
@@ -596,55 +619,45 @@
 
   </main>
 
-  <footer class="footer">
-    <p>© 2026 YT SEO Architect · <a href="/blog">All Articles</a> · <a href="/pricing">Pricing</a> · <a href="/privacy-policy">Privacy</a></p>
+  <!-- Footer -->
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <div class="footer-col">
+        <h4>Product</h4>
+        <a href="/public/tools">Free Tools</a>
+        <a href="/dashboard.html">Dashboard</a>
+        <a href="/changelog.html">Changelog</a>
+      </div>
+      <div class="footer-col">
+        <h4>Resources</h4>
+        <a href="/blog">Blog</a>
+        <a href="/public/glossary">Glossary</a>
+        <a href="/public/guides">Guides</a>
+      </div>
+      <div class="footer-col">
+        <h4>Company</h4>
+        <a href="/about.html">About</a>
+        <a href="/contact.html">Contact</a>
+        <a href="/privacy-policy.html">Privacy</a>
+        <a href="/terms-of-service.html">Terms</a>
+      </div>
+      <div class="footer-col">
+        <h4>Social</h4>
+        <a href="https://twitter.com/YTSEOArchitect" target="_blank" rel="noopener">Twitter / X</a>
+        <a href="https://youtube.com" target="_blank" rel="noopener">YouTube</a>
+        <a href="https://github.com/nhlaka3" target="_blank" rel="noopener">GitHub</a>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>&copy; 2026 YT SEO Architect. All rights reserved.</span>
+      <div class="footer-social">
+        <a href="https://twitter.com/YTSEOArchitect" target="_blank" rel="noopener" aria-label="Twitter">𝕏</a>
+        <a href="https://github.com/nhlaka3" target="_blank" rel="noopener" aria-label="GitHub">GH</a>
+      </div>
+    </div>
   </footer>
 
-
-  <script>
-  /* ── Reading Progress Bar ──────────────────────────── */
-  (function(){
-    var bar = document.getElementById('readingProgress');
-    if(!bar) return;
-    var update = function(){
-      var scrollTop = window.scrollY || document.documentElement.scrollTop;
-      var docHeight = document.documentElement.scrollHeight - window.innerHeight;
-      var pct = docHeight > 0 ? (scrollTop / docHeight) * 100 : 0;
-      bar.style.setProperty('--scroll-pct', pct + '%');
-    };
-    window.addEventListener('scroll', update, { passive: true });
-    window.addEventListener('resize', update, { passive: true });
-    update();
-  })();
-
-  /* ── Social Share Bar ─────────────────────────────── */
-  (function(){
-    var bar = document.querySelector('[data-share-bar]');
-    if(!bar) return;
-    var url = encodeURIComponent(window.location.href);
-    var title = encodeURIComponent(document.title.replace(/ — YT SEO Architect$/, '').trim());
-    var links = {
-      twitter: 'https://twitter.com/intent/tweet?text='+title+'&url='+url,
-      linkedin: 'https://linkedin.com/sharing/share-offsite/?url='+url,
-      facebook: 'https://facebook.com/sharer/sharer.php?u='+url,
-      whatsapp: 'https://wa.me/?text='+title+'%20'+url,
-    };
-    bar.querySelectorAll('[data-share]').forEach(function(el){
-      var key = el.getAttribute('data-share');
-      if(links[key]) el.href = links[key];
-      if(key === 'copy'){
-        el.addEventListener('click', function(e){
-          e.preventDefault();
-          navigator.clipboard.writeText(decodeURIComponent(url)).then(function(){
-            el.classList.add('copied');
-            el.textContent = '✓ Copied';
-            setTimeout(function(){ el.classList.remove('copied'); el.innerHTML = '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M7.24 2h9.52A5.24 5.24 0 0122 7.24v9.52A5.24 5.24 0 0116.76 22H7.24A5.24 5.24 0 012 16.76V7.24A5.24 5.24 0 017.24 2zm0 2A3.24 3.24 0 004 7.24v9.52A3.24 3.24 0 007.24 20h9.52A3.24 3.24 0 0020 16.76V7.24A3.24 3.24 0 0016.76 4H7.24zm8.4 3.17c.64.64.64 1.68 0 2.32l-3.17 3.17a1.64 1.64 0 01-2.32 0l-1.9-1.9a1.64 1.64 0 012.32-2.32l.74.74 2.02-2.02c.64-.64 1.68-.64 2.32 0z"/></svg> Copy'; }, 2000);
-          });
-        });
-      }
-    });
-  })();
-  </script>
+  <script defer src="/js/blog-enhancements.js"></script>
 
 
 </body>
