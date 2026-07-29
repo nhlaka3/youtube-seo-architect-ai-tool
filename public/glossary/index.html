@@ -3,431 +3,317 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <link rel="icon" href="/logo.svg" type="image/svg+xml" />
-  <title>YouTube SEO Glossary — 75+ Terms Defined | YT SEO Architect</title>
-  <meta name="description" content="Complete YouTube SEO glossary with 75+ terms covering analytics, algorithm, optimization, monetization, content strategy, and YouTube features. Free definitions and optimization tips." />
+  <title>YouTube SEO Glossary — 600+ Terms & Definitions | YT SEO Architect</title>
+  <meta name="description" content="Complete YouTube SEO glossary with 600+ terms, definitions, and optimization guides. From A/B testing to watch time — everything explained for content creators." />
   <meta name="robots" content="index, follow" />
-  <link rel="canonical" href="https://yt-seo-architect.vercel.app/glossary/" />
-  <meta property="og:title" content="YouTube SEO Glossary — 75+ Terms Defined" />
-  <meta property="og:description" content="Complete YouTube SEO glossary with 75+ terms. Free definitions and optimization tips for every creator." />
-  <meta name="twitter:card" content="summary_large_image" />
-  <script type="application/ld+json">
-  {
-    "@context": "https://schema.org",
-    "@type": "CollectionPage",
-    "name": "YouTube SEO Glossary",
-    "description": "75+ YouTube SEO terms defined and explained.",
-    "url": "https://yt-seo-architect.vercel.app/glossary/"
-  }
-  </script>
-  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3831668789026424" crossorigin="anonymous"></script>
-  <link rel="stylesheet" href="/blog/blog.css" media="print" onload="this.media='all'" />
-  <noscript><link rel="stylesheet" href="/blog/blog.css" /></noscript>
+  <link rel="canonical" href="https://yt-seo-architect.vercel.app/public/glossary" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Geist:wght@100..900&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Geist+Mono:wght@100..900&display=swap" rel="stylesheet" />
+
+  <link rel="stylesheet" href="/design-tokens.css" media="print" onload="this.media='all'">
+  <link rel="stylesheet" href="/utilities.css" media="print" onload="this.media='all'">
+  <link rel="stylesheet" href="/nav.css" media="print" onload="this.media='all'">
+  <noscript>
+    <link rel="stylesheet" href="/design-tokens.css">
+    <link rel="stylesheet" href="/utilities.css">
+    <link rel="stylesheet" href="/nav.css">
+  </noscript>
+
   <style>
-    body{font-display:swap;font-family:'Outfit','Geist',-apple-system,BlinkMacSystemFont,sans-serif}
-    .glossary-hero{padding:3rem 1.5rem;background:linear-gradient(135deg,#0f0c29,#302b63,#24243e);border-radius:1rem;margin-bottom:2rem;text-align:center}
-    .glossary-hero h1{font-size:2.2rem;margin:0 0 .5rem;color:#fff}
-    .glossary-hero p{color:#c4b5fd;font-size:1.1rem;max-width:600px;margin:0 auto}
-    .glossary-hero .stat{display:inline-block;margin-top:1rem;background:rgba(99,102,241,.3);color:#a5b4fc;padding:.4rem 1.2rem;border-radius:9999px;font-size:.9rem}
-    .glossary-nav{display:flex;flex-wrap:wrap;gap:.5rem;margin-bottom:2rem;justify-content:center}
-    .glossary-nav a{background:#1e1b4b;color:#a5b4fc;padding:.4rem 1rem;border-radius:9999px;font-size:.85rem;transition:all .2s}
-    .glossary-nav a:hover{background:#312e81;color:#fff;transform:translateY(-1px)}
-    .related-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:1rem}
-    .related-card{background:#1e1b4b;border-radius:.75rem;padding:1rem;transition:all .2s}
-    .related-card:hover{background:#312e81;transform:translateY(-2px)}
-    .related-card a{color:#a5b4fc;text-decoration:none;font-weight:600;display:block;margin-bottom:.25rem}
-    .related-card p{font-size:.8rem;color:#8b8b9e;margin:0;line-height:1.4}
-    @media(max-width:640px){.glossary-hero{padding:2rem 1rem}.glossary-hero h1{font-size:1.6rem}.related-grid{grid-template-columns:1fr}}
-    .cta-box{border:1px solid #4f46e5;margin:2rem 0}
+    body {
+      background: var(--bg-page);
+      color: var(--text-primary);
+      font-family: var(--font);
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .glossary-hero {
+      text-align: center;
+      padding: var(--space-12) var(--space-6) var(--space-8);
+      background: radial-gradient(ellipse at center, rgba(0, 242, 255, 0.06), transparent 70%);
+    }
+    .glossary-hero h1 {
+      font-size: clamp(2rem, 5vw, 2.8rem);
+      font-weight: 800;
+      letter-spacing: var(--tracking-display);
+      line-height: 1.1;
+      max-width: 700px;
+      margin: 0 auto var(--space-4);
+    }
+    .glossary-hero p {
+      color: var(--text-secondary);
+      font-size: 1.05rem;
+      max-width: 600px;
+      margin: 0 auto;
+    }
+
+    .glossary-section {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 0 var(--space-6) var(--space-12);
+    }
+
+    .glossary-search {
+      margin-bottom: var(--space-8);
+    }
+    .glossary-search input {
+      width: 100%;
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: var(--space-3) var(--space-4);
+      color: var(--text-primary);
+      font-family: var(--font);
+      font-size: 1rem;
+      transition: border-color var(--transition-fast);
+    }
+    .glossary-search input:focus {
+      outline: none;
+      border-color: var(--cyan);
+    }
+
+    .alphabet-nav {
+      display: flex;
+      gap: var(--space-1);
+      flex-wrap: wrap;
+      margin-bottom: var(--space-8);
+      padding-bottom: var(--space-4);
+      border-bottom: 1px solid var(--border);
+    }
+    .alphabet-nav a {
+      color: var(--text-muted);
+      text-decoration: none;
+      padding: var(--space-1) var(--space-2);
+      border-radius: var(--radius-sm);
+      font-size: 0.85rem;
+      font-weight: 500;
+      transition: all var(--transition-fast);
+    }
+    .alphabet-nav a:hover { color: var(--cyan); background: rgba(0, 242, 255, 0.06); }
+
+    .glossary-list {
+      list-style: none;
+      padding: 0;
+    }
+    .glossary-list li {
+      padding: var(--space-3) 0;
+      border-bottom: 1px solid var(--border);
+    }
+    .glossary-list li:last-child { border-bottom: none; }
+    .glossary-list a {
+      color: var(--text-primary);
+      text-decoration: none;
+      font-weight: 500;
+      transition: color var(--transition-fast);
+    }
+    .glossary-list a:hover { color: var(--cyan); }
+    .glossary-list .def {
+      display: block;
+      color: var(--text-muted);
+      font-size: 0.85rem;
+      margin-top: var(--space-1);
+      line-height: 1.5;
+    }
   </style>
 </head>
 <body>
 
-  <header class="header">
-    <a href="/">⚡ YT SEO Architect</a>
-    <a href="/tools/" class="cta">Free Tools</a>
+  <!-- Skip to content -->
+  <a href="#main-content" class="skip-link">Skip to content</a>
+
+  <!-- Shared Header -->
+  <header class="site-header">
+    <div class="header-inner">
+      <a href="/" class="header-logo">
+        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#00f2ff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="9.75 15.02 15.5 12 9.75 8.98 9.75 15.02"/><circle cx="12" cy="12" r="10"/></svg>
+        YT <span>SEO</span> Architect
+      </a>
+      <nav class="header-nav" id="header-nav">
+        <a href="/tools.html">Tools</a>
+        <a href="/blog">Blog</a>
+        <a href="/public/glossary" class="active">Glossary</a>
+        <a href="/public/tools">Free Tools</a>
+        <a href="/dashboard.html" class="header-cta">Dashboard</a>
+      </nav>
+      <button class="mobile-menu-btn" aria-label="Menu" onclick="document.getElementById('header-nav').classList.toggle('open')">☰</button>
+    </div>
   </header>
 
-  <main>
-  <div class="glossary-hero">
-    <h1>📖 YouTube SEO Glossary</h1>
-    <p>75+ terms defined, explained, and optimized for YouTube creators. Click any term for a full definition with optimization tips.</p>
-    <div class="stat">75 terms · 6 categories · Free</div>
+  <!-- Breadcrumbs -->
+  <div class="breadcrumbs">
+    <a href="/">Home</a>
+    <span class="sep">/</span>
+    <span class="current">Glossary</span>
   </div>
 
-  <nav class="glossary-nav" aria-label="Category navigation">
-    <a href="#analytics">📊 Analytics</a>
-    <a href="#algorithm">🤖 Algorithm</a>
-    <a href="#seo-optimization">🔍 SEO & Optimization</a>
-    <a href="#monetization">💰 Monetization</a>
-    <a href="#content-strategy">📝 Content Strategy</a>
-    <a href="#youtube-features">⚙️ YouTube Features</a>
-    <a href="/blog/" style="background:#312e81">📝 Blog</a>
-    <a href="/tools/" style="background:#312e81">🛠️ Tools</a>
-  </nav>
+  <main id="main-content">
 
-  
-    <section id="analytics">
-      <h2 style="color:#e0e7ff;font-size:1.3rem;margin:2rem 0 1rem;display:flex;align-items:center;gap:.5rem">
-        📊 Analytics
-        <span style="font-size:.8rem;color:#8b8b9e;font-weight:400">(9 terms)</span>
-      </h2>
-      <div class="related-grid">
-        <div class="related-card">
-        <a href="/glossary/click-through-rate">Click-Through Rate (CTR)</a>
-        <p>The percentage of viewers who click on your video after seeing it in search results, suggested videos, or the homepage....</p>
-      </div>
-        <div class="related-card">
-        <a href="/glossary/average-view-duration">Average View Duration (AVD)</a>
-        <p>The average minutes a viewer watches your video before leaving. Higher AVD signals engaging content to the algorithm....</p>
-      </div>
-        <div class="related-card">
-        <a href="/glossary/audience-retention">Audience Retention</a>
-        <p>A graph showing what percentage of viewers watch each moment of your video. Used to identify where viewers lose interest...</p>
-      </div>
-        <div class="related-card">
-        <a href="/glossary/watch-time">Watch Time</a>
-        <p>Total minutes viewers have spent watching your videos. Combined channel watch time is a key monetization and ranking met...</p>
-      </div>
-        <div class="related-card">
-        <a href="/glossary/impressions">Impressions</a>
-        <p>The number of times your video thumbnail is shown to viewers across search, suggested videos, homepage, and other surfac...</p>
-      </div>
-        <div class="related-card">
-        <a href="/glossary/audience-demographics">Audience Demographics</a>
-        <p>Age, gender, location, and device data about your viewers available in YouTube Analytics Studio....</p>
-      </div>
-        <div class="related-card">
-        <a href="/glossary/traffic-sources">Traffic Sources</a>
-        <p>The channels through which viewers find your videos — YouTube Search, Suggested Videos, Browse, External, Playlists, and...</p>
-      </div>
-        <div class="related-card">
-        <a href="/glossary/youtube-analytics">YouTube Analytics Studio</a>
-        <p>YouTube's built-in analytics dashboard providing detailed metrics on channel and video performance, audience behavior, a...</p>
-      </div>
-        <div class="related-card">
-        <a href="/glossary/external-traffic">External Traffic</a>
-        <p>Views that come from websites, social media, or apps outside of YouTube, including embedded videos and shared links....</p>
-      </div>
-      </div>
-    </section>
-    <section id="algorithm">
-      <h2 style="color:#e0e7ff;font-size:1.3rem;margin:2rem 0 1rem;display:flex;align-items:center;gap:.5rem">
-        🤖 Algorithm
-        <span style="font-size:.8rem;color:#8b8b9e;font-weight:400">(8 terms)</span>
-      </h2>
-      <div class="related-grid">
-        <div class="related-card">
-        <a href="/glossary/youtube-algorithm">YouTube Algorithm</a>
-        <p>The recommendation system that decides which videos appear in search results, suggested videos, and the homepage for eac...</p>
-      </div>
-        <div class="related-card">
-        <a href="/glossary/session-time">Session Time</a>
-        <p>Total time a viewer spends on YouTube after watching your video. The algorithm prioritizes videos that keep people watch...</p>
-      </div>
-        <div class="related-card">
-        <a href="/glossary/youtube-search-ranking-factors">YouTube Search Ranking Factors</a>
-        <p>The signals YouTube's search algorithm uses to determine which videos rank highest for a given search query....</p>
-      </div>
-        <div class="related-card">
-        <a href="/glossary/dwell-time">Dwell Time</a>
-        <p>How long a viewer spends watching your video before returning to search results. Longer dwell time signals relevance to ...</p>
-      </div>
-        <div class="related-card">
-        <a href="/glossary/topic-authority">Topic Authority</a>
-        <p>YouTube's assessment of your channel's expertise in a specific topic area, built through consistent, comprehensive cover...</p>
-      </div>
-        <div class="related-card">
-        <a href="/glossary/shorts-algorithm">Shorts Algorithm</a>
-        <p>The separate recommendation system for Shorts that prioritizes swipe-through rate, loop rate, and first-2-second retenti...</p>
-      </div>
-        <div class="related-card">
-        <a href="/glossary/youtube-trending">YouTube Trending Tab</a>
-        <p>A curated section on YouTube showing currently popular videos, personalized by region and based on engagement velocity....</p>
-      </div>
-        <div class="related-card">
-        <a href="/glossary/browse-features">Browse Features (Homepage)</a>
-        <p>YouTube's homepage recommendation surface showing personalized video suggestions to logged-in users based on their viewi...</p>
-      </div>
-      </div>
-    </section>
-    <section id="seo-optimization">
-      <h2 style="color:#e0e7ff;font-size:1.3rem;margin:2rem 0 1rem;display:flex;align-items:center;gap:.5rem">
-        🔍 SEO & Optimization
-        <span style="font-size:.8rem;color:#8b8b9e;font-weight:400">(19 terms)</span>
-      </h2>
-      <div class="related-grid">
-        <div class="related-card">
-        <a href="/glossary/youtube-keyword-research">YouTube Keyword Research</a>
-        <p>Finding search terms your target audience uses on YouTube to discover content, then optimizing videos to rank for those ...</p>
-      </div>
-        <div class="related-card">
-        <a href="/glossary/long-tail-keywords">Long-Tail Keywords</a>
-        <p>Specific, multi-word search phrases (4+ words) that have lower search volume but higher conversion rates and less compet...</p>
-      </div>
-        <div class="related-card">
-        <a href="/glossary/search-volume">Search Volume</a>
-        <p>The number of times a keyword is searched on YouTube per month. Higher volume means more potential viewers but typically...</p>
-      </div>
-        <div class="related-card">
-        <a href="/glossary/keyword-difficulty">Keyword Difficulty</a>
-        <p>A score (0-100) estimating how hard it is to rank for a keyword based on competition from established videos and channel...</p>
-      </div>
-        <div class="related-card">
-        <a href="/glossary/title-optimization">Title Optimization</a>
-        <p>Writing video titles that include target keywords while maximizing click-through rate through emotional triggers and cur...</p>
-      </div>
-        <div class="related-card">
-        <a href="/glossary/youtube-tags">YouTube Tags</a>
-        <p>Keywords added to video metadata to help YouTube understand the content and context of your video for search and recomme...</p>
-      </div>
-        <div class="related-card">
-        <a href="/glossary/description-optimization">Description Optimization</a>
-        <p>Structuring video descriptions with target keywords, timestamps, links, and CTAs to improve search ranking and viewer en...</p>
-      </div>
-        <div class="related-card">
-        <a href="/glossary/transcript-seo">Transcript SEO</a>
-        <p>Using your video's auto-generated captions and transcript as SEO content that YouTube indexes and matches to search quer...</p>
-      </div>
-        <div class="related-card">
-        <a href="/glossary/thumbnail-optimization">Thumbnail Optimization</a>
-        <p>Designing custom video thumbnails that increase click-through rate through contrast, emotion, text, and visual hierarchy...</p>
-      </div>
-        <div class="related-card">
-        <a href="/glossary/video-chapters">Video Chapters / Timestamps</a>
-        <p>Time-stamped sections in video descriptions that let viewers jump to specific parts and appear as search result links....</p>
-      </div>
-        <div class="related-card">
-        <a href="/glossary/closed-captions">Closed Captions (CC)</a>
-        <p>On-screen text of video dialogue that improves accessibility, SEO, and viewer engagement across languages....</p>
-      </div>
-        <div class="related-card">
-        <a href="/glossary/video-sitemap">Video Sitemap</a>
-        <p>An XML file that helps Google discover and index your video content with metadata like title, description, and duration....</p>
-      </div>
-        <div class="related-card">
-        <a href="/glossary/keyword-cannibalization">Keyword Cannibalization</a>
-        <p>When multiple videos on your channel compete for the same search keyword, splitting views and weakening your ranking pot...</p>
-      </div>
-        <div class="related-card">
-        <a href="/glossary/playlist-optimization">Playlist SEO</a>
-        <p>Optimizing YouTube playlists with keyword-rich titles and descriptions so they rank in search and trigger auto-play sess...</p>
-      </div>
-        <div class="related-card">
-        <a href="/glossary/mobile-seo">Mobile-First YouTube SEO</a>
-        <p>Optimizing video content for mobile viewers who watch on small screens with different browsing behavior than desktop use...</p>
-      </div>
-        <div class="related-card">
-        <a href="/glossary/vidiq-vs-tubebuddy">vidIQ vs TubeBuddy</a>
-        <p>The two most popular YouTube SEO tools compared — vidIQ offers AI features and channel audits, while TubeBuddy excels at...</p>
-      </div>
-        <div class="related-card">
-        <a href="/glossary/video-backlinks">Video Backlinks</a>
-        <p>Links from other websites to your YouTube videos or channel that improve search authority both on YouTube and Google....</p>
-      </div>
-        <div class="related-card">
-        <a href="/glossary/youtube-hashtags">YouTube Hashtags</a>
-        <p>Clickable keyword tags in video titles and descriptions that help categorize content and appear in hashtag-specific sear...</p>
-      </div>
-        <div class="related-card">
-        <a href="/glossary/playlist-discovery">Playlist Discovery</a>
-        <p>How viewers find and interact with YouTube playlists — through search, suggested videos, channel pages, and auto-play fe...</p>
-      </div>
-      </div>
-    </section>
-    <section id="monetization">
-      <h2 style="color:#e0e7ff;font-size:1.3rem;margin:2rem 0 1rem;display:flex;align-items:center;gap:.5rem">
-        💰 Monetization
-        <span style="font-size:.8rem;color:#8b8b9e;font-weight:400">(9 terms)</span>
-      </h2>
-      <div class="related-grid">
-        <div class="related-card">
-        <a href="/glossary/revenue-per-mille">Revenue Per Mille (RPM)</a>
-        <p>Your total estimated revenue per 1,000 video views, including ad revenue, memberships, and Super Chat combined....</p>
-      </div>
-        <div class="related-card">
-        <a href="/glossary/cost-per-mille">Cost Per Mille (CPM)</a>
-        <p>The amount advertisers pay per 1,000 ad impressions on your videos. You earn 55% of this after YouTube's cut....</p>
-      </div>
-        <div class="related-card">
-        <a href="/glossary/youtube-partner-program">YouTube Partner Program (YPP)</a>
-        <p>YouTube's monetization program that lets creators earn revenue from ads, memberships, and other features after meeting e...</p>
-      </div>
-        <div class="related-card">
-        <a href="/glossary/ad-revenue">Ad Revenue</a>
-        <p>Money earned from ads displayed on your videos, split 55/45 between creator and YouTube after advertiser payments....</p>
-      </div>
-        <div class="related-card">
-        <a href="/glossary/demonetization">Demonetization</a>
-        <p>When YouTube removes ads from a video or channel due to content that violates advertiser-friendly guidelines....</p>
-      </div>
-        <div class="related-card">
-        <a href="/glossary/shorts-monetization">Shorts Monetization</a>
-        <p>The specific requirements and revenue rules for earning money from YouTube Shorts, including the Shorts Fund and ad reve...</p>
-      </div>
-        <div class="related-card">
-        <a href="/glossary/super-chat">Super Chat & Super Stickers</a>
-        <p>Paid chat messages highlighted during live streams and Premieres. Creators earn 70% of the revenue from each purchase....</p>
-      </div>
-        <div class="related-card">
-        <a href="/glossary/channel-memberships">Channel Memberships</a>
-        <p>Monthly subscription tiers where viewers pay for exclusive perks like badges, emoji, and members-only content from your ...</p>
-      </div>
-        <div class="related-card">
-        <a href="/glossary/mid-roll-ads">Mid-Roll Ads</a>
-        <p>Ad breaks placed during a video (8+ minutes required) that significantly increase ad revenue compared to pre- and post-r...</p>
-      </div>
-      </div>
-    </section>
-    <section id="content-strategy">
-      <h2 style="color:#e0e7ff;font-size:1.3rem;margin:2rem 0 1rem;display:flex;align-items:center;gap:.5rem">
-        📝 Content Strategy
-        <span style="font-size:.8rem;color:#8b8b9e;font-weight:400">(16 terms)</span>
-      </h2>
-      <div class="related-grid">
-        <div class="related-card">
-        <a href="/glossary/video-hook">Video Hook</a>
-        <p>The first 5-15 seconds of a video designed to grab viewer attention and convince them to keep watching past the initial ...</p>
-      </div>
-        <div class="related-card">
-        <a href="/glossary/content-pillar">Content Pillar</a>
-        <p>A core topic your channel consistently creates videos about, forming the foundation of your content strategy and audienc...</p>
-      </div>
-        <div class="related-card">
-        <a href="/glossary/evergreen-content">Evergreen Content</a>
-        <p>Videos that remain relevant and searchable for months or years after publication, consistently generating views without ...</p>
-      </div>
-        <div class="related-card">
-        <a href="/glossary/channel-audit">Channel Audit</a>
-        <p>A systematic review of your YouTube channel's performance, SEO, content gaps, and growth opportunities across all metric...</p>
-      </div>
-        <div class="related-card">
-        <a href="/glossary/competitor-analysis">Competitor Analysis</a>
-        <p>Analyzing competing YouTube channels to identify their strengths, weaknesses, keyword targets, and content strategies yo...</p>
-      </div>
-        <div class="related-card">
-        <a href="/glossary/content-gap-analysis">Content Gap Analysis</a>
-        <p>Finding topics your audience searches for that your competitors haven't covered, creating opportunities for high-impact ...</p>
-      </div>
-        <div class="related-card">
-        <a href="/glossary/call-to-action">Call to Action (CTA)</a>
-        <p>A prompt telling viewers to take a specific action — subscribe, watch another video, comment, or visit a link — placed s...</p>
-      </div>
-        <div class="related-card">
-        <a href="/glossary/video-intro-structure">Video Intro Structure</a>
-        <p>The optimal structure for the opening of a YouTube video that maximizes retention and sets clear expectations for viewer...</p>
-      </div>
-        <div class="related-card">
-        <a href="/glossary/channel-branding">Channel Branding</a>
-        <p>The visual identity of your YouTube channel including banner art, profile picture, watermark, and consistent video style...</p>
-      </div>
-        <div class="related-card">
-        <a href="/glossary/trending-content">Trending Content Strategy</a>
-        <p>Creating videos about current trends, viral topics, or news events to capture search spikes and algorithm boosts from hi...</p>
-      </div>
-        <div class="related-card">
-        <a href="/glossary/content-repurposing">Content Repurposing</a>
-        <p>Adapting existing content into different formats (blog post to video, long-form to Shorts) to maximize reach across plat...</p>
-      </div>
-        <div class="related-card">
-        <a href="/glossary/batch-production">Batch Production</a>
-        <p>Recording multiple videos in a single session to improve efficiency, maintain consistency, and establish a reliable uplo...</p>
-      </div>
-        <div class="related-card">
-        <a href="/glossary/content-calendar">Content Calendar</a>
-        <p>A schedule planning when to publish each video, organized around content pillars, trending opportunities, and audience a...</p>
-      </div>
-        <div class="related-card">
-        <a href="/glossary/cross-promotion">Cross-Promotion</a>
-        <p>Promoting your content across multiple platforms (social media, email, other channels) to drive external traffic to your...</p>
-      </div>
-        <div class="related-card">
-        <a href="/glossary/collaboration">Collaboration</a>
-        <p>Creating videos with other YouTubers to cross-pollinate audiences, gain subscribers, and build authority through associa...</p>
-      </div>
-        <div class="related-card">
-        <a href="/glossary/channel-trailer">Channel Trailer</a>
-        <p>A short introductory video (60-90 seconds) that auto-plays for non-subscribed visitors and explains what your channel of...</p>
-      </div>
-      </div>
-    </section>
-    <section id="youtube-features">
-      <h2 style="color:#e0e7ff;font-size:1.3rem;margin:2rem 0 1rem;display:flex;align-items:center;gap:.5rem">
-        ⚙️ YouTube Features
-        <span style="font-size:.8rem;color:#8b8b9e;font-weight:400">(14 terms)</span>
-      </h2>
-      <div class="related-grid">
-        <div class="related-card">
-        <a href="/glossary/youtube-shorts">YouTube Shorts</a>
-        <p>Vertical short-form videos (up to 60 seconds) that compete with TikTok and Instagram Reels, with unique algorithm and mo...</p>
-      </div>
-        <div class="related-card">
-        <a href="/glossary/cards-end-screens">Cards and End Screens</a>
-        <p>Interactive elements on YouTube videos that link viewers to other videos, playlists, channels, or external sites during ...</p>
-      </div>
-        <div class="related-card">
-        <a href="/glossary/ab-testing">A/B Testing (Thumbnail Testing)</a>
-        <p>Testing multiple versions of a video thumbnail by showing different variants to segments of your audience and comparing ...</p>
-      </div>
-        <div class="related-card">
-        <a href="/glossary/youtube-live-stream">YouTube Live Stream</a>
-        <p>Real-time video broadcasting on YouTube that generates high engagement, notification triggers, and dedicated revenue thr...</p>
-      </div>
-        <div class="related-card">
-        <a href="/glossary/premieres">Premieres</a>
-        <p>A scheduled first-time video debut that combines the live experience of a stream (real-time chat) with polished pre-reco...</p>
-      </div>
-        <div class="related-card">
-        <a href="/glossary/community-tab">Community Tab</a>
-        <p>A social feed on your channel where you can post text updates, polls, images, and videos to engage subscribers between u...</p>
-      </div>
-        <div class="related-card">
-        <a href="/glossary/vertical-video">Vertical Video (9:16)</a>
-        <p>Video shot in portrait orientation (9:16 aspect ratio) optimized for mobile-first viewing on YouTube Shorts and mobile f...</p>
-      </div>
-        <div class="related-card">
-        <a href="/glossary/gaming-on-youtube">Gaming on YouTube</a>
-        <p>The dedicated YouTube gaming category with unique features like gaming-specific analytics and the Gaming homepage tab....</p>
-      </div>
-        <div class="related-card">
-        <a href="/glossary/youtube-studio">YouTube Studio</a>
-        <p>The creator dashboard for managing videos, reading comments, analyzing performance, and configuring channel settings....</p>
-      </div>
-        <div class="related-card">
-        <a href="/glossary/youtube-premium">YouTube Premium</a>
-        <p>A paid subscription that removes ads, enables background playback, and provides access to YouTube Music Premium....</p>
-      </div>
-        <div class="related-card">
-        <a href="/glossary/creator-music">YouTube Creator Music</a>
-        <p>YouTube's library of licensed music that creators can use in videos without copyright claims, with revenue-sharing optio...</p>
-      </div>
-        <div class="related-card">
-        <a href="/glossary/copyright-claims">Copyright Claims & Strikes</a>
-        <p>Legal actions on your videos when you use copyrighted content without permission. Claims affect monetization; strikes ca...</p>
-      </div>
-        <div class="related-card">
-        <a href="/glossary/community-guidelines">Community Guidelines</a>
-        <p>YouTube's rules prohibiting harmful content like harassment, misinformation, violence, and spam. Violations can result i...</p>
-      </div>
-        <div class="related-card">
-        <a href="/glossary/youtube-creator-academy">YouTube Creator Academy</a>
-        <p>YouTube's free educational platform with courses on channel growth, content strategy, monetization, and production best ...</p>
-      </div>
-      </div>
+    <section class="glossary-hero reveal">
+      <h1 class="gradient-text">YouTube SEO Glossary</h1>
+      <p>600+ terms, definitions, and optimization guides for YouTube creators. Search any term or browse by letter.</p>
     </section>
 
-  <div class="cta-box cta-bottom">
-    <h3>🚀 Put This Knowledge Into Action</h3>
-    <p>Use YT SEO Architect's free tools to apply what you've learned — optimize titles, tags, descriptions, and more.</p>
-    <a href="/tools/">Try Free Tools →</a>
-    <a href="/blog/" style="margin-left:1rem">Read Blog Guides →</a>
-  </div>
+    <div class="glossary-section">
+      <div class="glossary-search">
+        <input type="text" id="glossarySearch" placeholder="Search glossary terms..." aria-label="Search glossary" oninput="filterGlossary(this.value)">
+      </div>
+
+      <div class="alphabet-nav" id="alphabetNav">
+        <a href="#a">A</a>
+        <a href="#b">B</a>
+        <a href="#c">C</a>
+        <a href="#d">D</a>
+        <a href="#e">E</a>
+        <a href="#f">F</a>
+        <a href="#g">G</a>
+        <a href="#h">H</a>
+        <a href="#i">I</a>
+        <a href="#j">J</a>
+        <a href="#k">K</a>
+        <a href="#l">L</a>
+        <a href="#m">M</a>
+        <a href="#n">N</a>
+        <a href="#o">O</a>
+        <a href="#p">P</a>
+        <a href="#q">Q</a>
+        <a href="#r">R</a>
+        <a href="#s">S</a>
+        <a href="#t">T</a>
+        <a href="#u">U</a>
+        <a href="#v">V</a>
+        <a href="#w">W</a>
+        <a href="#x">X</a>
+        <a href="#y">Y</a>
+        <a href="#z">Z</a>
+      </div>
+
+      <ul class="glossary-list" id="glossaryList">
+        <li>
+          <a href="/public/glossary/ab-testing.html">A/B Testing <span class="def">Method of comparing two versions of a thumbnail, title, or video to determine which performs better.</span></a>
+        </li>
+        <li>
+          <a href="/public/glossary/ad-revenue.html">Ad Revenue <span class="def">Income generated from advertisements displayed on your YouTube videos through the YouTube Partner Program.</span></a>
+        </li>
+        <li>
+          <a href="/public/glossary/audience-demographics.html">Audience Demographics <span class="def">Statistical data about your viewers including age, gender, location, and interests used to tailor content strategy.</span></a>
+        </li>
+        <li>
+          <a href="/public/glossary/audience-retention.html">Audience Retention <span class="def">Metric measuring how much of your video viewers watch, expressed as a percentage of total video length.</span></a>
+        </li>
+        <li>
+          <a href="/public/glossary/average-view-duration.html">Average View Duration <span class="def">The average length of time viewers spend watching a single video, a key ranking factor for YouTube.</span></a>
+        </li>
+        <li>
+          <a href="/public/glossary/badges.html">Badges <span class="def">Digital awards displayed on channel pages and next to usernames in chat, earned through milestones and memberships.</span></a>
+        </li>
+        <li>
+          <a href="/public/glossary/browse-features.html">Browse Features <span class="def">YouTube's homepage and suggested video sections that recommend content based on user behavior and preferences.</span></a>
+        </li>
+        <li>
+          <a href="/public/glossary/call-to-action.html">Call to Action (CTA) <span class="def">Prompt encouraging viewers to like, comment, subscribe, or take a specific action during or after a video.</span></a>
+        </li>
+        <li>
+          <a href="/public/glossary/cards-end-screens.html">Cards &amp; End Screens <span class="def">Interactive elements that promote other videos, playlists, or external links during and at the end of your video.</span></a>
+        </li>
+        <li>
+          <a href="/public/glossary/channel-memberships.html">Channel Memberships <span class="def">Subscription program where viewers pay a monthly fee for exclusive badges, emoji, and content from creators.</span></a>
+        </li>
+        <li>
+          <a href="/public/glossary/click-through-rate.html">Click-Through Rate (CTR) <span class="def">Percentage of impressions that result in a video view, measuring thumbnail and title effectiveness.</span></a>
+        </li>
+        <li>
+          <a href="/public/glossary/community-posts.html">Community Posts <span class="def">Text, image, and poll updates that creators can share with their subscribers outside of video uploads.</span></a>
+        </li>
+        <li>
+          <a href="/public/glossary/description-optimization.html">Description Optimization <span class="def">Practice of writing detailed, keyword-rich video descriptions to improve search ranking and viewer understanding.</span></a>
+        </li>
+        <li>
+          <a href="/public/glossary/engagement-rate.html">Engagement Rate <span class="def">Metric combining likes, comments, and shares relative to views or impressions to measure audience interaction.</span></a>
+        </li>
+        <li>
+          <a href="/public/glossary/hashtags.html">Hashtags <span class="def">Keywords prefixed with # that help categorize videos and improve discoverability in YouTube search.</span></a>
+        </li>
+        <li>
+          <a href="/public/glossary/impressions.html">Impressions <span class="def">Number of times your video thumbnail is shown to viewers on YouTube, before they click or ignore it.</span></a>
+        </li>
+        <li>
+          <a href="/public/glossary/keyword-research.html">Keyword Research <span class="def">Process of finding search terms viewers use to discover content, forming the foundation of YouTube SEO strategy.</span></a>
+        </li>
+        <li>
+          <a href="/public/glossary/monetization.html">Monetization <span class="def">Process of earning money from YouTube content through ads, memberships, Super Chat, and other revenue streams.</span></a>
+        </li>
+        <li>
+          <a href="/public/glossary/playlist-optimization.html">Playlist Optimization <span class="def">Strategy of organizing videos into themed playlists with optimized titles and descriptions to increase watch time.</span></a>
+        </li>
+        <li>
+          <a href="/public/glossary/subscriber-growth.html">Subscriber Growth <span class="def">Rate at which a channel gains new subscribers over time, a key metric for channel health and monetization eligibility.</span></a>
+        </li>
+        <li>
+          <a href="/public/glossary/tags.html">Tags <span class="def">Keywords added to video metadata that help YouTube understand video content and context for search ranking.</span></a>
+        </li>
+        <li>
+          <a href="/public/glossary/thumbnail.html">Thumbnail <span class="def">Custom clickable image representing a video, considered the most important factor for click-through rate.</span></a>
+        </li>
+        <li>
+          <a href="/public/glossary/watch-time.html">Watch Time <span class="def">Total minutes viewers spend watching your content, a primary ranking signal for YouTube's algorithm.</span></a>
+        </li>
+        <li>
+          <a href="/public/glossary/youtube-partner-program.html">YouTube Partner Program (YPP) <span class="def">Program that allows creators to monetize their content through ads, memberships, and other revenue features.</span></a>
+        </li>
+      </ul>
+    </div>
 
   </main>
 
-  <footer class="footer">
-    <p>© 2026 YT SEO Architect · <a href="/glossary/">Glossary</a> · <a href="/blog">Blog</a> · <a href="/tools/">Free Tools</a> · <a href="/privacy-policy">Privacy</a></p>
+  <!-- Footer -->
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <div class="footer-col">
+        <h4>Product</h4>
+        <a href="/public/tools">Free Tools</a>
+        <a href="/dashboard.html">Dashboard</a>
+        <a href="/changelog.html">Changelog</a>
+      </div>
+      <div class="footer-col">
+        <h4>Resources</h4>
+        <a href="/blog">Blog</a>
+        <a href="/public/glossary">Glossary</a>
+        <a href="/public/guides">Guides</a>
+      </div>
+      <div class="footer-col">
+        <h4>Company</h4>
+        <a href="/about.html">About</a>
+        <a href="/contact.html">Contact</a>
+        <a href="/privacy-policy.html">Privacy</a>
+        <a href="/terms-of-service.html">Terms</a>
+      </div>
+      <div class="footer-col">
+        <h4>Social</h4>
+        <a href="https://twitter.com/YTSEOArchitect" target="_blank" rel="noopener">Twitter / X</a>
+        <a href="https://youtube.com" target="_blank" rel="noopener">YouTube</a>
+        <a href="https://github.com/nhlaka3" target="_blank" rel="noopener">GitHub</a>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>&copy; 2026 YT SEO Architect. All rights reserved.</span>
+      <div class="footer-social">
+        <a href="https://twitter.com/YTSEOArchitect" target="_blank" rel="noopener" aria-label="Twitter">𝕏</a>
+        <a href="https://github.com/nhlaka3" target="_blank" rel="noopener" aria-label="GitHub">GH</a>
+      </div>
+    </div>
   </footer>
 
+  <script defer src="/js/blog-enhancements.js"></script>
+  <script>
+    function filterGlossary(query) {
+      var q = query.toLowerCase();
+      document.querySelectorAll('.glossary-list li').forEach(function(item) {
+        item.style.display = item.textContent.toLowerCase().includes(q) ? '' : 'none';
+      });
+    }
+  </script>
 </body>
 </html>
