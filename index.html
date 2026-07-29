@@ -173,65 +173,32 @@
   <link href="https://fonts.googleapis.com/css2?family=Geist:wght@100..900&display=swap" rel="stylesheet" />
   <link href="https://fonts.googleapis.com/css2?family=Geist+Mono:wght@100..900&display=swap" rel="stylesheet" />
   <script src="https://unpkg.com/lucide@0.460.0/dist/umd/lucide.min.js" crossorigin="anonymous" defer></script>
+  <link rel="stylesheet" href="design-tokens.css" media="print" onload="this.media='all'">
+  <link rel="stylesheet" href="utilities.css" media="print" onload="this.media='all'">
+  <link rel="stylesheet" href="nav.css" media="print" onload="this.media='all'">
+  <link rel="stylesheet" href="style.css" media="print" onload="this.media='all'">
+  <link rel="stylesheet" href="blog-article.css" media="print" onload="this.media='all'">
+  <noscript>
+    <link rel="stylesheet" href="design-tokens.css">
+    <link rel="stylesheet" href="utilities.css">
+    <link rel="stylesheet" href="nav.css">
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="blog-article.css">
+  </noscript>
   <style>
     :root {
        --primary: #00f2ff;
        --primary-hover: #00d7e6;
        --primary-glow: rgba(0, 242, 255, 0.3);
        --accent: #00ff88;
-       --accent-hover: #00e67a;
-       --accent-glow: rgba(0, 255, 136, 0.3);
-       --bg-dark: #0a0b10;
-       --bg-oled: #000000;
-       --bg-card: rgba(16, 20, 32, 0.6);
-       --surface-hover: rgba(16, 20, 32, 0.85);
-       --text-primary: #f0f2f5;
-       --text-muted: #a8b2c1;
-       --text-dim: #5d6676;
-       --border: rgba(0, 242, 255, 0.12);
-       --border-hover: rgba(0, 242, 255, 0.35);
-       --success: #00ff88;
-       --danger: #ff3366;
-       --font: 'Geist', 'Outfit', -apple-system, BlinkMacSystemFont, sans-serif;
-       --font-mono: 'Geist Mono', 'Fira Code', monospace;
-       --glass-shadow: 0 10px 40px -10px rgba(0, 0, 0, 0.9), 0 0 20px rgba(0, 242, 255, 0.05);
-       --glow-cyan: 0 0 25px rgba(0, 242, 255, 0.15);
-       --glow-green: 0 0 25px rgba(0, 255, 136, 0.15);
      }
-
-    @keyframes fadeInUp {
-        from { opacity: 0; transform: translateY(30px); }
-        to { opacity: 1; transform: translateY(0); }
-    }
-
-    @keyframes float {
-        0% { transform: translateY(0px); }
-        50% { transform: translateY(-10px); }
-        100% { transform: translateY(0px); }
-    }
-
-    @keyframes fadeIn {
-        from { opacity: 0; }
-        to { opacity: 1; }
-    }
-
-    @keyframes pulse-glow {
-        0%, 100% { box-shadow: 0 0 20px rgba(0, 242, 255, 0.3); }
-        50% { box-shadow: 0 0 40px rgba(0, 242, 255, 0.6); }
-    }
-
-    @keyframes pulse-ring {
-        0%   { transform: scale(1);   opacity: 0.7; }
-        70%  { transform: scale(1.45); opacity: 0; }
-        100% { transform: scale(1);   opacity: 0;   }
-    }
 
     * { margin: 0; padding: 0; box-sizing: border-box; }
 
     body {
       font-family: var(--font);
       font-display: swap;
-      background: var(--bg-oled);
+      background: var(--bg-page);
       color: var(--text-primary);
       min-height: 100vh;
       overflow-x: hidden;
@@ -253,74 +220,32 @@
        background: radial-gradient(circle at center, rgba(0, 242, 255, 0.06) 0%, transparent 50%);
        pointer-events: none;
        z-index: 0;
-       animation: float 10s ease-in-out infinite;
      }
 
-    header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 10px 0;
-      margin-bottom: 40px;
+    /* Homepage-specific styles (not in utilities) */
+    .hero-glow {
       position: relative;
-      z-index: 10;
+      --glow-x: 50%;
+      --glow-y: 50%;
     }
-
-    .logo {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      font-size: 1.5rem;
-      font-weight: 800;
-      letter-spacing: -0.05em;
+    .hero-glow::before {
+      content: '';
+      position: absolute;
+      top: -30%;
+      left: -20%;
+      width: 140%;
+      height: 140%;
+      background: radial-gradient(circle at var(--glow-x, 50%) var(--glow-y, 50%), rgba(0, 242, 255, 0.08), transparent 60%);
+      pointer-events: none;
+      z-index: 0;
     }
-
-    .logo i { color: var(--primary); filter: drop-shadow(0 0 8px var(--primary-glow)); }
-    .logo .text-accent { color: var(--accent); }
-
-    .header-nav { display: flex; align-items: center; gap: 1.25rem; }
-    .header-nav a {
-      color: var(--text-muted);
-      text-decoration: none;
-      font-weight: 600;
-      font-size: 0.9rem;
-      transition: color 0.2s;
-      display: flex;
-      align-items: center;
-      gap: 0.35rem;
-    }
-    .header-nav a:hover { color: var(--text); }
-    .header-nav a.nav-cta {
-      background: var(--primary);
-      color: #fff;
-      padding: 0.45rem 1rem;
-      border-radius: 8px;
-      font-size: 0.85rem;
-      transition: background 0.2s, transform 0.2s;
-    }
-    .header-nav a.nav-cta:hover { background: var(--primary-glow); transform: translateY(-1px); }
 
     .hero {
        text-align: center;
-       margin-bottom: 32px;
+       padding: 80px 20px 40px;
        position: relative;
        z-index: 1;
-       animation: fadeInUp 1s cubic-bezier(0.16, 1, 0.3, 1);
      }
-
-    .badge-new {
-      display: inline-block;
-      padding: 6px 16px;
-      background: rgba(0, 242, 255, 0.06);
-      border: 1px solid rgba(0, 242, 255, 0.2);
-      color: var(--primary);
-      border-radius: 99px;
-      font-size: 0.8rem;
-      font-weight: 600;
-      margin-bottom: 24px;
-      text-transform: uppercase;
-      letter-spacing: 0.05em;
-    }
 
     .hero h1 {
       font-size: clamp(2.5rem, 8vw, 4.5rem);
@@ -328,13 +253,6 @@
       line-height: 1.05;
       margin-bottom: 24px;
       letter-spacing: -0.04em;
-    }
-
-    .gradient-text {
-      background: linear-gradient(135deg, var(--text), var(--primary));
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
     }
 
     .hero p {
@@ -352,47 +270,6 @@
        flex-wrap: wrap;
      }
 
-    .btn {
-      padding: 16px 32px;
-      border-radius: 12px;
-      font-size: 1rem;
-      font-weight: 600;
-      cursor: pointer;
-      transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-      text-decoration: none;
-      display: inline-flex;
-      align-items: center;
-      gap: 12px;
-      border: none;
-    }
-
-    .btn-main {
-      background: var(--primary);
-      color: white;
-      box-shadow: 0 4px 20px rgba(0, 242, 255, 0.3);
-      animation: pulse-glow 2s ease-in-out infinite;
-    }
-
-    .btn-main:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 8px 30px rgba(0, 242, 255, 0.4);
-      filter: brightness(1.1);
-    }
-
-    .btn-outline {
-      background: rgba(255, 255, 255, 0.03);
-      color: white;
-      border: 1px solid var(--border);
-    }
-
-    .btn-outline:hover {
-      background: rgba(0, 242, 255, 0.08);
-      border-color: var(--primary);
-    }
-
-    .stat-num { font-size: 1.5rem; font-weight: 700; color: var(--primary); }
-    .stat-label { font-size: 0.8rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.05em; }
-
     .hero-stats {
       display: flex;
       justify-content: center;
@@ -406,36 +283,28 @@
       display: flex;
       flex-direction: column;
       gap: 4px;
+      align-items: center;
     }
-
-    .stat-num { font-size: 1.5rem; font-weight: 700; color: var(--primary); }
+    .stat-num { font-size: 1.5rem; font-weight: 700; color: var(--cyan); }
     .stat-label { font-size: 0.8rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.05em; }
 
     .pillars-section {
-      padding: 32px 0;
+      padding: 60px 0;
       text-align: center;
       position: relative;
       z-index: 1;
     }
-
     .pillars-section h2 {
-      font-size: 2.5rem;
+      font-size: clamp(2rem, 4vw, 2.5rem);
       font-weight: 800;
-      margin-bottom: 16px;
+      margin-bottom: 48px;
       letter-spacing: -0.03em;
-    }
-
-    .pillars-section > p {
-      color: var(--text-muted);
-      font-size: 1.1rem;
-      max-width: 600px;
-      margin: 0 auto 32px;
     }
 
     .pillars-grid {
        display: grid;
        grid-template-columns: repeat(3, 1fr);
-       gap: 20px;
+       gap: 24px;
        margin-bottom: 32px;
        max-width: 1000px;
        margin-left: auto;
@@ -443,31 +312,31 @@
      }
 
     .pillar-card {
-      background: var(--bg-card);
-      border: 1px solid var(--border);
-      border-radius: 24px;
+      display: block;
+      text-decoration: none;
+      background: var(--bg-surface);
+      backdrop-filter: blur(12px);
+      border: 1px solid var(--border-solid);
+      border-radius: var(--radius-xl);
       padding: 40px 32px;
       text-align: left;
-      transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+      transition: all var(--transition-normal);
       position: relative;
       overflow: hidden;
     }
-
     .pillar-card::before {
       content: '';
       position: absolute;
       inset: 0;
       background: radial-gradient(circle at top right, rgba(0, 242, 255, 0.08), transparent 70%);
       opacity: 0;
-      transition: opacity 0.4s ease;
+      transition: opacity var(--transition-normal);
     }
-
     .pillar-card:hover {
-      border-color: var(--primary);
+      border-color: var(--border-hover);
       transform: translateY(-8px);
-      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+      box-shadow: var(--card-shadow-hover);
     }
-
     .pillar-card:hover::before { opacity: 1; }
 
     .pillar-icon {
@@ -479,22 +348,20 @@
       align-items: center;
       justify-content: center;
       margin-bottom: 24px;
-      color: var(--primary);
-      transition: all 0.3s ease;
+      color: var(--cyan);
+      transition: all var(--transition-normal);
     }
-
     .pillar-card:hover .pillar-icon {
       transform: scale(1.1) rotate(5deg);
-      background: var(--primary);
-      color: white;
+      background: var(--cyan);
+      color: var(--bg-oled);
     }
-
-    .pillar-card h3 { font-size: 1.35rem; margin-bottom: 12px; font-weight: 700; color: white; }
-    .pillar-card .pillar-subtitle { font-size: 0.85rem; color: var(--primary); font-weight: 600; margin-bottom: 16px; text-transform: uppercase; letter-spacing: 0.05em; }
+    .pillar-card h3 { font-size: 1.35rem; margin-bottom: 12px; font-weight: 700; color: var(--text-white); }
+    .pillar-card .pillar-subtitle { font-size: 0.85rem; color: var(--cyan); font-weight: 600; margin-bottom: 16px; text-transform: uppercase; letter-spacing: 0.05em; }
     .pillar-card p { font-size: 0.95rem; color: var(--text-muted); line-height: 1.7; }
 
     .social-proof {
-      padding: 32px 0;
+      padding: 60px 0;
       text-align: center;
     }
 
@@ -862,23 +729,32 @@
     </div>
   </noscript>
 
-  <div class="signal-glow"></div>
+  <!-- Skip to content -->
+  <a href="#main-content" class="skip-link">Skip to content</a>
 
-  <div class="landing-container">
-    <header>
-      <div class="logo">
-        <i data-lucide="zap"></i>
-        YT SEO <span class="text-accent">Architect</span>
-      </div>
-      <nav class="header-nav" aria-label="Main navigation">
-        <a href="/tools/"><i data-lucide="tags" style="width:16px;height:16px;" aria-hidden="true"></i> Free Tools</a>
-        <a href="/glossary/"><i data-lucide="book" style="width:16px;height:16px;" aria-hidden="true"></i> Glossary</a>
-        <a href="/blog"><i data-lucide="book-open" style="width:16px;height:16px;" aria-hidden="true"></i> Blog</a>
-        <a href="/dashboard" class="nav-cta">Get Started Free</a>
+  <!-- Reading Progress Bar -->
+  <div class="reading-progress" id="reading-progress"></div>
+
+  <!-- Shared Header -->
+  <header class="site-header">
+    <div class="header-inner">
+      <a href="/" class="header-logo">
+        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#00f2ff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="9.75 15.02 15.5 12 9.75 8.98 9.75 15.02"/><circle cx="12" cy="12" r="10"/></svg>
+        YT <span>SEO</span> Architect
+      </a>
+      <nav class="header-nav" id="header-nav">
+        <a href="/tools.html">Tools</a>
+        <a href="/blog">Blog</a>
+        <a href="/public/glossary">Glossary</a>
+        <a href="/public/tools">Free Tools</a>
+        <a href="/dashboard.html" class="header-cta">Dashboard</a>
       </nav>
-    </header>
+      <button class="mobile-menu-btn" aria-label="Menu" onclick="document.getElementById('header-nav').classList.toggle('open')">☰</button>
+    </div>
+  </header>
 
-    <main id="main-content">
+  <!-- Main Content -->
+  <main id="main-content">
 
     <!-- Hero -->
     <section class="hero reveal reveal-fade-up" aria-labelledby="hero-heading">
@@ -1589,6 +1465,47 @@
     const style = document.createElement('style');
     style.textContent = '@keyframes spin { to { transform: rotate(360deg); } }';
     document.head.appendChild(style);
+  <!-- Footer -->
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <div class="footer-col">
+        <h4>Product</h4>
+        <a href="/public/tools">Free Tools</a>
+        <a href="/dashboard.html">Dashboard</a>
+        <a href="/changelog.html">Changelog</a>
+      </div>
+      <div class="footer-col">
+        <h4>Resources</h4>
+        <a href="/blog">Blog</a>
+        <a href="/public/glossary">Glossary</a>
+        <a href="/public/guides">Guides</a>
+      </div>
+      <div class="footer-col">
+        <h4>Company</h4>
+        <a href="/about.html">About</a>
+        <a href="/contact.html">Contact</a>
+        <a href="/privacy-policy.html">Privacy</a>
+        <a href="/terms-of-service.html">Terms</a>
+      </div>
+      <div class="footer-col">
+        <h4>Social</h4>
+        <a href="https://twitter.com/YTSEOArchitect" target="_blank" rel="noopener">Twitter / X</a>
+        <a href="https://youtube.com" target="_blank" rel="noopener">YouTube</a>
+        <a href="https://github.com/nhlaka3" target="_blank" rel="noopener">GitHub</a>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>&copy; 2026 YT SEO Architect. All rights reserved.</span>
+      <div class="footer-social">
+        <a href="https://twitter.com/YTSEOArchitect" target="_blank" rel="noopener" aria-label="Twitter">𝕏</a>
+        <a href="https://github.com/nhlaka3" target="_blank" rel="noopener" aria-label="GitHub">GH</a>
+      </div>
+    </div>
+  </footer>
+
+  <script defer src="/js/blog-enhancements.js"></script>
+  <script>
+    try { lucide.createIcons(); } catch(e) {}
   </script>
   <script type="module">
     import { inject } from 'https://cdn.jsdelivr.net/npm/@vercel/analytics@1/dist/index.mjs';
