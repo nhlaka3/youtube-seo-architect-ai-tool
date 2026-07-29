@@ -192,11 +192,28 @@ async function main() {
   if (added > 0) {
     // Regenerate HTML pages
     console.log('\n  Regenerating HTML pages...');
-    const { default: gen } = await import('./generate-niches.mjs');
-    // generate-niches already runs on import, but it won't auto-run
-    // So let's exec it
     const { execSync } = await import('child_process');
     execSync(`node '${PROJECT}/scripts/generate-niches.mjs'`, { stdio: 'inherit' });
+
+    // Auto-commit if --commit flag
+    if (COMMIT) {
+      try {
+        execSync(
+          `git config user.name "YT SEO Bot" && ` +
+          `git config user.email "hnhlaka142@gmail.com" && ` +
+          `git add scripts/niches-data.js public/niches/ && ` +
+          `git diff --cached --quiet || (` +
+          `git commit -m "discovery: new niches [skip ci]" && ` +
+          `git pull --rebase origin main 2>/dev/null || true && ` +
+          `git push origin HEAD:main 2>&1 || true)`,
+          { stdio: 'inherit', cwd: PROJECT }
+        );
+        console.log('\n  ✅ Committed and pushed.');
+      } catch (e) {
+        console.log(`  ⚠ Commit skipped: ${e.message}`);
+      }
+    }
+
     console.log('\n  ✅ All pages regenerated.');
   }
 }
