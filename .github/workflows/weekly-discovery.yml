@@ -2,7 +2,7 @@ name: 🔄 Weekly Content Discovery
 
 on:
   schedule:
-    - cron: '0 10 * * 3'     # 10:00 AM UTC every Wednesday
+    - cron: '0 10 * * 3'
   workflow_dispatch:
     inputs:
       count:
@@ -24,22 +24,43 @@ jobs:
       - uses: actions/setup-node@v4
         with: { node-version: '24' }
 
-      - name: 🔍 Discover new niches
-        continue-on-error: true
-        run: node scripts/auto-discover-niches.mjs --count ${{ github.event.inputs.count || '2' }} 2>&1
-
-      - name: 🔍 Discover new comparison tools
-        continue-on-error: true
-        run: node scripts/auto-discover-tools.mjs --count ${{ github.event.inputs.count || '2' }} 2>&1
-
-      - name: 📤 Commit and push discoveries
+      - name: 🔍 Discover and commit
         env:
           PUBLIC_REPO: https://x-access-token:${{ secrets.GH_PAT }}@github.com/nhlaka3/youtube-seo-architect-ai-tool.git
         run: |
+          COUNT=${{ github.event.inputs.count || '2' }}
+
+          echo "=== Discovering niches ==="
+          node scripts/auto-discover-niches.mjs --count $COUNT 2>&1 || true
+
+          echo "=== Discovering tools ==="
+          node scripts/auto-discover-tools.mjs --count $COUNT 2>&1 || true
+
+          echo "=== Checking git status ==="
           git config user.name "YT SEO Bot"
           git config user.email "hnhlaka142@gmail.com"
-          git add -A
-          git diff --cached --quiet || git commit -m "discovery: weekly auto-discovered content [skip ci]"
-          git push origin HEAD:main 2>&1 || echo "Push skipped (nothing to push)"
+
+          # Debug: check if files are actually different
+          echo "--- git status ---"
+          git status --porcelain || true
+          echo "--- git diff ---"
+          git diff --name-only || true
+          echo "--- wc -l files ---"
+          wc -l scripts/niches-data.js scripts/vs-data.js 2>/dev/null || true
+
+          # Try to add and commit
+          git add -A 2>&1 || true
+          git status --porcelain 2>&1 || true
+
+          CHANGES=$(git status --porcelain 2>/dev/null | wc -l)
+          if [ "$CHANGES" -gt 0 ]; then
+            echo "Changes found: $CHANGES"
+            git commit -m "discovery: weekly auto-discovered content [skip ci]"
+            git push origin HEAD:main 2>&1
+          else
+            echo "No git changes detected"
+          fi
+
+          # Always push to public (latest main, not modified)
           git remote add public "$PUBLIC_REPO" 2>/dev/null || true
-          git push public HEAD:main --force 2>&1 && echo "✅ Deployed to Vercel"
+          git push public HEAD:main --force 2>&1 && echo "✅ Pushed to public repo"
