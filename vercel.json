@@ -3,7 +3,7 @@
   "cleanUrls": true,
   "trailingSlash": false,
   "builds": [
-    { "src": "api/index.js", "use": "@vercel/node" },
+    { "src": "api/index.js", "use": "@vercel/node", "config": { "includeFiles": ["scripts/glossary-data.json"] } },
     { "src": "api/[...path].js", "use": "@vercel/node" },
     { "src": "package.json", "use": "@vercel/static-build", "config": { "distDir": "dist" } },
     { "src": "public/**", "use": "@vercel/static" }
