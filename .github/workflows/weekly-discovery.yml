@@ -22,54 +22,60 @@ permissions:
   contents: write
 
 jobs:
-  discover:
+  discover-niches:
+    if: ${{ github.event.inputs.niches != 'false' }}
     runs-on: ubuntu-latest
     env:
       GROQ_API_KEY: ${{ secrets.GROQ_API_KEY }}
-
     steps:
-      - name: ⬇️ Checkout private repo
-        uses: actions/checkout@v4
-        with:
-          token: ${{ secrets.GH_PAT }}
-          fetch-depth: 0
-
-      - name: 🔧 Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: '24'
-
+      - uses: actions/checkout@v4
+        with: { token: '${{ secrets.GH_PAT }}', fetch-depth: 0 }
+      - uses: actions/setup-node@v4
+        with: { node-version: '24' }
       - name: 🔍 Discover new niches
-        if: ${{ github.event.inputs.niches != 'false' }}
         continue-on-error: true
-        run: |
-          COUNT=${{ github.event.inputs.count || '2' }}
-          echo "🔍 Discovering $COUNT new niche(s)..."
-          node scripts/auto-discover-niches.mjs --count $COUNT 2>&1
-
-      - name: 🔍 Discover new comparison tools
-        if: ${{ github.event.inputs.tools != 'false' }}
-        continue-on-error: true
-        run: |
-          COUNT=${{ github.event.inputs.count || '2' }}
-          echo "🔍 Discovering $COUNT new tool(s)..."
-          node scripts/auto-discover-tools.mjs --count $COUNT 2>&1
-
-      - name: 📤 Push new discoveries to private repo
+        run: node scripts/auto-discover-niches.mjs --count ${{ github.event.inputs.count || '2' }} 2>&1
+      - name: 📤 Commit niche discoveries
         run: |
           git config user.name "YT SEO Bot"
           git config user.email "hnhlaka142@gmail.com"
-          git add scripts/niches-data.js scripts/vs-data.js public/niches/ public/vs/ public/guides/ public/tools/converters/
-          if git diff --staged --quiet; then
-            echo "✅ No new discoveries to commit"
-          else
-            git commit -m "discovery: weekly auto-discovered content [skip ci]"
-            git pull --rebase origin main 2>&1 || true
-            git push origin HEAD:main 2>&1
-            echo "✅ New discoveries committed and pushed"
-          fi
+          git add scripts/niches-data.js public/niches/
+          git diff --cached --quiet || git commit -m "discovery: new niches [skip ci]"
+          git pull --rebase origin main 2>&1 || true
+          git push origin HEAD:main 2>&1 || true
+          echo "✅ Niches committed if any"
 
-      - name: 🌐 Deploy to Vercel
+  discover-tools:
+    if: ${{ github.event.inputs.tools != 'false' }}
+    runs-on: ubuntu-latest
+    env:
+      GROQ_API_KEY: ${{ secrets.GROQ_API_KEY }}
+    steps:
+      - uses: actions/checkout@v4
+        with: { token: '${{ secrets.GH_PAT }}', fetch-depth: 0 }
+      - uses: actions/setup-node@v4
+        with: { node-version: '24' }
+      - name: 🔍 Discover new tools
+        continue-on-error: true
+        run: node scripts/auto-discover-tools.mjs --count ${{ github.event.inputs.count || '2' }} 2>&1
+      - name: 📤 Commit tool discoveries
+        run: |
+          git config user.name "YT SEO Bot"
+          git config user.email "hnhlaka142@gmail.com"
+          git add scripts/vs-data.js public/vs/
+          git diff --cached --quiet || git commit -m "discovery: new tools [skip ci]"
+          git pull --rebase origin main 2>&1 || true
+          git push origin HEAD:main 2>&1 || true
+          echo "✅ Tools committed if any"
+
+  deploy:
+    needs: [discover-niches, discover-tools]
+    if: always()
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with: { token: '${{ secrets.GH_PAT }}', fetch-depth: 0 }
+      - name: 🌐 Push to public repo
         env:
           PUBLIC_REPO: https://x-access-token:${{ secrets.GH_PAT }}@github.com/nhlaka3/youtube-seo-architect-ai-tool.git
         run: |
