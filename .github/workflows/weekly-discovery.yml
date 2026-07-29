@@ -40,17 +40,18 @@ jobs:
           git config user.name "YT SEO Bot"
           git config user.email "hnhlaka142@gmail.com"
 
-          # Debug: check if files are actually different
+          echo "--- pwd ---"
+          pwd
+          echo "--- ls scripts ---"
+          ls scripts/niches-data.js 2>&1 || echo "niches-data.js not found in scripts/"
+          echo "--- find ---"
+          find . -name "niches-data.js" -type f 2>/dev/null | head -5
           echo "--- git status ---"
           git status --porcelain || true
           echo "--- git diff ---"
           git diff --name-only || true
-          echo "--- wc -l files ---"
-          wc -l scripts/niches-data.js scripts/vs-data.js 2>/dev/null || true
 
-          # Try to add and commit
           git add -A 2>&1 || true
-          git status --porcelain 2>&1 || true
 
           CHANGES=$(git status --porcelain 2>/dev/null | wc -l)
           if [ "$CHANGES" -gt 0 ]; then
