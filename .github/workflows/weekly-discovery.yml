@@ -35,15 +35,14 @@ jobs:
       - name: 📤 Commit via GitHub API
         env:
           GH_TOKEN: ${{ secrets.GH_PAT }}
-        shell: python3
         run: |
+          python3 << 'PYEOF'
           import json, os, subprocess, sys
 
           repo = "nhlaka3/yt-seo-architect-private"
           files_to_check = ["scripts/niches-data.js", "scripts/vs-data.js",
                             "public/niches/index.html", "public/vs/index.html"]
 
-          # Get current HEAD and base tree
           def gh(*args, input_data=None):
             cmd = ["gh", "api"] + list(args)
             if input_data is not None:
@@ -58,7 +57,6 @@ jobs:
           base_tree = gh(f"repos/{repo}/git/commits/{head}", "--jq", ".tree.sha")
           print(f"HEAD: {head}  Tree: {base_tree}")
 
-          # Create blobs for changed files
           tree_entries = []
           for f in files_to_check:
             if os.path.exists(f):
@@ -73,23 +71,21 @@ jobs:
             print("No files to commit")
             sys.exit(0)
 
-          # Create new tree
           new_tree = gh(f"repos/{repo}/git/trees", input_data=json.dumps({"base_tree": base_tree, "tree": tree_entries}), "--jq", ".sha")
           if not new_tree or new_tree == base_tree:
             print("No changes - tree unchanged")
             sys.exit(0)
           print(f"New tree: {new_tree}")
 
-          # Create commit
           new_commit = gh(f"repos/{repo}/git/commits", input_data=json.dumps({
             "message": "discovery: weekly auto-discovered content [skip ci]",
             "tree": new_tree, "parents": [head]
           }), "--jq", ".sha")
           print(f"New commit: {new_commit}")
 
-          # Update ref
           result = gh(f"repos/{repo}/git/refs/heads/main", "-X", "PATCH", input_data=json.dumps({"sha": new_commit, "force": True}), "--jq", ".ref")
           print(f"✅ Committed via API: {result}")
+          PYEOF
 
       - name: 🌐 Deploy to Vercel
         env:
