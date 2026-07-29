@@ -19,7 +19,6 @@ const VS_FILE = resolve(PROJECT, 'scripts/vs-data.js');
 
 const args = process.argv.slice(2);
 const COUNT = parseInt(args.includes('--count') ? args[args.indexOf('--count') + 1] : '2', 10);
-const COMMIT = args.includes('--commit');
 const RETRY_DELAY = 5000;
 const MAX_RETRIES = 3;
 
@@ -160,23 +159,6 @@ async function main() {
   if (added > 0) {
     const { execSync } = await import('child_process');
     execSync(`node '${PROJECT}/scripts/generate-vs-pages.mjs'`, { stdio: 'inherit' });
-    if (COMMIT) {
-      try {
-        execSync(
-          `git config user.name "YT SEO Bot" && ` +
-          `git config user.email "hnhlaka142@gmail.com" && ` +
-          `git add scripts/vs-data.js public/vs/ && ` +
-          `git diff --cached --quiet || (` +
-          `git commit -m "discovery: new tools [skip ci]" && ` +
-          `git pull --rebase origin main 2>/dev/null || true && ` +
-          `git push origin HEAD:main 2>&1 || true)`,
-          { stdio: 'inherit', cwd: PROJECT }
-        );
-        console.log('\n  ✅ Committed and pushed.');
-      } catch (e) {
-        console.log(`  ⚠ Commit skipped: ${e.message}`);
-      }
-    }
     console.log('\n  ✅ All vs/ pages regenerated.');
   }
 }

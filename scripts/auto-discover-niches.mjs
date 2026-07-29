@@ -19,7 +19,6 @@ const NICHES_FILE = resolve(PROJECT, 'scripts/niches-data.js');
 
 const args = process.argv.slice(2);
 const COUNT = parseInt(args.includes('--count') ? args[args.indexOf('--count') + 1] : '2', 10);
-
 // ── Load existing niches ───────────────────────────────────────────
 
 function getExistingNiches() {
@@ -190,30 +189,9 @@ async function main() {
   const added = appendToFile(newNiches);
 
   if (added > 0) {
-    // Regenerate HTML pages
     console.log('\n  Regenerating HTML pages...');
     const { execSync } = await import('child_process');
     execSync(`node '${PROJECT}/scripts/generate-niches.mjs'`, { stdio: 'inherit' });
-
-    // Auto-commit if --commit flag
-    if (COMMIT) {
-      try {
-        execSync(
-          `git config user.name "YT SEO Bot" && ` +
-          `git config user.email "hnhlaka142@gmail.com" && ` +
-          `git add scripts/niches-data.js public/niches/ && ` +
-          `git diff --cached --quiet || (` +
-          `git commit -m "discovery: new niches [skip ci]" && ` +
-          `git pull --rebase origin main 2>/dev/null || true && ` +
-          `git push origin HEAD:main 2>&1 || true)`,
-          { stdio: 'inherit', cwd: PROJECT }
-        );
-        console.log('\n  ✅ Committed and pushed.');
-      } catch (e) {
-        console.log(`  ⚠ Commit skipped: ${e.message}`);
-      }
-    }
-
     console.log('\n  ✅ All pages regenerated.');
   }
 }
