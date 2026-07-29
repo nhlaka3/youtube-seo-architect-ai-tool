@@ -43,18 +43,16 @@ jobs:
           files_to_check = ["scripts/niches-data.js", "scripts/vs-data.js",
                             "public/niches/index.html", "public/vs/index.html"]
 
-          def gh(*args, input_data=None):
-            cmd = ["gh", "api"] + list(args)
-            if input_data is not None:
-              cmd += ["--input", "-"]
-            p = subprocess.run(cmd, capture_output=True, text=True, input=input_data)
-            if p.returncode != 0:
-              print(f"gh error: {p.stderr}")
-              return None
-            return json.loads(p.stdout)
+          def gh(args, input_data=None):
+              cmd = ["gh", "api"] + args
+              p = subprocess.run(cmd, input=input_data, capture_output=True, text=True)
+              if p.returncode != 0:
+                  print(f"gh error ({p.returncode}): {p.stderr[:200]}")
+                  return None
+              return json.loads(p.stdout)
 
-          head = gh(f"repos/{repo}/git/refs/heads/main", "--jq", ".object.sha")
-          base_tree = gh(f"repos/{repo}/git/commits/{head}", "--jq", ".tree.sha")
+          head = gh(["repos/" + repo + "/git/refs/heads/main", "--jq", ".object.sha"])
+          base_tree = gh(["repos/" + repo + "/git/commits/" + head, "--jq", ".tree.sha"])
           print(f"HEAD: {head}  Tree: {base_tree}")
 
           tree_entries = []
@@ -62,7 +60,8 @@ jobs:
             if os.path.exists(f):
               with open(f, "r", encoding="utf-8") as fh:
                 content = fh.read()
-              blob = gh(f"repos/{repo}/git/blobs", input_data=json.dumps({"content": content, "encoding": "utf-8"}), "--jq", ".sha")
+              blob = gh(["repos/" + repo + "/git/blobs", "--input", "-", "--jq", ".sha"],
+                        input_data=json.dumps({"content": content, "encoding": "utf-8"}))
               if blob:
                 tree_entries.append({"path": f, "mode": "100644", "type": "blob", "sha": blob})
                 print(f"  Added: {f} ({len(content)} bytes)")
@@ -71,19 +70,19 @@ jobs:
             print("No files to commit")
             sys.exit(0)
 
-          new_tree = gh(f"repos/{repo}/git/trees", input_data=json.dumps({"base_tree": base_tree, "tree": tree_entries}), "--jq", ".sha")
+          new_tree = gh(["repos/" + repo + "/git/trees", "--input", "-", "--jq", ".sha"],
+                       input_data=json.dumps({"base_tree": base_tree, "tree": tree_entries}))
           if not new_tree or new_tree == base_tree:
             print("No changes - tree unchanged")
             sys.exit(0)
           print(f"New tree: {new_tree}")
 
-          new_commit = gh(f"repos/{repo}/git/commits", input_data=json.dumps({
-            "message": "discovery: weekly auto-discovered content [skip ci]",
-            "tree": new_tree, "parents": [head]
-          }), "--jq", ".sha")
+          new_commit = gh(["repos/" + repo + "/git/commits", "--input", "-", "--jq", ".sha"],
+                         input_data=json.dumps({"message": "discovery: weekly auto-discovered content [skip ci]", "tree": new_tree, "parents": [head]}))
           print(f"New commit: {new_commit}")
 
-          result = gh(f"repos/{repo}/git/refs/heads/main", "-X", "PATCH", input_data=json.dumps({"sha": new_commit, "force": True}), "--jq", ".ref")
+          result = gh(["repos/" + repo + "/git/refs/heads/main", "-X", "PATCH", "--input", "-", "--jq", ".ref"],
+                     input_data=json.dumps({"sha": new_commit, "force": True}))
           print(f"✅ Committed via API: {result}")
           PYEOF
 
