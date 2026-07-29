@@ -1261,7 +1261,7 @@
 
     <footer>
       <p class="footer-updated">✅ Updated May 2026 — actively maintained</p>
-      <p>&copy; 2026 YT SEO Architect &middot; <a href="/privacy-policy.html">Privacy</a> &middot; <a href="/terms-of-service.html">Terms</a> &middot; <a href="/about">About</a> &middot; <a href="/tools/tag-generator">Free Tools</a> &middot; <a href="/glossary/">Glossary</a> &middot; <a href="/blog">Blog</a> &middot; <a href="mailto:thiza3062@gmail.com">Support</a></p>
+      <p>&copy; 2026 YT SEO Architect &middot; <a href="/privacy-policy.html">Privacy</a> &middot; <a href="/terms-of-service.html">Terms</a> &middot; <a href="/about">About</a> &middot; <a href="/tools.html">Tools</a> &middot; <a href="/glossary/">Glossary</a> &middot; <a href="/blog">Blog</a> &middot; <a href="mailto:thiza3062@gmail.com">Support</a></p>
       <div class="footer-tagline-wrap">
         <p class="footer-tagline">🎯 <strong>Free YouTube Tag Generators:</strong></p>
         <nav class="footer-niche-nav" aria-label="Free tag generator tools">
@@ -1314,7 +1314,7 @@
       const revealObserver = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
           if (entry.isIntersecting) {
-            entry.target.classList.add('revealed');
+            entry.target.classList.add('visible');
             revealObserver.unobserve(entry.target);
           }
         });
@@ -1323,7 +1323,7 @@
       document.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
     } else {
       // Show everything immediately for reduced-motion users
-      document.querySelectorAll('.reveal').forEach(el => el.classList.add('revealed'));
+      document.querySelectorAll('.reveal').forEach(el => el.classList.add('visible'));
     }
 
     // ── Staggered grid animations ──

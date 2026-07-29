@@ -791,7 +791,7 @@ export function renderBlogTemplate(page) {
   </header>
 
   <main>
-    <article>
+    <article class="article-body">
 
       <!-- Breadcrumb -->
       ${hasBreadcrumbs ? '' : `
