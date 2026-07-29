@@ -1163,6 +1163,11 @@ async function main() {
           saveKeywords(data);
           continue;
         }
+        if (FORCE_MODE) {
+          keywordEntry = candidate;
+          console.log(`  ⚡ --force: picking "${candidate.keyword}" without demand check`);
+          break;
+        }
         console.log(`  📊 Checking: "${candidate.keyword}"`);
         const demandResult = checkKeywordDemand(candidate.keyword);
         demandResults.push({ keyword: candidate, demand: demandResult });
