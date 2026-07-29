@@ -41,6 +41,7 @@ jobs:
 
       - name: 🔍 Discover new niches
         if: ${{ github.event.inputs.niches != 'false' }}
+        continue-on-error: true
         run: |
           COUNT=${{ github.event.inputs.count || '2' }}
           echo "🔍 Discovering $COUNT new niche(s)..."
@@ -48,6 +49,7 @@ jobs:
 
       - name: 🔍 Discover new comparison tools
         if: ${{ github.event.inputs.tools != 'false' }}
+        continue-on-error: true
         run: |
           COUNT=${{ github.event.inputs.count || '2' }}
           echo "🔍 Discovering $COUNT new tool(s)..."

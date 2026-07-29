@@ -19,6 +19,10 @@ const VS_FILE = resolve(PROJECT, 'scripts/vs-data.js');
 
 const args = process.argv.slice(2);
 const COUNT = parseInt(args.includes('--count') ? args[args.indexOf('--count') + 1] : '2', 10);
+const RETRY_DELAY = 5000; // 5s between retries
+const MAX_RETRIES = 3;
+
+function sleep(ms) { return new Promise(r => setTimeout(r, ms)); }
 
 function getExistingTools() {
   const raw = readFileSync(VS_FILE, 'utf-8');
@@ -76,25 +80,44 @@ Requirements:
 - REAL tools that YouTube creators actually use
 - Return ONLY valid JSON array — no markdown`;
 
-  const response = await fetch('https://api.groq.com/openai/v1/chat/completions', {
-    method: 'POST',
-    headers: { 'Authorization': `Bearer ${apiKey}`, 'Content-Type': 'application/json' },
-    body: JSON.stringify({
-      model: 'llama-3.1-8b-instant',
-      messages: [
-        { role: 'system', content: 'Return ONLY valid JSON array.' },
-        { role: 'user', content: prompt },
-      ],
-      temperature: 0.7, max_tokens: 4096,
-    }),
-    signal: AbortSignal.timeout(30000),
-  });
+  for (let attempt = 1; attempt <= MAX_RETRIES; attempt++) {
+    try {
+      const response = await fetch('https://api.groq.com/openai/v1/chat/completions', {
+        method: 'POST',
+        headers: { 'Authorization': `Bearer ${apiKey}`, 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          model: 'llama-3.1-8b-instant',
+          messages: [
+            { role: 'system', content: 'Return ONLY valid JSON array.' },
+            { role: 'user', content: prompt },
+          ],
+          temperature: 0.7, max_tokens: 2048,
+        }),
+        signal: AbortSignal.timeout(30000),
+      });
 
-  if (!response.ok) throw new Error(`API error ${response.status}: ${await response.text()}`);
-  const result = await response.json();
-  let text = result.choices?.[0]?.message?.content || '';
-  text = text.replace(/^```(?:json)?\s*\n?/i, '').replace(/\n?```\s*$/i, '').trim();
-  return JSON.parse(text);
+      if (!response.ok) {
+        const errText = await response.text();
+        if (response.status === 429 && attempt < MAX_RETRIES) {
+          const wait = RETRY_DELAY * attempt;
+          console.log(`  ⏳ Rate limited. Retrying in ${wait/1000}s (attempt ${attempt}/${MAX_RETRIES})...`);
+          await sleep(wait);
+          continue;
+        }
+        throw new Error(`API error ${response.status}: ${errText}`);
+      }
+
+      const result = await response.json();
+      let text = result.choices?.[0]?.message?.content || '';
+      text = text.replace(/^```(?:json)?\s*\n?/i, '').replace(/\n?```\s*$/i, '').trim();
+      return JSON.parse(text);
+    } catch (e) {
+      if (attempt === MAX_RETRIES) throw e;
+      console.log(`  ⚠ Attempt ${attempt} failed: ${e.message}. Retrying...`);
+      await sleep(RETRY_DELAY * attempt);
+    }
+  }
+  return [];
 }
 
 function appendToFile(tools) {
