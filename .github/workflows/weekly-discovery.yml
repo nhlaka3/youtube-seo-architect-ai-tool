@@ -34,31 +34,12 @@ jobs:
 
       - name: 📤 Commit and push discoveries
         env:
-          GH_TOKEN: ${{ secrets.GH_PAT }}
-        run: |
-          CHANGED=""
-          for f in scripts/niches-data.js scripts/vs-data.js; do
-            GIT=$(git rev-parse HEAD:$f 2>/dev/null || echo "")
-            CURRENT=$(sha256sum $f 2>/dev/null | cut -d' ' -f1 || echo "")
-            if [ "$GIT" != "$CURRENT" ] && [ -n "$CURRENT" ]; then
-              CHANGED="$CHANGED $f"
-            fi
-          done
-          if [ -n "$CHANGED" ]; then
-            echo "Changed files:$CHANGED"
-            git config user.name "YT SEO Bot"
-            git config user.email "hnhlaka142@gmail.com"
-            git add scripts/niches-data.js scripts/vs-data.js public/niches/ public/vs/ public/guides/ public/tools/converters/
-            git commit -m "discovery: weekly auto-discovered content [skip ci]"
-            git push origin HEAD:main 2>&1
-            echo "✅ Committed and pushed"
-          else
-            echo "✅ No content changes detected"
-          fi
-
-      - name: 🌐 Deploy to Vercel
-        env:
           PUBLIC_REPO: https://x-access-token:${{ secrets.GH_PAT }}@github.com/nhlaka3/youtube-seo-architect-ai-tool.git
         run: |
-          git remote add public "$PUBLIC_REPO"
-          git push public HEAD:main --force 2>&1 && echo "✅ Pushed to public repo — Vercel auto-deploy triggered"
+          git config user.name "YT SEO Bot"
+          git config user.email "hnhlaka142@gmail.com"
+          git add -A
+          git diff --cached --quiet || git commit -m "discovery: weekly auto-discovered content [skip ci]"
+          git push origin HEAD:main 2>&1 || echo "Push skipped (nothing to push)"
+          git remote add public "$PUBLIC_REPO" 2>/dev/null || true
+          git push public HEAD:main --force 2>&1 && echo "✅ Deployed to Vercel"
