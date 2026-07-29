@@ -33,21 +33,27 @@ jobs:
         run: node scripts/auto-discover-tools.mjs --count ${{ github.event.inputs.count || '2' }} 2>&1
 
       - name: 📤 Commit and push discoveries
+        env:
+          GH_TOKEN: ${{ secrets.GH_PAT }}
         run: |
-          git config user.name "YT SEO Bot"
-          git config user.email "hnhlaka142@gmail.com"
-          # Force-add all changed files in tracked paths
-          git add -A scripts/niches-data.js scripts/vs-data.js public/niches/ public/vs/ public/guides/ public/tools/converters/ 2>&1 || true
-          # Check if anything changed
-          CHANGES=$(git status --porcelain scripts/niches-data.js scripts/vs-data.js public/niches/ public/vs/ public/guides/ public/tools/converters/ 2>/dev/null | wc -l)
-          if [ "$CHANGES" -gt 0 ]; then
-            echo "Changes detected: $CHANGES file(s)"
-            git status --porcelain scripts/niches-data.js scripts/vs-data.js public/niches/ public/vs/ public/guides/ public/tools/converters/
+          CHANGED=""
+          for f in scripts/niches-data.js scripts/vs-data.js; do
+            GIT=$(git rev-parse HEAD:$f 2>/dev/null || echo "")
+            CURRENT=$(sha256sum $f 2>/dev/null | cut -d' ' -f1 || echo "")
+            if [ "$GIT" != "$CURRENT" ] && [ -n "$CURRENT" ]; then
+              CHANGED="$CHANGED $f"
+            fi
+          done
+          if [ -n "$CHANGED" ]; then
+            echo "Changed files:$CHANGED"
+            git config user.name "YT SEO Bot"
+            git config user.email "hnhlaka142@gmail.com"
+            git add scripts/niches-data.js scripts/vs-data.js public/niches/ public/vs/ public/guides/ public/tools/converters/
             git commit -m "discovery: weekly auto-discovered content [skip ci]"
             git push origin HEAD:main 2>&1
-            echo "✅ Committed and pushed to private repo"
+            echo "✅ Committed and pushed"
           else
-            echo "✅ No changes to commit"
+            echo "✅ No content changes detected"
           fi
 
       - name: 🌐 Deploy to Vercel
