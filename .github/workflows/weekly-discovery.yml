@@ -40,10 +40,9 @@ jobs:
           git config user.name "YT SEO Bot"
           git config user.email "hnhlaka142@gmail.com"
           git add scripts/niches-data.js public/niches/
-          git diff --cached --quiet || git commit -m "discovery: new niches [skip ci]"
-          git pull --rebase origin main 2>&1 || true
-          git push origin HEAD:main 2>&1 || true
-          echo "✅ Niches committed if any"
+          git status --short
+          git diff --cached --quiet && echo "Nothing to commit" || (git commit -m "discovery: new niches [skip ci]" && git pull --rebase origin main 2>&1 || true && git push origin HEAD:main 2>&1 || true)
+          echo "✅ Niche step done"
 
   discover-tools:
     if: ${{ github.event.inputs.tools != 'false' }}
@@ -63,10 +62,9 @@ jobs:
           git config user.name "YT SEO Bot"
           git config user.email "hnhlaka142@gmail.com"
           git add scripts/vs-data.js public/vs/
-          git diff --cached --quiet || git commit -m "discovery: new tools [skip ci]"
-          git pull --rebase origin main 2>&1 || true
-          git push origin HEAD:main 2>&1 || true
-          echo "✅ Tools committed if any"
+          git status --short
+          git diff --cached --quiet && echo "Nothing to commit" || (git commit -m "discovery: new tools [skip ci]" && git pull --rebase origin main 2>&1 || true && git push origin HEAD:main 2>&1 || true)
+          echo "✅ Tool step done"
 
   deploy:
     needs: [discover-niches, discover-tools]
