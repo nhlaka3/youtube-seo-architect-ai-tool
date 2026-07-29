@@ -1844,33 +1844,50 @@ app.get('/sitemap.xml', async (req, res) => {
       xml += `  <url><loc>https://yt-seo-architect.vercel.app/tools/${slug}</loc><changefreq>weekly</changefreq><priority>0.9</priority></url>\n`;
     }
 
-    // Glossary pages (slugs inlined for Vercel serverless reliability)
-    const GLOSSARY_SLUGS = [
-      "youtube-algorithm", "session-time", "click-through-rate", "average-view-duration",
-      "audience-retention", "watch-time", "impressions", "revenue-per-mille", "cost-per-mille",
-      "youtube-partner-program", "ad-revenue", "demonetization", "youtube-keyword-research",
-      "long-tail-keywords", "search-volume", "keyword-difficulty", "title-optimization",
-      "youtube-tags", "description-optimization", "transcript-seo", "thumbnail-optimization",
-      "video-chapters", "closed-captions", "video-sitemap", "youtube-search-ranking-factors",
-      "dwell-time", "keyword-cannibalization", "youtube-shorts", "shorts-monetization",
-      "video-hook", "content-pillar", "evergreen-content", "playlist-optimization",
-      "cards-end-screens", "channel-audit", "competitor-analysis", "content-gap-analysis",
-      "call-to-action", "ab-testing", "youtube-live-stream", "super-chat", "channel-memberships",
-      "premieres", "community-tab", "vertical-video", "mobile-seo", "topic-authority",
-      "audience-demographics", "traffic-sources", "shorts-algorithm", "video-intro-structure",
-      "youtube-analytics", "gaming-on-youtube", "youtube-studio", "vidiq-vs-tubebuddy",
-      "youtube-premium", "channel-branding", "creator-music", "copyright-claims",
-      "community-guidelines", "trending-content", "youtube-trending", "browse-features",
-      "content-repurposing", "batch-production", "content-calendar", "cross-promotion",
-      "external-traffic", "video-backlinks", "collaboration", "youtube-hashtags",
-      "mid-roll-ads", "youtube-creator-academy", "playlist-discovery", "channel-trailer"
-    ];
-    for (const slug of GLOSSARY_SLUGS) {
+    // Glossary term pages (scan filesystem — always accurate)
+    const { readdirSync } = await import('fs');
+    const GLOSSARY_DIR = resolve(__dirname, '../public/glossary');
+
+    let glossaryFiles = [];
+    try {
+      glossaryFiles = readdirSync(GLOSSARY_DIR).filter(
+        f => f.endsWith('.html') && f !== '_template.html' && f !== 'index.html'
+      );
+    } catch (e) {
+      console.error('[Sitemap] Glossary dir error:', e.message);
+    }
+
+    // Term pages (no -vs- in filename)
+    const termFiles = glossaryFiles.filter(f => !f.includes('-vs-'));
+    for (const file of termFiles) {
+      const slug = file.replace('.html', '');
       xml += `  <url><loc>https://yt-seo-architect.vercel.app/glossary/${slug}</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>\n`;
     }
 
-    // PSEO disabled as per user request
+    // Comparison pages (contain -vs- in filename) — up to 10k per sitemap limits
+    const comparisonFiles = glossaryFiles.filter(f => f.includes('-vs-'));
+    const MAX_SITEMAP_URLS = 20000;
+    let cmpCount = 0;
+    for (const file of comparisonFiles) {
+      if (cmpCount >= MAX_SITEMAP_URLS) break;
+      const slug = file.replace('.html', '');
+      xml += `  <url><loc>https://yt-seo-architect.vercel.app/glossary/${slug}</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>\n`;
+      cmpCount++;
+    }
 
+    // Spanish glossary pages
+    const GLOSSARY_ES_DIR = resolve(__dirname, '../public/glossary/es');
+    try {
+      const esFiles = readdirSync(GLOSSARY_ES_DIR).filter(
+        f => f.endsWith('.html') && f !== '_template.html' && f !== 'index.html'
+      );
+      for (const file of esFiles) {
+        const slug = file.replace('.html', '');
+        xml += `  <url><loc>https://yt-seo-architect.vercel.app/glossary/es/${slug}</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>\n`;
+      }
+    } catch (e) {
+      console.error('[Sitemap] Spanish glossary dir error:', e.message);
+    }
 
     // Blog category pages
     for (const [catSlug, cat] of Object.entries(BLOG_CATEGORIES)) {
@@ -1879,27 +1896,10 @@ app.get('/sitemap.xml', async (req, res) => {
     xml += `  <url><loc>https://yt-seo-architect.vercel.app/blog/categories</loc><changefreq>weekly</changefreq><priority>0.7</priority></url>\n`;
     xml += `  <url><loc>https://yt-seo-architect.vercel.app/guide/youtube-seo</loc><changefreq>monthly</changefreq><priority>0.9</priority></url>\n`;
 
-    // Comparison pages
+    // Comparison pages (vs/ tool comparisons)
     const vsSlugs = ['vidiq', 'tubebuddy', 'morningfame', 'tubics', 'keywordtool', 'canva'];
     for (const vs of vsSlugs) {
       xml += `  <url><loc>https://yt-seo-architect.vercel.app/vs/${vs}</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>\n`;
-    }
-
-    // Glossary comparison pages (same-category pairs for discoverability)
-    const seenPairs = new Set();
-    let cmpCount = 0;
-    for (const cat of [...new Set(GLOSSARY_TERMS.map(t => t.cat))]) {
-      const catTerms = GLOSSARY_TERMS.filter(t => t.cat === cat);
-      for (let i = 0; i < catTerms.length && cmpCount < 1500; i++) {
-        for (let j = i + 1; j < catTerms.length && cmpCount < 1500; j++) {
-          const key = [catTerms[i].slug, catTerms[j].slug].sort().join('-');
-          if (seenPairs.has(key)) continue;
-          seenPairs.add(key);
-          xml += `  <url><loc>https://yt-seo-architect.vercel.app/glossary/${catTerms[i].slug}-vs-${catTerms[j].slug}</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>\n`;
-          xml += `  <url><loc>https://yt-seo-architect.vercel.app/glossary/es/${catTerms[i].slug}-vs-${catTerms[j].slug}</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>\n`;
-          cmpCount++;
-        }
-      }
     }
 
     // Validated blog posts only
