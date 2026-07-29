@@ -6,7 +6,12 @@
     { "src": "api/index.js", "use": "@vercel/node", "config": { "includeFiles": ["scripts/glossary-data.json"] } },
     { "src": "api/[...path].js", "use": "@vercel/node" },
     { "src": "package.json", "use": "@vercel/static-build", "config": { "distDir": "dist" } },
-    { "src": "public/**", "use": "@vercel/static" }
+    { "src": "public/**", "use": "@vercel/static" },
+    { "src": "design-tokens.css", "use": "@vercel/static" },
+    { "src": "utilities.css", "use": "@vercel/static" },
+    { "src": "nav.css", "use": "@vercel/static" },
+    { "src": "blog-article.css", "use": "@vercel/static" },
+    { "src": "tools.html", "use": "@vercel/static" }
   ],
   "crons": [
     {
