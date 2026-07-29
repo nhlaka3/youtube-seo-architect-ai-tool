@@ -1844,49 +1844,42 @@ app.get('/sitemap.xml', async (req, res) => {
       xml += `  <url><loc>https://yt-seo-architect.vercel.app/tools/${slug}</loc><changefreq>weekly</changefreq><priority>0.9</priority></url>\n`;
     }
 
-    // Glossary term pages (scan filesystem — always accurate)
-    const { readdirSync } = await import('fs');
-    const GLOSSARY_DIR = resolve(__dirname, '../public/glossary');
-
-    let glossaryFiles = [];
+    // Glossary pages (from glossary-data.json — works in serverless)
+    let glossaryTerms = [];
     try {
-      glossaryFiles = readdirSync(GLOSSARY_DIR).filter(
-        f => f.endsWith('.html') && f !== '_template.html' && f !== 'index.html'
-      );
+      const raw = readFileSync(resolve(__dirname, '../scripts/glossary-data.json'), 'utf-8');
+      glossaryTerms = JSON.parse(raw).terms || [];
     } catch (e) {
-      console.error('[Sitemap] Glossary dir error:', e.message);
+      console.error('[Sitemap] Glossary data error:', e.message);
     }
+    console.log(`[Sitemap] ${glossaryTerms.length} glossary terms loaded`);
 
-    // Term pages (no -vs- in filename)
-    const termFiles = glossaryFiles.filter(f => !f.includes('-vs-'));
-    for (const file of termFiles) {
-      const slug = file.replace('.html', '');
+    // Term pages
+    const termSlugs = glossaryTerms.map(t => t.slug);
+    for (const slug of termSlugs) {
       xml += `  <url><loc>https://yt-seo-architect.vercel.app/glossary/${slug}</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>\n`;
     }
 
-    // Comparison pages (contain -vs- in filename) — up to 10k per sitemap limits
-    const comparisonFiles = glossaryFiles.filter(f => f.includes('-vs-'));
-    const MAX_SITEMAP_URLS = 20000;
+    // Spanish term pages
+    for (const slug of termSlugs) {
+      xml += `  <url><loc>https://yt-seo-architect.vercel.app/glossary/es/${slug}</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>\n`;
+    }
+
+    // Comparison pages (all unique pairs, capped at 45k to stay under sitemap limit)
+    const MAX_SITEMAP_URLS = 45000;
+    const seenPairs = new Set();
     let cmpCount = 0;
-    for (const file of comparisonFiles) {
-      if (cmpCount >= MAX_SITEMAP_URLS) break;
-      const slug = file.replace('.html', '');
-      xml += `  <url><loc>https://yt-seo-architect.vercel.app/glossary/${slug}</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>\n`;
-      cmpCount++;
-    }
-
-    // Spanish glossary pages
-    const GLOSSARY_ES_DIR = resolve(__dirname, '../public/glossary/es');
-    try {
-      const esFiles = readdirSync(GLOSSARY_ES_DIR).filter(
-        f => f.endsWith('.html') && f !== '_template.html' && f !== 'index.html'
-      );
-      for (const file of esFiles) {
-        const slug = file.replace('.html', '');
-        xml += `  <url><loc>https://yt-seo-architect.vercel.app/glossary/es/${slug}</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>\n`;
+    for (let i = 0; i < termSlugs.length && cmpCount < MAX_SITEMAP_URLS; i++) {
+      for (let j = i + 1; j < termSlugs.length && cmpCount < MAX_SITEMAP_URLS; j++) {
+        const a = termSlugs[i];
+        const b = termSlugs[j];
+        const key = a < b ? `${a}-vs-${b}` : `${b}-vs-${a}`;
+        if (seenPairs.has(key)) continue;
+        seenPairs.add(key);
+        xml += `  <url><loc>https://yt-seo-architect.vercel.app/glossary/${key}</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>\n`;
+        xml += `  <url><loc>https://yt-seo-architect.vercel.app/glossary/es/${key}</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>\n`;
+        cmpCount++;
       }
-    } catch (e) {
-      console.error('[Sitemap] Spanish glossary dir error:', e.message);
     }
 
     // Blog category pages
