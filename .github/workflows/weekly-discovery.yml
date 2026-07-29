@@ -24,44 +24,64 @@ jobs:
       - uses: actions/setup-node@v4
         with: { node-version: '24' }
 
-      - name: 🔍 Discover and commit
+      - name: 🔍 Discover new niches
+        continue-on-error: true
+        run: node scripts/auto-discover-niches.mjs --count ${{ github.event.inputs.count || '2' }}
+
+      - name: 🔍 Discover new tools
+        continue-on-error: true
+        run: node scripts/auto-discover-tools.mjs --count ${{ github.event.inputs.count || '2' }}
+
+      - name: 📤 Commit via GitHub API
+        env:
+          GH_TOKEN: ${{ secrets.GH_PAT }}
+        run: |
+          # Create a tree with updated files via gh api
+          HEAD_SHA=$(gh api repos/nhlaka3/yt-seo-architect-private/git/refs/heads/main --jq '.object.sha')
+          BASE_TREE=$(gh api repos/nhlaka3/yt-seo-architect-private/git/commits/$HEAD_SHA --jq '.tree.sha')
+          
+          echo "HEAD: $HEAD_SHA  Tree: $BASE_TREE"
+          
+          # Add files that exist and have changed
+          FILES=""
+          for f in scripts/niches-data.js scripts/vs-data.js public/niches/index.html; do
+            if [ -f "$f" ]; then
+              BLOB=$(gh api repos/nhlaka3/yt-seo-architect-private/git/blobs -f content=@$f -f encoding=utf-8 --jq '.sha')
+              FILES="$FILES{\"path\":\"$f\",\"mode\":\"100644\",\"type\":\"blob\",\"sha\":\"$BLOB\"},"
+              echo "  Added: $f"
+            fi
+          done
+          
+          if [ -z "$FILES" ]; then
+            echo "No files to commit"
+            exit 0
+          fi
+          
+          NEW_TREE=$(echo "{\"base_tree\":\"$BASE_TREE\",\"tree\":[$FILES]}" | \
+            gh api repos/nhlaka3/yt-seo-architect-private/git/trees --input - --jq '.sha')
+          
+          echo "New tree: $NEW_TREE"
+          
+          if [ "$NEW_TREE" = "$BASE_TREE" ]; then
+            echo "No changes - tree unchanged"
+            exit 0
+          fi
+          
+          NEW_COMMIT=$(echo "{\"message\":\"discovery: weekly auto-discovered content [skip ci]\",\"tree\":\"$NEW_TREE\",\"parents\":[\"$HEAD_SHA\"]}" | \
+            gh api repos/nhlaka3/yt-seo-architect-private/git/commits --input - --jq '.sha')
+          
+          echo "New commit: $NEW_COMMIT"
+          
+          gh api repos/nhlaka3/yt-seo-architect-private/git/refs/heads/main \
+            -X PATCH -f sha=$NEW_COMMIT -f force=true --jq '.ref'
+          
+          echo "✅ Committed via API"
+
+      - name: 🌐 Deploy to Vercel
         env:
           PUBLIC_REPO: https://x-access-token:${{ secrets.GH_PAT }}@github.com/nhlaka3/youtube-seo-architect-ai-tool.git
         run: |
-          COUNT=${{ github.event.inputs.count || '2' }}
-
-          echo "=== Discovering niches ==="
-          node scripts/auto-discover-niches.mjs --count $COUNT 2>&1 || true
-
-          echo "=== Discovering tools ==="
-          node scripts/auto-discover-tools.mjs --count $COUNT 2>&1 || true
-
-          echo "=== Checking git status ==="
-          git config user.name "YT SEO Bot"
-          git config user.email "hnhlaka142@gmail.com"
-
-          echo "--- pwd ---"
-          pwd
-          echo "--- ls scripts ---"
-          ls scripts/niches-data.js 2>&1 || echo "niches-data.js not found in scripts/"
-          echo "--- find ---"
-          find . -name "niches-data.js" -type f 2>/dev/null | head -5
-          echo "--- git status ---"
-          git status --porcelain || true
-          echo "--- git diff ---"
-          git diff --name-only || true
-
-          git add -A 2>&1 || true
-
-          CHANGES=$(git status --porcelain 2>/dev/null | wc -l)
-          if [ "$CHANGES" -gt 0 ]; then
-            echo "Changes found: $CHANGES"
-            git commit -m "discovery: weekly auto-discovered content [skip ci]"
-            git push origin HEAD:main 2>&1
-          else
-            echo "No git changes detected"
-          fi
-
-          # Always push to public (latest main, not modified)
+          git fetch origin main 2>/dev/null
+          git reset --hard origin/main 2>/dev/null
           git remote add public "$PUBLIC_REPO" 2>/dev/null || true
-          git push public HEAD:main --force 2>&1 && echo "✅ Pushed to public repo"
+          git push public HEAD:main --force 2>&1 && echo "✅ Deployed to Vercel"
