@@ -34,22 +34,20 @@ jobs:
 
       - name: 📤 Commit and push discoveries
         run: |
-          echo "=== DEBUG ==="
-          pwd
-          wc -l scripts/niches-data.js
-          git diff --name-only
-          git diff --stat
-          echo "=== ADD ==="
-          git add --verbose scripts/niches-data.js scripts/vs-data.js public/niches/ public/vs/ public/guides/ public/tools/converters/ 2>&1 || true
-          git status --short
           git config user.name "YT SEO Bot"
           git config user.email "hnhlaka142@gmail.com"
-          if git diff --cached --quiet; then
-            echo "✅ No new discoveries to commit"
-          else
+          # Force-add all changed files in tracked paths
+          git add -A scripts/niches-data.js scripts/vs-data.js public/niches/ public/vs/ public/guides/ public/tools/converters/ 2>&1 || true
+          # Check if anything changed
+          CHANGES=$(git status --porcelain scripts/niches-data.js scripts/vs-data.js public/niches/ public/vs/ public/guides/ public/tools/converters/ 2>/dev/null | wc -l)
+          if [ "$CHANGES" -gt 0 ]; then
+            echo "Changes detected: $CHANGES file(s)"
+            git status --porcelain scripts/niches-data.js scripts/vs-data.js public/niches/ public/vs/ public/guides/ public/tools/converters/
             git commit -m "discovery: weekly auto-discovered content [skip ci]"
             git push origin HEAD:main 2>&1
             echo "✅ Committed and pushed to private repo"
+          else
+            echo "✅ No changes to commit"
           fi
 
       - name: 🌐 Deploy to Vercel
