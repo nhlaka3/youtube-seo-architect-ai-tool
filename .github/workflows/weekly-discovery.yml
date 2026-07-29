@@ -34,9 +34,16 @@ jobs:
 
       - name: 📤 Commit and push discoveries
         run: |
+          echo "=== DEBUG ==="
+          pwd
+          wc -l scripts/niches-data.js
+          git diff --name-only
+          git diff --stat
+          echo "=== ADD ==="
+          git add --verbose scripts/niches-data.js scripts/vs-data.js public/niches/ public/vs/ public/guides/ public/tools/converters/ 2>&1 || true
+          git status --short
           git config user.name "YT SEO Bot"
           git config user.email "hnhlaka142@gmail.com"
-          git add scripts/niches-data.js scripts/vs-data.js public/niches/ public/vs/ public/guides/ public/tools/converters/
           if git diff --cached --quiet; then
             echo "✅ No new discoveries to commit"
           else
