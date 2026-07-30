@@ -1,6 +1,13 @@
 @import './design-tokens.css';
 
 /* ── Blog Article Layout ── */
+body {
+  background: #0a0b10;
+  color: #f0f2f5;
+  font-family: "Geist", "Outfit", -apple-system, BlinkMacSystemFont, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  line-height: 1.6;
+}
 .article-body {
   max-width: 720px;
   margin: 0 auto;

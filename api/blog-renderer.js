@@ -755,10 +755,10 @@ export function renderBlogTemplate(page) {
 
   <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3831668789026424" crossorigin="anonymous"></script>
   <script type="application/ld+json">${schemaJSON}</script>
-  <link rel="stylesheet" href="/design-tokens.css" media="print" onload="this.media='all'">
-  <link rel="stylesheet" href="/utilities.css" media="print" onload="this.media='all'">
-  <link rel="stylesheet" href="/nav.css" media="print" onload="this.media='all'">
-  <link rel="stylesheet" href="/blog-article.css" media="print" onload="this.media='all'">
+  <link rel="stylesheet" href="/design-tokens.css">
+  <link rel="stylesheet" href="/utilities.css">
+  <link rel="stylesheet" href="/nav.css">
+  <link rel="stylesheet" href="/blog-article.css">
   <noscript>
     <link rel="stylesheet" href="/design-tokens.css">
     <link rel="stylesheet" href="/utilities.css">
