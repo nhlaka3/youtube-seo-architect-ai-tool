@@ -16,6 +16,8 @@ PRODUCT/
 .hermes/
 .opencode/
 .superpowers/
+OmniRoute/
+opensource/
 __pycache__/
 *.mp4
 *.mov
@@ -28,9 +30,17 @@ __pycache__/
 # Exclude auto-generated glossary comparison pages (thousands of files)
 public/glossary/*-vs-*.html
 public/glossary/es/*-vs-*.html
+public/glossary/category/*
 public/blog/_archive/
 node_modules/
 .git/
 .hg/
 .bzr/
 .svn/
+
+# Exclude temp/log/working files
+logs/
+*.txt
+*.md
+*.docx
+designs.txt
