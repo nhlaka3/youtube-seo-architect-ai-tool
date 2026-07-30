@@ -1044,30 +1044,33 @@ app.get('/blog', async (req, res) => {
     const { validateBlogPost } = await import('./blog-validation.js');
     pages = pages.filter(p => validateBlogPost({ slug: p.slug, title: p.title, content: p.content, wordCount: p.wordCount }).valid);
 
-    // Filesystem fallback: include blog HTML files not in DB (e.g. locally generated)
-    try {
-      const { readdirSync, readFileSync, existsSync, statSync } = await import('fs');
-      const { resolve } = await import('path');
-      const blogDir = resolve(process.cwd(), 'public', 'blog');
-      if (existsSync(blogDir)) {
-        const dbSlugs = new Set(pages.map(p => p.slug));
-        const fsFiles = readdirSync(blogDir).filter(f => f.endsWith('.html') && f !== '_TEMPLATE.html' && f !== '_template.html');
-        for (const file of fsFiles) {
-          const slug = file.replace(/\.html$/, '');
-          if (dbSlugs.has(slug)) continue;
-          const content = readFileSync(resolve(blogDir, file), 'utf-8');
-          const titleMatch = content.match(/<title>([^<]+)<\/title>/i) || content.match(/<h1[^>]*>([^<]+)<\/h1>/i);
-          const title = titleMatch ? titleMatch[1].trim().replace(/ — YouTube SEO Blog.*$/, '').trim() : slug.replace(/-/g, ' ');
-          const wordCount = content.replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').trim().split(/\s+/).length;
-          const dateMatch = content.match(/(\d{4}-\d{2}-\d{2})/);
-          const publishedAt = dateMatch ? dateMatch[1] : statSync(resolve(blogDir, file)).mtime.toISOString().split('T')[0];
-          pages.push({ slug, title, wordCount, content, publishedAt });
-          dbSlugs.add(slug);
-        }
-        // Re-sort by date descending (newest first)
-        pages.sort((a, b) => new Date(b.publishedAt) - new Date(a.publishedAt));
+    // Static fallback: known blog HTML files deployed to Vercel
+    // (filesystem readdir doesn't work in serverless runtime)
+    const KNOWN_BLOG_SLUGS = [
+      'best-youtube-growth-strategies-for-new-creators-2026',
+      'creating-effective-youtube-thumbnails-for-clicks-2026',
+      'developing-a-youtube-content-calendar-strategy-2026',
+      'improving-youtube-engagement-with-live-streaming-2026',
+      'increasing-youtube-watch-time-with-analytics-2026',
+      'maximizing-youtube-revenue-with-sponsorships-2026',
+      'understanding-youtube-algorithm-updates-for-creators-2026',
+      'youtube-algorithm-best-strategies-2026',
+      'youtube-channel-branding-tips-for-consistency-2026',
+      'youtube-content-strategy-for-beginners-2026',
+      'youtube-seo-examples-2026',
+      'youtube-shorts-seo-guide-2026',
+      'youtube-subscriber-growth-2026',
+      'youtube-thumbnail-tips-2026',
+    ];
+    const dbSlugs = new Set(pages.map(p => p.slug));
+    for (const slug of KNOWN_BLOG_SLUGS) {
+      if (!dbSlugs.has(slug)) {
+        const title = slug.replace(/-/g, ' ').replace(/\b\w/g, c => c.toUpperCase());
+        pages.push({ slug, title, wordCount: 0, content: '', publishedAt: '2026-07-01' });
+        dbSlugs.add(slug);
       }
-    } catch (_) { /* fs fallback is best-effort */ }
+    }
+    pages.sort((a, b) => new Date(b.publishedAt) - new Date(a.publishedAt));
 
     var html = '<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0"><link rel="icon" href="/logo.svg" type="image/svg+xml" />'
       + '<title>YouTube SEO Blog — Guides &amp; Strategies | YT SEO Architect</title>'
