@@ -640,10 +640,14 @@ export function renderBlogTemplate(page) {
     bodyContent = articleMatch[1].trim();
   }
   // Strip duplicate H1 (template provides one) and any existing related-posts/footer sections
+  // Also strip share bars, meta lines, author box — template renders these
   bodyContent = bodyContent
     .replace(/<h1[^>]*>.*?<\/h1>/i, '')
     .replace(/<nav\s[^>]*class="related-posts"[^>]*>[\s\S]*?<\/nav>/gi, '')
     .replace(/<footer[\s\S]*?<\/footer>/gi, '')
+    .replace(/<div\s[^>]*class="share-bar[^>]*>[\s\S]*?<\/div>/gi, '')
+    .replace(/<p\s[^>]*class="meta"[^>]*>[\s\S]*?<\/p>/gi, '')
+    .replace(/<div\s[^>]*class="author-box[^>]*>[\s\S]*?<\/div>/gi, '')
     .trim();
   const linked = linkGlossaryTerms(bodyContent);
   contentHTML += linked;
