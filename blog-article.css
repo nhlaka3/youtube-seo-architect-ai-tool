@@ -586,3 +586,13 @@ pre:hover .copy-btn { opacity: 1; }
   a { color: #000; text-decoration: underline; }
   article { max-width: 100%; padding: 0; }
 }
+
+/* ── Compact pre-content spacing ── */
+.article-body > .share-bar { margin: 0.5rem 0 0.25rem; }
+.article-body > .breadcrumb { margin: 0.25rem 0; }
+.article-body > .author-box { margin: 0.5rem 0; padding: 0.75rem; }
+.article-body > .author-box p { font-size: 0.85rem; }
+.article-body > img:first-of-type { max-height: 300px; object-fit: cover; margin: 0.5rem auto; }
+.article-body > .tldr { margin: 0.75rem 0; padding: 0.75rem; }
+.article-body > .adsense-blog-top { margin: 0.5rem 0; }
+.article-body > .toc { margin: 0.75rem 0 1rem; padding: 1rem 1.25rem; }
