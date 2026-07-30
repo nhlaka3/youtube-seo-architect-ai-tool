@@ -763,6 +763,7 @@ export function renderBlogTemplate(page) {
   <link rel="stylesheet" href="/utilities.css">
   <link rel="stylesheet" href="/nav.css">
   <link rel="stylesheet" href="/blog-article.css">
+  <link rel="stylesheet" href="/blog/blog.css">
   <noscript>
     <link rel="stylesheet" href="/design-tokens.css">
     <link rel="stylesheet" href="/utilities.css">
