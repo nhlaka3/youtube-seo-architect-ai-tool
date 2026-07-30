@@ -912,6 +912,28 @@ app.get(['/blog/categories', '/blog/category'], async (req, res) => {
     var pages = await dbService.db.select({ slug: s.seoPages.slug, title: s.seoPages.title, wordCount: s.seoPages.wordCount, content: s.seoPages.content, publishedAt: s.seoPages.publishedAt }).from(s.seoPages).where(eq(s.seoPages.status,'published')).orderBy(desc(s.seoPages.publishedAt));
     pages = pages.filter(p => validateBlogPost({ slug: p.slug, title: p.title, content: p.content, wordCount: p.wordCount }).valid);
 
+    // Filesystem fallback: include blog HTML files not in DB
+    try {
+      const { readdirSync, readFileSync, existsSync, statSync } = await import('fs');
+      const { resolve } = await import('path');
+      const blogDir = resolve(process.cwd(), 'public', 'blog');
+      if (existsSync(blogDir)) {
+        const dbSlugs = new Set(pages.map(p => p.slug));
+        const fsFiles = readdirSync(blogDir).filter(f => f.endsWith('.html') && f !== '_TEMPLATE.html' && f !== '_template.html');
+        for (const file of fsFiles) {
+          const slug = file.replace(/\.html$/, '');
+          if (dbSlugs.has(slug)) continue;
+          const content = readFileSync(resolve(blogDir, file), 'utf-8');
+          const titleMatch = content.match(/<title>([^<]+)<\/title>/i) || content.match(/<h1[^>]*>([^<]+)<\/h1>/i);
+          const title = titleMatch ? titleMatch[1].trim().replace(/ — YouTube SEO Blog.*$/, '').trim() : slug.replace(/-/g, ' ');
+          const dateMatch = content.match(/(\d{4}-\d{2}-\d{2})/);
+          const publishedAt = dateMatch ? dateMatch[1] : statSync(resolve(blogDir, file)).mtime.toISOString().split('T')[0];
+          pages.push({ slug, title, wordCount: 0, content, publishedAt });
+          dbSlugs.add(slug);
+        }
+      }
+    } catch (_) { /* fs fallback is best-effort */ }
+
     // Count posts per category
     var catCounts = {};
     for (const p of pages) {
@@ -955,6 +977,28 @@ app.get('/blog/category/:slug', async (req, res) => {
     var allPages = await dbService.db.select({ slug: s.seoPages.slug, title: s.seoPages.title, wordCount: s.seoPages.wordCount, content: s.seoPages.content, publishedAt: s.seoPages.publishedAt }).from(s.seoPages).where(eq(s.seoPages.status,'published')).orderBy(desc(s.seoPages.publishedAt));
     allPages = allPages.filter(p => validateBlogPost({ slug: p.slug, title: p.title, content: p.content, wordCount: p.wordCount }).valid);
 
+    // Filesystem fallback: include blog HTML files not in DB
+    try {
+      const { readdirSync, readFileSync, existsSync, statSync } = await import('fs');
+      const { resolve } = await import('path');
+      const blogDir = resolve(process.cwd(), 'public', 'blog');
+      if (existsSync(blogDir)) {
+        const dbSlugs = new Set(allPages.map(p => p.slug));
+        const fsFiles = readdirSync(blogDir).filter(f => f.endsWith('.html') && f !== '_TEMPLATE.html' && f !== '_template.html');
+        for (const file of fsFiles) {
+          const slug = file.replace(/\.html$/, '');
+          if (dbSlugs.has(slug)) continue;
+          const content = readFileSync(resolve(blogDir, file), 'utf-8');
+          const titleMatch = content.match(/<title>([^<]+)<\/title>/i) || content.match(/<h1[^>]*>([^<]+)<\/h1>/i);
+          const title = titleMatch ? titleMatch[1].trim().replace(/ — YouTube SEO Blog.*$/, '').trim() : slug.replace(/-/g, ' ');
+          const dateMatch = content.match(/(\d{4}-\d{2}-\d{2})/);
+          const publishedAt = dateMatch ? dateMatch[1] : statSync(resolve(blogDir, file)).mtime.toISOString().split('T')[0];
+          allPages.push({ slug, title, wordCount: 0, content, publishedAt });
+          dbSlugs.add(slug);
+        }
+      }
+    } catch (_) { /* fs fallback is best-effort */ }
+
     var catPages = allPages.filter(p => getPostCategory(p.slug, p.title) === catSlug);
 
     const rendered = renderCategoryHeader(catSlug, catPages);
@@ -965,7 +1009,7 @@ app.get('/blog/category/:slug', async (req, res) => {
       + '<div class="blog-grid">';
 
     for (var p of catPages) {
-      fullHtml += '<div class="blog-card"><a href="/blog/'+p.slug+'">'+p.title+'</a><div class="meta">'+p.wordCount+' words · '+new Date(p.publishedAt).toLocaleDateString()+'</div></div>';
+      fullHtml += '<div class="blog-card"><a href="/blog/'+p.slug+'">'+p.title+'</a><div class="meta">'+(p.wordCount || '')+' words · '+new Date(p.publishedAt).toLocaleDateString()+'</div></div>';
     }
 
     fullHtml += '</div></div><footer class="site-footer"><div class="footer-inner"><div class="footer-col"><h4>Product</h4><a href="/dashboard.html">Dashboard</a><a href="/changelog.html">Changelog</a></div><div class="footer-col"><h4>Resources</h4><a href="/blog">Blog</a><a href="/public/glossary">Glossary</a><a href="/public/guides">Guides</a></div><div class="footer-col"><h4>Company</h4><a href="/about.html">About</a><a href="/contact.html">Contact</a><a href="/privacy-policy.html">Privacy</a><a href="/terms-of-service.html">Terms</a></div><div class="footer-col"><h4>Social</h4><a href="https://twitter.com/YTSEOArchitect" target="_blank" rel="noopener">Twitter / X</a><a href="https://youtube.com" target="_blank" rel="noopener">YouTube</a><a href="https://github.com/nhlaka3" target="_blank" rel="noopener">GitHub</a></div></div><div class="footer-bottom"><span>&copy; 2026 YT SEO Architect. All rights reserved.</span><div class="footer-social"><a href="https://twitter.com/YTSEOArchitect" target="_blank" rel="noopener" aria-label="Twitter">𝕏</a><a href="https://github.com/nhlaka3" target="_blank" rel="noopener" aria-label="GitHub">GH</a></div></div></footer><script defer src="/js/blog-enhancements.js"></script></body></html>';
@@ -989,6 +1033,31 @@ app.get('/blog', async (req, res) => {
     // Quality gate: only list validated posts (template-compliant, 1,200+ words, no banned words)
     const { validateBlogPost } = await import('./blog-validation.js');
     pages = pages.filter(p => validateBlogPost({ slug: p.slug, title: p.title, content: p.content, wordCount: p.wordCount }).valid);
+
+    // Filesystem fallback: include blog HTML files not in DB (e.g. locally generated)
+    try {
+      const { readdirSync, readFileSync, existsSync, statSync } = await import('fs');
+      const { resolve } = await import('path');
+      const blogDir = resolve(process.cwd(), 'public', 'blog');
+      if (existsSync(blogDir)) {
+        const dbSlugs = new Set(pages.map(p => p.slug));
+        const fsFiles = readdirSync(blogDir).filter(f => f.endsWith('.html') && f !== '_TEMPLATE.html' && f !== '_template.html');
+        for (const file of fsFiles) {
+          const slug = file.replace(/\.html$/, '');
+          if (dbSlugs.has(slug)) continue;
+          const content = readFileSync(resolve(blogDir, file), 'utf-8');
+          const titleMatch = content.match(/<title>([^<]+)<\/title>/i) || content.match(/<h1[^>]*>([^<]+)<\/h1>/i);
+          const title = titleMatch ? titleMatch[1].trim().replace(/ — YouTube SEO Blog.*$/, '').trim() : slug.replace(/-/g, ' ');
+          const wordCount = content.replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').trim().split(/\s+/).length;
+          const dateMatch = content.match(/(\d{4}-\d{2}-\d{2})/);
+          const publishedAt = dateMatch ? dateMatch[1] : statSync(resolve(blogDir, file)).mtime.toISOString().split('T')[0];
+          pages.push({ slug, title, wordCount, content, publishedAt });
+          dbSlugs.add(slug);
+        }
+        // Re-sort by date descending (newest first)
+        pages.sort((a, b) => new Date(b.publishedAt) - new Date(a.publishedAt));
+      }
+    } catch (_) { /* fs fallback is best-effort */ }
 
     var html = '<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0"><link rel="icon" href="/logo.svg" type="image/svg+xml" />'
       + '<title>YouTube SEO Blog — Guides &amp; Strategies | YT SEO Architect</title>'
