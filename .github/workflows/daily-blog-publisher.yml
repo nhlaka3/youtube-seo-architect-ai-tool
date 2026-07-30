@@ -48,10 +48,10 @@ jobs:
           token: ${{ secrets.GH_PAT }}
           fetch-depth: 0
 
-      - name: 🔧 Setup Node.js 24
+      - name: 🔧 Setup Node.js 22
         uses: actions/setup-node@v4
         with:
-          node-version: '24'
+          node-version: '22'
           cache: 'npm'
 
       - name: 🐍 Setup Python 3.12
