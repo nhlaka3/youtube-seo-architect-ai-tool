@@ -915,30 +915,27 @@ app.get(['/blog/categories', '/blog/category'], async (req, res) => {
     // Static fallback: known blog HTML files deployed to Vercel
     // (filesystem readdir doesn't work in serverless runtime)
     const KNOWN_BLOG_SLUGS = [
-      'best-youtube-growth-strategies-for-new-creators-2026',
-      'creating-effective-youtube-thumbnails-for-clicks-2026',
-      'developing-a-youtube-content-calendar-strategy-2026',
-      'improving-youtube-engagement-with-live-streaming-2026',
-      'increasing-youtube-watch-time-with-analytics-2026',
-      'maximizing-youtube-revenue-with-sponsorships-2026',
-      'understanding-youtube-algorithm-updates-for-creators-2026',
-      'youtube-algorithm-best-strategies-2026',
-      'youtube-channel-branding-tips-for-consistency-2026',
-      'youtube-content-strategy-for-beginners-2026',
-      'youtube-seo-examples-2026',
-      'youtube-shorts-seo-guide-2026',
-      'youtube-subscriber-growth-2026',
-      'youtube-thumbnail-tips-2026',
-      'using-youtube-features-to-enhance-viewer-experience-2026',
+      { slug: 'best-youtube-growth-strategies-for-new-creators-2026', date: '2026-07-29' },
+      { slug: 'creating-effective-youtube-thumbnails-for-clicks-2026', date: '2026-07-29' },
+      { slug: 'developing-a-youtube-content-calendar-strategy-2026', date: '2026-07-29' },
+      { slug: 'improving-youtube-engagement-with-live-streaming-2026', date: '2026-07-29' },
+      { slug: 'increasing-youtube-watch-time-with-analytics-2026', date: '2026-07-29' },
+      { slug: 'maximizing-youtube-revenue-with-sponsorships-2026', date: '2026-07-29' },
+      { slug: 'understanding-youtube-algorithm-updates-for-creators-2026', date: '2026-07-30' },
+      { slug: 'youtube-algorithm-best-strategies-2026', date: '2026-07-29' },
+      { slug: 'youtube-channel-branding-tips-for-consistency-2026', date: '2026-07-29' },
+      { slug: 'youtube-content-strategy-for-beginners-2026', date: '2026-07-29' },
+      { slug: 'youtube-seo-examples-2026', date: '2026-07-29' },
+      { slug: 'youtube-shorts-seo-guide-2026', date: '2026-07-29' },
+      { slug: 'youtube-subscriber-growth-2026', date: '2026-07-29' },
+      { slug: 'youtube-thumbnail-tips-2026', date: '2026-07-29' },
     ];
     const dbSlugs = new Set(pages.map(p => p.slug));
-    for (const slug of KNOWN_BLOG_SLUGS) {
-      if (!dbSlugs.has(slug)) {
-        const title = slug.replace(/-/g, ' ').replace(/\b\w/g, c => c.toUpperCase());
-        // Use today's date so new posts sort near top
-        const today = new Date().toISOString().split('T')[0];
-        pages.push({ slug, title, wordCount: 0, content: '', publishedAt: today });
-        dbSlugs.add(slug);
+    for (const entry of KNOWN_BLOG_SLUGS) {
+      if (!dbSlugs.has(entry.slug)) {
+        const title = entry.slug.replace(/-/g, ' ').replace(/\b\w/g, c => c.toUpperCase());
+        pages.push({ slug: entry.slug, title, wordCount: 0, content: '', publishedAt: entry.date });
+        dbSlugs.add(entry.slug);
       }
     }
 
@@ -1051,30 +1048,27 @@ app.get('/blog', async (req, res) => {
     // Static fallback: known blog HTML files deployed to Vercel
     // (filesystem readdir doesn't work in serverless runtime)
     const KNOWN_BLOG_SLUGS = [
-      'best-youtube-growth-strategies-for-new-creators-2026',
-      'creating-effective-youtube-thumbnails-for-clicks-2026',
-      'developing-a-youtube-content-calendar-strategy-2026',
-      'improving-youtube-engagement-with-live-streaming-2026',
-      'increasing-youtube-watch-time-with-analytics-2026',
-      'maximizing-youtube-revenue-with-sponsorships-2026',
-      'understanding-youtube-algorithm-updates-for-creators-2026',
-      'youtube-algorithm-best-strategies-2026',
-      'youtube-channel-branding-tips-for-consistency-2026',
-      'youtube-content-strategy-for-beginners-2026',
-      'youtube-seo-examples-2026',
-      'youtube-shorts-seo-guide-2026',
-      'youtube-subscriber-growth-2026',
-      'youtube-thumbnail-tips-2026',
-      'using-youtube-features-to-enhance-viewer-experience-2026',
+      { slug: 'best-youtube-growth-strategies-for-new-creators-2026', date: '2026-07-29' },
+      { slug: 'creating-effective-youtube-thumbnails-for-clicks-2026', date: '2026-07-29' },
+      { slug: 'developing-a-youtube-content-calendar-strategy-2026', date: '2026-07-29' },
+      { slug: 'improving-youtube-engagement-with-live-streaming-2026', date: '2026-07-29' },
+      { slug: 'increasing-youtube-watch-time-with-analytics-2026', date: '2026-07-29' },
+      { slug: 'maximizing-youtube-revenue-with-sponsorships-2026', date: '2026-07-29' },
+      { slug: 'understanding-youtube-algorithm-updates-for-creators-2026', date: '2026-07-30' },
+      { slug: 'youtube-algorithm-best-strategies-2026', date: '2026-07-29' },
+      { slug: 'youtube-channel-branding-tips-for-consistency-2026', date: '2026-07-29' },
+      { slug: 'youtube-content-strategy-for-beginners-2026', date: '2026-07-29' },
+      { slug: 'youtube-seo-examples-2026', date: '2026-07-29' },
+      { slug: 'youtube-shorts-seo-guide-2026', date: '2026-07-29' },
+      { slug: 'youtube-subscriber-growth-2026', date: '2026-07-29' },
+      { slug: 'youtube-thumbnail-tips-2026', date: '2026-07-29' },
     ];
     const dbSlugs = new Set(pages.map(p => p.slug));
-    for (const slug of KNOWN_BLOG_SLUGS) {
-      if (!dbSlugs.has(slug)) {
-        const title = slug.replace(/-/g, ' ').replace(/\b\w/g, c => c.toUpperCase());
-        // Use today's date so new posts sort near top
-        const today = new Date().toISOString().split('T')[0];
-        pages.push({ slug, title, wordCount: 0, content: '', publishedAt: today });
-        dbSlugs.add(slug);
+    for (const entry of KNOWN_BLOG_SLUGS) {
+      if (!dbSlugs.has(entry.slug)) {
+        const title = entry.slug.replace(/-/g, ' ').replace(/\b\w/g, c => c.toUpperCase());
+        pages.push({ slug: entry.slug, title, wordCount: 0, content: '', publishedAt: entry.date });
+        dbSlugs.add(entry.slug);
       }
     }
     pages.sort((a, b) => new Date(b.publishedAt) - new Date(a.publishedAt));
