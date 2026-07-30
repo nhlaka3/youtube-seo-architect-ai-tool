@@ -595,7 +595,7 @@ export function renderBlogTemplate(page) {
   const hasTOC = hasSection(rawContent, 'toc');
   const hasFAQ = hasSection(rawContent, 'faq');
   const hasKeyTakeaways = hasSection(rawContent, 'key-takeaways') || hasSection(rawContent, 'key-takeaways');
-  const hasHero = hasHeroImage(rawContent);
+  const hasHero = false; // Always inject via template — body content hero is stripped
   const hasCTA = hasSection(rawContent, 'cta-box');
   const hasAuthorBox = hasSection(rawContent, 'author-box') || hasSection(rawContent, 'author-info');
   const hasBreadcrumbs = hasSection(rawContent, 'breadcrumb') || /"BreadcrumbList"/i.test(rawContent);
@@ -640,7 +640,7 @@ export function renderBlogTemplate(page) {
     bodyContent = articleMatch[1].trim();
   }
   // Strip duplicate H1 (template provides one) and any existing related-posts/footer sections
-  // Also strip share bars, meta lines, author box — template renders these
+  // Also strip share bars, meta lines, author box, hero image — template renders these
   bodyContent = bodyContent
     .replace(/<h1[^>]*>.*?<\/h1>/i, '')
     .replace(/<nav\s[^>]*class="related-posts"[^>]*>[\s\S]*?<\/nav>/gi, '')
@@ -649,6 +649,7 @@ export function renderBlogTemplate(page) {
     .replace(/<p\s[^>]*class="meta"[^>]*>[\s\S]*?<\/p>/gi, '')
     .replace(/<div\s[^>]*class="author-box[^>]*>[\s\S]*?<\/div>/gi, '')
     .replace(/<div\s[^>]*class="adsense-blog[^"]*"[^>]*>[\s\S]*?<\/div>/gi, '')
+    .replace(/<div\s[^>]*class="featured-image-wrapper[^>]*>[\s\S]*?<\/div>/gi, '')
     .trim();
   const linked = linkGlossaryTerms(bodyContent);
   contentHTML += linked;
