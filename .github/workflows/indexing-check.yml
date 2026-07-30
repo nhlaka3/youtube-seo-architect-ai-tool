@@ -1,0 +1,58 @@
+name: 🔍 Indexing Checker
+
+on:
+  schedule:
+    - cron: '0 8 * * 1'
+  workflow_dispatch:
+    inputs:
+      full:
+        description: 'Full scan (all 2,900+ URLs)? Default: quick (500)'
+        type: boolean
+        default: false
+
+permissions:
+  contents: write
+
+jobs:
+  check-indexing:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GH_PAT }}
+          fetch-depth: 1
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+
+      - name: Run indexing check
+        id: check
+        run: |
+          if [[ "${{ github.event.inputs.full }}" == "true" ]]; then
+            node scripts/check-indexing.mjs
+          else
+            node scripts/check-indexing.mjs --quick
+          fi
+
+      - name: Commit report
+        id: commit
+        run: |
+          git config user.name "YT SEO Bot"
+          git config user.email "hnhlaka142@gmail.com"
+          git add public/indexing-report.json
+          if git diff --staged --quiet; then
+            echo "No changes"
+          else
+            git commit -m "indexing: weekly check report [skip ci]"
+            git push origin HEAD:main
+          fi
+
+      - name: Ping search engines
+        continue-on-error: true
+        run: node scripts/auto-index.mjs --deploy
+
+      - name: Report summary
+        if: always()
+        run: node scripts/print-indexing-report.mjs

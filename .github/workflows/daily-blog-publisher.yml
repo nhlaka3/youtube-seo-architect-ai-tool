@@ -1,0 +1,178 @@
+name: 📝 Daily Blog Publisher
+
+on:
+  schedule:
+    - cron: '0 6 * * *'     # 6:00 AM UTC daily (~8 AM SAST)
+  workflow_dispatch:          # Manual trigger from GitHub UI
+    inputs:
+      force:
+        description: 'Skip demand check?'
+        type: boolean
+        default: false
+      keyword:
+        description: 'Override keyword (empty = use next pending)'
+        type: string
+        default: ''
+
+# ── Required GitHub Secrets ─────────────────────────────────────
+# Go to Settings → Secrets and variables → Actions → New secret:
+#   GROQ_API_KEY   (required — for AI blog generation)
+#   GEMINI_API_KEY (optional — fallback if Groq fails)
+#   GH_PAT         (required — personal access token with Contents: Write)
+#    Create at: https://github.com/settings/tokens → scopes: repo
+#
+# ⚠️ VERCEL_TOKEN is NOT needed here — deployment happens by pushing
+#    blog files to the public repo (nhlaka3/youtube-seo-architect-ai-tool)
+#    which auto-deploys to Vercel via its GitHub integration.
+# ───────────────────────────────────────────────────────────────
+
+permissions:
+  contents: write
+
+jobs:
+  generate-and-deploy:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+
+    env:
+      GROQ_API_KEY: ${{ secrets.GROQ_API_KEY }}
+      GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+      DATABASE_URL: ${{ secrets.DATABASE_URL }}
+      CI: true   # Tells auto-blog-generator.mjs to skip internal Vercel deploy
+      NODE_ENV: production
+
+    steps:
+      - name: ⬇️ Checkout private repo
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GH_PAT }}
+          fetch-depth: 0
+
+      - name: 🔧 Setup Node.js 22
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: 'npm'
+
+      - name: 🐍 Setup Python 3.12
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: 🏗️ Build command
+        id: build-cmd
+        run: |
+          CMD="node scripts/auto-blog-generator.mjs"
+          if [[ "${{ github.event.inputs.force }}" == "true" ]]; then
+            CMD="$CMD --force"
+          fi
+          echo "CMD=$CMD" >> $GITHUB_OUTPUT
+
+      - name: 🚀 Generate blog post
+        id: generate
+        continue-on-error: true
+        env:
+          KEYWORD_OVERRIDE: ${{ github.event.inputs.keyword }}
+        run: |
+          CMD="${{ steps.build-cmd.outputs.CMD }}"
+          if [[ -n "$KEYWORD_OVERRIDE" ]]; then
+            CMD="$CMD --keyword \"$KEYWORD_OVERRIDE\""
+          fi
+          echo "Running: $CMD"
+          eval "$CMD"
+
+      - name: 🔗 Inject glossary cross-links into blog posts
+        id: inject-links
+        run: |
+          echo "Injecting glossary links into new blog post..."
+          node scripts/add-glossary-links.mjs
+          node scripts/add-glossary-links-dist.mjs
+
+      - name: 🛠️ Generate interactive tool page for new blog post
+        id: generate-tool
+        run: |
+          echo "Generating interactive tool page for new blog post..."
+          node scripts/generate-blog-tools.mjs
+          echo "Interactive tool page generated (or already exists)"
+
+      - name: 📋 Rebuild tools index page
+        id: rebuild-tools-index
+        run: |
+          echo "Rebuilding tools index page with search and filters..."
+          node scripts/generate-tools-index.mjs
+          echo "Tools index page rebuilt"
+
+      - name: 📊 Regenerate comparison vs/ pages
+        run: |
+          echo "Regenerating comparison pages from data..."
+          node scripts/generate-vs-pages.mjs 2>&1
+          echo "✅ vs/ pages regenerated"
+
+      - name: 🧮 Regenerate converter calculators
+        run: |
+          echo "Regenerating interactive converter calculators..."
+          node scripts/generate-converters.mjs 2>&1
+          echo "✅ Converter pages regenerated"
+
+      - name: 📚 Regenerate how-to guides
+        run: |
+          echo "Regenerating how-to guides..."
+          node scripts/generate-guides.mjs 2>&1
+          echo "✅ Guide pages regenerated"
+
+      - name: 🎬 Generate video from new blog post
+        id: video
+        continue-on-error: true
+        env:
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+          FAL_KEY: ${{ secrets.FAL_KEY }}
+          GOOGLE_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          GROQ_API_KEY: ${{ secrets.GROQ_API_KEY }}
+        run: |
+          if [ -n "$GOOGLE_API_KEY" ]; then
+            echo "🎬 Gemini key found — video generation ready"
+            echo "Run: gh workflow run video-generator.yml -f slug=<slug>"
+            echo ""
+            echo "To enable full video (motion clips), add FAL_KEY secret."
+            echo "With just Gemini: image-based videos with voiceover (~\$0.15/video)."
+            echo "With FAL_KEY added: full motion video with stock clips (~\$0.50/video)."
+          else
+            echo "⚠ No video API keys configured — skipping video generation"
+          fi
+
+      - name: 📤 Push generated files to private repo
+        id: push
+        run: |
+          git config user.name "YT SEO Bot"
+          git config user.email "hnhlaka142@gmail.com"
+          git add -A
+          if git diff --staged --quiet; then
+            echo "✅ No changes to commit"
+            echo "COMMITTED=false" >> $GITHUB_OUTPUT
+          else
+            git commit -m "blog: daily auto-generated post"
+            git pull --rebase origin main 2>&1 || true
+            git push origin HEAD:main 2>&1
+            echo "✅ Pushed to private repo"
+            echo "COMMITTED=true" >> $GITHUB_OUTPUT
+          fi
+
+      - name: 🌐 Deploy to Vercel
+        if: steps.push.outputs.COMMITTED == 'true'
+        env:
+          PUBLIC_REPO: https://x-access-token:${{ secrets.GH_PAT }}@github.com/nhlaka3/youtube-seo-architect-ai-tool.git
+        run: |
+          # Push to public repo — Vercel auto-deploys via GitHub integration
+          git remote add public "$PUBLIC_REPO"
+          git push public HEAD:main --force 2>&1 && echo "✅ Pushed to public repo — Vercel auto-deploy triggered"
+
+      - name: 📊 Report
+        if: always()
+        run: |
+          echo "════════════════════════════════════════════"
+          echo "  📝 DAILY BLOG PUBLISHER REPORT"
+          echo "════════════════════════════════════════════"
+          echo "  Generate step: ${{ steps.generate.outcome }}"
+          echo "  Changes pushed: ${{ steps.push.outputs.COMMITTED }}"
+          echo "  Time:          $(date -u)"
+          echo "════════════════════════════════════════════"

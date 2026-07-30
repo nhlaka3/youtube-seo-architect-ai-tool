@@ -930,14 +930,14 @@ app.get(['/blog/categories', '/blog/category'], async (req, res) => {
       'youtube-subscriber-growth-2026',
       'youtube-thumbnail-tips-2026',
       'using-youtube-features-to-enhance-viewer-experience-2026',
-      'using-youtube-features-to-enhance-viewer-experience-2026',
-      'using-youtube-features-to-enhance-viewer-experience-2026',
     ];
     const dbSlugs = new Set(pages.map(p => p.slug));
     for (const slug of KNOWN_BLOG_SLUGS) {
       if (!dbSlugs.has(slug)) {
         const title = slug.replace(/-/g, ' ').replace(/\b\w/g, c => c.toUpperCase());
-        pages.push({ slug, title, wordCount: 0, content: '', publishedAt: '2026-07-01' });
+        // Use today's date so new posts sort near top
+        const today = new Date().toISOString().split('T')[0];
+        pages.push({ slug, title, wordCount: 0, content: '', publishedAt: today });
         dbSlugs.add(slug);
       }
     }
@@ -1003,8 +1003,6 @@ app.get('/blog/category/:slug', async (req, res) => {
       'youtube-subscriber-growth-2026',
       'youtube-thumbnail-tips-2026',
       'using-youtube-features-to-enhance-viewer-experience-2026',
-      'using-youtube-features-to-enhance-viewer-experience-2026',
-      'using-youtube-features-to-enhance-viewer-experience-2026',
     ];
     const dbSlugs = new Set(allPages.map(p => p.slug));
     for (const slug of KNOWN_BLOG_SLUGS) {
@@ -1068,14 +1066,14 @@ app.get('/blog', async (req, res) => {
       'youtube-subscriber-growth-2026',
       'youtube-thumbnail-tips-2026',
       'using-youtube-features-to-enhance-viewer-experience-2026',
-      'using-youtube-features-to-enhance-viewer-experience-2026',
-      'using-youtube-features-to-enhance-viewer-experience-2026',
     ];
     const dbSlugs = new Set(pages.map(p => p.slug));
     for (const slug of KNOWN_BLOG_SLUGS) {
       if (!dbSlugs.has(slug)) {
         const title = slug.replace(/-/g, ' ').replace(/\b\w/g, c => c.toUpperCase());
-        pages.push({ slug, title, wordCount: 0, content: '', publishedAt: '2026-07-01' });
+        // Use today's date so new posts sort near top
+        const today = new Date().toISOString().split('T')[0];
+        pages.push({ slug, title, wordCount: 0, content: '', publishedAt: today });
         dbSlugs.add(slug);
       }
     }

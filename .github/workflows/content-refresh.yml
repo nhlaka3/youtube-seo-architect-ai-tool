@@ -1,0 +1,92 @@
+name: 🔄 Weekly Content Refresh
+
+on:
+  schedule:
+    - cron: '0 7 * * 1'      # 7:00 AM UTC every Monday (after glossary at 8AM, before backlinks at 9AM)
+  workflow_dispatch:           # Manual trigger
+    inputs:
+      slug:
+        description: 'Specific blog slug to refresh (empty = auto-pick oldest)'
+        type: string
+        default: ''
+      force:
+        description: 'Skip "refreshed within 7 days" check'
+        type: boolean
+        default: false
+
+permissions:
+  contents: write
+
+jobs:
+  refresh:
+    runs-on: ubuntu-latest
+
+    env:
+      GROQ_API_KEY: ${{ secrets.GROQ_API_KEY }}
+      GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+
+    steps:
+      - name: ⬇️ Checkout private repo
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GH_PAT }}
+          fetch-depth: 1
+
+      - name: 🔧 Setup Node.js 24
+        uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+
+      - name: 🔄 Refresh oldest blog post
+        id: refresh
+        run: |
+          CMD="node scripts/refresh-oldest-post.mjs"
+          if [[ "${{ github.event.inputs.force }}" == "true" ]] || [[ "${{ github.event_name }}" == "schedule" ]]; then
+            CMD="$CMD --force"
+          fi
+          if [[ -n "${{ github.event.inputs.slug }}" ]]; then
+            CMD="$CMD --slug=${{ github.event.inputs.slug }}"
+          fi
+          echo "Running: $CMD"
+          eval "$CMD"
+
+      - name: 🤖 Regenerate AI search files (llms.txt + llms-full.txt)
+        id: llms
+        run: |
+          node scripts/generate-llms-content.mjs
+
+      - name: 📤 Push changes
+        id: push
+        run: |
+          git config user.name "YT SEO Bot"
+          git config user.email "hnhlaka142@gmail.com"
+          git add -A
+          if git diff --staged --quiet; then
+            echo "✅ No changes to commit"
+            echo "CHANGED=false" >> $GITHUB_OUTPUT
+          else
+            git commit -m "content: refresh oldest blog post [skip ci]"
+            git pull --rebase origin main 2>&1 || true
+            git push origin HEAD:main 2>&1
+            echo "✅ Pushed to private repo"
+            echo "CHANGED=true" >> $GITHUB_OUTPUT
+          fi
+
+      - name: 🌐 Push to public repo (triggers Vercel deploy)
+        if: steps.push.outputs.CHANGED == 'true'
+        env:
+          PUBLIC_REPO: https://x-access-token:${{ secrets.GH_PAT }}@github.com/nhlaka3/youtube-seo-architect-ai-tool.git
+        run: |
+          git remote add public "$PUBLIC_REPO"
+          git push public HEAD:main --force 2>&1 && echo "✅ Pushed to public repo — Vercel auto-deploy triggered"
+
+      - name: 📊 Report
+        if: always()
+        run: |
+          echo "════════════════════════════════════════════"
+          echo "  🔄 CONTENT REFRESH REPORT"
+          echo "════════════════════════════════════════════"
+          echo "  Refresh: ${{ steps.refresh.outcome }}"
+          echo "  Changes: ${{ steps.push.outputs.CHANGED }}"
+          echo "  Time:    $(date -u)"
+          echo "════════════════════════════════════════════"
