@@ -384,6 +384,34 @@ async function generateSectionViaGemini(apiKey, systemPrompt, sectionPrompt) {
   return cleanHTML(text);
 }
 
+async function generateSectionViaNvidia(systemPrompt, sectionPrompt) {
+  const response = await fetchWithRetry(
+    'https://integrate.api.nvidia.com/v1/chat/completions',
+    {
+      method: 'POST',
+      headers: {
+        'Authorization': 'Bearer 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',
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        model: 'meta/llama-3.1-8b-instruct',
+        messages: [
+          { role: 'system', content: systemPrompt },
+          { role: 'user', content: sectionPrompt },
+        ],
+        temperature: 0.7,
+        max_tokens: 4096,
+        top_p: 0.9,
+      }),
+    }
+  );
+
+  const data = await response.json();
+  const content = data.choices?.[0]?.message?.content;
+  if (!content) throw new Error('Empty response from NVIDIA');
+  return cleanHTML(content);
+}
+
 async function generateSection(systemPrompt, sectionPrompt) {
   const groqKey = process.env.GROQ_API_KEY;
   const geminiKey = process.env.GEMINI_API_KEY;
@@ -394,17 +422,28 @@ async function generateSection(systemPrompt, sectionPrompt) {
       return await generateSectionViaGroq(groqKey, systemPrompt, sectionPrompt);
     } catch (e) {
       console.log(`    ⚠ Groq failed: ${e.message}`);
-      if (!geminiKey) throw e;
+      if (!geminiKey) {
+        console.log('    → Falling back to NVIDIA...');
+        return await generateSectionViaNvidia(systemPrompt, sectionPrompt);
+      }
       console.log('    → Falling back to Gemini...');
     }
   }
 
   // Fallback to Gemini
   if (geminiKey) {
-    return await generateSectionViaGemini(geminiKey, systemPrompt, sectionPrompt);
+    try {
+      return await generateSectionViaGemini(geminiKey, systemPrompt, sectionPrompt);
+    } catch (e) {
+      console.log(`    ⚠ Gemini failed: ${e.message}`);
+      console.log('    → Falling back to NVIDIA...');
+      return await generateSectionViaNvidia(systemPrompt, sectionPrompt);
+    }
   }
 
-  throw new Error('No API keys available (GROQ_API_KEY and/or GEMINI_API_KEY)');
+  // Final fallback: NVIDIA
+  console.log('    → Using NVIDIA (no Groq/Gemini keys available)...');
+  return await generateSectionViaNvidia(systemPrompt, sectionPrompt);
 }
 
 function cleanHTML(text) {
@@ -889,12 +928,8 @@ async function refillKeywords() {
   }
 
   const apiKey = process.env.GROQ_API_KEY;
-  if (!apiKey) {
-    console.error('  ❌ GROQ_API_KEY not found. Cannot generate keywords.');
-    return;
-  }
 
-  console.log('  Generating new keyword ideas via Groq...');
+  console.log('  Generating new keyword ideas...');
 
   // Categories we need more of
   const categories = ['SEO', 'Analytics', 'Growth', 'Revenue', 'Engagement', 'Thumbnails', 'Content', 'Strategy', 'Tools', 'Branding'];
@@ -919,28 +954,64 @@ Rules for slug: lowercase, replace spaces with hyphens, remove special chars.
 Rules for category: one of: SEO, Analytics, Growth, Revenue, Engagement, Thumbnails, Content, Strategy, Tools, Branding, Niche, Shorts, Algorithm, Features, Troubleshooting, Technical`;
 
   try {
-    const response = await fetchWithRetry(
-      'https://api.groq.com/openai/v1/chat/completions',
-      {
-        method: 'POST',
-        headers: {
-          'Authorization': `Bearer ${apiKey}`,
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          model: 'llama-3.1-8b-instant',
-          messages: [
-            { role: 'system', content: 'You are an SEO keyword research expert. Return only valid JSON.' },
-            { role: 'user', content: prompt },
-          ],
-          temperature: 0.8,
-          max_tokens: 2048,
-        }),
-      }
-    );
+    let text = '';
+    if (apiKey) {
+      // Try Groq first
+      console.log('    → Using Groq...');
+      const response = await fetchWithRetry(
+        'https://api.groq.com/openai/v1/chat/completions',
+        {
+          method: 'POST',
+          headers: {
+            'Authorization': `Bearer ${apiKey}`,
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            model: 'llama-3.1-8b-instant',
+            messages: [
+              { role: 'system', content: 'You are an SEO keyword research expert. Return only valid JSON.' },
+              { role: 'user', content: prompt },
+            ],
+            temperature: 0.8,
+            max_tokens: 2048,
+          }),
+        }
+      );
+      const result = await response.json();
+      text = result.choices?.[0]?.message?.content || '';
+    }
 
-    const result = await response.json();
-    let text = result.choices?.[0]?.message?.content || '';
+    // Fallback: try NVIDIA if Groq unavailable or returned empty
+    if (!text) {
+      console.log('    → Using NVIDIA...');
+      const nvResponse = await fetchWithRetry(
+        'https://integrate.api.nvidia.com/v1/chat/completions',
+        {
+          method: 'POST',
+          headers: {
+            'Authorization': 'Bearer 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',
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            model: 'meta/llama-3.1-8b-instruct',
+            messages: [
+              { role: 'system', content: 'You are an SEO keyword research expert. Return only valid JSON.' },
+              { role: 'user', content: prompt },
+            ],
+            temperature: 0.8,
+            max_tokens: 2048,
+          }),
+        }
+      );
+      const nvResult = await nvResponse.json();
+      text = nvResult.choices?.[0]?.message?.content || '';
+    }
+
+    if (!text) {
+      console.log('  ❌ No response from any provider. Cannot generate keywords.');
+      return;
+    }
+
     text = text.replace(/^```(?:json)?\s*\n?/i, '').replace(/\n?```\s*$/i, '').trim();
 
     const newKeywords = JSON.parse(text);
@@ -1097,8 +1168,12 @@ async function main() {
   const done = data.keywords.filter(k => k.status === 'done');
 
   console.log(`  Keywords: ${pending.length} pending, ${done.length} done`);
-  console.log(`  Providers: Groq${process.env.GEMINI_API_KEY ? ' + Gemini (fallback)' : ''}`);
+  console.log(`  Providers: Groq${process.env.GEMINI_API_KEY ? ' + Gemini (fallback)' : ''} + NVIDIA (fallback)`);
   console.log('');
+
+  // ── Pick keyword (declared early so auto-refill can reference it) ──
+  let keywordEntry = null;
+  let demandResults = [];
 
   // Auto-refill if running low
   if (pending.length < 5 && !KEYWORD_OVERRIDE) {
@@ -1133,9 +1208,6 @@ async function main() {
   }
 
   // ── Pick keyword with demand loop ──────────────────────────────
-  let keywordEntry = null;
-  let demandResults = [];
-
   if (KEYWORD_OVERRIDE) {
     keywordEntry = pickNextKeyword(data, KEYWORD_OVERRIDE);
     if (!keywordEntry) {
