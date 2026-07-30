@@ -929,6 +929,9 @@ app.get(['/blog/categories', '/blog/category'], async (req, res) => {
       'youtube-shorts-seo-guide-2026',
       'youtube-subscriber-growth-2026',
       'youtube-thumbnail-tips-2026',
+      'using-youtube-features-to-enhance-viewer-experience-2026',
+      'using-youtube-features-to-enhance-viewer-experience-2026',
+      'using-youtube-features-to-enhance-viewer-experience-2026',
     ];
     const dbSlugs = new Set(pages.map(p => p.slug));
     for (const slug of KNOWN_BLOG_SLUGS) {
@@ -999,6 +1002,9 @@ app.get('/blog/category/:slug', async (req, res) => {
       'youtube-shorts-seo-guide-2026',
       'youtube-subscriber-growth-2026',
       'youtube-thumbnail-tips-2026',
+      'using-youtube-features-to-enhance-viewer-experience-2026',
+      'using-youtube-features-to-enhance-viewer-experience-2026',
+      'using-youtube-features-to-enhance-viewer-experience-2026',
     ];
     const dbSlugs = new Set(allPages.map(p => p.slug));
     for (const slug of KNOWN_BLOG_SLUGS) {
@@ -1061,6 +1067,9 @@ app.get('/blog', async (req, res) => {
       'youtube-shorts-seo-guide-2026',
       'youtube-subscriber-growth-2026',
       'youtube-thumbnail-tips-2026',
+      'using-youtube-features-to-enhance-viewer-experience-2026',
+      'using-youtube-features-to-enhance-viewer-experience-2026',
+      'using-youtube-features-to-enhance-viewer-experience-2026',
     ];
     const dbSlugs = new Set(pages.map(p => p.slug));
     for (const slug of KNOWN_BLOG_SLUGS) {
