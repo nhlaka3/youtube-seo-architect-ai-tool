@@ -310,6 +310,7 @@ pre:hover .copy-btn { opacity: 1; }
   .article-layout { flex-direction: column; }
   .toc-sidebar { display: none; }
 }
+.toc { position: static !important; max-height: none !important; overflow-y: visible !important; margin: 1rem 0 1.5rem !important; }
 
 /* ── Article Hero ── */
 .article-hero {

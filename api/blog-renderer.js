@@ -648,6 +648,7 @@ export function renderBlogTemplate(page) {
     .replace(/<div\s[^>]*class="share-bar[^>]*>[\s\S]*?<\/div>/gi, '')
     .replace(/<p\s[^>]*class="meta"[^>]*>[\s\S]*?<\/p>/gi, '')
     .replace(/<div\s[^>]*class="author-box[^>]*>[\s\S]*?<\/div>/gi, '')
+    .replace(/<div\s[^>]*class="adsense-blog[^"]*"[^>]*>[\s\S]*?<\/div>/gi, '')
     .trim();
   const linked = linkGlossaryTerms(bodyContent);
   contentHTML += linked;
