@@ -1,0 +1,69 @@
+  Search error: <urlopen error timed out>
+  Search error: <urlopen error timed out>
+  Search error: <urlopen error timed out>
+  Search error: <urlopen error timed out>
+  Search error: <urlopen error timed out>
+  Search error: <urlopen error timed out>
+  Search error: <urlopen error timed out>
+  Search error: <urlopen error timed out>
+  Search error: <urlopen error timed out>
+  Search error: <urlopen error timed out>
+  Search error: <urlopen error timed out>
+  Search error: <urlopen error timed out>
+  Search error: <urlopen error timed out>
+  Search error: <urlopen error timed out>
+
+============================================================
+SKYSCRAPER TECHNIQUE SCANNER
+Finding pages that link to competitor tools but not to us
+Our site: https://yt-seo-architect.vercel.app
+============================================================
+
+🔄 Stage 1: Searching for competitor-linking pages...
+  [1/15] "best youtube seo tools"
+  [2/15] "youtube tools for creators"
+  [3/15] "youtube seo guide tools"
+  [4/15] "youtube keyword research tools"
+  [5/15] "youtube growth tools"
+  [6/15] "youtube analytics tools"
+  [7/15] "youtube thumbnail maker"
+  [8/15] "youtube tag generator tools"
+  [9/15] "youtube description generator"
+  [10/15] "tools i use for youtube"
+  [11/15] "best free youtube tools"
+  [12/15] "youtube seo comparison"
+  [13/15] "youtube optimization tools"
+  [14/15] "tools to grow youtube channel"
+  [15/15] "youtube creator toolkit"
+  Found 0 unique results
+
+  DDG returned 0. Using curated fallback list...
+  Using 23 fallback pages
+
+🔄 Stage 2: Fetching and analyzing up to 15 pages...
+  [1/15] 🎯 OPPORTUNITY https://contentmavericks.com/best-youtube-seo-tool, email: support@contentmavericks.com, tools: https://www.tubebuddy.com
+  [2/15] [SKIP] https://www.youngurbanproject.com/youtube-seo-tool — no competitor links
+  [3/15] [SKIP] https://tuberanker.com/ — HTTP Error 403: Forbidden
+  [4/15] 🎯 OPPORTUNITY https://vidiq.com/youtube-seo-tools/, email: support@vidiq.com, tools: https://discord.com/invite/vidiq
+  [5/15] [SKIP] https://thecmo.com/tools/youtube-seo-tools/ — HTTP Error 403: Forbidden
+  [6/15] [SKIP] https://rankxdigital.com/blog/youtube-seo-tools/ — no competitor links
+  [7/15] [SKIP] https://impressivemagazine.com/best-youtube-seo-to — HTTP Error 403: Forbidden
+  [8/15] [SKIP] https://stuartkerrs.com/best-seo-tools-for-youtube — no competitor links
+  [9/15] [SKIP] https://blog.hubspot.com/marketing/youtube-seo-too — HTTP Error 404: Not Found
+  [10/15] [SKIP] https://syscality.com/best-seo-tools-for-youtube/ — no competitor links
+  [11/15] [SKIP] https://neilpatel.com/blog/youtube-seo-tools/ — HTTP Error 404: Not Found
+  [12/15] 🎯 OPPORTUNITY https://influencermarketinghub.com/youtube-seo-too, tools: https://vidiq.com
+  [13/15] [SKIP] https://backlinko.com/youtube-seo-tools — HTTP Error 404: Not Found
+  [14/15] [SKIP] https://joseangelostudios.com/best-youtube-seo-too — no competitor links
+  [15/15] [SKIP] https://www.tastyedits.com/youtube-seo-tools/ — no competitor links
+
+  Found 3 pages linking to competitors
+
+  Missing our link: 3 pages
+
+🔄 Stage 4: Generating outreach templates...
+
+  New opportunities: 0
+  Skipped (seen): 3
+
+No new opportunities found.
