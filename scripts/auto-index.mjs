@@ -70,7 +70,33 @@ function discoverAllUrls() {
     }
   }
 
-  // Glossary term pages
+  // Glossary pages (generated from glossary-data.json — all 5,700+ comparison URLs)
+  const glossaryDataPath = resolve(ROOT, 'scripts/glossary-data.json');
+  if (existsSync(glossaryDataPath)) {
+    try {
+      const raw = JSON.parse(readFileSync(glossaryDataPath, 'utf-8'));
+      const terms = (raw.terms || []).map(t => t.slug).filter(Boolean);
+      if (terms.length > 0) {
+        // Term pages
+        for (const slug of terms) {
+          urls.push(`${SITE_URL}/glossary/${slug}`);
+          urls.push(`${SITE_URL}/glossary/es/${slug}`);
+        }
+        // Comparison pages (a-vs-b for every unique pair)
+        for (let i = 0; i < terms.length; i++) {
+          for (let j = i + 1; j < terms.length; j++) {
+            urls.push(`${SITE_URL}/glossary/${terms[i]}-vs-${terms[j]}`);
+            urls.push(`${SITE_URL}/glossary/es/${terms[i]}-vs-${terms[j]}`);
+          }
+        }
+        // Category pages
+        for (const cat of ['analytics','algorithm','seo-optimization','monetization','content-strategy','youtube-features']) {
+          urls.push(`${SITE_URL}/glossary/category/${cat}`);
+        }
+      }
+    } catch (_) { /* fallback to filesystem scan below */ }
+  }
+  // Also scan public/glossary/ for any static files not covered above
   const glossaryDir = resolve(ROOT, 'public/glossary');
   if (existsSync(glossaryDir)) {
     const glossaryFiles = readdirSync(glossaryDir).filter(

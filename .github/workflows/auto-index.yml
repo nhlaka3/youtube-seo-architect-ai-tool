@@ -36,16 +36,12 @@ jobs:
         with:
           node-version: '24'
 
-      - name: 🔍 Run auto-index
+      - name: 🔍 Run auto-index (sitemap ping + IndexNow — no Google API)
         id: index
         continue-on-error: true
         env:
-          GOOGLE_INDEXING_KEY: ${{ secrets.GOOGLE_INDEXING_KEY || '' }}
-        run: |
-          CMD="node scripts/auto-index.mjs --deploy"
-          echo "  🚀 Google API included (key configured)"
-          echo "Running: $CMD"
-          eval "$CMD"
+          GOOGLE_INDEXING_KEY: ''
+        run: node scripts/auto-index.mjs
 
       - name: 📊 Report
         if: always()
