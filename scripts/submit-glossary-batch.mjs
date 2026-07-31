@@ -135,26 +135,54 @@ async function main() {
   const token = await getToken(key);
   console.log('✅ Authenticated with Google\n');
 
-  let success = 0, failed = 0;
+  let success = 0, failed = 0, attempted = 0;
   for (let i = 0; i < batch.length; i++) {
+    attempted++;
     try {
       const res = await fetch('https://indexing.googleapis.com/v3/urlNotifications:publish', {
         method: 'POST',
         headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' },
         body: JSON.stringify({ url: batch[i], type: 'URL_UPDATED' }),
       });
-      const body = await res.text();
+      const bodyText = await res.text();
       if (res.ok) {
         success++;
       } else if (res.status === 429) {
+        const detail = bodyText.slice(0, 300);
         failed++;
-        if (failed === 1) console.log('   ⚠️  429 quota hit — stopping early');
-        const retryAfter = res.headers.get('retry-after');
-        if (retryAfter) console.log(`   ⏳ Retry after: ${retryAfter}s`);
-        break; // Stop on quota exceeded, we'll continue next run
+        console.log(`   ⚠️  429 on ${batch[i]} — ${detail}`);
+        // Could be a burst limit (shared GH runner IPs). Retry once after 30s.
+        if (failed === 1) {
+          console.log('   ⏳ Waiting 30s and retrying once...');
+          await new Promise(r => setTimeout(r, 30000));
+          try {
+            const retry = await fetch('https://indexing.googleapis.com/v3/urlNotifications:publish', {
+              method: 'POST',
+              headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' },
+              body: JSON.stringify({ url: batch[i], type: 'URL_UPDATED' }),
+            });
+            if (retry.ok) { success++; continue; }
+            const detail2 = (await retry.text().catch(() => '')).slice(0, 300);
+            console.log(`   ⚠️  retry ${retry.status} — ${detail2}`);
+            if (retry.status === 429) {
+              const retryAfter = retry.headers.get('retry-after');
+              if (retryAfter) console.log(`   ⏳ Retry after: ${retryAfter}s`);
+              console.log('   ⏹️  Quota still exhausted — stopping early, will resume next run');
+              attempted--; // the retry consumed no quota success; count once
+              break;
+            }
+          } catch (e) {
+            console.log(`   ⚠️  retry failed: ${e.message}`);
+          }
+        } else {
+          const retryAfter = res.headers.get('retry-after');
+          if (retryAfter) console.log(`   ⏳ Retry after: ${retryAfter}s`);
+          console.log('   ⏹️  Quota exhausted — stopping early, will resume next run');
+          break;
+        }
       } else {
         failed++;
-        console.log(`   ⚠️  [${i + 1}] ${batch[i].split('/glossary/')[1]}: ${res.status}`);
+        console.log(`   ⚠️  [${i + 1}] ${batch[i].split('/glossary/')[1]}: ${res.status} ${bodyText.slice(0, 150)}`);
       }
     } catch (e) {
       failed++;
@@ -175,7 +203,7 @@ async function main() {
     total: allUrls.length,
     completed: newIndex >= allUrls.length,
     lastBatch: {
-      submitted: batch.length,
+      submitted: attempted,
       succeeded: success,
       failed,
       timestamp: new Date().toISOString(),

@@ -35,7 +35,7 @@
  * ═══════════════════════════════════════════════════════════
  */
 
-import { readFileSync, readdirSync, existsSync } from 'fs';
+import { readFileSync, readdirSync, existsSync, writeFileSync } from 'fs';
 import { resolve, dirname } from 'path';
 import { fileURLToPath } from 'url';
 
@@ -46,6 +46,26 @@ const SITEMAP_URL = `${SITE_URL}/sitemap.xml`;
 
 // IndexNow API key — must match public/{key}.txt verification file
 const INDEXNOW_KEY = '8825c721ac4f49c5b25af78d7418a2b8';
+
+// Google Indexing API state — tracks which non-glossary URLs have already
+// been submitted so we don't re-burn the 200/day quota every run.
+const GOOGLE_STATE_PATH = resolve(ROOT, 'public/auto-index-google-state.json');
+
+function readGoogleState() {
+  try {
+    return JSON.parse(readFileSync(GOOGLE_STATE_PATH, 'utf-8'));
+  } catch {
+    return { submitted: [], updatedAt: null };
+  }
+}
+
+function writeGoogleState(state) {
+  try {
+    writeFileSync(GOOGLE_STATE_PATH, JSON.stringify(state, null, 2) + '\n');
+  } catch (e) {
+    console.log(`   ⚠️  Could not write Google state: ${e.message}`);
+  }
+}
 
 // ── Page discovery ──────────────────────────────────────────────
 
@@ -119,27 +139,36 @@ function discoverAllUrls() {
   return [...new Set(urls)];
 }
 
-// ── Sitemap ping (fastest way to notify all search engines) ──
+// ── Sitemap ping (Google Search Console upsert — the modern channel) ──
+// Note: legacy google.com/ping and bing.com/ping endpoints are both dead
+// (404/410). Bing/Yandex are notified via IndexNow below.
 
-async function pingSitemap() {
-  console.log(`\n🗺️  Pinging sitemap to search engines...\n`);
-
-  const endpoints = [
-    { name: 'Google', url: `https://www.google.com/ping?sitemap=${encodeURIComponent(SITEMAP_URL)}` },
-    { name: 'Bing',   url: `https://www.bing.com/ping?siteMap=${encodeURIComponent(SITEMAP_URL)}` },
-  ];
+async function pingSitemap(googleToken) {
+  console.log(`\n🗺️  Submitting sitemap to Google Search Console...\n`);
 
   const results = [];
-  for (const { name, url } of endpoints) {
+
+  // Search Console API sitemap upsert (PUT) — same service account,
+  // no Indexing API quota cost.
+  if (googleToken) {
     try {
-      const res = await fetch(url, { method: 'GET' });
-      results.push({ name, status: res.ok ? 'ok' : `http ${res.status}` });
-      console.log(`   ${name}: ${res.ok ? '✅' : '⚠️'} ${res.status}`);
+      const encodedSite = encodeURIComponent(`${SITE_URL}/`);
+      const feedpath = encodeURIComponent(SITEMAP_URL);
+      const res = await fetch(
+        `https://www.googleapis.com/webmasters/v3/sites/${encodedSite}/sitemaps/${feedpath}`,
+        { method: 'PUT', headers: { Authorization: `Bearer ${googleToken}` } }
+      );
+      results.push({ name: 'Google (GSC)', status: res.ok ? 'ok' : `http ${res.status}` });
+      console.log(`   Google (GSC): ${res.ok ? '✅' : '⚠️'} ${res.status}`);
     } catch (e) {
-      results.push({ name, status: `failed: ${e.message}` });
-      console.log(`   ${name}: ❌ ${e.message}`);
+      results.push({ name: 'Google (GSC)', status: `failed: ${e.message}` });
+      console.log(`   Google (GSC): ❌ ${e.message}`);
     }
+  } else {
+    results.push({ name: 'Google (GSC)', status: 'skipped' });
+    console.log(`   Google (GSC): skipped (no service account key)`);
   }
+
   return results;
 }
 
@@ -220,7 +249,7 @@ async function getGoogleAccessToken(key) {
   const header = Buffer.from(JSON.stringify({ alg: 'RS256', typ: 'JWT' })).toString('base64url');
   const payload = Buffer.from(JSON.stringify({
     iss: key.client_email,
-    scope: 'https://www.googleapis.com/auth/indexing',
+    scope: 'https://www.googleapis.com/auth/indexing https://www.googleapis.com/auth/webmasters',
     aud: 'https://oauth2.googleapis.com/token',
     exp: now + 3600,
     iat: now,
@@ -246,7 +275,7 @@ async function submitBatchToGoogle(urls) {
   const rawInput = process.env.GOOGLE_INDEXING_KEY;
   const key = resolveGoogleKey(rawInput);
   if (!key) {
-    return { success: 0, failed: 0, total: 0, skipped: true };
+    return { success: 0, failed: 0, total: 0, skipped: true, okUrls: [] };
   }
 
   console.log(`\n🔍 Submitting ${urls.length} URLs via Google Indexing API...\n`);
@@ -257,11 +286,12 @@ async function submitBatchToGoogle(urls) {
     console.log('✅ Authenticated with Google\n');
   } catch (e) {
     console.log(`❌ Google auth failed: ${e.message}`);
-    return { success: 0, failed: urls.length, total: urls.length, skipped: false };
+    return { success: 0, failed: urls.length, total: urls.length, skipped: false, okUrls: [] };
   }
 
   let success = 0;
   let failed = 0;
+  const okUrls = [];
 
   for (let i = 0; i < urls.length; i++) {
     try {
@@ -271,8 +301,13 @@ async function submitBatchToGoogle(urls) {
         body: JSON.stringify({ url: urls[i], type: 'URL_UPDATED' }),
       });
       const result = await res.json();
-      if (result.urlNotificationMetadata) success++;
-      else failed++;
+      if (result.urlNotificationMetadata) {
+        success++;
+        okUrls.push(urls[i]);
+      } else {
+        failed++;
+        console.log(`   ⚠️  ${urls[i]}: ${res.status} ${JSON.stringify(result).slice(0, 150)}`);
+      }
     } catch (e) {
       failed++;
     }
@@ -282,7 +317,7 @@ async function submitBatchToGoogle(urls) {
     }
   }
 
-  return { success, failed, total: urls.length, skipped: false };
+  return { success, failed, total: urls.length, skipped: false, okUrls };
 }
 
 // ── Main ─────────────────────────────────────────────────────
@@ -292,6 +327,8 @@ async function main() {
   const specificUrl = args.includes('--url') ? args[args.indexOf('--url') + 1] : null;
   const deployMode = args.includes('--deploy');
   const checkMode = args.includes('--check');
+  const capIdx = args.indexOf('--google-cap');
+  const googleCap = capIdx !== -1 ? parseInt(args[capIdx + 1], 10) : 0; // 0 = unlimited
 
   console.log('╔══════════════════════════════════════════════════╗');
   console.log('║   Auto-Indexing Engine                          ║');
@@ -322,18 +359,50 @@ async function main() {
     console.log(`   Core: ${stats.core} | Tools: ${stats.tools} | Glossary: ${stats.glossary} | Blog: ${stats.blog}`);
   }
 
+  // Resolve Google key + token once (used for GSC sitemap PUT + Indexing API)
+  const hasGoogleKey = !!resolveGoogleKey(process.env.GOOGLE_INDEXING_KEY);
+  let googleToken = null;
+  if (hasGoogleKey) {
+    try {
+      googleToken = await getGoogleAccessToken(resolveGoogleKey(process.env.GOOGLE_INDEXING_KEY));
+    } catch (e) {
+      console.log(`❌ Google auth failed: ${e.message}`);
+    }
+  } else {
+    console.log('\nℹ️  No GOOGLE_INDEXING_KEY set — Google sitemap PUT + Indexing API skipped.');
+  }
+
   // ── Step 1: Ping sitemap (always — fastest path) ────────
-  const sitemapResult = await pingSitemap();
+  const sitemapResult = await pingSitemap(googleToken);
 
   // ── Step 2: IndexNow (always — per-URL notifications) ───
   const indexNowResult = await submitBatchToIndexNow(urls);
 
-  // ── Step 3: Google Indexing API (only if key exists) ────
+  // ── Step 3: Google Indexing API (--deploy mode only) ────
   let googleResult = { success: 0, failed: 0, total: 0, skipped: true };
-  const hasGoogleKey = !!resolveGoogleKey(process.env.GOOGLE_INDEXING_KEY);
-  if (deployMode && hasGoogleKey) {
-    googleResult = await submitBatchToGoogle(urls);
-  } else if (hasGoogleKey) {
+  if (deployMode && googleToken) {
+    const state = readGoogleState();
+    const already = new Set(state.submitted || []);
+
+    // Priority: non-glossary URLs (core/tools/blog) — glossary pages are
+    // covered by the daily glossary-indexing batch (200/day).
+    let candidates = urls.filter(u => !u.includes('/glossary/') && !already.has(u));
+    if (googleCap > 0) candidates = candidates.slice(0, googleCap);
+
+    if (candidates.length === 0) {
+      console.log('\nℹ️  Google API: nothing new to submit (all priority pages already submitted)');
+    } else {
+      googleResult = await submitBatchToGoogle(candidates);
+      if (googleResult.okUrls.length > 0) {
+        const newState = {
+          submitted: [...(state.submitted || []), ...googleResult.okUrls],
+          updatedAt: new Date().toISOString(),
+        };
+        writeGoogleState(newState);
+        console.log(`   💾 State updated: ${newState.submitted.length} priority URLs recorded`);
+      }
+    }
+  } else if (hasGoogleKey && !deployMode) {
     console.log('\nℹ️  Google Indexing API key detected. Use --deploy to submit to Google.');
   }
 

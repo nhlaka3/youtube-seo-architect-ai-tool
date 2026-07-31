@@ -12,14 +12,15 @@ on:
 
 # ── Required GitHub Secrets ─────────────────────────────────────
 # Go to Settings → Secrets and variables → Actions → New secret:
-#   GOOGLE_INDEXING_KEY (optional — path to Google service account JSON key
-#                        for Google Indexing API submissions)
+#   GOOGLE_INDEXING_KEY (full JSON contents of the Google service
+#                        account key — used for Search Console
+#                        sitemap upsert + Indexing API submissions)
 #
 # IndexNow (Bing/Yandex) works automatically without any secrets.
 # ───────────────────────────────────────────────────────────────
 
 permissions:
-  contents: read
+  contents: write
 
 jobs:
   auto-index:
@@ -29,6 +30,7 @@ jobs:
       - name: ⬇️ Checkout repo
         uses: actions/checkout@v4
         with:
+          token: ${{ secrets.GH_PAT }}
           fetch-depth: 1
 
       - name: 🔧 Setup Node.js 24
@@ -36,12 +38,24 @@ jobs:
         with:
           node-version: '24'
 
-      - name: 🔍 Run auto-index (sitemap ping + IndexNow — no Google API)
+      - name: 🔍 Run auto-index (sitemap ping + IndexNow + Google priority pages)
         id: index
         continue-on-error: true
         env:
-          GOOGLE_INDEXING_KEY: ''
-        run: node scripts/auto-index.mjs
+          GOOGLE_INDEXING_KEY: ${{ secrets.GOOGLE_INDEXING_KEY }}
+        run: node scripts/auto-index.mjs --deploy --google-cap 25
+
+      - name: 💾 Commit Google state
+        run: |
+          git config user.name "YT SEO Bot"
+          git config user.email "hnhlaka142@gmail.com"
+          git add public/auto-index-google-state.json
+          if git diff --staged --quiet; then
+            echo "No state changes"
+          else
+            git commit -m "indexing: auto-index google state [skip ci]"
+            git push origin HEAD:main
+          fi
 
       - name: 📊 Report
         if: always()
@@ -52,4 +66,5 @@ jobs:
           echo "  Index step: ${{ steps.index.outcome }}"
           echo "  Time:       $(date -u)"
           echo "  Schedule:   Every 6 hours"
+          echo "  Google cap: 25 URLs/run (priority pages)"
           echo "════════════════════════════════════════════"
