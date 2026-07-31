@@ -1934,6 +1934,12 @@ app.get('/sitemap.xml', async (req, res) => {
       xml += `  <url><loc>https://yt-seo-architect.vercel.app/glossary/es/${slug}</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>\n`;
     }
 
+    // Category hub pages (hub-and-spoke internal linking per wise playbook)
+    const CATEGORY_SLUGS = ['index', 'algorithm', 'analytics', 'content-strategy', 'monetization', 'seo-optimization', 'youtube-features'];
+    for (const cat of CATEGORY_SLUGS) {
+      xml += `  <url><loc>https://yt-seo-architect.vercel.app/glossary/category/${cat}</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>\n`;
+    }
+
     // Comparison pages (all unique pairs, capped at 45k to stay under sitemap limit)
     const MAX_SITEMAP_URLS = 45000;
     const seenPairs = new Set();

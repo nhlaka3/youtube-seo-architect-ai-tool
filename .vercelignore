@@ -30,7 +30,7 @@ __pycache__/
 # Exclude auto-generated glossary comparison pages (thousands of files)
 public/glossary/*-vs-*.html
 public/glossary/es/*-vs-*.html
-public/glossary/category/*
+# Category hub pages ARE deployed (hub-and-spoke internal linking per wise playbook)
 public/blog/_archive/
 node_modules/
 .git/
