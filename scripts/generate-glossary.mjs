@@ -506,6 +506,9 @@ function generateIndexPage(data) {
   <meta name="description" content="Complete YouTube SEO glossary with ${total}+ terms covering analytics, algorithm, optimization, monetization, content strategy, and YouTube features. Free definitions and optimization tips." />
   <meta name="robots" content="index, follow" />
   <link rel="canonical" href="https://yt-seo-architect.vercel.app/glossary/" />
+  <link rel="alternate" hreflang="en" href="https://yt-seo-architect.vercel.app/glossary/" />
+  <link rel="alternate" hreflang="es" href="https://yt-seo-architect.vercel.app/glossary/es/" />
+  <link rel="alternate" hreflang="x-default" href="https://yt-seo-architect.vercel.app/glossary/" />
   <meta property="og:title" content="YouTube SEO Glossary — ${total}+ Terms Defined" />
   <meta property="og:description" content="Complete YouTube SEO glossary with ${total}+ terms. Free definitions and optimization tips for every creator." />
   <meta name="twitter:card" content="summary_large_image" />
@@ -560,6 +563,8 @@ function generateIndexPage(data) {
     <h1>📖 YouTube SEO Glossary</h1>
     <p>${total}+ terms defined, explained, and optimized for YouTube creators. Click any term for a full definition with optimization tips.</p>
     <div class="stat">${total} terms · 6 categories · Free</div>
+    <br>
+    <a href="/glossary/es/" class="lang-switch" hreflang="es" rel="alternate" style="display:inline-flex;align-items:center;gap:4px;font-size:.8rem;color:#a5b4fc;text-decoration:none;padding:4px 12px;border:1px solid rgba(165,180,252,.3);border-radius:9999px;transition:all .2s">🇪🇸 Versión en Español</a>
   </div>
 
   <nav class="glossary-nav" aria-label="Category navigation">

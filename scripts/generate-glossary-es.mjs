@@ -281,6 +281,8 @@ function generateIndexPage(data) {
       <h1>📖 Glosario SEO de YouTube</h1>
       <p>${total}+ términos definidos y explicados para creadores de contenido en español.</p>
       <div class="stat">${total} términos · 6 categorías · Gratis</div>
+      <br>
+      <a href="/glossary/" class="lang-switch" hreflang="en" rel="alternate" style="display:inline-flex;align-items:center;gap:4px;font-size:.8rem;color:#a5b4fc;text-decoration:none;padding:4px 12px;border:1px solid rgba(165,180,252,.3);border-radius:9999px;transition:all .2s">🇺🇸 English Version</a>
     </div>
     <div class="lang-notice">🇪🇸 Estás viendo la versión en español. <a href="/glossary/">Ver en inglés →</a></div>
     ${catSections}
