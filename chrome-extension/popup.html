@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      width: 340px;
+      min-height: 200px;
+      background: #0a0b10;
+      color: #e5e7eb;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      padding: 0;
+    }
+
+    .header {
+      background: linear-gradient(135deg, #1e1b4b, #1a1a2e);
+      padding: 20px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+    }
+
+    .logo {
+      font-size: 18px;
+      font-weight: 800;
+      color: #818cf8;
+      margin-bottom: 4px;
+    }
+
+    .tagline {
+      font-size: 12px;
+      color: #6b7280;
+    }
+
+    .content {
+      padding: 16px 20px;
+    }
+
+    .stat-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 10px 0;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+    }
+
+    .stat-row:last-child {
+      border-bottom: none;
+    }
+
+    .stat-label {
+      font-size: 13px;
+      color: #9ca3af;
+    }
+
+    .stat-value {
+      font-size: 14px;
+      font-weight: 600;
+      color: #e5e7eb;
+    }
+
+    .stat-value.good { color: #34d399; }
+    .stat-value.warn { color: #fbbf24; }
+    .stat-value.bad { color: #f87171; }
+
+    .btn {
+      display: block;
+      width: 100%;
+      padding: 12px;
+      margin-top: 12px;
+      border: none;
+      border-radius: 10px;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.15s;
+      text-decoration: none;
+      text-align: center;
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, #818cf8, #6366f1);
+      color: white;
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 4px 12px rgba(99, 102, 241, 0.4);
+    }
+
+    .btn-secondary {
+      background: rgba(255, 255, 255, 0.06);
+      color: #e5e7eb;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+    }
+
+    .btn-secondary:hover {
+      background: rgba(255, 255, 255, 0.1);
+    }
+
+    .footer {
+      padding: 12px 20px;
+      border-top: 1px solid rgba(255, 255, 255, 0.06);
+      text-align: center;
+      font-size: 11px;
+      color: #4b5563;
+    }
+
+    .footer a {
+      color: #818cf8;
+      text-decoration: none;
+    }
+
+    .hidden { display: none; }
+  </style>
+</head>
+<body>
+
+  <!-- Main popup (on YouTube) -->
+  <div id="main-view">
+    <div class="header">
+      <div class="logo">⚡ YT SEO Architect</div>
+      <div class="tagline">YouTube SEO Score Extension</div>
+    </div>
+
+    <div class="content">
+      <div class="stat-row">
+        <span class="stat-label">Status</span>
+        <span class="stat-value good" id="status">Active</span>
+      </div>
+      <div class="stat-row">
+        <span class="stat-label">Videos Scored</span>
+        <span class="stat-value" id="count">0</span>
+      </div>
+      <div class="stat-row">
+        <span class="stat-label">Panel</span>
+        <span class="stat-value" id="panel-status">Visible</span>
+      </div>
+
+      <a href="https://yt-seo-architect.vercel.app" target="_blank" class="btn btn-primary">
+        Open Full Dashboard →
+      </a>
+      <button class="btn btn-secondary" id="toggle-panel">
+        Hide Panel on This Page
+      </button>
+    </div>
+
+    <div class="footer">
+      Free forever · <a href="https://yt-seo-architect.vercel.app" target="_blank">yt-seo-architect.vercel.app</a>
+    </div>
+  </div>
+
+  <!-- Not YouTube view -->
+  <div id="not-youtube-view" class="hidden">
+    <div class="header">
+      <div class="logo">⚡ YT SEO Architect</div>
+      <div class="tagline">YouTube SEO Score Extension</div>
+    </div>
+
+    <div class="content" style="text-align: center; padding: 30px 20px;">
+      <div style="font-size: 48px; margin-bottom: 12px;">🎬</div>
+      <div style="font-size: 14px; color: #9ca3af; margin-bottom: 16px;">
+        Navigate to a YouTube video to see SEO scores
+      </div>
+      <a href="https://yt-seo-architect.vercel.app" target="_blank" class="btn btn-primary">
+        Open YT SEO Architect →
+      </a>
+    </div>
+  </div>
+
+  <script src="popup.js"></script>
+</body>
+</html>

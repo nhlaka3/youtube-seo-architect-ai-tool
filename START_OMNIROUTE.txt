@@ -1,0 +1,37 @@
+OmniRoute (localhost:20128)
+===================================
+
+WHAT IT IS
+  Local AI model router that auto-falls back between providers
+  (OpenCode, DuckDuckGo, TheOldLLM, MiMo Code, Auggie, etc.)
+  Model: auto/best-coding  ->  uses the 1.5B token pool
+
+START IT
+  Auto-starts with Docker (--restart unless-stopped). Usually nothing to do.
+
+  If stopped:
+    docker start omniroute
+
+  If container was deleted, recreate:
+    docker run -d --name omniroute --restart unless-stopped \
+      -p 127.0.0.1:20128:20128 \
+      -v omniroute-data:/app/data \
+      diegosouzapw/omniroute:latest
+
+CHECK IT
+  docker ps --filter name=omniroute
+  curl http://localhost:20128/v1/models
+
+USE IT IN HERMES
+  New sessions automatically route through OmniRoute (config default).
+  To switch current session:
+    /model omniroute/auto/best-coding
+
+CONFIG
+  base_url: http://localhost:20128/v1
+  provider: omniroute
+  model:    auto/best-coding
+  (API key lives in ~/.hermes/.env)
+
+SOURCE REPO
+  /home/nhlaka/OmniRoute  (branch release/v3.8.49)

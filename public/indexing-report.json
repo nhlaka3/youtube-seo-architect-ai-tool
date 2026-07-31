@@ -1,0 +1,67 @@
+{
+  "timestamp": "2026-07-28T20:26:22.039Z",
+  "total": 190,
+  "checked": 190,
+  "live": 190,
+  "redirect": 0,
+  "dead": 0,
+  "errors": 0,
+  "byType": {
+    "blog": {
+      "total": 14,
+      "live": 14,
+      "dead": 0
+    },
+    "blog-index": {
+      "total": 1,
+      "live": 1,
+      "dead": 0
+    },
+    "comparison": {
+      "total": 1,
+      "live": 1,
+      "dead": 0
+    },
+    "dashboard": {
+      "total": 1,
+      "live": 1,
+      "dead": 0
+    },
+    "glossary": {
+      "total": 75,
+      "live": 75,
+      "dead": 0
+    },
+    "glossary-category": {
+      "total": 6,
+      "live": 6,
+      "dead": 0
+    },
+    "glossary-category-index": {
+      "total": 1,
+      "live": 1,
+      "dead": 0
+    },
+    "glossary-index": {
+      "total": 1,
+      "live": 1,
+      "dead": 0
+    },
+    "home": {
+      "total": 1,
+      "live": 1,
+      "dead": 0
+    },
+    "tool": {
+      "total": 88,
+      "live": 88,
+      "dead": 0
+    },
+    "tools-index": {
+      "total": 1,
+      "live": 1,
+      "dead": 0
+    }
+  },
+  "notFound": []
+}
