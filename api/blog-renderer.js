@@ -338,15 +338,24 @@ function generateDualSchema(page, faqItems) {
     dateModified: isoUpdate,
     author: {
       '@type': 'Person',
-      name: 'Patrick'
+      name: 'Patrick',
+      url: 'https://yt-seo-architect.vercel.app/about',
+      sameAs: ['https://github.com/nhlaka3'],
+      knowsAbout: ['YouTube SEO', 'YouTube Analytics', 'YouTube Algorithm', 'Content Strategy']
     },
     publisher: {
       '@type': 'Organization',
       name: 'YT SEO Architect',
+      url: 'https://yt-seo-architect.vercel.app/',
       logo: {
         '@type': 'ImageObject',
         url: 'https://yt-seo-architect.vercel.app/og-image.png'
-      }
+      },
+      sameAs: [
+        'https://twitter.com/YTSEOArchitect',
+        'https://linkedin.com/company/yt-seo-architect',
+        'https://github.com/nhlaka3'
+      ]
     },
     mainEntityOfPage: {
       '@type': 'WebPage',

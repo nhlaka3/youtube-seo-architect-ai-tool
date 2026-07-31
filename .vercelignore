@@ -43,4 +43,7 @@ logs/
 *.txt
 *.md
 *.docx
+# Re-include llms.txt files so they deploy (Google ignores them, but Claude/Perplexity discovery benefits)
+!public/llms.txt
+!public/llms-full.txt
 designs.txt

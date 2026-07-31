@@ -1636,8 +1636,8 @@ function renderPillarPage() {
     "description": "Complete YouTube SEO resource covering all aspects of ranking on YouTube in 2026.",
     "datePublished": "2026-07-24",
     "dateModified": "2026-07-24",
-    "author": { "@type": "Person", "name": "Patrick" },
-    "publisher": { "@type": "Organization", "name": "YT SEO Architect" },
+    "author": { "@type": "Person", "name": "Patrick", "url": "https://yt-seo-architect.vercel.app/about", "sameAs": ["https://github.com/nhlaka3"], "knowsAbout": ["YouTube SEO", "YouTube Analytics", "YouTube Algorithm"] },
+    "publisher": { "@type": "Organization", "name": "YT SEO Architect", "url": "https://yt-seo-architect.vercel.app/", "sameAs": ["https://twitter.com/YTSEOArchitect", "https://linkedin.com/company/yt-seo-architect", "https://github.com/nhlaka3"] },
     "mainEntityOfPage": { "@type": "WebPage", "@id": "https://yt-seo-architect.vercel.app/guide/youtube-seo" }
   }
   </script>
@@ -2027,7 +2027,7 @@ Allow: /
 User-agent: PerplexityBot
 Allow: /
 
-User-agent: Claude-Web
+User-agent: ClaudeBot
 Allow: /
 
 User-agent: anthropic-ai
