@@ -54,11 +54,13 @@ jobs:
           echo "📖 Generating glossary pages..."
           node scripts/generate-glossary.mjs
 
-      - name: 🗂️ Phase 4 — Generate category landing pages + clusters
+      - name: 🗂️ Phase 4 — Generate category landing pages + clusters (EN + ES)
         id: categories
         run: |
-          echo "🗂️ Generating category pages..."
+          echo "🗂️ Generating category pages (EN)..."
           node scripts/generate-glossary-categories.mjs
+          echo "🗂️ Generating category pages (ES)..."
+          node scripts/generate-glossary-categories.mjs --es
 
       - name: 🔄 Phase 5 — Generate comparison pages (term-a-vs-term-b)
         id: comparisons

@@ -485,9 +485,10 @@ function generateIndexPage(data) {
 
     catSections += `
     <section id="${cat.slug}">
-      <h2 style="color:#e0e7ff;font-size:1.3rem;margin:2rem 0 1rem;display:flex;align-items:center;gap:.5rem">
+      <h2 style="color:#e0e7ff;font-size:1.3rem;margin:2rem 0 1rem;display:flex;align-items:center;gap:.5rem;flex-wrap:wrap">
         ${getCategoryEmoji(cat.slug)} ${cat.name}
         <span style="font-size:.8rem;color:#8b8b9e;font-weight:400">(${catTerms.length} terms)</span>
+        <a href="/glossary/category/${cat.slug}" style="font-size:.75rem;color:#a5b4fc;text-decoration:none;border:1px solid #4f46e5;padding:.15rem .6rem;border-radius:9999px">View hub →</a>
       </h2>
       <div class="related-grid">
         ${termLinks}
@@ -562,7 +563,7 @@ function generateIndexPage(data) {
   </div>
 
   <nav class="glossary-nav" aria-label="Category navigation">
-    ${categories.map(c => `<a href="#${c.slug}">${getCategoryEmoji(c.slug)} ${c.name}</a>`).join('\n    ')}
+    ${categories.map(c => `<a href="/glossary/category/${c.slug}">${getCategoryEmoji(c.slug)} ${c.name}</a>`).join('\n    ')}
     <a href="/blog/" style="background:#312e81">📝 Blog</a>
     <a href="/tools/" style="background:#312e81">🛠️ Tools</a>
   </nav>

@@ -24,10 +24,13 @@ import { fileURLToPath } from 'url';
 const __filename = fileURLToPath(import.meta.url);
 const PROJECT = resolve(dirname(__filename), '..');
 const DATA_FILE = resolve(PROJECT, 'scripts/glossary-data.json');
+const ES_DATA_FILE = resolve(PROJECT, 'scripts/glossary-data-es.json');
 const OUTPUT_DIR = resolve(PROJECT, 'public/glossary/category');
+const ES_OUTPUT_DIR = resolve(PROJECT, 'public/glossary/es/category');
 const BLOG_DIR = resolve(PROJECT, 'public/blog');
 
 const DRY_RUN = process.argv.includes('--dry-run');
+const ES_MODE = process.argv.includes('--es');
 
 const CATEGORY_META = {
   'analytics': {
@@ -68,16 +71,58 @@ const CATEGORY_META = {
   },
 };
 
+const ES_CATEGORY_META = {
+  'analytics': {
+    name: 'Analíticas',
+    emoji: '📊',
+    description: 'Entiende los datos de tu canal de YouTube con estas métricas y KPIs de analítica. Aprende qué significa cada métrica, cómo rastrearla y cómo usarla para mejorar tu estrategia de contenido y el crecimiento de tu canal.',
+    keywords: 'analítica de YouTube, métricas de rendimiento de video, datos del canal, analítica de audiencia, medición de contenido',
+  },
+  'algorithm': {
+    name: 'Algoritmo',
+    emoji: '🤖',
+    description: 'Cómo funciona el algoritmo de YouTube en 2026: señales de posicionamiento, sistemas de recomendación, factores de búsqueda y las estrategias para trabajar con el algoritmo — no contra él.',
+    keywords: 'algoritmo de YouTube explicado, señales de ranking, sistema de recomendación, descubrimiento de videos, ranking de búsqueda',
+  },
+  'seo-optimization': {
+    name: 'Optimización SEO',
+    emoji: '🔍',
+    description: 'Estrategias y técnicas de SEO para YouTube que te ayudan a posicionar mejor en los resultados de búsqueda. Desde investigación de palabras clave hasta optimización de títulos, miniaturas y transcripciones.',
+    keywords: 'SEO de YouTube, optimización de video, investigación de palabras clave, optimización de títulos, consejos de miniaturas',
+  },
+  'monetization': {
+    name: 'Monetización',
+    emoji: '💰',
+    description: 'Gana dinero en YouTube: ingresos por anuncios, membresías del canal, Super Chat, marketing de afiliados y patrocinios. Entiende los requisitos del Programa de Socios y maximiza tus ganancias por visualización.',
+    keywords: 'monetización de YouTube, ingresos por anuncios, membresías del canal, Super Chat, marketing de afiliados',
+  },
+  'content-strategy': {
+    name: 'Estrategia de Contenido',
+    emoji: '📝',
+    description: 'Planifica, crea y crece con una estrategia de contenido ganadora para YouTube. Aprende sobre pilares de contenido, formatos de video, construcción de audiencia y planificación basada en datos.',
+    keywords: 'estrategia de contenido para YouTube, planificación de video, crecimiento del canal, pilares de contenido',
+  },
+  'youtube-features': {
+    name: 'Funciones de YouTube',
+    emoji: '⚙️',
+    description: 'Domina las funciones integradas de YouTube — desde pantallas finales y tarjetas hasta publicaciones de comunidad, listas de reproducción y transmisiones en vivo.',
+    keywords: 'guía de funciones de YouTube, pantallas finales, tarjetas, listas de reproducción, transmisiones en vivo',
+  },
+};
+
 function loadData() {
-  return JSON.parse(readFileSync(DATA_FILE, 'utf-8'));
+  const file = ES_MODE ? ES_DATA_FILE : DATA_FILE;
+  return JSON.parse(readFileSync(file, 'utf-8'));
 }
 
 function getCategoryEmoji(slug) {
-  return CATEGORY_META[slug]?.emoji || '📖';
+  const meta = ES_MODE ? ES_CATEGORY_META : CATEGORY_META;
+  return meta[slug]?.emoji || '📖';
 }
 
 function getCategoryName(slug) {
-  return CATEGORY_META[slug]?.name || slug;
+  const meta = ES_MODE ? ES_CATEGORY_META : CATEGORY_META;
+  return meta[slug]?.name || slug;
 }
 
 // ── Cluster terms into beginner / intermediate / advanced ────
@@ -129,29 +174,46 @@ function getRelatedBlogsForCategory(categorySlug) {
 // ── Generate a single category page ──────────────────────────
 
 function generateCategoryPage(categorySlug, termsInCategory, allTerms, totalTerms, allCategories) {
-  const meta = CATEGORY_META[categorySlug] || { name: categorySlug, emoji: '📖', description: '', keywords: '' };
+  const meta = (ES_MODE ? ES_CATEGORY_META : CATEGORY_META)[categorySlug] || { name: categorySlug, emoji: '📖', description: '', keywords: '' };
   const clusters = clusterTerms(termsInCategory);
   const relatedBlogs = getRelatedBlogsForCategory(categorySlug);
+
+  const termBase = ES_MODE ? '/glossary/es' : '/glossary';
+  const catBase = ES_MODE ? '/glossary/es/category' : '/glossary/category';
+  const lang = ES_MODE ? 'es' : 'en';
+  const langLabel = ES_MODE ? '🇺🇸 English' : '🇪🇸 Español';
+  const langHref = ES_MODE ? `/glossary/category/${categorySlug}` : `/glossary/es/category/${categorySlug}`;
+  const otherLangHref = langHref;
+
+  const clusterLabels = ES_MODE
+    ? { 'Essential': 'Esenciales', 'Core Concepts': 'Conceptos Clave', 'Advanced Topics': 'Temas Avanzados' }
+    : {};
 
   // Term cards by cluster
   let bodyHTML = '';
   for (const [clusterName, clusterTerms] of Object.entries(clusters)) {
     if (clusterTerms.length === 0) continue;
-    const cards = clusterTerms.map(t => `
+    const label = clusterLabels[clusterName] || clusterName;
+    const cards = clusterTerms.map(t => {
+      const termName = ES_MODE ? (t.term_es || t.term) : t.term;
+      const def = ES_MODE ? (t.shortDefinition_es || t.shortDefinition) : t.shortDefinition;
+      return `
       <div class="glossary-card">
-        <a href="/glossary/${t.slug}"><h3>${t.term}</h3></a>
-        <p>${t.shortDefinition.substring(0, 150)}...</p>
+        <a href="${termBase}/${t.slug}"><h3>${termName}</h3></a>
+        <p>${def.substring(0, 150)}...</p>
         ${t.relatedTerms && t.relatedTerms.length > 0
-          ? `<div class="tag-group"><strong>Related:</strong> ${t.relatedTerms.slice(0, 3).map(s => {
+          ? `<div class="tag-group"><strong>${ES_MODE ? 'Relacionados' : 'Related'}:</strong> ${t.relatedTerms.slice(0, 3).map(s => {
               const rt = allTerms.find(t2 => t2.slug === s);
-              return rt ? `<a href="/glossary/${rt.slug}" class="tag">${rt.term}</a>` : '';
+              const rtName = rt ? (ES_MODE ? (rt.term_es || rt.term) : rt.term) : '';
+              return rt ? `<a href="${termBase}/${rt.slug}" class="tag">${rtName}</a>` : '';
             }).filter(Boolean).join(' ')}</div>`
           : ''}
-      </div>`).join('');
+      </div>`;
+    }).join('');
 
     bodyHTML += `
     <section class="cluster">
-      <h2 class="cluster-title">${clusterName} <span class="count">(${clusterTerms.length} terms)</span></h2>
+      <h2 class="cluster-title">${label} <span class="count">(${clusterTerms.length} ${ES_MODE ? 'términos' : 'terms'})</span></h2>
       <div class="card-grid">
         ${cards}
       </div>
@@ -163,7 +225,7 @@ function generateCategoryPage(categorySlug, termsInCategory, allTerms, totalTerm
   if (relatedBlogs.length > 0) {
     blogSection = `
     <section class="related-blogs">
-      <h2>📝 Related Blog Posts</h2>
+      <h2>${ES_MODE ? '📝 Artículos de Blog Relacionados' : '📝 Related Blog Posts'}</h2>
       <div class="blog-list">
         ${relatedBlogs.map(b => `<a href="/blog/${b.slug}" class="blog-link">📖 ${b.title}</a>`).join('\n        ')}
       </div>
@@ -173,34 +235,37 @@ function generateCategoryPage(categorySlug, termsInCategory, allTerms, totalTerm
   // Cross-category navigation
   const otherCategories = allCategories
     .filter(c => c !== categorySlug)
-    .map(c => `<a href="/glossary/category/${c}" class="cross-cat">${getCategoryEmoji(c)} ${getCategoryName(c)}</a>`)
+    .map(c => `<a href="${catBase}/${c}" class="cross-cat">${getCategoryEmoji(c)} ${getCategoryName(c)}</a>`)
     .join('\n          ');
 
   // Build HTML
   const html = `<!DOCTYPE html>
-<html lang="en">
+<html lang="${lang}">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <link rel="icon" href="/logo.svg" type="image/svg+xml" />
-  <title>${meta.emoji} ${meta.name} — YouTube SEO Glossary Terms | YT SEO Architect</title>
+  <title>${meta.emoji} ${meta.name} — ${ES_MODE ? 'Términos del Glosario SEO de YouTube' : 'YouTube SEO Glossary Terms'} | YT SEO Architect</title>
   <meta name="description" content="${meta.description.substring(0, 160)}" />
   <meta name="keywords" content="${meta.keywords}" />
   <meta name="robots" content="index, follow" />
-  <link rel="canonical" href="https://yt-seo-architect.vercel.app/glossary/category/${categorySlug}" />
+  <link rel="canonical" href="https://yt-seo-architect.vercel.app${catBase}/${categorySlug}" />
+  <link rel="alternate" hreflang="en" href="https://yt-seo-architect.vercel.app/glossary/category/${categorySlug}" />
+  <link rel="alternate" hreflang="es" href="https://yt-seo-architect.vercel.app/glossary/es/category/${categorySlug}" />
+  <link rel="alternate" hreflang="x-default" href="https://yt-seo-architect.vercel.app/glossary/category/${categorySlug}" />
 
-  <meta property="og:title" content="${meta.name} — YouTube SEO Glossary" />
+  <meta property="og:title" content="${meta.name} — ${ES_MODE ? 'Glosario SEO de YouTube' : 'YouTube SEO Glossary'}" />
   <meta property="og:description" content="${meta.description.substring(0, 160)}" />
-  <meta property="og:url" content="https://yt-seo-architect.vercel.app/glossary/category/${categorySlug}" />
+  <meta property="og:url" content="https://yt-seo-architect.vercel.app${catBase}/${categorySlug}" />
   <meta property="og:type" content="website" />
 
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
     "@type": "CollectionPage",
-    "name": "${meta.name} YouTube SEO Glossary",
+    "name": "${ES_MODE ? `Glosario de ${meta.name}` : `${meta.name} YouTube SEO Glossary`}",
     "description": "${meta.description.substring(0, 200)}",
-    "url": "https://yt-seo-architect.vercel.app/glossary/category/${categorySlug}",
+    "url": "https://yt-seo-architect.vercel.app${catBase}/${categorySlug}",
     "about": {
       "@type": "Thing",
       "name": "${meta.name}"
@@ -226,6 +291,8 @@ function generateCategoryPage(categorySlug, termsInCategory, allTerms, totalTerm
     .hero h1{font-size:2rem;margin:0 0 .5rem;color:#fff}
     .hero p{color:#c4b5fd;max-width:600px;margin:0 auto}
     .hero .stat{margin-top:1rem;display:inline-block;background:rgba(99,102,241,.3);color:#a5b4fc;padding:.4rem 1.2rem;border-radius:9999px;font-size:.9rem}
+    .lang-switch{display:inline-block;margin-top:.75rem;font-size:.8rem;color:#a5b4fc;text-decoration:none;border:1px solid #4f46e5;padding:.3rem 1rem;border-radius:9999px;transition:all .2s}
+    .lang-switch:hover{background:#312e81;color:#fff}
     .cluster{margin-bottom:2.5rem}
     .cluster-title{font-size:1.3rem;color:#e0e7ff;margin:0 0 1rem;display:flex;align-items:center;gap:.5rem}
     .cluster-title .count{font-size:.85rem;color:#8b8b9e;font-weight:400}
@@ -253,17 +320,19 @@ function generateCategoryPage(categorySlug, termsInCategory, allTerms, totalTerm
 <body>
   <header class="header">
     <a href="/">⚡ YT SEO Architect</a>
-    <a href="/glossary/" style="color:#a5b4fc">📖 Glossary</a>
-    <a href="/tools/" class="cta">Free Tools</a>
+    <a href="${termBase}/" style="color:#a5b4fc">📖 ${ES_MODE ? 'Glosario' : 'Glossary'}</a>
+    <a href="/tools/" class="cta">${ES_MODE ? 'Herramientas Gratis' : 'Free Tools'}</a>
   </header>
 
   <main>
-    <a href="/glossary/" class="back-link">← Back to All Glossary Terms</a>
+    <a href="${termBase}/" class="back-link">← ${ES_MODE ? 'Volver a Todos los Términos del Glosario' : 'Back to All Glossary Terms'}</a>
 
     <div class="hero">
-      <h1>${meta.emoji} ${meta.name} Glossary</h1>
+      <h1>${meta.emoji} ${ES_MODE ? `Glosario de ${meta.name}` : `${meta.name} Glossary`}</h1>
       <p>${meta.description}</p>
-      <div class="stat">${termsInCategory.length} terms · ${Object.keys(clusters).length} clusters</div>
+      <div class="stat">${termsInCategory.length} ${ES_MODE ? 'términos' : 'terms'} · ${Object.keys(clusters).length} ${ES_MODE ? 'grupos' : 'clusters'}</div>
+      <br>
+      <a href="${otherLangHref}" class="lang-switch" hreflang="${ES_MODE ? 'en' : 'es'}" rel="alternate">${langLabel}</a>
     </div>
 
     <nav class="cross-cats">
@@ -275,18 +344,18 @@ function generateCategoryPage(categorySlug, termsInCategory, allTerms, totalTerm
     ${blogSection}
 
     <div class="cta-box" style="margin:2rem 0;padding:1.5rem;background:linear-gradient(135deg,#1a1a2e,#16213e);border:1px solid #6366f1;border-radius:12px;text-align:center;">
-      <h3 style="color:#e2e8f0;margin:0 0 .5rem">🚀 Apply What You've Learned</h3>
-      <p style="color:#94a3b8;margin:0 0 1rem">Use YT SEO Architect's free tools to optimize your YouTube content — titles, tags, descriptions, and more.</p>
-      <a href="/tools/" style="display:inline-block;background:linear-gradient(135deg,#f97316,#fb923c);color:#fff;padding:.7rem 2rem;border-radius:9999px;text-decoration:none;font-weight:600">Try Free Tools →</a>
+      <h3 style="color:#e2e8f0;margin:0 0 .5rem">🚀 ${ES_MODE ? 'Aplica lo que Has Aprendido' : "Apply What You've Learned"}</h3>
+      <p style="color:#94a3b8;margin:0 0 1rem">${ES_MODE ? 'Usa las herramientas gratuitas de YT SEO Architect para optimizar tu contenido de YouTube — títulos, etiquetas, descripciones y más.' : "Use YT SEO Architect's free tools to optimize your YouTube content — titles, tags, descriptions, and more."}</p>
+      <a href="/tools/" style="display:inline-block;background:linear-gradient(135deg,#f97316,#fb923c);color:#fff;padding:.7rem 2rem;border-radius:9999px;text-decoration:none;font-weight:600">${ES_MODE ? 'Prueba las Herramientas Gratis →' : 'Try Free Tools →'}</a>
     </div>
 
     <div style="text-align:center;margin:2rem 0">
-      <a href="/glossary/" style="color:#a5b4fc;font-size:.9rem">📖 Browse All ${totalTerms} Glossary Terms</a>
+      <a href="${termBase}/" style="color:#a5b4fc;font-size:.9rem">📖 ${ES_MODE ? 'Explora los' : 'Browse All'} ${totalTerms} ${ES_MODE ? 'Términos del Glosario' : 'Glossary Terms'}</a>
     </div>
   </main>
 
   <footer class="footer">
-    <p>&copy; 2026 YT SEO Architect · <a href="/glossary/">Glossary</a> · <a href="/blog">Blog</a> · <a href="/tools/">Free Tools</a> · <a href="/privacy-policy">Privacy</a></p>
+    <p>&copy; 2026 YT SEO Architect · <a href="${termBase}/">${ES_MODE ? 'Glosario' : 'Glossary'}</a> · <a href="/blog">Blog</a> · <a href="/tools/">${ES_MODE ? 'Herramientas Gratis' : 'Free Tools'}</a> · <a href="/privacy-policy">Privacy</a></p>
   </footer>
 </body>
 </html>`;
@@ -297,26 +366,35 @@ function generateCategoryPage(categorySlug, termsInCategory, allTerms, totalTerm
 // ── Generate category index page ─────────────────────────────
 
 function generateCategoryIndex(allCategories, termCounts, totalTerms) {
+  const termBase = ES_MODE ? '/glossary/es' : '/glossary';
+  const catBase = ES_MODE ? '/glossary/es/category' : '/glossary/category';
+  const lang = ES_MODE ? 'es' : 'en';
+
   const cards = allCategories.map(cat => {
-    const meta = CATEGORY_META[cat] || { name: cat, emoji: '📖', description: '' };
+    const meta = (ES_MODE ? ES_CATEGORY_META : CATEGORY_META)[cat] || { name: cat, emoji: '📖', description: '' };
     return `
-      <a href="/glossary/category/${cat}" class="cat-card">
+      <a href="${catBase}/${cat}" class="cat-card">
         <div class="cat-emoji">${meta.emoji}</div>
         <h3>${meta.name}</h3>
-        <p>${termCounts[cat] || 0} terms</p>
+        <p>${termCounts[cat] || 0} ${ES_MODE ? 'términos' : 'terms'}</p>
         <p class="desc">${meta.description.substring(0, 100)}...</p>
       </a>`;
   }).join('');
 
   return `<!DOCTYPE html>
-<html lang="en">
+<html lang="${lang}">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Glossary Categories — YT SEO Architect</title>
-  <meta name="description" content="Browse YouTube SEO glossary terms by category: Analytics, Algorithm, SEO Optimization, Monetization, Content Strategy, and YouTube Features." />
+  <title>${ES_MODE ? 'Categorías del Glosario' : 'Glossary Categories'} — YT SEO Architect</title>
+  <meta name="description" content="${ES_MODE
+    ? 'Explora los términos del glosario de SEO para YouTube por categoría: Analíticas, Algoritmo, Optimización SEO, Monetización, Estrategia de Contenido y Funciones de YouTube.'
+    : 'Browse YouTube SEO glossary terms by category: Analytics, Algorithm, SEO Optimization, Monetization, Content Strategy, and YouTube Features.'}" />
   <meta name="robots" content="index, follow" />
-  <link rel="canonical" href="https://yt-seo-architect.vercel.app/glossary/category/" />
+  <link rel="canonical" href="https://yt-seo-architect.vercel.app${catBase}/" />
+  <link rel="alternate" hreflang="en" href="https://yt-seo-architect.vercel.app/glossary/category/" />
+  <link rel="alternate" hreflang="es" href="https://yt-seo-architect.vercel.app/glossary/es/category/" />
+  <link rel="alternate" hreflang="x-default" href="https://yt-seo-architect.vercel.app/glossary/category/" />
   <link rel="stylesheet" href="/design-tokens.css" media="print" onload="this.media='all'">
   <link rel="stylesheet" href="/utilities.css" media="print" onload="this.media='all'">
   <link rel="stylesheet" href="/nav.css" media="print" onload="this.media='all'">
@@ -345,8 +423,9 @@ function generateCategoryIndex(allCategories, termCounts, totalTerms) {
   <header class="header"><a href="/">⚡ YT SEO Architect</a></header>
   <main>
     <div class="hero">
-      <h1>📖 Glossary Categories</h1>
-      <p>${totalTerms} terms across 6 categories. Pick a category to dive in.</p>
+      <h1>📖 ${ES_MODE ? 'Categorías del Glosario' : 'Glossary Categories'}</h1>
+      <p>${totalTerms} ${ES_MODE ? 'términos en 6 categorías. Elige una categoría para sumergirte.' : 'terms across 6 categories. Pick a category to dive in.'}</p>
+      <a href="${termBase}/" style="color:#a5b4fc;font-size:.9rem">📖 ${ES_MODE ? 'Ver todos los términos' : 'View all glossary terms'}</a>
     </div>
     <div class="cat-grid">${cards}</div>
   </main>
@@ -357,20 +436,23 @@ function generateCategoryIndex(allCategories, termCounts, totalTerms) {
 // ── Main ──────────────────────────────────────────────────────
 
 function main() {
-  console.log('\n🗂️  Generating Glossary Category Pages...\n');
+  const modeLabel = ES_MODE ? '🇪🇸 ES' : '🇺🇸 EN';
+  console.log(`\n🗂️  Generating Glossary Category Pages [${modeLabel}]...\n`);
 
-  if (!existsSync(DATA_FILE)) {
-    console.error('❌ glossary-data.json not found');
+  const dataFile = ES_MODE ? ES_DATA_FILE : DATA_FILE;
+  if (!existsSync(dataFile)) {
+    console.error(`❌ ${dataFile} not found`);
     process.exit(1);
   }
 
   const data = loadData();
   const allTerms = data.terms;
-  const allCategories = data.categories.map(c => c.slug).filter(c => CATEGORY_META[c]);
+  const allCategories = data.categories.map(c => c.slug).filter(c => (ES_MODE ? ES_CATEGORY_META : CATEGORY_META)[c]);
   const totalTerms = allTerms.length;
 
-  if (!existsSync(OUTPUT_DIR)) {
-    mkdirSync(OUTPUT_DIR, { recursive: true });
+  const outDir = ES_MODE ? ES_OUTPUT_DIR : OUTPUT_DIR;
+  if (!existsSync(outDir)) {
+    mkdirSync(outDir, { recursive: true });
   }
 
   let generated = 0;
@@ -384,13 +466,13 @@ function main() {
     }
 
     const html = generateCategoryPage(categorySlug, termsInCategory, allTerms, totalTerms, allCategories);
-    const filePath = resolve(OUTPUT_DIR, `${categorySlug}.html`);
+    const filePath = resolve(outDir, `${categorySlug}.html`);
 
     if (!DRY_RUN) {
       writeFileSync(filePath, html);
     }
 
-    console.log(`  ✅ ${categorySlug}.html  [${termsInCategory.length} terms, ${Object.keys({}).length} clusters]`);
+    console.log(`  ✅ ${categorySlug}.html  [${termsInCategory.length} terms]`);
     generated++;
   }
 
@@ -401,15 +483,17 @@ function main() {
   }
   const indexHTML = generateCategoryIndex(allCategories, termCounts, totalTerms);
   if (!DRY_RUN) {
-    writeFileSync(resolve(OUTPUT_DIR, 'index.html'), indexHTML);
-    writeFileSync(resolve(PROJECT, 'public/glossary/category.html'), indexHTML);
+    writeFileSync(resolve(outDir, 'index.html'), indexHTML);
+    if (!ES_MODE) {
+      writeFileSync(resolve(PROJECT, 'public/glossary/category.html'), indexHTML);
+    }
   }
   console.log(`  ✅ category/index.html  [Category Hub — ${allCategories.length} categories]`);
 
-  console.log(`\n📊 Summary:`);
+  console.log(`\n📊 Summary [${modeLabel}]:`);
   console.log(`  Category pages: ${generated}`);
   console.log(`  Total terms indexed: ${totalTerms}`);
-  console.log(`  Output: public/glossary/category/\n`);
+  console.log(`  Output: ${outDir.replace(PROJECT + '/', '')}/\n`);
 }
 
 main();

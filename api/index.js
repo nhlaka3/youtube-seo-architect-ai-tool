@@ -1938,6 +1938,7 @@ app.get('/sitemap.xml', async (req, res) => {
     const CATEGORY_SLUGS = ['index', 'algorithm', 'analytics', 'content-strategy', 'monetization', 'seo-optimization', 'youtube-features'];
     for (const cat of CATEGORY_SLUGS) {
       xml += `  <url><loc>https://yt-seo-architect.vercel.app/glossary/category/${cat}</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>\n`;
+      xml += `  <url><loc>https://yt-seo-architect.vercel.app/glossary/es/category/${cat}</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>\n`;
     }
 
     // Comparison pages (all unique pairs, capped at 45k to stay under sitemap limit)
