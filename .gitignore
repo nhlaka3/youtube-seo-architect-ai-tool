@@ -200,3 +200,6 @@ media
 # Embedded git repos
 OmniRoute/
 opensource/
+
+# Google service account key — never commit
+config/google-indexing-key.json
