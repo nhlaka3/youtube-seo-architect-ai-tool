@@ -248,6 +248,7 @@ function generateIndexPage(data) {
   <meta property="og:title" content="Glosario SEO de YouTube — ${total}+ Términos en Español" />
   <link rel="alternate" hreflang="en" href="https://yt-seo-architect.vercel.app/glossary/" />
   <link rel="alternate" hreflang="es" href="https://yt-seo-architect.vercel.app/glossary/es/" />
+  <link rel="alternate" hreflang="pt" href="https://yt-seo-architect.vercel.app/glossary/pt/" />
   <link rel="stylesheet" href="/design-tokens.css" media="print" onload="this.media='all'">
   <link rel="stylesheet" href="/utilities.css" media="print" onload="this.media='all'">
   <link rel="stylesheet" href="/nav.css" media="print" onload="this.media='all'">
@@ -283,6 +284,7 @@ function generateIndexPage(data) {
       <div class="stat">${total} términos · 6 categorías · Gratis</div>
       <br>
       <a href="/glossary/" class="lang-switch" hreflang="en" rel="alternate" style="display:inline-flex;align-items:center;gap:4px;font-size:.8rem;color:#a5b4fc;text-decoration:none;padding:4px 12px;border:1px solid rgba(165,180,252,.3);border-radius:9999px;transition:all .2s">🇺🇸 English Version</a>
+      <a href="/glossary/pt/" class="lang-switch" hreflang="pt" rel="alternate" style="display:inline-flex;align-items:center;gap:4px;font-size:.8rem;color:#a5b4fc;text-decoration:none;padding:4px 12px;border:1px solid rgba(165,180,252,.3);border-radius:9999px;transition:all .2s">🇧🇷 Versão em Português</a>
     </div>
     <div class="lang-notice">🇪🇸 Estás viendo la versión en español. <a href="/glossary/">Ver en inglés →</a></div>
     ${catSections}

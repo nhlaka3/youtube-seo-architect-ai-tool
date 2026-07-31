@@ -48,19 +48,25 @@ jobs:
           node scripts/glossary-auto-expand.mjs --count 10 2>&1
           echo "EXPANDED=true" >> $GITHUB_OUTPUT
 
-      - name: 📖 Phase 3 — Generate all glossary term pages
+      - name: 📖 Phase 3 — Generate all glossary term pages (EN + ES + PT)
         id: generate
         run: |
-          echo "📖 Generating glossary pages..."
+          echo "📖 Generating glossary pages (EN)..."
           node scripts/generate-glossary.mjs
+          echo "🌐 Generating glossary pages (ES)..."
+          node scripts/generate-glossary-es.mjs
+          echo "🇧🇷 Generating glossary pages (PT)..."
+          node scripts/generate-glossary-pt.mjs
 
-      - name: 🗂️ Phase 4 — Generate category landing pages + clusters (EN + ES)
+      - name: 🗂️ Phase 4 — Generate category landing pages + clusters (EN + ES + PT)
         id: categories
         run: |
           echo "🗂️ Generating category pages (EN)..."
           node scripts/generate-glossary-categories.mjs
           echo "🗂️ Generating category pages (ES)..."
           node scripts/generate-glossary-categories.mjs --es
+          echo "🗂️ Generating category pages (PT)..."
+          node scripts/generate-glossary-categories-pt.mjs --pt
 
       - name: 🔄 Phase 5 — Generate comparison pages (term-a-vs-term-b)
         id: comparisons

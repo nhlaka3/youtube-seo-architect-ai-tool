@@ -252,6 +252,7 @@ function generateCategoryPage(categorySlug, termsInCategory, allTerms, totalTerm
   <link rel="canonical" href="https://yt-seo-architect.vercel.app${catBase}/${categorySlug}" />
   <link rel="alternate" hreflang="en" href="https://yt-seo-architect.vercel.app/glossary/category/${categorySlug}" />
   <link rel="alternate" hreflang="es" href="https://yt-seo-architect.vercel.app/glossary/es/category/${categorySlug}" />
+  <link rel="alternate" hreflang="pt" href="https://yt-seo-architect.vercel.app/glossary/pt/category/${categorySlug}" />
   <link rel="alternate" hreflang="x-default" href="https://yt-seo-architect.vercel.app/glossary/category/${categorySlug}" />
 
   <meta property="og:title" content="${meta.name} — ${ES_MODE ? 'Glosario SEO de YouTube' : 'YouTube SEO Glossary'}" />
@@ -333,6 +334,7 @@ function generateCategoryPage(categorySlug, termsInCategory, allTerms, totalTerm
       <div class="stat">${termsInCategory.length} ${ES_MODE ? 'términos' : 'terms'} · ${Object.keys(clusters).length} ${ES_MODE ? 'grupos' : 'clusters'}</div>
       <br>
       <a href="${otherLangHref}" class="lang-switch" hreflang="${ES_MODE ? 'en' : 'es'}" rel="alternate">${langLabel}</a>
+      <a href="/glossary/pt/category/${categorySlug}" class="lang-switch" hreflang="pt" rel="alternate">🇧🇷 Português</a>
     </div>
 
     <nav class="cross-cats">
@@ -394,6 +396,7 @@ function generateCategoryIndex(allCategories, termCounts, totalTerms) {
   <link rel="canonical" href="https://yt-seo-architect.vercel.app${catBase}/" />
   <link rel="alternate" hreflang="en" href="https://yt-seo-architect.vercel.app/glossary/category/" />
   <link rel="alternate" hreflang="es" href="https://yt-seo-architect.vercel.app/glossary/es/category/" />
+  <link rel="alternate" hreflang="pt" href="https://yt-seo-architect.vercel.app/glossary/pt/category/" />
   <link rel="alternate" hreflang="x-default" href="https://yt-seo-architect.vercel.app/glossary/category/" />
   <link rel="stylesheet" href="/design-tokens.css" media="print" onload="this.media='all'">
   <link rel="stylesheet" href="/utilities.css" media="print" onload="this.media='all'">
@@ -426,6 +429,10 @@ function generateCategoryIndex(allCategories, termCounts, totalTerms) {
       <h1>📖 ${ES_MODE ? 'Categorías del Glosario' : 'Glossary Categories'}</h1>
       <p>${totalTerms} ${ES_MODE ? 'términos en 6 categorías. Elige una categoría para sumergirte.' : 'terms across 6 categories. Pick a category to dive in.'}</p>
       <a href="${termBase}/" style="color:#a5b4fc;font-size:.9rem">📖 ${ES_MODE ? 'Ver todos los términos' : 'View all glossary terms'}</a>
+      <br>
+      <a href="/glossary/category/" class="lang-switch" hreflang="en" rel="alternate" style="display:inline-flex;align-items:center;gap:4px;font-size:.8rem;color:#a5b4fc;text-decoration:none;padding:4px 12px;border:1px solid rgba(165,180,252,.3);border-radius:9999px;transition:all .2s">🇺🇸 English</a>
+      <a href="/glossary/es/category/" class="lang-switch" hreflang="es" rel="alternate" style="display:inline-flex;align-items:center;gap:4px;font-size:.8rem;color:#a5b4fc;text-decoration:none;padding:4px 12px;border:1px solid rgba(165,180,252,.3);border-radius:9999px;transition:all .2s">🇪🇸 Español</a>
+      <a href="/glossary/pt/category/" class="lang-switch" hreflang="pt" rel="alternate" style="display:inline-flex;align-items:center;gap:4px;font-size:.8rem;color:#a5b4fc;text-decoration:none;padding:4px 12px;border:1px solid rgba(165,180,252,.3);border-radius:9999px;transition:all .2s">🇧🇷 Português</a>
     </div>
     <div class="cat-grid">${cards}</div>
   </main>
