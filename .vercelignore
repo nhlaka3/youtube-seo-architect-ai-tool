@@ -25,6 +25,7 @@ __pycache__/
 *.mkv
 *.wav
 *.svg
+!public/logo.svg
 *.pyc
 
 # Exclude auto-generated glossary comparison pages (thousands of files)
