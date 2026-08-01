@@ -2047,7 +2047,7 @@ function generateToolHtml(slug) {
   <link rel="canonical" href="${SITE}/tools/${slug}" />
   <meta property="og:title" content="${metaTitle}" />
   <meta property="og:description" content="${metaDesc}" />
-  <meta property="og:image" content="${SITE}/logo.svg" />
+  <meta property="og:image" content="${SITE}/og-image.png" />
   <meta name="robots" content="index, follow" />
   <script type="application/ld+json">
   { "@context": "https://schema.org", "@type": "WebApplication",
