@@ -1,0 +1,2 @@
+PSI Error (mobile): PSI rate limit exceeded (240 QPM / 25,000 QPD). Wait and retry.
+PSI Error (desktop): PSI rate limit exceeded (240 QPM / 25,000 QPD). Wait and retry.
