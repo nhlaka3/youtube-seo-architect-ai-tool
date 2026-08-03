@@ -607,6 +607,10 @@ export function renderBlogTemplate(page) {
   const formattedUpdateDate = formatDateStr(new Date(updateDate), 'MMMM yyyy');
   const slug = page.slug;
   const title = page.title || '';
+  // Truncate SERP title to <=60 chars (Google display limit); keep body H1 + schema full
+  const metaTitle = title.length > 60
+    ? title.substring(0, 57).replace(/\s+\S*$/, '') + '…'
+    : title;
   const metaDesc = (page.metaDescription || '').replace(/"/g, '&quot;');
   const rawContent = page.content || '';
   // Calculate word count from actual content (strips HTML tags)
@@ -755,7 +759,7 @@ export function renderBlogTemplate(page) {
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <link rel="icon" href="/favicon.ico" />
 
-  <title>${title} — YT SEO Architect</title>
+  <title>${metaTitle} — YT SEO Architect</title>
   <meta name="description" content="${metaDesc}" />
   <meta name="robots" content="index, follow" />
   <link rel="canonical" href="https://yt-seo-architect.vercel.app/blog/${slug}" />
@@ -763,7 +767,7 @@ export function renderBlogTemplate(page) {
   <!-- Open Graph -->
   <meta property="og:type" content="article" />
   <meta property="og:url" content="https://yt-seo-architect.vercel.app/blog/${slug}" />
-  <meta property="og:title" content="${title}" />
+  <meta property="og:title" content="${metaTitle}" />
   <meta property="og:description" content="${metaDesc}" />
   <meta property="og:image" content="https://yt-seo-architect.vercel.app/blog/${slug}-og.png" />
   <meta property="og:image:width" content="1200" />
@@ -773,7 +777,7 @@ export function renderBlogTemplate(page) {
 
   <!-- Twitter -->
   <meta name="twitter:card" content="summary_large_image" />
-  <meta name="twitter:title" content="${title}" />
+  <meta name="twitter:title" content="${metaTitle}" />
   <meta name="twitter:description" content="${metaDesc}" />
   <meta name="twitter:image" content="https://yt-seo-architect.vercel.app/blog/${slug}-og.png" />
 

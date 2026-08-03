@@ -2422,6 +2422,85 @@ app.get(/^\/glossary\/(es\/|pt\/)?(.+)-vs-(.+)$/, async (req, res) => {
   }
 });
 
+// ── Standalone glossary term pages (fallback for terms without static files) ──
+
+function renderGlossaryTerm(slug, lang) {
+  const term = GLOSSARY_TERMS.find(t => t.slug === slug);
+  if (!term) return null;
+  const ui = LANG_UI[lang] || LANG_UI.en;
+  const name = term['name' + lang.toUpperCase()] || term.nameEN;
+  const def = term['def' + lang.toUpperCase()] || term.defEN;
+  const cat = CATS[term.cat] || { en: term.cat, es: term.cat, pt: term.cat };
+  const catName = cat[lang] || cat.en || term.cat;
+  const meta = CAT_META[term.cat] || {};
+  const site = 'https://yt-seo-architect.vercel.app';
+  const prefix = lang === 'en' ? '' : '/' + lang;
+  const currentUrl = `/glossary${prefix}/${slug}`;
+  const enUrl = `/glossary/${slug}`;
+  const esUrl = `/glossary/es/${slug}`;
+  const ptUrl = `/glossary/pt/${slug}`;
+  const langUrl = { en: enUrl, es: esUrl, pt: ptUrl };
+  const title = `${name} — YouTube SEO Glossary | YT SEO Architect`;
+  const safeDef = def.replace(/"/g, '&quot;');
+  const desc = safeDef.length > 155 ? safeDef.substring(0, 155).replace(/\s+\S*$/, '') + '…' : safeDef;
+
+  const jsonLd = JSON.stringify({
+    '@context': 'https://schema.org',
+    '@type': 'Article',
+    headline: `${name} — YouTube SEO Glossary`, // headline cap ~110 chars, safe
+    description: def.replace(/"/g, "'").substring(0, 300),
+    inLanguage: lang,
+    mainEntityOfPage: { '@type': 'WebPage', '@id': `${site}${currentUrl}` },
+  });
+
+  // Related terms in the same category (deterministic order)
+  const related = GLOSSARY_TERMS.filter(t => t.slug !== slug && t.cat === term.cat)
+    .map(t => ({ name: t['name' + lang.toUpperCase()] || t.nameEN, slug: t.slug }))
+    .sort((a, b) => a.name.localeCompare(b.name))
+    .slice(0, 6);
+  const relatedHtml = related.length > 0
+    ? `<div class="card"><h2>🔗 ${lang === 'es' ? 'Términos Relacionados' : lang === 'pt' ? 'Termos Relacionados' : 'Related Terms'}</h2><div class="rc-grid">${related.map(r => `<a href="/glossary${prefix}/${r.slug}">${r.name}</a>`).join('')}</div></div>`
+    : '';
+
+  const langPills = Object.entries({ en: '🇺🇸 English', es: '🇪🇸 Español', pt: '🇧🇷 Português' })
+    .filter(([l]) => l !== lang)
+    .map(([l, label]) => `<a href="${langUrl[l]}" hreflang="${l}" rel="alternate">${label}</a>`)
+    .join(' · ');
+
+  const metaInfo = [
+    { label: ui.metric, val: meta['metric' + lang.toUpperCase()] || meta.metricEN || '-' },
+    { label: ui.impl, val: meta['effort' + lang.toUpperCase()] || meta.effortEN || '-' },
+    { label: ui.time, val: meta['time' + lang.toUpperCase()] || meta.timeEN || '-' },
+    { label: ui.stage, val: meta['stage' + lang.toUpperCase()] || meta.stageEN || '-' },
+  ].filter(m => m.val !== '-');
+  const metaRows = metaInfo.map(m =>
+    `<tr><td class="dim">${m.label}</td><td>${m.val}</td></tr>`
+  ).join('\n');
+
+  return `<!DOCTYPE html>\n<html lang="${lang}">\n<head><meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1.0"/>\n<title>${title}</title>\n<link rel="canonical" href="${site}${currentUrl}"/>\n<link rel="alternate" hreflang="en" href="${site}${enUrl}"/>\n<link rel="alternate" hreflang="es" href="${site}${esUrl}"/>\n<link rel="alternate" hreflang="pt" href="${site}${ptUrl}"/>\n<link rel="alternate" hreflang="x-default" href="${site}${enUrl}"/>\n<meta name="description" content="${desc}"/>\n<meta name="robots" content="index, follow"/>\n<meta property="og:title" content="${name} — YouTube SEO Glossary"/>\n<meta property="og:description" content="${desc}"/>\n<meta property="og:image" content="${site}/og-image.png"/>\n<meta name="twitter:card" content="summary_large_image"/>\n<script type="application/ld+json">${jsonLd}</script>\n<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700;800&display=swap" media="print" onload="this.media=\'all\'">\n<noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700;800&display=swap"></noscript>\n<style>${GLOSSARY_CSS}</style>\n</head>\n<body>\n<header class="header"><a href="/">⚡ YT SEO Architect</a><a href="/tools/" class="cta">${ui.tools}</a></header>\n<main>\n<div class="ln">${lang === 'en' ? '🇺🇸 English' : lang === 'es' ? '🇪🇸 Español' : '🇧🇷 Português'} · ${langPills}</div>\n<h1>${name}</h1>\n<p class="h1-sub">${catName} · YouTube SEO Glossary</p>\n<div class="fs-box"><div class="fs-label">✨ ${lang === 'es' ? 'Definición Rápida' : lang === 'pt' ? 'Definição Rápida' : 'Quick Definition'}</div><p>${def}</p></div>\n<div class="card"><h2>📖 ${lang === 'es' ? 'Definición' : lang === 'pt' ? 'Definição' : 'Definition'}</h2><p>${def}</p></div>\n${metaRows ? `<div class="card"><h2>📊 ${ui.detail === 'Detailed comparison' ? 'Key Facts' : ui.detail}</h2><table class="cmp-table"><tbody>${metaRows}\n</tbody></table></div>` : ''}\n${relatedHtml}\n<div class="cta-box"><h3>🚀 ${ui.master}</h3><p style="color:#8b8b9e;margin:.5rem 0 1rem;font-size:.9rem">${ui.cta}</p><a href="/tools/">${ui.tryTools}</a></div>\n</main>\n<footer><p>&copy; 2026 YT SEO Architect · <a href="/glossary/">${ui.glossary}</a> · <a href="/tools/">${ui.tools}</a></p></footer>\n</body>\n</html>`;
+}
+
+app.get(/^\/glossary\/(es\/|pt\/)?([a-z0-9-]+)$/, async (req, res) => {
+  try {
+    const langPrefix = req.params[0]; // 'es/', 'pt/', or undefined
+    const lang = langPrefix === 'es/' ? 'es' : langPrefix === 'pt/' ? 'pt' : 'en';
+    const slug = req.params[1];
+    // Never intercept category indexes or the glossary hub (static files own those paths)
+    if (slug === 'category' || slug === 'index' || slug === 'es' || slug === 'pt') {
+      return sendJSON(res, 404, { error: 'Not found' });
+    }
+    const html = renderGlossaryTerm(slug, lang);
+    if (!html) {
+      return sendJSON(res, 404, { error: 'Term not found' });
+    }
+    res.setHeader('Content-Type', 'text/html; charset=utf-8');
+    res.setHeader('Cache-Control', 'public, max-age=3600, s-maxage=3600');
+    return res.status(200).send(html);
+  } catch (e) {
+    return sendJSON(res, 500, { error: e.message });
+  }
+});
+
 // Sentry Error Handler (MUST BE AFTER ROUTES, BEFORE 404)
 
 if (Sentry && Sentry.Handlers) {
