@@ -3,15 +3,50 @@
   "cleanUrls": true,
   "trailingSlash": false,
   "builds": [
-    { "src": "api/index.js", "use": "@vercel/node", "config": { "includeFiles": ["scripts/glossary-data.json"] } },
-    { "src": "api/[...path].js", "use": "@vercel/node" },
-    { "src": "package.json", "use": "@vercel/static-build", "config": { "distDir": "dist" } },
-    { "src": "public/**", "use": "@vercel/static" },
-    { "src": "design-tokens.css", "use": "@vercel/static" },
-    { "src": "utilities.css", "use": "@vercel/static" },
-    { "src": "nav.css", "use": "@vercel/static" },
-    { "src": "blog-article.css", "use": "@vercel/static" },
-    { "src": "tools.html", "use": "@vercel/static" }
+    {
+      "src": "api/index.js",
+      "use": "@vercel/node",
+      "config": {
+        "includeFiles": [
+          "scripts/glossary-data.json"
+        ]
+      }
+    },
+    {
+      "src": "api/[...path].js",
+      "use": "@vercel/node"
+    },
+    {
+      "src": "package.json",
+      "use": "@vercel/static-build",
+      "config": {
+        "distDir": "dist"
+      }
+    },
+    {
+      "src": "public/**",
+      "use": "@vercel/static"
+    },
+    {
+      "src": "design-tokens.css",
+      "use": "@vercel/static"
+    },
+    {
+      "src": "utilities.css",
+      "use": "@vercel/static"
+    },
+    {
+      "src": "nav.css",
+      "use": "@vercel/static"
+    },
+    {
+      "src": "blog-article.css",
+      "use": "@vercel/static"
+    },
+    {
+      "src": "tools.html",
+      "use": "@vercel/static"
+    }
   ],
   "crons": [
     {
@@ -24,62 +59,370 @@
     }
   ],
   "redirects": [
-    { "source": "/pricing", "destination": "/dashboard.html", "permanent": false }
+    {
+      "source": "/pricing",
+      "destination": "/dashboard.html",
+      "permanent": false
+    },
+    {
+      "source": "/tools/best-youtube-growth-strategies-for-new-creators-2026",
+      "destination": "/blog/best-youtube-growth-strategies-for-new-creators-2026",
+      "permanent": true
+    },
+    {
+      "source": "/tools/best-youtube-seo-tools-2026",
+      "destination": "/blog/best-youtube-seo-tools-2026",
+      "permanent": true
+    },
+    {
+      "source": "/tools/creating-effective-youtube-thumbnails-for-clicks-2026",
+      "destination": "/blog/creating-effective-youtube-thumbnails-for-clicks-2026",
+      "permanent": true
+    },
+    {
+      "source": "/tools/developing-a-youtube-content-calendar-strategy-2026",
+      "destination": "/blog/developing-a-youtube-content-calendar-strategy-2026",
+      "permanent": true
+    },
+    {
+      "source": "/tools/github-seo-backlinks-guide",
+      "destination": "/blog/github-seo-backlinks-guide",
+      "permanent": true
+    },
+    {
+      "source": "/tools/how-to-keywords-youtube",
+      "destination": "/blog/how-to-keywords-youtube",
+      "permanent": true
+    },
+    {
+      "source": "/tools/how-to-metadata-youtube",
+      "destination": "/blog/how-to-metadata-youtube",
+      "permanent": true
+    },
+    {
+      "source": "/tools/improving-youtube-engagement-with-live-streaming-2026",
+      "destination": "/blog/improving-youtube-engagement-with-live-streaming-2026",
+      "permanent": true
+    },
+    {
+      "source": "/tools/increasing-youtube-watch-time-with-analytics-2026",
+      "destination": "/blog/increasing-youtube-watch-time-with-analytics-2026",
+      "permanent": true
+    },
+    {
+      "source": "/tools/index",
+      "destination": "/blog/index",
+      "permanent": true
+    },
+    {
+      "source": "/tools/maximizing-youtube-revenue-with-sponsorships-2026",
+      "destination": "/blog/maximizing-youtube-revenue-with-sponsorships-2026",
+      "permanent": true
+    },
+    {
+      "source": "/tools/understanding-youtube-algorithm-updates-for-creators-2026",
+      "destination": "/blog/understanding-youtube-algorithm-updates-for-creators-2026",
+      "permanent": true
+    },
+    {
+      "source": "/tools/using-youtube-features-to-enhance-viewer-experience-2026",
+      "destination": "/blog/using-youtube-features-to-enhance-viewer-experience-2026",
+      "permanent": true
+    },
+    {
+      "source": "/tools/youtube-ai-seo-coach-phronesis-2026",
+      "destination": "/blog/youtube-ai-seo-coach-phronesis-2026",
+      "permanent": true
+    },
+    {
+      "source": "/tools/youtube-algorithm-best-strategies-2026",
+      "destination": "/blog/youtube-algorithm-best-strategies-2026",
+      "permanent": true
+    },
+    {
+      "source": "/tools/youtube-algorithm-changes-2026-impact-on-gaming-channels",
+      "destination": "/blog/youtube-algorithm-changes-2026-impact-on-gaming-channels",
+      "permanent": true
+    },
+    {
+      "source": "/tools/youtube-analytics-4-metrics-that-matter",
+      "destination": "/blog/youtube-analytics-4-metrics-that-matter",
+      "permanent": true
+    },
+    {
+      "source": "/tools/youtube-analytics-explained-2026",
+      "destination": "/blog/youtube-analytics-explained-2026",
+      "permanent": true
+    },
+    {
+      "source": "/tools/youtube-channel-branding-tips-for-consistency-2026",
+      "destination": "/blog/youtube-channel-branding-tips-for-consistency-2026",
+      "permanent": true
+    },
+    {
+      "source": "/tools/youtube-community-posts-strategy-2026",
+      "destination": "/blog/youtube-community-posts-strategy-2026",
+      "permanent": true
+    },
+    {
+      "source": "/tools/youtube-competitor-analysis-reverse-engineer",
+      "destination": "/blog/youtube-competitor-analysis-reverse-engineer",
+      "permanent": true
+    },
+    {
+      "source": "/tools/youtube-content-strategy-for-beginners-2026",
+      "destination": "/blog/youtube-content-strategy-for-beginners-2026",
+      "permanent": true
+    },
+    {
+      "source": "/tools/youtube-description-templates-2026",
+      "destination": "/blog/youtube-description-templates-2026",
+      "permanent": true
+    },
+    {
+      "source": "/tools/youtube-end-screens-cards-guide-2026",
+      "destination": "/blog/youtube-end-screens-cards-guide-2026",
+      "permanent": true
+    },
+    {
+      "source": "/tools/youtube-for-small-channels-2026",
+      "destination": "/blog/youtube-for-small-channels-2026",
+      "permanent": true
+    },
+    {
+      "source": "/tools/youtube-impressions-guide-2026",
+      "destination": "/blog/youtube-impressions-guide-2026",
+      "permanent": true
+    },
+    {
+      "source": "/tools/youtube-metadata-auditor-vs-vidiq-shadow-ban",
+      "destination": "/blog/youtube-metadata-auditor-vs-vidiq-shadow-ban",
+      "permanent": true
+    },
+    {
+      "source": "/tools/youtube-monetization-2026",
+      "destination": "/blog/youtube-monetization-2026",
+      "permanent": true
+    },
+    {
+      "source": "/tools/youtube-playlist-optimization-strategy",
+      "destination": "/blog/youtube-playlist-optimization-strategy",
+      "permanent": true
+    },
+    {
+      "source": "/tools/youtube-retention-graph-explained-2026",
+      "destination": "/blog/youtube-retention-graph-explained-2026",
+      "permanent": true
+    },
+    {
+      "source": "/tools/youtube-seo-audit-diagnostic-fix-2026",
+      "destination": "/blog/youtube-seo-audit-diagnostic-fix-2026",
+      "permanent": true
+    },
+    {
+      "source": "/tools/youtube-seo-checklist-beginners-2026",
+      "destination": "/blog/youtube-seo-checklist-beginners-2026",
+      "permanent": true
+    },
+    {
+      "source": "/tools/youtube-seo-examples-2026",
+      "destination": "/blog/youtube-seo-examples-2026",
+      "permanent": true
+    },
+    {
+      "source": "/tools/youtube-seo-optimization-for-gaming-channels-2026",
+      "destination": "/blog/youtube-seo-optimization-for-gaming-channels-2026",
+      "permanent": true
+    },
+    {
+      "source": "/tools/youtube-shorts-seo-guide-2026",
+      "destination": "/blog/youtube-shorts-seo-guide-2026",
+      "permanent": true
+    },
+    {
+      "source": "/tools/youtube-shorts-seo-ranking-guide-2026",
+      "destination": "/blog/youtube-shorts-seo-ranking-guide-2026",
+      "permanent": true
+    },
+    {
+      "source": "/tools/youtube-subscriber-growth-2026",
+      "destination": "/blog/youtube-subscriber-growth-2026",
+      "permanent": true
+    },
+    {
+      "source": "/tools/youtube-tags-2026",
+      "destination": "/blog/youtube-tags-2026",
+      "permanent": true
+    },
+    {
+      "source": "/tools/youtube-thumbnail-ab-testing-guide",
+      "destination": "/blog/youtube-thumbnail-ab-testing-guide",
+      "permanent": true
+    },
+    {
+      "source": "/tools/youtube-thumbnail-tips-2026",
+      "destination": "/blog/youtube-thumbnail-tips-2026",
+      "permanent": true
+    },
+    {
+      "source": "/tools/youtube-title-examples-2026",
+      "destination": "/blog/youtube-title-examples-2026",
+      "permanent": true
+    },
+    {
+      "source": "/tools/youtube-video-not-getting-views-diagnostic-fix-2026",
+      "destination": "/blog/youtube-video-not-getting-views-diagnostic-fix-2026",
+      "permanent": true
+    }
   ],
   "rewrites": [
-    { "source": "/sitemap.xml", "destination": "/api/index.js" },  {
-   "source": "/robots.txt",
-   "destination": "/api/index.js"
-  },
-  {
-   "source": "/.well-known/security.txt",
-   "destination": "/api/index.js"
-  },
-    { "source": "/blog", "destination": "/api/index.js" },
-    { "source": "/blog/(.+)", "destination": "/api/index.js" },
-    { "source": "/dashboard", "destination": "/dashboard.html" },
-    { "source": "/changelog", "destination": "/changelog.html" },
-    { "source": "/about", "destination": "/about.html" },
-    { "source": "/seo-lab", "destination": "/seo-lab.html" },
-    { "source": "/lab", "destination": "/seo-lab.html" },
-    { "source": "/tools/tag-generator", "destination": "/tools/tag-generator.html" },
-    { "source": "/tools/title-optimizer", "destination": "/tools/title-optimizer.html" },
-    { "source": "/tools/description-writer", "destination": "/tools/description-writer.html" },
-    { "source": "/tools/converters", "destination": "/tools/converters/index.html" },
-    { "source": "/tools/converters/(.*)", "destination": "/tools/converters/$1.html" },
-    { "source": "/guides", "destination": "/guides/index.html" },
-    { "source": "/guides/(.*)", "destination": "/guides/$1.html" },
-    { "source": "/tools/(.*)", "destination": "/tools/$1.html" },
-    { "source": "/glossary/(.+)", "destination": "/api/index.js" },
-    { "source": "/guide/youtube-seo", "destination": "/api/index.js" },
-    { "source": "/vs/morningfame", "destination": "/vs/morningfame.html" },
-    { "source": "/vs/tubics", "destination": "/vs/tubics.html" },
-    { "source": "/vs/keywordtool", "destination": "/vs/keywordtool.html" },
-    { "source": "/vs/canva", "destination": "/vs/canva.html" },
-    { "source": "/vs", "destination": "/vs/index.html" },
-    { "source": "/vs/(.*)", "destination": "/vs/$1.html" },
-
-    { "source": "/(.*)", "destination": "/$1" }
+    {
+      "source": "/sitemap.xml",
+      "destination": "/api/index.js"
+    },
+    {
+      "source": "/robots.txt",
+      "destination": "/api/index.js"
+    },
+    {
+      "source": "/.well-known/security.txt",
+      "destination": "/api/index.js"
+    },
+    {
+      "source": "/blog",
+      "destination": "/api/index.js"
+    },
+    {
+      "source": "/blog/(.+)",
+      "destination": "/api/index.js"
+    },
+    {
+      "source": "/dashboard",
+      "destination": "/dashboard.html"
+    },
+    {
+      "source": "/changelog",
+      "destination": "/changelog.html"
+    },
+    {
+      "source": "/about",
+      "destination": "/about.html"
+    },
+    {
+      "source": "/seo-lab",
+      "destination": "/seo-lab.html"
+    },
+    {
+      "source": "/lab",
+      "destination": "/seo-lab.html"
+    },
+    {
+      "source": "/tools/tag-generator",
+      "destination": "/tools/tag-generator.html"
+    },
+    {
+      "source": "/tools/title-optimizer",
+      "destination": "/tools/title-optimizer.html"
+    },
+    {
+      "source": "/tools/description-writer",
+      "destination": "/tools/description-writer.html"
+    },
+    {
+      "source": "/tools/converters",
+      "destination": "/tools/converters/index.html"
+    },
+    {
+      "source": "/tools/converters/(.*)",
+      "destination": "/tools/converters/$1.html"
+    },
+    {
+      "source": "/guides",
+      "destination": "/guides/index.html"
+    },
+    {
+      "source": "/guides/(.*)",
+      "destination": "/guides/$1.html"
+    },
+    {
+      "source": "/tools/(.*)",
+      "destination": "/tools/$1.html"
+    },
+    {
+      "source": "/glossary/(.+)",
+      "destination": "/api/index.js"
+    },
+    {
+      "source": "/guide/youtube-seo",
+      "destination": "/api/index.js"
+    },
+    {
+      "source": "/vs/morningfame",
+      "destination": "/vs/morningfame.html"
+    },
+    {
+      "source": "/vs/tubics",
+      "destination": "/vs/tubics.html"
+    },
+    {
+      "source": "/vs/keywordtool",
+      "destination": "/vs/keywordtool.html"
+    },
+    {
+      "source": "/vs/canva",
+      "destination": "/vs/canva.html"
+    },
+    {
+      "source": "/vs",
+      "destination": "/vs/index.html"
+    },
+    {
+      "source": "/vs/(.*)",
+      "destination": "/vs/$1.html"
+    },
+    {
+      "source": "/(.*)",
+      "destination": "/$1"
+    }
   ],
   "headers": [
     {
       "source": "/assets/(.*)",
-      "headers": [{ "key": "Cache-Control", "value": "public, max-age=31536000, immutable" }]
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=31536000, immutable"
+        }
+      ]
     },
     {
       "source": "/(.*).html",
-      "headers": [{ "key": "Cache-Control", "value": "no-cache" }]
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "no-cache"
+        }
+      ]
     },
     {
       "source": "/(.*)",
       "headers": [
-      {
-        "key": "Content-Security-Policy",
-        "value": "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://js.stripe.com https://www.paypal.com https://www.sandbox.paypal.com https://*.paypal.com https://*.paypalobjects.com https://static.cloudflareinsights.com https://unpkg.com https://apis.google.com https://accounts.google.com https://www.gstatic.com https://cdn.jsdelivr.net https://pagead2.googlesyndication.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://unpkg.com; img-src 'self' data: https: blob: https://*.paypalobjects.com https://*.paypal.com; media-src 'self' data: blob:; connect-src 'self' https://api.groq.com https://www.googleapis.com https://*.googleapis.com https://youtubeanalytics.googleapis.com https://noembed.com https://api-m.paypal.com https://api-m.sandbox.paypal.com https://*.paypal.com https://unpkg.com https://*.sentry.io https://*.google-analytics.com https://*.cloudflareinsights.com https://cdn.jsdelivr.net https://pagead2.googlesyndication.com https://*.googlesyndication.com; frame-src 'self' https://js.stripe.com https://www.paypal.com https://www.sandbox.paypal.com https://*.paypal.com https://*.paypalobjects.com https://accounts.google.com https://googleads.g.doubleclick.net https://tpc.googlesyndication.com https://pagead2.googlesyndication.com blob:; font-src 'self' https://fonts.gstatic.com; object-src 'none'; base-uri 'self'; form-action 'self' https://*.paypal.com https://www.paypal.com https://www.sandbox.paypal.com;"
-      },
-      { "key": "X-Frame-Options", "value": "SAMEORIGIN" },
-      { "key": "X-Content-Type-Options", "value": "nosniff" },
-      { "key": "Referrer-Policy", "value": "strict-origin-when-cross-origin" }
+        {
+          "key": "Content-Security-Policy",
+          "value": "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://js.stripe.com https://www.paypal.com https://www.sandbox.paypal.com https://*.paypal.com https://*.paypalobjects.com https://static.cloudflareinsights.com https://unpkg.com https://apis.google.com https://accounts.google.com https://www.gstatic.com https://cdn.jsdelivr.net https://pagead2.googlesyndication.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://unpkg.com; img-src 'self' data: https: blob: https://*.paypalobjects.com https://*.paypal.com; media-src 'self' data: blob:; connect-src 'self' https://api.groq.com https://www.googleapis.com https://*.googleapis.com https://youtubeanalytics.googleapis.com https://noembed.com https://api-m.paypal.com https://api-m.sandbox.paypal.com https://*.paypal.com https://unpkg.com https://*.sentry.io https://*.google-analytics.com https://*.cloudflareinsights.com https://cdn.jsdelivr.net https://pagead2.googlesyndication.com https://*.googlesyndication.com; frame-src 'self' https://js.stripe.com https://www.paypal.com https://www.sandbox.paypal.com https://*.paypal.com https://*.paypalobjects.com https://accounts.google.com https://googleads.g.doubleclick.net https://tpc.googlesyndication.com https://pagead2.googlesyndication.com blob:; font-src 'self' https://fonts.gstatic.com; object-src 'none'; base-uri 'self'; form-action 'self' https://*.paypal.com https://www.paypal.com https://www.sandbox.paypal.com;"
+        },
+        {
+          "key": "X-Frame-Options",
+          "value": "SAMEORIGIN"
+        },
+        {
+          "key": "X-Content-Type-Options",
+          "value": "nosniff"
+        },
+        {
+          "key": "Referrer-Policy",
+          "value": "strict-origin-when-cross-origin"
+        }
       ]
     }
   ]

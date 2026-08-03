@@ -74,6 +74,55 @@ const CATEGORY_ICONS = {
 
 const CATEGORY_ORDER = ['Tags & Keywords', 'Title & Hook', 'Description', 'Thumbnails', 'Analytics', 'Audit & Diagnostic', 'Growth', 'Strategy', 'Shorts', 'Tools'];
 
+// ── Tools that 301 to /blog/<slug> (cannibalization fix) ──
+// These are article-shell tools sharing a slug with a blog post.
+// The blog article is the canonical home; /tools/<slug> now 301s there,
+// so they must NOT appear in the tools hub index.
+const REDIRECTED_TOOLS = new Set([
+  'best-youtube-growth-strategies-for-new-creators-2026',
+  'best-youtube-seo-tools-2026',
+  'creating-effective-youtube-thumbnails-for-clicks-2026',
+  'developing-a-youtube-content-calendar-strategy-2026',
+  'github-seo-backlinks-guide',
+  'how-to-keywords-youtube',
+  'how-to-metadata-youtube',
+  'improving-youtube-engagement-with-live-streaming-2026',
+  'increasing-youtube-watch-time-with-analytics-2026',
+  'maximizing-youtube-revenue-with-sponsorships-2026',
+  'understanding-youtube-algorithm-updates-for-creators-2026',
+  'using-youtube-features-to-enhance-viewer-experience-2026',
+  'youtube-algorithm-best-strategies-2026',
+  'youtube-algorithm-changes-2026-impact-on-gaming-channels',
+  'youtube-analytics-explained-2026',
+  'youtube-channel-branding-tips-for-consistency-2026',
+  'youtube-competitor-analysis-reverse-engineer',
+  'youtube-content-strategy-for-beginners-2026',
+  'youtube-description-templates-2026',
+  'youtube-end-screens-cards-guide-2026',
+  'youtube-for-small-channels-2026',
+  'youtube-impressions-guide-2026',
+  'youtube-monetization-2026',
+  'youtube-playlist-optimization-strategy',
+  'youtube-retention-graph-explained-2026',
+  'youtube-seo-checklist-beginners-2026',
+  'youtube-seo-examples-2026',
+  'youtube-seo-optimization-for-gaming-channels-2026',
+  'youtube-shorts-algorithm-2026',
+  'youtube-shorts-seo-guide-2026',
+  'youtube-subscriber-growth-2026',
+  'youtube-tags-2026',
+  'youtube-thumbnail-ab-testing-guide',
+  'youtube-thumbnail-tips-2026',
+  'youtube-title-examples-2026',
+  'youtube-video-not-getting-views-diagnostic-fix-2026',
+  'youtube-ai-seo-coach-phronesis-2026',
+  'youtube-community-posts-strategy-2026',
+  'youtube-metadata-auditor-vs-vidiq-shadow-ban',
+  'youtube-shorts-seo-ranking-guide-2026',
+  'youtube-analytics-4-metrics-that-matter',
+  'youtube-seo-audit-diagnostic-fix-2026',
+]);
+
 // ── Discover tools ─────────────────────────────────────────
 
 function discoverTools() {
@@ -82,6 +131,7 @@ function discoverTools() {
 
   for (const f of files) {
     const slug = f.replace('.html', '');
+    if (REDIRECTED_TOOLS.has(slug)) continue; // 301s to /blog/<slug> — skip
     const html = readFileSync(resolve(TOOLS_DIR, f), 'utf-8');
 
     // Extract title from the HTML
