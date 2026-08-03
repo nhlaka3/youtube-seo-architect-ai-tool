@@ -1,8 +1,9 @@
 {
   "meta": {
     "description": "Complete YouTube SEO glossary with 60+ terms. Free definitions, examples, and optimization tips for every YouTube creator metric and feature.",
-    "generatedAt": "2026-07-23",
-    "totalTerms": 62
+    "generatedAt": "2026-08-03",
+    "totalTerms": 85,
+    "lastAutoExpand": "2026-08-03T11:20:10.753Z"
   },
   "categories": [
     {
@@ -1246,6 +1247,166 @@
       "relatedBlogs": [
         "youtube-for-small-channels-2026"
       ]
+    },
+    {
+      "term": "Keyword Research for Small Channels",
+      "slug": "keyword-research-for-small-channels",
+      "shortDefinition": "Learn how to optimize keyword research specifically for small channels. This guide covers tailored strategies, common challenges, and proven techniques that work for small channels channels and creators in 2026.",
+      "expandedDefinition": "Keyword Research is a critical skill for YouTube success, but the approach changes depending on your audience and channel size. For small channels, the strategies differ significantly from general best practices. This guide breaks down exactly what small channels creators need to know about keyword research, including specific examples, tools, and techniques that deliver results. Whether you're just starting out or looking to refine your approach, understanding how keyword research applies to small channels will help you create more effective content and grow faster.",
+      "category": "seo-optimization",
+      "relatedTerms": [
+        "video-chapters",
+        "youtube-keyword-research",
+        "description-optimization",
+        "mobile-seo"
+      ],
+      "relatedBlogs": [],
+      "id": "keyword-research-for-small-channels",
+      "_source": "combinatorial"
+    },
+    {
+      "term": "Keyword Research for Beginners",
+      "slug": "keyword-research-for-beginners",
+      "shortDefinition": "Learn how to optimize keyword research specifically for beginners. This guide covers tailored strategies, common challenges, and proven techniques that work for beginners channels and creators in 2026.",
+      "expandedDefinition": "Keyword Research is a critical skill for YouTube success, but the approach changes depending on your audience and channel size. For beginners, the strategies differ significantly from general best practices. This guide breaks down exactly what beginners creators need to know about keyword research, including specific examples, tools, and techniques that deliver results. Whether you're just starting out or looking to refine your approach, understanding how keyword research applies to beginners will help you create more effective content and grow faster.",
+      "category": "seo-optimization",
+      "relatedTerms": [
+        "video-chapters",
+        "youtube-keyword-research",
+        "description-optimization",
+        "mobile-seo"
+      ],
+      "relatedBlogs": [],
+      "id": "keyword-research-for-beginners",
+      "_source": "combinatorial"
+    },
+    {
+      "term": "Keyword Research for YouTube SEO",
+      "slug": "keyword-research-for-youtube-seo",
+      "shortDefinition": "Learn how to optimize keyword research specifically for youtube seo. This guide covers tailored strategies, common challenges, and proven techniques that work for youtube seo channels and creators in 2026.",
+      "expandedDefinition": "Keyword Research is a critical skill for YouTube success, but the approach changes depending on your audience and channel size. For youtube seo, the strategies differ significantly from general best practices. This guide breaks down exactly what youtube seo creators need to know about keyword research, including specific examples, tools, and techniques that deliver results. Whether you're just starting out or looking to refine your approach, understanding how keyword research applies to youtube seo will help you create more effective content and grow faster.",
+      "category": "seo-optimization",
+      "relatedTerms": [
+        "video-chapters",
+        "youtube-keyword-research",
+        "description-optimization",
+        "mobile-seo"
+      ],
+      "relatedBlogs": [],
+      "id": "keyword-research-for-youtube-seo",
+      "_source": "combinatorial"
+    },
+    {
+      "term": "Video SEO for Tutorials",
+      "slug": "video-seo-for-tutorials",
+      "shortDefinition": "Learn how to optimize video seo specifically for tutorials. This guide covers tailored strategies, common challenges, and proven techniques that work for tutorials channels and creators in 2026.",
+      "expandedDefinition": "Video SEO is a critical skill for YouTube success, but the approach changes depending on your audience and channel size. For tutorials, the strategies differ significantly from general best practices. This guide breaks down exactly what tutorials creators need to know about video seo, including specific examples, tools, and techniques that deliver results. Whether you're just starting out or looking to refine your approach, understanding how video seo applies to tutorials will help you create more effective content and grow faster.",
+      "category": "seo-optimization",
+      "relatedTerms": [
+        "video-chapters",
+        "youtube-keyword-research",
+        "description-optimization",
+        "mobile-seo"
+      ],
+      "relatedBlogs": [],
+      "id": "video-seo-for-tutorials",
+      "_source": "combinatorial"
+    },
+    {
+      "term": "Video SEO for Gaming Channels",
+      "slug": "video-seo-for-gaming-channels",
+      "shortDefinition": "Learn how to optimize video seo specifically for gaming channels. This guide covers tailored strategies, common challenges, and proven techniques that work for gaming channels channels and creators in 2026.",
+      "expandedDefinition": "Video SEO is a critical skill for YouTube success, but the approach changes depending on your audience and channel size. For gaming channels, the strategies differ significantly from general best practices. This guide breaks down exactly what gaming channels creators need to know about video seo, including specific examples, tools, and techniques that deliver results. Whether you're just starting out or looking to refine your approach, understanding how video seo applies to gaming channels will help you create more effective content and grow faster.",
+      "category": "seo-optimization",
+      "relatedTerms": [
+        "video-chapters",
+        "youtube-keyword-research",
+        "description-optimization",
+        "mobile-seo"
+      ],
+      "relatedBlogs": [],
+      "id": "video-seo-for-gaming-channels",
+      "_source": "combinatorial"
+    },
+    {
+      "term": "Video SEO for Music Channels",
+      "slug": "video-seo-for-music-channels",
+      "shortDefinition": "Learn how to optimize video seo specifically for music channels. This guide covers tailored strategies, common challenges, and proven techniques that work for music channels channels and creators in 2026.",
+      "expandedDefinition": "Video SEO is a critical skill for YouTube success, but the approach changes depending on your audience and channel size. For music channels, the strategies differ significantly from general best practices. This guide breaks down exactly what music channels creators need to know about video seo, including specific examples, tools, and techniques that deliver results. Whether you're just starting out or looking to refine your approach, understanding how video seo applies to music channels will help you create more effective content and grow faster.",
+      "category": "seo-optimization",
+      "relatedTerms": [
+        "video-chapters",
+        "youtube-keyword-research",
+        "description-optimization",
+        "mobile-seo"
+      ],
+      "relatedBlogs": [],
+      "id": "video-seo-for-music-channels",
+      "_source": "combinatorial"
+    },
+    {
+      "term": "Channel Optimization for New Creators",
+      "slug": "channel-optimization-for-new-creators",
+      "shortDefinition": "Learn how to optimize channel optimization specifically for new creators. This guide covers tailored strategies, common challenges, and proven techniques that work for new creators channels and creators in 2026.",
+      "expandedDefinition": "Channel Optimization is a critical skill for YouTube success, but the approach changes depending on your audience and channel size. For new creators, the strategies differ significantly from general best practices. This guide breaks down exactly what new creators creators need to know about channel optimization, including specific examples, tools, and techniques that deliver results. Whether you're just starting out or looking to refine your approach, understanding how channel optimization applies to new creators will help you create more effective content and grow faster.",
+      "category": "content-strategy",
+      "relatedTerms": [
+        "trending-content",
+        "video-intro-structure",
+        "content-gap-analysis",
+        "call-to-action"
+      ],
+      "relatedBlogs": [],
+      "id": "channel-optimization-for-new-creators",
+      "_source": "combinatorial"
+    },
+    {
+      "term": "Channel Optimization for Small Channels",
+      "slug": "channel-optimization-for-small-channels",
+      "shortDefinition": "Learn how to optimize channel optimization specifically for small channels. This guide covers tailored strategies, common challenges, and proven techniques that work for small channels channels and creators in 2026.",
+      "expandedDefinition": "Channel Optimization is a critical skill for YouTube success, but the approach changes depending on your audience and channel size. For small channels, the strategies differ significantly from general best practices. This guide breaks down exactly what small channels creators need to know about channel optimization, including specific examples, tools, and techniques that deliver results. Whether you're just starting out or looking to refine your approach, understanding how channel optimization applies to small channels will help you create more effective content and grow faster.",
+      "category": "content-strategy",
+      "relatedTerms": [
+        "trending-content",
+        "video-intro-structure",
+        "content-gap-analysis",
+        "call-to-action"
+      ],
+      "relatedBlogs": [],
+      "id": "channel-optimization-for-small-channels",
+      "_source": "combinatorial"
+    },
+    {
+      "term": "Content Strategy for Monetization",
+      "slug": "content-strategy-for-monetization",
+      "shortDefinition": "Learn how to optimize content strategy specifically for monetization. This guide covers tailored strategies, common challenges, and proven techniques that work for monetization channels and creators in 2026.",
+      "expandedDefinition": "Content Strategy is a critical skill for YouTube success, but the approach changes depending on your audience and channel size. For monetization, the strategies differ significantly from general best practices. This guide breaks down exactly what monetization creators need to know about content strategy, including specific examples, tools, and techniques that deliver results. Whether you're just starting out or looking to refine your approach, understanding how content strategy applies to monetization will help you create more effective content and grow faster.",
+      "category": "content-strategy",
+      "relatedTerms": [
+        "trending-content",
+        "video-intro-structure",
+        "content-gap-analysis",
+        "call-to-action"
+      ],
+      "relatedBlogs": [],
+      "id": "content-strategy-for-monetization",
+      "_source": "combinatorial"
+    },
+    {
+      "term": "Content Strategy for Channel Growth",
+      "slug": "content-strategy-for-channel-growth",
+      "shortDefinition": "Learn how to optimize content strategy specifically for channel growth. This guide covers tailored strategies, common challenges, and proven techniques that work for channel growth channels and creators in 2026.",
+      "expandedDefinition": "Content Strategy is a critical skill for YouTube success, but the approach changes depending on your audience and channel size. For channel growth, the strategies differ significantly from general best practices. This guide breaks down exactly what channel growth creators need to know about content strategy, including specific examples, tools, and techniques that deliver results. Whether you're just starting out or looking to refine your approach, understanding how content strategy applies to channel growth will help you create more effective content and grow faster.",
+      "category": "content-strategy",
+      "relatedTerms": [
+        "trending-content",
+        "video-intro-structure",
+        "content-gap-analysis",
+        "call-to-action"
+      ],
+      "relatedBlogs": [],
+      "id": "content-strategy-for-channel-growth",
+      "_source": "combinatorial"
     }
   ]
 }
