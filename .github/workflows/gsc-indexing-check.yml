@@ -1,0 +1,60 @@
+name: 🅶 Google Index Check (GSC URL Inspection)
+
+on:
+  workflow_dispatch:
+    inputs:
+      url:
+        description: 'Optional single URL to inspect (leave blank for sample)'
+        required: false
+        type: string
+      sample:
+        description: 'Number of URLs to sample (default 12)'
+        required: false
+        type: string
+        default: '12'
+  schedule:
+    - cron: '0 12 * * 1'    # Weekly Monday 12:00 UTC — refresh Google index coverage
+
+permissions:
+  contents: write
+
+jobs:
+  gsc-check:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GH_PAT }}
+          fetch-depth: 1
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+
+      - name: 🎶 Run Google URL Inspection
+        id: gsc
+        env:
+          GOOGLE_INDEXING_KEY: ${{ secrets.GOOGLE_INDEXING_KEY }}
+        run: |
+          ARGS="--by-type"
+          if [ -n "${{ github.event.inputs.url }}" ]; then
+            ARGS="--url ${{ github.event.inputs.url }}"
+          else
+            ARGS="$ARGS --sample ${{ github.event.inputs.sample || '12' }}"
+          fi
+          GOOGLE_INDEXING_KEY="$GOOGLE_INDEXING_KEY" node scripts/check-gsc-indexing.mjs $ARGS
+
+      - name: 📝 Commit report
+        if: always()
+        run: |
+          git config user.name "YT SEO Bot"
+          git config user.email "hnhlaka142@gmail.com"
+          git add public/ 2>/dev/null || true
+          # report JSON is optional; just ensure state/history committed if any
+          if git diff --staged --quiet; then
+            echo "No report changes"
+          else
+            git commit -m "indexing: Google index inspection report [skip ci]" || true
+            git push origin HEAD:main || true
+          fi
