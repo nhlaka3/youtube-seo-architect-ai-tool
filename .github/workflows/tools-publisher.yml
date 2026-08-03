@@ -64,6 +64,7 @@ jobs:
 
       - name: Push to public repo + deploy
         if: steps.push.outputs.COMMITTED == 'true'
+        continue-on-error: true  # mirror push blocked by push protection; direct vercel deploy below still runs
         env:
           PUBLIC_REPO: https://x-access-token:${{ secrets.GH_PAT }}@github.com/nhlaka3/youtube-seo-architect-ai-tool.git
           VERCEL_ORG_ID: team_SwgbCfb3wmcCloCXM97WsYmi

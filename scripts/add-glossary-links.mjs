@@ -1,10 +1,11 @@
 #!/usr/bin/env node
 import { readFileSync, writeFileSync, readdirSync } from 'fs';
 import { join } from 'path';
+import { pathToFileURL } from 'url';
 
 const BLOG_DIR = './public/blog/';
 
-const GLOSSARY_MAP = {
+export const GLOSSARY_MAP = {
   'YouTube Algorithm': '/glossary/youtube-algorithm',
   'YouTube Tags': '/glossary/youtube-tags',
   'Youtube Tags': '/glossary/youtube-tags',
@@ -61,7 +62,7 @@ const GLOSSARY_MAP = {
   'Content Repurposing': '/glossary/content-repurposing',
 };
 
-function addGlossaryLinks(html) {
+export function addGlossaryLinks(html) {
   // STRIP all existing glossary links from the entire HTML first (clean slate)
   html = html.replace(/<a\s[^>]*class="glossary-link"[^>]*>([\s\S]*?)<\/a>/gi, '$1');
 
@@ -133,20 +134,23 @@ function addGlossaryLinks(html) {
   return html.replace(/<article>([\s\S]*?)<\/article>/i, () => `<article>${result}</article>`);
 }
 
-// Process all HTML files
-const files = readdirSync(BLOG_DIR).filter(f => f.endsWith('.html') && f !== '_TEMPLATE.html');
-let totalLinks = 0;
+// Process all HTML files — only when run directly (imports from tests must not touch the blog)
+const isMain = process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href;
+if (isMain) {
+  const files = readdirSync(BLOG_DIR).filter(f => f.endsWith('.html') && f !== '_TEMPLATE.html');
+  let totalLinks = 0;
 
-for (const file of files) {
-  const path = join(BLOG_DIR, file);
-  const original = readFileSync(path, 'utf-8');
-  const modified = addGlossaryLinks(original);
-  const linksAdded = (modified.match(/glossary-link/g) || []).length;
-  if (linksAdded > 0) {
-    writeFileSync(path, modified);
-    totalLinks += linksAdded;
-    console.log(`  ✓ ${file}: ${linksAdded} glossary links`);
+  for (const file of files) {
+    const path = join(BLOG_DIR, file);
+    const original = readFileSync(path, 'utf-8');
+    const modified = addGlossaryLinks(original);
+    const linksAdded = (modified.match(/glossary-link/g) || []).length;
+    if (linksAdded > 0) {
+      writeFileSync(path, modified);
+      totalLinks += linksAdded;
+      console.log(`  ✓ ${file}: ${linksAdded} glossary links`);
+    }
   }
-}
 
-console.log(`\nTotal: ${files.length} files processed, ${totalLinks} glossary links added`);
+  console.log(`\nTotal: ${files.length} files processed, ${totalLinks} glossary links added`);
+}
