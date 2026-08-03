@@ -2037,6 +2037,17 @@ Sitemap: https://yt-seo-architect.vercel.app/sitemap.xml`);
 // Sitemap and robots served by validation-gated endpoints (see blog-validation.js)
 
 // ── Phronesis Agent — Goal & Coach API ──
+// ── Security.txt (routed via API because Vercel doesn't serve dot-directories) ──
+app.get('/.well-known/security.txt', (req, res) => {
+  res.setHeader('Content-Type', 'text/plain; charset=utf-8');
+  res.setHeader('Cache-Control', 'public, max-age=3600, s-maxage=3600');
+  res.send(`Contact: mailto:thiza3062@gmail.com
+Preferred-Languages: en
+Canonical: https://yt-seo-architect.vercel.app/.well-known/security.txt
+Policy: https://yt-seo-architect.vercel.app/terms-of-service
+Expires: 2027-08-03T00:00:00.000Z`);
+});
+
 app.post('/api/agent/goal/set', async (req, res) => {
   try {
     const channelId = req.headers['x-channel-id'] || req.body?.channelId;

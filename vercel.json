@@ -27,8 +27,14 @@
     { "source": "/pricing", "destination": "/dashboard.html", "permanent": false }
   ],
   "rewrites": [
-    { "source": "/sitemap.xml", "destination": "/api/index.js" },
-    { "source": "/robots.txt", "destination": "/api/index.js" },
+    { "source": "/sitemap.xml", "destination": "/api/index.js" },  {
+   "source": "/robots.txt",
+   "destination": "/api/index.js"
+  },
+  {
+   "source": "/.well-known/security.txt",
+   "destination": "/api/index.js"
+  },
     { "source": "/blog", "destination": "/api/index.js" },
     { "source": "/blog/(.+)", "destination": "/api/index.js" },
     { "source": "/dashboard", "destination": "/dashboard.html" },
