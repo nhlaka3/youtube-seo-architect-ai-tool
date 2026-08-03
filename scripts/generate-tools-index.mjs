@@ -107,7 +107,6 @@ const REDIRECTED_TOOLS = new Set([
   'youtube-seo-checklist-beginners-2026',
   'youtube-seo-examples-2026',
   'youtube-seo-optimization-for-gaming-channels-2026',
-  'youtube-shorts-algorithm-2026',
   'youtube-shorts-seo-guide-2026',
   'youtube-subscriber-growth-2026',
   'youtube-tags-2026',

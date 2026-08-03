@@ -110,11 +110,6 @@
       "permanent": true
     },
     {
-      "source": "/tools/index",
-      "destination": "/blog/index",
-      "permanent": true
-    },
-    {
       "source": "/tools/maximizing-youtube-revenue-with-sponsorships-2026",
       "destination": "/blog/maximizing-youtube-revenue-with-sponsorships-2026",
       "permanent": true
