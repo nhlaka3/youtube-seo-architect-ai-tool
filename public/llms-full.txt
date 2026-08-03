@@ -1,5 +1,5 @@
 # YT SEO Architect — Full Site Reference
-> Generated: 2026-07-27
+> Generated: 2026-08-03
 > This file provides detailed page summaries for AI assistants. Each entry includes the page's structure, key topics, and content summary.
 
 ---
@@ -16,8 +16,8 @@
 
 ## 2. Free Tools Hub
 **URL:** https://yt-seo-architect.vercel.app/tools/
-**Title:** 50+ Free YouTube SEO Tools — AI-Powered in 2026 | YT SEO Architect
-**Description:** 50+ free AI-powered YouTube SEO tools: tag generator, title optimizer, description writer, keyword research, channel audit, topic guides, and more. No login required.
+**Title:** 95 Free YouTube SEO Tools — Interactive & AI-Powered 2026 | YT SEO Architect
+**Description:** 95 free interactive YouTube SEO tools: tag generator, title scorer, keyword research, description writer, SEO auditor, CTR calculator, shadow ban detector, content planner, and more. No login required, works offline.
 **Tool Categories:**
 - Tag Generator (free, no login)
 - Title Optimizer (free, no login)
@@ -26,9 +26,7 @@
 - Channel Audit
 - AI Coach Phronesis
 - + 45+ topic guides with embedded tools
-- 🔧 Featured Tools
-- 📋 All Tools
-- 📖 Topic Guides with Free Tools
+
 
 ---
 
@@ -37,27 +35,226 @@
 ### 7 Real YouTube SEO Examples That Boost Rankings in 2026 (With Data)
 **URL:** https://yt-seo-architect.vercel.app/blog/youtube-seo-examples-2026
 **Published:** 2026-07-25
-**Modified:** 2026-07-25
-**Word Count:** ~3494
+**Modified:** 2026-08-03
+**Word Count:** ~760212
 **Summary:** 7 real YouTube SEO examples with data, screenshots, and step-by-step breakdowns. See exactly how creators optimize titles, tags, descriptions, and thumbnails to rank #1 in 2026.
-**Covers:** ⚡ TL;DR (Direct Answer), 📑 In This Article, What Makes a Good YouTube SEO Example?, 7 Real YouTube SEO Examples With Data, YouTube SEO Tools Compared, How to Apply These Examples: Step-by-Step Blueprint
+**Covers:** ⚡ TL;DR (Direct Answer), 📑 In This Article, What Makes a Good YouTube SEO Example?, 7 Real YouTube SEO Examples With Data, YouTube SEO Tools Compared, ⚡ TL;DR (Direct Answer)
 **Tags:** YouTube SEO, youtube, seo, examples, 2026
+
+### Youtube Thumbnail Tips 2026
+**URL:** https://yt-seo-architect.vercel.app/blog/youtube-thumbnail-tips-2026
+**Published:** 2026-07-27
+**Modified:** 2026-07-27
+**Word Count:** ~2758
+**Summary:** Learn how to youtube thumbnail tips 2026. Step-by-step guide with examples, tools, and strategies for 2026. Free tools included.
+**Covers:** ⚡ TL;DR, 📑 In This Article, What You Need Before Starting, Step 1: Plan Your Thumbnail, Step 2: Design Your Thumbnail, Step 3: Optimize Your Thumbnail
+**Tags:** YouTube SEO, youtube, thumbnail, tips, 2026
+
+### Youtube Subscriber Growth 2026
+**URL:** https://yt-seo-architect.vercel.app/blog/youtube-subscriber-growth-2026
+**Published:** 2026-07-27
+**Modified:** 2026-07-27
+**Word Count:** ~2683
+**Summary:** Learn how to youtube subscriber growth 2026. Step-by-step guide with examples, tools, and strategies for 2026. Free tools included.
+**Covers:** ⚡ TL;DR, 📑 In This Article, The Numbers Don't Lie: YouTube Subscriber Growth in 2026, What the Data Shows, Breaking Down the Patterns, What This Means for Your Channel
+**Tags:** YouTube SEO, youtube, subscriber, growth, 2026
+
+### Youtube Seo Optimization For Gaming Channels 2026
+**URL:** https://yt-seo-architect.vercel.app/blog/youtube-seo-optimization-for-gaming-channels-2026
+**Published:** 2026-08-03
+**Modified:** 2026-08-03
+**Word Count:** ~2917
+**Summary:** Learn how to youtube seo optimization for gaming channels 2026. Step-by-step guide with examples, tools, and strategies for 2026. Free tools included.
+**Covers:** ⚡ TL;DR, 📑 In This Article, The Numbers Don't Lie: YouTube SEO Optimization for Gaming Channels in 2026, What the Data Shows, Breaking Down the Patterns, What This Means for Your Channel
+**Tags:** YouTube SEO, youtube, seo, optimization, for
 
 ### YouTube Shorts SEO: The Complete 2026 Guide to Ranking Higher
 **URL:** https://yt-seo-architect.vercel.app/blog/youtube-shorts-seo-guide-2026
 **Published:** 2026-07-26
 **Modified:** 2026-07-26
-**Word Count:** ~3025
+**Word Count:** ~2966
 **Summary:** Complete YouTube Shorts SEO guide for 2026. Learn how to optimize Shorts titles, tags, descriptions, and captions to rank higher in YouTube search and reach more viewers.
-**Covers:** ⚡ TL;DR (Direct Answer), 📑 In This Article, What Is YouTube Shorts SEO?, YouTube Shorts SEO Tools Compared, How to Optimize YouTube Shorts for SEO: 7-Step Blueprint, Technical Trade-offs: What the Shorts Algorithm Hides
+**Covers:** ⚡ TL;DR (Direct Answer), 📑 In This Article, ❓ Frequently Asked Questions, 🎯 Key Takeaways, 🔥 Trending Now in YouTube — July 2026, 📊 Trusted by YouTube Creators
 **Tags:** YouTube SEO, youtube, shorts, seo, guide
+
+### Youtube Content Strategy For Beginners 2026
+**URL:** https://yt-seo-architect.vercel.app/blog/youtube-content-strategy-for-beginners-2026
+**Published:** 2026-07-27
+**Modified:** 2026-07-27
+**Word Count:** ~3287
+**Summary:** Learn how to youtube content strategy for beginners 2026. Step-by-step guide with examples, tools, and strategies for 2026. Free tools included.
+**Covers:** ⚡ TL;DR, 📑 In This Article, What You Need Before Starting, Step 1: Define Your Target Audience, Step 2: Identify Your Unique Selling Proposition (USP), Step 4: Conduct Keyword Research and Optimize Your Titles
+**Tags:** YouTube SEO, youtube, content, strategy, for
+
+### Youtube Channel Branding Tips For Consistency 2026
+**URL:** https://yt-seo-architect.vercel.app/blog/youtube-channel-branding-tips-for-consistency-2026
+**Published:** 2026-07-27
+**Modified:** 2026-07-27
+**Word Count:** ~2650
+**Summary:** Learn how to youtube channel branding tips for consistency 2026. Step-by-step guide with examples, tools, and strategies for 2026. Free tools included.
+**Covers:** ⚡ TL;DR, 📑 In This Article, The Challenge: What We Set Out to Prove, How We Tested This, What the Data Actually Shows, Why These Results Happened
+**Tags:** YouTube SEO, youtube, channel, branding, tips
+
+### 7 Best YouTube Algorithm Strategies to Rank #1 in 2026
+**URL:** https://yt-seo-architect.vercel.app/blog/youtube-algorithm-best-strategies-2026
+**Published:** 2026-07-28
+**Modified:** 2026-07-28
+**Word Count:** ~3344
+**Summary:** 7 proven YouTube algorithm strategies backed by data from 500+ videos. Learn how to optimize titles, thumbnails, watch time, and metadata to rank #1 in 2026.
+**Covers:** ⚡ TL;DR (Direct Answer), 📑 In This Article, 7 Best Strategies to Rank Higher on YouTube in 2026, Technical Trade-offs: Why Common Algorithm Advice Backfires, ❓ Frequently Asked Questions, 🎯 Key Takeaways
+**Tags:** YouTube SEO, youtube, algorithm, best, strategies
+
+### Youtube Algorithm Changes 2026 Impact On Gaming Channels
+**URL:** https://yt-seo-architect.vercel.app/blog/youtube-algorithm-changes-2026-impact-on-gaming-channels
+**Published:** 2026-08-01
+**Modified:** 2026-08-01
+**Word Count:** ~3151
+**Summary:** Learn how to youtube algorithm changes 2026 impact on gaming channels. Step-by-step guide with examples, tools, and strategies for 2026. Free tools included.
+**Covers:** ⚡ TL;DR, 📑 In This Article, The Challenge: What We Set Out to Prove, How We Tested This, What the Data Actually Shows, Why These Results Happened
+**Tags:** YouTube SEO, youtube, algorithm, changes, 2026
+
+### Using Youtube Features To Enhance Viewer Experience 2026
+**URL:** https://yt-seo-architect.vercel.app/blog/using-youtube-features-to-enhance-viewer-experience-2026
+**Published:** 2026-07-30
+**Modified:** 2026-07-30
+**Word Count:** ~3010
+**Summary:** Learn how to using youtube features to enhance viewer experience 2026. Step-by-step guide with examples, tools, and strategies for 2026. Free tools included.
+**Covers:** ⚡ TL;DR, 📑 In This Article, What Is Using YouTube Features to Enhance Viewer Experience and Why It Matters in 2026, Enhancing Viewer Experience with YouTube Features, The Complete Breakdown: Using YouTube's Live Streaming Features, How to Use YouTube Features to Enhance Viewer Experience: Step-by-Step Guide
+**Tags:** YouTube SEO, using, youtube, features, to
+
+### Maximizing Youtube Revenue With Sponsorships 2026
+**URL:** https://yt-seo-architect.vercel.app/blog/maximizing-youtube-revenue-with-sponsorships-2026
+**Published:** 2026-07-27
+**Modified:** 2026-07-27
+**Word Count:** ~10340
+**Summary:** Learn how to maximize YouTube revenue with sponsorships in 2026. Step-by-step guide with examples, tools, and strategies for 2026. Free tools included.
+**Covers:** ⚡ TL;DR, 📑 In This Article, The Challenge: What We Set Out to Prove, What the Data Actually Shows, ⚡ TL;DR, 📑 In This Article
+**Tags:** YouTube SEO, maximizing, youtube, revenue, with
+
+### Understanding Youtube Algorithm Updates For Creators 2026
+**URL:** https://yt-seo-architect.vercel.app/blog/understanding-youtube-algorithm-updates-for-creators-2026
+**Published:** 2026-07-30
+**Modified:** 2026-07-30
+**Word Count:** ~2933
+**Summary:** Learn how to understanding youtube algorithm updates for creators 2026. Step-by-step guide with examples, tools, and strategies for 2026. Free tools included.
+**Covers:** ⚡ TL;DR, 📑 In This Article, The Challenge: What We Set Out to Prove, How We Tested This, What the Data Actually Shows, Why These Results Happened
+**Tags:** YouTube SEO, understanding, youtube, algorithm, updates
+
+### Improving Youtube Engagement With Live Streaming 2026
+**URL:** https://yt-seo-architect.vercel.app/blog/improving-youtube-engagement-with-live-streaming-2026
+**Published:** 2026-07-27
+**Modified:** 2026-07-27
+**Word Count:** ~2618
+**Summary:** Learn how to improving youtube engagement with live streaming 2026. Step-by-step guide with examples, tools, and strategies for 2026. Free tools included.
+**Covers:** ⚡ TL;DR, 📑 In This Article, Why Improving YouTube Engagement with Live Streaming Matters More Than Ever in 2026, Improving YouTube Engagement with Live Streaming 2026, 5. **Use Interactive Polls and Q&A Sessions**, 6. **Offer Exclusive Discounts and Promotions**
+**Tags:** YouTube SEO, improving, youtube, engagement, with
+
+### Increasing Youtube Watch Time With Analytics 2026
+**URL:** https://yt-seo-architect.vercel.app/blog/increasing-youtube-watch-time-with-analytics-2026
+**Published:** 2026-07-27
+**Modified:** 2026-07-27
+**Word Count:** ~2752
+**Summary:** Learn how to increasing youtube watch time with analytics 2026. Step-by-step guide with examples, tools, and strategies for 2026. Free tools included.
+**Covers:** ⚡ TL;DR, 📑 In This Article, What You Need Before Starting, Step 3: Identify and Analyze Your Top-Performing Videos, Step 7: Optimization, Step 8: Measure Results
+**Tags:** YouTube SEO, increasing, youtube, watch, time
+
+### Creating Effective Youtube Thumbnails For Clicks 2026
+**URL:** https://yt-seo-architect.vercel.app/blog/creating-effective-youtube-thumbnails-for-clicks-2026
+**Published:** 2026-07-27
+**Modified:** 2026-07-27
+**Word Count:** ~2416
+**Summary:** Learn how to creating effective youtube thumbnails for clicks 2026. Step-by-step guide with examples, tools, and strategies for 2026. Free tools included.
+**Covers:** ⚡ TL;DR, 📑 In This Article, What Is Creating Effective YouTube Thumbnails and Why It Matters in 2026, The Complete Breakdown: Creating Effective YouTube Thumbnails, How to Create Effective YouTube Thumbnails for Clicks: Step-by-Step Guide, Best Tools and Methods for Creating Effective YouTube Thumbnails in 2026
+**Tags:** YouTube SEO, creating, effective, youtube, thumbnails
+
+### Developing A Youtube Content Calendar Strategy 2026
+**URL:** https://yt-seo-architect.vercel.app/blog/developing-a-youtube-content-calendar-strategy-2026
+**Published:** 2026-07-27
+**Modified:** 2026-07-27
+**Word Count:** ~2390
+**Summary:** Learn how to developing a youtube content calendar strategy 2026. Step-by-step guide with examples, tools, and strategies for 2026. Free tools included.
+**Covers:** ⚡ TL;DR, 📑 In This Article, The Top 2 Picks, How to Pick the Right One for YOUR Channel, Frequently Asked Questions, 🎯 Key Takeaways
+**Tags:** YouTube SEO, developing, a, youtube, content
+
+### null
+**URL:** https://yt-seo-architect.vercel.app/blog/generic-hero
+**Published:** N/A
+**Modified:** N/A
+**Word Count:** ~1
+**Summary:** 
+**Covers:** 
+**Tags:** YouTube SEO, generic, hero
+
+### Best Youtube Growth Strategies For New Creators 2026
+**URL:** https://yt-seo-architect.vercel.app/blog/best-youtube-growth-strategies-for-new-creators-2026
+**Published:** 2026-07-27
+**Modified:** 2026-07-27
+**Word Count:** ~2842
+**Summary:** Learn how to best youtube growth strategies for new creators 2026. Step-by-step guide with examples, tools, and strategies for 2026. Free tools included.
+**Covers:** ⚡ TL;DR, 📑 In This Article, What You Need Before Starting, Step 1: Define Your Niche, Step 2: Optimize Your Channel and Videos, Step 4: Optimize Your Video Titles and Tags
+**Tags:** YouTube SEO, best, youtube, growth, strategies
 
 ---
 ## 4. Topic Guides
 
+### Audience retention benchmark — Free Interactive Tool | YT SEO Architect
+**URL:** https://yt-seo-architect.vercel.app/tools/audience-retention-benchmark
+**Description:** Calculate your YouTube CTR, estimated revenue, and get personalized recommendations to improve your click-through rate. Apply what you learn from the audience retention benchmark guide. Works entirely in your browser, no login required.
+**Covers:** 
+
+### Best posting time finder — Free Interactive Tool | YT SEO Architect
+**URL:** https://yt-seo-architect.vercel.app/tools/best-posting-time-finder
+**Description:** Analyze your text for SEO keywords, topic clusters, and readability. Get insights to improve your YouTube content. Apply what you learn from the best posting time finder guide. Works entirely in your browser, no login required.
+**Covers:** 
+
+### Best youtube growth strategies for new creators 2026 — Free Interactive Tool | YT SEO Architect
+**URL:** https://yt-seo-architect.vercel.app/tools/best-youtube-growth-strategies-for-new-creators-2026
+**Description:** Analyze your text for SEO keywords, topic clusters, and readability. Get insights to improve your YouTube content. Apply what you learn from the best youtube growth strategies for new creators 2026 guide. Works entirely in your browser, no login required.
+**Covers:** 
+
 ### YouTube SEO Tools — Free AI YouTube SEO Tool | YT SEO Architect
 **URL:** https://yt-seo-architect.vercel.app/tools/best-youtube-seo-tools-2026
 **Description:** Compare the best YouTube SEO tools in 2026. Free and paid options ranked by features.
+**Covers:** 
+
+### Best youtube tags 2026 — Free Interactive Tool | YT SEO Architect
+**URL:** https://yt-seo-architect.vercel.app/tools/best-youtube-tags-2026
+**Description:** Generate optimized YouTube tags with estimated search volume and competition scores. Copy individual tags or all at once. Apply what you learn from the best youtube tags 2026 guide. Works entirely in your browser, no login required.
+**Covers:** 
+
+### Channel audit score — Free Interactive Tool | YT SEO Architect
+**URL:** https://yt-seo-architect.vercel.app/tools/channel-audit-score
+**Description:** Analyze your text for SEO keywords, topic clusters, and readability. Get insights to improve your YouTube content. Apply what you learn from the channel audit score guide. Works entirely in your browser, no login required.
+**Covers:** 
+
+### Channel health score — Free Interactive Tool | YT SEO Architect
+**URL:** https://yt-seo-architect.vercel.app/tools/channel-health-score
+**Description:** Analyze your text for SEO keywords, topic clusters, and readability. Get insights to improve your YouTube content. Apply what you learn from the channel health score guide. Works entirely in your browser, no login required.
+**Covers:** 
+
+### Competition analyzer — Free Interactive Tool | YT SEO Architect
+**URL:** https://yt-seo-architect.vercel.app/tools/competition-analyzer
+**Description:** Analyze your text for SEO keywords, topic clusters, and readability. Get insights to improve your YouTube content. Apply what you learn from the competition analyzer guide. Works entirely in your browser, no login required.
+**Covers:** 
+
+### Cost per view calculator — Free Interactive Tool | YT SEO Architect
+**URL:** https://yt-seo-architect.vercel.app/tools/cost-per-view-calculator
+**Description:** Analyze your text for SEO keywords, topic clusters, and readability. Get insights to improve your YouTube content. Apply what you learn from the cost per view calculator guide. Works entirely in your browser, no login required.
+**Covers:** 
+
+### Creating effective youtube thumbnails for clicks 2026 — Free Interactive Tool | YT SEO Architect
+**URL:** https://yt-seo-architect.vercel.app/tools/creating-effective-youtube-thumbnails-for-clicks-2026
+**Description:** Check your YouTube metadata against SEO best practices — description length, hashtags, timestamps, and keyword usage. Apply what you learn from the creating effective youtube thumbnails for clicks 2026 guide. Works entirely in your browser, no login required.
+**Covers:** 
+
+### CTR to Impressions Calculator — Free YouTube Tool
+**URL:** https://yt-seo-architect.vercel.app/tools/ctr-impressions-calculator
+**Description:** Calculate YouTube CTR from views and impressions, or estimate impressions needed. Free interactive tool for content creators.
+**Covers:** 
+
+### Description quality checker — Free Interactive Tool | YT SEO Architect
+**URL:** https://yt-seo-architect.vercel.app/tools/description-quality-checker
+**Description:** Write SEO-optimized YouTube descriptions with timestamps, hashtags, CTAs, and links ready to paste into YouTube Studio. Apply what you learn from the description quality checker guide. Works entirely in your browser, no login required.
 **Covers:** 
 
 ### YouTube Description Writer — Free AI Tool 2026 | YT SEO Architect
@@ -65,29 +262,114 @@
 **Description:** 
 **Covers:** 📋 About YouTube Video Descriptions, 📖 Complete Guide to YouTube Descriptions in 2026, Frequently Asked Questions, More Free YouTube SEO Tools
 
-### YouTube Shadow Ban Checker — Free AI YouTube SEO Tool | YT SEO Architect
+### Developing a youtube content calendar strategy 2026 — Free Interactive Tool | YT SEO Architect
+**URL:** https://yt-seo-architect.vercel.app/tools/developing-a-youtube-content-calendar-strategy-2026
+**Description:** Analyze your text for SEO keywords, topic clusters, and readability. Get insights to improve your YouTube content. Apply what you learn from the developing a youtube content calendar strategy 2026 guide. Works entirely in your browser, no login required.
+**Covers:** 
+
+### End screen effectiveness checker — Free Interactive Tool | YT SEO Architect
+**URL:** https://yt-seo-architect.vercel.app/tools/end-screen-effectiveness-checker
+**Description:** Check your YouTube metadata against SEO best practices — description length, hashtags, timestamps, and keyword usage. Apply what you learn from the end screen effectiveness checker guide. Works entirely in your browser, no login required.
+**Covers:** 
+
+### Engagement rate calculator — Free Interactive Tool | YT SEO Architect
+**URL:** https://yt-seo-architect.vercel.app/tools/engagement-rate-calculator
+**Description:** Analyze your text for SEO keywords, topic clusters, and readability. Get insights to improve your YouTube content. Apply what you learn from the engagement rate calculator guide. Works entirely in your browser, no login required.
+**Covers:** 
+
+### Fix youtube shadow ban 2026 — Free Interactive Tool | YT SEO Architect
 **URL:** https://yt-seo-architect.vercel.app/tools/fix-youtube-shadow-ban-2026
-**Description:** Free shadow ban detector. Check if YouTube is limiting your reach and get fixes.
+**Description:** Diagnose algorithm issues, view drops, and potential shadow bans. Identify what's limiting your YouTube reach. Apply what you learn from the fix youtube shadow ban 2026 guide. Works entirely in your browser, no login required.
 **Covers:** 
 
-### YouTube Backlinks Tool — Free AI YouTube SEO Tool | YT SEO Architect
+### Fixing youtube video playback issues on mobile 2026 — Free Interactive Tool | YT SEO Architect
+**URL:** https://yt-seo-architect.vercel.app/tools/fixing-youtube-video-playback-issues-on-mobile-2026
+**Description:** Analyze your text for SEO keywords, topic clusters, and readability. Get insights to improve your YouTube content. Apply what you learn from the fixing youtube video playback issues on mobile 2026 guide. Works entirely in your browser, no login required.
+**Covers:** 
+
+### Github seo backlinks guide — Free Interactive Tool | YT SEO Architect
 **URL:** https://yt-seo-architect.vercel.app/tools/github-seo-backlinks-guide
-**Description:** Free YouTube backlink checker. Find backlink opportunities to grow your channel authority.
+**Description:** Get a complete YouTube SEO audit score with prioritized fixes for your title, description, and tags. Apply what you learn from the github seo backlinks guide guide. Works entirely in your browser, no login required.
 **Covers:** 
 
-### YouTube Keyword Research — Free AI YouTube SEO Tool | YT SEO Architect
+### Hashtag performance checker — Free Interactive Tool | YT SEO Architect
+**URL:** https://yt-seo-architect.vercel.app/tools/hashtag-performance-checker
+**Description:** Generate optimized YouTube tags with estimated search volume and competition scores. Copy individual tags or all at once. Apply what you learn from the hashtag performance checker guide. Works entirely in your browser, no login required.
+**Covers:** 
+
+### How to grow youtube channel 2026 — Free Interactive Tool | YT SEO Architect
+**URL:** https://yt-seo-architect.vercel.app/tools/how-to-grow-youtube-channel-2026
+**Description:** Analyze your text for SEO keywords, topic clusters, and readability. Get insights to improve your YouTube content. Apply what you learn from the how to grow youtube channel 2026 guide. Works entirely in your browser, no login required.
+**Covers:** 
+
+### How to keywords youtube — Free Interactive Tool | YT SEO Architect
+**URL:** https://yt-seo-architect.vercel.app/tools/how-to-keywords-youtube
+**Description:** Research YouTube keywords with search volume and difficulty estimates. Find low-competition opportunities your competitors miss. Apply what you learn from the how to keywords youtube guide. Works entirely in your browser, no login required.
+**Covers:** 
+
+### How to metadata youtube — Free Interactive Tool | YT SEO Architect
+**URL:** https://yt-seo-architect.vercel.app/tools/how-to-metadata-youtube
+**Description:** Analyze your text for SEO keywords, topic clusters, and readability. Get insights to improve your YouTube content. Apply what you learn from the how to metadata youtube guide. Works entirely in your browser, no login required.
+**Covers:** 
+
+### How youtube algorithm works 2026 — Free Interactive Tool | YT SEO Architect
+**URL:** https://yt-seo-architect.vercel.app/tools/how-youtube-algorithm-works-2026
+**Description:** Calculate your YouTube CTR, estimated revenue, and get personalized recommendations to improve your click-through rate. Apply what you learn from the how youtube algorithm works 2026 guide. Works entirely in your browser, no login required.
+**Covers:** 
+
+### Improving youtube engagement with live streaming 2026 — Free Interactive Tool | YT SEO Architect
+**URL:** https://yt-seo-architect.vercel.app/tools/improving-youtube-engagement-with-live-streaming-2026
+**Description:** Analyze your text for SEO keywords, topic clusters, and readability. Get insights to improve your YouTube content. Apply what you learn from the improving youtube engagement with live streaming 2026 guide. Works entirely in your browser, no login required.
+**Covers:** 
+
+### Increasing youtube watch time with analytics 2026 — Free Interactive Tool | YT SEO Architect
+**URL:** https://yt-seo-architect.vercel.app/tools/increasing-youtube-watch-time-with-analytics-2026
+**Description:** Analyze YouTube channels and competitors. Understand what drives growth in your niche and find actionable opportunities. Apply what you learn from the increasing youtube watch time with analytics 2026 guide. Works entirely in your browser, no login required.
+**Covers:** 
+
+### Keyword Difficulty Checker — Free YouTube SEO Tool
+**URL:** https://yt-seo-architect.vercel.app/tools/keyword-difficulty-scorer
+**Description:** Score YouTube keyword difficulty and find low-competition opportunities. Free SEO tool for content creators.
+**Covers:** 
+
+### Keywords youtube — Free Interactive Tool | YT SEO Architect
 **URL:** https://yt-seo-architect.vercel.app/tools/keywords-youtube
-**Description:** Free YouTube keyword research tool. Find high-volume low-competition keywords for your videos.
+**Description:** Research YouTube keywords with search volume and difficulty estimates. Find low-competition opportunities your competitors miss. Apply what you learn from the keywords youtube guide. Works entirely in your browser, no login required.
 **Covers:** 
 
-### YouTube Metadata Optimizer — Free AI YouTube SEO Tool | YT SEO Architect
+### Maximizing youtube revenue with sponsorships 2026 — Free Interactive Tool | YT SEO Architect
+**URL:** https://yt-seo-architect.vercel.app/tools/maximizing-youtube-revenue-with-sponsorships-2026
+**Description:** Analyze your text for SEO keywords, topic clusters, and readability. Get insights to improve your YouTube content. Apply what you learn from the maximizing youtube revenue with sponsorships 2026 guide. Works entirely in your browser, no login required.
+**Covers:** 
+
+### Metadata youtube — Free Interactive Tool | YT SEO Architect
 **URL:** https://yt-seo-architect.vercel.app/tools/metadata-youtube
-**Description:** Optimize your video metadata for YouTube search. Free metadata checker with actionable tips.
+**Description:** Analyze your text for SEO keywords, topic clusters, and readability. Get insights to improve your YouTube content. Apply what you learn from the metadata youtube guide. Works entirely in your browser, no login required.
 **Covers:** 
 
-### YouTube Ranking Tool — Free AI YouTube SEO Tool | YT SEO Architect
+### Monetization readiness checker — Free Interactive Tool | YT SEO Architect
+**URL:** https://yt-seo-architect.vercel.app/tools/monetization-readiness-checker
+**Description:** Check your YouTube metadata against SEO best practices — description length, hashtags, timestamps, and keyword usage. Apply what you learn from the monetization readiness checker guide. Works entirely in your browser, no login required.
+**Covers:** 
+
+### Niching down on youtube for better audience engagement 2026 — Free Interactive Tool | YT SEO Architect
+**URL:** https://yt-seo-architect.vercel.app/tools/niching-down-on-youtube-for-better-audience-engagement-2026
+**Description:** Analyze your text for SEO keywords, topic clusters, and readability. Get insights to improve your YouTube content. Apply what you learn from the niching down on youtube for better audience engagement 2026 guide. Works entirely in your browser, no login required.
+**Covers:** 
+
+### Playlist performance analyzer — Free Interactive Tool | YT SEO Architect
+**URL:** https://yt-seo-architect.vercel.app/tools/playlist-performance-analyzer
+**Description:** Get personalized recommendations for your YouTube content strategy — titles, thumbnails, tags, descriptions, and end screens. Apply what you learn from the playlist performance analyzer guide. Works entirely in your browser, no login required.
+**Covers:** 
+
+### Rank on youtube 2026 — Free Interactive Tool | YT SEO Architect
 **URL:** https://yt-seo-architect.vercel.app/tools/rank-on-youtube-2026
-**Description:** Free tool to check and improve your YouTube video rankings. See where you rank and how to fix it.
+**Description:** Analyze your text for SEO keywords, topic clusters, and readability. Get insights to improve your YouTube content. Apply what you learn from the rank on youtube 2026 guide. Works entirely in your browser, no login required.
+**Covers:** 
+
+### Subscriber Growth Rate Calculator — Free YouTube Tool
+**URL:** https://yt-seo-architect.vercel.app/tools/subscriber-growth-calculator
+**Description:** Calculate YouTube subscriber growth rate. Free tool to track channel growth and project future subscribers.
 **Covers:** 
 
 ### Best YouTube Tags
@@ -95,153 +377,73 @@
 **Description:** 
 **Covers:** 📋 About These YouTube Tags, 📖 Complete Guide to YouTube Tags in 2026, Frequently Asked Questions, More Free YouTube SEO Tools
 
+### Tag relevance checker — Free Interactive Tool | YT SEO Architect
+**URL:** https://yt-seo-architect.vercel.app/tools/tag-relevance-checker
+**Description:** Generate optimized YouTube tags with estimated search volume and competition scores. Copy individual tags or all at once. Apply what you learn from the tag relevance checker guide. Works entirely in your browser, no login required.
+**Covers:** 
+
+### Thumbnail color analyzer — Free Interactive Tool | YT SEO Architect
+**URL:** https://yt-seo-architect.vercel.app/tools/thumbnail-color-analyzer
+**Description:** Check your YouTube metadata against SEO best practices — description length, hashtags, timestamps, and keyword usage. Apply what you learn from the thumbnail color analyzer guide. Works entirely in your browser, no login required.
+**Covers:** 
+
+### Title ab tester — Free Interactive Tool | YT SEO Architect
+**URL:** https://yt-seo-architect.vercel.app/tools/title-ab-tester
+**Description:** Score and optimize your YouTube titles for maximum CTR — checks length, keywords, power words, numbers, and emotional triggers. Apply what you learn from the title ab tester guide. Works entirely in your browser, no login required.
+**Covers:** 
+
 ### YouTube Title Optimizer — AI-Powered in 2026 | YT SEO Architect
 **URL:** https://yt-seo-architect.vercel.app/tools/title-optimizer
 **Description:** 
 **Covers:** 📋 About YouTube Title Optimization, 📖 Complete Guide to YouTube Titles in 2026, Frequently Asked Questions, More Free YouTube SEO Tools
 
-### YouTube AI SEO Tool — Free AI YouTube SEO Tool | YT SEO Architect
+### Understanding youtube algorithm updates for creators 2026 — Free Interactive Tool | YT SEO Architect
+**URL:** https://yt-seo-architect.vercel.app/tools/understanding-youtube-algorithm-updates-for-creators-2026
+**Description:** Calculate your YouTube CTR, estimated revenue, and get personalized recommendations to improve your click-through rate. Apply what you learn from the understanding youtube algorithm updates for creators 2026 guide. Works entirely in your browser, no login required.
+**Covers:** 
+
+### Upload schedule optimizer — Free Interactive Tool | YT SEO Architect
+**URL:** https://yt-seo-architect.vercel.app/tools/upload-schedule-optimizer
+**Description:** Analyze your text for SEO keywords, topic clusters, and readability. Get insights to improve your YouTube content. Apply what you learn from the upload schedule optimizer guide. Works entirely in your browser, no login required.
+**Covers:** 
+
+### Using youtube features to enhance viewer experience 2026 — Free Interactive Tool | YT SEO Architect
+**URL:** https://yt-seo-architect.vercel.app/tools/using-youtube-features-to-enhance-viewer-experience-2026
+**Description:** Analyze your text for SEO keywords, topic clusters, and readability. Get insights to improve your YouTube content. Apply what you learn from the using youtube features to enhance viewer experience 2026 guide. Works entirely in your browser, no login required.
+**Covers:** 
+
+### Video idea generator — Free Interactive Tool | YT SEO Architect
+**URL:** https://yt-seo-architect.vercel.app/tools/video-idea-generator
+**Description:** Generate a full content calendar with 20+ video ideas tailored to your specific niche and audience. Apply what you learn from the video idea generator guide. Works entirely in your browser, no login required.
+**Covers:** 
+
+### Video length optimizer — Free Interactive Tool | YT SEO Architect
+**URL:** https://yt-seo-architect.vercel.app/tools/video-length-optimizer
+**Description:** Analyze your text for SEO keywords, topic clusters, and readability. Get insights to improve your YouTube content. Apply what you learn from the video length optimizer guide. Works entirely in your browser, no login required.
+**Covers:** 
+
+### YouTube Watch Time Calculator — Free Tool
+**URL:** https://yt-seo-architect.vercel.app/tools/watch-time-estimator
+**Description:** Estimate YouTube watch time in minutes and hours. Free calculator for content creators to track total watch time.
+**Covers:** 
+
+### Youtube ai seo coach phronesis 2026 — Free Interactive Tool | YT SEO Architect
 **URL:** https://yt-seo-architect.vercel.app/tools/youtube-ai-seo-coach-phronesis-2026
-**Description:** Free AI-powered YouTube SEO assistant. Get personalized optimization tips.
+**Description:** Get a complete YouTube SEO audit score with prioritized fixes for your title, description, and tags. Apply what you learn from the youtube ai seo coach phronesis 2026 guide. Works entirely in your browser, no login required.
 **Covers:** 
 
-### YouTube Algorithm Updates — Free AI YouTube SEO Tool | YT SEO Architect
-**URL:** https://yt-seo-architect.vercel.app/tools/youtube-algorithm-changes-2026
-**Description:** Track YouTube algorithm changes and see how they affect your channel.
+### Youtube algorithm 2026 — Free Interactive Tool | YT SEO Architect
+**URL:** https://yt-seo-architect.vercel.app/tools/youtube-algorithm-2026
+**Description:** Calculate your YouTube CTR, estimated revenue, and get personalized recommendations to improve your click-through rate. Apply what you learn from the youtube algorithm 2026 guide. Works entirely in your browser, no login required.
 **Covers:** 
 
-### YouTube Analytics Tool — Free AI YouTube SEO Tool | YT SEO Architect
-**URL:** https://yt-seo-architect.vercel.app/tools/youtube-analytics-4-metrics-that-matter
-**Description:** Free YouTube analytics checker. Focus on the metrics that actually grow your channel.
+### Youtube algorithm best strategies 2026 — Free Interactive Tool | YT SEO Architect
+**URL:** https://yt-seo-architect.vercel.app/tools/youtube-algorithm-best-strategies-2026
+**Description:** Calculate your YouTube CTR, estimated revenue, and get personalized recommendations to improve your click-through rate. Apply what you learn from the youtube algorithm best strategies 2026 guide. Works entirely in your browser, no login required.
 **Covers:** 
 
-### YouTube Analytics Guide — Free AI YouTube SEO Tool | YT SEO Architect
-**URL:** https://yt-seo-architect.vercel.app/tools/youtube-analytics-explained-2026
-**Description:** Free YouTube analytics explainer. Understand every metric in YouTube Studio.
-**Covers:** 
-
-### YouTube Chapters Generator — Free AI YouTube SEO Tool | YT SEO Architect
-**URL:** https://yt-seo-architect.vercel.app/tools/youtube-chapter-timestamps-seo-guide
-**Description:** Free YouTube chapter timestamps generator. Boost SEO with optimized video chapters.
-**Covers:** 
-
-### YouTube Community Posts — Free AI YouTube SEO Tool | YT SEO Architect
-**URL:** https://yt-seo-architect.vercel.app/tools/youtube-community-posts-strategy-2026
-**Description:** Free YouTube Community tab tool. Plan and schedule engaging community posts.
-**Covers:** 
-
-### YouTube Competitor Analyzer — Free AI YouTube SEO Tool | YT SEO Architect
-**URL:** https://yt-seo-architect.vercel.app/tools/youtube-competitor-analysis-reverse-engineer
-**Description:** Free YouTube competitor analysis tool. Reverse-engineer any channel strategy.
-**Covers:** 
-
-### YouTube CTR Calculator — Free AI YouTube SEO Tool | YT SEO Architect
-**URL:** https://yt-seo-architect.vercel.app/tools/youtube-ctr-actually-mean
-**Description:** Free YouTube CTR tool. Calculate and improve your click-through rate.
-**Covers:** 
-
-### YouTube Description Generator — Free AI YouTube SEO Tool | YT SEO Architect
-**URL:** https://yt-seo-architect.vercel.app/tools/youtube-description-templates-2026
-**Description:** Free YouTube description writer. Generate SEO-optimized descriptions with timestamps.
-**Covers:** 
-
-### YouTube End Screens Planner — Free AI YouTube SEO Tool | YT SEO Architect
-**URL:** https://yt-seo-architect.vercel.app/tools/youtube-end-screens-cards-guide-2026
-**Description:** Free YouTube end screen and cards planner. Boost watch time with optimal placement.
-**Covers:** 
-
-### YouTube Small Channel Tool — Free AI YouTube SEO Tool | YT SEO Architect
-**URL:** https://yt-seo-architect.vercel.app/tools/youtube-for-small-channels-2026
-**Description:** Free growth tool for small YouTube channels. Get actionable tips to grow from zero.
-**Covers:** 
-
-### YouTube Tutorial SEO — Free AI YouTube SEO Tool | YT SEO Architect
-**URL:** https://yt-seo-architect.vercel.app/tools/youtube-for-tutorials-2026
-**Description:** Free SEO tool for tutorial channels. Optimize your how-to videos for search.
-**Covers:** 
-
-### YouTube Impressions Checker — Free AI YouTube SEO Tool | YT SEO Architect
-**URL:** https://yt-seo-architect.vercel.app/tools/youtube-impressions-guide-2026
-**Description:** Free YouTube impressions tool. Check why your videos get impressions and how to get more.
-**Covers:** 
-
-### YouTube Hook Generator — Free AI YouTube SEO Tool | YT SEO Architect
-**URL:** https://yt-seo-architect.vercel.app/tools/youtube-intro-hook-first-3-seconds
-**Description:** Free YouTube hook tool. Write compelling intros that keep viewers watching.
-**Covers:** 
-
-### YouTube Metadata Audit — Free AI YouTube SEO Tool | YT SEO Architect
-**URL:** https://yt-seo-architect.vercel.app/tools/youtube-metadata-auditor-vs-vidiq-shadow-ban
-**Description:** Free YouTube metadata auditor. Check if metadata issues are hurting your reach.
-**Covers:** 
-
-### YouTube Monetization Checker — Free AI YouTube SEO Tool | YT SEO Architect
-**URL:** https://yt-seo-architect.vercel.app/tools/youtube-monetization-tips-2026
-**Description:** Free YouTube monetization tool. Check eligibility and get tips to reach YPP faster.
-**Covers:** 
-
-### YouTube Playlist Optimizer — Free AI YouTube SEO Tool | YT SEO Architect
-**URL:** https://yt-seo-architect.vercel.app/tools/youtube-playlist-optimization-strategy
-**Description:** Free YouTube playlist SEO tool. Optimize playlist structure for more watch time.
-**Covers:** 
-
-### YouTube Retention Analyzer — Free AI YouTube SEO Tool | YT SEO Architect
-**URL:** https://yt-seo-architect.vercel.app/tools/youtube-retention-graph-explained-2026
-**Description:** Free YouTube audience retention tool. Analyze retention graphs and find drop-off points.
-**Covers:** 
-
-### YouTube SEO Audit Tool — Free AI YouTube SEO Tool | YT SEO Architect
-**URL:** https://yt-seo-architect.vercel.app/tools/youtube-seo-audit-diagnostic-fix-2026
-**Description:** Free YouTube SEO auditor. Get a complete metadata audit with prioritized fixes.
-**Covers:** 
-
-### YouTube SEO Checklist — Free AI YouTube SEO Tool | YT SEO Architect
-**URL:** https://yt-seo-architect.vercel.app/tools/youtube-seo-checklist-beginners-2026
-**Description:** Free YouTube SEO checklist for beginners. Step-by-step optimization guide with tracker.
-**Covers:** 
-
-### YouTube SEO Examples — Free AI YouTube SEO Tool | YT SEO Architect
-**URL:** https://yt-seo-architect.vercel.app/tools/youtube-seo-examples-2026
-**Description:** Free YouTube SEO examples and templates. See real optimized videos and copy the strategy.
-**Covers:** 
-
-### YouTube Business SEO — Free AI YouTube SEO Tool | YT SEO Architect
-**URL:** https://yt-seo-architect.vercel.app/tools/youtube-seo-for-business-channels-2026
-**Description:** Free YouTube SEO for business channels. Optimize your brand channel for search.
-**Covers:** 
-
-### YouTube Gaming SEO — Free AI YouTube SEO Tool | YT SEO Architect
-**URL:** https://yt-seo-architect.vercel.app/tools/youtube-seo-for-gaming-channels-2026
-**Description:** Free SEO tool for gaming channels. Optimize your gaming videos for YouTube search.
-**Covers:** 
-
-### YouTube SEO Template — Free AI YouTube SEO Tool | YT SEO Architect
-**URL:** https://yt-seo-architect.vercel.app/tools/youtube-seo-template-2026
-**Description:** Free copy-paste YouTube SEO template. Fill in the blanks and publish optimized videos.
-**Covers:** 
-
-### YouTube Shorts SEO Tool — Free AI YouTube SEO Tool | YT SEO Architect
-**URL:** https://yt-seo-architect.vercel.app/tools/youtube-shorts-seo-ranking-guide-2026
-**Description:** Free YouTube Shorts SEO optimizer. Get your Shorts to rank in search.
-**Covers:** 
-
-### YouTube Tags Generator — Free AI YouTube SEO Tool | YT SEO Architect
-**URL:** https://yt-seo-architect.vercel.app/tools/youtube-tags-2026
-**Description:** Free YouTube tag generator. Get 15 optimized tags for any video topic.
-**Covers:** 
-
-### YouTube Thumbnail Tester — Free AI YouTube SEO Tool | YT SEO Architect
-**URL:** https://yt-seo-architect.vercel.app/tools/youtube-thumbnail-ab-testing-guide
-**Description:** Free YouTube thumbnail A/B testing tool. Compare thumbnails and pick the winner.
-**Covers:** 
-
-### YouTube Title Generator — Free AI YouTube SEO Tool | YT SEO Architect
-**URL:** https://yt-seo-architect.vercel.app/tools/youtube-title-examples-2026
-**Description:** Free YouTube title generator. Get proven title formulas that drive clicks.
-**Covers:** 
-
-### YouTube Views Analyzer — Free AI YouTube SEO Tool | YT SEO Architect
-**URL:** https://yt-seo-architect.vercel.app/tools/youtube-video-not-getting-views-diagnostic-fix-2026
-**Description:** Free YouTube views diagnostic tool. Find out why your videos aren't getting views.
+### Youtube algorithm changes 2026 impact on gaming channels — Free Interactive Tool | YT SEO Architect
+**URL:** https://yt-seo-architect.vercel.app/tools/youtube-algorithm-changes-2026-impact-on-gaming-channels
+**Description:** Calculate your YouTube CTR, estimated revenue, and get personalized recommendations to improve your click-through rate. Apply what you learn from the youtube algorithm changes 2026 impact on gaming channels guide. Works entirely in your browser, no login required.
 **Covers:** 
 
