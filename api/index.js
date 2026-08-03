@@ -825,6 +825,7 @@ const TRASH_SLUGS_410 = [
   'youtube-algorithm-changes-2026', 'youtube-keyword-research-tutorial',
   'how-to-mass-update-youtube-descriptions-safely', 'youtube-shorts-seo-ranking-guide',
   'youtube-tags-generator-vs-vidiq', 'youtube-seo-guide-2026',
+  'generic-hero', // orphaned 274-byte "Page not found" stub that leaked into llms-full.txt
 ];
 TRASH_SLUGS_410.forEach(slug => {
   app.get(`/blog/${slug}`, (req, res) => res.status(410).send('Gone'));
@@ -1887,8 +1888,10 @@ app.get('/sitemap.xml', async (req, res) => {
     const TOOL_SLUGS = [
       "tag-generator", "title-optimizer", "description-writer", "fix-youtube-shadow-ban-2026",
       "keywords-youtube", "metadata-youtube", "rank-on-youtube-2026", "youtube-ctr-actually-mean",
-      "youtube-algorithm-changes-2026", "youtube-chapter-timestamps-seo-guide", "youtube-for-tutorials-2026", "youtube-intro-hook-first-3-seconds",
-      "youtube-monetization-tips-2026", "youtube-seo-for-business-channels-2026", "youtube-seo-for-gaming-channels-2026", "youtube-seo-template-2026",
+      "youtube-algorithm-changes-2026", "youtube-chapter-timestamps-seo-guide", "youtube-seo-template-2026",
+      // Note: youtube-for-tutorials-2026, youtube-intro-hook-first-3-seconds, youtube-monetization-tips-2026,
+      // youtube-seo-for-business-channels-2026, youtube-seo-for-gaming-channels-2026 were removed from the
+      // sitemap — their /tools/ variants are noindexed to resolve blog/tools cannibalization (blog owns keyword).
     ];
     for (const slug of TOOL_SLUGS) {
       xml += `  <url><loc>https://yt-seo-architect.vercel.app/tools/${slug}</loc><changefreq>weekly</changefreq><priority>0.9</priority></url>\n`;
@@ -1908,7 +1911,15 @@ app.get('/sitemap.xml', async (req, res) => {
     }
 
     // Category hub pages (hub-and-spoke internal linking per wise playbook)
-    const CATEGORY_SLUGS = ['index', 'algorithm', 'analytics', 'content-strategy', 'monetization', 'seo-optimization', 'youtube-features'];
+    // EN/ES/PT hubs are served at /glossary/category, /glossary/es/category,
+    // /glossary/pt/category (Vercel serves category/index.html there). Do NOT
+    // emit category/.../index -- that 308-redirects to the hub and Google flags
+    // redirect URLs inside a sitemap as an error (was causing errors:1).
+    const CATEGORY_SLUGS = ['algorithm', 'analytics', 'content-strategy', 'monetization', 'seo-optimization', 'youtube-features'];
+    const CATEGORY_HUBS = ['glossary/category', 'glossary/es/category', 'glossary/pt/category'];
+    for (const h of CATEGORY_HUBS) {
+      xml += `  <url><loc>https://yt-seo-architect.vercel.app/${h}</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>\n`;
+    }
     for (const cat of CATEGORY_SLUGS) {
       xml += `  <url><loc>https://yt-seo-architect.vercel.app/glossary/category/${cat}</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>\n`;
       xml += `  <url><loc>https://yt-seo-architect.vercel.app/glossary/es/category/${cat}</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>\n`;
@@ -1923,6 +1934,10 @@ app.get('/sitemap.xml', async (req, res) => {
       for (let j = i + 1; j < termSlugs.length && cmpCount < MAX_SITEMAP_URLS; j++) {
         const a = termSlugs[i];
         const b = termSlugs[j];
+        // Skip pairs where either slug already contains "-vs-" (e.g. "vidiq-vs-tubebuddy"
+        // is itself a glossary term, not a pair primitive). Pairing it with other terms
+        // produced broken double-vs URLs like "{term}-vs-vidiq-vs-tubebuddy" (404s).
+        if (a.includes('-vs-') || b.includes('-vs-')) continue;
         const key = a < b ? `${a}-vs-${b}` : `${b}-vs-${a}`;
         if (seenPairs.has(key)) continue;
         seenPairs.add(key);
@@ -2407,6 +2422,15 @@ app.get(/^\/glossary\/(es\/|pt\/)?(.+)-vs-(.+)$/, async (req, res) => {
     const lang = langPrefix === 'es/' ? 'es' : langPrefix === 'pt/' ? 'pt' : 'en';
     const slugA = req.params[1];
     const slugB = req.params[2];
+    // A slug like "vidiq-vs-tubebuddy" is itself a glossary TERM (not a pair of standalone
+    // terms). When the full slug matches a term, render the term page instead of 404ing.
+    const fullSlug = `${slugA}-vs-${slugB}`;
+    const termPageHtml = renderGlossaryTerm(fullSlug, lang);
+    if (termPageHtml) {
+      res.setHeader('Content-Type', 'text/html; charset=utf-8');
+      res.setHeader('Cache-Control', 'public, max-age=3600, s-maxage=3600');
+      return res.status(200).send(termPageHtml);
+    }
     const html = renderGlossaryComparison(slugA, slugB, lang);
     if (!html) {
       return sendJSON(res, 404, { error: 'Terms not found' });
