@@ -196,6 +196,54 @@ async function submitToIndexNow(url) {
   return results;
 }
 
+/**
+ * Bulk IndexNow submission via the official bulk endpoint.
+ * IndexNow accepts up to 10,000 URLs per POST request — this replaces
+ * thousands of individual GET requests (one per URL × 3 endpoints) that
+ * were triggering persistent 429 rate limiting on Bing.
+ *
+ * Endpoint: POST https://api.indexnow.org/indexnow
+ * Body: { host, key, keyLocation, urlList: [...] }
+ * 200/202 = accepted · 403 = bad key · 429 = rate limited
+ */
+async function submitBatchToIndexNowBulk(urls) {
+  const MAX_PER_REQUEST = 10000;
+  const results = { success: 0, failed: 0, total: urls.length, requests: 0 };
+
+  for (let i = 0; i < urls.length; i += MAX_PER_REQUEST) {
+    const chunk = urls.slice(i, i + MAX_PER_REQUEST);
+    results.requests++;
+    try {
+      const res = await fetch('https://api.indexnow.org/indexnow', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json; charset=utf-8' },
+        body: JSON.stringify({
+          host: 'yt-seo-architect.vercel.app',
+          key: INDEXNOW_KEY,
+          keyLocation: `https://yt-seo-architect.vercel.app/${INDEXNOW_KEY}.txt`,
+          urlList: chunk,
+        }),
+      });
+      if (res.ok || res.status === 202) {
+        results.success += chunk.length;
+        console.log(`   📦 Bulk ${i + chunk.length}/${urls.length}: accepted (${res.status})`);
+      } else if (res.status === 429) {
+        console.log(`   ⏳ Bulk ${i + chunk.length}/${urls.length}: rate-limited (429) — stopping early`);
+        results.failed += chunk.length;
+        break; // don't keep hammering; resume next run
+      } else {
+        const body = await res.text().catch(() => '');
+        console.log(`   ❌ Bulk ${i + chunk.length}/${urls.length}: HTTP ${res.status} ${body.slice(0, 120)}`);
+        results.failed += chunk.length;
+      }
+    } catch (e) {
+      console.log(`   ❌ Bulk request failed: ${e.message}`);
+      results.failed += chunk.length;
+    }
+  }
+  return results;
+}
+
 async function submitBatchToIndexNow(urls) {
   console.log(`\n📡 Submitting ${urls.length} URLs via IndexNow (Bing/Yandex)...\n`);
 
@@ -376,7 +424,7 @@ async function main() {
   const sitemapResult = await pingSitemap(googleToken);
 
   // ── Step 2: IndexNow (always — per-URL notifications) ───
-  const indexNowResult = await submitBatchToIndexNow(urls);
+  const indexNowResult = await submitBatchToIndexNowBulk(urls);
 
   // ── Step 3: Google Indexing API (--deploy mode only) ────
   let googleResult = { success: 0, failed: 0, total: 0, skipped: true };
