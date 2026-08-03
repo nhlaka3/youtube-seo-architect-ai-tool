@@ -96,15 +96,20 @@ export function addGlossaryLinks(html) {
 
   const articleContent = articleMatch[1];
   
-  // Protect existing links inside article content
+  // Protect script/style/pre/code blocks, existing links, AND every HTML tag — term
+  // matching must only ever touch visible text nodes. Without tag protection, terms
+  // inside attribute values (img alt="...") or JSON-LD strings get wrapped in <a>
+  // tags, corrupting markup and breaking JSON.parse on schema blocks.
   const protectedLinks = [];
   let idx = 0;
-  const prot = articleContent.replace(/<a\s[^>]*>.*?<\/a>/gi, (m) => {
-    const t = `__GL${idx}__`;
-    protectedLinks.push(m);
-    idx++;
-    return t;
-  });
+  const protect = (m) => { const t = `__GL${idx}__`; protectedLinks.push(m); idx++; return t; };
+  const prot = articleContent
+    .replace(/<script[\s\S]*?<\/script>/gi, protect)
+    .replace(/<style[\s\S]*?<\/style>/gi, protect)
+    .replace(/<pre[\s\S]*?<\/pre>/gi, protect)
+    .replace(/<code[\s\S]*?<\/code>/gi, protect)
+    .replace(/<a\s[^>]*>.*?<\/a>/gi, protect)
+    .replace(/<[^>]*>/g, protect);
 
   // Sort terms by length descending for longest-match-first
   const terms = Object.keys(GLOSSARY_MAP).sort((a, b) => b.length - a.length);
@@ -120,14 +125,11 @@ export function addGlossaryLinks(html) {
     });
   }
 
-  // Restore protected links
-  // NOTE: must use a FUNCTION replacement, not a string — string replacements
-  // expand `$` patterns (e.g. "$1,000" inside link text -> capture group 1),
-  // which corrupts dollar figures and can explode the output past V8's ~536MB
-  // string limit (RangeError: Invalid string length) on large posts.
-  for (let i = 0; i < protectedLinks.length; i++) {
-    result = result.replace(`__GL${i}__`, () => protectedLinks[i]);
-  }
+  // Restore protected content in ONE pass (per-token replace would be O(n^2) now
+  // that every HTML tag is protected — 50k+ tokens on large posts). The replacer is
+  // a FUNCTION so `$` patterns (e.g. "$1,000") are never expanded as capture groups,
+  // which previously corrupted dollar figures and hit RangeError: Invalid string length.
+  result = result.replace(/__GL(\d+)__/g, (match, i) => protectedLinks[Number(i)]);
 
   // Put the linked content back into the full HTML
   // (function replacement so `$` in the article text is never expanded)

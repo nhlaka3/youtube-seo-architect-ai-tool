@@ -1873,16 +1873,11 @@ app.get('/sitemap.xml', async (req, res) => {
     let xml = '<?xml version="1.0" encoding="UTF-8"?>\n';
     xml += '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n';
 
-    // Core static pages (always included)
+    // Core static pages (indexable only — noindex app/legal pages excluded)
     const corePages = [
       { loc: '/', priority: '1.0', changefreq: 'weekly' },
-      { loc: '/dashboard', priority: '0.9', changefreq: 'weekly' },
       { loc: '/blog', priority: '0.9', changefreq: 'daily' },
-      { loc: '/about', priority: '0.5', changefreq: 'monthly' },
       { loc: '/tools', priority: '0.9', changefreq: 'weekly' },
-      { loc: '/changelog', priority: '0.6', changefreq: 'monthly' },
-      { loc: '/privacy-policy', priority: '0.3', changefreq: 'yearly' },
-      { loc: '/terms-of-service', priority: '0.3', changefreq: 'yearly' },
     ];
     for (const p of corePages) {
       xml += `  <url><loc>https://yt-seo-architect.vercel.app${p.loc}</loc><changefreq>${p.changefreq}</changefreq><priority>${p.priority}</priority></url>\n`;
@@ -1913,30 +1908,17 @@ app.get('/sitemap.xml', async (req, res) => {
       xml += `  <url><loc>https://yt-seo-architect.vercel.app/tools/${slug}</loc><changefreq>weekly</changefreq><priority>0.9</priority></url>\n`;
     }
 
-    // Glossary pages (from glossary-data.json — works in serverless)
-    let glossaryTerms = [];
-    try {
-      const raw = readFileSync(resolve(__dirname, '../scripts/glossary-data.json'), 'utf-8');
-      glossaryTerms = JSON.parse(raw).terms || [];
-    } catch (e) {
-      console.error('[Sitemap] Glossary data error:', e.message);
-    }
-    console.log(`[Sitemap] ${glossaryTerms.length} glossary terms loaded`);
+    // Glossary pages — use the SAME embedded GLOSSARY_TERMS list the glossary render
+    // routes use, so every URL emitted is guaranteed to resolve (kills the ~29% 404 rate
+    // caused by pairing terms that exist in glossary-data.json but not in the route data).
+    const today = new Date().toISOString().split('T')[0];
+    const termSlugs = (typeof GLOSSARY_TERMS !== 'undefined' ? GLOSSARY_TERMS : []).map(t => t.slug);
 
-    // Term pages
-    const termSlugs = glossaryTerms.map(t => t.slug);
+    // Term pages (EN / ES / PT)
     for (const slug of termSlugs) {
-      xml += `  <url><loc>https://yt-seo-architect.vercel.app/glossary/${slug}</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>\n`;
-    }
-
-    // Spanish term pages
-    for (const slug of termSlugs) {
-      xml += `  <url><loc>https://yt-seo-architect.vercel.app/glossary/es/${slug}</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>\n`;
-    }
-
-    // Portuguese term pages
-    for (const slug of termSlugs) {
-      xml += `  <url><loc>https://yt-seo-architect.vercel.app/glossary/pt/${slug}</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>\n`;
+      xml += `  <url><loc>https://yt-seo-architect.vercel.app/glossary/${slug}</loc><lastmod>${today}</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>\n`;
+      xml += `  <url><loc>https://yt-seo-architect.vercel.app/glossary/es/${slug}</loc><lastmod>${today}</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>\n`;
+      xml += `  <url><loc>https://yt-seo-architect.vercel.app/glossary/pt/${slug}</loc><lastmod>${today}</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>\n`;
     }
 
     // Category hub pages (hub-and-spoke internal linking per wise playbook)
@@ -1958,9 +1940,9 @@ app.get('/sitemap.xml', async (req, res) => {
         const key = a < b ? `${a}-vs-${b}` : `${b}-vs-${a}`;
         if (seenPairs.has(key)) continue;
         seenPairs.add(key);
-        xml += `  <url><loc>https://yt-seo-architect.vercel.app/glossary/${key}</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>\n`;
-        xml += `  <url><loc>https://yt-seo-architect.vercel.app/glossary/es/${key}</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>\n`;
-        xml += `  <url><loc>https://yt-seo-architect.vercel.app/glossary/pt/${key}</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>\n`;
+        xml += `  <url><loc>https://yt-seo-architect.vercel.app/glossary/${key}</loc><lastmod>${today}</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>\n`;
+        xml += `  <url><loc>https://yt-seo-architect.vercel.app/glossary/es/${key}</loc><lastmod>${today}</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>\n`;
+        xml += `  <url><loc>https://yt-seo-architect.vercel.app/glossary/pt/${key}</loc><lastmod>${today}</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>\n`;
         cmpCount++;
       }
     }

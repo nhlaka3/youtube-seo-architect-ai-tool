@@ -161,9 +161,9 @@ async function main() {
 - [Privacy Policy](${SITE_URL}/privacy-policy)
 - [Terms of Service](${SITE_URL}/terms-of-service)
 
-## Blog Posts (${blogPosts.length})
+## Blog Posts (${blogPosts.filter(p => p.title && p.slug !== 'generic-hero').length})
 `;
-  for (const post of blogPosts.slice(0, 30)) {
+  for (const post of blogPosts.filter(p => p.title && p.slug !== 'generic-hero').slice(0, 30)) {
     const date = post.published ? post.published.split('T')[0] : '';
     llmsContent += `- [${post.title}](${SITE_URL}/blog/${post.slug}): ${post.description || ''} (${date})\n`;
   }

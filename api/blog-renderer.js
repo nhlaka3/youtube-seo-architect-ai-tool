@@ -1,3 +1,13 @@
+import { existsSync } from 'fs';
+import { resolve } from 'path';
+
+// Self-hosted hero detection (public/ is served at the site root)
+function heroExists(url) {
+  try {
+    return existsSync(resolve(process.cwd(), 'public', String(url).replace(/^\//, '')));
+  } catch { return false; }
+}
+
 // Zero-dependency date formatting (replaces date-fns)
 function formatDateStr(date, pattern) {
   const MONTHS = ['January','February','March','April','May','June','July','August','September','October','November','December'];
@@ -92,16 +102,19 @@ function linkGlossaryTerms(html) {
   const sortedTerms = GLOSSARY_MAP.map(g => g[0]).sort((a, b) => b.length - a.length);
   let result = html;
 
-  // Protect existing links
-  const LINKED_REGION = /<a\s[^>]*>.*?<\/a>/gi;
+  // Protect script/style/pre/code blocks, existing links, AND every HTML tag — so term
+  // matching only ever touches visible text nodes. Without this, terms inside attribute
+  // values (e.g. img alt="...") or JSON-LD strings get wrapped in <a> tags, corrupting markup.
   const protectedRegions = [];
   let protectedIdx = 0;
-  result = result.replace(LINKED_REGION, (match) => {
-    const token = `__PROTECTED_LINK_${protectedIdx}__`;
-    protectedRegions.push(match);
-    protectedIdx++;
-    return token;
-  });
+  const protect = (m) => { const t = `__PROTECTED_LINK_${protectedIdx}__`; protectedRegions.push(m); protectedIdx++; return t; };
+  result = result
+    .replace(/<script[\s\S]*?<\/script>/gi, protect)
+    .replace(/<style[\s\S]*?<\/style>/gi, protect)
+    .replace(/<pre[\s\S]*?<\/pre>/gi, protect)
+    .replace(/<code[\s\S]*?<\/code>/gi, protect)
+    .replace(/<a\s[^>]*>.*?<\/a>/gi, protect)
+    .replace(/<[^>]*>/g, protect);
 
   for (const term of sortedTerms) {
     // Find the slug for this term
@@ -119,10 +132,9 @@ function linkGlossaryTerms(html) {
     });
   }
 
-  // Restore protected regions
-  for (let i = 0; i < protectedRegions.length; i++) {
-    result = result.replace(`__PROTECTED_LINK_${i}__`, protectedRegions[i]);
-  }
+  // Restore protected regions in ONE pass — per-token replace would be O(n^2) now that
+  // every tag is protected. Function replacer keeps `$` patterns (e.g. "$1,000") intact.
+  result = result.replace(/__PROTECTED_LINK_(\d+)__/g, (match, i) => protectedRegions[Number(i)]);
 
   return result;
 }
@@ -386,11 +398,14 @@ function escAttr(s) { return (s || '').replace(/"/g, '&quot;'); }
 function formatDate(d) { return new Date(d).toISOString().split('T')[0]; }
 
 function heroImageHTML(slug, title) {
-  const seed = slug.replace(/[^a-z0-9-]/g, '').substring(0, 30);
+  // Self-hosted branded hero when available; otherwise fall back to the site OG image.
+  // (picsum.photos hotlinks were removed — external images hurt reliability and SEO.)
   const alt = (title || slug).replace(/—.*/, '').trim();
+  const heroSrc = `/blog/${slug}-hero.png`;
+  const src = heroExists(heroSrc) ? heroSrc : '/og-image.png';
   return `<div class="featured-image-wrapper" style="margin:24px 0;text-align:center;">
       <img
-        src="https://picsum.photos/seed/${seed}/800/400"
+        src="${src}"
         alt="${escAttr(alt)} guide — YT SEO Architect"
         width="800"
         height="400"
@@ -659,6 +674,10 @@ export function renderBlogTemplate(page) {
     .replace(/<div\s[^>]*class="author-box[^>]*>[\s\S]*?<\/div>/gi, '')
     .replace(/<div\s[^>]*class="adsense-blog[^"]*"[^>]*>[\s\S]*?<\/div>/gi, '')
     .replace(/<div\s[^>]*class="featured-image-wrapper[^>]*>[\s\S]*?<\/div>/gi, '')
+    // Strip any JSON-LD blocks embedded in the article body — schema belongs in the
+    // <head> (the template emits one clean block via JSON.stringify below). Embedded
+    // blocks from generators are often unparseable and break rich results.
+    .replace(/<script[^>]*type=["']application\/ld\+json["'][^>]*>[\s\S]*?<\/script>/gi, '')
     .trim();
   const linked = linkGlossaryTerms(bodyContent);
   contentHTML += linked;
