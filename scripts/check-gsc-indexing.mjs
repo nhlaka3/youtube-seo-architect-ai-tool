@@ -69,10 +69,21 @@ async function inspectUrl(token, url, siteUrl) {
   const insp = d.inspectionResult || {};
   const idx = insp.indexStatusResult || {};
   const exp = insp.urlInspectionResult || {};
+  // Google returns localized/human-readable coverageState strings from this
+  // endpoint (e.g. "Submitted and indexed", "URL is unknown to Google",
+  // "Excluded by page removal tool" ...) OR the enum form. Normalize:
+  const raw = idx.coverageState || '';
+  const str = String(raw);
+  const isIndexed = /indexed|index?/i.test(str) && !/unknown|not indexed|excluded|not found|noindex|soft 404/i.test(str);
   return {
     url,
     status: res.status,
-    coverageState: idx.coverageState || 'UNKNOWN',
+    coverageState: str || 'UNKNOWN',
+    // 'indexed' = true ONLY when Google confirms the URL is in its index
+    // 'unknown' = Google has never catalogued/discovered the URL
+    rawCoverage: str,
+    isIndexed,
+    isUnknown: /unknown to google|unknown/i.test(str) || str === 'URL is unknown to Google',
     indexingState: idx.indexingState || 'N/A',
     lastCrawl: idx.lastCrawlTime || null,
     pageFetchState: idx.pageFetchState || 'N/A',
@@ -143,23 +154,25 @@ async function main() {
   for (const url of targets) {
     const r = await inspectUrl(token, url, GSC_SITE);
     results.push(r);
-    const dot = r.coverageState === 'IN_STOCK' ? '✅' : (r.coverageState === 'DUP' ? '⚠️' : '❌');
+    const dot = r.isIndexed ? '✅' : (r.isUnknown ? '❓' : '❌');
     console.log(`  ${dot} [${r.coverageState}] ${typeOf(url).padEnd(18)} ${url}`);
     await new Promise(res => setTimeout(res, 200)); // pace — URL inspection is also quota'd
   }
 
   // Summary
-  const inStock = results.filter(r => r.coverageState === 'IN_STOCK').length;
-  const notIn = results.filter(r => r.coverageState && r.coverageState !== 'IN_STOCK').length;
+  const inStock = results.filter(r => r.isIndexed).length;
+  const unknown = results.filter(r => r.isUnknown).length;
+  const notIn = results.length - inStock - unknown;
   console.log('\n═'.repeat(60));
   console.log('📊 GOOGLE INDEX SUMMARY');
   console.log('─'.repeat(60));
   console.log(`   Checked:   ${results.length}`);
-  console.log(`   In stock (indexed): ${inStock}`);
-  console.log(`   Not indexed:        ${notIn}`);
+  console.log(`   Indexed:   ${inStock}   (Google confirms URL is in the index)`);
+  console.log(`   Unknown:   ${unknown}   (Google has never discovered the URL — sitemap/discovery issue)`);
+  console.log(`   Other:     ${notIn}   (discovered but not indexed)`);
   console.log('═'.repeat(60));
 
-  process.exit(notIn > results.length / 2 ? 1 : 0); // fail if majority not indexed
+  process.exit(unknown > results.length / 2 ? 1 : 0); // fail if majority never discovered
 }
 
 main().catch(e => { console.error('Fatal:', e); process.exit(1); });
