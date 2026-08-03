@@ -120,12 +120,17 @@ function addGlossaryLinks(html) {
   }
 
   // Restore protected links
+  // NOTE: must use a FUNCTION replacement, not a string — string replacements
+  // expand `$` patterns (e.g. "$1,000" inside link text -> capture group 1),
+  // which corrupts dollar figures and can explode the output past V8's ~536MB
+  // string limit (RangeError: Invalid string length) on large posts.
   for (let i = 0; i < protectedLinks.length; i++) {
-    result = result.replace(`__GL${i}__`, protectedLinks[i]);
+    result = result.replace(`__GL${i}__`, () => protectedLinks[i]);
   }
 
   // Put the linked content back into the full HTML
-  return html.replace(/<article>([\s\S]*?)<\/article>/i, `<article>${result}</article>`);
+  // (function replacement so `$` in the article text is never expanded)
+  return html.replace(/<article>([\s\S]*?)<\/article>/i, () => `<article>${result}</article>`);
 }
 
 // Process all HTML files

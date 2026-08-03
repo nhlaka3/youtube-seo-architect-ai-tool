@@ -83,6 +83,7 @@ jobs:
 
       - name: 🔗 Inject glossary cross-links into blog posts
         id: inject-links
+        if: steps.generate.outcome == 'success'
         run: |
           echo "Injecting glossary links into new blog post..."
           node scripts/add-glossary-links.mjs

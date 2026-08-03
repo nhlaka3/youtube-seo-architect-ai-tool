@@ -103,12 +103,15 @@ function addGlossaryLinks(html) {
     });
   }
 
+  // NOTE: function replacements only — string replacements expand `$` patterns
+  // (e.g. "$1,000" -> capture group 1), corrupting dollar figures and exploding
+  // output past V8's ~536MB limit (RangeError) on large posts.
   for (let i = 0; i < protectedLinks.length; i++) {
-    result = result.replace(`__GL${i}__`, protectedLinks[i]);
+    result = result.replace(`__GL${i}__`, () => protectedLinks[i]);
   }
 
   // Put the linked content back into the full HTML
-  return html.replace(/<article>([\s\S]*?)<\/article>/i, `<article>${result}</article>`);
+  return html.replace(/<article>([\s\S]*?)<\/article>/i, () => `<article>${result}</article>`);
 }
 
 try {
