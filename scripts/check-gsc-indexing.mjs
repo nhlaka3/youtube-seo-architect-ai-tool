@@ -48,14 +48,24 @@ async function getToken(key) {
   const sign = createSign('RSA-SHA256');
   sign.update(jwt);
   const sig = sign.sign(key.private_key, 'base64url');
-  const res = await fetch('https://oauth2.googleapis.com/token', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-    body: `grant_type=urn:ietf:params:oauth:grant-type:jwt-bearer&assertion=${jwt}.${sig}`,
-  });
-  const d = await res.json();
-  if (!d.access_token) throw new Error(`Auth failed: ${JSON.stringify(d).slice(0, 300)}`);
-  return d.access_token;
+  // Retry: cold-start / transient network blips ETIMEDOUT the first attempt
+  let lastErr;
+  for (let attempt = 1; attempt <= 4; attempt++) {
+    try {
+      const res = await fetch('https://oauth2.googleapis.com/token', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        body: `grant_type=urn:ietf:params:oauth:grant-type:jwt-bearer&assertion=${jwt}.${sig}`,
+      });
+      const d = await res.json();
+      if (!d.access_token) throw new Error(`Auth failed: ${JSON.stringify(d).slice(0, 300)}`);
+      return d.access_token;
+    } catch (e) {
+      lastErr = e;
+      if (attempt < 4) await new Promise(res => setTimeout(res, 1500 * attempt));
+    }
+  }
+  throw lastErr;
 }
 
 async function inspectUrl(token, url, siteUrl) {
