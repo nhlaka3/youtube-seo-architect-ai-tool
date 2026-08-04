@@ -1,8 +1,8 @@
 {
-  "consecutive429": 1,
-  "lastOk": null,
-  "last429": "2026-08-03T18:18:09.429Z",
-  "lastRun": "2026-08-03T18:18:09.429Z",
+  "consecutive429": 0,
+  "lastOk": "2026-08-04T11:28:54.799Z",
+  "last429": null,
+  "lastRun": "2026-08-04T11:28:54.799Z",
   "keyFileOk": true,
-  "lastBulkStatus": 429
+  "lastBulkStatus": 200
 }
