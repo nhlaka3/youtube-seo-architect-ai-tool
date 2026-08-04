@@ -4,17 +4,17 @@ on:
   workflow_dispatch:
     inputs:
       slug:
-        description: 'Blog post slug to turn into video'
+        description: 'Output file name (e.g. youtube-tags-2026)'
         type: string
         required: true
-      pipeline:
-        description: 'Pipeline type'
+      demo:
+        description: 'Zero-key demo to render'
         type: choice
-        default: 'animated-explainer'
+        default: 'world-in-numbers'
         options:
-          - animated-explainer
-          - clip-factory
-          - talking-head
+          - world-in-numbers
+          - code-to-screen
+          - focusflow-pitch
 
 permissions:
   contents: write
@@ -22,12 +22,6 @@ permissions:
 jobs:
   generate-video:
     runs-on: ubuntu-latest
-
-    env:
-      OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
-      GOOGLE_API_KEY: ${{ secrets.GOOGLE_API_KEY }}
-      FAL_KEY: ${{ secrets.FAL_KEY }}
-      ELEVENLABS_API_KEY: ${{ secrets.ELEVENLABS_API_KEY }}
 
     steps:
       - name: ⬇️ Checkout main project
@@ -52,64 +46,39 @@ jobs:
         with:
           node-version: '24'
 
+      - name: 🔧 Install ffmpeg
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq ffmpeg
+
       - name: 🏗️ Install OpenMontage
         run: |
           cd openmontage
           pip install -r requirements.txt -q
           pip install -e . -q
-          # Install Remotion deps if needed
-          if [ -d remotion-composer ]; then
-            cd remotion-composer && npm install --silent 2>/dev/null || true
-          fi
 
-      - name: 📝 Fetch blog post content
-        id: fetch-post
+      - name: 🎬 Render demo video (zero-key, Remotion)
+        id: render
         run: |
+          DEMO="${{ github.event.inputs.demo }}"
           SLUG="${{ github.event.inputs.slug }}"
-          URL="https://yt-seo-architect.vercel.app/blog/$SLUG"
-          echo "Fetching: $URL"
-          curl -s "$URL" > /tmp/blog-post.html
-          TITLE=$(grep -oP '<title>[^<]+' /tmp/blog-post.html | sed 's/<title>//' | sed 's/ —.*//')
-          echo "TITLE=$TITLE" >> $GITHUB_OUTPUT
-          echo "SLUG=$SLUG" >> $GITHUB_OUTPUT
-          echo "Blog post: $TITLE"
-
-      - name: 🎬 Generate video via OpenMontage
-        id: generate
-        run: |
-          TITLE="${{ steps.fetch-post.outputs.TITLE }}"
-          SLUG="${{ steps.fetch-post.outputs.SLUG }}"
-          echo "Generating video for: $TITLE"
-          
-          # Create output directory
-          mkdir -p main-project/media/videos
-          
-          # Run OpenMontage animated-explainer pipeline
+          echo "Rendering demo: $DEMO"
           cd openmontage
-          
-          # Build the prompt for the pipeline
-          cat > /tmp/pipeline-input.json << 'EOF'
-          {
-            "topic": "$TITLE",
-            "source_url": "https://yt-seo-architect.vercel.app/blog/$SLUG",
-            "style": "professional",
-            "duration_seconds": 60,
-            "voice": "alloy",
-            "output": "../main-project/media/videos/$SLUG.mp4"
-          }
-          EOF
-          
-          echo "Pipeline config written"
+          python render_demo.py "$DEMO"
+          echo "Output dir contents:"
+          ls -la projects/demos/renders/
+          # Copy to main project media dir with the requested slug name
+          mkdir -p ../main-project/media/videos
+          cp "projects/demos/renders/$DEMO.mp4" "../main-project/media/videos/$SLUG.mp4"
+          SIZE=$(du -h "../main-project/media/videos/$SLUG.mp4" | cut -f1)
+          echo "SIZE=$SIZE" >> $GITHUB_OUTPUT
+          echo "✅ Video ready: media/videos/$SLUG.mp4 ($SIZE)"
 
-      - name: 📊 Check output
-        run: |
-          if [ -f "main-project/media/videos/${{ steps.fetch-post.outputs.SLUG }}.mp4" ]; then
-            SIZE=$(du -h "main-project/media/videos/${{ steps.fetch-post.outputs.SLUG }}.mp4" | cut -f1)
-            echo "✅ Video generated: $SIZE"
-          else
-            echo "⚠️ Video generation requires API keys (FAL_KEY, GOOGLE_API_KEY, OPENAI_API_KEY)"
-            echo "   Set these as GitHub Secrets to enable video generation."
-          fi
+      - name: 📦 Upload video artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: video-${{ github.event.inputs.slug }}
+          path: main-project/media/videos/${{ github.event.inputs.slug }}.mp4
 
       - name: 📊 Report
         if: always()
@@ -117,8 +86,15 @@ jobs:
           echo "════════════════════════════════════════════"
           echo "  🎬 VIDEO GENERATION REPORT"
           echo "════════════════════════════════════════════"
-          echo "  Post:    ${{ steps.fetch-post.outputs.TITLE }}"
-          echo "  Slug:    ${{ steps.fetch-post.outputs.SLUG }}"
-          echo "  Status:  ${{ steps.generate.outcome }}"
+          echo "  Demo:    ${{ github.event.inputs.demo }}"
+          echo "  Output:  media/videos/${{ github.event.inputs.slug }}.mp4"
+          echo "  Size:    ${{ steps.render.outputs.SIZE }}"
+          echo "  Status:  ${{ steps.render.outcome }}"
           echo "  Time:    $(date -u)"
           echo "════════════════════════════════════════════"
+          echo ""
+          echo "Artifact 'video-${{ github.event.inputs.slug }}' is downloadable from this run."
+          echo ""
+          echo "NOTE: This uses OpenMontage's zero-key Remotion demo path (no AI/API keys)."
+          echo "To generate real AI explainer videos, the workflow needs an agent driver"
+          echo "(Codex/Claude Code CLI) — see AGENTS.md video production stack."
