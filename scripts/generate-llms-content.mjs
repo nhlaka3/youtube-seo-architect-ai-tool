@@ -30,6 +30,11 @@ const TODAY = new Date().toISOString().split('T')[0];
 // ── Page parser ───────────────────────────────────────────────────
 function parseHtmlPage(filePath) {
   const html = readFileSync(filePath, 'utf-8');
+  return parseHtmlString(html);
+}
+
+// Parse from an HTML string (used for live-fetched DB-rendered posts)
+function parseHtmlString(html) {
   const titleMatch = html.match(/<title[^>]*>([^<]+)<\/title>/);
   const descMatch = html.match(/<meta name="description" content="([^"]+)"/i);
   const h1Match = html.match(/<h1[^>]*>([^<]+)<\/h1>/);
@@ -48,6 +53,59 @@ function parseHtmlPage(filePath) {
     modified: modMatch ? modMatch[1] : null,
   };
 }
+
+// ── Glossary loader ─────────────────────────────────────────────
+// Loads glossary terms + definitions from scripts/glossary-data.json so the
+// site's largest content asset (18k programmatic pages) is surfaced to AI crawlers.
+function loadGlossaryTerms() {
+  const glossaryPath = resolve(PROJECT, 'scripts/glossary-data.json');
+  if (!existsSync(glossaryPath)) return [];
+  try {
+    const raw = JSON.parse(readFileSync(glossaryPath, 'utf-8'));
+    return (raw.terms || [])
+      .filter(t => t && t.slug && !t.slug.includes('-vs-')) // skip comparison pairs
+      .map(t => ({
+        slug: t.slug,
+        name: t.term || t.name || t.nameEN || t.slug,
+        def: t.shortDefinition || t.def || t.defEN || t.expandedDefinition || '',
+      }))
+      .filter(t => t.def)
+      .slice(0, 150);
+  } catch {
+    return [];
+  }
+}
+
+// ── Live blog discovery (DB posts) ──────────────────────────────
+// Many blog posts are DB-rendered (not static files). Discover them from the
+// live sitemap and fetch their meta so llms.txt covers ALL posts, not just static ones.
+async function discoverDbOnlyPosts(staticSlugs) {
+  try {
+    const res = await fetch(`${SITE_URL}/sitemap.xml`, { signal: AbortSignal.timeout(20000) });
+    if (!res.ok) return [];
+    const xml = await res.text();
+    const locs = [...xml.matchAll(/<loc>([^<]+)<\/loc>/g)].map(m => m[1]);
+    const blogUrls = locs.filter(u => /\/blog\/[a-z0-9-]+$/.test(u));
+    const missing = blogUrls.filter(u => !staticSlugs.has(u.split('/').pop().replace('.html', '')));
+    const posts = [];
+    for (const url of missing.slice(0, 50)) {
+      try {
+        const pageRes = await fetch(url, { signal: AbortSignal.timeout(15000) });
+        if (!pageRes.ok) continue;
+        const html = await pageRes.text();
+        const slug = url.split('/').pop();
+        const parsed = parseHtmlString(html);
+        if (parsed.title && !/page not found/i.test(parsed.title)) {
+          posts.push({ slug, ...parsed });
+        }
+      } catch { /* skip unreachable post */ }
+    }
+    return posts;
+  } catch {
+    return [];
+  }
+}
+
 
 // ── AI summary generator (optional — falls back to description) ──
 async function generateSummary(title, description, h2s) {
@@ -147,6 +205,22 @@ async function main() {
     }
   }
 
+  // 5. Glossary terms (from scripts/glossary-data.json)
+  const glossaryTerms = loadGlossaryTerms();
+
+  // 6. DB-only blog posts (discovered via live sitemap — they aren't static files)
+  const staticBlogSlugs = new Set(blogPosts.map(p => p.slug));
+  const dbOnlyPosts = await discoverDbOnlyPosts(staticBlogSlugs);
+  const knownDbSlugs = new Set(dbOnlyPosts.map(p => p.slug));
+  const allBlogPosts = [...blogPosts, ...dbOnlyPosts].filter(p => p.title && p.slug !== 'generic-hero' && !/page not found/i.test(p.title));
+
+  // Deterministic ordering: newest first (static posts carry published dates; DB posts fall back to today)
+  const healthyPosts = allBlogPosts.slice().sort((a, b) => {
+    const da = a.published ? new Date(a.published) : 0;
+    const db = b.published ? new Date(b.published) : 0;
+    return db - da;
+  });
+
   // ── Generate llms.txt (quick reference) ──────────────────────────
   let llmsContent = `# YT SEO Architect
 > AI-powered YouTube SEO platform — 50+ free tools for keyword research, tag generation, title optimization, channel audit, and more.
@@ -161,9 +235,9 @@ async function main() {
 - [Privacy Policy](${SITE_URL}/privacy-policy)
 - [Terms of Service](${SITE_URL}/terms-of-service)
 
-## Blog Posts (${blogPosts.filter(p => p.title && p.slug !== 'generic-hero').length})
+## Blog Posts (${healthyPosts.length})
 `;
-  for (const post of blogPosts.filter(p => p.title && p.slug !== 'generic-hero').slice(0, 30)) {
+  for (const post of healthyPosts.slice(0, 30)) {
     const date = post.published ? post.published.split('T')[0] : '';
     llmsContent += `- [${post.title}](${SITE_URL}/blog/${post.slug}): ${post.description || ''} (${date})\n`;
   }
@@ -173,8 +247,17 @@ async function main() {
     llmsContent += `- [${tool.title}](${SITE_URL}/tools/${tool.slug}): ${tool.description || ''}\n`;
   }
 
+  // Glossary section — surfaces the site's largest structured content asset
+  if (glossaryTerms.length > 0) {
+    llmsContent += `\n## Glossary (${glossaryTerms.length} key terms)\n`;
+    for (const t of glossaryTerms) {
+      const def = t.def.replace(/\s+/g, ' ').trim();
+      llmsContent += `- [${t.name}](${SITE_URL}/glossary/${t.slug}): ${def.slice(0, 180)}\n`;
+    }
+  }
+
   writeFileSync(resolve(PROJECT, 'public/llms.txt'), llmsContent);
-  console.log(`✅ public/llms.txt — ${blogPosts.length} blog posts + ${toolPages.length} tools indexed`);
+  console.log(`✅ public/llms.txt — ${healthyPosts.length} blog posts + ${toolPages.length} tools + ${glossaryTerms.length} glossary terms indexed`);
 
   // ── Generate llms-full.txt (detailed) ────────────────────────────
   let fullContent = `# YT SEO Architect — Full Site Reference
@@ -213,7 +296,7 @@ ${ti?.h2s.slice(0, 3).map(h => `- ${h}`).join('\n') || ''}
 
 `;
 
-  for (const post of blogPosts.slice(0, 50)) {
+  for (const post of healthyPosts.slice(0, 50)) {
     const summary = post.description || '';
     fullContent += `### ${post.title}
 **URL:** ${SITE_URL}/blog/${post.slug}
@@ -225,6 +308,23 @@ ${ti?.h2s.slice(0, 3).map(h => `- ${h}`).join('\n') || ''}
 **Tags:** YouTube SEO, ${post.slug.split('-').slice(0, 4).join(', ')}
 
 `;
+  }
+
+  // Glossary detail section
+  if (glossaryTerms.length > 0) {
+    fullContent += `---
+## 5. Glossary (${glossaryTerms.length} key terms)
+
+`;
+    for (const t of glossaryTerms) {
+      const def = t.def.replace(/\s+/g, ' ').trim();
+      fullContent += `### ${t.name}
+**URL:** ${SITE_URL}/glossary/${t.slug}
+**Definition:** ${def.slice(0, 300)}
+**Topic:** YouTube SEO
+
+`;
+    }
   }
 
   fullContent += `---

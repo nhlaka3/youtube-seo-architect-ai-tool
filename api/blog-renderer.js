@@ -670,6 +670,9 @@ export function renderBlogTemplate(page) {
   // Strip duplicate H1 (template provides one) and any existing related-posts/footer sections
   // Also strip share bars, meta lines, author box, hero image — template renders these
   bodyContent = bodyContent
+    // Some DB posts store a FULL HTML page (incl. <head> with its own canonical/meta).
+    // Strip the embedded head so we never emit duplicate <link rel=canonical> / meta tags.
+    .replace(/<head[^>]*>[\s\S]*?<\/head>/gi, '')
     .replace(/<h1[^>]*>.*?<\/h1>/i, '')
     .replace(/<nav\s[^>]*class="related-posts"[^>]*>[\s\S]*?<\/nav>/gi, '')
     .replace(/<footer[\s\S]*?<\/footer>/gi, '')

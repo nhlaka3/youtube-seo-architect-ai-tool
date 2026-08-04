@@ -1,256 +1,236 @@
 {
   "summary": {
-    "health_score": 58,
+    "health_score": 67,
     "business_type": "SaaS — free AI YouTube SEO tool (SoftwareApplication) with programmatic SEO glossary (EN/ES/PT), blog, and interactive tools",
     "audit_date": "2026-08-03",
+    "previous_score": 58,
     "top_findings": [
-      "Sitemap is ~29% broken: 23/80 sampled /glossary/ URLs return HTTP 404 (~3,000+ of 10,986 listed), incl. the 255-URL 'channel-optimization-for-small-channels' family",
-      "Blog JSON-LD still unparseable on ~50% of sampled posts (unescaped HTML inside JSON strings) — Article+FAQPage rich results are broken on the newest content",
-      "24 identical /blog/* vs /tools/* slug pairs competing for the same keywords (cannibalization), both indexable",
-      "E-E-A-T vacuum persists: /about noindex, anonymous authorship, Gmail contact, empty 'Trusted by' section, AI-template blog titles ('Learn how to X 2026')",
-      "5 noindex core URLs (/dashboard, /about, /changelog, /privacy-policy, /terms-of-service) still listed in sitemap; only 49/11,096 URLs have <lastmod>",
-      "Content-Security-Policy blocks third-party scripts: Vercel Analytics (cdn.jsdelivr.net) console error + Google AdSense (pagead2.googlesyndication.com) won't load",
-      "Blog hero image alt attributes are corrupted by glossary-link HTML injection on some posts; one post still hotlinks picsum.photos"
+      "324-URL 'double-vs' glossary family ~73% broken (est. ~240 404s): /{term}-vs-vidiq-vs-tubebuddy and /{term}-vs-tubebuddy-vs-* URLs 404 in sitemap; also /glossary/vidiq-vs-tubebuddy EN+ES 404 (PT works)",
+      "5 remaining identical blog/tools slug pairs cannibalize (both indexable): youtube-for-tutorials-2026, youtube-intro-hook-first-3-seconds, youtube-monetization-tips-2026, youtube-seo-for-business-channels-2026, youtube-seo-for-gaming-channels-2026",
+      "Canonical loop on /tools: canonical points to /tools.html which 308-redirects back to /tools",
+      "Missing canonicals on /about, /privacy-policy, /terms-of-service, /contact; duplicate canonical on some blog posts (e.g. /blog/youtube-tags-2026)",
+      "llms.txt stale/shallow: 17/50 blog posts, zero glossary entries (18k pages), llms-full.txt embeds a 'Page not found' section for /blog/generic-hero"
     ],
     "quick_wins": [
-      "Remove 404 glossary URLs + noindex core URLs from sitemap.xml and regenerate (single deploy, removes ~29% of broken sitemap)",
-      "Fix blog JSON-LD escaping in the post template (json_encode the strings) — restores rich results on all posts",
-      "Pick one home per cannibalized slug: 301 /tools/* article shells to /blog/* (24 pairs)",
-      "Add lastmod to glossary URLs in the sitemap generator (11,047 URLs missing it)",
-      "Add pagead2.googlesyndication.com + cdn.jsdelivr.net to CSP script-src so AdSense and analytics load",
-      "Add security.txt + make /about indexable with a named founder/author"
+      "Regenerate sitemap without the 324 double-vs URLs + fix /glossary/vidiq-vs-tubebuddy EN/ES (removes ~240 404s in one deploy)",
+      "301 the 5 residual /tools/* twins to /blog/* (or noindex the thin tool variants)",
+      "Fix /tools canonical to https://yt-seo-architect.vercel.app/tools",
+      "Add self-referencing canonicals to /about, /privacy-policy, /terms-of-service, /contact",
+      "Regenerate llms.txt/llms-full.txt: all 50 blog posts + top glossary terms, strip broken entries"
     ]
   },
   "categories": [
     {
       "name": "Technical SEO",
-      "score": 55,
+      "score": 72,
+      "weight": 22,
       "what_works": [
-        "HTTPS + HSTS (preload) on all routes; Vercel CDN with proper cache headers (immutable assets, max-age=0 for HTML)",
-        "robots.txt clean: blocks only internal paths, allows all major AI crawlers (ChatGPT-User, Google-Extended, PerplexityBot, ClaudeBot, OAI-SearchBot)",
-        "Core pages return 200; canonical tags present; the prior 6,400 glossary 500-errors are FIXED (vs-pages now render 200)",
-        "llms.txt (200) and llms-full.txt (33KB, 200) now live",
-        "hreflang en/es/pt/x-default correctly implemented on multilingual glossary pages"
+        "Sitemap 18,090 URLs with lastmod on 99.7% (was 49 URLs); noindex core pages removed",
+        "Prior ~29% sitemap 404 rate reduced to ~1.3% (one generator family remains)",
+        "Strong security headers: strict CSP with AdSense+jsdelivr whitelisted, HSTS preload, nosniff, frame-options, security.txt",
+        "robots.txt allows all major AI crawlers; blocks only dev paths",
+        "Removed blog post returns correct 410 Gone"
       ],
       "findings": [
         {
-          "title": "Sitemap contains ~29% broken (404) URLs",
+          "title": "324 'double-vs' glossary URLs ~73% broken (~240 est. 404s)",
           "severity": "Critical",
-          "description": "11,096 URLs in sitemap.xml; 10,986 are /glossary/. Sampling 80 random glossary URLs: 23 return HTTP 404 (28.75%). The 'channel-optimization-for-small-channels' family alone accounts for 255 dead URLs (all 404). Extrapolated: ~3,000+ broken URLs are submitted to Google.",
-          "recommendation": "Audit and either generate the missing glossary combos or 301/410 them; regenerate sitemap from live-verified URLs only. Add an automated broken-link check to CI."
+          "description": "Pattern /{term}-vs-{tool}-vs-{tool} (tool=vidiq,tubebuddy). Sample 30 → 22 404. Plus /glossary/vidiq-vs-tubebuddy EN and ES 404 while PT renders.",
+          "recommendation": "Exclude slugs with 2+ -vs- segments from the glossary generator and sitemap; fix the vidiq-vs-tubebuddy EN/ES render path."
         },
         {
-          "title": "5 noindex core pages listed in sitemap",
+          "title": "/tools canonical points to redirecting tools.html",
           "severity": "High",
-          "description": "/dashboard, /about, /changelog, /privacy-policy, /terms-of-service all return robots noindex/nofollow yet appear in sitemap.xml.",
-          "recommendation": "Exclude noindex URLs from the sitemap generator (or make /about indexable, see E-E-A-T)."
+          "description": "canonical href=.../tools.html, which 308-redirects to /tools (canonical-to-redirect loop).",
+          "recommendation": "Change canonical to https://yt-seo-architect.vercel.app/tools"
         },
         {
-          "title": "Missing <lastmod> on 99.5% of URLs",
-          "severity": "Medium",
-          "description": "Only 49 of 11,096 URLs carry <lastmod>. Google cannot detect freshness for the glossary.",
-          "recommendation": "Emit lastmod (and ideally changefreq) for glossary entries in the sitemap generator."
-        },
-        {
-          "title": "Security header gaps + missing security.txt",
-          "severity": "Medium",
-          "description": "X-Frame-Options, X-Content-Type-Options (nosniff), and Referrer-Policy are absent from responses. /.well-known/security.txt and /security.txt return 404.",
-          "recommendation": "Add XFO (SAMEORIGIN), nosniff, Referrer-Policy to vercel.json headers; publish a security.txt."
-        },
-        {
-          "title": "Stray placeholder + dead routes",
-          "severity": "Medium",
-          "description": "/blog/generic-hero returns HTTP 200 with 16 bytes (placeholder template page) and /guide returns 404. /pricing redirects to the noindex dashboard shell.",
-          "recommendation": "noindex or delete /blog/generic-hero; fix or remove /guide; build a real indexable /pricing page."
-        },
-        {
-          "title": "CSP blocks first-party analytics",
+          "title": "Missing canonicals on 4 core pages",
           "severity": "High",
-          "description": "Console error: loading @vercel/analytics from cdn.jsdelivr.net violates the CSP script-src. AdSense (pagead2.googlesyndication.com) is likewise not whitelisted.",
-          "recommendation": "Whitelist cdn.jsdelivr.net, pagead2.googlesyndication.com (script), googleads.g.doubleclick.net + tpc.googlesyndication.com (frame) in the CSP."
+          "description": "/about, /privacy-policy, /terms-of-service, /contact have no canonical tag.",
+          "recommendation": "Add self-referencing canonical to each."
+        },
+        {
+          "title": "Duplicate canonical tags on some blog posts",
+          "severity": "High",
+          "description": "/blog/youtube-tags-2026 emits 2 identical canonical links.",
+          "recommendation": "Ensure blog template emits exactly one canonical."
+        },
+        {
+          "title": "/blog/generic-hero orphan returns 200",
+          "severity": "Low",
+          "description": "Stub page returns 200 and leaks into llms-full.txt as 'Page not found'.",
+          "recommendation": "410 or remove it."
         }
       ]
     },
     {
       "name": "Content Quality",
-      "score": 48,
+      "score": 60,
+      "weight": 23,
       "what_works": [
-        "Blog posts are substantive (2,000-10,500 words with structured H2 sections, FAQ blocks, and internal tool links)",
-        "Multilingual glossary (EN/ES/PT) with real definitions and Article schema",
-        "llms.txt + llms-full.txt provide a comprehensive AI-facing content map",
-        "Interlinking between blog and tools exists (blog-enhancements.js injects glossary links)"
+        "Blog JSON-LD fixed — Article+FAQPage valid on 10/10 sampled posts (was ~50% unparseable)",
+        "/about indexable again; 50 blog posts all live with H1s, metas, internal links"
       ],
       "findings": [
         {
-          "title": "E-E-A-T vacuum on a YMYL-adjacent niche",
+          "title": "E-E-A-T still thin",
           "severity": "High",
-          "description": "/about is noindex with no named founder/author; authorship is brand-only; contact is a Gmail address; legal entity absent from privacy/ToS; homepage 'Trusted by' section shows no verifiable logos.",
-          "recommendation": "Publish an indexable About page with a named founder, consistent author bylines on posts, business email/address, and remove unverifiable 'Trusted by' claims."
+          "description": "Anonymous authorship, Gmail contact, no author pages, no Person schema. Money-adjacent niche.",
+          "recommendation": "Add named author + author pages + Person schema; improve About page."
         },
         {
-          "title": "Scaled AI-template content risk",
-          "severity": "High",
-          "description": "Many blog posts follow the template 'Learn how to {keyword} 2026...' with near-identical phrasing; 58 blog posts + 10,986 programmatic glossary pages is high-volume automated output.",
-          "recommendation": "Add a human review/fact-check gate to the publishing workflow; differentiate post intros/outros; cite sources for data claims."
-        },
-        {
-          "title": "Thin pages in 3 templates",
+          "title": "AI-template blog titles persist",
           "severity": "Medium",
-          "description": "Tools pages: 109-172 words, H2=0 (12 sampled); blog category hubs: 74-82 words; glossary vs-pages: 300-490 words of boilerplate ('How to Optimize' blocks).",
-          "recommendation": "Expand tool pages with how-to steps, examples, and FAQ; flesh out category hubs; vary glossary copy per term."
+          "description": "'Learn how to X 2026' pattern across many posts.",
+          "recommendation": "Rewrite titles for click-value and differentiation."
         },
         {
-          "title": "Multiple H1s on one post",
+          "title": "Boilerplate tool descriptions",
           "severity": "Medium",
-          "description": "/blog/maximizing-youtube-revenue-with-sponsorships-2026 contains 6 H1 tags (198KB, 10,545 words).",
-          "recommendation": "Demote to H2/H3 in the template/regenerator and re-render the post."
+          "description": "~95 tool pages + llms.txt use identical filler text.",
+          "recommendation": "Unique value proposition per tool."
         },
         {
-          "title": "Broken llms.txt entry + stale counts",
+          "title": "Blog SERP titles truncated",
           "severity": "Low",
-          "description": "llms.txt lists a '[null]' entry pointing to /blog/generic-hero and states 'Blog Posts (18)' and '95 tools' while the live sitemap shows 58 blog posts and 37 tool URLs.",
-          "recommendation": "Regenerate llms.txt from live content with accurate counts; drop the generic-hero entry."
+          "description": "73-76 char titles with visible '…' truncation.",
+          "recommendation": "Trim to <=60 chars without ellipsis."
         }
       ]
     },
     {
       "name": "On-Page SEO",
-      "score": 62,
+      "score": 65,
+      "weight": 20,
       "what_works": [
-        "Single H1 on nearly all pages; meta descriptions present on 49/50 sampled URLs",
-        "Canonical tags on core and content pages; keyword-rich titles",
-        "50 internal links on homepage; blog hub links to 47 posts",
-        "Googlebot receives identical HTML to browsers (static prerender — no SPA wall)"
+        "Titles+metas on homepage, tools, blog, glossary, vs, guide",
+        "Single H1 on blog posts; correct hreflang en/es/pt/x-default on glossary",
+        "Homepage canonical correct; OG tags complete with valid 197KB og-image.png"
       ],
       "findings": [
         {
-          "title": "Title tags too long on blog and tools",
+          "title": "5 identical blog/tools slug pairs both indexable",
+          "severity": "Critical",
+          "description": "/tools/{5 slugs} thin 'Free Interactive Tool' variants compete with /blog/{same} full articles.",
+          "recommendation": "301 tools→blog or noindex tool variants."
+        },
+        {
+          "title": "/tools canonical loop",
+          "severity": "High",
+          "description": "Canonical → tools.html → 308 → /tools.",
+          "recommendation": "Point canonical at /tools directly."
+        },
+        {
+          "title": "Missing canonicals on core pages",
+          "severity": "High",
+          "description": "about/privacy/terms/contact.",
+          "recommendation": "Add self-canonicals."
+        },
+        {
+          "title": "Title lengths over guidance",
           "severity": "Medium",
-          "description": "Sampled blog titles run 62-96 chars (8 of 14 >60), tools titles 63-94 chars. Google truncates at ~60 (desktop) / ~50-55 (mobile).",
-          "recommendation": "Trim titles to <=60 chars in the generators; front-load the keyword."
-        },
-        {
-          "title": "Alt attribute corrupted by glossary-link injection",
-          "severity": "High",
-          "description": "On some blog posts the hero image alt contains raw HTML (<a href=\"/glossary/youtube-shorts\" class=\"glossary-link\">...) — the glossary cross-linker is injecting links inside alt attributes, producing broken markup.",
-          "recommendation": "Make the glossary-link injection ignore attributes (only inject into visible text nodes); re-render affected posts."
-        },
-        {
-          "title": "Blog/tools slug cannibalization",
-          "severity": "High",
-          "description": "24 identical slugs exist under both /blog/ and /tools/ (e.g. youtube-intro-hook-first-3-seconds, youtube-tags-2026), both indexable with different templates.",
-          "recommendation": "Designate one canonical home per keyword (recommend /blog/ for articles, /tools/ only for interactive tools) and 301/canonical the losers."
-        },
-        {
-          "title": "Weak meta descriptions on some pages",
-          "severity": "Low",
-          "description": "A few meta descriptions are short (61-99 chars) or missing entirely (tools/description-writer has none).",
-          "recommendation": "Enforce 120-160 char descriptions across templates."
+          "description": "Home 65 chars; blog SERP titles 73-76 chars truncated.",
+          "recommendation": "Shorten titles."
         }
       ]
     },
     {
       "name": "Schema / Structured Data",
-      "score": 55,
+      "score": 80,
+      "weight": 10,
       "what_works": [
-        "Homepage JSON-LD valid and rich: Organization (+logo.png), WebSite, SoftwareApplication, FAQPage, BreadcrumbList",
-        "Tool pages emit WebApplication; /vs/ pages emit FAQPage; glossary emits Article — all parseable",
-        "Blog posts with valid blocks include Article + FAQPage + SpeakableSpecification"
+        "Homepage single valid block: SoftwareApplication+FAQPage+Organization+WebSite+BreadcrumbList+SearchAction",
+        "Blog Article/FAQPage valid; glossary Definition JSON-LD valid with hreflang"
       ],
       "findings": [
         {
-          "title": "Blog JSON-LD broken on ~50% of sampled posts",
-          "severity": "Critical",
-          "description": "7 of 14 sampled posts have unparseable ld+json blocks (e.g. youtube-intro-hook 4/5, youtube-metadata-auditor-vs-vidiq-shadow-ban 1/3, youtube-analytics-4-metrics 1/2) — unescaped HTML in JSON strings breaks Article+FAQPage.",
-          "recommendation": "Use a real JSON serializer in the blog template (json.dumps/htmlspecialchars), re-render affected posts, and add a schema validation step to CI."
-        },
-        {
-          "title": "SearchAction points to login-gated /dashboard",
+          "title": "No Author/Person schema",
           "severity": "Medium",
-          "description": "WebSite SearchAction target is https://yt-seo-architect.vercel.app/dashboard?q={search_term_string} which is noindex and requires login for search results.",
-          "recommendation": "Point SearchAction at an indexable search surface or remove it."
+          "description": "Weakens E-E-A-T structured signals.",
+          "recommendation": "Add Person schema linked from articles."
         },
         {
-          "title": "Hub pages lack list schema",
+          "title": "No VideoObject schema",
           "severity": "Low",
-          "description": "No ItemList/BreadcrumbList on /blog, /tools, /glossary hubs; no DefinedTerm on glossary entries.",
-          "recommendation": "Add ItemList to hub templates and DefinedTerm to glossary terms."
+          "description": "Product targets YouTube creators but no VideoObject anywhere.",
+          "recommendation": "Add where relevant."
         }
       ]
     },
     {
       "name": "Performance (CWV)",
       "score": 65,
+      "weight": 10,
       "what_works": [
-        "Homepage HTML is lean (71KB); zero <img> tags on homepage keeps layout stable",
-        "Vercel CDN edge caching; immutable hashed asset names; static prerender (no client-side render wall for Googlebot)",
-        "Only 3 external scripts on homepage; preconnects/dns-prefetches declared"
+        "Homepage fully server-rendered (no client content dependency) — well-positioned for CWV",
+        "Vercel edge caching active (x-vercel-cache: HIT)"
       ],
       "findings": [
         {
-          "title": "No field CWV data available",
+          "title": "No fresh field data",
           "severity": "Medium",
-          "description": "CrUX/GSC credentials are not configured (google_auth --check: tier -1), so LCP/INP/CLS cannot be scored from field data in this audit.",
-          "recommendation": "Connect a Google API key (GOOGLE_API_KEY) so future audits pull CrUX field data; meanwhile run Lighthouse on a real machine."
+          "description": "PageSpeed API 429 (quota) at test time; no CrUX/GSC credentials.",
+          "recommendation": "Add GOOGLE_API_KEY, run scripts/fetch-crux-field-data.mjs."
         },
         {
-          "title": "Third-party render dependencies + CSP-blocked scripts",
-          "severity": "Medium",
-          "description": "lucide icons load from unpkg.com (third-party render dependency); @vercel/analytics is CSP-blocked; AdSense loader is CSP-blocked.",
-          "recommendation": "Bundle lucide locally (or inline needed icons); whitelist analytics/ads domains in CSP or remove them."
+          "title": "Large single sitemap file",
+          "severity": "Low",
+          "description": "3.4 MB / 18,090 URLs.",
+          "recommendation": "Split into sitemap index files."
         }
       ]
     },
     {
       "name": "AI Search Readiness",
-      "score": 78,
+      "score": 72,
+      "weight": 10,
       "what_works": [
-        "robots.txt explicitly allows ChatGPT-User, Google-Extended, PerplexityBot, ClaudeBot, OAI-SearchBot, Applebot-Extended, Bytespider",
-        "llms.txt (200) and llms-full.txt (33KB) published with product summary, pricing, and topic index",
-        "FAQPage schema on posts feeds direct AI answers; broad topical coverage across 10,000+ glossary terms",
-        "Descriptive title/description pairs on most pages make them citable"
+        "robots.txt allows all major AI crawlers",
+        "llms.txt + llms-full.txt published with brand line and blog index",
+        "Clean static LLM-friendly HTML; highly structured glossary pages"
       ],
       "findings": [
         {
-          "title": "llms.txt data-quality bugs",
-          "severity": "Low",
-          "description": "[null] entry for /blog/generic-hero; stale counts (18 blog / 95 tools vs live 58 / 37).",
-          "recommendation": "Regenerate llms.txt from the live sitemap with corrected counts."
+          "title": "llms.txt incomplete (17/50 posts, 0 glossary entries)",
+          "severity": "High",
+          "description": "18,006 glossary pages — the richest structured content — absent from AI reference files.",
+          "recommendation": "Regenerate with full blog + top glossary coverage."
         },
         {
-          "title": "Citation-blocking content errors",
+          "title": "llms-full.txt embeds broken 'Page not found' entry",
+          "severity": "High",
+          "description": "/blog/generic-hero section present in the AI reference file.",
+          "recommendation": "Strip broken entries during generation."
+        },
+        {
+          "title": "Templated llms.txt tool descriptions",
+          "severity": "Medium",
+          "description": "Repeated filler text reduces citation value.",
+          "recommendation": "Unique value props per tool."
+        },
+        {
+          "title": "No Q&A blocks in llms.txt",
           "severity": "Low",
-          "description": "Broken JSON-LD and 404 glossary URLs dilute passage-level citability for AI crawlers that validate sources.",
-          "recommendation": "Fixing the JSON-LD and 404 issues above also improves AI citation reliability."
+          "description": "FAQ content not surfaced for AI answer extraction.",
+          "recommendation": "Add FAQ section."
         }
       ]
     },
     {
       "name": "Images",
-      "score": 50,
+      "score": 55,
+      "weight": 5,
       "what_works": [
-        "Most pages carry zero or one image (fast, low bloat)",
-        "Alt text present on sampled images",
-        "Self-hosted PNG heroes deployed for most posts (picsum hotlink mostly removed)"
+        "og-image.png serves correctly (200, 197KB, 1200x630)",
+        "Self-hosted blog heroes (picsum hotlink removed)"
       ],
       "findings": [
         {
-          "title": "Alt-attribute HTML corruption on blog heroes",
-          "severity": "High",
-          "description": "Glossary-link injection writes raw <a> HTML inside alt attributes on some posts (e.g. youtube-shorts-seo-guide-2026).",
-          "recommendation": "Fix the injector to skip attribute contexts; regenerate affected posts."
-        },
-        {
-          "title": "External image hotlink remains",
+          "title": "Alt-text quality unverified at scale",
           "severity": "Medium",
-          "description": "youtube-description-templates-2026 still loads its hero from picsum.photos (unreliable, no ownership).",
-          "recommendation": "Replace with a self-hosted branded hero like the other posts."
-        },
-        {
-          "title": "No next-gen formats or explicit dimensions everywhere",
-          "severity": "Low",
-          "description": "Heroes are PNG (not WebP/AVIF); some lack width/height (CLS risk on load).",
-          "recommendation": "Convert heroes to WebP with width/height attributes; add srcset."
+          "description": "Prior audit noted alt corruption from glossary-link injection; needs recheck post-remediation.",
+          "recommendation": "Script-scan blog heroes for alt integrity."
         }
       ]
     }
@@ -261,50 +241,44 @@
         "name": "Phase 1: Critical Fixes",
         "timeframe": "Week 1",
         "items": [
-          "Purge ~3,000 404 glossary URLs from sitemap (generate from live-verified URLs only); add CI broken-link check",
-          "Fix blog JSON-LD escaping in template + re-render affected posts (7/14 sampled broken)",
-          "Fix glossary-link injection into alt attributes; re-render affected posts",
-          "Add pagead2.googlesyndication.com + cdn.jsdelivr.net to CSP so AdSense and analytics load",
-          "Exclude 5 noindex core URLs from sitemap"
+          "Purge 324 double-vs glossary URLs from sitemap; fix /glossary/vidiq-vs-tubebuddy EN/ES",
+          "301 five residual /tools/* twins → /blog/* (or noindex tool variants)",
+          "Regenerate sitemap; verify 0 non-200 in a 50-URL glossary sample"
         ]
       },
       {
         "name": "Phase 2: High-Impact Improvements",
         "timeframe": "Weeks 2-3",
         "items": [
-          "Resolve 24 blog/tools cannibalization pairs (301 losers, one home per keyword)",
-          "Make /about indexable with named founder + author bylines (E-E-A-T)",
-          "Add security headers (XFO, nosniff, Referrer-Policy) + security.txt",
-          "Trim blog/tools titles to <=60 chars in generators",
-          "Add lastmod to glossary URLs in sitemap generator",
-          "Fix llms.txt [null] entry + refresh counts"
+          "Fix /tools canonical to https://yt-seo-architect.vercel.app/tools",
+          "Add canonicals to about/privacy/terms/contact; dedupe blog canonicals",
+          "Regenerate llms.txt/llms-full.txt with full blog + glossary coverage",
+          "410 or remove /blog/generic-hero"
         ]
       },
       {
         "name": "Phase 3: Content & Authority",
         "timeframe": "Month 2",
         "items": [
-          "Expand thin tool pages (109-172 words -> 500+ with how-to/FAQ)",
-          "Human review/fact-check gate on the blog publishing workflow",
-          "Flesh out blog category hubs; vary glossary boilerplate",
-          "Build a real indexable /pricing page; fix /guide 404 + /blog/generic-hero placeholder",
-          "Bundle lucide locally; convert blog heroes to WebP"
+          "Person/Author schema + author pages (E-E-A-T)",
+          "Rewrite boilerplate tool descriptions to unique value props",
+          "Trim blog SERP titles to <=60 chars",
+          "Add VideoObject schema where relevant"
         ]
       },
       {
         "name": "Phase 4: Monitoring & Iteration",
         "timeframe": "Ongoing",
         "items": [
-          "Connect GOOGLE_API_KEY (CrUX field data) + GSC for indexation monitoring",
-          "Backlink program (domain absent from Common Crawl) — directories, GitHub, HARO",
-          "Re-run this audit monthly; add schema-validation and broken-link CI gates"
+          "Connect GOOGLE_API_KEY + GSC for CrUX/GSC field data",
+          "Split sitemap into index files",
+          "Re-audit monthly; track score deltas"
         ]
       }
     ]
   },
   "artifacts": {
     "findings_dir": "findings/",
-    "screenshots_dir": "screenshots/",
-    "audit_date": "2026-08-03"
+    "screenshots_dir": "screenshots/"
   }
 }
