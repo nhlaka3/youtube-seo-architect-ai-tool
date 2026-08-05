@@ -61,8 +61,13 @@
   "redirects": [
     {
       "source": "/pricing",
-      "destination": "/dashboard.html",
+      "destination": "/pricing.html",
       "permanent": false
+    },
+    {
+      "source": "/guide",
+      "destination": "/guide/youtube-seo",
+      "permanent": true
     },
     {
       "source": "/tools/best-youtube-growth-strategies-for-new-creators-2026",

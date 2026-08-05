@@ -833,14 +833,22 @@ TRASH_SLUGS_410.forEach(slug => {
 
 // ── Blog Categories ──────────────────────────────────────────
 const BLOG_CATEGORIES = {
-  'monetization': { name: 'Monetization', icon: '💰', desc: 'YouTube monetization requirements, ad revenue, YPP, and income strategies', slugMatch: ['monetiz', 'partner-program', 'ad-revenue', 'ypp'] },
-  'shorts': { name: 'Shorts & Vertical Video', icon: '📱', desc: 'YouTube Shorts algorithm, monetization, and growth strategies', slugMatch: ['short'] },
-  'analytics': { name: 'Analytics & Metrics', icon: '📊', desc: 'CTR, retention, impressions, and analytics metrics explained', slugMatch: ['analytic', 'retention', 'ctr', 'impression', 'metric'] },
-  'optimization': { name: 'SEO Optimization', icon: '🔍', desc: 'Tags, titles, descriptions, thumbnails, and metadata optimization', slugMatch: ['tag', 'title', 'description', 'thumbnail', 'metadata', 'chapter', 'caption', 'transcript', 'keyword', 'search-volume', 'keyword-difficulty'] },
-  'strategy': { name: 'Strategy & Planning', icon: '📝', desc: 'Keyword research, competitor analysis, content strategy and planning', slugMatch: ['strategy', 'planning', 'research', 'competitor', 'playlist', 'checklist', 'blueprint'] },
-  'growth': { name: 'Channel Growth', icon: '🚀', desc: 'Small channel growth, community building, and audience development', slugMatch: ['small-channel', 'hook', 'community', 'end-screen', 'card', 'intro'] },
-  'tools': { name: 'Tool Reviews & Comparisons', icon: '🛠️', desc: 'YouTube SEO tool comparisons, reviews, and alternatives', slugMatch: ['tool', 'vs-', 'vidiq', 'tubebuddy', 'coach'] },
-  'niche': { name: 'Niche Channels', icon: '🎯', desc: 'YouTube SEO for gaming, cooking, fitness, music, and business channels', slugMatch: ['gaming', 'cooking', 'fitness', 'music', 'business', 'tutorial'] },
+  'monetization': { name: 'Monetization', icon: '💰', desc: 'YouTube monetization requirements, ad revenue, YPP, and income strategies', slugMatch: ['monetiz', 'partner-program', 'ad-revenue', 'ypp'],
+    content: '<p>Monetization is the milestone every creator works toward, but the path to the YouTube Partner Program (YPP) is full of specific requirements and strategy decisions. This category covers the exact thresholds you need to hit, how ad revenue actually gets calculated, and the realistic ways creators build income beyond ads — memberships, sponsorships, affiliate links, and digital products.</p><p>Start by understanding the YPP entry requirements: 1,000 subscribers and 4,000 valid public watch hours (or 10 million Shorts views in 90 days). Once you qualify, the next questions are practical — how RPM and CPM work, why some niches pay dramatically more per view, and how to structure your content pipeline so monetization doesn\'t come at the cost of growth.</p><p>Every guide in this category is written to be actionable today, not theoretical. You\'ll learn what actually moves your revenue numbers and what is wasted effort, based on how YouTube\'s ad system really works in 2026.</p>' },
+  'shorts': { name: 'Shorts & Vertical Video', icon: '📱', desc: 'YouTube Shorts algorithm, monetization, and growth strategies', slugMatch: ['short'],
+    content: '<p>YouTube Shorts changed the platform\'s growth dynamics completely. A channel can now go from zero to hundreds of thousands of subscribers in months — but only if it understands how the Shorts feed actually selects and ranks content. This category is your complete guide to vertical video on YouTube.</p><p>The Shorts algorithm prioritizes watch-through rate, swipe-away rate, and engagement velocity above everything else. That means your first 1-3 seconds decide most of your fate, and your hook needs to work with sound on or off. We cover the mechanics of Shorts ranking, the monetization thresholds unique to Shorts, and how to convert Shorts viewers into long-form subscribers instead of just renting attention.</p><p>Whether you\'re starting fresh with Shorts or trying to fix a channel that\'s plateaued, these guides give you the exact playbook for 2026\'s Shorts environment.</p>' },
+  'analytics': { name: 'Analytics & Metrics', icon: '📊', desc: 'CTR, retention, impressions, and analytics metrics explained', slugMatch: ['analytic', 'retention', 'ctr', 'impression', 'metric'],
+    content: '<p>YouTube analytics tells you exactly what\'s working and what isn\'t — if you know how to read it. Most creators check views and subscribers, then miss the metrics that actually drive growth: click-through rate (CTR), average view duration, impressions, and audience retention curves. This category decodes all of it.</p><p>CTR tells you if your title and thumbnail are competitive in the search results and suggested feed. Retention tells you if your content delivers on its promise. Impressions tell you whether YouTube is even testing your videos with new audiences. Each metric points at a different fix, and these guides map metric to action.</p><p>You\'ll learn which numbers matter at which channel size, how to interpret a retention graph that drops at 30 seconds vs 2 minutes, and what analytics patterns reliably predict a video about to take off.</p>' },
+  'optimization': { name: 'SEO Optimization', icon: '🔍', desc: 'Tags, titles, descriptions, thumbnails, and metadata optimization', slugMatch: ['tag', 'title', 'description', 'thumbnail', 'metadata', 'chapter', 'caption', 'transcript', 'keyword', 'search-volume', 'keyword-difficulty'],
+    content: '<p>On-page YouTube SEO is the highest-leverage skill a creator can learn, because it\'s entirely within your control. Every video you publish competes in a search and recommendation system that reads your metadata first — title, description, tags, chapters, and captions. This category is the complete optimization playbook.</p><p>The fundamentals matter more than ever in 2026: one clear primary keyword in your title, a description that front-loads the value, tags used for spelling and phrasing variants rather than keyword stuffing, and chapters that improve session time. But optimization goes deeper — thumbnail composition, video structure that matches search intent, and metadata that stays accurate as YouTube\'s systems evolve.</p><p>Each guide here covers one piece of the optimization stack with examples you can copy. Optimize every element correctly and your existing content starts working harder without a single new video.</p>' },
+  'strategy': { name: 'Strategy & Planning', icon: '📝', desc: 'Keyword research, competitor analysis, content strategy and planning', slugMatch: ['strategy', 'planning', 'research', 'competitor', 'playlist', 'checklist', 'blueprint'],
+    content: '<p>Viral luck isn\'t a strategy — but most creators operate as if it is. This category is for the planning side of YouTube: keyword research that finds demand before your competitors do, competitor analysis that reveals gaps in their coverage, content calendars that keep you consistent, and playlist architecture that turns one-time viewers into subscribers.</p><p>Great YouTube strategy starts with search intent. You need to know what your target audience types into the search bar, what questions they ask, and which topics have sustainable search demand versus fleeting trends. From there, strategy is about sequencing: what to publish first, how to cluster content into topical authority, and how to position each video so it feeds the next one.</p><p>These guides give you frameworks you can apply to any niche — research templates, competitive audits, and planning systems built for solo creators who don\'t have a team.</p>' },
+  'growth': { name: 'Channel Growth', icon: '🚀', desc: 'Small channel growth, community building, and audience development', slugMatch: ['small-channel', 'hook', 'community', 'end-screen', 'card', 'intro'],
+    content: '<p>Every big channel was once a small channel with zero subscribers — the difference is usually systems, not luck. This category covers the growth mechanics that compound: hooks and intros that stop the scroll, end screens and cards that chain videos together, community features that turn viewers into regulars, and the specific tactics small channels can use to compete with established ones.</p><p>The core insight across every guide here is that growth comes from repeatable wins, not one-off videos. A consistent hook formula, a retention structure you reuse, and a session-building strategy across your library create compounding returns that single viral videos can\'t match.</p><p>Whether you\'re at 50 subscribers or 50,000, the playbooks in this category show you how to grow deliberately instead of hoping.</p>' },
+  'tools': { name: 'Tool Reviews & Comparisons', icon: '🛠️', desc: 'YouTube SEO tool comparisons, reviews, and alternatives', slugMatch: ['tool', 'vs-', 'vidiq', 'tubebuddy', 'coach'],
+    content: '<p>The YouTube SEO tool market is crowded, expensive, and full of features you probably don\'t need. This category cuts through it with honest comparisons of the major platforms — vidIQ, TubeBuddy, Morningfame, Tubics, Keyword Tool, and Canva — against YT SEO Architect and against each other.</p><p>We compare on the things that actually matter: keyword research depth, metadata optimization, thumbnail analysis, automation, price, and whether free tiers are genuinely usable. Each comparison is structured as a feature-by-feature breakdown so you can judge fit for your specific situation rather than relying on marketing claims.</p><p>The goal is simple: by the time you finish reading, you know exactly which tools are worth your money and which ones your current workflow already covers.</p>' },
+  'niche': { name: 'Niche Channels', icon: '🎯', desc: 'YouTube SEO for gaming, cooking, fitness, music, and business channels', slugMatch: ['gaming', 'cooking', 'fitness', 'music', 'business', 'tutorial'],
+    content: '<p>YouTube SEO is not one-size-fits-all. A gaming channel competes on different keywords and formats than a cooking channel, which competes differently than a fitness or business channel. This category applies the fundamentals to specific niches so you can see exactly how the playbook changes.</p><p>Gaming channels live and die by game-specific search demand and trending titles. Cooking channels win with recipe-intent keywords and consistent formats. Fitness channels need authority and trust to rank for health-adjacent terms. Business channels compete on high-value commercial keywords where intent is everything.</p><p>Each guide in this category takes one niche and walks through its specific keyword patterns, format conventions, and optimization priorities — so you can apply the right playbook to your channel\'s world.</p>' },
 };
 
 function getPostCategory(slug, title) {
@@ -866,6 +874,8 @@ function renderCategoryHeader(catSlug, pages) {
     + '<link rel="preconnect" href="https://fonts.googleapis.com" /><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />'
     + '<link href="https://fonts.googleapis.com/css2?family=Geist:wght@100..900&display=swap" rel="stylesheet" />'
     + '<link href="https://fonts.googleapis.com/css2?family=Geist+Mono:wght@100..900&display=swap" rel="stylesheet" />'
+    + '<script type="application/ld+json">{"@context":"https://schema.org","@type":"CollectionPage","name":"' + (cat ? cat.icon + ' ' + cat.name : 'Blog Categories') + ' — YouTube SEO Blog","description":"' + (cat ? cat.desc : 'Browse YouTube SEO guides by topic') + '","url":"https://yt-seo-architect.vercel.app/blog' + (catSlug ? '/category/' + catSlug : '/categories') + '","isPartOf":{"@type":"Blog","name":"YT SEO Architect Blog","url":"https://yt-seo-architect.vercel.app/blog"}}</script>'
+    + '<script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://yt-seo-architect.vercel.app/"},{"@type":"ListItem","position":2,"name":"Blog","item":"https://yt-seo-architect.vercel.app/blog"},{"@type":"ListItem","position":3,"name":"' + (cat ? cat.name : 'Categories') + '","item":"https://yt-seo-architect.vercel.app/blog' + (catSlug ? '/category/' + catSlug : '/categories') + '"}]}</script>'
     + '<link rel="stylesheet" href="/design-tokens.css">'
     + '<link rel="stylesheet" href="/utilities.css">'
     + '<link rel="stylesheet" href="/nav.css">'
@@ -952,6 +962,10 @@ app.get(['/blog/categories', '/blog/category'], async (req, res) => {
     var fullHtml = rendered.html
       + '<div class="blog-hero"><h1>📚 Blog Categories</h1><p>Browse YouTube SEO guides by topic. Each category clusters related guides for deeper learning.</p>'
       + '<div class="stat">' + Object.keys(catCounts).length + ' categories · ' + pages.length + ' guides</div></div>'
+      + '<div style="max-width:760px;margin:0 auto 2rem;color:var(--text-secondary);line-height:1.8;">'
+      + '<p>YouTube SEO isn\'t one topic — it\'s a stack of skills that compound: metadata optimization, keyword research, retention strategy, monetization, and niche-specific tactics. These categories organize the blog so you can go deep on exactly what your channel needs right now, or work through them in order to build a complete foundation.</p>'
+      + '<p>Each category page links every guide that covers that topic, from beginner fundamentals to advanced playbooks. Start with the category that matches your biggest current bottleneck — growth, views, revenue, or rankings.</p>'
+      + '</div>'
       + '<div class="cat-grid">';
 
     for (const [slug, cat] of Object.entries(BLOG_CATEGORIES)) {
@@ -1019,6 +1033,7 @@ app.get('/blog/category/:slug', async (req, res) => {
       + '<div class="blog-hero"><h1>' + cat.icon + ' ' + cat.name + '</h1><p>' + cat.desc + '</p>'
       + '<div class="stat">' + catPages.length + ' guide' + (catPages.length > 1 ? 's' : '') + '</div></div>'
       + '<a href="/blog/categories" class="back-link">← All Categories</a>'
+      + '<div style="max-width:760px;margin:0 auto 2rem;color:var(--text-secondary);line-height:1.8;">' + (cat.content || '') + '</div>'
       + '<div class="blog-grid">';
 
     for (var p of catPages) {
@@ -1041,7 +1056,7 @@ app.get('/blog', async (req, res) => {
 
     const { eq, desc } = await import('drizzle-orm');
 
-    var pages = await dbService.db.select({ slug: s.seoPages.slug, title: s.seoPages.title, wordCount: s.seoPages.wordCount, content: s.seoPages.content, publishedAt: s.seoPages.publishedAt }).from(s.seoPages).where(eq(s.seoPages.status,'published')).orderBy(desc(s.seoPages.publishedAt)).limit(50);
+    var pages = await dbService.db.select({ slug: s.seoPages.slug, title: s.seoPages.title, wordCount: s.seoPages.wordCount, content: s.seoPages.content, publishedAt: s.seoPages.publishedAt }).from(s.seoPages).where(eq(s.seoPages.status,'published')).orderBy(desc(s.seoPages.publishedAt)).limit(500);
 
     // Quality gate: only list validated posts (template-compliant, 1,200+ words, no banned words)
     const { validateBlogPost } = await import('./blog-validation.js');
@@ -1880,6 +1895,7 @@ app.get('/sitemap.xml', async (req, res) => {
       { loc: '/blog' },
       { loc: '/tools' },
       { loc: '/about' },
+      { loc: '/pricing' },
     ];
     for (const p of corePages) {
       xml += `  <url><loc>https://yt-seo-architect.vercel.app${p.loc}</loc></url>\n`;
@@ -2489,6 +2505,42 @@ function renderGlossaryTerm(slug, lang) {
     ? `<div class="card"><h2>🔗 ${relatedLabel}</h2><div class="rc-grid">${related.map(r => `<a href="/glossary${prefix}/${r.slug}">${r.name}</a>`).join('')}</div></div>`
     : '';
 
+  // Related blog posts — map glossary terms to relevant guides by keyword
+  const BLOG_TOPIC_MAP = [
+    { kw: ['tag', 'keyword'], posts: [['Best YouTube Tags 2026: The Complete Guide', '/blog/youtube-tags-2026'], ['How to Do YouTube Keyword Research in 2026', '/blog/how-to-keywords-youtube']] },
+    { kw: ['title', 'ctr', 'click'], posts: [['Best YouTube Title Examples for More Views', '/blog/youtube-title-examples-2026'], ['How to Optimize YouTube Titles in 2026', '/blog/youtube-title-optimization-guide-2026']] },
+    { kw: ['retention', 'watch time', 'watch-time'], posts: [['YouTube Retention Graph Explained', '/blog/youtube-retention-graph-explained-2026'], ['Increasing Watch Time with Analytics', '/blog/increasing-youtube-watch-time-with-analytics-2026']] },
+    { kw: ['thumbnail'], posts: [['YouTube Thumbnail Tips That Get Clicks', '/blog/youtube-thumbnail-tips-2026'], ['How to Create Thumbnails That Get Clicks', '/blog/creating-effective-youtube-thumbnails-for-clicks-2026']] },
+    { kw: ['monetiz', 'partner', 'revenue', 'ad'], posts: [['YouTube Monetization 2026: Complete Guide', '/blog/youtube-monetization-2026'], ['Maximizing Revenue with Sponsorships', '/blog/maximizing-youtube-revenue-with-sponsorships-2026']] },
+    { kw: ['algorithm', 'rank', 'search'], posts: [['How the YouTube Algorithm Works in 2026', '/blog/how-youtube-algorithm-works-2026'], ['YouTube SEO: Complete Guide for Beginners', '/blog/youtube-seo-checklist-beginners-2026']] },
+    { kw: ['short', 'vertical'], posts: [['YouTube Shorts SEO Guide 2026', '/blog/youtube-shorts-seo-guide-2026'], ['YouTube Shorts Ranking Guide', '/blog/youtube-shorts-seo-ranking-guide-2026']] },
+    { kw: ['playlist', 'session'], posts: [['YouTube Playlist Optimization Strategy', '/blog/youtube-playlist-optimization-strategy']] },
+    { kw: ['community', 'comment', 'engagement'], posts: [['YouTube Community Posts Strategy 2026', '/blog/youtube-community-posts-strategy-2026'], ['Creator Community Engagement Strategies', '/blog/youtube-creator-community-engagement-strategies-2026']] },
+    { kw: ['subscriber', 'growth', 'small'], posts: [['YouTube Subscriber Growth 2026', '/blog/youtube-subscriber-growth-2026'], ['YouTube for Small Channels in 2026', '/blog/youtube-for-small-channels-2026']] },
+    { kw: ['end screen', 'end-screen', 'card'], posts: [['YouTube End Screens & Cards Guide 2026', '/blog/youtube-end-screens-cards-guide-2026']] },
+    { kw: ['chapter', 'timestamp'], posts: [['YouTube Chapter Timestamps SEO Guide', '/blog/youtube-chapter-timestamps-seo-guide']] },
+    { kw: ['description', 'metadata'], posts: [['YouTube Description Templates 2026', '/blog/youtube-description-templates-2026'], ['How to Optimize Metadata on YouTube', '/blog/how-to-metadata-youtube']] },
+    { kw: ['audit', 'analy', 'score'], posts: [['YouTube SEO Audit: Diagnose & Fix', '/blog/youtube-seo-audit-diagnostic-fix-2026'], ['YouTube Analytics 4: Metrics That Matter', '/blog/youtube-analytics-4-metrics-that-matter']] },
+    { kw: ['shadow ban', 'views', 'visibility'], posts: [['Fix YouTube Shadow Ban in 2026', '/blog/fix-youtube-shadow-ban-2026'], ["Why Your YouTube Video Isn't Getting Views", '/blog/youtube-video-not-getting-views-diagnostic-fix-2026']] },
+    { kw: ['content', 'strategy', 'calendar', 'plan'], posts: [['YouTube Content Strategy for Beginners 2026', '/blog/youtube-content-strategy-for-beginners-2026'], ['Developing a Content Calendar Strategy', '/blog/developing-a-youtube-content-calendar-strategy-2026']] },
+    { kw: ['hook', 'intro', 'first'], posts: [['YouTube Intro Hook: First 3 Seconds', '/blog/youtube-intro-hook-first-3-seconds']] },
+    { kw: ['trend', 'evergreen', 'viral'], posts: [['YouTube SEO Examples That Rank in 2026', '/blog/youtube-seo-examples-2026'], ['Best YouTube Growth Strategies', '/blog/best-youtube-growth-strategies-for-new-creators-2026']] },
+  ];
+  const termKey = (name + ' ' + term.slug).toLowerCase().replace(/-/g, ' ');
+  let blogPosts = [];
+  for (const entry of BLOG_TOPIC_MAP) {
+    if (entry.kw.some(k => termKey.includes(k))) {
+      blogPosts = blogPosts.concat(entry.posts);
+    }
+  }
+  // Dedupe + cap at 3
+  const seenBlog = new Set();
+  blogPosts = blogPosts.filter(p => !seenBlog.has(p[1]) && seenBlog.add(p[1])).slice(0, 3);
+  const blogLabel = lang === 'es' ? 'Artículos Relacionados' : lang === 'pt' ? 'Artigos Relacionados' : 'Related Blog Posts';
+  const blogHtml = blogPosts.length > 0
+    ? `<div class="card"><h2>📝 ${blogLabel}</h2><div class="rc-grid">${blogPosts.map(p => `<a href="${p[1]}">${p[0]}</a>`).join('')}</div></div>`
+    : '';
+
   const langPills = Object.entries({ en: '🇺🇸 English', es: '🇪🇸 Español', pt: '🇧🇷 Português' })
     .filter(([l]) => l !== lang)
     .map(([l, label]) => `<a href="${langUrl[l]}" hreflang="${l}" rel="alternate">${label}</a>`)
@@ -2504,7 +2556,7 @@ function renderGlossaryTerm(slug, lang) {
     `<tr><td class="dim">${m.label}</td><td>${m.val}</td></tr>`
   ).join('\n');
 
-  return `<!DOCTYPE html>\n<html lang="${lang}">\n<head><meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1.0"/>\n<title>${title}</title>\n<link rel="canonical" href="${site}${currentUrl}"/>\n<link rel="alternate" hreflang="en" href="${site}${enUrl}"/>\n<link rel="alternate" hreflang="es" href="${site}${esUrl}"/>\n<link rel="alternate" hreflang="pt" href="${site}${ptUrl}"/>\n<link rel="alternate" hreflang="x-default" href="${site}${enUrl}"/>\n<meta name="description" content="${desc}"/>\n<meta name="robots" content="index, follow"/>\n<meta property="og:title" content="${name} — YouTube SEO Glossary"/>\n<meta property="og:description" content="${desc}"/>\n<meta property="og:image" content="${site}/og-image.png"/>\n<meta name="twitter:card" content="summary_large_image"/>\n<script type="application/ld+json">${jsonLd}</script>\n<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700;800&display=swap" media="print" onload="this.media=\'all\'">\n<noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700;800&display=swap"></noscript>\n<style>${GLOSSARY_CSS}</style>\n</head>\n<body>\n<header class="header"><a href="/">⚡ YT SEO Architect</a><a href="/tools/" class="cta">${ui.tools}</a></header>\n<main>\n<div class="ln">${lang === 'en' ? '🇺🇸 English' : lang === 'es' ? '🇪🇸 Español' : '🇧🇷 Português'} · ${langPills}</div>\n<h1>${name}</h1>\n<p class="h1-sub">${catName} · YouTube SEO Glossary</p>\n<div class="fs-box"><div class="fs-label">✨ ${quickDefLabel}</div><p>${def}</p></div>\n<div class="card"><h2>📖 ${defLabel}</h2><p>${def}</p></div>\n${metaRows ? `<div class="card"><h2>📊 ${keyFactsLabel}</h2><table class="cmp-table"><tbody>${metaRows}\n</tbody></table></div>` : ''}\n${relatedHtml}\n<div class="cta-box"><h3>🚀 ${ui.master}</h3><p style="color:#8b8b9e;margin:.5rem 0 1rem;font-size:.9rem">${ui.cta}</p><a href="/tools/">${ui.tryTools}</a></div>\n</main>\n<footer><p>&copy; 2026 YT SEO Architect · <a href="/glossary/">${ui.glossary}</a> · <a href="/tools/">${ui.tools}</a></p></footer>\n</body>\n</html>`;
+  return `<!DOCTYPE html>\n<html lang="${lang}">\n<head><meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1.0"/>\n<title>${title}</title>\n<link rel="canonical" href="${site}${currentUrl}"/>\n<link rel="alternate" hreflang="en" href="${site}${enUrl}"/>\n<link rel="alternate" hreflang="es" href="${site}${esUrl}"/>\n<link rel="alternate" hreflang="pt" href="${site}${ptUrl}"/>\n<link rel="alternate" hreflang="x-default" href="${site}${enUrl}"/>\n<meta name="description" content="${desc}"/>\n<meta name="robots" content="index, follow"/>\n<meta property="og:title" content="${name} — YouTube SEO Glossary"/>\n<meta property="og:description" content="${desc}"/>\n<meta property="og:image" content="${site}/og-image.png"/>\n<meta name="twitter:card" content="summary_large_image"/>\n<script type="application/ld+json">${jsonLd}</script>\n<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700;800&display=swap" media="print" onload="this.media=\'all\'">\n<noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700;800&display=swap"></noscript>\n<style>${GLOSSARY_CSS}</style>\n</head>\n<body>\n<header class="header"><a href="/">⚡ YT SEO Architect</a><a href="/tools/" class="cta">${ui.tools}</a></header>\n<main>\n<div class="ln">${lang === 'en' ? '🇺🇸 English' : lang === 'es' ? '🇪🇸 Español' : '🇧🇷 Português'} · ${langPills}</div>\n<h1>${name}</h1>\n<p class="h1-sub">${catName} · YouTube SEO Glossary</p>\n<div class="fs-box"><div class="fs-label">✨ ${quickDefLabel}</div><p>${def}</p></div>\n<div class="card"><h2>📖 ${defLabel}</h2><p>${def}</p></div>\n${metaRows ? `<div class="card"><h2>📊 ${keyFactsLabel}</h2><table class="cmp-table"><tbody>${metaRows}\n</tbody></table></div>` : ''}\n${relatedHtml}\n${blogHtml}\n<div class="cta-box"><h3>🚀 ${ui.master}</h3><p style="color:#8b8b9e;margin:.5rem 0 1rem;font-size:.9rem">${ui.cta}</p><a href="/tools/">${ui.tryTools}</a></div>\n</main>\n<footer><p>&copy; 2026 YT SEO Architect · <a href="/glossary/">${ui.glossary}</a> · <a href="/tools/">${ui.tools}</a></p></footer>\n</body>\n</html>`;
 }
 
 app.get(/^\/glossary\/(es\/|pt\/)?([a-z0-9-]+)$/, async (req, res) => {
