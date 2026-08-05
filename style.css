@@ -10067,7 +10067,6 @@ body {
   .agent-stat { flex: 1 1 45%; min-width: 140px; }
   .war-controls-row { flex-wrap: wrap; gap: 8px; }
   .control-group { flex: 1 1 auto; }
-  .mobile-menu-btn { display: flex !important; }
 }
 
 /* Phone: single column, stack everything */

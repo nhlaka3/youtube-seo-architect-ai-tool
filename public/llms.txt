@@ -1,12 +1,12 @@
 # YT SEO Architect
-> AI-powered YouTube SEO platform — 50+ free tools for keyword research, tag generation, title optimization, channel audit, and more.
+> AI-powered YouTube SEO platform — 90+ free tools for keyword research, tag generation, title optimization, channel audit, and more.
 > Site: https://yt-seo-architect.vercel.app
 > Updated: 2026-08-03
 
 ## Core Platform
 - [Homepage](https://yt-seo-architect.vercel.app/): AI YouTube SEO toolkit: keyword research, script &amp; tag generator, metadata audit, thumbnail analyzer. 100% Free &amp; Unlimited — no credits, no subscription, no catch.
 - [Dashboard](https://yt-seo-architect.vercel.app/dashboard): Full YouTube SEO dashboard with channel connect, AI coach, keyword research, channel audit
-- [Tools](https://yt-seo-architect.vercel.app/tools/): 54 free interactive YouTube SEO tools: tag generator, title scorer, keyword research, description writer, SEO auditor, CTR calculator, shadow ban detector, content planner, and more. No login required, works offline.
+- [Tools](https://yt-seo-architect.vercel.app/tools/): 90+ free YouTube SEO tools: tag generator, title scorer, keyword research, description writer, SEO auditor, CTR calculator, shadow ban detector, content planner, and more. No login required, works offline.
 - [About](https://yt-seo-architect.vercel.app/about): About YT SEO Architect and its creator
 - [Privacy Policy](https://yt-seo-architect.vercel.app/privacy-policy)
 - [Terms of Service](https://yt-seo-architect.vercel.app/terms-of-service)

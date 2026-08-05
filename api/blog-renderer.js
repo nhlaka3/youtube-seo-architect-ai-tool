@@ -764,6 +764,7 @@ export function renderBlogTemplate(page) {
 
   <title>${metaTitle} — YT SEO Architect</title>
   <meta name="description" content="${metaDesc}" />
+  <meta name="author" content="Patrick" />
   <meta name="robots" content="index, follow" />
   <link rel="canonical" href="https://yt-seo-architect.vercel.app/blog/${slug}" />
 
@@ -850,7 +851,7 @@ export function renderBlogTemplate(page) {
 
       <!-- Meta line + last-updated badge -->
       <p class="meta">
-        Published ${formattedDate} · ${readMinutes} min read · By YT SEO Architect
+        Published ${formattedDate} · ${readMinutes} min read · By <a href="https://yt-seo-architect.vercel.app/about" style="color:var(--cyan);text-decoration:none;font-weight:600;">Patrick</a>
         <span class="last-updated">✓ Updated ${formattedUpdateDate}</span>
       </p>
 
@@ -860,10 +861,10 @@ export function renderBlogTemplate(page) {
       <!-- E-E-A-T: Author credentials (improved) -->
       ${hasAuthorBox ? '' : `
       <div class="author-box">
-        <div class="avatar">YT</div>
+        <div class="avatar">P</div>
         <div class="author-info">
-          <h4>YT SEO Architect Team</h4>
-          <p>We help 5,000+ creators optimize their YouTube channels with free AI-powered tools. Our guides are researched and tested — not theoretical.</p>
+          <h4>Patrick</h4>
+          <p>Founder of YT SEO Architect. I research and test every strategy in this guide on real YouTube channels — no theory, no fabricated stats. Free tools for every creator.</p>
         </div>
       </div>
       `}
@@ -876,7 +877,7 @@ export function renderBlogTemplate(page) {
 
       <!-- Social proof counter -->
       <div class="social-proof">
-        <div class="stat"><strong>17</strong><span>Free AI Tools</span></div>
+        <div class="stat"><strong>90+</strong><span>Free AI Tools</span></div>
         <div class="stat"><strong>5,000+</strong><span>Active Creators</span></div>
         <div class="stat"><strong>100</strong><span>Free Credits/Month</span></div>
         <div class="stat"><strong>No CC</strong><span>Required</span></div>

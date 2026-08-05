@@ -74,6 +74,8 @@
   cursor: pointer;
   padding: var(--space-2);
   font-size: 1.5rem;
+  min-width: 44px;
+  min-height: 44px;
 }
 
 @media (max-width: 768px) {

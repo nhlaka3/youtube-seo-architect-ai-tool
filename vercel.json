@@ -320,6 +320,10 @@
       "destination": "/tools/tag-generator.html"
     },
     {
+      "source": "/tools/tag-generator/:niche",
+      "destination": "/tools/tag-generator.html"
+    },
+    {
       "source": "/tools/title-optimizer",
       "destination": "/tools/title-optimizer.html"
     },

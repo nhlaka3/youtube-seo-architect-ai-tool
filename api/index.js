@@ -1876,12 +1876,13 @@ app.get('/sitemap.xml', async (req, res) => {
 
     // Core static pages (indexable only — noindex app/legal pages excluded)
     const corePages = [
-      { loc: '/', priority: '1.0', changefreq: 'weekly' },
-      { loc: '/blog', priority: '0.9', changefreq: 'daily' },
-      { loc: '/tools', priority: '0.9', changefreq: 'weekly' },
+      { loc: '/' },
+      { loc: '/blog' },
+      { loc: '/tools' },
+      { loc: '/about' },
     ];
     for (const p of corePages) {
-      xml += `  <url><loc>https://yt-seo-architect.vercel.app${p.loc}</loc><changefreq>${p.changefreq}</changefreq><priority>${p.priority}</priority></url>\n`;
+      xml += `  <url><loc>https://yt-seo-architect.vercel.app${p.loc}</loc></url>\n`;
     }
 
     // Free tool pages (dynamic list synced with blog posts)
@@ -1894,7 +1895,7 @@ app.get('/sitemap.xml', async (req, res) => {
       // sitemap — their /tools/ variants are noindexed to resolve blog/tools cannibalization (blog owns keyword).
     ];
     for (const slug of TOOL_SLUGS) {
-      xml += `  <url><loc>https://yt-seo-architect.vercel.app/tools/${slug}</loc><changefreq>weekly</changefreq><priority>0.9</priority></url>\n`;
+      xml += `  <url><loc>https://yt-seo-architect.vercel.app/tools/${slug}</loc></url>\n`;
     }
 
     // Glossary pages — use the SAME embedded GLOSSARY_TERMS list the glossary render
@@ -1905,9 +1906,9 @@ app.get('/sitemap.xml', async (req, res) => {
 
     // Term pages (EN / ES / PT)
     for (const slug of termSlugs) {
-      xml += `  <url><loc>https://yt-seo-architect.vercel.app/glossary/${slug}</loc><lastmod>${today}</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>\n`;
-      xml += `  <url><loc>https://yt-seo-architect.vercel.app/glossary/es/${slug}</loc><lastmod>${today}</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>\n`;
-      xml += `  <url><loc>https://yt-seo-architect.vercel.app/glossary/pt/${slug}</loc><lastmod>${today}</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>\n`;
+      xml += `  <url><loc>https://yt-seo-architect.vercel.app/glossary/${slug}</loc></url>\n`;
+      xml += `  <url><loc>https://yt-seo-architect.vercel.app/glossary/es/${slug}</loc></url>\n`;
+      xml += `  <url><loc>https://yt-seo-architect.vercel.app/glossary/pt/${slug}</loc></url>\n`;
     }
 
     // Category hub pages (hub-and-spoke internal linking per wise playbook)
@@ -1918,12 +1919,12 @@ app.get('/sitemap.xml', async (req, res) => {
     const CATEGORY_SLUGS = ['algorithm', 'analytics', 'content-strategy', 'monetization', 'seo-optimization', 'youtube-features'];
     const CATEGORY_HUBS = ['glossary/category', 'glossary/es/category', 'glossary/pt/category'];
     for (const h of CATEGORY_HUBS) {
-      xml += `  <url><loc>https://yt-seo-architect.vercel.app/${h}</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>\n`;
+      xml += `  <url><loc>https://yt-seo-architect.vercel.app/${h}</loc></url>\n`;
     }
     for (const cat of CATEGORY_SLUGS) {
-      xml += `  <url><loc>https://yt-seo-architect.vercel.app/glossary/category/${cat}</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>\n`;
-      xml += `  <url><loc>https://yt-seo-architect.vercel.app/glossary/es/category/${cat}</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>\n`;
-      xml += `  <url><loc>https://yt-seo-architect.vercel.app/glossary/pt/category/${cat}</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>\n`;
+      xml += `  <url><loc>https://yt-seo-architect.vercel.app/glossary/category/${cat}</loc></url>\n`;
+      xml += `  <url><loc>https://yt-seo-architect.vercel.app/glossary/es/category/${cat}</loc></url>\n`;
+      xml += `  <url><loc>https://yt-seo-architect.vercel.app/glossary/pt/category/${cat}</loc></url>\n`;
     }
 
     // Comparison pages (all unique pairs, capped at 45k to stay under sitemap limit)
@@ -1941,24 +1942,24 @@ app.get('/sitemap.xml', async (req, res) => {
         const key = a < b ? `${a}-vs-${b}` : `${b}-vs-${a}`;
         if (seenPairs.has(key)) continue;
         seenPairs.add(key);
-        xml += `  <url><loc>https://yt-seo-architect.vercel.app/glossary/${key}</loc><lastmod>${today}</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>\n`;
-        xml += `  <url><loc>https://yt-seo-architect.vercel.app/glossary/es/${key}</loc><lastmod>${today}</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>\n`;
-        xml += `  <url><loc>https://yt-seo-architect.vercel.app/glossary/pt/${key}</loc><lastmod>${today}</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>\n`;
+        xml += `  <url><loc>https://yt-seo-architect.vercel.app/glossary/${key}</loc></url>\n`;
+        xml += `  <url><loc>https://yt-seo-architect.vercel.app/glossary/es/${key}</loc></url>\n`;
+        xml += `  <url><loc>https://yt-seo-architect.vercel.app/glossary/pt/${key}</loc></url>\n`;
         cmpCount++;
       }
     }
 
     // Blog category pages
     for (const [catSlug, cat] of Object.entries(BLOG_CATEGORIES)) {
-      xml += `  <url><loc>https://yt-seo-architect.vercel.app/blog/category/${catSlug}</loc><changefreq>weekly</changefreq><priority>0.7</priority></url>\n`;
+      xml += `  <url><loc>https://yt-seo-architect.vercel.app/blog/category/${catSlug}</loc></url>\n`;
     }
-    xml += `  <url><loc>https://yt-seo-architect.vercel.app/blog/categories</loc><changefreq>weekly</changefreq><priority>0.7</priority></url>\n`;
-    xml += `  <url><loc>https://yt-seo-architect.vercel.app/guide/youtube-seo</loc><changefreq>monthly</changefreq><priority>0.9</priority></url>\n`;
+    xml += `  <url><loc>https://yt-seo-architect.vercel.app/blog/categories</loc></url>\n`;
+    xml += `  <url><loc>https://yt-seo-architect.vercel.app/guide/youtube-seo</loc></url>\n`;
 
     // Comparison pages (vs/ tool comparisons)
     const vsSlugs = ['vidiq', 'tubebuddy', 'morningfame', 'tubics', 'keywordtool', 'canva'];
     for (const vs of vsSlugs) {
-      xml += `  <url><loc>https://yt-seo-architect.vercel.app/vs/${vs}</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>\n`;
+      xml += `  <url><loc>https://yt-seo-architect.vercel.app/vs/${vs}</loc></url>\n`;
     }
 
     // Validated blog posts only
@@ -1974,7 +1975,7 @@ app.get('/sitemap.xml', async (req, res) => {
       const date = page.publishedAt
         ? new Date(page.publishedAt).toISOString().split('T')[0]
         : '2026-05-27';
-      xml += `  <url><loc>https://yt-seo-architect.vercel.app/blog/${page.slug}</loc><lastmod>${date}</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>\n`;
+      xml += `  <url><loc>https://yt-seo-architect.vercel.app/blog/${page.slug}</loc><lastmod>${date}</lastmod></url>\n`;
     }
 
     xml += '</urlset>';

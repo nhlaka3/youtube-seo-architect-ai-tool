@@ -467,7 +467,7 @@ async function generateArticle(keyword, slug) {
       sections: [
         { id: 'definition', prompt: `Write section 1 of a blog post about "${keyword}" (${year}). DEFINITION and INTRODUCTION.
 H2: <h2 id="definition">What Is [Topic] and Why It Matters in ${year}</h2>
-300-400 words. Define the concept, explain why it matters for YouTube creators, include 1-2 statistics from real data.
+300-400 words. Define the concept, explain why it matters for YouTube creators. Include a statistic ONLY if you can cite a real primary source inline; otherwise keep claims qualitative.
 End with: <div class="tip-card"><strong>\ud83d\udca1 EXPERT TIP:</strong> [pro tip]</div>
 Return ONLY the HTML.` },
         { id: 'deep-dive', prompt: `Write section 2 of a blog post about "${keyword}" (${year}). DEEP DIVE.
@@ -490,7 +490,7 @@ Include: <div class="alert-box"><strong>\u2139\ufe0f NOTE:</strong> [insight]</d
 Be blunt and specific — no vague advice. Return ONLY the HTML.` },
         { id: 'advanced-tips', prompt: `Write the FINAL section of a blog post about "${keyword}" (${year}). ADVANCED TIPS.
 H2: <h2 id="advanced-tips">Advanced Strategies for [Topic] in ${year}</h2>
-250-350 words. 2-3 advanced strategies with specific numbers or examples.
+250-350 words. 2-3 advanced strategies with concrete examples. Use a number only if it is a real, citable fact; otherwise keep claims qualitative.
 Include a tip-card div.
 End with CTA: try YT SEO Architect free tools. Link to /dashboard.
 NO "in conclusion". Return ONLY the HTML.` },
@@ -502,7 +502,7 @@ NO "in conclusion". Return ONLY the HTML.` },
       sections: [
         { id: 'intro', prompt: `Write the INTRODUCTION for a listicle about "${keyword}" (${year}).
 H2: <h2 id="intro">Why [Topic] Matters More Than Ever in ${year}</h2>
-200-300 words. Hook with a stat. Explain what the list covers.
+200-300 words. Hook with a relatable fact, question, or pain point. Explain what the list covers.
 End with: <div class="tip-card"><strong>\ud83d\udca1 PRO TIP:</strong> [tip for using this list]</div>
 Return ONLY the HTML.` },
         { id: 'list-1', prompt: `Write items 1-4 of a listicle about "${keyword}" (${year}).
@@ -535,7 +535,7 @@ Questions real creators search for. Return ONLY the HTML.` },
         { id: 'setup', prompt: `Write the SETUP for a case study about "${keyword}" (${year}).
 H2: <h2 id="setup">The Challenge: What We Set Out to Prove</h2>
 250-350 words. Frame as investigation/experiment. Hypothesis, channels studied, timeframe.
-Use realistic numbers. Return ONLY the HTML.` },
+Use only real numbers if you have them; otherwise describe findings qualitatively. NEVER invent figures. Return ONLY the HTML.` },
         { id: 'methodology', prompt: `Write METHODOLOGY for "${keyword}" (${year}).
 H2: <h2 id="methodology">How We Tested This</h2>
 250-350 words. Step-by-step approach.
@@ -543,8 +543,8 @@ Include a <table> (columns: Variable, Control, Test, Expected Outcome).
 Be transparent about limitations. Return ONLY the HTML.` },
         { id: 'findings', prompt: `Write FINDINGS for "${keyword}" (${year}).
 H2: <h2 id="findings">What the Data Actually Shows</h2>
-350-450 words. Results with specific numbers.
-Include <table> with before/after metrics (columns: Metric, Before, After, Change %).
+350-450 words. Report results accurately — use real numbers only, otherwise describe findings qualitatively. NEVER invent metrics.
+If a <table> with before/after metrics is used, every figure must be real and verifiable; otherwise omit the table.
 Include: <div class="tip-card"><strong>\ud83d\udca1 KEY FINDING:</strong> [insight]</div>
 Return ONLY the HTML.` },
         { id: 'analysis', prompt: `Write ANALYSIS for "${keyword}" (${year}).
@@ -635,13 +635,13 @@ End with CTA to /dashboard. Return ONLY the HTML.` },
       sections: [
         { id: 'hook', prompt: `Write the HOOK for a data-driven article about "${keyword}" (${year}).
 H2: <h2 id="hook">The Numbers Don't Lie: [Topic] in ${year}</h2>
-200-300 words. Open with a surprising statistic or data point. Set up what the article will reveal.
+200-300 words. Open with a striking fact or question, or a common creator pain point. Use a statistic only if it is real and citable.
 Include: <div class="tip-card"><strong>\ud83d\udca1 KEY INSIGHT:</strong> [one-sentence takeaway]</div>
 Return ONLY the HTML.` },
         { id: 'data-overview', prompt: `Write DATA OVERVIEW for "${keyword}" (${year}).
 H2: <h2 id="data-overview">What the Data Shows</h2>
 300-400 words. Present3-5 key data points with context. Use <table> with columns: Metric, Finding, Why It Matters.
-Be specific with numbers (percentages, counts, timeframes). Return ONLY the HTML.` },
+Be specific with timeframes and qualitative scope; use exact numbers only if they are real and citable. Return ONLY the HTML.` },
         { id: 'deep-analysis', prompt: `Write DEEP ANALYSIS for "${keyword}" (${year}).
 H2: <h2 id="deep-analysis">Breaking Down the Patterns</h2>
 350-450 words. Analyze WHY the data looks this way. Connect patterns to YouTube algorithm behavior.
@@ -683,11 +683,24 @@ CRITICAL RULES — VIOLATION = REJECTION:
   "without further ado"
 - Also AVOID: "take it to the next level", "ultimate guide" (overused),
   "comprehensive" (AI signal), "myriad", "plethora", "facilitate"
+- FACTUALITY (hard rule, same weight as the ban list above):
+  - NEVER invent statistics, percentages, surveys, studies, or quotes.
+  - NEVER attribute a number or finding to a real company, tool, or person
+    (e.g. "a study by Hootsuite", "according to Pew Research", "TubeFilter found")
+    unless you are certain of the finding AND you include an inline link to the
+    primary source. A fabricated attribution is a hard violation.
+  - NEVER invent case studies with specific before/after metrics for real or
+    invented channels/creators.
+  - If you do not have a real, citable number, write the claim qualitatively
+    ("higher", "stronger", "most channels", "many creators") — do NOT invent a
+    figure to make the point concrete.
 - Write for YouTube creators who want actionable advice, not theory.
 - Use HTML: <h2 id="...">, <h3>, <p>, <ul>/<ol>, <table>, <strong>.
 - Mention YT SEO Architect naturally 2-3 times (link to /dashboard).
 - Each section must be SUBSTANTIAL — at least 350 words of real content.
-- Include specific examples, numbers, and step-by-step instructions.
+- Include specific, concrete examples and step-by-step instructions. Use a
+  specific number ONLY when it is a real, verifiable fact; otherwise keep
+  claims qualitative — never fabricate figures.
 - NO filler paragraphs, NO vague summaries, NO "in conclusion" garbage.
 - Write like a human who actually uses YouTube — casual where appropriate,
   specific where it matters, blunt about what doesn't work.
@@ -746,10 +759,10 @@ This section covers REAL-WORLD EXAMPLES AND CASE STUDIES.
 Requirements:
 - H2 tag: <h2 id="examples">Real-World Examples: [Topic] That Actually Work</h2>
 - 400-500 words minimum
-- Include 2-3 specific examples with numbers (views gained, CTR improvement, etc.)
+- Include 2-3 specific examples with practical details (what was changed, why it worked). NEVER invent view counts, CTR figures, or results for creators — describe strategies qualitatively.
 - Format each example as: <h3>Example 1: [Description]</h3> followed by details
-- Reference YouTube creators who used these strategies successfully
-- Be specific — channel names, video types, results achieved
+- You may reference well-known YouTube creators and their general strategies, but DO NOT fabricate specific performance numbers for them.
+- Be specific about the strategy and approach; describe outcomes qualitatively ("more", "higher", "stronger") unless a real, citable figure exists
 - End with a key insight about what all examples have in common
 
 Return ONLY the HTML for this section.`

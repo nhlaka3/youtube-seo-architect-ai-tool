@@ -134,7 +134,7 @@ CRITICAL RULES:
    "pivotal", "embark", "game-changer", "cutting-edge", "streamline".
 3. NO filler: "At its core", "That said", "Let's explore", "Ultimately", "It's important to note".
 4. Short paragraphs (2-3 sentences). Concrete nouns, strong verbs. Vary sentence length.
-5. E-E-A-T: first-hand experience ("I tested this"), specific numbers, real examples, actionable steps.
+5. E-E-A-T: first-hand experience ("I tested this"), real examples, actionable steps. Use specific numbers ONLY when they are real and verifiable; NEVER invent statistics, studies, or metrics attributed to real companies/creators.
 6. Primary keyword: "youtube playlist seo" — first 100 words, H1, at least one H2.
    Secondary keywords: reorder YouTube playlists, boost YouTube playlist watch time,
    create playlists for YouTube, optimize YouTube playlists for search,
@@ -144,7 +144,7 @@ REQUIRED STRUCTURE:
 - <blockquote><strong>TL;DR:</strong> 2–3 sentence direct answer. Start with a bold claim, back with a number. MANDATORY.
 - <img src="https://picsum.photos/seed/playlist-optimization/800/400" alt="YouTube playlist SEO guide" style="width:100%"> — MANDATORY directly after TL;DR.
 - <h2>What Is YouTube Playlist SEO?</h2> — One-clean-definition sentence + how YouTube indexes playlist metadata separately from individual video metadata.
-- <h2>Why Playlist SEO Matters More in 2026</h2> — Session watch time data, Browse Feature update, compare a well-ordered vs unordered playlist effect. Use concrete example numbers.
+- <h2>Why Playlist SEO Matters More in 2026</h2> — Session watch time data, Browse Feature update, compare a well-ordered vs unordered playlist effect. Use concrete examples; cite a real source for any specific number.
 - <h2>6 Actions to Take Right Now</h2>
   - <h3>Step 1: Identify Your Underperforming Playlists</h3>
     How to spot low-session watch time in Studio's End Screens / Watch Time per playlist report.

@@ -14,7 +14,15 @@ We do not write generic blog posts. We write comprehensive, data-backed mastercl
 *   **Zero "AI-isms" or Filler**:
     *   **Prohibited AI-isms**: *"in today's world"*, *"landscape"*, *"leverage"*, *"robust"*, *"seamless"*, *"foster"*, *"moreover"*, *"pivotal"*, *"embark"*, *"game-changer"*, *"cutting-edge"*, *"streamline"*.
     *   **Prohibited Filler Phrases**: *"At its core"*, *"That said"*, *"Let's explore"*, *"Ultimately"*, *"It's important to note"*, *"In a world where"*.
-    *   **No Hedging**: Do not write *"it might be helpful to..."* or *"this could potentially..."*. Declare facts with confidence: *"I tested this on 4 channels and watched CTR increase by 42%. Here is how to do it."*
+    *   **No Hedging**: Do not write *"it might be helpful to..."* or *"this could potentially..."*. Declare facts with confidence: *"I tested this on 4 channels and watched CTR increase. Here is how to do it."* (Do NOT invent a specific figure — see Factuality rule below.)
+
+### 🔬 Factuality & Statistics (HARD RULE — same weight as the AI-isms ban)
+Never present invented data as fact. This is the single biggest E-E-A-T and misinformation risk on the site.
+*   **No fabricated sources**: NEVER write *"a study by TubeFilter/Hootsuite/Wyzowl/HubSpot found..."* unless the study actually exists **and** you link the primary source inline.
+*   **No fake creator case studies**: Do NOT invent specific before/after metrics (views, CTR %, watch time) for real or made-up channels/creators. If you describe a real creator's approach, keep outcomes qualitative or cite a verifiable source.
+*   **No unverifiable platform claims**: Do not assert counts like *"Over 12,000 creators use..."* or *"a survey of 500 users..."* unless they are real and documented.
+*   **Rule for any specific number**: Every specific figure must be either (a) real and linked to a primary source, or (b) removed in favor of qualitative language ("more", "higher", "most channels"). If you wouldn't bet the domain's reputation on it, don't publish it.
+*   **Prefer qualitative precision**: "highly correlated with", "consistently outranks" are credible and safe. Fabricated precision ("73% of cases") is the tell of AI-generated content and triggers E-E-A-T collapse.
 
 ---
 

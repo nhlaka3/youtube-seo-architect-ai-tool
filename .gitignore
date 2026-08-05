@@ -204,3 +204,4 @@ opensource/
 
 # Google service account key — never commit
 config/google-indexing-key.json
+.env*

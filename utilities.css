@@ -31,6 +31,8 @@
   transition: all var(--transition-fast);
   text-decoration: none;
   line-height: 1;
+  min-height: 44px;
+  min-width: 44px;
 }
 .btn:focus-visible {
   outline: 2px solid var(--cyan);

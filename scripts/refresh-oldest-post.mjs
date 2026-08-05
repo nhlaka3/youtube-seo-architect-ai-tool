@@ -340,7 +340,7 @@ REQUIREMENTS:
 - Each section must start with <h2 id="fresh-section-N"> where N is 1, 2, or 3
 - Each section must be 250-400 words of substantial, actionable content
 - Focus on: new YouTube algorithm updates, recent data, fresh strategies that weren't covered before
-- Include specific numbers, dates, and actionable steps
+- Include dates and actionable steps. Use a specific number ONLY when it is a real, verifiable fact you can cite; otherwise keep claims qualitative ("more", "higher"). NEVER invent statistics, studies, or attribution to real companies/creators, and NEVER fabricate metrics for named channels.
 - Link to YT SEO Architect dashboard (/dashboard) naturally once or twice
 - Use the same writing style as the existing post (direct, authoritative, no fluff)
 - NO banned words: leverage, seamless, robust, embark, streamline, cutting-edge, delve, harness, unlock, realm, game-changer
