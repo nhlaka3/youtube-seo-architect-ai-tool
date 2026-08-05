@@ -28,22 +28,6 @@
       "use": "@vercel/static"
     },
     {
-      "src": "design-tokens.css",
-      "use": "@vercel/static"
-    },
-    {
-      "src": "utilities.css",
-      "use": "@vercel/static"
-    },
-    {
-      "src": "nav.css",
-      "use": "@vercel/static"
-    },
-    {
-      "src": "blog-article.css",
-      "use": "@vercel/static"
-    },
-    {
       "src": "tools.html",
       "use": "@vercel/static"
     }
@@ -395,6 +379,15 @@
   "headers": [
     {
       "source": "/assets/(.*)",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=31536000, immutable"
+        }
+      ]
+    },
+    {
+      "source": "/js/(.*)",
       "headers": [
         {
           "key": "Cache-Control",

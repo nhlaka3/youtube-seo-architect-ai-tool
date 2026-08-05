@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Tag relevance checker — Free Interactive Tool | YT SEO Architect</title>
+  <meta name="description" content="Generate optimized YouTube tags with estimated search volume and competition scores. Copy individual tags or all at once. Apply what you learn from the tag relevance checker guide. Works entirely in your browser, no login required." />
+  <link rel="canonical" href="https://yt-seo-architect.vercel.app/tools/tag-relevance-checker" />
+  <meta property="og:title" content="Tag relevance checker — Free Interactive Tool | YT SEO Architect" />
+  <meta property="og:description" content="Generate optimized YouTube tags with estimated search volume and competition scores. Copy individual tags or all at once. Apply what you learn from the tag relevance checker guide. Works entirely in your browser, no login required." />
+  <meta property="og:image" content="https://yt-seo-architect.vercel.app/og-image.png" />
+  <meta name="robots" content="index, follow" />
+  <script type="application/ld+json">
+  { "@context": "https://schema.org", "@type": "WebApplication",
+    "name": "Tag relevance checker", "description": "tag relevance checker for YouTube creators",
+    "url": "https://yt-seo-architect.vercel.app/tools/tag-relevance-checker", "applicationCategory": "MultimediaApplication",
+    "operatingSystem": "Web", "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" } }
+  </script>
+  <style>
+    :root { --bg: #0f0f1a; --surface: #1a1a2e; --border: #2a2a4a; --accent: #6366f1; --accent2: #06b6d4; --text: #e2e8f0; --text2: #94a3b8; --text3: #64748b; --success: #22c55e; }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { background: var(--bg); color: var(--text); font-family: 'Segoe UI', system-ui, -apple-system, sans-serif; min-height: 100vh; line-height: 1.6; }
+    .header { background: var(--surface); border-bottom: 1px solid var(--border); padding: 1rem 2rem; display: flex; align-items: center; justify-content: space-between; position: sticky; top: 0; z-index: 100; }
+    .header-logo { display: flex; align-items: center; gap: 0.75rem; text-decoration: none; color: var(--text); font-weight: 700; font-size: 1.25rem; }
+    .header-logo span { font-size: 1.5rem; }
+    .header-cta { color: var(--accent2); text-decoration: none; font-weight: 600; font-size: 0.9rem; padding: 0.5rem 1rem; border: 1px solid var(--accent2); border-radius: 6px; transition: all 0.2s; }
+    .header-cta:hover { background: rgba(6,182,212,0.1); }
+    .container { max-width: 740px; margin: 0 auto; padding: 2rem; }
+    h1 { font-size: 2rem; margin-bottom: 0.5rem; background: linear-gradient(135deg, #fff, var(--accent2)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+    .subtitle { color: var(--text2); margin-bottom: 1.5rem; }
+    .breadcrumb { font-size: 0.85rem; color: var(--text3); margin-bottom: 1rem; }
+    .breadcrumb a { color: var(--accent); text-decoration: none; }
+    .breadcrumb a:hover { text-decoration: underline; }
+    .copy-btn { display: none; margin-top: 1rem; width: 100%; padding: 0.65rem; background: linear-gradient(135deg, #6366f1, #06b6d4); color: #fff; border: none; border-radius: 8px; font-size: 0.9rem; font-weight: 600; cursor: pointer; transition: opacity 0.3s, transform 0.2s; }
+    .copy-btn:hover { opacity: 0.9; transform: scale(1.01); }
+    .copy-btn:active { transform: scale(0.98); }
+    .copy-btn.copied { background: linear-gradient(135deg, #22c55e, #16a34a); }
+    .result-box.show .copy-btn { display: block; }
+    .copy-btn-small { display: inline-flex; align-items: center; gap: 0.35rem; padding: 0.35rem 0.75rem; background: rgba(99,102,241,0.15); color: #a5b4fc; border: 1px solid rgba(99,102,241,0.25); border-radius: 6px; font-size: 0.75rem; cursor: pointer; transition: all 0.2s; }
+    .copy-btn-small:hover { background: rgba(99,102,241,0.25); color: #c7d2fe; }
+    .copy-btn-small.copied { background: rgba(34,197,94,0.2); color: #22c55e; border-color: #22c55e; }
+    .tool-card { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 1.5rem; }
+    .tool-card label { display: block; font-weight: 600; margin-bottom: 0.5rem; color: var(--text2); font-size: 0.9rem; }
+    .tool-card input, .tool-card textarea { width: 100%; padding: 0.75rem 1rem; background: var(--bg); border: 1px solid var(--border); border-radius: 8px; color: var(--text); font-size: 1rem; margin-bottom: 1rem; outline: none; transition: border-color 0.2s; }
+    .tool-card input:focus, .tool-card textarea:focus { border-color: var(--accent); box-shadow: 0 0 0 2px rgba(99,102,241,0.15); }
+    .tool-card textarea { min-height: 100px; resize: vertical; }
+    .tool-card button { background: linear-gradient(135deg, var(--accent), var(--accent2)); color: #fff; border: none; padding: 0.75rem 2rem; border-radius: 8px; font-weight: 600; font-size: 1rem; cursor: pointer; width: 100%; transition: transform 0.2s, box-shadow 0.2s; }
+    .tool-card button:hover { transform: translateY(-1px); box-shadow: 0 4px 15px rgba(99,102,241,0.3); }
+    .tool-card button:active { transform: translateY(0); }
+    .result-box { background: var(--surface); border: 1px solid var(--accent2); border-radius: 12px; padding: 1.25rem; margin-top: 1rem; display: none; }
+    .result-box.show { display: block; }
+    .result-box .placeholder { color: var(--text3); text-align: center; padding: 1rem; }
+    .blog-link { margin-top: 2rem; padding: 1.25rem; background: var(--surface); border: 1px solid var(--border); border-radius: 12px; text-align: center; }
+    .blog-link p { color: var(--text2); margin-bottom: 0.75rem; font-size: 0.9rem; }
+    .blog-link a { display: inline-block; background: transparent; border: 1px solid var(--accent); color: var(--accent); padding: 0.6rem 1.5rem; border-radius: 8px; text-decoration: none; font-weight: 600; transition: all 0.2s; }
+    .blog-link a:hover { background: var(--accent); color: #fff; }
+    .footer { text-align: center; padding: 2rem; color: var(--text3); font-size: 0.85rem; }
+    .footer a { color: var(--accent2); text-decoration: none; }
+    @media (max-width: 600px) { .container { padding: 1rem; } h1 { font-size: 1.5rem; } .header { padding: 0.75rem 1rem; } }
+  </style>
+    <link rel="stylesheet" href="/design-tokens.css" media="print" onload="this.media='all'">
+  <link rel="stylesheet" href="/utilities.css" media="print" onload="this.media='all'">
+  <link rel="stylesheet" href="/nav.css" media="print" onload="this.media='all'">
+  <link rel="stylesheet" href="/blog-article.css" media="print" onload="this.media='all'">
+  <noscript>
+    <link rel="stylesheet" href="/design-tokens.css">
+    <link rel="stylesheet" href="/utilities.css">
+    <link rel="stylesheet" href="/nav.css">
+    <link rel="stylesheet" href="/blog-article.css">
+  </noscript>
+</head>
+<body data-keyword="tag relevance checker">
+  <div class="header">
+    <a href="/" class="header-logo"><span>🛠️</span> YT SEO Architect</a>
+    <div style="display:flex;gap:1rem;align-items:center;">
+      <a href="/tools" style="color:var(--accent);text-decoration:none;font-weight:600;font-size:0.9rem;">All Tools</a>
+      <a href="/blog/tag-relevance-checker" class="header-cta">📖 Read the Guide →</a>
+    </div>
+  </div>
+
+  <div class="container">
+    <div class="breadcrumb">
+      <a href="/tools">Tools</a> / Tag relevance checker
+    </div>
+
+    <h1>🏷️ Tag relevance checker — Free Interactive Tool</h1>
+    <p class="subtitle">Generate optimized YouTube tags with estimated search volume and competition scores. Copy individual tags or all at once. Aligned with the <a href="/blog/tag-relevance-checker" style="color:var(--accent2);text-decoration:underline;">tag relevance checker guide</a> — everything works in your browser, no login needed.</p>
+
+    <div class="tool-card">
+      <label for="tool-input">Enter your topic keyword</label>
+      <input type="text" id="tool-input" placeholder="e.g., youtube seo tips" />
+      <button onclick="handleTool()">Generate Tags</button>
+
+      <div class="result-box" id="result-box">
+        <div class="placeholder" id="result-placeholder">
+          Enter your details above and click "Generate Tags" to get results aligned with the tag relevance checker guide.
+        </div>
+        <button class="copy-btn" id="copy-btn" onclick="copyResults()">📋 Copy Results</button>
+        <div style="display:flex;gap:0.5rem;justify-content:flex-end;margin-top:0.4rem;">
+          <button class="copy-btn-small" id="copy-btn-text" onclick="copyResultsTextOnly()">📋 Copy Text</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="blog-link">
+      <p>📖 Want the full guide with examples and expert tips?</p>
+      <a href="/blog/tag-relevance-checker">Read the Complete Guide →</a>
+    </div>
+  </div>
+
+    <div class="seo-content" style="max-width:760px;margin:2.5rem auto 0;padding-top:2rem;border-top:1px solid var(--border);">
+      <h2 style="font-size:1.35rem;font-weight:800;color:var(--text-primary);margin-bottom:.75rem;">About This Tool</h2>
+      <p>This checker scores how relevant your tag list is to the actual video content, flagging the common mistakes — irrelevant tags, keyword stuffing, and single-word tags — that waste your 500-character tag budget.</p><p>Why this matters: YouTube's algorithm is a feedback loop — better metadata earns more impressions, more impressions surface your retention, and strong retention expands reach further. Tools like this one exist to make sure you are optimizing every variable in that loop, on every upload, without needing a consultant's budget. Used consistently, the small gains from each check compound into a channel that ranks.</p><p>The YT SEO Architect approach is deliberately simple: run the check, apply the result, move on. No dashboards to babysit, no credits to count. If you pair this tool with the matching guide on the blog, you get the "why" behind every "what" — the benchmarks, the examples, and the mistakes to avoid — so you are never applying advice blindly.</p>
+      <h2 style="font-size:1.35rem;font-weight:800;color:var(--text-primary);margin:1.5rem 0 .75rem;">How to Use It</h2>
+      <ol style="color:var(--text-secondary);line-height:1.8;padding-left:1.25rem;"><li>Paste your current tag list (from YouTube Studio) into the tool.</li><li>Enter your video's primary topic so relevance can be scored.</li><li>The tool flags irrelevant and low-value tags and shows what to remove.</li><li>Use the tag suggestions to rebuild a tight, relevant list under 500 characters.</li></ol>
+      <h2 style="font-size:1.35rem;font-weight:800;color:var(--text-primary);margin:1.5rem 0 .75rem;">Frequently Asked Questions</h2>
+      <div class="faq-item" style="margin-bottom:1rem;"><h3 style="font-size:1rem;color:var(--text-primary);margin-bottom:.3rem;">Do YouTube tags still matter in 2026?</h3><p style="color:var(--text-secondary);font-size:.9rem;line-height:1.7;margin:0;">Yes, but less than before — YouTube says tags mainly help with misspellings and alternate phrasings. They are a minor signal behind title, thumbnail, and description, so use them to cover spelling variants and synonyms, not to stuff keywords.</p></div><div class="faq-item" style="margin-bottom:1rem;"><h3 style="font-size:1rem;color:var(--text-primary);margin-bottom:.3rem;">How many tags should I use?</h3><p style="color:var(--text-secondary);font-size:.9rem;line-height:1.7;margin:0;">Use 5-15 highly relevant tags or roughly 250-400 characters. Quality beats quantity: a tight list of relevant tags outperforms 30 generic ones.</p></div><div class="faq-item" style="margin-bottom:1rem;"><h3 style="font-size:1rem;color:var(--text-primary);margin-bottom:.3rem;">What tags should I never use?</h3><p style="color:var(--text-secondary);font-size:.9rem;line-height:1.7;margin:0;">Irrelevant trending tags, competitor channel names, and single-word tags like 'funny' that describe nothing. These waste budget and can look spammy to YouTube's systems.</p></div><div class="faq-item" style="margin-bottom:1rem;"><h3 style="font-size:1rem;color:var(--text-primary);margin-bottom:.3rem;">How does this tool fit into a full YouTube SEO workflow?</h3><p style="color:var(--text-secondary);font-size:.9rem;line-height:1.7;margin:0;">It covers one specific lever in the optimization stack. Use it alongside the title, description, tag, and thumbnail tools for a complete pre-publish checklist, then validate the results against your YouTube Studio analytics over the following weeks.</p></div><div class="faq-item" style="margin-bottom:1rem;"><h3 style="font-size:1rem;color:var(--text-primary);margin-bottom:.3rem;">Will this tool work for my channel size?</h3><p style="color:var(--text-secondary);font-size:.9rem;line-height:1.7;margin:0;">Yes — the recommendations are size-agnostic because they follow YouTube's ranking fundamentals, which apply equally to a 100-subscriber channel and a million-subscriber channel. What changes with size is how fast results show, not whether the optimization is correct.</p></div>
+      <h2 style="font-size:1.35rem;font-weight:800;color:var(--text-primary);margin:1.5rem 0 .75rem;">Related Tools</h2>
+      <div style="margin-bottom:.5rem;"><a href="/tools/hashtag-performance-checker" style="display:inline-block;margin:.25rem .5rem .25rem 0;background:rgba(0,242,255,.08);border:1px solid rgba(0,242,255,.15);color:var(--cyan);padding:.35rem .8rem;border-radius:9999px;font-size:.8rem;font-weight:600;text-decoration:none;">hashtag performance checker</a><a href="/tools/youtube-tags-2026" style="display:inline-block;margin:.25rem .5rem .25rem 0;background:rgba(0,242,255,.08);border:1px solid rgba(0,242,255,.15);color:var(--cyan);padding:.35rem .8rem;border-radius:9999px;font-size:.8rem;font-weight:600;text-decoration:none;">youtube tags 2026</a><a href="/tools/best-youtube-tags-2026" style="display:inline-block;margin:.25rem .5rem .25rem 0;background:rgba(0,242,255,.08);border:1px solid rgba(0,242,255,.15);color:var(--cyan);padding:.35rem .8rem;border-radius:9999px;font-size:.8rem;font-weight:600;text-decoration:none;">best youtube tags 2026</a></div>
+    </div>
+
+  
+
+
+  
+
+
+  
+
+  <div class="footer">
+    <p>Part of <a href="/">YT SEO Architect</a> — Free AI-powered YouTube SEO tools | <a href="/blog/tag-relevance-checker">Tag relevance checker</a></p>
+  </div>
+
+  <script>
+    window.BLOG_SLUG = 'tag-relevance-checker';
+    window.BLOG_TOPIC = 'tag-relevance-checker'.replace(/-/g, ' ').replace(/d{4}/g, '').replace(/s+/g, ' ').trim();
+
+    // ── Deterministic random (same input = same output) ──
+    function seededRandom(seed) {
+      var x = Math.sin(Math.abs(typeof seed === 'number' ? seed : seed ? seed.charCodeAt(0) + seed.length : 1)) * 10000;
+      return x - Math.floor(x);
+    }
+
+    // ── Topic-aware advice generator ──
+    function topicAdvice(topic) {
+      var t = (topic || '').toLowerCase();
+      if (t.includes('subscriber') || t.includes('growth')) return '🎯 ' + 'Tip: Focus on subscriber growth through consistent uploading, community engagement, and strategic cross-promotion.';
+      if (t.includes('small') || t.includes('beginner')) return '🎯 ' + 'Tip: Small channels grow fastest by targeting low-competition keywords and niching down. Consistency beats volume.';
+      if (t.includes('tutorial')) return '🎯 ' + 'Tip: Tutorials with clear timestamps, step-by-step visuals, and downloadable resources rank higher in YouTube search.';
+      if (t.includes('algorithm')) return '🎯 ' + "Tip: YouTube's algorithm favors high retention, strong CTR, and consistent uploads. Optimize for watch time first.";
+      if (t.includes('tag') || t.includes('keyword')) return '🎯 ' + 'Tip: Use a mix of broad (high volume) and specific (low competition) tags for maximum discovery.';
+      if (t.includes('title') || t.includes('hook')) return '🎯 ' + 'Tip: Titles with numbers, power words, and brackets see 15-36% higher CTR. Front-load your keyword.';
+      if (t.includes('description')) return '🎯 ' + 'Tip: Descriptions with 200+ words, timestamps, and relevant hashtags rank significantly better in search.';
+      if (t.includes('retention') || t.includes('ctr')) return '🎯 ' + "Tip: Audience retention and CTR are YouTube's top ranking signals. Hook viewers in the first 5 seconds.";
+      if (t.includes('thumbnail')) return '🎯 ' + 'Tip: High-contrast thumbnails with close-up faces and 3-5 words max get up to 30% more clicks.';
+      if (t.includes('monetization')) return '🎯 ' + 'Tip: Focus on niche content with high CPM potential. Reach 1K subs and 4K watch hours to unlock monetization.';
+      if (t.includes('shorts')) return '🎯 ' + 'Tip: YouTube Shorts under 60s with strong hooks in the first 3 seconds get the most algorithmic push.';
+      if (t.includes('backlink') || t.includes('seo') || t.includes('rank')) return '🎯 ' + "Tip: Build backlinks through guest posting, collaborations, and valuable forum contributions to boost channel authority.";
+      if (t.includes('competitor') || t.includes('analyze')) return '🎯 ' + "Tip: Analyze competitors' top videos for keyword gaps, content formats, and engagement patterns to find your edge.";
+      if (t.includes('idea') || t.includes('plan')) return '🎯 ' + 'Tip: Plan content around search intent — informational, educational, and entertaining formats all serve different audiences.';
+      return '🎯 ' + 'Tip: Focus on creating content that provides clear value. Consistency and quality drive long-term YouTube growth.';
+    }
+
+    function copyResults() {
+      var box = document.getElementById('result-box');
+      if (!box) return;
+      var text = box.innerText || box.textContent || '';
+      text = text.replace(/📋 Copy Results/g, '').replace(/📋 Copy Text/g, '').replace(/Copys*/g, '').replace(/Copied!/g, '').trim();
+      if (!text) return;
+      navigator.clipboard.writeText(text).then(function() {
+        var btn = document.getElementById('copy-btn');
+        if (btn) { btn.textContent = '✅ Copied!'; btn.classList.add('copied');
+          setTimeout(function() { btn.textContent = '📋 Copy Results'; btn.classList.remove('copied'); }, 2000); }
+      }).catch(function() {
+        var ta = document.createElement('textarea');
+        ta.value = text;
+        document.body.appendChild(ta);
+        ta.select();
+        document.execCommand('copy');
+        document.body.removeChild(ta);
+      });
+    }
+
+    function copyResultsTextOnly() {
+      var box = document.getElementById('result-box');
+      if (!box) return;
+      var text = box.innerText || box.textContent || '';
+      text = text.replace(/📋 Copy Results/g, '').replace(/📋 Copy Text/g, '').replace(/Copys*/g, '').replace(/Copied!/g, '').trim();
+      if (!text) return;
+      navigator.clipboard.writeText(text).then(function() {
+        var btn = document.getElementById('copy-btn-text');
+        if (btn) { btn.textContent = '✅ Copied!'; btn.classList.add('copied');
+          setTimeout(function() { btn.textContent = '📋 Copy Text'; btn.classList.remove('copied'); }, 2000); }
+      }).catch(function() {
+        var ta = document.createElement('textarea');
+        ta.value = text;
+        document.body.appendChild(ta);
+        ta.select();
+        document.execCommand('copy');
+        document.body.removeChild(ta);
+      });
+    }
+
+    
+const ToolLogic = {
+  generateTags(topic) {
+    const base = topic.toLowerCase().trim();
+    const words = base.split(/\s+/);
+    const tags = [];
+    const seen = new Set();
+
+    function add(tag) {
+      const t = tag.toLowerCase().trim();
+      if (t && !seen.has(t) && t.length > 0) {
+        seen.add(t);
+        tags.push(t);
+      }
+    }
+
+    // Base seed
+    add(base);
+    add(base + ' 2026');
+    add(base + ' tutorial');
+    add('how to ' + base);
+    add(base + ' guide');
+    add('best ' + base + ' tips');
+    add(base + ' for beginners');
+    add(base + ' explained');
+    add(base + ' step by step');
+    add(base + ' strategy');
+    add(base + ' ideas');
+
+    // Variations from words
+    if (words.length > 1) {
+      add(words.slice(0,2).join(' ') + ' 2026');
+      add('top ' + base);
+      add(base + ' secrets');
+    }
+
+    // Suffix combos (more diverse)
+    const suffixes = ['hacks', 'masterclass', 'techniques', 'mistakes', 'examples', 'checklist', 'tools', 'software', 'review', 'comparison', 'best practices', 'tips and tricks', 'course', 'training', 'updated'];
+    for (const s of suffixes) {
+      if (tags.length >= 30) break;
+      add(base + ' ' + s);
+    }
+
+    // Broad terms
+    const broad = ['youtube seo', 'video optimization', 'content marketing', 'youtube growth', 'youtube algorithm'];
+    for (const b of broad) {
+      if (tags.length >= 35) break;
+      add(b);
+    }
+
+    // Volume estimates (deterministic: same topic = same results)
+    return tags.slice(0, 30).map(function(t, i) {
+      const volBase = 500 - (i * 15);
+      const vol = Math.max(50, volBase + Math.floor(seededRandom(i * 10 + 1) * 200));
+      const comp = Math.min(95, 30 + Math.floor(seededRandom(i * 10 + 7) * 50));
+      return { tag: t, volume: vol, competition: comp };
+    });
+  },
+
+  analyzeTags(topic) {
+    var base = topic.toLowerCase().trim();
+    // Generate the best 5 tags with rationale
+    var bestTags = [
+      { tag: base, reason: 'Primary keyword — essential for ranking' },
+      { tag: base + ' 2026', reason: 'Time-bound keyword — captures trending searches' },
+      { tag: 'how to ' + base, reason: 'How-to format — highest search intent' },
+      { tag: base + ' tutorial', reason: "Tutorial format — YouTube's favorite content type" },
+      { tag: base + ' for beginners', reason: 'Beginner modifier — broadest search audience' },
+    ];
+
+    // Tag gap analysis
+    var gaps = ['Long-tail tag (3-5 words targeting specific search intent)'];
+    if (base.split(/s+/).length < 3) {
+      gaps.push('Broad category tag (e.g., "youtube seo tips" instead of just "seo")');
+    }
+    if (!base.includes('2026') && !base.includes('2025')) {
+      gaps.push('Year-specific tag to capture "2026" searches');
+    }
+
+    return {
+      best: bestTags,
+      gaps: gaps,
+      tip: 'Use your primary keyword as the first tag. Mix exact match, broad match, and long-tail tags. Aim for 10-15 tags total.'
+    };
+  }
+};
+
+function handleTool() {
+  const input = document.getElementById('tool-input').value.trim();
+  if (!input) return;
+  const results = ToolLogic.generateTags(input);
+  const box = document.getElementById('result-box');
+  const placeholder = document.getElementById('result-placeholder');
+  box.classList.add('show');
+  let html = '<div style="font-size:0.75rem;color:#64748b;margin-bottom:0.75rem;padding:0.4rem 0.75rem;background:rgba(99,102,241,0.06);border-radius:6px;text-align:left;">📖 Based on the ' + window.BLOG_TOPIC + ' guide</div>';
+  html += '<div style="margin-bottom:0.75rem;">' + topicAdvice(window.BLOG_TOPIC) + '</div>';
+  html += '<div style="margin-bottom:1rem;color:#94a3b8;font-size:0.9rem;">Generated ' + results.length + ' tags for &quot;' + input + '&quot;</div>';
+  results.forEach(function(r, i) {
+    const compColor = r.competition < 40 ? '#22c55e' : r.competition < 65 ? '#f59e0b' : '#ff3366';
+    html += '<div style="display:flex;align-items:center;justify-content:space-between;padding:0.6rem 0.75rem;border-bottom:1px solid rgba(255,255,255,0.05);">';
+    html += '<div style="display:flex;align-items:center;gap:0.75rem;">';
+    html += '<span style="font-weight:700;color:#6366f1;font-size:0.85rem;min-width:2rem;">#' + (i + 1) + '</span>';
+    html += '<span style="font-family:monospace;font-size:0.95rem;color:#e2e8f0;">' + r.tag + '</span>';
+    html += '</div>';
+    html += '<div style="display:flex;align-items:center;gap:0.75rem;">';
+    html += '<span style="font-size:0.75rem;color:#94a3b8;">' + r.volume.toLocaleString() + '/mo</span>';
+    html += '<span style="font-size:0.75rem;color:' + compColor + ';background:' + compColor + '15;padding:0.15rem 0.5rem;border-radius:4px;">' + r.competition + '% comp</span>';
+    html += '<button class="copy-tag-btn" data-tag="' + r.tag.replace(/"/g, '&quot;') + '" style="background:none;border:1px solid #2a2a4a;color:#94a3b8;padding:0.25rem 0.6rem;border-radius:4px;cursor:pointer;font-size:0.75rem;">Copy</button>';
+    html += '</div></div>';
+  });
+  placeholder.innerHTML = html;
+  setTimeout(function() {
+    document.querySelectorAll('.copy-tag-btn').forEach(function(btn) {
+      btn.addEventListener('click', function() {
+        var tag = btn.getAttribute('data-tag');
+        navigator.clipboard.writeText(tag).then(function() {
+          btn.textContent = 'Copied!';
+          btn.style.color = '#22c55e';
+          btn.style.borderColor = '#22c55e';
+          setTimeout(function() {
+            btn.textContent = 'Copy';
+            btn.style.color = '';
+            btn.style.borderColor = '';
+          }, 1500);
+        });
+      });
+    });
+  }, 0);
+
+  // Add tag gap analysis
+  var tagAnalysis = ToolLogic.analyzeTags(input);
+
+  // Best 5 tags section
+  html += '<div style="margin-top:1.25rem;padding:1rem;background:rgba(99,102,241,0.04);border:1px solid rgba(99,102,241,0.12);border-radius:8px;text-align:left;">';
+  html += '<div style="font-weight:700;font-size:1rem;color:#6366f1;margin-bottom:0.75rem;">🎯 Top 5 Recommended Tags</div>';
+  tagAnalysis.best.forEach(function(t, i) {
+    html += '<div style="display:flex;align-items:center;gap:0.5rem;padding:0.4rem 0.6rem;margin-bottom:0.3rem;background:rgba(99,102,241,0.06);border-radius:6px;">';
+    html += '<span style="font-weight:700;color:#6366f1;font-size:0.85rem;min-width:1.5rem;">#' + (i + 1) + '</span>';
+    html += '<div style="flex:1;"><span style="font-family:monospace;font-size:0.85rem;color:#e2e8f0;">' + t.tag + '</span>';
+    html += '<div style="font-size:0.7rem;color:#64748b;">' + t.reason + '</div></div>';
+    html += '<button class="copy-best-btn" data-tag="' + t.tag.replace(/"/g, '&quot;') + '" style="background:none;border:1px solid #6366f1;color:#6366f1;padding:0.2rem 0.6rem;border-radius:4px;cursor:pointer;font-size:0.7rem;white-space:nowrap;">Copy</button>';
+    html += '</div>';
+  });
+
+  // Tag gaps section
+  if (tagAnalysis.gaps.length > 0) {
+    html += '<div style="margin-top:0.75rem;padding:0.75rem;background:rgba(245,158,11,0.05);border:1px solid rgba(245,158,11,0.12);border-radius:6px;">';
+    html += '<div style="font-weight:600;font-size:0.85rem;color:#f59e0b;margin-bottom:0.4rem;">💡 Tag Strategy Tips</div>';
+    tagAnalysis.gaps.forEach(function(g) {
+      html += '<div style="font-size:0.8rem;color:#d1d5db;padding:0.15rem 0;">→ ' + g + '</div>';
+    });
+    html += '<div style="font-size:0.8rem;color:#6366f1;margin-top:0.4rem;">💡 ' + tagAnalysis.tip + '</div>';
+    html += '</div>';
+  }
+  html += '</div>';
+
+  // Setup copy buttons for best tags
+  setTimeout(function() {
+    document.querySelectorAll('.copy-best-btn').forEach(function(btn) {
+      btn.addEventListener('click', function() {
+        var tag = btn.getAttribute('data-tag');
+        navigator.clipboard.writeText(tag).then(function() {
+          btn.textContent = 'Copied!';
+          btn.style.color = '#22c55e';
+          btn.style.borderColor = '#22c55e';
+          setTimeout(function() {
+            btn.textContent = 'Copy';
+            btn.style.color = '';
+            btn.style.borderColor = '';
+          }, 1500);
+        });
+      });
+    });
+  }, 100);
+
+  placeholder.innerHTML = html;
+}
+  </script>
+  <!-- Footer -->
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <div class="footer-col">
+        <h4>Product</h4>
+        <a href="/public/tools">Free Tools</a>
+        <a href="/dashboard.html">Dashboard</a>
+        <a href="/changelog.html">Changelog</a>
+      </div>
+      <div class="footer-col">
+        <h4>Resources</h4>
+        <a href="/blog">Blog</a>
+        <a href="/public/glossary">Glossary</a>
+        <a href="/public/guides">Guides</a>
+      </div>
+      <div class="footer-col">
+        <h4>Company</h4>
+        <a href="/about.html">About</a>
+        <a href="/contact.html">Contact</a>
+        <a href="/privacy-policy.html">Privacy</a>
+        <a href="/terms-of-service.html">Terms</a>
+      </div>
+      <div class="footer-col">
+        <h4>Social</h4>
+        <a href="https://twitter.com/YTSEOArchitect" target="_blank" rel="noopener">Twitter / X</a>
+        <a href="https://youtube.com" target="_blank" rel="noopener">YouTube</a>
+        <a href="https://github.com/nhlaka3" target="_blank" rel="noopener">GitHub</a>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>&copy; 2026 YT SEO Architect. All rights reserved.</span>
+      <div class="footer-social">
+        <a href="https://twitter.com/YTSEOArchitect" target="_blank" rel="noopener" aria-label="Twitter">\u1d54\u1d43</a>
+        <a href="https://github.com/nhlaka3" target="_blank" rel="noopener" aria-label="GitHub">GH</a>
+      </div>
+    </div>
+  </footer>
+
+  <script defer src="/js/blog-enhancements.js"></script>
+</body>
+</html>
