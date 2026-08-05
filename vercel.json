@@ -60,11 +60,6 @@
   ],
   "redirects": [
     {
-      "source": "/pricing",
-      "destination": "/pricing.html",
-      "permanent": false
-    },
-    {
       "source": "/guide",
       "destination": "/guide/youtube-seo",
       "permanent": true
@@ -276,6 +271,10 @@
     }
   ],
   "rewrites": [
+    {
+      "source": "/pricing",
+      "destination": "/pricing.html"
+    },
     {
       "source": "/sitemap.xml",
       "destination": "/api/index.js"
