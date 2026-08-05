@@ -401,18 +401,16 @@ function heroImageHTML(slug, title) {
   // Self-hosted branded hero when available; otherwise fall back to the site OG image.
   // (picsum.photos hotlinks were removed — external images hurt reliability and SEO.)
   const alt = (title || slug).replace(/—.*/, '').trim();
-  const heroSrc = `/blog/${slug}-hero.png`;
-  const src = heroExists(heroSrc) ? heroSrc : '/og-image.png';
+  const heroWebp = `/blog/${slug}-hero.webp`;
+  const heroPng = `/blog/${slug}-hero.png`;
+  const useWebp = heroExists(heroWebp);
+  const src = useWebp ? heroWebp : (heroExists(heroPng) ? heroPng : '/og-image.png');
+  const fallback = useWebp ? (heroExists(heroPng) ? heroPng : '/og-image.png') : null;
+  const picture = useWebp
+    ? `<picture><source srcset="${heroWebp}" type="image/webp" /><img src="${fallback}" alt="${escAttr(alt)} guide — YT SEO Architect" width="800" height="400" loading="eager" fetchpriority="high" style="width:100%;height:auto;max-width:800px;border-radius:12px;border:1px solid #2D215E;" /></picture>`
+    : `<img src="${src}" alt="${escAttr(alt)} guide — YT SEO Architect" width="800" height="400" loading="eager" fetchpriority="high" style="width:100%;height:auto;max-width:800px;border-radius:12px;border:1px solid #2D215E;" />`;
   return `<div class="featured-image-wrapper" style="margin:24px 0;text-align:center;">
-      <img
-        src="${src}"
-        alt="${escAttr(alt)} guide — YT SEO Architect"
-        width="800"
-        height="400"
-        loading="eager"
-        fetchpriority="high"
-        style="width:100%;height:auto;max-width:800px;border-radius:12px;border:1px solid #2D215E;"
-      />
+      ${picture}
     </div>`;
 }
 

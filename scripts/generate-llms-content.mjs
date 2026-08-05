@@ -223,28 +223,41 @@ async function main() {
 
   // ── Generate llms.txt (quick reference) ──────────────────────────
   let llmsContent = `# YT SEO Architect
-> AI-powered YouTube SEO platform — 50+ free tools for keyword research, tag generation, title optimization, channel audit, and more.
+> AI-powered YouTube SEO platform — 90+ free tools for keyword research, tag generation, title optimization, channel audit, and more.
 > Site: ${SITE_URL}
 > Updated: ${TODAY}
 
 ## Core Platform
-- [Homepage](${SITE_URL}/): ${hp.description || 'AI YouTube SEO toolkit with 50+ free tools'}
+- [Homepage](${SITE_URL}/): ${hp.description || 'AI YouTube SEO toolkit with 90+ free tools'}
 - [Dashboard](${SITE_URL}/dashboard): Full YouTube SEO dashboard with channel connect, AI coach, keyword research, channel audit
-- [Tools](${SITE_URL}/tools/): ${ti?.description || '50+ free AI-powered YouTube SEO tools'}
+- [Tools](${SITE_URL}/tools/): ${ti?.description || '90+ free AI-powered YouTube SEO tools'}
 - [About](${SITE_URL}/about): About YT SEO Architect and its creator
+- [Pricing](${SITE_URL}/pricing): YT SEO Architect is 100% free — $0 forever, unlimited credits, no subscription
 - [Privacy Policy](${SITE_URL}/privacy-policy)
 - [Terms of Service](${SITE_URL}/terms-of-service)
 
 ## Blog Posts (${healthyPosts.length})
 `;
-  for (const post of healthyPosts.slice(0, 30)) {
+  for (const post of healthyPosts) {
     const date = post.published ? post.published.split('T')[0] : '';
-    llmsContent += `- [${post.title}](${SITE_URL}/blog/${post.slug}): ${post.description || ''} (${date})\n`;
+    let desc = post.description || '';
+    // Replace slug-injected template descriptions ("Learn how to X 2026...") with a clean title-based line
+    if (/^learn how to /i.test(desc) || /Step-by-step guide with examples, tools, and strategies/i.test(desc)) {
+      const h1 = post.h1 || post.title || '';
+      const clean = h1.replace(/— YT SEO Architect.*$/, '').trim();
+      desc = `${clean}. Practical guide with actionable YouTube SEO strategy, examples, and best practices for 2026.`;
+    }
+    llmsContent += `- [${post.title}](${SITE_URL}/blog/${post.slug}): ${desc} (${date})\n`;
   }
 
   llmsContent += `\n## Topic Guides with Interactive Tools (${toolPages.length})\n`;
-  for (const tool of toolPages.slice(0, 40)) {
-    llmsContent += `- [${tool.title}](${SITE_URL}/tools/${tool.slug}): ${tool.description || ''}\n`;
+  for (const tool of toolPages) {
+    let tdesc = tool.description || '';
+    if (/^learn how to /i.test(tdesc) || /Step-by-step guide with examples, tools, and strategies/i.test(tdesc)) {
+      const tclean = (tool.h1 || tool.title || '').replace(/— YT SEO Architect.*$/, '').trim();
+      tdesc = `${tclean}. Free interactive tool with practical YouTube SEO guidance for 2026.`;
+    }
+    llmsContent += `- [${tool.title}](${SITE_URL}/tools/${tool.slug}): ${tdesc}\n`;
   }
 
   // Glossary section — surfaces the site's largest structured content asset

@@ -1,0 +1,574 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Free YouTube SEO Tools — 90+ Tools | YT SEO Architect</title>
+  <meta name="description" content="90+ free YouTube SEO tools: keyword research, tag generator, title optimizer, description writer, thumbnail analyzer, and more. All 100% free, no limits." />
+  <meta name="robots" content="index, follow" />
+  <link rel="canonical" href="https://yt-seo-architect.vercel.app/tools" />
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebPage",
+    "name": "Free YouTube SEO Tools",
+    "description": "90+ free YouTube SEO tools: keyword research, tag generator, title optimizer, description writer, thumbnail analyzer, and more. All 100% free, no limits.",
+    "url": "https://yt-seo-architect.vercel.app/tools",
+    "isPartOf": {
+      "@type": "WebSite",
+      "name": "YT SEO Architect",
+      "url": "https://yt-seo-architect.vercel.app/"
+    },
+    "breadcrumb": {
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://yt-seo-architect.vercel.app/" },
+        { "@type": "ListItem", "position": 2, "name": "Tools", "item": "https://yt-seo-architect.vercel.app/tools" }
+      ]
+    }
+  }
+  </script>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "ItemList",
+    "name": "Free YouTube SEO Tools",
+    "url": "https://yt-seo-architect.vercel.app/tools",
+    "numberOfItems": 90,
+    "itemListElement": [
+      { "@type": "ListItem", "position": 1, "name": "YouTube Tag Generator", "url": "https://yt-seo-architect.vercel.app/tools/tag-generator" },
+      { "@type": "ListItem", "position": 2, "name": "YouTube Title Optimizer", "url": "https://yt-seo-architect.vercel.app/tools/title-optimizer" },
+      { "@type": "ListItem", "position": 3, "name": "YouTube Description Writer", "url": "https://yt-seo-architect.vercel.app/tools/description-writer" },
+      { "@type": "ListItem", "position": 4, "name": "Keyword Research Tool", "url": "https://yt-seo-architect.vercel.app/tools/keywords-youtube" },
+      { "@type": "ListItem", "position": 5, "name": "Metadata Auditor", "url": "https://yt-seo-architect.vercel.app/tools/metadata-youtube" }
+    ]
+  }
+  </script>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Geist:wght@100..900&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Geist+Mono:wght@100..900&display=swap" rel="stylesheet" />
+
+  <link rel="stylesheet" href="/design-tokens.css" media="print" onload="this.media='all'">
+  <link rel="stylesheet" href="/utilities.css" media="print" onload="this.media='all'">
+  <link rel="stylesheet" href="/nav.css" media="print" onload="this.media='all'">
+  <noscript>
+    <link rel="stylesheet" href="/design-tokens.css">
+    <link rel="stylesheet" href="/utilities.css">
+    <link rel="stylesheet" href="/nav.css">
+  </noscript>
+
+  <style>
+    body {
+      background: var(--bg-page);
+      color: var(--text-primary);
+      font-family: var(--font);
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .tools-hero {
+      text-align: center;
+      padding: var(--space-12) var(--space-6) var(--space-8);
+      background: radial-gradient(ellipse at center, rgba(0, 242, 255, 0.06), transparent 70%);
+    }
+    .tools-hero h1 {
+      font-size: clamp(2rem, 5vw, 3rem);
+      font-weight: 800;
+      letter-spacing: var(--tracking-display);
+      line-height: 1.1;
+      max-width: 700px;
+      margin: 0 auto var(--space-4);
+    }
+    .tools-hero p {
+      color: var(--text-secondary);
+      font-size: 1.1rem;
+      max-width: 600px;
+      margin: 0 auto var(--space-6);
+    }
+    .tools-hero .stats {
+      display: flex;
+      justify-content: center;
+      gap: var(--space-8);
+      flex-wrap: wrap;
+    }
+    .tools-hero .stats span {
+      font-size: 0.9rem;
+      color: var(--text-muted);
+    }
+    .tools-hero .stats strong {
+      color: var(--cyan);
+    }
+
+    .tools-search {
+      max-width: 500px;
+      margin: 0 auto var(--space-6);
+    }
+    .tools-search input {
+      width: 100%;
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: var(--space-3) var(--space-4);
+      color: var(--text-primary);
+      font-family: var(--font);
+      font-size: 1rem;
+      transition: border-color var(--transition-fast);
+    }
+    .tools-search input:focus {
+      outline: none;
+      border-color: var(--cyan);
+    }
+    .tools-search input::placeholder {
+      color: var(--text-muted);
+    }
+
+    .tools-section {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 var(--space-6) var(--space-12);
+    }
+
+    .category-tabs {
+      display: flex;
+      gap: var(--space-2);
+      flex-wrap: wrap;
+      margin-bottom: var(--space-8);
+      padding-bottom: var(--space-4);
+      border-bottom: 1px solid var(--border);
+    }
+    .category-tab {
+      background: none;
+      border: 1px solid var(--border);
+      color: var(--text-secondary);
+      padding: var(--space-2) var(--space-4);
+      border-radius: var(--radius-pill);
+      font-size: 0.85rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all var(--transition-fast);
+      font-family: var(--font);
+    }
+    .category-tab:hover { border-color: var(--border-hover); color: var(--text-primary); }
+    .category-tab.active { background: rgba(0, 242, 255, 0.1); border-color: var(--cyan); color: var(--cyan); }
+
+    .tools-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+      gap: var(--space-4);
+    }
+
+    .tool-card {
+      background: var(--bg-surface);
+      backdrop-filter: blur(12px);
+      border: 1px solid var(--border-solid);
+      border-radius: var(--radius-lg);
+      padding: var(--space-6);
+      transition: all var(--transition-normal);
+      text-decoration: none;
+      display: block;
+      position: relative;
+      overflow: hidden;
+    }
+    .tool-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: radial-gradient(circle at top right, rgba(0, 242, 255, 0.06), transparent 70%);
+      opacity: 0;
+      transition: opacity var(--transition-normal);
+      pointer-events: none;
+    }
+    .tool-card:hover {
+      border-color: var(--border-hover);
+      transform: translateY(-4px);
+      box-shadow: var(--card-shadow-hover);
+    }
+    .tool-card:hover::before { opacity: 1; }
+
+    .tool-card .tool-icon {
+      width: 44px;
+      height: 44px;
+      background: rgba(0, 242, 255, 0.08);
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: var(--space-3);
+      color: var(--cyan);
+      font-size: 1.2rem;
+    }
+    .tool-card h3 {
+      font-size: 1.05rem;
+      font-weight: 600;
+      color: var(--text-primary);
+      margin-bottom: var(--space-2);
+    }
+    .tool-card p {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      line-height: 1.5;
+      margin-bottom: var(--space-3);
+    }
+    .tool-card .tool-tag {
+      display: inline-block;
+      background: rgba(0, 242, 255, 0.06);
+      color: var(--cyan);
+      border: 1px solid rgba(0, 242, 255, 0.1);
+      padding: 0.1rem 0.45rem;
+      border-radius: var(--radius-pill);
+      font-size: 0.65rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+
+    .tool-group {
+      margin-bottom: var(--space-10);
+    }
+    .tool-group h2 {
+      font-size: 1.5rem;
+      font-weight: 700;
+      letter-spacing: var(--tracking-heading);
+      margin-bottom: var(--space-6);
+      color: var(--text-primary);
+    }
+
+    @media (max-width: 640px) {
+      .tools-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Skip to content -->
+  <a href="#main-content" class="skip-link">Skip to content</a>
+
+  <!-- Shared Header -->
+  <header class="site-header">
+    <div class="header-inner">
+      <a href="/" class="header-logo">
+        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#00f2ff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="9.75 15.02 15.5 12 9.75 8.98 9.75 15.02"/><circle cx="12" cy="12" r="10"/></svg>
+        YT <span>SEO</span> Architect
+      </a>
+      <nav class="header-nav" id="header-nav">
+        <a href="/tools.html" class="active">Tools</a>
+        <a href="/blog">Blog</a>
+        <a href="/public/glossary">Glossary</a>
+       <a href="/dashboard.html" class="header-cta">Dashboard</a>
+      </nav>
+      <button class="mobile-menu-btn" aria-label="Menu" onclick="document.getElementById('header-nav').classList.toggle('open')">☰</button>
+    </div>
+  </header>
+
+  <!-- Breadcrumbs -->
+  <div class="breadcrumbs">
+    <a href="/">Home</a>
+    <span class="sep">/</span>
+    <span class="current">Free Tools</span>
+  </div>
+
+  <main id="main-content">
+
+    <!-- Hero -->
+    <section class="tools-hero reveal">
+      <h1 class="gradient-text">Free YouTube SEO Tools</h1>
+      <p>90+ AI-powered tools to research keywords, optimize metadata, analyze thumbnails, and grow your channel. All 100% free — no limits, no credit card.</p>
+      <div class="tools-search">
+        <input type="text" id="toolSearch" placeholder="Search tools..." aria-label="Search tools" oninput="filterTools(this.value)">
+      </div>
+      <div class="stats">
+        <span><strong>90+</strong> Tools</span>
+        <span><strong>100%</strong> Free</span>
+        <span><strong>No</strong> Limits</span>
+      </div>
+    </section>
+
+    <div class="tools-section">
+
+      <!-- Category tabs -->
+      <div class="category-tabs" id="categoryTabs">
+        <button class="category-tab active" data-cat="all" onclick="filterCategory('all')">All</button>
+        <button class="category-tab" data-cat="keyword-research" onclick="filterCategory('keyword-research')">Keyword Research</button>
+        <button class="category-tab" data-cat="metadata" onclick="filterCategory('metadata')">Metadata</button>
+        <button class="category-tab" data-cat="analytics" onclick="filterCategory('analytics')">Analytics</button>
+        <button class="category-tab" data-cat="thumbnails" onclick="filterCategory('thumbnails')">Thumbnails</button>
+        <button class="category-tab" data-cat="shorts" onclick="filterCategory('shorts')">Shorts</button>
+        <button class="category-tab" data-cat="monetization" onclick="filterCategory('monetization')">Monetization</button>
+        <button class="category-tab" data-cat="strategy" onclick="filterCategory('strategy')">Strategy</button>
+      </div>
+
+      <!-- Tool Groups -->
+
+      <!-- Keyword Research -->
+      <div class="tool-group" data-category="keyword-research">
+        <h2>🔑 Keyword Research</h2>
+        <div class="tools-grid">
+          <a href="/public/tools/tag-generator.html" class="tool-card">
+            <div class="tool-icon">🏷</div>
+            <h3>Tag Generator</h3>
+            <p>AI-powered YouTube tag generation with competition scoring and ranking analysis.</p>
+            <span class="tool-tag">Popular</span>
+          </a>
+          <a href="/public/tools/tag-relevance-checker.html" class="tool-card">
+            <div class="tool-icon">🎯</div>
+            <h3>Tag Relevance Checker</h3>
+            <p>Check how relevant your tags are to your video content and target audience.</p>
+          </a>
+          <a href="/public/tools/keyword-difficulty-scorer.html" class="tool-card">
+            <div class="tool-icon">📊</div>
+            <h3>Keyword Difficulty Scorer</h3>
+            <p>Score how hard it is to rank for any YouTube keyword with data-driven analysis.</p>
+          </a>
+          <a href="/public/tools/keywords-youtube.html" class="tool-card">
+            <div class="tool-icon">🔍</div>
+            <h3>YouTube Keyword Tool</h3>
+            <p>Discover high-volume, low-competition keywords for your YouTube niche.</p>
+          </a>
+          <a href="/blog/how-to-keywords-youtube" class="tool-card">
+            <div class="tool-icon">📝</div>
+            <h3>How to Keywords for YouTube</h3>
+            <p>Learn how to find and use the best keywords for your YouTube videos.</p>
+          </a>
+          <a href="/blog/youtube-tags-2026" class="tool-card">
+            <div class="tool-icon">#️⃣</div>
+            <h3>YouTube Tags 2026</h3>
+            <p>Optimized tag strategies for 2026 YouTube algorithm and search.</p>
+          </a>
+        </div>
+      </div>
+
+      <!-- Metadata -->
+      <div class="tool-group" data-category="metadata">
+        <h2>✍️ Metadata & Titles</h2>
+        <div class="tools-grid">
+          <a href="/public/tools/title-optimizer.html" class="tool-card">
+            <div class="tool-icon">📄</div>
+            <h3>Title Optimizer</h3>
+            <p>AI-optimized YouTube titles with CTR prediction and keyword integration.</p>
+          </a>
+          <a href="/public/tools/description-writer.html" class="tool-card">
+            <div class="tool-icon">📃</div>
+            <h3>Description Writer</h3>
+            <p>Generate SEO-optimized YouTube descriptions with timestamps and keywords.</p>
+          </a>
+          <a href="/public/tools/description-quality-checker.html" class="tool-card">
+            <div class="tool-icon">✅</div>
+            <h3>Description Quality Checker</h3>
+            <p>Score and improve your YouTube video description quality for better SEO.</p>
+          </a>
+          <a href="/blog/youtube-metadata-auditor-vs-vidiq-shadow-ban" class="tool-card">
+            <div class="tool-icon">🛡</div>
+            <h3>Metadata Auditor</h3>
+            <p>Audit your metadata against vidIQ standards and check for shadow ban risks.</p>
+          </a>
+          <a href="/blog/how-to-metadata-youtube" class="tool-card">
+            <div class="tool-icon">📋</div>
+            <h3>Metadata Guide</h3>
+            <p>Complete guide to optimizing YouTube metadata for search and discovery.</p>
+          </a>
+        </div>
+      </div>
+
+      <!-- Analytics -->
+      <div class="tool-group" data-category="analytics">
+        <h2>📈 Analytics & Performance</h2>
+        <div class="tools-grid">
+          <a href="/public/tools/audience-retention-benchmark.html" class="tool-card">
+            <div class="tool-icon">📉</div>
+            <h3>Audience Retention Benchmark</h3>
+            <p>Compare your retention rates against niche benchmarks.</p>
+          </a>
+          <a href="/public/tools/engagement-rate-calculator.html" class="tool-card">
+            <div class="tool-icon">❤️</div>
+            <h3>Engagement Rate Calculator</h3>
+            <p>Calculate your like, comment, and share engagement rates.</p>
+          </a>
+          <a href="/public/tools/ctr-impressions-calculator.html" class="tool-card">
+            <div class="tool-icon">👁</div>
+            <h3>CTR & Impressions Calculator</h3>
+            <p>Analyze click-through rates and impression performance.</p>
+          </a>
+          <a href="/public/tools/subscriber-growth-calculator.html" class="tool-card">
+            <div class="tool-icon">📈</div>
+            <h3>Subscriber Growth Calculator</h3>
+            <p>Project subscriber growth based on current trends.</p>
+          </a>
+          <a href="/public/tools/watch-time-estimator.html" class="tool-card">
+            <div class="tool-icon">⏱</div>
+            <h3>Watch Time Estimator</h3>
+            <p>Estimate total watch time and monetization progress.</p>
+          </a>
+          <a href="/public/tools/youtube-revenue-estimator.html" class="tool-card">
+            <div class="tool-icon">💰</div>
+            <h3>Revenue Estimator</h3>
+            <p>Estimate YouTube ad revenue based on views and niche.</p>
+          </a>
+        </div>
+      </div>
+
+      <!-- Thumbnails -->
+      <div class="tool-group" data-category="thumbnails">
+        <h2>🖼 Thumbnails & Visual</h2>
+        <div class="tools-grid">
+          <a href="/public/tools/thumbnail-color-analyzer.html" class="tool-card">
+            <div class="tool-icon">🎨</div>
+            <h3>Thumbnail Color Analyzer</h3>
+            <p>Analyze thumbnail color schemes for maximum CTR and visual impact.</p>
+          </a>
+          <a href="/blog/youtube-thumbnail-ab-testing-guide" class="tool-card">
+            <div class="tool-icon">A/B</div>
+            <h3>Thumbnail A/B Tester</h3>
+            <p>Guide to split-testing thumbnails for optimal click-through rates.</p>
+          </a>
+          <a href="/blog/youtube-thumbnail-tips-2026" class="tool-card">
+            <div class="tool-icon">💡</div>
+            <h3>Thumbnail Tips 2026</h3>
+            <p>Best practices and trends for YouTube thumbnails in 2026.</p>
+          </a>
+        </div>
+      </div>
+
+      <!-- Shorts -->
+      <div class="tool-group" data-category="shorts">
+        <h2>📱 Shorts</h2>
+        <div class="tools-grid">
+          <a href="/public/tools/youtube-shorts-seo-ranking-guide.html" class="tool-card">
+            <div class="tool-icon">🎬</div>
+            <h3>Shorts SEO Ranking Guide</h3>
+            <p>Complete guide to ranking YouTube Shorts in search and the Shorts feed.</p>
+          </a>
+          <a href="/public/tools/youtube-shorts-seo-guide.html" class="tool-card">
+            <div class="tool-icon">📱</div>
+            <h3>Shorts SEO Guide</h3>
+            <p>Optimize your YouTube Shorts with proper SEO techniques.</p>
+          </a>
+          <a href="/public/tools/youtube-shorts-algorithm-2026.html" class="tool-card">
+            <div class="tool-icon">🤖</div>
+            <h3>Shorts Algorithm 2026</h3>
+            <p>Understand how the YouTube Shorts algorithm works in 2026.</p>
+          </a>
+          <a href="/public/tools/youtube-shorts-strategy-for-increasing-views-2026.html" class="tool-card">
+            <div class="tool-icon">🚀</div>
+            <h3>Shorts Strategy 2026</h3>
+            <p>Strategic guide to increasing Shorts views and engagement.</p>
+          </a>
+        </div>
+      </div>
+
+      <!-- Strategy -->
+      <div class="tool-group" data-category="strategy">
+        <h2>🧠 Strategy & Growth</h2>
+        <div class="tools-grid">
+          <a href="/public/tools/competition-analyzer.html" class="tool-card">
+            <div class="tool-icon">🔬</div>
+            <h3>Competition Analyzer</h3>
+            <p>Analyze competitor channels and find content gaps to exploit.</p>
+          </a>
+          <a href="/public/tools/best-posting-time-finder.html" class="tool-card">
+            <div class="tool-icon">⏰</div>
+            <h3>Best Posting Time Finder</h3>
+            <p>Find the optimal time to post videos for maximum engagement.</p>
+          </a>
+          <a href="/public/tools/playlist-performance-analyzer.html" class="tool-card">
+            <div class="tool-icon">📋</div>
+            <h3>Playlist Performance Analyzer</h3>
+            <p>Analyze your playlist structure and performance metrics.</p>
+          </a>
+          <a href="/public/tools/youtube-intro-hook-first-3-seconds.html" class="tool-card">
+            <div class="tool-icon">🎣</div>
+            <h3>Intro Hook Generator</h3>
+            <p>Create compelling video intros that hook viewers in the first 3 seconds.</p>
+          </a>
+          <a href="/public/tools/video-idea-generator.html" class="tool-card">
+            <div class="tool-icon">💡</div>
+            <h3>Video Idea Generator</h3>
+            <p>AI-powered video topic ideas based on your niche and trends.</p>
+          </a>
+          <a href="/blog/youtube-channel-branding-tips-for-consistency-2026" class="tool-card">
+            <div class="tool-icon">🎨</div>
+            <h3>Channel Branding Tips</h3>
+            <p>Branding strategies for consistent YouTube channel identity.</p>
+          </a>
+        </div>
+      </div>
+
+    </div>
+
+    <section style="max-width:1200px;margin:0 auto;padding:3rem var(--space-6);">
+      <h2 style="font-size:1.8rem;font-weight:800;margin-bottom:1.5rem;">YT SEO Architect vs. Alternatives</h2>
+      <p style="color:var(--text-muted);margin-bottom:1.5rem;">How YT SEO Architect stacks up against the most popular YouTube growth tools — honest, feature-by-feature comparisons.</p>
+      <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:1rem;">
+        <a href="/vs/vidiq" class="tool-card"><div class="tool-icon">📊</div><h3>vs vidIQ</h3><p>Keyword research & channel analytics compared.</p></a>
+        <a href="/vs/tubebuddy" class="tool-card"><div class="tool-icon">🛠️</div><h3>vs TubeBuddy</h3><p>Channel management & optimization compared.</p></a>
+        <a href="/vs/morningfame" class="tool-card"><div class="tool-icon">📈</div><h3>vs Morningfame</h3><p>YouTube analytics tools compared.</p></a>
+        <a href="/vs/tubics" class="tool-card"><div class="tool-icon">🎯</div><h3>vs Tubics</h3><p>SEO scoring & competitor tracking compared.</p></a>
+        <a href="/vs/keywordtool" class="tool-card"><div class="tool-icon">🔑</div><h3>vs Keyword Tool</h3><p>Multi-platform keyword research compared.</p></a>
+        <a href="/vs/canva" class="tool-card"><div class="tool-icon">🎨</div><h3>vs Canva</h3><p>Thumbnail design workflows compared.</p></a>
+      </div>
+      <p style="margin-top:1.25rem;"><a href="/vs" style="color:var(--primary);">Browse all comparisons →</a></p>
+    </section>
+
+  </main>
+
+  <!-- Footer -->
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <div class="footer-col">
+        <h4>Product</h4>
+       <a href="/dashboard.html">Dashboard</a>
+        <a href="/changelog.html">Changelog</a>
+      </div>
+      <div class="footer-col">
+        <h4>Resources</h4>
+        <a href="/blog">Blog</a>
+        <a href="/public/glossary">Glossary</a>
+        <a href="/public/guides">Guides</a>
+      </div>
+      <div class="footer-col">
+        <h4>Company</h4>
+        <a href="/about.html">About</a>
+        <a href="/contact.html">Contact</a>
+        <a href="/privacy-policy.html">Privacy</a>
+        <a href="/terms-of-service.html">Terms</a>
+      </div>
+      <div class="footer-col">
+        <h4>Social</h4>
+        <a href="https://twitter.com/YTSEOArchitect" target="_blank" rel="noopener">Twitter / X</a>
+        <a href="https://youtube.com" target="_blank" rel="noopener">YouTube</a>
+        <a href="https://github.com/nhlaka3" target="_blank" rel="noopener">GitHub</a>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>&copy; 2026 YT SEO Architect. All rights reserved.</span>
+      <div class="footer-social">
+        <a href="https://twitter.com/YTSEOArchitect" target="_blank" rel="noopener" aria-label="Twitter">𝕏</a>
+        <a href="https://github.com/nhlaka3" target="_blank" rel="noopener" aria-label="GitHub">GH</a>
+      </div>
+    </div>
+  </footer>
+
+  <script defer src="/js/blog-enhancements.js"></script>
+  <script>
+    function filterTools(query) {
+      document.querySelectorAll('.tool-card').forEach(function(card) {
+        var text = card.textContent.toLowerCase();
+        card.style.display = text.includes(query.toLowerCase()) ? 'block' : 'none';
+      });
+    }
+    function filterCategory(cat) {
+      document.querySelectorAll('.category-tab').forEach(function(t) {
+        t.classList.toggle('active', t.dataset.cat === cat);
+      });
+      document.querySelectorAll('.tool-group').forEach(function(group) {
+        if (cat === 'all' || group.dataset.category === cat) {
+          group.style.display = 'block';
+        } else {
+          group.style.display = 'none';
+        }
+      });
+    }
+  </script>
+</body>
+</html>
