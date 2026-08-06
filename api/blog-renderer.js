@@ -681,7 +681,8 @@ export function renderBlogTemplate(page) {
   }
 
   // AdSense: Post-TOC (moved below the TOC so it doesn't separate TL;DR from
-  // the article; tighter margins so unfilled ad units don't leave a void)
+  // the article; auto-collapses when no ad is served so unfilled units never
+  // leave a gap in the layout)
   contentHTML += `<div class="adsense-blog-top" style="margin:1rem 0 1.5rem; text-align:center;">
     <ins class="adsbygoogle"
          style="display:inline-block;width:728px;height:90px"
@@ -926,6 +927,20 @@ export function renderBlogTemplate(page) {
              (adsbygoogle = window.adsbygoogle || []).push({});
         <\/script>
       </div>
+
+      <!-- Collapse unfilled ad units so they never leave layout gaps -->
+      <script>
+        (function () {
+          setTimeout(function () {
+            document.querySelectorAll('.adsense-blog-top, .adsense-blog-bottom').forEach(function (w) {
+              var ins = w.querySelector('ins.adsbygoogle');
+              if (ins && !ins.querySelector('iframe') && ins.getAttribute('data-ad-status') !== 'filled') {
+                w.style.display = 'none';
+              }
+            });
+          }, 3500);
+        })();
+      <\/script>
 
     </article>
   </main>

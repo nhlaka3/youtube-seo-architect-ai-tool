@@ -440,6 +440,20 @@
         </script>
       </div>
 
+      <!-- Collapse unfilled ad units so they never leave layout gaps -->
+      <script>
+        (function () {
+          setTimeout(function () {
+            document.querySelectorAll('.adsense-blog-top, .adsense-blog-bottom').forEach(function (w) {
+              var ins = w.querySelector('ins.adsbygoogle');
+              if (ins && !ins.querySelector('iframe') && ins.getAttribute('data-ad-status') !== 'filled') {
+                w.style.display = 'none';
+              }
+            });
+          }, 3500);
+        })();
+      </script>
+
     </article>
   </main>
 
