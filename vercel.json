@@ -395,22 +395,6 @@
       ]
     },
     {
-      "source": "/assets/(.*)",
-      "has": [
-        {
-          "type": "header",
-          "key": "x-vercel-error",
-          "value": "NOT_FOUND"
-        }
-      ],
-      "headers": [
-        {
-          "key": "Cache-Control",
-          "value": "no-cache, no-store, must-revalidate"
-        }
-      ]
-    },
-    {
       "source": "/js/(.*)",
       "headers": [
         {
