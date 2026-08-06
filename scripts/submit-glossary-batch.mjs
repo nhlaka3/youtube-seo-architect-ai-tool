@@ -41,13 +41,11 @@ function generateUrls(terms) {
     urls.push(`${SITE}/glossary/${slug}`);
     urls.push(`${SITE}/glossary/es/${slug}`);
   }
-  // Comparison pages (EN + ES)
-  for (let i = 0; i < terms.length; i++) {
-    for (let j = i + 1; j < terms.length; j++) {
-      urls.push(`${SITE}/glossary/${terms[i]}-vs-${terms[j]}`);
-      urls.push(`${SITE}/glossary/es/${terms[i]}-vs-${terms[j]}`);
-    }
-  }
+  // NOTE: Comparison (X-vs-Y) pages are no longer submitted. They are noindex'd
+  // (thin, template-assembled content with no standalone search demand) and the
+  // Google Indexing API only acts on JobPosting/VideoObject pages anyway, so
+  // submitting them wasted daily quota on URLs that can never be forced into the
+  // index. Terms (above) + tools stay on the legitimate submit path.
   return [...new Set(urls)];
 }
 

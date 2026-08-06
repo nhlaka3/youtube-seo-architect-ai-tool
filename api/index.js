@@ -1960,25 +1960,13 @@ async function buildSitemapChunks() {
   }
   terms += footer;
 
-  // ── Chunk 3: glossary comparison pages (the bulk) ──
-  const MAX_PAIRS = 40000;
-  const seenPairs = new Set();
-  let pairs = header;
-  let cmpCount = 0;
-  for (let i = 0; i < termSlugs.length && cmpCount < MAX_PAIRS; i++) {
-    for (let j = i + 1; j < termSlugs.length && cmpCount < MAX_PAIRS; j++) {
-      const a = termSlugs[i], b = termSlugs[j];
-      if (a.includes('-vs-') || b.includes('-vs-')) continue;
-      const key = a < b ? `${a}-vs-${b}` : `${b}-vs-${a}`;
-      if (seenPairs.has(key)) continue;
-      seenPairs.add(key);
-      pairs += `  <url><loc>${site}/glossary/${key}</loc></url>\n`;
-      pairs += `  <url><loc>${site}/glossary/es/${key}</loc></url>\n`;
-      pairs += `  <url><loc>${site}/glossary/pt/${key}</loc></url>\n`;
-      cmpCount++;
-    }
-  }
-  pairs += footer;
+  // ── Chunk 3: glossary comparison pages ──
+  // Comparison (X-vs-Y) pages are noindex'd (2026-08-06): thin, template-assembled
+  // content with no standalone search demand. Removed from the sitemap so crawl
+  // budget goes to tools, blog, and glossary terms. If a curated subset is later
+  // given real data depth, re-add it here.
+  const pairs = header + footer;
+  const cmpCount = 0;
 
   return { core, terms, pairs, counts: { core: core.split('<url>').length - 1, terms: terms.split('<url>').length - 1, pairs: cmpCount } };
 }
@@ -1990,7 +1978,6 @@ app.get('/sitemap.xml', async (req, res) => {
       + '<sitemapindex xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n'
       + '  <sitemap><loc>https://yt-seo-architect.vercel.app/sitemap-core.xml</loc></sitemap>\n'
       + '  <sitemap><loc>https://yt-seo-architect.vercel.app/sitemap-glossary-terms.xml</loc></sitemap>\n'
-      + '  <sitemap><loc>https://yt-seo-architect.vercel.app/sitemap-glossary-pairs.xml</loc></sitemap>\n'
       + '</sitemapindex>';
     res.header('Content-Type', 'application/xml');
     res.header('Cache-Control', 'public, max-age=3600');
@@ -2429,12 +2416,23 @@ function getComparisonDims(termA, termB, lang) {
   ];
 }
 
+// Deterministic string hash — keeps related-comparison order stable across renders
+// (was Math.random, which produced different HTML on every request and defeated
+// Vercel edge caching + made pages look unstable to crawlers).
+function hashStr(s) {
+  let h = 0;
+  for (let i = 0; i < s.length; i++) {
+    h = ((h << 5) - h + s.charCodeAt(i)) | 0;
+  }
+  return Math.abs(h);
+}
+
 function getRelatedComparisons(slugA, lang) {
   const termA = GLOSSARY_TERMS.find(t => t.slug === slugA);
   if (!termA) return [];
   const prefix = lang === 'en' ? '' : '/' + lang;
   return GLOSSARY_TERMS.filter(t => t.slug !== slugA && t.cat === termA.cat)
-    .map(t => ({ t, r: Math.random() })).sort((a, b) => a.r - b.r).map(x => x.t)
+    .map(t => ({ t, r: hashStr(slugA + '-' + t.slug) })).sort((a, b) => a.r - b.r).map(x => x.t)
     .slice(0, 6)
     .map(t => ({
       name: t['name' + lang.toUpperCase()] || t.nameEN,
@@ -2490,7 +2488,7 @@ function renderGlossaryComparison(slugA, slugB, lang) {
     .map(([l, label]) => `<a href="${langUrl[l]}" hreflang="${l}" rel="alternate">${label}</a>`)
     .join(' · ');
 
-  return `<!DOCTYPE html>\n<html lang="${lang}">\n<head><meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1.0"/>\n<title>${title}</title>\n<link rel="canonical" href="${site}${currentUrl}"/>\n<link rel="alternate" hreflang="en" href="${site}${enUrl}"/>\n<link rel="alternate" hreflang="es" href="${site}${esUrl}"/>\n<link rel="alternate" hreflang="pt" href="${site}${ptUrl}"/>\n<link rel="alternate" hreflang="x-default" href="${site}${enUrl}"/>\n<meta name="description" content="${desc}"/>\n<script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","headline":"${title}","description":"${desc.replace(/"/g,'\\"')}","inLanguage":"${lang}","mainEntityOfPage":{"@type":"WebPage","@id":"${site}${currentUrl}"}}</script>\n<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700;800&display=swap" media="print" onload="this.media=\\'all\\'">\n<noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700;800&display=swap"></noscript>\n<style>${GLOSSARY_CSS}</style>\n</head>\n<body>\n<header class="header"><a href="/">⚡ YT SEO Architect</a><a href="/tools/" class="cta">${ui.tools}</a></header>\n<main>\n<div class="ln">${lang === 'en' ? '🇺🇸 English' : lang === 'es' ? '🇪🇸 Español' : '🇧🇷 Português'} · ${langPills}</div>\n<h1>${aName} vs ${bName}</h1>\n<p class="h1-sub">${catName} · ${ui.detail}</p>\n<div class="fs-box"><div class="fs-label">✨ ${ui.quickAnswer}</div><p>${snippetAnswer}</p></div>\n<div class="card"><h2>📖 ${aName}</h2><p>${aDef}</p><p style="margin-top:.5rem"><a href="${aGlossaryUrl}" style="color:#a5b4fc;font-size:.85rem">${ui.readGuide}</a></p></div>\n<div class="vs">⚡ VS ⚡</div>\n<div class="card"><h2>📖 ${bName}</h2><p>${bDef}</p><p style="margin-top:.5rem"><a href="${bGlossaryUrl}" style="color:#a5b4fc;font-size:.85rem">${ui.readGuide}</a></p></div>\n<div class="card"><h2>⚖️ ${ui.sideBySide}</h2>\n<table class="cmp-table"><thead><tr><th>${ui.dim}</th><th style="color:#fb923c">${aName}</th><th style="color:#a5b4fc">${bName}</th></tr></thead><tbody>\n${dimRows}\n</tbody></table></div>\n${whenToUse}\n${relatedHtml}\n<div class="cta-box"><h3>🚀 ${ui.master}</h3><p style="color:#8b8b9e;margin:.5rem 0 1rem;font-size:.9rem">${ui.cta}</p><a href="/tools/">${ui.tryTools}</a></div>\n</main>\n<footer><p>&copy; 2026 YT SEO Architect · <a href="/glossary/">${ui.glossary}</a> · <a href="/tools/">${ui.tools}</a></p></footer>\n</body>\n</html>`;
+  return `<!DOCTYPE html>\n<html lang="${lang}">\n<head><meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1.0"/>\n<meta name="robots" content="noindex, follow"/>\n<title>${title}</title>\n<link rel="canonical" href="${site}${currentUrl}"/>\n<link rel="alternate" hreflang="en" href="${site}${enUrl}"/>\n<link rel="alternate" hreflang="es" href="${site}${esUrl}"/>\n<link rel="alternate" hreflang="pt" href="${site}${ptUrl}"/>\n<link rel="alternate" hreflang="x-default" href="${site}${enUrl}"/>\n<meta name="description" content="${desc}"/>\n<script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","headline":"${title}","description":"${desc.replace(/"/g,'\\"')}","inLanguage":"${lang}","mainEntityOfPage":{"@type":"WebPage","@id":"${site}${currentUrl}"}}</script>\n<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700;800&display=swap" media="print" onload="this.media=\\'all\\'">\n<noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700;800&display=swap"></noscript>\n<style>${GLOSSARY_CSS}</style>\n</head>\n<body>\n<header class="header"><a href="/">⚡ YT SEO Architect</a><a href="/tools/" class="cta">${ui.tools}</a></header>\n<main>\n<div class="ln">${lang === 'en' ? '🇺🇸 English' : lang === 'es' ? '🇪🇸 Español' : '🇧🇷 Português'} · ${langPills}</div>\n<h1>${aName} vs ${bName}</h1>\n<p class="h1-sub">${catName} · ${ui.detail}</p>\n<div class="fs-box"><div class="fs-label">✨ ${ui.quickAnswer}</div><p>${snippetAnswer}</p></div>\n<div class="card"><h2>📖 ${aName}</h2><p>${aDef}</p><p style="margin-top:.5rem"><a href="${aGlossaryUrl}" style="color:#a5b4fc;font-size:.85rem">${ui.readGuide}</a></p></div>\n<div class="vs">⚡ VS ⚡</div>\n<div class="card"><h2>📖 ${bName}</h2><p>${bDef}</p><p style="margin-top:.5rem"><a href="${bGlossaryUrl}" style="color:#a5b4fc;font-size:.85rem">${ui.readGuide}</a></p></div>\n<div class="card"><h2>⚖️ ${ui.sideBySide}</h2>\n<table class="cmp-table"><thead><tr><th>${ui.dim}</th><th style="color:#fb923c">${aName}</th><th style="color:#a5b4fc">${bName}</th></tr></thead><tbody>\n${dimRows}\n</tbody></table></div>\n${whenToUse}\n${relatedHtml}\n<div class="cta-box"><h3>🚀 ${ui.master}</h3><p style="color:#8b8b9e;margin:.5rem 0 1rem;font-size:.9rem">${ui.cta}</p><a href="/tools/">${ui.tryTools}</a></div>\n</main>\n<footer><p>&copy; 2026 YT SEO Architect · <a href="/glossary/">${ui.glossary}</a> · <a href="/tools/">${ui.tools}</a></p></footer>\n</body>\n</html>`;
 }
 
 
@@ -2514,6 +2512,11 @@ app.get(/^\/glossary\/(es\/|pt\/)?(.+)-vs-(.+)$/, async (req, res) => {
     if (!html) {
       return sendJSON(res, 404, { error: 'Terms not found' });
     }
+    // Comparison (X-vs-Y) pages are noindex'd (2026-08-06): thin, template-assembled
+    // content with no standalone search demand. Kept live for internal linking/UX
+    // but kept out of Google's index so crawl budget + quality signals go to tools,
+    // blog, and glossary term pages. See renderGlossaryComparison for the meta tag.
+    res.setHeader('X-Robots-Tag', 'noindex, follow');
     res.setHeader('Content-Type', 'text/html; charset=utf-8');
     res.setHeader('Cache-Control', 'public, max-age=3600, s-maxage=3600');
     return res.status(200).send(html);

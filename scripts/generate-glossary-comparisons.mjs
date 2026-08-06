@@ -70,6 +70,13 @@ function generateComparisonIntro(termA, termB, catA, catB) {
 function generateKeyDifferences(termA, termB, catA, catB, defA, defB) {
   const diffs = [];
 
+  // Deterministic "impact timeline" from the term names (was Math.random, which
+  // produced a different number on every regeneration — non-reproducible output).
+  let _h = 0;
+  const _seed = `${termA}-${termB}`;
+  for (let _i = 0; _i < _seed.length; _i++) _h = ((_h << 5) - _h + _seed.charCodeAt(_i)) | 0;
+  const weeks = 2 + (Math.abs(_h) % 4);
+
   // Category difference
   diffs.push({
     dimension: 'Primary Category',
@@ -93,8 +100,8 @@ function generateKeyDifferences(termA, termB, catA, catB, defA, defB) {
   // Impact timing
   diffs.push({
     dimension: 'Impact Timeline',
-    a: `${termA} typically shows measurable results within ${Math.floor(2 + Math.random() * 4)} weeks of consistent application.`,
-    b: `${termB} typically shows measurable results within ${Math.floor(2 + Math.random() * 4)} weeks of consistent application.`,
+    a: `${termA} typically shows measurable results within ${weeks} weeks of consistent application.`,
+    b: `${termB} typically shows measurable results within ${weeks} weeks of consistent application.`,
     insight: 'Both require consistent effort over time — there are no shortcuts in YouTube SEO. The key is to integrate both into your regular workflow.'
   });
 
@@ -154,7 +161,7 @@ function generateComparisonPage(termA, termB, slugA, slugB, dataA, dataB) {
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>${title} | YT SEO Architect</title>
   <meta name="description" content="${description.substring(0, 160)}" />
-  <meta name="robots" content="index, follow" />
+  <meta name="robots" content="noindex, follow" />
   <link rel="canonical" href="https://yt-seo-architect.vercel.app/glossary/${slug}" />
 
   <meta property="og:title" content="${title}" />

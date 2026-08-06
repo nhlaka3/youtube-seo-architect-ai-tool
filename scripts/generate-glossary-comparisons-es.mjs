@@ -70,7 +70,7 @@ function generateComparisonPage(a, b, aName, bName, aCat, bCat, aDef, bDef, allT
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>${aName} vs ${bName}: Diferencias Clave para Creadores de YouTube | YT SEO Architect</title>
   <meta name="description" content="Compara ${aName} y ${bName}: definiciones, diferencias clave, cuándo enfocarte en cada uno y cómo afectan tu estrategia de YouTube SEO." />
-  <meta name="robots" content="index, follow" />
+  <meta name="robots" content="noindex, follow" />
   <link rel="canonical" href="${SITE}/glossary/es/${a}-vs-${b}" />
   <meta property="og:title" content="${aName} vs ${bName}: Diferencias Clave para YouTube" />
   <meta property="og:description" content="Compara ${aName} y ${bName} para tu estrategia de YouTube SEO." />
