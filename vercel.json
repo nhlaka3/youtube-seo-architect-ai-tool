@@ -382,10 +382,6 @@
     {
       "source": "/vs/(.*)",
       "destination": "/vs/$1.html"
-    },
-    {
-      "source": "/(.*)",
-      "destination": "/$1"
     }
   ],
   "headers": [
