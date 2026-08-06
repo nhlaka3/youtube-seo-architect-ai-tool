@@ -2652,12 +2652,25 @@ if (Sentry && Sentry.Handlers) {
 
 
 
-// Fallback 404 handler
-
+// Fallback 404 handler — serve the branded 404 page (matches static 404.html)
 app.use((req, res) => {
-
-  sendJSON(res, 404, { error: 'Not found', path: req.path });
-
+  const { readFileSync } = require('fs');
+  const { resolve, dirname } = require('path');
+  const { fileURLToPath } = require('url');
+  const __filename = fileURLToPath(import.meta.url);
+  const __dirname = dirname(__filename);
+  try {
+    const four04 = readFileSync(resolve(__dirname, '../dist/404.html'), 'utf-8');
+    res.status(404).header('Content-Type', 'text/html; charset=utf-8').send(four04);
+  } catch {
+    // Fall back to a minimal branded 404 if the file isn't available
+    res.status(404).header('Content-Type', 'text/html; charset=utf-8').send(
+      '<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><title>404 - Page Not Found | YT SEO Architect</title></head>'
+      + '<body style="font-family:Geist,sans-serif;background:#0a0b10;color:#f8fafc;display:flex;align-items:center;justify-content:center;height:100vh;margin:0;text-align:center;">'
+      + '<div><h1 style="font-size:4rem;margin:0;background:linear-gradient(135deg,#f97316,#8b5cf6);-webkit-background-clip:text;-webkit-text-fill-color:transparent;">404</h1>'
+      + '<p>Page not found. <a href="/" style="color:#00f2ff;">Back to YT SEO Architect</a></p></div></body></html>'
+    );
+  }
 });
 
 
