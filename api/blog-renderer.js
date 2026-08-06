@@ -656,13 +656,21 @@ export function renderBlogTemplate(page) {
     // blocks from generators are often unparseable and break rich results.
     .replace(/<script[^>]*type=["']application\/ld\+json["'][^>]*>[\s\S]*?<\/script>/gi, '')
     .trim();
-  // Hoist a leading TL;DR block so it renders above the TOC
+  // Hoist a content-provided TL;DR block (from ANY position) so it renders
+  // above the TOC. Stored full-page posts embed their own tldr/toc/breadcrumb
+  // chrome — strip the duplicates and let the template regenerate them.
   let hoistedTLDR = '';
-  const tldrHoist = bodyContent.match(/^(<div\s[^>]*class=["'][^"']*tldr[^"']*["'][^>]*>[\s\S]*?<\/div>)/i);
-  if (tldrHoist) {
-    hoistedTLDR = tldrHoist[1].trim();
-    bodyContent = bodyContent.slice(tldrHoist[0].length).trim();
+  let strippedTOC = false;
+  const anyTLDR = bodyContent.match(/<div\s[^>]*class=["'][^"']*tldr[^"']*["'][^>]*>[\s\S]*?<\/div>/i);
+  if (anyTLDR) {
+    hoistedTLDR = anyTLDR[0].trim();
   }
+  bodyContent = bodyContent
+    .replace(/<div\s[^>]*class=["'][^"']*tldr[^"']*["'][^>]*>[\s\S]*?<\/div>/gi, '')
+    .replace(/<nav\s[^>]*class="toc"[^>]*>[\s\S]*?<\/nav>/gi, (_m) => { strippedTOC = true; return ''; })
+    .replace(/<nav\s[^>]*class="breadcrumb"[^>]*>[\s\S]*?<\/nav>/gi, '')
+    .replace(/<!--\s*Breadcrumb\s*-->/gi, '')
+    .trim();
 
   // Build content sections (insert structural wrappers where missing)
   let contentHTML = '';
@@ -674,9 +682,10 @@ export function renderBlogTemplate(page) {
     contentHTML += generateTLDRBlock(page);
   }
 
-  // 2. TOC nav (before any ad — keeps the TL;DR → TOC → content flow tight)
-  if (!hasTOC && h2s.length >= 3) {
-    const contentH2s = h2s.filter(h => !/faq|key takeaways|conclusion/i.test(h.text));
+  // 2. TOC nav (before any ad — keeps the TL;DR → TOC → content flow tight;
+  // regenerate when the stored copy was stripped)
+  if (h2s.length >= 3 && (!hasTOC || strippedTOC)) {
+    const contentH2s = h2s.filter(h => !/faq|key takeaways|conclusion|in this article/i.test(h.text));
     contentHTML += generateTOCNav(contentH2s);
   }
 
