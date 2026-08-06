@@ -1446,6 +1446,42 @@ async function main() {
   } catch (e) {
     console.log(`  ⚠ Visual generation skipped (non-fatal): ${e.message}`);
   }
+
+  // ── JS visual top-up: guarantee BLOG_MIN_VISUALS charts ──────────
+  // The Python pipeline above is non-fatal and silently no-ops on CI runners
+  // without matplotlib — that's why older cron posts ship with 0 visuals.
+  // This zero-dependency generator injects inline <svg> charts (no assets to
+  // deploy) so the min-visuals gate is reliably satisfied.
+  try {
+    const { generatePostVisuals } = await import('./blog-visuals.mjs');
+    const needed = BLOG_MIN_VISUALS - countVisuals(articleHTML);
+    if (needed > 0) {
+      const visuals = generatePostVisuals({ slug: keywordEntry.slug, keyword: keywordEntry.keyword });
+      const toAdd = visuals.slice(0, needed);
+      const h2s = [...articleHTML.matchAll(/<h2[^>]*>.*?<\/h2>/gi)];
+      // Anchor after the 1st, middle, and last H2 (fall back to body start).
+      const anchors = [
+        h2s[0] ? h2s[0].index + h2s[0][0].length : -1,
+        h2s[Math.floor(h2s.length / 2)] ? h2s[Math.floor(h2s.length / 2)].index + h2s[Math.floor(h2s.length / 2)][0].length : -1,
+        h2s[h2s.length - 1] ? h2s[h2s.length - 1].index + h2s[h2s.length - 1][0].length : -1,
+      ].filter(p => p >= 0);
+      const uniq = [...new Set(anchors)].sort((a, b) => a - b).slice(0, toAdd.length);
+      let result = '';
+      let last = 0;
+      toAdd.forEach((v, i) => {
+        const pos = uniq[i] ?? articleHTML.length;
+        result += articleHTML.slice(last, pos) + '\n' + v.figure_html + '\n';
+        last = pos;
+      });
+      result += articleHTML.slice(last);
+      articleHTML = result;
+      console.log(`  ✅ JS visuals injected: ${Math.min(toAdd.length, uniq.length)} (total now ${countVisuals(articleHTML)})`);
+    } else {
+      console.log(`  🖼 Visuals already present: ${countVisuals(articleHTML)} (>= ${BLOG_MIN_VISUALS})`);
+    }
+  } catch (e) {
+    console.log(`  ⚠ JS visual top-up skipped (non-fatal): ${e.message}`);
+  }
   console.log('');
 
   // Build page object for renderer

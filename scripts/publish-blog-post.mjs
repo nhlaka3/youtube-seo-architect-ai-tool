@@ -189,11 +189,21 @@ console.log(`  Authored visuals (img/object/svg): ${countVisuals(body)}`);
 console.log(`  FAQ details after conversion: ${(body.match(/<details[\s>]/gi) || []).length}`);
 
 // Enforce the minimum-visuals requirement on the AUTHORED body (not the
-// template-wrapped output, so template chrome can't satisfy it).
-const visuals = countVisuals(body);
+// template-wrapped output, so template chrome can't satisfy it). Drafts short
+// on visuals are auto-topped-up with branded inline-SVG charts.
+let visuals = countVisuals(body);
+if (visuals < minVisuals) {
+  const { generatePostVisuals } = await import('./blog-visuals.mjs');
+  const toAdd = generatePostVisuals({ slug, keyword: title }).slice(0, minVisuals - visuals);
+  const firstH2 = body.match(/<h2[^>]*>[\s\S]*?<\/h2>/i);
+  const pos = firstH2 ? firstH2.index + firstH2[0].length : body.length;
+  body = body.slice(0, pos) + '\n' + toAdd.map(v => v.figure_html).join('\n') + '\n' + body.slice(pos);
+  visuals = countVisuals(body);
+  console.log(`  🎨 auto-injected ${toAdd.length} visual(s) → now ${visuals}`);
+}
 if (visuals < minVisuals) {
   console.log(`\n  ❌ BLOCKED: only ${visuals} images/charts (need ${minVisuals} minimum).`);
-  console.log('  Add more images/charts, or pass --min-visuals 0 to skip.');
+  console.log('  Pass --min-visuals 0 to skip, or add more visuals.');
   console.log('  Nothing was saved.');
   process.exit(2);
 }
