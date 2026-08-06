@@ -252,7 +252,11 @@ if (DRY_RUN) {
   process.exit(0);
 }
 
-// 5. Upsert into DB
+// 5. Upsert into DB.
+// IMPORTANT: save the RAW article body, NOT fullHTML. The blog/:slug API serves
+// posts by running renderBlogTemplate(page) again on the stored content, so
+// wrapping here AND letting the API wrap = double header/nav (the bug we found).
+// Storing the raw body + API wrapping once matches how the cron's posts work.
 console.log('\n  Saving to database...');
 try {
   const { default: dbService } = await import('../src/database/services.js');
@@ -261,7 +265,7 @@ try {
     title,
     metaDescription: description || title,
     h1: title,
-    content: fullHTML,
+    content: body, // raw article body — the API wraps it with renderBlogTemplate
     wordCount,
     status,
     publishedAt: status === 'published' ? new Date() : null,
