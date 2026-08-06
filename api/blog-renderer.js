@@ -630,40 +630,12 @@ export function renderBlogTemplate(page) {
   const h2s = extractH2s(rawContent);
   const faqItems = extractFAQItems(rawContent);
 
-  // Build content sections (insert structural wrappers where missing)
-  let contentHTML = '';
-
-  // 1. TL;DR block
-  if (!hasTLDR) {
-    contentHTML += generateTLDRBlock(page);
-  }
-
-  // AdSense: Post-TL;DR
-  contentHTML += `<div class="adsense-blog-top" style="margin:2rem 0; text-align:center;">
-    <ins class="adsbygoogle"
-         style="display:inline-block;width:728px;height:90px"
-         data-ad-client="ca-pub-3831668789026424"
-         data-ad-slot="8703240267"
-         data-ad-format="auto"
-         data-full-width-responsive="true"></ins>
-    <script>
-         (adsbygoogle = window.adsbygoogle || []).push({});
-    <\/script>
-  </div>`;
-
-  // 2. TOC nav
-  if (!hasTOC && h2s.length >= 3) {
-    const contentH2s = h2s.filter(h => !/faq|key takeaways|conclusion/i.test(h.text));
-    contentHTML += generateTOCNav(contentH2s);
-  }
-
-  // 3. Body content (the AI-generated or template-generated HTML) — with auto-linked glossary terms
-  // Extract just the article body — rawContent is a full HTML page saved in DB,
-  // but the template wraps it in another full page. Strip H1 too (template provides one).
+  // Extract the article body early — needed to hoist a content-provided TL;DR
+  // above the TOC (canonical order: TL;DR → TOC → ad → body).
   let bodyContent = rawContent;
-  const articleMatch = bodyContent.match(/<article>([\s\S]*?)<\/article>/i);
-  if (articleMatch) {
-    bodyContent = articleMatch[1].trim();
+  const articleMatchB = bodyContent.match(/<article>([\s\S]*?)<\/article>/i);
+  if (articleMatchB) {
+    bodyContent = articleMatchB[1].trim();
   }
   // Strip duplicate H1 (template provides one) and any existing related-posts/footer sections
   // Also strip share bars, meta lines, author box, hero image — template renders these
@@ -684,6 +656,46 @@ export function renderBlogTemplate(page) {
     // blocks from generators are often unparseable and break rich results.
     .replace(/<script[^>]*type=["']application\/ld\+json["'][^>]*>[\s\S]*?<\/script>/gi, '')
     .trim();
+  // Hoist a leading TL;DR block so it renders above the TOC
+  let hoistedTLDR = '';
+  const tldrHoist = bodyContent.match(/^(<div\s[^>]*class=["'][^"']*tldr[^"']*["'][^>]*>[\s\S]*?<\/div>)/i);
+  if (tldrHoist) {
+    hoistedTLDR = tldrHoist[1].trim();
+    bodyContent = bodyContent.slice(tldrHoist[0].length).trim();
+  }
+
+  // Build content sections (insert structural wrappers where missing)
+  let contentHTML = '';
+
+  // 1. TL;DR block
+  if (hoistedTLDR) {
+    contentHTML += hoistedTLDR;
+  } else if (!hasTLDR) {
+    contentHTML += generateTLDRBlock(page);
+  }
+
+  // 2. TOC nav (before any ad — keeps the TL;DR → TOC → content flow tight)
+  if (!hasTOC && h2s.length >= 3) {
+    const contentH2s = h2s.filter(h => !/faq|key takeaways|conclusion/i.test(h.text));
+    contentHTML += generateTOCNav(contentH2s);
+  }
+
+  // AdSense: Post-TOC (moved below the TOC so it doesn't separate TL;DR from
+  // the article; tighter margins so unfilled ad units don't leave a void)
+  contentHTML += `<div class="adsense-blog-top" style="margin:1rem 0 1.5rem; text-align:center;">
+    <ins class="adsbygoogle"
+         style="display:inline-block;width:728px;height:90px"
+         data-ad-client="ca-pub-3831668789026424"
+         data-ad-slot="8703240267"
+         data-ad-format="auto"
+         data-full-width-responsive="true"></ins>
+    <script>
+         (adsbygoogle = window.adsbygoogle || []).push({});
+    <\/script>
+  </div>`;
+
+  // 3. Body content (the AI-generated or template-generated HTML) — with auto-linked glossary terms
+  // (bodyContent was extracted and cleaned above, incl. TL;DR hoisting)
   const linked = linkGlossaryTerms(bodyContent);
   contentHTML += linked;
 
@@ -898,8 +910,12 @@ export function renderBlogTemplate(page) {
       <!-- Social Share Buttons (Bottom) -->
       ${generateShareBar(slug, title, true)}
 
-      <!-- AdSense: Bottom -->
-      <div class="adsense-blog-bottom" style="margin:2rem 0; text-align:center;">
+      <!-- Related posts -->
+      ${generateRelatedPosts(page)}
+
+      <!-- AdSense: Bottom (after related posts — keeps share bar → related
+           cards contiguous so unfilled ad units don't leave a void) -->
+      <div class="adsense-blog-bottom" style="margin:1.5rem 0 0.5rem; text-align:center;">
         <ins class="adsbygoogle"
              style="display:block;width:100%;height:250px"
              data-ad-client="ca-pub-3831668789026424"
@@ -910,9 +926,6 @@ export function renderBlogTemplate(page) {
              (adsbygoogle = window.adsbygoogle || []).push({});
         <\/script>
       </div>
-
-      <!-- Related posts -->
-      ${generateRelatedPosts(page)}
 
     </article>
   </main>
