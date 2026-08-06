@@ -99,6 +99,29 @@ function extractBody(html) {
   return body.trim();
 }
 
+/**
+ * Strip template-owned chrome from a claude-blog draft's body BEFORE saving.
+ * The blog/:slug API wraps the stored body with renderBlogTemplate, which
+ * GENERATES these sections itself — so any of them already present in the
+ * draft body come out duplicated. Removing them lets the template render
+ * exactly one of each. Only the article content (h2/p/table/figure/charts/
+ * FAQ details/links) is kept.
+ */
+function stripTemplateChrome(html) {
+  const chromeRe = /tldr|key-takeaways|cta-box|author-box|author-info|share-bar|related-posts|social-proof|reading-progress|featured-image|tool-cta|sticky-cta|disclosure|affiliate|adsense|gear\b|shop/i;
+  let out = html;
+  let removed = 0;
+  let prev;
+  do {
+    prev = out;
+    out = out.replace(/<div\b[^>]*class="([^"]*)"[^>]*>[\s\S]*?<\/div>/gi, (full, cls) => {
+      if (chromeRe.test(cls)) { removed++; return ''; }
+      return full;
+    });
+  } while (prev !== out);
+  return { html: out, removed };
+}
+
 /** Remove the first <h1>...</h1> — the template renders page.title as the H1. */
 function stripH1(html) {
   return html.replace(/<h1[^>]*>[\s\S]*?<\/h1>/i, '').trim();
@@ -180,6 +203,9 @@ const draftHtml = readFileSync(htmlPath, 'utf-8');
 // 1. Extract + normalize body
 let body = extractBody(draftHtml);
 body = stripH1(body);
+const chrome = stripTemplateChrome(body);
+if (chrome.removed > 0) console.log(`  🧹 stripped ${chrome.removed} template-chrome block(s) from draft body`);
+body = chrome.html;
 body = convertFAQ(body);
 const { html: bodyWithAssets } = copyAssets(body, slug);
 body = bodyWithAssets;
