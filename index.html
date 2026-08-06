@@ -14,6 +14,19 @@
   <link rel="preconnect" href="https://apis.google.com" />
   <link rel="dns-prefetch" href="https://api.groq.com" />
   <link rel="dns-prefetch" href="https://www.paypal.com" />
+  <link rel="preload" href="/design-tokens.css" as="style" />
+  <link rel="preload" href="/style.css" as="style" />
+  <script type="speculationrules">
+  {
+    "prerender": [
+      {
+        "source": "list",
+        "urls": ["/tools", "/blog", "/pricing", "/about"],
+        "eagerness": "moderate"
+      }
+    ]
+  }
+  </script>
 
   <title>YT SEO Architect — AI YouTube SEO Tool | Keywords, Tags & Scripts</title>
   <meta name="description" content="90+ free AI YouTube SEO tools: keyword research, tag generator, title optimizer, metadata audit, thumbnail analyzer. 100% Free &amp; Unlimited — no credits, no subscription, no catch." />
@@ -166,8 +179,8 @@
 
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Geist:wght@100..900&display=swap" rel="stylesheet" />
-  <link href="https://fonts.googleapis.com/css2?family=Geist+Mono:wght@100..900&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Geist:wght@100..900&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
+  <link href="https://fonts.googleapis.com/css2?family=Geist+Mono:wght@100..900&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
   <script src="/js/lucide.min.js" defer></script>
   <link rel="stylesheet" href="/design-tokens.css" media="print" onload="this.media='all'">
   <link rel="stylesheet" href="/utilities.css" media="print" onload="this.media='all'">

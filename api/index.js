@@ -279,7 +279,7 @@ app.use(helmet({
 
   hsts: {
 
-    maxAge: 31536000,
+    maxAge: 63072000,
 
     includeSubDomains: true,
 
@@ -834,21 +834,21 @@ TRASH_SLUGS_410.forEach(slug => {
 // ── Blog Categories ──────────────────────────────────────────
 const BLOG_CATEGORIES = {
   'monetization': { name: 'Monetization', icon: '💰', desc: 'YouTube monetization requirements, ad revenue, YPP, and income strategies', slugMatch: ['monetiz', 'partner-program', 'ad-revenue', 'ypp'],
-    content: '<p>Monetization is the milestone every creator works toward, but the path to the YouTube Partner Program (YPP) is full of specific requirements and strategy decisions. This category covers the exact thresholds you need to hit, how ad revenue actually gets calculated, and the realistic ways creators build income beyond ads — memberships, sponsorships, affiliate links, and digital products.</p><p>Start by understanding the YPP entry requirements: 1,000 subscribers and 4,000 valid public watch hours (or 10 million Shorts views in 90 days). Once you qualify, the next questions are practical — how RPM and CPM work, why some niches pay dramatically more per view, and how to structure your content pipeline so monetization doesn\'t come at the cost of growth.</p><p>Every guide in this category is written to be actionable today, not theoretical. You\'ll learn what actually moves your revenue numbers and what is wasted effort, based on how YouTube\'s ad system really works in 2026.</p>' },
+    content: '<p>Monetization is the milestone every creator works toward, but the path to the YouTube Partner Program (YPP) is full of specific requirements and strategy decisions. This category covers the exact thresholds you need to hit, how ad revenue actually gets calculated, and the realistic ways creators build income beyond ads — memberships, sponsorships, affiliate links, and digital products.</p><p>Start by understanding the YPP entry requirements: 1,000 subscribers and 4,000 valid public watch hours (or 10 million Shorts views in 90 days). Once you qualify, the next questions are practical — how RPM and CPM work, why some niches pay dramatically more per view, and how to structure your content pipeline so monetization doesn\'t come at the cost of growth.</p><p>Every guide in this category is written to be actionable today, not theoretical. You\'ll learn what actually moves your revenue numbers and what is wasted effort, based on how YouTube\'s ad system really works in 2026.</p><p>What you\'ll learn in this category: the difference between RPM and CPM and why your niche dictates both, the three monetization paths available in 2026 (ads, memberships, and the Shorts revenue pool), and the mistakes that get channels demonetized or stuck below the YPP threshold. Every guide ends with a concrete action list, so you can move from reading to revenue.</p><p>How to use this category: start with the YPP requirements guide if you haven\'t qualified yet, then move to the revenue-focused guides once you\'re monetized. Bookmark the monetization checklist and run it before each upload batch — the requirements change more often than most creators realize, and staying compliant is easier than recovering from a strike.</p><p>Key topics covered: YPP requirements, RPM vs CPM, ad revenue, memberships, sponsorships, affiliate income, and monetization mistakes to avoid.</p><p>Whether you\'re aiming for your first payout or scaling an already-monetized channel, these guides meet you where you are and show the next step clearly.</p>' },
   'shorts': { name: 'Shorts & Vertical Video', icon: '📱', desc: 'YouTube Shorts algorithm, monetization, and growth strategies', slugMatch: ['short'],
-    content: '<p>YouTube Shorts changed the platform\'s growth dynamics completely. A channel can now go from zero to hundreds of thousands of subscribers in months — but only if it understands how the Shorts feed actually selects and ranks content. This category is your complete guide to vertical video on YouTube.</p><p>The Shorts algorithm prioritizes watch-through rate, swipe-away rate, and engagement velocity above everything else. That means your first 1-3 seconds decide most of your fate, and your hook needs to work with sound on or off. We cover the mechanics of Shorts ranking, the monetization thresholds unique to Shorts, and how to convert Shorts viewers into long-form subscribers instead of just renting attention.</p><p>Whether you\'re starting fresh with Shorts or trying to fix a channel that\'s plateaued, these guides give you the exact playbook for 2026\'s Shorts environment.</p>' },
+    content: '<p>YouTube Shorts changed the platform\'s growth dynamics completely. A channel can now go from zero to hundreds of thousands of subscribers in months — but only if it understands how the Shorts feed actually selects and ranks content. This category is your complete guide to vertical video on YouTube.</p><p>The Shorts algorithm prioritizes watch-through rate, swipe-away rate, and engagement velocity above everything else. That means your first 1-3 seconds decide most of your fate, and your hook needs to work with sound on or off. We cover the mechanics of Shorts ranking, the monetization thresholds unique to Shorts, and how to convert Shorts viewers into long-form subscribers instead of just renting attention.</p><p>Whether you\'re starting fresh with Shorts or trying to fix a channel that\'s plateaued, these guides give you the exact playbook for 2026\'s Shorts environment.</p><p>What you\'ll learn in this category: how the Shorts feed selects videos (hint: it\'s watch-through rate and swipe-away rate, not views), the exact monetization thresholds for Shorts in 2026, and how to build a Shorts strategy that feeds your long-form channel instead of competing with it. You\'ll also see the analytics that matter for Shorts specifically — they\'re different from long-form.</p><p>How to use this category: if you\'re starting fresh, read the Shorts algorithm guide first to understand the feed mechanics, then the monetization requirements so you know what you\'re working toward. If your Shorts are already getting views but not converting to subscribers, focus on the growth strategies that bridge Shorts viewers to long-form content.</p><p>Key topics covered: Shorts algorithm mechanics, swipe-away rate, Shorts monetization thresholds, vertical video strategy, and converting Shorts viewers to subscribers.</p><p>Short-form is where new audiences are found fastest in 2026 — these guides make sure you don\'t waste the opportunity.</p>' },
   'analytics': { name: 'Analytics & Metrics', icon: '📊', desc: 'CTR, retention, impressions, and analytics metrics explained', slugMatch: ['analytic', 'retention', 'ctr', 'impression', 'metric'],
-    content: '<p>YouTube analytics tells you exactly what\'s working and what isn\'t — if you know how to read it. Most creators check views and subscribers, then miss the metrics that actually drive growth: click-through rate (CTR), average view duration, impressions, and audience retention curves. This category decodes all of it.</p><p>CTR tells you if your title and thumbnail are competitive in the search results and suggested feed. Retention tells you if your content delivers on its promise. Impressions tell you whether YouTube is even testing your videos with new audiences. Each metric points at a different fix, and these guides map metric to action.</p><p>You\'ll learn which numbers matter at which channel size, how to interpret a retention graph that drops at 30 seconds vs 2 minutes, and what analytics patterns reliably predict a video about to take off.</p>' },
+    content: '<p>YouTube analytics tells you exactly what\'s working and what isn\'t — if you know how to read it. Most creators check views and subscribers, then miss the metrics that actually drive growth: click-through rate (CTR), average view duration, impressions, and audience retention curves. This category decodes all of it.</p><p>CTR tells you if your title and thumbnail are competitive in the search results and suggested feed. Retention tells you if your content delivers on its promise. Impressions tell you whether YouTube is even testing your videos with new audiences. Each metric points at a different fix, and these guides map metric to action.</p><p>You\'ll learn which numbers matter at which channel size, how to interpret a retention graph that drops at 30 seconds vs 2 minutes, and what analytics patterns reliably predict a video about to take off.</p><p>What you\'ll learn in this category: how to read your analytics dashboard like an SEO consultant — which metrics are leading indicators (impressions, CTR) versus lagging (views, watch time), how to diagnose a video that underperforms, and which numbers YouTube\'s algorithm actually uses to rank content. The goal is to turn your analytics from a vanity scoreboard into a fix-it list.</p><p>How to use this category: pick the metric that\'s currently hurting your channel most — low CTR means a packaging problem, low retention means a content-structure problem, low impressions means an authority or niche problem. Each guide maps one metric to its fix, so you always know what to change next rather than guessing.</p><p>Key topics covered: CTR, impressions, audience retention, average view duration, watch time, and reading your analytics dashboard like a consultant.</p><p>Stop guessing what works. These guides turn your data into a clear, prioritized action list for your channel.</p>' },
   'optimization': { name: 'SEO Optimization', icon: '🔍', desc: 'Tags, titles, descriptions, thumbnails, and metadata optimization', slugMatch: ['tag', 'title', 'description', 'thumbnail', 'metadata', 'chapter', 'caption', 'transcript', 'keyword', 'search-volume', 'keyword-difficulty'],
-    content: '<p>On-page YouTube SEO is the highest-leverage skill a creator can learn, because it\'s entirely within your control. Every video you publish competes in a search and recommendation system that reads your metadata first — title, description, tags, chapters, and captions. This category is the complete optimization playbook.</p><p>The fundamentals matter more than ever in 2026: one clear primary keyword in your title, a description that front-loads the value, tags used for spelling and phrasing variants rather than keyword stuffing, and chapters that improve session time. But optimization goes deeper — thumbnail composition, video structure that matches search intent, and metadata that stays accurate as YouTube\'s systems evolve.</p><p>Each guide here covers one piece of the optimization stack with examples you can copy. Optimize every element correctly and your existing content starts working harder without a single new video.</p>' },
+    content: '<p>On-page YouTube SEO is the highest-leverage skill a creator can learn, because it\'s entirely within your control. Every video you publish competes in a search and recommendation system that reads your metadata first — title, description, tags, chapters, and captions. This category is the complete optimization playbook.</p><p>The fundamentals matter more than ever in 2026: one clear primary keyword in your title, a description that front-loads the value, tags used for spelling and phrasing variants rather than keyword stuffing, and chapters that improve session time. But optimization goes deeper — thumbnail composition, video structure that matches search intent, and metadata that stays accurate as YouTube\'s systems evolve.</p><p>Each guide here covers one piece of the optimization stack with examples you can copy. Optimize every element correctly and your existing content starts working harder without a single new video.</p><p>What you\'ll learn in this category: a complete metadata optimization system — how to pick one primary keyword per video, structure titles that earn clicks without clickbait, write descriptions that rank, use tags for spelling variants and synonyms, and add chapters that improve session time. Every element is covered with copy-paste examples you can adapt to your niche.</p><p>How to use this category: treat it as your pre-publish checklist. Before every upload, run through the title, description, tag, and thumbnail guides in order. After you publish, use the metadata auditor tool to verify nothing slipped. Consistent application of these fundamentals is what separates channels that grow from channels that stall.</p><p>Key topics covered: titles, descriptions, tags, thumbnails, chapters, captions, transcripts, and a complete pre-publish metadata checklist.</p><p>Metadata optimization is free, permanent, and entirely within your control — the highest-ROI skill in YouTube SEO.</p>' },
   'strategy': { name: 'Strategy & Planning', icon: '📝', desc: 'Keyword research, competitor analysis, content strategy and planning', slugMatch: ['strategy', 'planning', 'research', 'competitor', 'playlist', 'checklist', 'blueprint'],
-    content: '<p>Viral luck isn\'t a strategy — but most creators operate as if it is. This category is for the planning side of YouTube: keyword research that finds demand before your competitors do, competitor analysis that reveals gaps in their coverage, content calendars that keep you consistent, and playlist architecture that turns one-time viewers into subscribers.</p><p>Great YouTube strategy starts with search intent. You need to know what your target audience types into the search bar, what questions they ask, and which topics have sustainable search demand versus fleeting trends. From there, strategy is about sequencing: what to publish first, how to cluster content into topical authority, and how to position each video so it feeds the next one.</p><p>These guides give you frameworks you can apply to any niche — research templates, competitive audits, and planning systems built for solo creators who don\'t have a team.</p>' },
+    content: '<p>Viral luck isn\'t a strategy — but most creators operate as if it is. This category is for the planning side of YouTube: keyword research that finds demand before your competitors do, competitor analysis that reveals gaps in their coverage, content calendars that keep you consistent, and playlist architecture that turns one-time viewers into subscribers.</p><p>Great YouTube strategy starts with search intent. You need to know what your target audience types into the search bar, what questions they ask, and which topics have sustainable search demand versus fleeting trends. From there, strategy is about sequencing: what to publish first, how to cluster content into topical authority, and how to position each video so it feeds the next one.</p><p>These guides give you frameworks you can apply to any niche — research templates, competitive audits, and planning systems built for solo creators who don\'t have a team.</p><p>What you\'ll learn in this category: how to research keywords with real search demand, how to analyze competitors to find gaps they\'re leaving open, how to plan a content calendar that keeps you consistent, and how to structure playlists that turn one-time viewers into binge watchers. Strategy is the layer that makes every individual video work harder.</p><p>How to use this category: start with keyword research so every future video targets real demand, then build your competitive analysis to find angles the big channels ignore. Use the content planning guides to batch your production. Revisit the playlist guides quarterly — session time is one of the most underused ranking levers in YouTube SEO.</p><p>Key topics covered: keyword research, competitor analysis, content calendars, playlist architecture, and turning one-time viewers into subscribers.</p><p>A week of planning beats a month of guessing. These guides build the systems that let your content compound.</p>' },
   'growth': { name: 'Channel Growth', icon: '🚀', desc: 'Small channel growth, community building, and audience development', slugMatch: ['small-channel', 'hook', 'community', 'end-screen', 'card', 'intro'],
-    content: '<p>Every big channel was once a small channel with zero subscribers — the difference is usually systems, not luck. This category covers the growth mechanics that compound: hooks and intros that stop the scroll, end screens and cards that chain videos together, community features that turn viewers into regulars, and the specific tactics small channels can use to compete with established ones.</p><p>The core insight across every guide here is that growth comes from repeatable wins, not one-off videos. A consistent hook formula, a retention structure you reuse, and a session-building strategy across your library create compounding returns that single viral videos can\'t match.</p><p>Whether you\'re at 50 subscribers or 50,000, the playbooks in this category show you how to grow deliberately instead of hoping.</p>' },
+    content: '<p>Every big channel was once a small channel with zero subscribers — the difference is usually systems, not luck. This category covers the growth mechanics that compound: hooks and intros that stop the scroll, end screens and cards that chain videos together, community features that turn viewers into regulars, and the specific tactics small channels can use to compete with established ones.</p><p>The core insight across every guide here is that growth comes from repeatable wins, not one-off videos. A consistent hook formula, a retention structure you reuse, and a session-building strategy across your library create compounding returns that single viral videos can\'t match.</p><p>Whether you\'re at 50 subscribers or 50,000, the playbooks in this category show you how to grow deliberately instead of hoping.</p><p>What you\'ll learn in this category: the compounding growth mechanics that small channels can actually use — hooks that stop the scroll, intros that earn the click, end screens and cards that chain videos together, and community features that turn viewers into regulars. Each tactic is small on its own, but applied consistently they compound into subscriber growth.</p><p>How to use this category: pick one growth mechanic and master it before moving to the next — start with hooks and intros (they affect every single video), then add end screens and cards (they multiply session time), then layer in community engagement. Trying to implement everything at once dilutes your effort; sequential mastery compounds faster.</p><p>Key topics covered: hooks, intros, end screens, cards, community engagement, and the compounding growth tactics small channels can use.</p><p>Growth is a system, not a lottery. Apply these mechanics consistently and the compounding takes over.</p>' },
   'tools': { name: 'Tool Reviews & Comparisons', icon: '🛠️', desc: 'YouTube SEO tool comparisons, reviews, and alternatives', slugMatch: ['tool', 'vs-', 'vidiq', 'tubebuddy', 'coach'],
-    content: '<p>The YouTube SEO tool market is crowded, expensive, and full of features you probably don\'t need. This category cuts through it with honest comparisons of the major platforms — vidIQ, TubeBuddy, Morningfame, Tubics, Keyword Tool, and Canva — against YT SEO Architect and against each other.</p><p>We compare on the things that actually matter: keyword research depth, metadata optimization, thumbnail analysis, automation, price, and whether free tiers are genuinely usable. Each comparison is structured as a feature-by-feature breakdown so you can judge fit for your specific situation rather than relying on marketing claims.</p><p>The goal is simple: by the time you finish reading, you know exactly which tools are worth your money and which ones your current workflow already covers.</p>' },
+    content: '<p>The YouTube SEO tool market is crowded, expensive, and full of features you probably don\'t need. This category cuts through it with honest comparisons of the major platforms — vidIQ, TubeBuddy, Morningfame, Tubics, Keyword Tool, and Canva — against YT SEO Architect and against each other.</p><p>We compare on the things that actually matter: keyword research depth, metadata optimization, thumbnail analysis, automation, price, and whether free tiers are genuinely usable. Each comparison is structured as a feature-by-feature breakdown so you can judge fit for your specific situation rather than relying on marketing claims.</p><p>The goal is simple: by the time you finish reading, you know exactly which tools are worth your money and which ones your current workflow already covers.</p><p>What you\'ll learn in this category: honest, feature-by-feature comparisons of the major YouTube SEO tools — vidIQ, TubeBuddy, Morningfame, Tubics, Keyword Tool, and Canva — evaluated against YT SEO Architect and against each other. You\'ll see where paid tools genuinely add value and where they duplicate what free tools already do.</p><p>How to use this category: before spending money on any tool, read its comparison guide to see if the paid features actually solve a problem you have. Check the pricing breakdown against your channel size — tools that pay for themselves at 10K subscribers are a waste at 500. And remember: the YT SEO Architect suite covers the core workflows free.</p><p>Key topics covered: vidIQ, TubeBuddy, Morningfame, Tubics, Keyword Tool, Canva, pricing breakdowns, and feature-by-feature comparisons.</p><p>Compare before you buy — most creators overspend on tools they don\'t need, and these guides prevent exactly that.</p>' },
   'niche': { name: 'Niche Channels', icon: '🎯', desc: 'YouTube SEO for gaming, cooking, fitness, music, and business channels', slugMatch: ['gaming', 'cooking', 'fitness', 'music', 'business', 'tutorial'],
-    content: '<p>YouTube SEO is not one-size-fits-all. A gaming channel competes on different keywords and formats than a cooking channel, which competes differently than a fitness or business channel. This category applies the fundamentals to specific niches so you can see exactly how the playbook changes.</p><p>Gaming channels live and die by game-specific search demand and trending titles. Cooking channels win with recipe-intent keywords and consistent formats. Fitness channels need authority and trust to rank for health-adjacent terms. Business channels compete on high-value commercial keywords where intent is everything.</p><p>Each guide in this category takes one niche and walks through its specific keyword patterns, format conventions, and optimization priorities — so you can apply the right playbook to your channel\'s world.</p>' },
+    content: '<p>YouTube SEO is not one-size-fits-all. A gaming channel competes on different keywords and formats than a cooking channel, which competes differently than a fitness or business channel. This category applies the fundamentals to specific niches so you can see exactly how the playbook changes.</p><p>Gaming channels live and die by game-specific search demand and trending titles. Cooking channels win with recipe-intent keywords and consistent formats. Fitness channels need authority and trust to rank for health-adjacent terms. Business channels compete on high-value commercial keywords where intent is everything.</p><p>Each guide in this category takes one niche and walks through its specific keyword patterns, format conventions, and optimization priorities — so you can apply the right playbook to your channel\'s world.</p><p>What you\'ll learn in this category: how YouTube SEO changes across niches — gaming channels and their game-specific search demand, cooking channels and recipe-intent keywords, fitness channels and trust-based authority, music channels and discovery mechanics, and business channels and commercial intent. The fundamentals stay the same; the application changes.</p><p>How to use this category: find your niche\'s guide and apply its keyword patterns and format conventions to your channel. Pay attention to the competition notes — they tell you whether to compete head-on or go long-tail in your specific niche. Bookmark the guides for adjacent niches too; cross-niche tactics often transfer surprisingly well.</p><p>Key topics covered: gaming, cooking, fitness, music, business, and tutorial channels — with niche-specific keyword patterns and format conventions.</p><p>Find your niche\'s playbook below and apply its specific keyword patterns to your next upload.</p>' },
 };
 
 function getPostCategory(slug, title) {
@@ -1867,141 +1867,166 @@ app.post('/api/admin/trash-posts', async (req, res) => {
 });
 
 // ── Dynamic Sitemap (quality-gated) ──────────────────────────────────
+// ── Sitemap index + chunks ─────────────────────────────────────────────
+// /sitemap.xml serves a sitemapindex pointing at chunk files so crawlers
+// can fetch the 17k+ glossary URLs incrementally instead of one 1.8MB blob.
+
+async function buildSitemapChunks() {
+  const { default: dbService } = await import('../src/database/services.js');
+  const s = await import('../src/database/schema.js');
+  const { eq, desc } = await import('drizzle-orm');
+  const { validateBlogPost } = await import('./blog-validation.js');
+
+  const allPages = await dbService.db.select()
+    .from(s.seoPages)
+    .where(eq(s.seoPages.status, 'published'))
+    .orderBy(desc(s.seoPages.publishedAt))
+    .limit(500);
+
+  const site = 'https://yt-seo-architect.vercel.app';
+  const today = new Date().toISOString().split('T')[0];
+  const termSlugs = (typeof GLOSSARY_TERMS !== 'undefined' ? GLOSSARY_TERMS : []).map(t => t.slug);
+  const header = '<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n';
+  const footer = '</urlset>';
+
+  // ── Chunk 1: core + tools + blog + vs + categories (small, stable) ──
+  let core = header;
+  const corePages = [
+    { loc: '/' }, { loc: '/blog' }, { loc: '/tools' }, { loc: '/about' }, { loc: '/pricing' },
+  ];
+  for (const p of corePages) core += `  <url><loc>${site}${p.loc}</loc></url>\n`;
+
+  const TOOL_SLUGS = [
+    "audience-retention-benchmark", "best-posting-time-finder", "best-youtube-tags-2026",
+    "channel-audit-score", "channel-health-score", "competition-analyzer", "cost-per-view-calculator",
+    "ctr-impressions-calculator", "description-quality-checker", "description-writer",
+    "end-screen-effectiveness-checker", "engagement-rate-calculator", "fix-youtube-shadow-ban-2026",
+    "fixing-youtube-video-playback-issues-on-mobile-2026", "hashtag-performance-checker",
+    "how-to-grow-youtube-channel-2026", "how-youtube-algorithm-works-2026", "keyword-difficulty-scorer",
+    "keywords-youtube", "metadata-youtube", "monetization-readiness-checker",
+    "niching-down-on-youtube-for-better-audience-engagement-2026", "playlist-performance-analyzer",
+    "rank-on-youtube-2026", "subscriber-growth-calculator", "tag-generator", "tag-relevance-checker",
+    "thumbnail-color-analyzer", "title-ab-tester", "title-optimizer", "upload-schedule-optimizer",
+    "video-idea-generator", "video-length-optimizer", "watch-time-estimator", "youtube-algorithm-2026",
+    "youtube-algorithm-changes-2026", "youtube-chapter-timestamps-seo-guide",
+    "youtube-creator-community-engagement-strategies-2026", "youtube-ctr-actually-mean",
+    "youtube-for-tutorials-2026", "youtube-intro-hook-first-3-seconds", "youtube-monetization-tips-2026",
+    "youtube-revenue-estimator", "youtube-seo-2026", "youtube-seo-for-business-channels-2026",
+    "youtube-seo-for-cooking-channels-2026", "youtube-seo-for-gaming-channels-2026",
+    "youtube-seo-optimization-techniques-2026", "youtube-seo-template-2026",
+    "youtube-seo-tools-for-keyword-research-2026", "youtube-shorts-algorithm-2026",
+    "youtube-shorts-monetization-requirements-2026", "youtube-shorts-strategy-for-increasing-views-2026",
+    "youtube-technical-issues-and-solutions-for-creators-2026", "youtube-title-optimization-guide-2026",
+    "youtube-video-ideas-2026", "youtube-video-visibility-increase-strategies-2026",
+  ];
+  for (const slug of TOOL_SLUGS) core += `  <url><loc>${site}/tools/${slug}</loc></url>\n`;
+
+  // Blog categories + guide + vs comparisons
+  for (const [catSlug, cat] of Object.entries(BLOG_CATEGORIES)) {
+    core += `  <url><loc>${site}/blog/category/${catSlug}</loc></url>\n`;
+  }
+  core += `  <url><loc>${site}/blog/categories</loc></url>\n`;
+  core += `  <url><loc>${site}/guide/youtube-seo</loc></url>\n`;
+  for (const vs of ['vidiq', 'tubebuddy', 'morningfame', 'tubics', 'keywordtool', 'canva']) {
+    core += `  <url><loc>${site}/vs/${vs}</loc></url>\n`;
+  }
+
+  // Blog posts (validated)
+  for (const page of allPages) {
+    const validation = validateBlogPost({
+      slug: page.slug, title: page.title, content: page.content, wordCount: page.wordCount,
+    });
+    if (!validation.valid) continue;
+    const date = page.publishedAt ? new Date(page.publishedAt).toISOString().split('T')[0] : '2026-05-27';
+    core += `  <url><loc>${site}/blog/${page.slug}</loc><lastmod>${date}</lastmod></url>\n`;
+  }
+  core += footer;
+
+  // ── Chunk 2: glossary term pages (en/es/pt) ──
+  let terms = header;
+  for (const slug of termSlugs) {
+    terms += `  <url><loc>${site}/glossary/${slug}</loc></url>\n`;
+    terms += `  <url><loc>${site}/glossary/es/${slug}</loc></url>\n`;
+    terms += `  <url><loc>${site}/glossary/pt/${slug}</loc></url>\n`;
+  }
+  // Category hubs
+  for (const h of ['glossary/category', 'glossary/es/category', 'glossary/pt/category']) {
+    terms += `  <url><loc>${site}/${h}</loc></url>\n`;
+  }
+  for (const cat of ['algorithm', 'analytics', 'content-strategy', 'monetization', 'seo-optimization', 'youtube-features']) {
+    terms += `  <url><loc>${site}/glossary/category/${cat}</loc></url>\n`;
+    terms += `  <url><loc>${site}/glossary/es/category/${cat}</loc></url>\n`;
+    terms += `  <url><loc>${site}/glossary/pt/category/${cat}</loc></url>\n`;
+  }
+  terms += footer;
+
+  // ── Chunk 3: glossary comparison pages (the bulk) ──
+  const MAX_PAIRS = 40000;
+  const seenPairs = new Set();
+  let pairs = header;
+  let cmpCount = 0;
+  for (let i = 0; i < termSlugs.length && cmpCount < MAX_PAIRS; i++) {
+    for (let j = i + 1; j < termSlugs.length && cmpCount < MAX_PAIRS; j++) {
+      const a = termSlugs[i], b = termSlugs[j];
+      if (a.includes('-vs-') || b.includes('-vs-')) continue;
+      const key = a < b ? `${a}-vs-${b}` : `${b}-vs-${a}`;
+      if (seenPairs.has(key)) continue;
+      seenPairs.add(key);
+      pairs += `  <url><loc>${site}/glossary/${key}</loc></url>\n`;
+      pairs += `  <url><loc>${site}/glossary/es/${key}</loc></url>\n`;
+      pairs += `  <url><loc>${site}/glossary/pt/${key}</loc></url>\n`;
+      cmpCount++;
+    }
+  }
+  pairs += footer;
+
+  return { core, terms, pairs, counts: { core: core.split('<url>').length - 1, terms: terms.split('<url>').length - 1, pairs: cmpCount } };
+}
+
 app.get('/sitemap.xml', async (req, res) => {
   try {
-    const { default: dbService } = await import('../src/database/services.js');
-    const s = await import('../src/database/schema.js');
-    const { eq, desc } = await import('drizzle-orm');
-    const { validateBlogPost } = await import('./blog-validation.js');
-    const { readFileSync } = await import('fs');
-    const { resolve, dirname } = await import('path');
-    const { fileURLToPath } = await import('url');
-
-    const __filename = fileURLToPath(import.meta.url);
-    const __dirname = dirname(__filename);
-
-    const allPages = await dbService.db.select()
-      .from(s.seoPages)
-      .where(eq(s.seoPages.status, 'published'))
-      .orderBy(desc(s.seoPages.publishedAt))
-      .limit(500);
-
-    let xml = '<?xml version="1.0" encoding="UTF-8"?>\n';
-    xml += '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n';
-
-    // Core static pages (indexable only — noindex app/legal pages excluded)
-    const corePages = [
-      { loc: '/' },
-      { loc: '/blog' },
-      { loc: '/tools' },
-      { loc: '/about' },
-      { loc: '/pricing' },
-    ];
-    for (const p of corePages) {
-      xml += `  <url><loc>https://yt-seo-architect.vercel.app${p.loc}</loc></url>\n`;
-    }
-
-    // Free tool pages (dynamic list synced with blog posts)
-    const TOOL_SLUGS = [
-      "tag-generator", "title-optimizer", "description-writer", "fix-youtube-shadow-ban-2026",
-      "keywords-youtube", "metadata-youtube", "rank-on-youtube-2026", "youtube-ctr-actually-mean",
-      "youtube-algorithm-changes-2026", "youtube-chapter-timestamps-seo-guide", "youtube-seo-template-2026",
-      // Note: youtube-for-tutorials-2026, youtube-intro-hook-first-3-seconds, youtube-monetization-tips-2026,
-      // youtube-seo-for-business-channels-2026, youtube-seo-for-gaming-channels-2026 were removed from the
-      // sitemap — their /tools/ variants are noindexed to resolve blog/tools cannibalization (blog owns keyword).
-    ];
-    for (const slug of TOOL_SLUGS) {
-      xml += `  <url><loc>https://yt-seo-architect.vercel.app/tools/${slug}</loc></url>\n`;
-    }
-
-    // Glossary pages — use the SAME embedded GLOSSARY_TERMS list the glossary render
-    // routes use, so every URL emitted is guaranteed to resolve (kills the ~29% 404 rate
-    // caused by pairing terms that exist in glossary-data.json but not in the route data).
-    const today = new Date().toISOString().split('T')[0];
-    const termSlugs = (typeof GLOSSARY_TERMS !== 'undefined' ? GLOSSARY_TERMS : []).map(t => t.slug);
-
-    // Term pages (EN / ES / PT)
-    for (const slug of termSlugs) {
-      xml += `  <url><loc>https://yt-seo-architect.vercel.app/glossary/${slug}</loc></url>\n`;
-      xml += `  <url><loc>https://yt-seo-architect.vercel.app/glossary/es/${slug}</loc></url>\n`;
-      xml += `  <url><loc>https://yt-seo-architect.vercel.app/glossary/pt/${slug}</loc></url>\n`;
-    }
-
-    // Category hub pages (hub-and-spoke internal linking per wise playbook)
-    // EN/ES/PT hubs are served at /glossary/category, /glossary/es/category,
-    // /glossary/pt/category (Vercel serves category/index.html there). Do NOT
-    // emit category/.../index -- that 308-redirects to the hub and Google flags
-    // redirect URLs inside a sitemap as an error (was causing errors:1).
-    const CATEGORY_SLUGS = ['algorithm', 'analytics', 'content-strategy', 'monetization', 'seo-optimization', 'youtube-features'];
-    const CATEGORY_HUBS = ['glossary/category', 'glossary/es/category', 'glossary/pt/category'];
-    for (const h of CATEGORY_HUBS) {
-      xml += `  <url><loc>https://yt-seo-architect.vercel.app/${h}</loc></url>\n`;
-    }
-    for (const cat of CATEGORY_SLUGS) {
-      xml += `  <url><loc>https://yt-seo-architect.vercel.app/glossary/category/${cat}</loc></url>\n`;
-      xml += `  <url><loc>https://yt-seo-architect.vercel.app/glossary/es/category/${cat}</loc></url>\n`;
-      xml += `  <url><loc>https://yt-seo-architect.vercel.app/glossary/pt/category/${cat}</loc></url>\n`;
-    }
-
-    // Comparison pages (all unique pairs, capped at 45k to stay under sitemap limit)
-    const MAX_SITEMAP_URLS = 45000;
-    const seenPairs = new Set();
-    let cmpCount = 0;
-    for (let i = 0; i < termSlugs.length && cmpCount < MAX_SITEMAP_URLS; i++) {
-      for (let j = i + 1; j < termSlugs.length && cmpCount < MAX_SITEMAP_URLS; j++) {
-        const a = termSlugs[i];
-        const b = termSlugs[j];
-        // Skip pairs where either slug already contains "-vs-" (e.g. "vidiq-vs-tubebuddy"
-        // is itself a glossary term, not a pair primitive). Pairing it with other terms
-        // produced broken double-vs URLs like "{term}-vs-vidiq-vs-tubebuddy" (404s).
-        if (a.includes('-vs-') || b.includes('-vs-')) continue;
-        const key = a < b ? `${a}-vs-${b}` : `${b}-vs-${a}`;
-        if (seenPairs.has(key)) continue;
-        seenPairs.add(key);
-        xml += `  <url><loc>https://yt-seo-architect.vercel.app/glossary/${key}</loc></url>\n`;
-        xml += `  <url><loc>https://yt-seo-architect.vercel.app/glossary/es/${key}</loc></url>\n`;
-        xml += `  <url><loc>https://yt-seo-architect.vercel.app/glossary/pt/${key}</loc></url>\n`;
-        cmpCount++;
-      }
-    }
-
-    // Blog category pages
-    for (const [catSlug, cat] of Object.entries(BLOG_CATEGORIES)) {
-      xml += `  <url><loc>https://yt-seo-architect.vercel.app/blog/category/${catSlug}</loc></url>\n`;
-    }
-    xml += `  <url><loc>https://yt-seo-architect.vercel.app/blog/categories</loc></url>\n`;
-    xml += `  <url><loc>https://yt-seo-architect.vercel.app/guide/youtube-seo</loc></url>\n`;
-
-    // Comparison pages (vs/ tool comparisons)
-    const vsSlugs = ['vidiq', 'tubebuddy', 'morningfame', 'tubics', 'keywordtool', 'canva'];
-    for (const vs of vsSlugs) {
-      xml += `  <url><loc>https://yt-seo-architect.vercel.app/vs/${vs}</loc></url>\n`;
-    }
-
-    // Validated blog posts only
-    for (const page of allPages) {
-      const validation = validateBlogPost({
-        slug: page.slug,
-        title: page.title,
-        content: page.content,
-        wordCount: page.wordCount,
-      });
-      if (!validation.valid) continue;
-
-      const date = page.publishedAt
-        ? new Date(page.publishedAt).toISOString().split('T')[0]
-        : '2026-05-27';
-      xml += `  <url><loc>https://yt-seo-architect.vercel.app/blog/${page.slug}</loc><lastmod>${date}</lastmod></url>\n`;
-    }
-
-    xml += '</urlset>';
+    const { counts } = await buildSitemapChunks();
+    const index = '<?xml version="1.0" encoding="UTF-8"?>\n'
+      + '<sitemapindex xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n'
+      + '  <sitemap><loc>https://yt-seo-architect.vercel.app/sitemap-core.xml</loc></sitemap>\n'
+      + '  <sitemap><loc>https://yt-seo-architect.vercel.app/sitemap-glossary-terms.xml</loc></sitemap>\n'
+      + '  <sitemap><loc>https://yt-seo-architect.vercel.app/sitemap-glossary-pairs.xml</loc></sitemap>\n'
+      + '</sitemapindex>';
     res.header('Content-Type', 'application/xml');
     res.header('Cache-Control', 'public, max-age=3600');
-    res.send(xml);
+    res.send(index);
+    console.log(`[Sitemap] index: core=${counts.core} terms=${counts.terms} pairs=${counts.pairs}`);
   } catch (e) {
     console.error('[Sitemap] Error:', e.message);
     res.status(500).send('Error generating sitemap');
   }
+});
+
+app.get('/sitemap-core.xml', async (req, res) => {
+  try {
+    const { core } = await buildSitemapChunks();
+    res.header('Content-Type', 'application/xml');
+    res.header('Cache-Control', 'public, max-age=3600');
+    res.send(core);
+  } catch (e) { res.status(500).send('Error'); }
+});
+
+app.get('/sitemap-glossary-terms.xml', async (req, res) => {
+  try {
+    const { terms } = await buildSitemapChunks();
+    res.header('Content-Type', 'application/xml');
+    res.header('Cache-Control', 'public, max-age=3600');
+    res.send(terms);
+  } catch (e) { res.status(500).send('Error'); }
+});
+
+app.get('/sitemap-glossary-pairs.xml', async (req, res) => {
+  try {
+    const { pairs } = await buildSitemapChunks();
+    res.header('Content-Type', 'application/xml');
+    res.header('Cache-Control', 'public, max-age=3600');
+    res.send(pairs);
+  } catch (e) { res.status(500).send('Error'); }
 });
 
 // ── Robots.txt ───────────────────────────────────────────────────────

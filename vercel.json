@@ -264,6 +264,18 @@
       "destination": "/api/index.js"
     },
     {
+      "source": "/sitemap-core.xml",
+      "destination": "/api/index.js"
+    },
+    {
+      "source": "/sitemap-glossary-terms.xml",
+      "destination": "/api/index.js"
+    },
+    {
+      "source": "/sitemap-glossary-pairs.xml",
+      "destination": "/api/index.js"
+    },
+    {
       "source": "/robots.txt",
       "destination": "/api/index.js"
     },
@@ -383,6 +395,22 @@
         {
           "key": "Cache-Control",
           "value": "public, max-age=31536000, immutable"
+        }
+      ]
+    },
+    {
+      "source": "/assets/(.*)",
+      "has": [
+        {
+          "type": "header",
+          "key": "x-vercel-error",
+          "value": "NOT_FOUND"
+        }
+      ],
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "no-cache, no-store, must-revalidate"
         }
       ]
     },

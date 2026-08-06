@@ -21,7 +21,8 @@ export default defineConfig({
         terms: resolve(__dirname, 'terms-of-service.html'),
         changelog: resolve(__dirname, 'changelog.html'),
         landing: resolve(__dirname, 'warriorplus-landing.html'),
-        redirect: resolve(__dirname, 'redirect.html')
+        redirect: resolve(__dirname, 'redirect.html'),
+        notfound: resolve(__dirname, '404.html')
       },
       output: {
         manualChunks(id) {
