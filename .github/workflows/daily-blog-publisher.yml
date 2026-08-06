@@ -43,6 +43,10 @@ jobs:
       # Scored quality gate (0-100). Posts below this are blocked from publishing.
       # Existing posts score ~85-100; raise it for stricter quality control.
       BLOG_MIN_SCORE: ${{ vars.BLOG_MIN_SCORE || '70' }}
+      # Minimum authored images/charts per post (default 3). NOTE: existing cron
+      # posts have 0 visuals, so with the default the cron will BLOCK until posts
+      # include ≥3 visuals. Set to 0 to keep publishing text-only posts.
+      BLOG_MIN_VISUALS: ${{ vars.BLOG_MIN_VISUALS || '3' }}
 
     steps:
       - name: ⬇️ Checkout private repo

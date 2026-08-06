@@ -56,7 +56,7 @@ const SITEMAP_FILE = resolve(PROJECT, 'sitemap.xml');
 // ── Load dependencies (project modules) ────────────────────────────
 
 const { renderBlogTemplate } = await import('../api/blog-renderer.js');
-const { validateBlogPost } = await import('../api/blog-validation.js');
+const { validateBlogPost, countVisuals } = await import('../api/blog-validation.js');
 
 // Database for dynamic sitemap
 let dbService = null;
@@ -102,6 +102,12 @@ const KEYWORD_OVERRIDE = args.includes('--keyword')
 // Scored quality-gate threshold (0-100). Override via BLOG_MIN_SCORE env.
 // Existing published posts score ~85-100; 70 blocks only genuinely thin output.
 const BLOG_MIN_SCORE = Number(process.env.BLOG_MIN_SCORE || 70);
+
+// Minimum authored visuals (images/charts) required per post. Default 3.
+// WARNING: existing cron posts have 0 visuals, so with the default this BLOCKS
+// daily publishing until the generator adds visuals. Set BLOG_MIN_VISUALS=0 to
+// keep publishing text-only posts.
+const BLOG_MIN_VISUALS = Number(process.env.BLOG_MIN_VISUALS || 3);
 
 // ── Constants ──────────────────────────────────────────────────────
 
@@ -1498,6 +1504,16 @@ async function main() {
     console.log(`  ❌ BLOCKED by quality gate: score ${validation.score} < threshold ${validation.threshold}`);
     console.log('  To force-publish anyway, set BLOG_MIN_SCORE lower (e.g. 0).');
     console.log('  No post was saved — daily run reported as blocked.');
+    process.exit(2);
+  }
+
+  // Minimum authored visuals (images/charts). Counts the authored body, not the
+  // template-wrapped output, so related-post thumbnails can't satisfy the rule.
+  const authoredVisuals = countVisuals(page.content || '');
+  console.log(`  🖼 Authored visuals: ${authoredVisuals} (need ${BLOG_MIN_VISUALS})`);
+  if (authoredVisuals < BLOG_MIN_VISUALS) {
+    console.log(`  ❌ BLOCKED by visuals requirement: ${authoredVisuals} < ${BLOG_MIN_VISUALS}`);
+    console.log('  Add images/charts to the post, or set BLOG_MIN_VISUALS=0 to skip.');
     process.exit(2);
   }
 

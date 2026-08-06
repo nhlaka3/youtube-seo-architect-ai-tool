@@ -35,6 +35,19 @@ const DEFAULT_MIN_SCORE = Number(process.env.BLOG_MIN_SCORE || 70);
 const CATEGORY_MAX = { content: 30, seo: 25, eeat: 15, technical: 15, aiCitation: 15 };
 
 /**
+ * Count authored visuals in HTML content: <img>, <object> (SVG/chart embeds),
+ * and inline <svg>. Used to enforce a minimum-visuals quality requirement on
+ * NEW posts (existing posts have 0 visuals, so this is opt-in per caller).
+ */
+export function countVisuals(html) {
+  if (!html) return 0;
+  const img = (html.match(/<img[\s>]/gi) || []).length;
+  const obj = (html.match(/<object[\s>]/gi) || []).length;
+  const svg = (html.match(/<svg[\s>]/gi) || []).length;
+  return img + obj + svg;
+}
+
+/**
  * Validate a blog post against the quality gate + scored rubric.
  * @param {Object} post - A post object from the seoPages table or a file path
  * @param {string} post.slug - Post slug (used for keyword detection)
@@ -79,6 +92,17 @@ export function validateBlogPost(post, opts = {}) {
   const bannedMatch = content.match(BANNED_WORDS);
   if (bannedMatch) {
     failures.push(`contains banned word: "${bannedMatch[0]}"`);
+  }
+
+  // 7. Minimum visuals (opt-in via opts.minVisuals — NEW posts must have ≥3
+  //    images/charts). Existing posts (0 visuals) are unaffected because the
+  //    sitemap/listing filter does not pass minVisuals.
+  const minVisuals = typeof opts.minVisuals === 'number' ? opts.minVisuals : 0;
+  if (minVisuals > 0) {
+    const visuals = countVisuals(content);
+    if (visuals < minVisuals) {
+      failures.push(`only ${visuals} images/charts (need ${minVisuals} minimum)`);
+    }
   }
 
   // ── Scored rubric (v2) ─────────────────────────────────────────

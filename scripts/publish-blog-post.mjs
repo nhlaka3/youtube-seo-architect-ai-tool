@@ -37,17 +37,26 @@ const __filename = fileURLToPath(import.meta.url);
 const PROJECT = resolve(dirname(__filename), '..');
 const BLOG_DIR = resolve(PROJECT, 'public/blog');
 
-// ── Minimal .env loader (mirrors auto-blog-generator) ──────────────
+// ── Minimal .env loader ────────────────────────────────────────────
+// Reads .env, then .env.local, then .env.vercel (first-set-wins so real
+// env vars / secrets always take precedence). Strips surrounding quotes.
 function loadEnv() {
-  const envPath = resolve(PROJECT, '.env');
-  if (!existsSync(envPath)) return;
-  const lines = readFileSync(envPath, 'utf-8').split('\n');
-  for (const line of lines) {
-    const trimmed = line.trim();
-    if (!trimmed || trimmed.startsWith('#')) continue;
-    const eq = trimmed.indexOf('=');
-    if (eq === -1) continue;
-    if (!process.env[trimmed.slice(0, eq).trim()]) process.env[trimmed.slice(eq + 1).trim()] = trimmed.slice(eq + 1).trim();
+  for (const f of ['.env', '.env.local', '.env.vercel']) {
+    const envPath = resolve(PROJECT, f);
+    if (!existsSync(envPath)) continue;
+    for (const line of readFileSync(envPath, 'utf-8').split('\n')) {
+      const trimmed = line.trim();
+      if (!trimmed || trimmed.startsWith('#')) continue;
+      const eq = trimmed.indexOf('=');
+      if (eq === -1) continue;
+      const key = trimmed.slice(0, eq).trim();
+      if (process.env[key]) continue; // first-set-wins
+      let val = trimmed.slice(eq + 1).trim();
+      if ((val.startsWith('"') && val.endsWith('"')) || (val.startsWith("'") && val.endsWith("'"))) {
+        val = val.slice(1, -1);
+      }
+      process.env[key] = val;
+    }
   }
 }
 loadEnv();
@@ -66,6 +75,7 @@ const description = arg('--description') || '';
 const author = arg('--author') || 'Patrick';
 const status = arg('--status') || 'published';
 const minScore = Number(arg('--min-score') || process.env.BLOG_MIN_SCORE || 70);
+const minVisuals = Number(arg('--min-visuals') || process.env.BLOG_MIN_VISUALS || 3);
 const DRY_RUN = has('--dry-run');
 const FORCE = has('--force');
 
@@ -77,7 +87,7 @@ if (!htmlPath || !slug || !title) {
 
 // ── Load project modules ───────────────────────────────────────────
 const { renderBlogTemplate } = await import('../api/blog-renderer.js');
-const { validateBlogPost } = await import('../api/blog-validation.js');
+const { validateBlogPost, countVisuals } = await import('../api/blog-validation.js');
 
 // ── HTML helpers ───────────────────────────────────────────────────
 
@@ -175,7 +185,18 @@ const { html: bodyWithAssets } = copyAssets(body, slug);
 body = bodyWithAssets;
 const wordCount = countWords(body);
 console.log(`  Body word count: ${wordCount}`);
+console.log(`  Authored visuals (img/object/svg): ${countVisuals(body)}`);
 console.log(`  FAQ details after conversion: ${(body.match(/<details[\s>]/gi) || []).length}`);
+
+// Enforce the minimum-visuals requirement on the AUTHORED body (not the
+// template-wrapped output, so template chrome can't satisfy it).
+const visuals = countVisuals(body);
+if (visuals < minVisuals) {
+  console.log(`\n  ❌ BLOCKED: only ${visuals} images/charts (need ${minVisuals} minimum).`);
+  console.log('  Add more images/charts, or pass --min-visuals 0 to skip.');
+  console.log('  Nothing was saved.');
+  process.exit(2);
+}
 
 // 2. Wrap in the production template
 const page = {
