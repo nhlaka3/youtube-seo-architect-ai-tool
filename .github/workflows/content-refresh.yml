@@ -37,6 +37,17 @@ jobs:
         with:
           node-version: '24'
 
+      - name: 🐍 Setup Python 3.12
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: 🔍 Run quality audit (writes refresh-priority.json)
+        id: audit
+        run: |
+          python3 scripts/blog-quality-audit.py
+          echo "Priority file ready — refresh targets lowest-quality post"
+
       - name: 🔄 Refresh oldest blog post
         id: refresh
         run: |

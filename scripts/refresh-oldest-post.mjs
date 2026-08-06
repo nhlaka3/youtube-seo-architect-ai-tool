@@ -256,40 +256,75 @@ async function main() {
   let targetSlug = SLUG_OVERRIDE;
 
   if (!targetSlug) {
-    // Parse all posts to find the oldest one
-    let oldest = null;
-    let oldestDate = Infinity;
+    // QUALITY-AWARE SELECTION: honor refresh-priority.json (written by
+    // scripts/blog-quality-audit.py, worst-first) so we refresh the
+    // LOWEST-QUALITY post, not just the oldest. Falls back to oldest.
+    const priorityFile = resolve(PROJECT, 'scripts/refresh-priority.json');
+    let prioritySlug = null;
+    try {
+      if (existsSync(priorityFile)) {
+        const priority = JSON.parse(readFileSync(priorityFile, 'utf-8'));
+        const candidate = priority.find(entry => {
+          if (!entry || !entry.slug) return false;
+          const p = resolve(BLOG_DIR, `${entry.slug}.html`);
+          if (!existsSync(p)) return false;
+          // Regenerate entries need the full generator, not a section graft —
+          // skip them here so the refresh cron doesn't waste a cycle.
+          if (entry.action === 'regenerate') return false;
+          // Skip posts refreshed within the last 7 days
+          const html = readFileSync(p, 'utf-8');
+          const meta = getPostMeta(html, entry.slug);
+          if (meta.modified) {
+            const days = Math.floor((Date.now() - new Date(meta.modified).getTime()) / (1000*60*60*24));
+            if (days < 7 && !FORCE) return false;
+          }
+          return true;
+        });
+        if (candidate) prioritySlug = candidate.slug;
+      }
+    } catch (e) {
+      console.log(`  ⚠ refresh-priority.json read failed (${e.message}) — falling back to oldest`);
+    }
 
-    for (const file of files) {
-      const slug = file.replace('.html', '');
-      const html = readFileSync(resolve(BLOG_DIR, file), 'utf-8');
-      const meta = getPostMeta(html, slug);
-      if (meta.published) {
-        const pubDate = new Date(meta.published).getTime();
-        if (pubDate < oldestDate && !isNaN(pubDate)) {
-          oldestDate = pubDate;
-          oldest = { ...meta, html };
+    if (prioritySlug) {
+      targetSlug = prioritySlug;
+      console.log(`  🎯 Priority target (from refresh-priority.json): ${targetSlug}`);
+    } else {
+      // Fallback: parse all posts to find the oldest one
+      let oldest = null;
+      let oldestDate = Infinity;
+
+      for (const file of files) {
+        const slug = file.replace('.html', '');
+        const html = readFileSync(resolve(BLOG_DIR, file), 'utf-8');
+        const meta = getPostMeta(html, slug);
+        if (meta.published) {
+          const pubDate = new Date(meta.published).getTime();
+          if (pubDate < oldestDate && !isNaN(pubDate)) {
+            oldestDate = pubDate;
+            oldest = { ...meta, html };
+          }
         }
       }
-    }
 
-    if (!oldest) {
-      console.log('❌ No blog posts found with valid published dates');
-      process.exit(1);
-    }
-
-    // Check if already refreshed recently (skip if modified within 7 days)
-    if (!FORCE && oldest.modified) {
-      const modDate = new Date(oldest.modified);
-      const daysSinceMod = Math.floor((Date.now() - modDate.getTime()) / (1000*60*60*24));
-      if (daysSinceMod < 7) {
-        console.log(`⏭️  "${oldest.title}" was refreshed ${daysSinceMod} day(s) ago — skipping (use --force to override)`);
-        process.exit(0);
+      if (!oldest) {
+        console.log('❌ No blog posts found with valid published dates');
+        process.exit(1);
       }
-    }
 
-    targetSlug = oldest.slug;
-    console.log(`  Target: "${oldest.title}" (published: ${oldest.published})`);
+      // Check if already refreshed recently (skip if modified within 7 days)
+      if (!FORCE && oldest.modified) {
+        const modDate = new Date(oldest.modified);
+        const daysSinceMod = Math.floor((Date.now() - modDate.getTime()) / (1000*60*60*24));
+        if (daysSinceMod < 7) {
+          console.log(`⏭️  "${oldest.title}" was refreshed ${daysSinceMod} day(s) ago — skipping (use --force to override)`);
+          process.exit(0);
+        }
+      }
+
+      targetSlug = oldest.slug;
+      console.log(`  Target: "${oldest.title}" (published: ${oldest.published})`);
+    }
   }
 
   // 2. Read the target post

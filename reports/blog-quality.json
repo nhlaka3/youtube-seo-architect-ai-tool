@@ -1,0 +1,504 @@
+{
+  "generated_at": "2026-08-06T12:38:16.900039Z",
+  "post_count": 21,
+  "average_quality": 35.0,
+  "average_words": 2292.0,
+  "posts_with_one_image_or_less": 20,
+  "cannibalization_clusters": 2,
+  "posts": [
+    {
+      "slug": "youtube-for-tutorials-2026",
+      "quality_score": 11,
+      "rating": "Rewrite",
+      "words": 2,
+      "h2": 0,
+      "images": 0,
+      "imgs_with_alt": 0,
+      "avg_load": 25.0,
+      "overloaded_sections": 0,
+      "published": null,
+      "modified": null,
+      "categories": {
+        "content_quality": 3,
+        "seo_optimization": 1,
+        "eeat_signals": 0,
+        "technical_elements": 4,
+        "ai_citation_readiness": 3
+      }
+    },
+    {
+      "slug": "youtube-seo-examples-2026",
+      "quality_score": 32,
+      "rating": "Rewrite",
+      "words": 2646,
+      "h2": 12,
+      "images": 2,
+      "imgs_with_alt": 2,
+      "avg_load": 23.1,
+      "overloaded_sections": 2,
+      "published": "2026-07-25",
+      "modified": "2026-08-03",
+      "categories": {
+        "content_quality": 14,
+        "seo_optimization": 4,
+        "eeat_signals": 2,
+        "technical_elements": 6,
+        "ai_citation_readiness": 6
+      }
+    },
+    {
+      "slug": "youtube-seo-audit-for-gaming-channels-2026",
+      "quality_score": 32,
+      "rating": "Rewrite",
+      "words": 2413,
+      "h2": 11,
+      "images": 1,
+      "imgs_with_alt": 1,
+      "avg_load": 18.3,
+      "overloaded_sections": 3,
+      "published": "2026-08-06",
+      "modified": "2026-08-06",
+      "categories": {
+        "content_quality": 13,
+        "seo_optimization": 4,
+        "eeat_signals": 4,
+        "technical_elements": 5,
+        "ai_citation_readiness": 6
+      }
+    },
+    {
+      "slug": "youtube-shorts-seo-guide-2026",
+      "quality_score": 32,
+      "rating": "Rewrite",
+      "words": 2090,
+      "h2": 10,
+      "images": 1,
+      "imgs_with_alt": 1,
+      "avg_load": 26.4,
+      "overloaded_sections": 2,
+      "published": "2026-07-26",
+      "modified": "2026-07-26",
+      "categories": {
+        "content_quality": 12,
+        "seo_optimization": 5,
+        "eeat_signals": 3,
+        "technical_elements": 6,
+        "ai_citation_readiness": 6
+      }
+    },
+    {
+      "slug": "youtube-video-visibility-increase-strategies-2026",
+      "quality_score": 33,
+      "rating": "Rewrite",
+      "words": 2679,
+      "h2": 11,
+      "images": 1,
+      "imgs_with_alt": 1,
+      "avg_load": 23.3,
+      "overloaded_sections": 2,
+      "published": "2026-08-05",
+      "modified": "2026-08-05",
+      "categories": {
+        "content_quality": 13,
+        "seo_optimization": 5,
+        "eeat_signals": 4,
+        "technical_elements": 5,
+        "ai_citation_readiness": 6
+      }
+    },
+    {
+      "slug": "youtube-creator-community-engagement-strategies-2026",
+      "quality_score": 33,
+      "rating": "Rewrite",
+      "words": 2490,
+      "h2": 9,
+      "images": 1,
+      "imgs_with_alt": 1,
+      "avg_load": 22.0,
+      "overloaded_sections": 2,
+      "published": "2026-08-04",
+      "modified": "2026-08-04",
+      "categories": {
+        "content_quality": 13,
+        "seo_optimization": 5,
+        "eeat_signals": 4,
+        "technical_elements": 5,
+        "ai_citation_readiness": 6
+      }
+    },
+    {
+      "slug": "youtube-seo-optimization-for-gaming-channels-2026",
+      "quality_score": 33,
+      "rating": "Rewrite",
+      "words": 2272,
+      "h2": 9,
+      "images": 1,
+      "imgs_with_alt": 1,
+      "avg_load": 21.0,
+      "overloaded_sections": 2,
+      "published": "2026-08-03",
+      "modified": "2026-08-03",
+      "categories": {
+        "content_quality": 14,
+        "seo_optimization": 5,
+        "eeat_signals": 3,
+        "technical_elements": 5,
+        "ai_citation_readiness": 6
+      }
+    },
+    {
+      "slug": "youtube-algorithm-best-strategies-2026",
+      "quality_score": 34,
+      "rating": "Rewrite",
+      "words": 2600,
+      "h2": 10,
+      "images": 1,
+      "imgs_with_alt": 1,
+      "avg_load": 22.7,
+      "overloaded_sections": 2,
+      "published": "2026-07-28",
+      "modified": "2026-07-28",
+      "categories": {
+        "content_quality": 15,
+        "seo_optimization": 5,
+        "eeat_signals": 2,
+        "technical_elements": 6,
+        "ai_citation_readiness": 6
+      }
+    },
+    {
+      "slug": "using-youtube-features-to-enhance-viewer-experience-2026",
+      "quality_score": 35,
+      "rating": "Rewrite",
+      "words": 2363,
+      "h2": 11,
+      "images": 1,
+      "imgs_with_alt": 1,
+      "avg_load": 19.2,
+      "overloaded_sections": 2,
+      "published": "2026-07-30",
+      "modified": "2026-07-30",
+      "categories": {
+        "content_quality": 13,
+        "seo_optimization": 5,
+        "eeat_signals": 4,
+        "technical_elements": 7,
+        "ai_citation_readiness": 6
+      }
+    },
+    {
+      "slug": "youtube-content-strategy-for-beginners-2026",
+      "quality_score": 36,
+      "rating": "Rewrite",
+      "words": 3122,
+      "h2": 17,
+      "images": 1,
+      "imgs_with_alt": 1,
+      "avg_load": 22.5,
+      "overloaded_sections": 3,
+      "published": "2026-07-27",
+      "modified": "2026-07-27",
+      "categories": {
+        "content_quality": 15,
+        "seo_optimization": 4,
+        "eeat_signals": 4,
+        "technical_elements": 7,
+        "ai_citation_readiness": 6
+      }
+    },
+    {
+      "slug": "best-youtube-growth-strategies-for-new-creators-2026",
+      "quality_score": 36,
+      "rating": "Rewrite",
+      "words": 2671,
+      "h2": 16,
+      "images": 1,
+      "imgs_with_alt": 1,
+      "avg_load": 17.6,
+      "overloaded_sections": 2,
+      "published": "2026-07-27",
+      "modified": "2026-07-27",
+      "categories": {
+        "content_quality": 15,
+        "seo_optimization": 4,
+        "eeat_signals": 4,
+        "technical_elements": 7,
+        "ai_citation_readiness": 6
+      }
+    },
+    {
+      "slug": "increasing-youtube-watch-time-with-analytics-2026",
+      "quality_score": 36,
+      "rating": "Rewrite",
+      "words": 2380,
+      "h2": 13,
+      "images": 1,
+      "imgs_with_alt": 1,
+      "avg_load": 19.3,
+      "overloaded_sections": 2,
+      "published": "2026-07-27",
+      "modified": "2026-07-27",
+      "categories": {
+        "content_quality": 15,
+        "seo_optimization": 5,
+        "eeat_signals": 3,
+        "technical_elements": 7,
+        "ai_citation_readiness": 6
+      }
+    },
+    {
+      "slug": "improving-youtube-engagement-with-live-streaming-2026",
+      "quality_score": 37,
+      "rating": "Rewrite",
+      "words": 2421,
+      "h2": 12,
+      "images": 1,
+      "imgs_with_alt": 1,
+      "avg_load": 20.4,
+      "overloaded_sections": 3,
+      "published": "2026-07-27",
+      "modified": "2026-07-27",
+      "categories": {
+        "content_quality": 15,
+        "seo_optimization": 5,
+        "eeat_signals": 4,
+        "technical_elements": 7,
+        "ai_citation_readiness": 6
+      }
+    },
+    {
+      "slug": "youtube-subscriber-growth-2026",
+      "quality_score": 37,
+      "rating": "Rewrite",
+      "words": 2211,
+      "h2": 9,
+      "images": 1,
+      "imgs_with_alt": 1,
+      "avg_load": 19.5,
+      "overloaded_sections": 1,
+      "published": "2026-07-27",
+      "modified": "2026-07-27",
+      "categories": {
+        "content_quality": 15,
+        "seo_optimization": 5,
+        "eeat_signals": 4,
+        "technical_elements": 7,
+        "ai_citation_readiness": 6
+      }
+    },
+    {
+      "slug": "youtube-thumbnail-tips-2026",
+      "quality_score": 38,
+      "rating": "Rewrite",
+      "words": 2597,
+      "h2": 16,
+      "images": 1,
+      "imgs_with_alt": 1,
+      "avg_load": 14.4,
+      "overloaded_sections": 2,
+      "published": "2026-07-27",
+      "modified": "2026-07-27",
+      "categories": {
+        "content_quality": 17,
+        "seo_optimization": 5,
+        "eeat_signals": 3,
+        "technical_elements": 7,
+        "ai_citation_readiness": 6
+      }
+    },
+    {
+      "slug": "youtube-algorithm-changes-2026-impact-on-gaming-channels",
+      "quality_score": 38,
+      "rating": "Rewrite",
+      "words": 2549,
+      "h2": 10,
+      "images": 1,
+      "imgs_with_alt": 1,
+      "avg_load": 26.4,
+      "overloaded_sections": 2,
+      "published": "2026-08-01",
+      "modified": "2026-08-01",
+      "categories": {
+        "content_quality": 16,
+        "seo_optimization": 5,
+        "eeat_signals": 4,
+        "technical_elements": 7,
+        "ai_citation_readiness": 6
+      }
+    },
+    {
+      "slug": "maximizing-youtube-revenue-with-sponsorships-2026",
+      "quality_score": 38,
+      "rating": "Rewrite",
+      "words": 1568,
+      "h2": 9,
+      "images": 1,
+      "imgs_with_alt": 1,
+      "avg_load": 16.0,
+      "overloaded_sections": 1,
+      "published": null,
+      "modified": null,
+      "categories": {
+        "content_quality": 14,
+        "seo_optimization": 5,
+        "eeat_signals": 4,
+        "technical_elements": 9,
+        "ai_citation_readiness": 6
+      }
+    },
+    {
+      "slug": "understanding-youtube-algorithm-updates-for-creators-2026",
+      "quality_score": 40,
+      "rating": "Rewrite",
+      "words": 2303,
+      "h2": 10,
+      "images": 1,
+      "imgs_with_alt": 1,
+      "avg_load": 20.9,
+      "overloaded_sections": 2,
+      "published": "2026-07-30",
+      "modified": "2026-07-30",
+      "categories": {
+        "content_quality": 16,
+        "seo_optimization": 5,
+        "eeat_signals": 4,
+        "technical_elements": 8,
+        "ai_citation_readiness": 7
+      }
+    },
+    {
+      "slug": "creating-effective-youtube-thumbnails-for-clicks-2026",
+      "quality_score": 41,
+      "rating": "Rewrite",
+      "words": 2149,
+      "h2": 10,
+      "images": 1,
+      "imgs_with_alt": 1,
+      "avg_load": 24.1,
+      "overloaded_sections": 1,
+      "published": "2026-07-27",
+      "modified": "2026-07-27",
+      "categories": {
+        "content_quality": 17,
+        "seo_optimization": 5,
+        "eeat_signals": 3,
+        "technical_elements": 9,
+        "ai_citation_readiness": 7
+      }
+    },
+    {
+      "slug": "developing-a-youtube-content-calendar-strategy-2026",
+      "quality_score": 41,
+      "rating": "Rewrite",
+      "words": 2144,
+      "h2": 8,
+      "images": 1,
+      "imgs_with_alt": 1,
+      "avg_load": 23.3,
+      "overloaded_sections": 2,
+      "published": "2026-07-27",
+      "modified": "2026-07-27",
+      "categories": {
+        "content_quality": 17,
+        "seo_optimization": 5,
+        "eeat_signals": 4,
+        "technical_elements": 8,
+        "ai_citation_readiness": 7
+      }
+    },
+    {
+      "slug": "youtube-channel-branding-tips-for-consistency-2026",
+      "quality_score": 43,
+      "rating": "Rewrite",
+      "words": 2463,
+      "h2": 10,
+      "images": 1,
+      "imgs_with_alt": 1,
+      "avg_load": 21.4,
+      "overloaded_sections": 1,
+      "published": "2026-07-27",
+      "modified": "2026-07-27",
+      "categories": {
+        "content_quality": 20,
+        "seo_optimization": 5,
+        "eeat_signals": 3,
+        "technical_elements": 8,
+        "ai_citation_readiness": 7
+      }
+    }
+  ],
+  "cannibalization": [
+    {
+      "severity": "MEDIUM",
+      "posts": [
+        "creating-effective-youtube-thumbnails-for-clicks-2026",
+        "youtube-thumbnail-tips-2026"
+      ],
+      "primary_keywords": [
+        "creating effective youtube",
+        "youtube thumbnail"
+      ],
+      "pairs": [
+        {
+          "a": "creating-effective-youtube-thumbnails-for-clicks-2026",
+          "b": "youtube-thumbnail-tips-2026",
+          "score": 0.4,
+          "shared_terms": [
+            "thumbnail"
+          ]
+        }
+      ],
+      "recommendation": "DIFFERENTIATE: add a distinct angle/year/audience to each post."
+    },
+    {
+      "severity": "MEDIUM",
+      "posts": [
+        "understanding-youtube-algorithm-updates-for-creators-2026",
+        "youtube-algorithm-changes-2026-impact-on-gaming-channels",
+        "youtube-seo-audit-for-gaming-channels-2026",
+        "youtube-seo-optimization-for-gaming-channels-2026"
+      ],
+      "primary_keywords": [
+        "understanding youtube algorithm",
+        "youtube algorithm changes",
+        "youtube seo audit",
+        "youtube seo optimize"
+      ],
+      "pairs": [
+        {
+          "a": "understanding-youtube-algorithm-updates-for-creators-2026",
+          "b": "youtube-algorithm-changes-2026-impact-on-gaming-channels",
+          "score": 0.4,
+          "shared_terms": [
+            "algorithm"
+          ]
+        },
+        {
+          "a": "youtube-algorithm-changes-2026-impact-on-gaming-channels",
+          "b": "youtube-seo-audit-for-gaming-channels-2026",
+          "score": 0.4,
+          "shared_terms": [
+            "gaming"
+          ]
+        },
+        {
+          "a": "youtube-algorithm-changes-2026-impact-on-gaming-channels",
+          "b": "youtube-seo-optimization-for-gaming-channels-2026",
+          "score": 0.4,
+          "shared_terms": [
+            "gaming"
+          ]
+        },
+        {
+          "a": "youtube-seo-audit-for-gaming-channels-2026",
+          "b": "youtube-seo-optimization-for-gaming-channels-2026",
+          "score": 0.4,
+          "shared_terms": [
+            "gaming"
+          ]
+        }
+      ],
+      "recommendation": "DIFFERENTIATE: add a distinct angle/year/audience to each post."
+    }
+  ]
+}
