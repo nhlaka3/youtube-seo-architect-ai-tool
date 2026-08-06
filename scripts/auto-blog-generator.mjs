@@ -40,7 +40,7 @@
  *   8. Deploy to Vercel
  */
 
-import { readFileSync, writeFileSync, existsSync, readdirSync } from 'fs';
+import { readFileSync, writeFileSync, appendFileSync, existsSync, readdirSync, rmSync } from 'fs';
 import { resolve, dirname } from 'path';
 import { fileURLToPath } from 'url';
 import { execSync } from 'child_process';
@@ -98,6 +98,10 @@ const VALIDATE_SLUG = args.includes('--validate-slug')
 const KEYWORD_OVERRIDE = args.includes('--keyword')
   ? args[args.indexOf('--keyword') + 1]
   : null;
+
+// Scored quality-gate threshold (0-100). Override via BLOG_MIN_SCORE env.
+// Existing published posts score ~85-100; 70 blocks only genuinely thin output.
+const BLOG_MIN_SCORE = Number(process.env.BLOG_MIN_SCORE || 70);
 
 // ── Constants ──────────────────────────────────────────────────────
 
@@ -1130,7 +1134,7 @@ function validateExistingPost(slug) {
     title: slug,
     content,
     wordCount,
-  });
+  }, { minScore: BLOG_MIN_SCORE });
 
   if (result.valid) {
     console.log('  ✅ Structural validation PASSED');
@@ -1139,6 +1143,13 @@ function validateExistingPost(slug) {
     for (const f of result.failures) {
       console.log(`    - ${f}`);
     }
+  }
+
+  // v2: scored quality report (diagnostic)
+  console.log(`  📊 Quality score: ${result.score}/100 (grade ${result.grade}, threshold ${result.threshold})`);
+  console.log(`     passing: ${result.passing}`);
+  for (const [cat, val] of Object.entries(result.categoryScores)) {
+    console.log(`       ${cat}: ${val}`);
   }
 
   // Quality gate
@@ -1375,6 +1386,62 @@ async function main() {
   }
   console.log('');
 
+  // ── Generate branded visuals and inject into the article body ──────
+  // Charts match the post's sections (scripts/generate-blog-visuals.py,
+  // Cyber-Luxe branding). PNGs land in public/blog/ and are committed +
+  // deployed with the post. Failures are non-fatal — the post still ships.
+  console.log('  🎨 Generating branded visuals...');
+  try {
+    const tmpVisual = resolve(BLOG_DIR, `_visuals-${keywordEntry.slug}.html`);
+    writeFileSync(tmpVisual, articleHTML);
+    // Prefer the manim venv (local WSL); CI has python3 + matplotlib
+    let visualPy = resolve(process.env.HOME || '/root', '.venv/manim/bin/python');
+    try {
+      execSync(`"${visualPy}" -c "import matplotlib"`, { stdio: 'pipe' });
+    } catch {
+      visualPy = 'python3';
+    }
+    const visOut = execSync(
+      `"${visualPy}" "${resolve(PROJECT, 'scripts/generate-blog-visuals.py')}" "${tmpVisual}" --auto --slug "${keywordEntry.slug}" --out-dir "${BLOG_DIR}"`,
+      { encoding: 'utf-8', maxBuffer: 10 * 1024 * 1024 }
+    );
+    rmSync(tmpVisual, { force: true });
+    const visStart = visOut.indexOf('{');
+    if (visStart !== -1) {
+      const charts = JSON.parse(visOut.slice(visStart)).charts || [];
+      const h2s = [...articleHTML.matchAll(/<h2[^>]*>.*?<\/h2>/gi)];
+      let injected = 0;
+      for (const chart of charts) {
+        if (articleHTML.includes(chart.file)) continue;
+        // Anchor under a heading matching the chart's topic keywords
+        const needles = {
+          ctr: ['ctr', 'click', 'thumbnail', 'position', 'impression'],
+          retention: ['retention', 'watch time', 'audience', 'hold'],
+          rpm: ['rpm', 'revenue', 'monetiz', 'sponsorship', 'earn'],
+          funnel: ['funnel', 'subscriber', 'conversion'],
+          traffic: ['traffic', 'impression', 'visibility', 'algorithm', 'suggested'],
+          growth: ['upload', 'frequency', 'cadence', 'consistency'],
+        }[chart.type] || [];
+        let anchor = -1;
+        for (const m of h2s) {
+          const t = m[0].replace(/<[^>]+>/g, '').toLowerCase();
+          if (needles.some(n => t.includes(n))) { anchor = m.index + m[0].length; break; }
+        }
+        if (anchor === -1 && h2s.length >= 2) {
+          anchor = h2s[1].index + h2s[1][0].length; // fallback: after 2nd section
+        }
+        if (anchor !== -1) {
+          articleHTML = articleHTML.slice(0, anchor) + '\n' + chart.figure_html + '\n' + articleHTML.slice(anchor);
+          injected++;
+        }
+      }
+      console.log(`  ✅ ${injected}/${charts.length} visual(s) injected into article`);
+    }
+  } catch (e) {
+    console.log(`  ⚠ Visual generation skipped (non-fatal): ${e.message}`);
+  }
+  console.log('');
+
   // Build page object for renderer
   const today = new Date();
   const titleRaw = keywordEntry.keyword
@@ -1400,9 +1467,11 @@ async function main() {
   console.log('  Wrapping in blog template...');
   const fullHTML = renderBlogTemplate(page);
 
-  // Validate
-  console.log('  Validating structure...');
-  const validation = validateBlogPost(page);
+  // Validate the final wrapped artifact (what actually ships) with the scored gate.
+  // v2: score the wrapped fullHTML — schema, canonical, author box, FAQ, internal
+  // links are all present there, so the score reflects the real published page.
+  console.log('  Validating structure + quality...');
+  const validation = validateBlogPost({ ...page, content: fullHTML }, { minScore: BLOG_MIN_SCORE });
   if (!validation.valid) {
     console.log(`  ⚠ Structural issues (non-blocking):`);
     for (const f of validation.failures) {
@@ -1411,6 +1480,25 @@ async function main() {
     console.log('  Continuing (renderer will auto-fix structural issues)...');
   } else {
     console.log('  ✅ Structural validation passed');
+  }
+  console.log(`  📊 Quality score: ${validation.score}/100 (grade ${validation.grade}, threshold ${validation.threshold})`);
+  for (const [cat, val] of Object.entries(validation.categoryScores)) {
+    console.log(`      ${cat}: ${val}`);
+  }
+
+  // Surface the score to the GitHub Actions run summary (report step reads these)
+  if (process.env.GITHUB_OUTPUT) {
+    try {
+      appendFileSync(process.env.GITHUB_OUTPUT, `quality_score=${validation.score}\nquality_grade=${validation.grade}\n`);
+    } catch (e) { /* non-fatal — score still logged to console */ }
+  }
+
+  if (!validation.passing) {
+    console.log('');
+    console.log(`  ❌ BLOCKED by quality gate: score ${validation.score} < threshold ${validation.threshold}`);
+    console.log('  To force-publish anyway, set BLOG_MIN_SCORE lower (e.g. 0).');
+    console.log('  No post was saved — daily run reported as blocked.');
+    process.exit(2);
   }
 
   // Dry run check
