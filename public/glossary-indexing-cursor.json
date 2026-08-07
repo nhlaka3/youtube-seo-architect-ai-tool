@@ -1,12 +1,12 @@
 {
   "index": 1200,
-  "total": 7317,
-  "completed": false,
+  "total": 177,
+  "completed": true,
   "lastBatch": {
-    "submitted": 200,
-    "succeeded": 200,
+    "submitted": 0,
+    "succeeded": 0,
     "failed": 0,
-    "timestamp": "2026-08-06T08:00:02.982Z"
+    "timestamp": "2026-08-07T06:43:08.949Z"
   },
-  "updatedAt": "2026-08-06T08:00:02.982Z"
+  "updatedAt": "2026-08-07T06:43:08.949Z"
 }
