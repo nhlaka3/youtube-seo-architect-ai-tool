@@ -115,6 +115,81 @@ function loadData() {
   return JSON.parse(readFileSync(file, 'utf-8'));
 }
 
+// ── Category guide prose (per-category pillar content) ─────────────
+
+const CATEGORY_GUIDES = {
+  'analytics': {
+    title: '📊 How to Work on Analytics',
+    lede: 'Analytics is your control room on YouTube — the only place where you can see exactly how viewers behave instead of guessing. Every metric on this page feeds a decision: impressions tell you whether YouTube is testing your content, CTR tells you whether the packaging (title + thumbnail) earns the click, average view duration tells you whether the video delivers on its promise, and retention graphs show the exact second people leave.',
+    how: [
+      'Set a weekly 15-minute review: open YouTube Studio > Analytics and read impressions, CTR, and retention for your last 5 videos — write down one action per video.',
+      'Diagnose by metric pair: low impressions = authority/niche problem, low CTR = packaging problem, low average view duration = hook or pacing problem. Fix the metric that is weakest first.',
+      'Compare yourself against the percentile ranks for your niche before judging a number — 4% CTR in a tech-review niche is different from 4% in a music niche.',
+    ],
+    rule: 'Rule of thumb: if you don\'t know which metric is hurting, the answer is usually average view duration — retention is the strongest compounding signal on YouTube.',
+  },
+  'algorithm': {
+    title: '🤖 How to Work With the Algorithm',
+    how: 'The YouTube algorithm is a viewer-behavior prediction engine: it recommends content that keeps people on the platform. Every term in this category describes one of the signals it watches — session time, click-through rate, watch time, retention, return viewers. There are no "secret algorithm hacks", only alignment with viewer behavior.',
+    how2: 'Work the loop in this order:',
+    items: [
+      'Retention first — a video that holds 60%+ of viewers signals quality to every downstream system (search, suggested, Shorts feed).',
+      'Then packaging (CTR) — a high-retention video with a weak title or thumbnail never gets tested at scale.',
+      'Then session time — ending videos with a next-watch link (playlist, cards) trains the recommender to treat your channel as a session.',
+    ],
+    rule: 'Rule of thumb: any "algorithm strategy" that expects you to trick viewers is wrong. The algorithm is a mirror — improve the reflection.',
+  },
+  'seo-optimization': {
+    title: '🔍 How to Run YouTube SEO',
+    how: 'YouTube SEO = making it easy for both the search box and the recommender to understand what your video is about, then proving it delivers. Search ranking depends on a handful of fields you control: title, description, tags, chapters, transcript, and the audio that search hears. The terms in this page are the vocabulary of that work.',
+    items: [
+      'Put the primary keyword in the title, in the first line of the description, and in the first 30 seconds of spoken audio — all three reinforce each other.',
+      'Write a description that tells Google and YouTube the content contract: what the video promises, who it is for, and when each section happens (chapters).',
+      'Refresh your top 10 videos once a month — descriptions, tags, end screens, chapters. Old wins are usually quick wins.',
+    ],
+    rule: 'Rule of thumb: if the video would lose a person\'s search intent match, it will not rank — fix intent match before adding more keywords.',
+  },
+  'monetization': {
+    title: '💰 How to Earn From a Channel',
+    who: 'Monetization starts after the YouTube Partner Program gate (1,000 subscribers + 4,000 watch hours or Shorts equivalents) and scales with a set of levers you control: video length (over 8 minutes unlocks mid-rolls), audience geography (CPM differs wildly), and the mix of revenue sources.',
+    items: [
+      'Check Studio > Monetization for status + policy warnings; a channel flagged for reused content monetizes nothing.',
+      'Enable mid-rolls on 8+ minute videos — manually, and only at natural content breaks.',
+      'Diversify: memberships, Super Chat, affiliate links, and sponsorships usually exceed AdSense for a small channel.',
+    ],
+    rule: 'Rule of thumb: RPM (revenue per 1,000 views) is the number to optimize, not raw views. 100k views in a low-CPM niche is worth less than 20k in a high-CPM one.',
+  },
+  'content-strategy': {
+    title: '📝 How to Plan Content That Compounds',
+    how: 'Content strategy is the discipline of deciding what to make before making it: which topics serve your niche, which formats fit your skills, and which cadence you can sustain. The terms on this page — pillars, niches, calendars, evergreen vs timely — are the planning units.',
+    items: [
+      'Define 3-5 content pillars (the recurring themes of the channel) and publish inside them — pillars compound authority and searches.',
+      'Aim for 60-70% evergreen, 30-40% timely/trending; evergreen earns for months, trending earns fast.',
+      'Batch-produce the pillar that already performs; playlists + series layout turn singles into sessions.',
+    ],
+    rule: 'Rule of thumb: consistency beats single-hits on YouTube. A 2x/week schedule you can keep for 6 months outperforms a perfect video once a month.',
+  },
+  'youtube-features': {
+    title: '⚙️ Leverage YouTube\'s Native Tools',
+    who: 'Every feature player (end screens, cards, playlists, chapters, community posts, live, Shorts) is a distribution asset that already exists — no production cost, just configuration. The tools you\'ve been given: features that extend reach (Shorts feed), features that extend watch time (playlists, end screens, IV clock), features that extend engagement (community, polls).',
+    items: [
+      'Add end screens + cards to every video at strategic points — the "next watch" click is pure session time for YouTube.',
+      'Turn a series of videos into a playlist with a clear order — playlists push users through a session instead of a one-off.',
+      'Post community updates between uploads (behind-the-scenes, polls, announcements) — the algorithm rewards activity.',
+    ],
+    rule: 'Rule of thumb: the best feature is the one that amplifies content you already have: playlists + end screens + chapters convert single videos into sessions.',
+  },
+};
+
+const ES_CATEGORY_GUIDES = {
+  'analytics': { title: '📊 Cómo Trabajar con las Analíticas', how: 'Los datos son el panel de control de tu canal: cada métrica de esta página decide algo. Las impresiones dicen si YouTube está probando tu contenido; el CTR dice si el título y la miniatura ganan el clic; la duración media de visualización dice si el video cumple su promesa; la retención muestra exactamente en qué segundo perdiste gente.', items: ['Revisa tus analíticas una vez por semana: impresiones, CTR y retención de tus últimos 5 videos — una acción por cada dato.', 'Distinge el problema por la métrica: pocas impresiones = problema de activación, CTR bajo = problema de empaque, retención baja = problema de gancho.', 'Compárate con tu percentil frente a canales similares antes de juzgar un cambio.'], rule: 'Regla: si no sabes qué métrica está mal, mejorar la duración de visualización es casi siempre el mejor punto de partida.' },
+  'algorithm': { title: '🤖 Cómo Trabajar con el Algoritmo', how: 'El algoritmo es una máquina que aprende del comportamiento de los espectadores: no hay trucos, solo señales. Retención, CTR y tiempo de sesión son las tres palancas reales.', items: ['Prioriza la retención: un video que retiene al 90% deja una señal fuerte para todo el sistema de recomendación.', 'Luego el CTR: un video con buena retención pero título/diminuto débiles no consigue pruebas a escala.', 'Después la sesión: terminales con next-watch (tarjetas, end screens, playlists) para que el sugerido recomiende tu canal completo.'], rule: 'Regla: cualquier "truco" que no influya en el comportamiento del espectador es ruido. Mejora el comportamiento y el algoritmo sigue.' },
+  'seo-optimization': { title: '🔍 Cómo Hacer SEO en YouTube', how: 'El SEO de YouTube = hacer que el buscador y el recomendador entiendan de qué trata tu video y que lo entregan. Palabra clave en el título, primera línea de la descripción y los primeros 30 segundos de audio: son los lugares más firmes.', items: ['Título con la palabra clave + gancho; descripción que cuente la historia completa; capítulos temporados.', 'Refuerza la intención: investiga el auto-suggest de YouTube — esas frases son keywords reales.', 'Actualiza mensualmente tus 10 videos principales: títulos, descripciones, capítulos, end screens.'], rule: 'Regla: si el video no coincide con la intención de búsqueda del usuario, no va a rankear. Arregla eso antes de añadir más keywords.' },
+  'monetization': { title: '💰 Cómo Ganar Dinero en YouTube', how: 'La monetización empieza en el Programa de Socios (1.000 suscriptores + 4.000 horas) y se multiplica con dependientes: videos de 8+ minutos desbloquean mid-rolls, la audiencia define el CPM, y las fuentes extra (membresías, Super Chat, afiliados) estabilizan los ingresos.', items: ['Revisa tu estado de monetización y avisos de política en Studio.', 'Activa mid-rolls en videos de 8+ minutos, en pausas naturales.', 'Diversifica: membresías, Super Chat, afiliados y patrocinios.'], rule: 'Regla: el RPM es la métrica a optimizar, no las vistas. 100k vistas en un nicho de CPM bajo valen menos que 5k en uno alto.' },
+  'content-strategy': { title: '📝 Estrategia de Contenido', how: 'La estrategia es la disciplina entre tener una idea y grabarla: qué temas sirven a tu audiencia, qué formatos dominas, y qué calendario puedes sostener. Los términos, hoy, son las unidades de planificación.', items: ['Define 3-5 pilares de contenido y construye el canal sobre ellos.', 'Mantén 60-70% de contenido perenne y 30-40% aprovechable a más actualidad.', 'Produce por secciones y usa playlists para que los videos individuales funcionen como una sesión.'], rule: 'Regla: la constancia supera al video único. Dos videos por semana durante dos años vencen a un "mega video" mensual.' },
+  'youtube-features': { title: '⚙️ Usa Las Funciones Nativas', how: 'Pantallas finales, tarjetas, playlists, capítulos, publicaciones de comunidad, el directo y Shorts son herramientas que ya existen: no te cuestan producción, solo configuración. Palmeras que alargan la sesión, funcionales que enganchan.', items: ['Añade end screens y tarjetas en cada video en puntos estratégicos.', 'Convierte series en playlists con orden claro.', 'Publica en la comunidad entre video y video: polls, behind-the-scenes, anuncios.'], rule: 'Regla: la mejor función es la que reaprovecha el contenido que ya tienes: playlists + end screens + comunidad = más sesión.' },
+};
+
 function getCategoryEmoji(slug) {
   const meta = ES_MODE ? ES_CATEGORY_META : CATEGORY_META;
   return meta[slug]?.emoji || '📖';
@@ -175,6 +250,7 @@ function getRelatedBlogsForCategory(categorySlug) {
 
 function generateCategoryPage(categorySlug, termsInCategory, allTerms, totalTerms, allCategories) {
   const meta = (ES_MODE ? ES_CATEGORY_META : CATEGORY_META)[categorySlug] || { name: categorySlug, emoji: '📖', description: '', keywords: '' };
+  const guide = (ES_MODE ? ES_CATEGORY_GUIDES : CATEGORY_GUIDES)[categorySlug];
   const clusters = clusterTerms(termsInCategory);
   const relatedBlogs = getRelatedBlogsForCategory(categorySlug);
 
@@ -237,6 +313,22 @@ function generateCategoryPage(categorySlug, termsInCategory, allTerms, totalTerm
     .filter(c => c !== categorySlug)
     .map(c => `<a href="${catBase}/${c}" class="cross-cat">${getCategoryEmoji(c)} ${getCategoryName(c)}</a>`)
     .join('\n          ');
+
+  // Category guide section (pillar prose)
+  let guideSection = '';
+  if (guide) {
+    const blocks = Object.entries(guide)
+      .filter(([k]) => k !== 'title')
+      .map(([k, v]) => Array.isArray(v)
+        ? `<ul>${v.map(x => `<li>${x}</li>`).join('')}</ul>`
+        : k === 'rule' ? `<p class="guide-rule"><strong>${v.split(':')[0]}:</strong>${v.slice(v.indexOf(':') + 1)}</p>` : `<p>${v}</p>`)
+      .join('\n    ');
+    guideSection = `
+    <section class="category-guide">
+      <h2>${guide.title}</h2>
+      ${blocks}
+    </section>`;
+  }
 
   // Build HTML
   const html = `<!DOCTYPE html>
@@ -314,6 +406,12 @@ function generateCategoryPage(categorySlug, termsInCategory, allTerms, totalTerm
     .blog-link:hover{background:#312e81;color:#fff}
     .back-link{display:inline-block;margin-bottom:1.5rem;color:#8b8b9e;text-decoration:none;font-size:.9rem}
     .back-link:hover{color:#a5b4fc}
+    .category-guide{max-width:760px;margin:0 auto 2.5rem;padding:0 1.5rem}
+    .category-guide h2{color:#e0e7ff;font-size:1.35rem;margin-bottom:.75rem}
+    .category-guide p,.category-guide li{color:#8b8b9e;line-height:1.7;font-size:.95rem}
+    .category-guide ul{padding-left:1.25rem;margin:.5rem 0 1rem}
+    .category-guide li{margin-bottom:.5rem}
+    .category-guide .guide-rule{color:#a5b4fc;border-left:3px solid #6366f1;padding-left:.75rem;margin-top:1rem}
     .cta-box{border:1px solid #4f46e5;margin:2rem 0}
     @media(max-width:640px){.hero{padding:2rem 1rem}.hero h1{font-size:1.5rem}.card-grid{grid-template-columns:1fr}}
   </style>
@@ -340,6 +438,8 @@ function generateCategoryPage(categorySlug, termsInCategory, allTerms, totalTerm
     <nav class="cross-cats">
       ${otherCategories}
     </nav>
+
+    ${guideSection}
 
     ${bodyHTML}
 
@@ -428,6 +528,9 @@ function generateCategoryIndex(allCategories, termCounts, totalTerms) {
     <div class="hero">
       <h1>📖 ${ES_MODE ? 'Categorías del Glosario' : 'Glossary Categories'}</h1>
       <p>${totalTerms} ${ES_MODE ? 'términos en 6 categorías. Elige una categoría para sumergirte.' : 'terms across 6 categories. Pick a category to dive in.'}</p>
+      <p style="max-width:640px;margin:1rem auto 0;color:#8b8b9e;font-size:.9rem;line-height:1.7">${ES_MODE
+        ? 'Cada categoría reúne los conceptos que necesitas para dominar una parte concreta del SEO en YouTube. Empieza por la categoría que coincida con tu problema actual — analíticas si no sabes qué métrica mirar, algoritmo si quieres entender por qué se recomiendan tus videos, SEO si buscas rankear más en búsqueda. Dentro de cada una encontrarás la definición, los términos relacionados y una guía práctica de aplicación.'
+        : 'Each category groups the concepts you need to master one part of YouTube SEO. Start with the category that matches your current problem — Analytics if you don\'t know which metric to watch, Algorithm if you want to understand why your videos get recommended, SEO Optimization if you want to rank higher in search. Inside each one you\'ll find definitions, related terms, and a practical application guide.'}</p>
       <a href="${termBase}/" style="color:#a5b4fc;font-size:.9rem">📖 ${ES_MODE ? 'Ver todos los términos' : 'View all glossary terms'}</a>
       <br>
       <a href="/glossary/category/" class="lang-switch" hreflang="en" rel="alternate" style="display:inline-flex;align-items:center;gap:4px;font-size:.8rem;color:#a5b4fc;text-decoration:none;padding:4px 12px;border:1px solid rgba(165,180,252,.3);border-radius:9999px;transition:all .2s">🇺🇸 English</a>
