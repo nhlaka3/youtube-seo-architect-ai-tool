@@ -1,0 +1,84 @@
+name: Comparison Demand Promoter
+
+# Weekly: check GSC for glossary comparison pairs with real search demand and
+# open a PR promoting qualifying pairs out of noindex into INDEXED_COMPARISONS.
+# Thresholds: >= 20 impressions / 28 days AND avg position <= 12.
+# Merge the PR -> Vercel auto-deploy -> pairs render index,follow + sitemap.
+
+on:
+  schedule:
+    - cron: "0 4 * * 1" # Mondays 04:00 UTC
+  workflow_dispatch: # manual run button
+
+permissions:
+  contents: write
+  pull-requests: write
+
+concurrency:
+  group: comparison-promoter
+  cancel-in-progress: true
+
+jobs:
+  promote:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          ref: main
+          fetch-depth: 1
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install Google API client
+        run: pip install --quiet google-auth google-api-python-client
+
+      - name: Restore service account key
+        run: |
+          echo "${{ secrets.GOOGLE_SA_KEY }}" | base64 -d > config/google-indexing-key.json
+          test -s config/google-indexing-key.json
+
+      - name: Check demand and promote
+        id: monitor
+        run: |
+          python3 scripts/check-comparison-demand.py --promote --min-impressions 20 --max-position 12 2>&1 | tee /tmp/monitor.out
+          if git diff --quiet api/index.js; then
+            echo "changed=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "changed=true" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Open promotion PR
+        if: steps.monitor.outputs.changed == 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          BRANCH="promote-comparisons-$(date +%Y%m%d%H%M%S)"
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git checkout -b "$BRANCH"
+          git add api/index.js
+          git commit -m "Promote comparison pairs with proven GSC demand"
+          git push origin "HEAD:$BRANCH"
+          SUMMARY=$(grep -A20 "promoted" /tmp/monitor.out | head -25 || true)
+          cat > /tmp/pr-body.md <<'PRBODY'
+          Weekly GSC demand monitor found comparison pairs crossing the promotion threshold (>= 20 impressions / 28d, position <= 12). These now render index,follow with the verdict section + blog link mesh, and are added to the sitemap automatically.
+
+          Promoted this run:
+          ```
+          PRSUMMARY
+          ```
+
+          Review the one-line-per-slug change, merge, and Vercel auto-deploys. Non-qualifying pairs remain noindex (their impressions decay while they keep passing link equity to the blog).
+          PRBODY
+          sed -i "s|PRSUMMARY|$SUMMARY|" /tmp/pr-body.md
+          gh pr create --base main --head "$BRANCH" \
+            --title "Promote comparison pairs with proven GSC demand" \
+            --body-file /tmp/pr-body.md
+
+      - name: No candidates
+        if: steps.monitor.outputs.changed != 'true'
+        run: echo "No comparison pairs crossed the promotion threshold — nothing to do."
