@@ -113,6 +113,31 @@ function generatePage(tool) {
 
   <!-- FAQ Schema (featured snippet) -->
   <script type="application/ld+json">${JSON.stringify(faqSchema, null, 2)}</script>
+  <!-- Breadcrumb + Organization entity graph -->
+  <script type="application/ld+json">${JSON.stringify([
+    {
+      '@context': 'https://schema.org',
+      '@type': 'BreadcrumbList',
+      itemListElement: [
+        { '@type': 'ListItem', position: 1, name: 'Home', item: 'https://yt-seo-architect.vercel.app/' },
+        { '@type': 'ListItem', position: 2, name: 'Comparisons', item: 'https://yt-seo-architect.vercel.app/vs/' },
+        { '@type': 'ListItem', position: 3, name: `YT SEO Architect vs ${name}`, item: `https://yt-seo-architect.vercel.app/vs/${slug}` },
+      ],
+    },
+    {
+      '@context': 'https://schema.org',
+      '@type': 'Organization',
+      '@id': 'https://yt-seo-architect.vercel.app/#organization',
+      name: 'YT SEO Architect',
+      url: 'https://yt-seo-architect.vercel.app/',
+      logo: { '@type': 'ImageObject', url: 'https://yt-seo-architect.vercel.app/logo.png' },
+      sameAs: [
+        'https://twitter.com/YTSEOArchitect',
+        'https://linkedin.com/company/yt-seo-architect',
+        'https://github.com/nhlaka3',
+      ],
+    },
+  ], null, 2)}</script>
 
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
