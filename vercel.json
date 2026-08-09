@@ -105,6 +105,36 @@
       "permanent": true
     },
     {
+      "source": "/tools/youtube-monetization-tips-2026",
+      "destination": "/blog/youtube-monetization-tips-2026",
+      "permanent": true
+    },
+    {
+      "source": "/tools/youtube-for-tutorials-2026",
+      "destination": "/blog/youtube-for-tutorials-2026",
+      "permanent": true
+    },
+    {
+      "source": "/tools/youtube-intro-hook-first-3-seconds",
+      "destination": "/blog/youtube-intro-hook-first-3-seconds",
+      "permanent": true
+    },
+    {
+      "source": "/tools/youtube-seo-for-business-channels-2026",
+      "destination": "/blog/youtube-seo-for-business-channels-2026",
+      "permanent": true
+    },
+    {
+      "source": "/tools/youtube-seo-for-gaming-channels-2026",
+      "destination": "/blog/youtube-seo-for-gaming-channels-2026",
+      "permanent": true
+    },
+    {
+      "source": "/glossary/vidiq-vs-tubebuddy",
+      "destination": "/vs/vidiq",
+      "permanent": true
+    },
+    {
       "source": "/tools/best-youtube-growth-strategies-for-new-creators-2026",
       "destination": "/blog/best-youtube-growth-strategies-for-new-creators-2026",
       "permanent": true

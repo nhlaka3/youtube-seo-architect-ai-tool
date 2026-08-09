@@ -1910,9 +1910,8 @@ async function buildSitemapChunks() {
     "video-idea-generator", "video-length-optimizer", "watch-time-estimator", "youtube-algorithm-2026",
     "youtube-algorithm-changes-2026", "youtube-chapter-timestamps-seo-guide",
     "youtube-creator-community-engagement-strategies-2026", "youtube-ctr-actually-mean",
-    "youtube-for-tutorials-2026", "youtube-intro-hook-first-3-seconds", "youtube-monetization-tips-2026",
-    "youtube-revenue-estimator", "youtube-seo-2026", "youtube-seo-for-business-channels-2026",
-    "youtube-seo-for-cooking-channels-2026", "youtube-seo-for-gaming-channels-2026",
+    "youtube-revenue-estimator", "youtube-seo-2026",
+        "youtube-seo-for-cooking-channels-2026",
     "youtube-seo-optimization-techniques-2026", "youtube-seo-template-2026",
     "youtube-seo-tools-for-keyword-research-2026", "youtube-shorts-algorithm-2026",
     "youtube-shorts-monetization-requirements-2026", "youtube-shorts-strategy-for-increasing-views-2026",
@@ -1944,8 +1943,9 @@ async function buildSitemapChunks() {
 
   // ── Chunk 2: glossary term pages (en/es/pt) ──
   let terms = header;
-  for (const slug of termSlugs) {
-    terms += `  <url><loc>${site}/glossary/${slug}</loc></url>\n`;
+    for (const slug of termSlugs) {
+      if (slug === 'vidiq-vs-tubebuddy') continue; // redirected to /vs/vidiq (2026-08-07)
+      terms += `  <url><loc>${site}/glossary/${slug}</loc></url>\n`;
     terms += `  <url><loc>${site}/glossary/es/${slug}</loc></url>\n`;
     terms += `  <url><loc>${site}/glossary/pt/${slug}</loc></url>\n`;
   }
