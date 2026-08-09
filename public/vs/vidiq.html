@@ -13,7 +13,8 @@
   <meta name="twitter:card" content="summary_large_image">
 
   <!-- FAQ Schema (featured snippet) -->
-  <script type="application/ld+json">{
+  <script type="application/ld+json">
+{
   "@context": "https://schema.org",
   "@type": "FAQPage",
   "mainEntity": [
@@ -41,8 +42,16 @@
         "text": "Yes. Many creators use both. vidIQ is good for youtube keyword research & channel analytics. YT SEO Architect adds AI thumbnail scoring, A/B title testing, and channel audit tools."
       }
     }
-  ]
-}</script>
+  ],
+  "speakable": {
+    "@type": "SpeakableSpecification",
+    "xpath": [
+      "//h1",
+      "//meta[@name='description']/@content"
+    ]
+  }
+}
+</script>
 
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }

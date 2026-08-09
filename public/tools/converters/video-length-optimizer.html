@@ -9,7 +9,8 @@
   <meta property="og:title" content="YouTube Video Length Optimizer">
   <meta property="og:description" content="Free YouTube video length optimizer. Find the ideal video duration for your niche and content type to maximize retention, watch time, and algorithm performance.">
   <meta property="og:type" content="website">
-  <script type="application/ld+json">{
+  <script type="application/ld+json">
+{
   "@context": "https://schema.org",
   "@type": "FAQPage",
   "mainEntity": [
@@ -29,8 +30,16 @@
         "text": "The average varies by niche. Use the reference table below to compare your channel against typical benchmarks."
       }
     }
-  ]
-}</script>
+  ],
+  "speakable": {
+    "@type": "SpeakableSpecification",
+    "xpath": [
+      "//h1",
+      "//meta[@name='description']/@content"
+    ]
+  }
+}
+</script>
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
     body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #0a0b10; color: #e5e7eb; line-height: 1.7; }

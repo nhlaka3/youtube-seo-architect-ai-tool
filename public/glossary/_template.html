@@ -24,32 +24,39 @@
   <meta name="twitter:title" content="{{TERM}} — YouTube SEO Glossary" />
   <meta name="twitter:description" content="{{SHORT_DEFINITION}}" />
   <script type="application/ld+json">
-  {
-    "@context": "https://schema.org",
-    "@type": "Article",
-    "headline": "{{TERM}} — Definition and Optimization Guide",
-    "description": "{{SCHEMA_DESCRIPTION}}",
-    "datePublished": "2026-07-23",
-    "dateModified": "2026-07-23",
-    "author": {
-      "@type": "Person",
-      "name": "Patrick",
-      "url": "https://yt-seo-architect.vercel.app/about"
-    },
-    "publisher": {
-      "@type": "Organization",
-      "name": "YT SEO Architect",
-      "logo": {
-        "@type": "ImageObject",
-        "url": "https://yt-seo-architect.vercel.app/logo.png"
-      }
-    },
-    "mainEntityOfPage": {
-      "@type": "WebPage",
-      "@id": "https://yt-seo-architect.vercel.app/glossary/{{SLUG}}"
+{
+  "@context": "https://schema.org",
+  "@type": "Article",
+  "headline": "{{TERM}} — Definition and Optimization Guide",
+  "description": "{{SCHEMA_DESCRIPTION}}",
+  "datePublished": "2026-07-23",
+  "dateModified": "2026-07-23",
+  "author": {
+    "@type": "Person",
+    "name": "Patrick",
+    "url": "https://yt-seo-architect.vercel.app/about"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "YT SEO Architect",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://yt-seo-architect.vercel.app/logo.png"
     }
+  },
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "https://yt-seo-architect.vercel.app/glossary/{{SLUG}}"
+  },
+  "speakable": {
+    "@type": "SpeakableSpecification",
+    "xpath": [
+      "//h1",
+      "//meta[@name='description']/@content"
+    ]
   }
-  </script>
+}
+</script>
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",

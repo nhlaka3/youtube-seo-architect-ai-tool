@@ -28,17 +28,38 @@
   <meta name="twitter:description" content="Un video introductorio corto (60-90 segundos) que se reproduce automáticamente para visitantes no suscritos y explica qué ofrece su canal." />
 
   <script type="application/ld+json">
-  {
-    "@context": "https://schema.org",
-    "@type": "Article",
-    "headline": "Channel Trailer — Definición y Guía de Optimización",
-    "description": "Un video introductorio corto (60-90 segundos) que se reproduce automáticamente para visitantes no suscritos y explica qué ofrece su canal.",
-    "inLanguage": "es",
-    "author": { "@type": "Person", "name": "Patrick", "url": "https://yt-seo-architect.vercel.app/about" },
-    "publisher": { "@type": "Organization", "name": "YT SEO Architect", "logo": { "@type": "ImageObject", "url": "https://yt-seo-architect.vercel.app/logo.png" } },
-    "mainEntityOfPage": { "@type": "WebPage", "@id": "https://yt-seo-architect.vercel.app/glossary/es/channel-trailer" }
+{
+  "@context": "https://schema.org",
+  "@type": "Article",
+  "headline": "Channel Trailer — Definición y Guía de Optimización",
+  "description": "Un video introductorio corto (60-90 segundos) que se reproduce automáticamente para visitantes no suscritos y explica qué ofrece su canal.",
+  "inLanguage": "es",
+  "author": {
+    "@type": "Person",
+    "name": "Patrick",
+    "url": "https://yt-seo-architect.vercel.app/about"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "YT SEO Architect",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://yt-seo-architect.vercel.app/logo.png"
+    }
+  },
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "https://yt-seo-architect.vercel.app/glossary/es/channel-trailer"
+  },
+  "speakable": {
+    "@type": "SpeakableSpecification",
+    "xpath": [
+      "//h1",
+      "//meta[@name='description']/@content"
+    ]
   }
-  </script>
+}
+</script>
 
   <script type="application/ld+json">
   {
@@ -54,29 +75,36 @@
   </script>
 
   <script type="application/ld+json">
-  {
-    "@context": "https://schema.org",
-    "@type": "FAQPage",
-    "mainEntity":     [
-        {
-            "@type": "Question",
-            "name": "¿Por qué channel trailer es importante?",
-            "acceptedAnswer": {
-                "@type": "Answer",
-                "text": "Channel Trailer es fundamental para el crecimiento del canal. Los creadores con una channel trailer sólida crecen 2-4 veces más rápido porque cada video tiene un propósito específico."
-            }
-        },
-        {
-            "@type": "Question",
-            "name": "¿Cómo construir channel trailer que funcione?",
-            "acceptedAnswer": {
-                "@type": "Answer",
-                "text": "Define los pilares temáticos de tu canal. Crea un calendario de contenido con 4-8 semanas de anticipación, equilibrando contenido perenne (60-70%) con contenido de tendencia (30-40%)."
-            }
-        }
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "¿Por qué channel trailer es importante?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Channel Trailer es fundamental para el crecimiento del canal. Los creadores con una channel trailer sólida crecen 2-4 veces más rápido porque cada video tiene un propósito específico."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "¿Cómo construir channel trailer que funcione?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Define los pilares temáticos de tu canal. Crea un calendario de contenido con 4-8 semanas de anticipación, equilibrando contenido perenne (60-70%) con contenido de tendencia (30-40%)."
+      }
+    }
+  ],
+  "speakable": {
+    "@type": "SpeakableSpecification",
+    "xpath": [
+      "//h1",
+      "//meta[@name='description']/@content"
     ]
   }
-  </script>
+}
+</script>
 
   <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3831668789026424" crossorigin="anonymous"></script>
   <link href="https://fonts.googleapis.com/css2?family=Geist:wght@100..900&display=swap" rel="stylesheet" />
@@ -109,7 +137,7 @@
       <nav class="header-nav" id="header-nav">
         <a href="/tools.html">Tools</a>
         <a href="/blog">Blog</a>
-        <a href="/public/glossary">Glossary</a>
+        <a href="/glossary/">Glossary</a>
        <a href="/dashboard.html" class="header-cta">Dashboard</a>
       </nav>
       <button class="mobile-menu-btn" aria-label="Menu" onclick="document.getElementById('header-nav').classList.toggle('open')">☰</button>
@@ -230,8 +258,8 @@
       <div class="footer-col">
         <h4>Resources</h4>
         <a href="/blog">Blog</a>
-        <a href="/public/glossary">Glossary</a>
-        <a href="/public/guides">Guides</a>
+        <a href="/glossary/">Glossary</a>
+        <a href="/tools/">Guides</a>
       </div>
       <div class="footer-col">
         <h4>Company</h4>

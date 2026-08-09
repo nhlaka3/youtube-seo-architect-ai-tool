@@ -24,10 +24,6 @@
       }
     },
     {
-      "src": "public/**",
-      "use": "@vercel/static"
-    },
-    {
       "src": "tools.html",
       "use": "@vercel/static"
     }
@@ -46,6 +42,66 @@
     {
       "source": "/guide",
       "destination": "/guide/youtube-seo",
+      "permanent": true
+    },
+    {
+      "source": "/public/glossary/:path*",
+      "destination": "/glossary/:path*",
+      "permanent": true
+    },
+    {
+      "source": "/public/glossary",
+      "destination": "/glossary/",
+      "permanent": true
+    },
+    {
+      "source": "/public/guides/:path*",
+      "destination": "/tools/:path*",
+      "permanent": true
+    },
+    {
+      "source": "/public/guides",
+      "destination": "/tools/",
+      "permanent": true
+    },
+    {
+      "source": "/public/vs/:path*",
+      "destination": "/vs/:path*",
+      "permanent": true
+    },
+    {
+      "source": "/public/vs",
+      "destination": "/vs/",
+      "permanent": true
+    },
+    {
+      "source": "/public/tools/:path*",
+      "destination": "/tools/:path*",
+      "permanent": true
+    },
+    {
+      "source": "/public/tools",
+      "destination": "/tools/",
+      "permanent": true
+    },
+    {
+      "source": "/public/blog/:path*",
+      "destination": "/blog/:path*",
+      "permanent": true
+    },
+    {
+      "source": "/public/blog",
+      "destination": "/blog",
+      "permanent": true
+    },
+    {
+      "source": "/public/niches/:path*",
+      "destination": "/blog/:path*",
+      "permanent": true
+    },
+    {
+      "source": "/public/niches",
+      "destination": "/blog",
       "permanent": true
     },
     {

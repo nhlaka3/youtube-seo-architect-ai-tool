@@ -372,6 +372,10 @@ function generateDualSchema(page, faqItems) {
     mainEntityOfPage: {
       '@type': 'WebPage',
       '@id': `https://yt-seo-architect.vercel.app/blog/${slug}`
+    },
+    speakable: {
+      '@type': 'SpeakableSpecification',
+      xpath: ['/html/head/title', '//h1', "//*[@id='direct-answer']", "//*[@class='tldr']"]
     }
   };
 
@@ -385,7 +389,11 @@ function generateDualSchema(page, faqItems) {
         '@type': 'Answer',
         text: f.answer || f.question
       }
-    }))
+    })),
+    speakable: {
+      '@type': 'SpeakableSpecification',
+      xpath: ['/h1', "//*[@id='direct-answer']/@content", "//meta[@name='description']/@content"]
+    }
   } : null;
 
   return JSON.stringify(faqSchema ? [articleSchema, faqSchema] : [articleSchema]);
@@ -850,7 +858,7 @@ export function renderBlogTemplate(page) {
       <nav class="header-nav" id="header-nav">
         <a href="/tools.html">Tools</a>
         <a href="/blog">Blog</a>
-        <a href="/public/glossary">Glossary</a>
+        <a href="/glossary/">Glossary</a>
        <a href="/dashboard.html" class="header-cta">Dashboard</a>
       </nav>
       <button class="mobile-menu-btn" aria-label="Menu" onclick="document.getElementById('header-nav').classList.toggle('open')">☰</button>
@@ -971,8 +979,8 @@ export function renderBlogTemplate(page) {
       <div class="footer-col">
         <h4>Resources</h4>
         <a href="/blog">Blog</a>
-        <a href="/public/glossary">Glossary</a>
-        <a href="/public/guides">Guides</a>
+        <a href="/glossary/">Glossary</a>
+        <a href="/tools/">Guides</a>
       </div>
       <div class="footer-col">
         <h4>Company</h4>
