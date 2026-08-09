@@ -1,6 +1,6 @@
 {
   "description": "Curated low-competition YouTube SEO keywords. Each entry has a keyword, slug, category, and status (pending/done/skipped). The generator picks the next 'pending' keyword.",
-  "lastUpdated": "2026-08-08",
+  "lastUpdated": "2026-08-09",
   "keywords": [
     {
       "keyword": "youtube community posts strategy 2026",
@@ -967,22 +967,25 @@
       "keyword": "youtube video optimization for gaming channels 2026",
       "slug": "youtube-video-optimization-for-gaming-channels-2026",
       "category": "SEO",
-      "status": "pending",
-      "notes": "Emergency force-add (demand 5/100, rankability 52/100)"
+      "status": "done",
+      "notes": "Emergency force-add (demand 5/100, rankability 52/100)",
+      "generatedAt": "2026-08-09T06:40:05.807Z"
     },
     {
       "keyword": "maximizing youtube watch time for creators 2026",
       "slug": "maximizing-youtube-watch-time-for-creators-2026",
       "category": "Growth",
-      "status": "pending",
-      "notes": "Emergency force-add (demand 5/100, rankability 52/100)"
+      "status": "done",
+      "notes": "Emergency force-add (demand 5/100, rankability 52/100)",
+      "generatedAt": "2026-08-09T06:40:06.122Z"
     },
     {
       "keyword": "youtube ad revenue optimization strategy 2026",
       "slug": "youtube-ad-revenue-optimization-strategy-2026",
       "category": "Revenue",
-      "status": "pending",
-      "notes": "Emergency force-add (demand 5/100, rankability 52/100)"
+      "status": "done",
+      "notes": "Emergency force-add (demand 5/100, rankability 52/100)",
+      "generatedAt": "2026-08-09T06:40:06.435Z"
     }
   ]
 }
