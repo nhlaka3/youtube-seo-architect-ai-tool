@@ -245,6 +245,25 @@ function generatePage(tool) {
   <link rel="canonical" href="${SITE}/tools/${tool.slug}" />
   <meta property="og:title" content="${tool.title}" />
   <meta property="og:description" content="${tool.meta}" />
+  <meta property="og:image" content="${SITE}/og-image.png" />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="${SITE}/tools/${tool.slug}" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="${tool.title}" />
+  <meta name="twitter:description" content="${tool.meta}" />
+  <meta name="twitter:image" content="${SITE}/og-image.png" />
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebApplication",
+    "name": "${tool.h1.replace(/[🎯⏱️💰📈🔍]/g, '').trim()}",
+    "description": "${tool.desc}",
+    "url": "${SITE}/tools/${tool.slug}/",
+    "applicationCategory": "UtilitiesApplication",
+    "operatingSystem": "Web",
+    "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" }
+  }
+  </script>
   <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3831668789026424" crossorigin="anonymous"></script>
   <style>
     *{box-sizing:border-box;margin:0;padding:0}

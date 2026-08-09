@@ -57,11 +57,11 @@ const SITE_HEADER = `  <!-- Reading Progress Bar -->
         YT <span>SEO</span> Architect
       </a>
       <nav class="header-nav" id="header-nav">
-        <a href="/tools.html">Tools</a>
+        <a href="/tools">Tools</a>
         <a href="/blog">Blog</a>
         <a href="/public/glossary">Glossary</a>
         <a href="/public/tools">Free Tools</a>
-        <a href="/dashboard.html" class="header-cta">Dashboard</a>
+        <a href="/dashboard" class="header-cta">Dashboard</a>
       </nav>
       <button class="mobile-menu-btn" aria-label="Menu" onclick="document.getElementById('header-nav').classList.toggle('open')">☰</button>
     </div>
@@ -89,7 +89,7 @@ const BREADCRUMBS_TOOLS = `  <!-- Breadcrumbs -->
   <div class="breadcrumbs">
     <a href="/">Home</a>
     <span class="sep">/</span>
-    <a href="/tools.html">Tools</a>
+    <a href="/tools">Tools</a>
     <span class="sep">/</span>
     <span class="current">Tool</span>
   </div>`;
@@ -100,8 +100,8 @@ const SITE_FOOTER = `  <!-- Footer -->
       <div class="footer-col">
         <h4>Product</h4>
         <a href="/public/tools">Free Tools</a>
-        <a href="/dashboard.html">Dashboard</a>
-        <a href="/changelog.html">Changelog</a>
+        <a href="/dashboard">Dashboard</a>
+        <a href="/changelog">Changelog</a>
       </div>
       <div class="footer-col">
         <h4>Resources</h4>
@@ -111,10 +111,10 @@ const SITE_FOOTER = `  <!-- Footer -->
       </div>
       <div class="footer-col">
         <h4>Company</h4>
-        <a href="/about.html">About</a>
-        <a href="/contact.html">Contact</a>
-        <a href="/privacy-policy.html">Privacy</a>
-        <a href="/terms-of-service.html">Terms</a>
+        <a href="/about">About</a>
+        <a href="/contact">Contact</a>
+        <a href="/privacy-policy">Privacy</a>
+        <a href="/terms-of-service">Terms</a>
       </div>
       <div class="footer-col">
         <h4>Social</h4>
@@ -358,7 +358,7 @@ function fixToolPage(content) {
   }
 
   // 5. Fix header-cta links (purple → cyan)
-  content = content.replace(/<a href="\/blog\/[^"]*" class="header-cta">📖 Read the Guide →<\/a>/g, '<a href="/tools.html" class="header-cta">All Tools</a>');
+  content = content.replace(/<a href="\/blog\/[^"]*" class="header-cta">📖 Read the Guide →<\/a>/g, '<a href="/tools" class="header-cta">All Tools</a>');
 
   return { content, changed };
 }
