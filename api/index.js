@@ -2527,6 +2527,70 @@ app.get(/^\/glossary\/(es\/|pt\/)?(.+)-vs-(.+)$/, async (req, res) => {
 
 // ── Standalone glossary term pages (fallback for terms without static files) ──
 
+const GLOSSARY_TIPS_EN = {
+  'analytics': (t) => [
+    `Open YouTube Studio > Analytics and find ${t.toLowerCase()} in the report before you change anything — establish the baseline first.`,
+    `Check ${t.toLowerCase()} weekly instead of daily; 28-day trends matter more than single-day spikes.`,
+    `Compare ${t.toLowerCase()} against similar channels with the report's comparison feature, then target the 50th-75th percentile.`,
+    `When a video outperforms on ${t.toLowerCase()}, copy its format, pacing, or packaging into your next upload.`,
+  ],
+  'algorithm': (t) => [
+    `Watch how ${t.toLowerCase()} shows up in your last 10 videos' Traffic Sources — it reveals which audience the algorithm is testing you on.`,
+    `Study two competitors ranking for your keyword: their title structure and retention vs yours.`,
+    `Check the official YouTube Creator blog for ${t.toLowerCase()} updates each quarter.`,
+    `Keep session time and watch time strong — they remain the most consistent reinforcement signals behind ${t.toLowerCase()}.`,
+  ],
+  'seo-optimization': (t) => [
+    `Search your keyword on YouTube and note the top 5 auto-suggest phrases — each is a title or description angle you can target with ${t.toLowerCase()}.`,
+    `Place ${t.toLowerCase()} in the title, the first description line, and the first 30 seconds of speech.`,
+    `Keep the definition block citable and the FAQ structured so ${t.toLowerCase()} content is extractable by AI search engines.`,
+    `Refresh your top 10 videos monthly — descriptions, tags, end screens — with ${t.toLowerCase()} insights.`,
+  ],
+  'monetization': (t) => [
+    `Check YouTube Studio > Monetization for your current status and any policy warnings on ${t.toLowerCase()}.`,
+    `Keep videos over 8 minutes if monetized so ${t.toLowerCase()} can include mid-roll ads.`,
+    `Diversify: memberships, Super Chat, and affiliate content stabilize revenue beyond ${t.toLowerCase()} from ads alone.`,
+    `Track ${t.toLowerCase()} monthly in Analytics and compare year-over-year, not week-over-week.`,
+  ],
+  'content-strategy': (t) => [
+    `Define 3-5 topic pillars and slot ${t.toLowerCase()} into one of them so every video reinforces the same audience promise.`,
+    `Plan 4-8 weeks ahead: 60-70% evergreen, 30-40% timely — keep ${t.toLowerCase()} in the evergreen share.`,
+    `Batch-produce the pillar that already performs so you always have ${t.toLowerCase()} content ready.`,
+    `Review your strategy quarterly — double down on what's working, cut what isn't.`,
+  ],
+  'youtube-features': (t) => [
+    `Explore all of ${t.toLowerCase()} in Studio — most features have panels or toggles creators never uncover.`,
+    `Use one aspect of ${t.toLowerCase()} per video and track the result before stacking more.`,
+    `Check YouTube's official how-to tutorials for ${t.toLowerCase()} before inventing workflows.`,
+    `Ask your community how they use ${t.toLowerCase()} — their questions become your next content.`,
+  ],
+};
+const GLOSSARY_TIPS_DEFAULT_EN = (t) => [
+  `Research how ${t.toLowerCase()} works from the official YouTube Help Center before applying it.`,
+  `Apply ${t.toLowerCase()} consistently across your next 3 videos, tracking one metric each time.`,
+  `Document what resonated with your audience so you can repeat the pattern.`,
+  `Revisit ${t.toLowerCase()} quarterly — YouTube updates its features and ranking signals often.`,
+];
+const GLOSSARY_TIPS_ES = (t) => [
+  `Investiga cómo funciona ${t} en el centro de ayuda oficial de YouTube antes de aplicarlo.`,
+  `Aplica ${t} de forma consistente en tus próximos 3 videos y mide un dato en cada uno.`,
+  `Documenta qué cambios conectaron con tu audiencia para poder repetirlos.`,
+  `Revisa ${t} cada trimestre — YouTube actualiza sus funciones y señales de ranking con frecuencia.`,
+];
+const GLOSSARY_TIPS_PT = (t) => [
+  `Pesquise como funciona ${t} no centro de ajuda oficial do YouTube antes de aplicar.`,
+  `Aplique ${t} de forma consistente nos seus próximos 3 vídeos, acompanhando uma métrica por vez.`,
+  `Documente o que funcionou com a sua audiência para repetir o padrão.`,
+  `Revise ${t} trimestralmente — o YouTube atualiza funções e sinais de ranqueamento com frequência.`,
+];
+
+function glossaryTipsSection(name, cat, lang) {
+  const t = name;
+  const tips = lang === 'es' ? GLOSSARY_TIPS_ES(t) : lang === 'pt' ? GLOSSARY_TIPS_PT(t) : ((GLOSSARY_TIPS_EN[cat] || GLOSSARY_TIPS_DEFAULT_EN)(t));
+  const title = lang === 'es' ? `🎯 Consejos de Optimización para ${t}` : lang === 'pt' ? `🎯 Dicas de Otimização para ${t}` : `🎯 Optimization Tips for ${t}`;
+  return `<div class="card"><h2>${title}</h2><ul>${tips.map(x => `<li>${x}</li>`).join('')}</ul></div>`;
+}
+
 function renderGlossaryTerm(slug, lang) {
   const term = GLOSSARY_TERMS.find(t => t.slug === slug);
   if (!term) return null;
@@ -2604,8 +2668,10 @@ function renderGlossaryTerm(slug, lang) {
   blogPosts = blogPosts.filter(p => !seenBlog.has(p[1]) && seenBlog.add(p[1])).slice(0, 3);
   const blogLabel = lang === 'es' ? 'Artículos Relacionados' : lang === 'pt' ? 'Artigos Relacionados' : 'Related Blog Posts';
   const blogHtml = blogPosts.length > 0
-    ? `<div class="card"><h2>📝 ${blogLabel}</h2><div class="rc-grid">${blogPosts.map(p => `<a href="${p[1]}">${p[0]}</a>`).join('')}</div></div>`
-    : '';
+      ? `<div class="card"><h2>📝 ${blogLabel}</h2><div class="rc-grid">${blogPosts.map(p => `<a href="${p[1]}">${p[0]}</a>`).join('')}</div></div>`
+      : '';
+
+    const tipsSection = glossaryTipsSection(name, term.cat, lang);
 
   const langPills = Object.entries({ en: '🇺🇸 English', es: '🇪🇸 Español', pt: '🇧🇷 Português' })
     .filter(([l]) => l !== lang)
@@ -2622,7 +2688,7 @@ function renderGlossaryTerm(slug, lang) {
     `<tr><td class="dim">${m.label}</td><td>${m.val}</td></tr>`
   ).join('\n');
 
-  return `<!DOCTYPE html>\n<html lang="${lang}">\n<head><meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1.0"/>\n<title>${title}</title>\n<link rel="canonical" href="${site}${currentUrl}"/>\n<link rel="alternate" hreflang="en" href="${site}${enUrl}"/>\n<link rel="alternate" hreflang="es" href="${site}${esUrl}"/>\n<link rel="alternate" hreflang="pt" href="${site}${ptUrl}"/>\n<link rel="alternate" hreflang="x-default" href="${site}${enUrl}"/>\n<meta name="description" content="${desc}"/>\n<meta name="robots" content="index, follow"/>\n<meta property="og:title" content="${name} — YouTube SEO Glossary"/>\n<meta property="og:description" content="${desc}"/>\n<meta property="og:image" content="${site}/og-image.png"/>\n<meta name="twitter:card" content="summary_large_image"/>\n<script type="application/ld+json">${jsonLd}</script>\n<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700;800&display=swap" media="print" onload="this.media=\'all\'">\n<noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700;800&display=swap"></noscript>\n<style>${GLOSSARY_CSS}</style>\n</head>\n<body>\n<header class="header"><a href="/">⚡ YT SEO Architect</a><a href="/tools/" class="cta">${ui.tools}</a></header>\n<main>\n<div class="ln">${lang === 'en' ? '🇺🇸 English' : lang === 'es' ? '🇪🇸 Español' : '🇧🇷 Português'} · ${langPills}</div>\n<h1>${name}</h1>\n<p class="h1-sub">${catName} · YouTube SEO Glossary</p>\n<div class="fs-box"><div class="fs-label">✨ ${quickDefLabel}</div><p>${def}</p></div>\n<div class="card"><h2>📖 ${defLabel}</h2><p>${def}</p></div>\n${metaRows ? `<div class="card"><h2>📊 ${keyFactsLabel}</h2><table class="cmp-table"><tbody>${metaRows}\n</tbody></table></div>` : ''}\n${relatedHtml}\n${blogHtml}\n<div class="cta-box"><h3>🚀 ${ui.master}</h3><p style="color:#8b8b9e;margin:.5rem 0 1rem;font-size:.9rem">${ui.cta}</p><a href="/tools/">${ui.tryTools}</a></div>\n</main>\n<footer><p>&copy; 2026 YT SEO Architect · <a href="/glossary/">${ui.glossary}</a> · <a href="/tools/">${ui.tools}</a></p></footer>\n</body>\n</html>`;
+  return `<!DOCTYPE html>\n<html lang="${lang}">\n<head><meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1.0"/>\n<title>${title}</title>\n<link rel="canonical" href="${site}${currentUrl}"/>\n<link rel="alternate" hreflang="en" href="${site}${enUrl}"/>\n<link rel="alternate" hreflang="es" href="${site}${esUrl}"/>\n<link rel="alternate" hreflang="pt" href="${site}${ptUrl}"/>\n<link rel="alternate" hreflang="x-default" href="${site}${enUrl}"/>\n<meta name="description" content="${desc}"/>\n<meta name="robots" content="index, follow"/>\n<meta property="og:title" content="${name} — YouTube SEO Glossary"/>\n<meta property="og:description" content="${desc}"/>\n<meta property="og:image" content="${site}/og-image.png"/>\n<meta name="twitter:card" content="summary_large_image"/>\n<script type="application/ld+json">${jsonLd}</script>\n<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700;800&display=swap" media="print" onload="this.media=\'all\'">\n<noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700;800&display=swap"></noscript>\n<style>${GLOSSARY_CSS}</style>\n</head>\n<body>\n<header class="header"><a href="/">⚡ YT SEO Architect</a><a href="/tools/" class="cta">${ui.tools}</a></header>\n<main>\n<div class="ln">${lang === 'en' ? '🇺🇸 English' : lang === 'es' ? '🇪🇸 Español' : '🇧🇷 Português'} · ${langPills}</div>\n<h1>${name}</h1>\n<p class="h1-sub">${catName} · YouTube SEO Glossary</p>\n<div class="fs-box"><div class="fs-label">✨ ${quickDefLabel}</div><p>${def}</p></div>\n<div class="card"><h2>📖 ${defLabel}</h2><p>${def}</p></div>\n${metaRows ? `<div class="card"><h2>📊 ${keyFactsLabel}</h2><table class="cmp-table"><tbody>${metaRows}\n</tbody></table></div>` : ''}\n${relatedHtml}\n${blogHtml}\n${tipsSection}\n<div class="cta-box"><h3>🚀 ${ui.master}</h3><p style="color:#8b8b9e;margin:.5rem 0 1rem;font-size:.9rem">${ui.cta}</p><a href="/tools/">${ui.tryTools}</a></div>\n</main>\n<footer><p>&copy; 2026 YT SEO Architect · <a href="/glossary/">${ui.glossary}</a> · <a href="/tools/">${ui.tools}</a></p></footer>\n</body>\n</html>`;
 }
 
 app.get(/^\/glossary\/(es\/|pt\/)?([a-z0-9-]+)$/, async (req, res) => {
