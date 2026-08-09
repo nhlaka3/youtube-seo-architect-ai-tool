@@ -34,19 +34,26 @@
   <meta name="twitter:image" content="https://yt-seo-architect.vercel.app/og-image.png" />
 
   <script type="application/ld+json">
-  {
-    "@context": "https://schema.org",
-    "@type": "Blog",
-    "name": "YT SEO Architect Blog",
-    "description": "YouTube SEO tips, guides, and growth strategies for content creators.",
-    "url": "https://yt-seo-architect.vercel.app/blog",
-    "publisher": {
-      "@type": "Organization",
-      "name": "YT SEO Architect",
-      "url": "https://yt-seo-architect.vercel.app/"
-    }
+{
+  "@context": "https://schema.org",
+  "@type": "Blog",
+  "name": "YT SEO Architect Blog",
+  "description": "YouTube SEO tips, guides, and growth strategies for content creators.",
+  "url": "https://yt-seo-architect.vercel.app/blog",
+  "publisher": {
+    "@type": "Organization",
+    "name": "YT SEO Architect",
+    "url": "https://yt-seo-architect.vercel.app/"
+  },
+  "speakable": {
+    "@type": "SpeakableSpecification",
+    "xpath": [
+      "//h1",
+      "//meta[@name='description']/@content"
+    ]
   }
-  </script>
+}
+</script>
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
@@ -352,7 +359,7 @@
       <nav class="header-nav" id="header-nav">
         <a href="/tools.html">Tools</a>
         <a href="/blog" class="active">Blog</a>
-        <a href="/public/glossary">Glossary</a>
+        <a href="/glossary/">Glossary</a>
        <a href="/dashboard.html" class="header-cta">Dashboard</a>
       </nav>
       <button class="mobile-menu-btn" aria-label="Menu" onclick="document.getElementById('header-nav').classList.toggle('open')">☰</button>
@@ -396,7 +403,7 @@
           <p>Get a free AI-powered audit of your channel's SEO — titles, tags, descriptions, and more — in 60 seconds.</p>
           <a href="/dashboard" class="audit-btn">Audit My Channel — Free</a>
           <div class="benefits">
-            <span class="benefit">17 AI tools</span>
+            <span class="benefit">Free AI tools</span>
             <span class="benefit">No credit card</span>
             <span class="benefit">60-second setup</span>
           </div>
@@ -448,7 +455,7 @@
         <!-- CTA Widget (bottom) -->
         <div class="cta-widget reveal">
           <h3>🚀 Ready to Grow Your Channel?</h3>
-          <p>90+ free AI YouTube SEO tools. Free to start. No credit card required.</p>
+          <p>Free AI YouTube SEO tools. Free to start. No credit card required.</p>
           <a href="/dashboard" class="audit-btn">Start Free Now</a>
           <div class="benefits">
             <span class="benefit">Tag Generator</span>
@@ -493,8 +500,8 @@
       <div class="footer-col">
         <h4>Resources</h4>
         <a href="/blog">Blog</a>
-        <a href="/public/glossary">Glossary</a>
-        <a href="/public/guides">Guides</a>
+        <a href="/glossary/">Glossary</a>
+        <a href="/tools/">Guides</a>
       </div>
       <div class="footer-col">
         <h4>Company</h4>
