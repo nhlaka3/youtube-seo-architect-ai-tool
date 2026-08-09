@@ -1960,13 +1960,18 @@ async function buildSitemapChunks() {
   }
   terms += footer;
 
-  // ── Chunk 3: glossary comparison pages ──
-  // Comparison (X-vs-Y) pages are noindex'd (2026-08-06): thin, template-assembled
-  // content with no standalone search demand. Removed from the sitemap so crawl
-  // budget goes to tools, blog, and glossary terms. If a curated subset is later
-  // given real data depth, re-add it here.
-  const pairs = header + footer;
-  const cmpCount = 0;
+  // ── Chunk 3: curated glossary comparison pages ──
+  // The combinatorial X-vs-Y long tail is noindex'd (2026-08-06) and excluded from
+  // the sitemap. Only the curated pairs with proven demand (GSC 2026-08-07) are
+  // listed here; they render index,follow via INDEXED_COMPARISONS.
+  let pairs = header;
+  for (const key of [...INDEXED_COMPARISONS]) {
+    pairs += `  <url><loc>${site}/glossary/${key}</loc></url>\n`;
+    pairs += `  <url><loc>${site}/glossary/es/${key}</loc></url>\n`;
+    pairs += `  <url><loc>${site}/glossary/pt/${key}</loc></url>\n`;
+  }
+  pairs += footer;
+  const cmpCount = [...INDEXED_COMPARISONS].length;
 
   return { core, terms, pairs, counts: { core: core.split('<url>').length - 1, terms: terms.split('<url>').length - 1, pairs: cmpCount } };
 }
@@ -2440,7 +2445,16 @@ function getRelatedComparisons(slugA, lang) {
     }));
 }
 
-function renderGlossaryComparison(slugA, slugB, lang) {
+// Curated comparison pages with proven search demand (GSC 2026-08-07):
+// "youtube creator academy {topic}" cluster. Everything else stays noindex.
+const INDEXED_COMPARISONS = new Set([
+  'thumbnail-optimization-vs-youtube-creator-academy',
+  'batch-production-vs-youtube-creator-academy',
+  'playlist-discovery-vs-youtube-creator-academy',
+  'shorts-algorithm-vs-youtube-creator-academy',
+]);
+
+function renderGlossaryComparison(slugA, slugB, lang, indexed = false) {
   const termA = GLOSSARY_TERMS.find(t => t.slug === slugA);
   const termB = GLOSSARY_TERMS.find(t => t.slug === slugB);
   if (!termA || !termB) return null;
@@ -2483,12 +2497,24 @@ function renderGlossaryComparison(slugA, slugB, lang) {
   const relatedHtml = related.length > 0
     ? `<div class="card"><h2>🔗 ${ui.related}</h2><div class="rc-grid">${related.map(r => `<a href="${r.url}">⚡ ${r.name}</a>`).join('')}</div></div>`
     : '';
+
+  // Verdict section — only on curated (indexed) comparisons, so those pages carry
+  // real decision content instead of a template shell.
+  const mAMetric = metaA['metric' + lang.toUpperCase()] || metaA.metricEN || '-';
+  const mBMetric = metaB['metric' + lang.toUpperCase()] || metaB.metricEN || '-';
+  const mAStage = metaA['stage' + lang.toUpperCase()] || metaA.stageEN || '-';
+  const mBStage = metaB['stage' + lang.toUpperCase()] || metaB.stageEN || '-';
+  const mAEffort = metaA['effort' + lang.toUpperCase()] || metaA.effortEN || '-';
+  const mBEffort = metaB['effort' + lang.toUpperCase()] || metaB.effortEN || '-';
+  const verdictSection = indexed ? `<div class="card"><h2>🏆 ${ui.verdict || 'Which Should You Use?'}</h2>
+<p>${lang === 'es' ? `Si tu problema es la ${mAMetric.toLowerCase()}, ${aName} es la palanca correcta: está pensado para canales en fase ${mAStage.toLowerCase()} y requiere un esfuerzo ${mAEffort.toLowerCase()}. Si tu problema es la ${mBMetric.toLowerCase()}, ${bName} es el que debes usar: funciona mejor en la fase ${mBStage.toLowerCase()} con un esfuerzo ${mBEffort.toLowerCase()}.` : lang === 'pt' ? `Se o seu problema é ${mAMetric.toLowerCase()}, ${aName} é a alavanca certa: foi feito para canais na fase ${mAStage.toLowerCase()} e exige esforço ${mAEffort.toLowerCase()}. Se o problema é ${mBMetric.toLowerCase()}, use ${bName}: funciona melhor na fase ${mBStage.toLowerCase()} com esforço ${mBEffort.toLowerCase()}.` : `If your problem is ${mAMetric.toLowerCase()}, ${aName} is the right lever — it's built for channels in the ${mAStage.toLowerCase()} stage and takes ${mAEffort.toLowerCase()} effort. If your problem is ${mBMetric.toLowerCase()}, use ${bName}: it works best at the ${mBStage.toLowerCase()} stage with ${mBEffort.toLowerCase()} effort.`}</p>
+<p>${lang === 'es' ? 'No son sustitutos: cada uno actúa sobre una métrica distinta. Trabaja primero la métrica más débil de tu canal, mide el cambio en YouTube Studio durante 2-4 semanas y solo entonces decide si necesitas la segunda palanca.' : lang === 'pt' ? 'Eles não são substitutos: cada um atua sobre uma métrica diferente. Trabalhe primeiro a métrica mais fraca do seu canal, meça a mudança no YouTube Studio por 2-4 semanas e só então decida se precisa da segunda alavanca.' : 'They are not substitutes — each one moves a different metric. Work the weaker metric on your channel first, measure the change in YouTube Studio for 2-4 weeks, and only then decide whether you need the second lever.'}</p></div>` : '';
   const langPills = Object.entries({ en: '🇺🇸 English', es: '🇪🇸 Español', pt: '🇧🇷 Português' })
     .filter(([l]) => l !== lang)
     .map(([l, label]) => `<a href="${langUrl[l]}" hreflang="${l}" rel="alternate">${label}</a>`)
     .join(' · ');
 
-  return `<!DOCTYPE html>\n<html lang="${lang}">\n<head><meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1.0"/>\n<meta name="robots" content="noindex, follow"/>\n<title>${title}</title>\n<link rel="canonical" href="${site}${currentUrl}"/>\n<link rel="alternate" hreflang="en" href="${site}${enUrl}"/>\n<link rel="alternate" hreflang="es" href="${site}${esUrl}"/>\n<link rel="alternate" hreflang="pt" href="${site}${ptUrl}"/>\n<link rel="alternate" hreflang="x-default" href="${site}${enUrl}"/>\n<meta name="description" content="${desc}"/>\n<script type="application/ld+json">[{"@context":"https://schema.org","@type":"Article","headline":"${title}","description":"${desc.replace(/"/g,'\\"')}","inLanguage":"${lang}","mainEntityOfPage":{"@type":"WebPage","@id":"${site}${currentUrl}"},"speakable":{"@type":"SpeakableSpecification","xpath":["//h1","//meta[@name='description']/@content"]}},{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"${site}/"},{"@type":"ListItem","position":2,"name":"Comparisons","item":"${site}/vs/"},{"@type":"ListItem","position":3,"name":"${aName} vs ${bName}","item":"${site}${currentUrl}"}]},{"@context":"https://schema.org","@type":"Organization","@id":"${site}/#organization","name":"YT SEO Architect","url":"${site}/","logo":{"@type":"ImageObject","url":"${site}/logo.png"},"sameAs":["https://twitter.com/YTSEOArchitect","https://linkedin.com/company/yt-seo-architect","https://github.com/nhlaka3"]}]</script>\n<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700;800&display=swap" media="print" onload="this.media=\\'all\\'">\n<noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700;800&display=swap"></noscript>\n<style>${GLOSSARY_CSS}</style>\n</head>\n<body>\n<header class="header"><a href="/">⚡ YT SEO Architect</a><a href="/tools/" class="cta">${ui.tools}</a></header>\n<main>\n<div class="ln">${lang === 'en' ? '🇺🇸 English' : lang === 'es' ? '🇪🇸 Español' : '🇧🇷 Português'} · ${langPills}</div>\n<h1>${aName} vs ${bName}</h1>\n<p class="h1-sub">${catName} · ${ui.detail}</p>\n<div class="fs-box"><div class="fs-label">✨ ${ui.quickAnswer}</div><p>${snippetAnswer}</p></div>\n<div class="card"><h2>📖 ${aName}</h2><p>${aDef}</p><p style="margin-top:.5rem"><a href="${aGlossaryUrl}" style="color:#a5b4fc;font-size:.85rem">${ui.readGuide}</a></p></div>\n<div class="vs">⚡ VS ⚡</div>\n<div class="card"><h2>📖 ${bName}</h2><p>${bDef}</p><p style="margin-top:.5rem"><a href="${bGlossaryUrl}" style="color:#a5b4fc;font-size:.85rem">${ui.readGuide}</a></p></div>\n<div class="card"><h2>⚖️ ${ui.sideBySide}</h2>\n<table class="cmp-table"><thead><tr><th>${ui.dim}</th><th style="color:#fb923c">${aName}</th><th style="color:#a5b4fc">${bName}</th></tr></thead><tbody>\n${dimRows}\n</tbody></table></div>\n${whenToUse}\n${relatedHtml}\n<div class="cta-box"><h3>🚀 ${ui.master}</h3><p style="color:#8b8b9e;margin:.5rem 0 1rem;font-size:.9rem">${ui.cta}</p><a href="/tools/">${ui.tryTools}</a></div>\n</main>\n<footer><p>&copy; 2026 YT SEO Architect · <a href="/glossary/">${ui.glossary}</a> · <a href="/tools/">${ui.tools}</a></p></footer>\n</body>\n</html>`;
+  return `<!DOCTYPE html>\n<html lang="${lang}">\n<head><meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1.0"/>\n<meta name="robots" content="${indexed ? 'index' : 'noindex'}, follow"/>\n<title>${title}</title>\n<link rel="canonical" href="${site}${currentUrl}"/>\n<link rel="alternate" hreflang="en" href="${site}${enUrl}"/>\n<link rel="alternate" hreflang="es" href="${site}${esUrl}"/>\n<link rel="alternate" hreflang="pt" href="${site}${ptUrl}"/>\n<link rel="alternate" hreflang="x-default" href="${site}${enUrl}"/>\n<meta name="description" content="${desc}"/>\n<script type="application/ld+json">[{"@context":"https://schema.org","@type":"Article","headline":"${title}","description":"${desc.replace(/"/g,'\\"')}","inLanguage":"${lang}","mainEntityOfPage":{"@type":"WebPage","@id":"${site}${currentUrl}"},"speakable":{"@type":"SpeakableSpecification","xpath":["//h1","//meta[@name='description']/@content"]}},{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"${site}/"},{"@type":"ListItem","position":2,"name":"Comparisons","item":"${site}/vs/"},{"@type":"ListItem","position":3,"name":"${aName} vs ${bName}","item":"${site}${currentUrl}"}]},{"@context":"https://schema.org","@type":"Organization","@id":"${site}/#organization","name":"YT SEO Architect","url":"${site}/","logo":{"@type":"ImageObject","url":"${site}/logo.png"},"sameAs":["https://twitter.com/YTSEOArchitect","https://linkedin.com/company/yt-seo-architect","https://github.com/nhlaka3"]}]</script>\n<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700;800&display=swap" media="print" onload="this.media=\\'all\\'">\n<noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700;800&display=swap"></noscript>\n<style>${GLOSSARY_CSS}</style>\n</head>\n<body>\n<header class="header"><a href="/">⚡ YT SEO Architect</a><a href="/tools/" class="cta">${ui.tools}</a></header>\n<main>\n<div class="ln">${lang === 'en' ? '🇺🇸 English' : lang === 'es' ? '🇪🇸 Español' : '🇧🇷 Português'} · ${langPills}</div>\n<h1>${aName} vs ${bName}</h1>\n<p class="h1-sub">${catName} · ${ui.detail}</p>\n<div class="fs-box"><div class="fs-label">✨ ${ui.quickAnswer}</div><p>${snippetAnswer}</p></div>\n<div class="card"><h2>📖 ${aName}</h2><p>${aDef}</p><p style="margin-top:.5rem"><a href="${aGlossaryUrl}" style="color:#a5b4fc;font-size:.85rem">${ui.readGuide}</a></p></div>\n<div class="vs">⚡ VS ⚡</div>\n<div class="card"><h2>📖 ${bName}</h2><p>${bDef}</p><p style="margin-top:.5rem"><a href="${bGlossaryUrl}" style="color:#a5b4fc;font-size:.85rem">${ui.readGuide}</a></p></div>\n<div class="card"><h2>⚖️ ${ui.sideBySide}</h2>\n<table class="cmp-table"><thead><tr><th>${ui.dim}</th><th style="color:#fb923c">${aName}</th><th style="color:#a5b4fc">${bName}</th></tr></thead><tbody>\n${dimRows}\n</tbody></table></div>\n${whenToUse}\n${verdictSection}\n${relatedHtml}\n<div class="cta-box"><h3>🚀 ${ui.master}</h3><p style="color:#8b8b9e;margin:.5rem 0 1rem;font-size:.9rem">${ui.cta}</p><a href="/tools/">${ui.tryTools}</a></div>\n</main>\n<footer><p>&copy; 2026 YT SEO Architect · <a href="/glossary/">${ui.glossary}</a> · <a href="/tools/">${ui.tools}</a></p></footer>\n</body>\n</html>`;
 }
 
 
@@ -2508,15 +2534,15 @@ app.get(/^\/glossary\/(es\/|pt\/)?(.+)-vs-(.+)$/, async (req, res) => {
       res.setHeader('Cache-Control', 'public, max-age=3600, s-maxage=3600');
       return res.status(200).send(termPageHtml);
     }
-    const html = renderGlossaryComparison(slugA, slugB, lang);
+    // Curated comparison pages with proven search demand get indexed (2026-08-07);
+    // the combinatorial long tail stays noindex'd so the ~5.5k thin pages decay out
+    // of Google's index while these few become real, enriched pages.
+    const indexed = INDEXED_COMPARISONS.has(fullSlug);
+    const html = renderGlossaryComparison(slugA, slugB, lang, indexed);
     if (!html) {
       return sendJSON(res, 404, { error: 'Terms not found' });
     }
-    // Comparison (X-vs-Y) pages are noindex'd (2026-08-06): thin, template-assembled
-    // content with no standalone search demand. Kept live for internal linking/UX
-    // but kept out of Google's index so crawl budget + quality signals go to tools,
-    // blog, and glossary term pages. See renderGlossaryComparison for the meta tag.
-    res.setHeader('X-Robots-Tag', 'noindex, follow');
+    res.setHeader('X-Robots-Tag', indexed ? 'index, follow' : 'noindex, follow');
     res.setHeader('Content-Type', 'text/html; charset=utf-8');
     res.setHeader('Cache-Control', 'public, max-age=3600, s-maxage=3600');
     return res.status(200).send(html);
