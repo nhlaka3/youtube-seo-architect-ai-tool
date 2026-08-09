@@ -2452,7 +2452,40 @@ const INDEXED_COMPARISONS = new Set([
   'batch-production-vs-youtube-creator-academy',
   'playlist-discovery-vs-youtube-creator-academy',
   'shorts-algorithm-vs-youtube-creator-academy',
+  // Tier-2 promotions (GSC demand monitor 2026-08-07: >=20 impressions, pos ~5-12)
+  'call-to-action-vs-video-editing',
+  'call-to-action-vs-youtube-creator-academy',
+  'calls-to-action-vs-description',
+  'description-vs-pinned-comment',
+  'external-traffic-vs-traffic-source',
+  'calls-to-action-vs-shorts-algorithm',
 ]);
+
+// Category → blog post slugs (verified live 2026-08-07) used to give every
+// comparison page a real outbound link mesh to the blog. The noindex tail still
+// passes link equity + context to the blog, which is its SEO job.
+const COMPARISON_CATEGORY_BLOGS = {
+  'analytics': ['youtube-impressions-guide-2026', 'youtube-retention-graph-explained-2026'],
+  'algorithm': ['how-youtube-algorithm-works-2026', 'youtube-algorithm-changes-2026'],
+  'seo-optimization': ['youtube-tags-2026', 'how-to-keywords-youtube', 'youtube-thumbnail-tips-2026', 'youtube-thumbnail-ab-testing-guide'],
+  'monetization': ['youtube-monetization-2026', 'maximizing-youtube-revenue-with-sponsorships-2026'],
+  'content-strategy': ['developing-a-youtube-content-calendar-strategy-2026'],
+  'youtube-features': ['youtube-shorts-seo-ranking-guide-2026', 'youtube-community-posts-strategy-2026', 'youtube-playlist-optimization-strategy'],
+};
+
+function relatedBlogsForComparison(catA, catB) {
+  const seen = new Set();
+  const out = [];
+  for (const cat of [catA, catB]) {
+    for (const slug of COMPARISON_CATEGORY_BLOGS[cat] || []) {
+      if (seen.has(slug)) continue;
+      seen.add(slug);
+      out.push({ slug, title: slug.replace(/-/g, ' ').replace(/\b\w/g, c => c.toUpperCase()) });
+      if (out.length >= 4) return out;
+    }
+  }
+  return out;
+}
 
 function renderGlossaryComparison(slugA, slugB, lang, indexed = false) {
   const termA = GLOSSARY_TERMS.find(t => t.slug === slugA);
@@ -2514,7 +2547,14 @@ function renderGlossaryComparison(slugA, slugB, lang, indexed = false) {
     .map(([l, label]) => `<a href="${langUrl[l]}" hreflang="${l}" rel="alternate">${label}</a>`)
     .join(' · ');
 
-  return `<!DOCTYPE html>\n<html lang="${lang}">\n<head><meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1.0"/>\n<meta name="robots" content="${indexed ? 'index' : 'noindex'}, follow"/>\n<title>${title}</title>\n<link rel="canonical" href="${site}${currentUrl}"/>\n<link rel="alternate" hreflang="en" href="${site}${enUrl}"/>\n<link rel="alternate" hreflang="es" href="${site}${esUrl}"/>\n<link rel="alternate" hreflang="pt" href="${site}${ptUrl}"/>\n<link rel="alternate" hreflang="x-default" href="${site}${enUrl}"/>\n<meta name="description" content="${desc}"/>\n<script type="application/ld+json">[{"@context":"https://schema.org","@type":"Article","headline":"${title}","description":"${desc.replace(/"/g,'\\"')}","inLanguage":"${lang}","mainEntityOfPage":{"@type":"WebPage","@id":"${site}${currentUrl}"},"speakable":{"@type":"SpeakableSpecification","xpath":["//h1","//meta[@name='description']/@content"]}},{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"${site}/"},{"@type":"ListItem","position":2,"name":"Comparisons","item":"${site}/vs/"},{"@type":"ListItem","position":3,"name":"${aName} vs ${bName}","item":"${site}${currentUrl}"}]},{"@context":"https://schema.org","@type":"Organization","@id":"${site}/#organization","name":"YT SEO Architect","url":"${site}/","logo":{"@type":"ImageObject","url":"${site}/logo.png"},"sameAs":["https://twitter.com/YTSEOArchitect","https://linkedin.com/company/yt-seo-architect","https://github.com/nhlaka3"]}]</script>\n<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700;800&display=swap" media="print" onload="this.media=\\'all\\'">\n<noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700;800&display=swap"></noscript>\n<style>${GLOSSARY_CSS}</style>\n</head>\n<body>\n<header class="header"><a href="/">⚡ YT SEO Architect</a><a href="/tools/" class="cta">${ui.tools}</a></header>\n<main>\n<div class="ln">${lang === 'en' ? '🇺🇸 English' : lang === 'es' ? '🇪🇸 Español' : '🇧🇷 Português'} · ${langPills}</div>\n<h1>${aName} vs ${bName}</h1>\n<p class="h1-sub">${catName} · ${ui.detail}</p>\n<div class="fs-box"><div class="fs-label">✨ ${ui.quickAnswer}</div><p>${snippetAnswer}</p></div>\n<div class="card"><h2>📖 ${aName}</h2><p>${aDef}</p><p style="margin-top:.5rem"><a href="${aGlossaryUrl}" style="color:#a5b4fc;font-size:.85rem">${ui.readGuide}</a></p></div>\n<div class="vs">⚡ VS ⚡</div>\n<div class="card"><h2>📖 ${bName}</h2><p>${bDef}</p><p style="margin-top:.5rem"><a href="${bGlossaryUrl}" style="color:#a5b4fc;font-size:.85rem">${ui.readGuide}</a></p></div>\n<div class="card"><h2>⚖️ ${ui.sideBySide}</h2>\n<table class="cmp-table"><thead><tr><th>${ui.dim}</th><th style="color:#fb923c">${aName}</th><th style="color:#a5b4fc">${bName}</th></tr></thead><tbody>\n${dimRows}\n</tbody></table></div>\n${whenToUse}\n${verdictSection}\n${relatedHtml}\n<div class="cta-box"><h3>🚀 ${ui.master}</h3><p style="color:#8b8b9e;margin:.5rem 0 1rem;font-size:.9rem">${ui.cta}</p><a href="/tools/">${ui.tryTools}</a></div>\n</main>\n<footer><p>&copy; 2026 YT SEO Architect · <a href="/glossary/">${ui.glossary}</a> · <a href="/tools/">${ui.tools}</a></p></footer>\n</body>\n</html>`;
+  // Blog link mesh — every comparison (indexed or not) points readers + link
+  // equity at the blog posts that cover the same topics.
+  const blogLinks = relatedBlogsForComparison(termA.cat, termB.cat);
+  const blogHtml = blogLinks.length > 0
+    ? `<div class="card"><h2>📚 ${lang === 'es' ? 'Guías Relacionadas del Blog' : lang === 'pt' ? 'Guias Relacionadas do Blog' : 'Related Blog Guides'}</h2><div class="rc-grid">${blogLinks.map(b => `<a href="/blog/${b.slug}">📖 ${b.title}</a>`).join('')}</div></div>`
+    : '';
+
+  return `<!DOCTYPE html>\n<html lang="${lang}">\n<head><meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1.0"/>\n<meta name="robots" content="${indexed ? 'index' : 'noindex'}, follow"/>\n<title>${title}</title>\n<link rel="canonical" href="${site}${currentUrl}"/>\n<link rel="alternate" hreflang="en" href="${site}${enUrl}"/>\n<link rel="alternate" hreflang="es" href="${site}${esUrl}"/>\n<link rel="alternate" hreflang="pt" href="${site}${ptUrl}"/>\n<link rel="alternate" hreflang="x-default" href="${site}${enUrl}"/>\n<meta name="description" content="${desc}"/>\n<script type="application/ld+json">[{"@context":"https://schema.org","@type":"Article","headline":"${title}","description":"${desc.replace(/"/g,'\\"')}","inLanguage":"${lang}","mainEntityOfPage":{"@type":"WebPage","@id":"${site}${currentUrl}"},"speakable":{"@type":"SpeakableSpecification","xpath":["//h1","//meta[@name='description']/@content"]}},{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"${site}/"},{"@type":"ListItem","position":2,"name":"Comparisons","item":"${site}/vs/"},{"@type":"ListItem","position":3,"name":"${aName} vs ${bName}","item":"${site}${currentUrl}"}]},{"@context":"https://schema.org","@type":"Organization","@id":"${site}/#organization","name":"YT SEO Architect","url":"${site}/","logo":{"@type":"ImageObject","url":"${site}/logo.png"},"sameAs":["https://twitter.com/YTSEOArchitect","https://linkedin.com/company/yt-seo-architect","https://github.com/nhlaka3"]}]</script>\n<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700;800&display=swap" media="print" onload="this.media=\\'all\\'">\n<noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700;800&display=swap"></noscript>\n<style>${GLOSSARY_CSS}</style>\n</head>\n<body>\n<header class="header"><a href="/">⚡ YT SEO Architect</a><a href="/tools/" class="cta">${ui.tools}</a></header>\n<main>\n<div class="ln">${lang === 'en' ? '🇺🇸 English' : lang === 'es' ? '🇪🇸 Español' : '🇧🇷 Português'} · ${langPills}</div>\n<h1>${aName} vs ${bName}</h1>\n<p class="h1-sub">${catName} · ${ui.detail}</p>\n<div class="fs-box"><div class="fs-label">✨ ${ui.quickAnswer}</div><p>${snippetAnswer}</p></div>\n<div class="card"><h2>📖 ${aName}</h2><p>${aDef}</p><p style="margin-top:.5rem"><a href="${aGlossaryUrl}" style="color:#a5b4fc;font-size:.85rem">${ui.readGuide}</a></p></div>\n<div class="vs">⚡ VS ⚡</div>\n<div class="card"><h2>📖 ${bName}</h2><p>${bDef}</p><p style="margin-top:.5rem"><a href="${bGlossaryUrl}" style="color:#a5b4fc;font-size:.85rem">${ui.readGuide}</a></p></div>\n<div class="card"><h2>⚖️ ${ui.sideBySide}</h2>\n<table class="cmp-table"><thead><tr><th>${ui.dim}</th><th style="color:#fb923c">${aName}</th><th style="color:#a5b4fc">${bName}</th></tr></thead><tbody>\n${dimRows}\n</tbody></table></div>\n${whenToUse}\n${verdictSection}\n${relatedHtml}\n${blogHtml}\n<div class="cta-box"><h3>🚀 ${ui.master}</h3><p style="color:#8b8b9e;margin:.5rem 0 1rem;font-size:.9rem">${ui.cta}</p><a href="/tools/">${ui.tryTools}</a></div>\n</main>\n<footer><p>&copy; 2026 YT SEO Architect · <a href="/glossary/">${ui.glossary}</a> · <a href="/tools/">${ui.tools}</a></p></footer>\n</body>\n</html>`;
 }
 
 
