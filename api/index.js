@@ -7,6 +7,9 @@ import express from 'express';
 import cors from 'cors';
 
 import helmet from 'helmet';
+import { readFileSync } from 'fs';
+import { resolve, dirname } from 'path';
+import { fileURLToPath } from 'url';
 
 
 
@@ -2790,9 +2793,6 @@ if (Sentry && Sentry.Handlers) {
 
 // Fallback 404 handler — serve the branded 404 page (matches static 404.html)
 app.use((req, res) => {
-  const { readFileSync } = require('fs');
-  const { resolve, dirname } = require('path');
-  const { fileURLToPath } = require('url');
   const __filename = fileURLToPath(import.meta.url);
   const __dirname = dirname(__filename);
   try {
