@@ -755,6 +755,20 @@
     .carousel-dot { width: 10px; height: 10px; border-radius: 50%; background: rgba(255,255,255,0.15); border: none; cursor: pointer; transition: all 0.3s ease; padding:0; }
     .carousel-dot.active { background: var(--primary); width: 28px; border-radius: var(--radius-5); }
 
+    /* ═══ Hero visual — idle float + faux-3D tilt (transform-only, GPU-safe) ═══ */
+    .hero-visual-section picture {
+      perspective: 900px;
+      display: block;
+      animation: heroFloat 7s ease-in-out infinite alternate;
+      will-change: transform;
+    }
+    .hero-visual-section picture img { transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1); }
+    @keyframes heroFloat { from { transform: translateY(0); } to { transform: translateY(-8px); } }
+    @media (prefers-reduced-motion: reduce) {
+      .hero-visual-section picture { animation: none; will-change: auto; }
+      .hero-visual-section picture img { transition: none; }
+    }
+
     /* Hero initial state — visible immediately */
     .hero.reveal { opacity: 1; transform: none; }
 
@@ -1429,6 +1443,24 @@
       document.querySelectorAll('.stagger-grid').forEach(el => staggerObserver.observe(el));
     } else {
       document.querySelectorAll('.stagger-item').forEach(el => el.classList.add('revealed'));
+    }
+
+    // ── Faux-3D hero tilt (subtle, transform-only; disabled for reduced motion) ──
+    if (!prefersReducedMotion) {
+      const heroVisual = document.querySelector('.hero-visual-section');
+      const heroImg = heroVisual ? heroVisual.querySelector('img') : null;
+      if (heroVisual && heroImg) {
+        heroVisual.addEventListener('mousemove', function(e) {
+          const r = heroVisual.getBoundingClientRect();
+          if (r.width === 0) return;
+          const x = (e.clientX - r.left) / r.width - 0.5;
+          const y = (e.clientY - r.top) / r.height - 0.5;
+          heroImg.style.transform = 'rotateX(' + (-y * 6).toFixed(2) + 'deg) rotateY(' + (x * 8).toFixed(2) + 'deg)';
+        });
+        heroVisual.addEventListener('mouseleave', function() {
+          heroImg.style.transform = 'rotateX(0deg) rotateY(0deg)';
+        });
+      }
     }
 
     // ── Counter animation ──
