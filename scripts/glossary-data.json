@@ -1,9 +1,9 @@
 {
   "meta": {
     "description": "Complete YouTube SEO glossary with 60+ terms. Free definitions, examples, and optimization tips for every YouTube creator metric and feature.",
-    "generatedAt": "2026-08-03",
-    "totalTerms": 85,
-    "lastAutoExpand": "2026-08-03T11:20:10.753Z"
+    "generatedAt": "2026-08-10",
+    "totalTerms": 112,
+    "lastAutoExpand": "2026-08-10T09:16:53.986Z"
   },
   "categories": [
     {
@@ -1406,6 +1406,387 @@
       ],
       "relatedBlogs": [],
       "id": "content-strategy-for-channel-growth",
+      "_source": "combinatorial"
+    },
+    {
+      "term": "YouTube Analytics for Non-Monetized Channels",
+      "slug": "youtube-analytics-for-non-monetized-channels",
+      "shortDefinition": "Understanding YouTube analytics for non-monetized channels to improve content performance.",
+      "expandedDefinition": "This involves analyzing views, engagement, and audience retention metrics to make data-driven decisions for content creation and optimization.",
+      "category": "analytics",
+      "relatedTerms": [],
+      "relatedBlogs": [
+        "https://blog.hubspot.com/marketing/youtube-analytics",
+        "https://www.socialmediaexaminer.com/youtube-analytics/"
+      ],
+      "id": "youtube-analytics-for-non-monetized-channels"
+    },
+    {
+      "term": "YouTube Algorithm Update for Long-Form Content",
+      "slug": "youtube-algorithm-update-for-long-form-content",
+      "shortDefinition": "Understanding the YouTube algorithm update for long-form content to improve video visibility.",
+      "expandedDefinition": "This update focuses on rewarding videos that are more engaging, informative, and provide value to viewers, particularly for long-form content.",
+      "category": "algorithm",
+      "relatedTerms": [],
+      "relatedBlogs": [
+        "https://www.youtube.com/yt/creators/blog/post/2022/08/Update-to-our-algorithm-part-1/",
+        "https://www.socialmediaexaminer.com/youtube-algorithm-update/"
+      ],
+      "id": "youtube-algorithm-update-for-long-form-content"
+    },
+    {
+      "term": "YouTube SEO for Voice-Over Content",
+      "slug": "youtube-seo-for-voice-over-content",
+      "shortDefinition": "Optimizing YouTube SEO for voice-over content to increase video visibility.",
+      "expandedDefinition": "This involves using relevant keywords, tags, and descriptions to help YouTube's algorithm understand the content and provide a better user experience.",
+      "category": "seo-optimization",
+      "relatedTerms": [],
+      "relatedBlogs": [
+        "https://www.backlinko.com/youtube-seo",
+        "https://blog.hubspot.com/marketing/youtube-seo"
+      ],
+      "id": "youtube-seo-for-voice-over-content"
+    },
+    {
+      "term": "Monetizing YouTube Shorts for Small Creators",
+      "slug": "monetizing-youtube-shorts-for-small-creators",
+      "shortDefinition": "Monetizing YouTube Shorts for small creators to increase revenue.",
+      "expandedDefinition": "This involves understanding YouTube's monetization policies, using the YouTube Partner Program, and leveraging Shorts' unique features to attract brands and viewers.",
+      "category": "monetization",
+      "relatedTerms": [],
+      "relatedBlogs": [
+        "https://www.youtube.com/yt/creators/blog/post/2022/07/Monetizing-YouTube-Shorts/",
+        "https://www.socialmediaexaminer.com/youtube-shorts-monetization/"
+      ],
+      "id": "monetizing-youtube-shorts-for-small-creators"
+    },
+    {
+      "term": "Content Strategy for YouTube Live Streaming",
+      "slug": "content-strategy-for-youtube-live-streaming",
+      "shortDefinition": "Developing a content strategy for YouTube Live Streaming to engage audiences.",
+      "expandedDefinition": "This involves planning and executing live streams that are interactive, informative, and entertaining, while also leveraging YouTube's features to enhance the viewer experience.",
+      "category": "content-strategy",
+      "relatedTerms": [],
+      "relatedBlogs": [
+        "https://www.youtube.com/yt/creators/blog/post/2022/06/Best-Practices-for-Live-Streaming/",
+        "https://blog.hubspot.com/marketing/youtube-live-streaming"
+      ],
+      "id": "content-strategy-for-youtube-live-streaming"
+    },
+    {
+      "term": "Using YouTube Super Chat for Community Building",
+      "slug": "using-youtube-super-chat-for-community-building",
+      "shortDefinition": "Leveraging YouTube Super Chat for community building and engagement.",
+      "expandedDefinition": "This involves using Super Chat's features to reward loyal viewers, foster a sense of community, and create a more interactive and engaging viewing experience.",
+      "category": "youtube-features",
+      "relatedTerms": [],
+      "relatedBlogs": [
+        "https://www.youtube.com/yt/creators/blog/post/2022/05/Super-Chat-and-Super-Stickers/",
+        "https://www.socialmediaexaminer.com/youtube-super-chat/"
+      ],
+      "id": "using-youtube-super-chat-for-community-building"
+    },
+    {
+      "term": "YouTube Analytics for Gaming Channels",
+      "slug": "youtube-analytics-for-gaming-channels",
+      "shortDefinition": "Understanding YouTube analytics for gaming channels to improve content performance.",
+      "expandedDefinition": "This involves analyzing metrics such as views, engagement, and audience retention to make data-driven decisions for content creation and optimization.",
+      "category": "analytics",
+      "relatedTerms": [],
+      "relatedBlogs": [
+        "https://www.socialmediaexaminer.com/youtube-analytics-gaming-channels/",
+        "https://blog.hubspot.com/marketing/youtube-analytics"
+      ],
+      "id": "youtube-analytics-for-gaming-channels"
+    },
+    {
+      "term": "YouTube Algorithm Update for Gaming Content",
+      "slug": "youtube-algorithm-update-for-gaming-content",
+      "shortDefinition": "Understanding the YouTube algorithm update for gaming content to improve video visibility.",
+      "expandedDefinition": "This update focuses on rewarding gaming content that is more engaging, informative, and provides value to viewers, particularly for live streams and VODs.",
+      "category": "algorithm",
+      "relatedTerms": [],
+      "relatedBlogs": [
+        "https://www.youtube.com/yt/creators/blog/post/2022/08/Update-to-our-algorithm-part-2/",
+        "https://www.socialmediaexaminer.com/youtube-algorithm-update-gaming/"
+      ],
+      "id": "youtube-algorithm-update-for-gaming-content"
+    },
+    {
+      "term": "YouTube SEO for Educational Content",
+      "slug": "youtube-seo-for-educational-content",
+      "shortDefinition": "Optimizing YouTube SEO for educational content to increase video visibility.",
+      "expandedDefinition": "This involves using relevant keywords, tags, and descriptions to help YouTube's algorithm understand the content and provide a better user experience for learners.",
+      "category": "seo-optimization",
+      "relatedTerms": [],
+      "relatedBlogs": [
+        "https://www.backlinko.com/youtube-seo",
+        "https://blog.hubspot.com/marketing/youtube-seo"
+      ],
+      "id": "youtube-seo-for-educational-content"
+    },
+    {
+      "term": "Monetizing YouTube for Niche Communities",
+      "slug": "monetizing-youtube-for-niche-communities",
+      "shortDefinition": "Monetizing YouTube for niche communities to increase revenue.",
+      "expandedDefinition": "This involves understanding YouTube's monetization policies, using the YouTube Partner Program, and leveraging niche communities' unique features to attract brands and viewers.",
+      "category": "monetization",
+      "relatedTerms": [],
+      "relatedBlogs": [
+        "https://www.youtube.com/yt/creators/blog/post/2022/07/Monetizing-Niche-Communities/",
+        "https://www.socialmediaexaminer.com/youtube-monetization-niche/"
+      ],
+      "id": "monetizing-youtube-for-niche-communities"
+    },
+    {
+      "term": "Content Strategy for YouTube Q&A Sessions",
+      "slug": "content-strategy-for-youtube-q-and-a-sessions",
+      "shortDefinition": "Developing a content strategy for YouTube Q&A sessions to engage audiences.",
+      "expandedDefinition": "This involves planning and executing Q&A sessions that are informative, interactive, and entertaining, while also leveraging YouTube's features to enhance the viewer experience.",
+      "category": "content-strategy",
+      "relatedTerms": [],
+      "relatedBlogs": [
+        "https://www.youtube.com/yt/creators/blog/post/2022/06/Best-Practices-for-Q-and-A-Sessions/",
+        "https://blog.hubspot.com/marketing/youtube-q-and-a"
+      ],
+      "id": "content-strategy-for-youtube-q-and-a-sessions"
+    },
+    {
+      "term": "Using YouTube Cards for Call-to-Actions",
+      "slug": "using-youtube-cards-for-call-to-actions",
+      "shortDefinition": "Leveraging YouTube Cards for call-to-actions and audience engagement.",
+      "expandedDefinition": "This involves using Cards' features to promote videos, playlists, or external links, and encourage viewers to take action and engage with content.",
+      "category": "youtube-features",
+      "relatedTerms": [],
+      "relatedBlogs": [
+        "https://www.youtube.com/yt/creators/blog/post/2022/05/Using-YouTube-Cards-for-Call-to-Actions/",
+        "https://www.socialmediaexaminer.com/youtube-cards/"
+      ],
+      "id": "using-youtube-cards-for-call-to-actions"
+    },
+    {
+      "term": "YouTube Analytics for Personal Branding",
+      "slug": "youtube-analytics-for-personal-branding",
+      "shortDefinition": "Understanding YouTube analytics for personal branding to improve content performance.",
+      "expandedDefinition": "This involves analyzing metrics such as views, engagement, and audience retention to make data-driven decisions for content creation and optimization, while also showcasing personal branding values.",
+      "category": "analytics",
+      "relatedTerms": [],
+      "relatedBlogs": [
+        "https://www.socialmediaexaminer.com/youtube-analytics-personal-branding/",
+        "https://blog.hubspot.com/marketing/youtube-analytics"
+      ],
+      "id": "youtube-analytics-for-personal-branding"
+    },
+    {
+      "term": "YouTube Algorithm Update for Personal Content",
+      "slug": "youtube-algorithm-update-for-personal-content",
+      "shortDefinition": "Understanding the YouTube algorithm update for personal content to improve video visibility.",
+      "expandedDefinition": "This update focuses on rewarding personal content that is more engaging, informative, and provides value to viewers, particularly for vlogs and personal stories.",
+      "category": "algorithm",
+      "relatedTerms": [],
+      "relatedBlogs": [
+        "https://www.youtube.com/yt/creators/blog/post/2022/08/Update-to-our-algorithm-part-3/",
+        "https://www.socialmediaexaminer.com/youtube-algorithm-update-personal/"
+      ],
+      "id": "youtube-algorithm-update-for-personal-content"
+    },
+    {
+      "term": "YouTube SEO for E-commerce Content",
+      "slug": "youtube-seo-for-e-commerce-content",
+      "shortDefinition": "Optimizing YouTube SEO for e-commerce content to increase video visibility.",
+      "expandedDefinition": "This involves using relevant keywords, tags, and descriptions to help YouTube's algorithm understand the content and provide a better user experience for customers.",
+      "category": "seo-optimization",
+      "relatedTerms": [],
+      "relatedBlogs": [
+        "https://www.backlinko.com/youtube-seo",
+        "https://blog.hubspot.com/marketing/youtube-seo"
+      ],
+      "id": "youtube-seo-for-e-commerce-content"
+    },
+    {
+      "term": "Monetizing YouTube for Influencer Marketing",
+      "slug": "monetizing-youtube-for-influencer-marketing",
+      "shortDefinition": "Monetizing YouTube for influencer marketing to increase revenue.",
+      "expandedDefinition": "This involves understanding YouTube's monetization policies, using the YouTube Partner Program, and leveraging influencer marketing's unique features to attract brands and viewers.",
+      "category": "monetization",
+      "relatedTerms": [],
+      "relatedBlogs": [
+        "https://www.youtube.com/yt/creators/blog/post/2022/07/Monetizing-Influencer-Marketing/",
+        "https://www.socialmediaexaminer.com/youtube-monetization-influencer/"
+      ],
+      "id": "monetizing-youtube-for-influencer-marketing"
+    },
+    {
+      "term": "Content Strategy for YouTube Interviews",
+      "slug": "content-strategy-for-youtube-interviews",
+      "shortDefinition": "Developing a content strategy for YouTube interviews to engage audiences.",
+      "expandedDefinition": "This involves planning and executing interviews that are informative, interactive, and entertaining, while also leveraging YouTube's features to enhance the viewer experience.",
+      "category": "content-strategy",
+      "relatedTerms": [],
+      "relatedBlogs": [
+        "https://www.youtube.com/yt/creators/blog/post/2022/06/Best-Practices-for-Interviews/",
+        "https://blog.hubspot.com/marketing/youtube-interviews"
+      ],
+      "id": "content-strategy-for-youtube-interviews"
+    },
+    {
+      "term": "YouTube Analytics for Content Strategy",
+      "slug": "youtube-analytics-for-content-strategy",
+      "shortDefinition": "Learn how to optimize youtube analytics specifically for content strategy. This guide covers tailored strategies, common challenges, and proven techniques that work for content strategy channels and creators in 2026.",
+      "expandedDefinition": "YouTube Analytics is a critical skill for YouTube success, but the approach changes depending on your audience and channel size. For content strategy, the strategies differ significantly from general best practices. This guide breaks down exactly what content strategy creators need to know about youtube analytics, including specific examples, tools, and techniques that deliver results. Whether you're just starting out or looking to refine your approach, understanding how youtube analytics applies to content strategy will help you create more effective content and grow faster.",
+      "category": "analytics",
+      "relatedTerms": [
+        "youtube-analytics-for-non-monetized-channels",
+        "youtube-analytics-for-personal-branding",
+        "youtube-analytics-for-gaming-channels",
+        "average-view-duration"
+      ],
+      "relatedBlogs": [],
+      "id": "youtube-analytics-for-content-strategy",
+      "_source": "combinatorial"
+    },
+    {
+      "term": "Thumbnail Design for Click-Through Rate",
+      "slug": "thumbnail-design-for-click-through-rate",
+      "shortDefinition": "Learn how to optimize thumbnail design specifically for click-through rate. This guide covers tailored strategies, common challenges, and proven techniques that work for click-through rate channels and creators in 2026.",
+      "expandedDefinition": "Thumbnail Design is a critical skill for YouTube success, but the approach changes depending on your audience and channel size. For click-through rate, the strategies differ significantly from general best practices. This guide breaks down exactly what click-through rate creators need to know about thumbnail design, including specific examples, tools, and techniques that deliver results. Whether you're just starting out or looking to refine your approach, understanding how thumbnail design applies to click-through rate will help you create more effective content and grow faster.",
+      "category": "seo-optimization",
+      "relatedTerms": [
+        "keyword-research-for-small-channels",
+        "youtube-seo-for-educational-content",
+        "youtube-seo-for-voice-over-content",
+        "youtube-seo-for-e-commerce-content"
+      ],
+      "relatedBlogs": [],
+      "id": "thumbnail-design-for-click-through-rate",
+      "_source": "combinatorial"
+    },
+    {
+      "term": "Thumbnail Design for YouTube Shorts",
+      "slug": "thumbnail-design-for-youtube-shorts",
+      "shortDefinition": "Learn how to optimize thumbnail design specifically for youtube shorts. This guide covers tailored strategies, common challenges, and proven techniques that work for youtube shorts channels and creators in 2026.",
+      "expandedDefinition": "Thumbnail Design is a critical skill for YouTube success, but the approach changes depending on your audience and channel size. For youtube shorts, the strategies differ significantly from general best practices. This guide breaks down exactly what youtube shorts creators need to know about thumbnail design, including specific examples, tools, and techniques that deliver results. Whether you're just starting out or looking to refine your approach, understanding how thumbnail design applies to youtube shorts will help you create more effective content and grow faster.",
+      "category": "seo-optimization",
+      "relatedTerms": [
+        "keyword-research-for-small-channels",
+        "youtube-seo-for-educational-content",
+        "youtube-seo-for-voice-over-content",
+        "youtube-seo-for-e-commerce-content"
+      ],
+      "relatedBlogs": [],
+      "id": "thumbnail-design-for-youtube-shorts",
+      "_source": "combinatorial"
+    },
+    {
+      "term": "Video Editing for Workflow",
+      "slug": "video-editing-for-workflow",
+      "shortDefinition": "Learn how to optimize video editing specifically for workflow. This guide covers tailored strategies, common challenges, and proven techniques that work for workflow channels and creators in 2026.",
+      "expandedDefinition": "Video Editing is a critical skill for YouTube success, but the approach changes depending on your audience and channel size. For workflow, the strategies differ significantly from general best practices. This guide breaks down exactly what workflow creators need to know about video editing, including specific examples, tools, and techniques that deliver results. Whether you're just starting out or looking to refine your approach, understanding how video editing applies to workflow will help you create more effective content and grow faster.",
+      "category": "youtube-features",
+      "relatedTerms": [
+        "using-youtube-super-chat-for-community-building",
+        "using-youtube-cards-for-call-to-actions",
+        "ab-testing",
+        "copyright-claims"
+      ],
+      "relatedBlogs": [],
+      "id": "video-editing-for-workflow",
+      "_source": "combinatorial"
+    },
+    {
+      "term": "Video Editing for Productivity",
+      "slug": "video-editing-for-productivity",
+      "shortDefinition": "Learn how to optimize video editing specifically for productivity. This guide covers tailored strategies, common challenges, and proven techniques that work for productivity channels and creators in 2026.",
+      "expandedDefinition": "Video Editing is a critical skill for YouTube success, but the approach changes depending on your audience and channel size. For productivity, the strategies differ significantly from general best practices. This guide breaks down exactly what productivity creators need to know about video editing, including specific examples, tools, and techniques that deliver results. Whether you're just starting out or looking to refine your approach, understanding how video editing applies to productivity will help you create more effective content and grow faster.",
+      "category": "youtube-features",
+      "relatedTerms": [
+        "using-youtube-super-chat-for-community-building",
+        "using-youtube-cards-for-call-to-actions",
+        "ab-testing",
+        "copyright-claims"
+      ],
+      "relatedBlogs": [],
+      "id": "video-editing-for-productivity",
+      "_source": "combinatorial"
+    },
+    {
+      "term": "YouTube Shorts for Monetization 2026",
+      "slug": "youtube-shorts-for-monetization-2026",
+      "shortDefinition": "Learn how to optimize youtube shorts specifically for monetization 2026. This guide covers tailored strategies, common challenges, and proven techniques that work for monetization 2026 channels and creators in 2026.",
+      "expandedDefinition": "YouTube Shorts is a critical skill for YouTube success, but the approach changes depending on your audience and channel size. For monetization 2026, the strategies differ significantly from general best practices. This guide breaks down exactly what monetization 2026 creators need to know about youtube shorts, including specific examples, tools, and techniques that deliver results. Whether you're just starting out or looking to refine your approach, understanding how youtube shorts applies to monetization 2026 will help you create more effective content and grow faster.",
+      "category": "youtube-features",
+      "relatedTerms": [
+        "using-youtube-super-chat-for-community-building",
+        "using-youtube-cards-for-call-to-actions",
+        "ab-testing",
+        "copyright-claims"
+      ],
+      "relatedBlogs": [],
+      "id": "youtube-shorts-for-monetization-2026",
+      "_source": "combinatorial"
+    },
+    {
+      "term": "YouTube Shorts for Algorithm 2026",
+      "slug": "youtube-shorts-for-algorithm-2026",
+      "shortDefinition": "Learn how to optimize youtube shorts specifically for algorithm 2026. This guide covers tailored strategies, common challenges, and proven techniques that work for algorithm 2026 channels and creators in 2026.",
+      "expandedDefinition": "YouTube Shorts is a critical skill for YouTube success, but the approach changes depending on your audience and channel size. For algorithm 2026, the strategies differ significantly from general best practices. This guide breaks down exactly what algorithm 2026 creators need to know about youtube shorts, including specific examples, tools, and techniques that deliver results. Whether you're just starting out or looking to refine your approach, understanding how youtube shorts applies to algorithm 2026 will help you create more effective content and grow faster.",
+      "category": "youtube-features",
+      "relatedTerms": [
+        "using-youtube-super-chat-for-community-building",
+        "using-youtube-cards-for-call-to-actions",
+        "ab-testing",
+        "copyright-claims"
+      ],
+      "relatedBlogs": [],
+      "id": "youtube-shorts-for-algorithm-2026",
+      "_source": "combinatorial"
+    },
+    {
+      "term": "Live Streaming for Monetization",
+      "slug": "live-streaming-for-monetization",
+      "shortDefinition": "Learn how to optimize live streaming specifically for monetization. This guide covers tailored strategies, common challenges, and proven techniques that work for monetization channels and creators in 2026.",
+      "expandedDefinition": "Live Streaming is a critical skill for YouTube success, but the approach changes depending on your audience and channel size. For monetization, the strategies differ significantly from general best practices. This guide breaks down exactly what monetization creators need to know about live streaming, including specific examples, tools, and techniques that deliver results. Whether you're just starting out or looking to refine your approach, understanding how live streaming applies to monetization will help you create more effective content and grow faster.",
+      "category": "youtube-features",
+      "relatedTerms": [
+        "using-youtube-super-chat-for-community-building",
+        "using-youtube-cards-for-call-to-actions",
+        "ab-testing",
+        "copyright-claims"
+      ],
+      "relatedBlogs": [],
+      "id": "live-streaming-for-monetization",
+      "_source": "combinatorial"
+    },
+    {
+      "term": "Live Streaming for Audience Growth",
+      "slug": "live-streaming-for-audience-growth",
+      "shortDefinition": "Learn how to optimize live streaming specifically for audience growth. This guide covers tailored strategies, common challenges, and proven techniques that work for audience growth channels and creators in 2026.",
+      "expandedDefinition": "Live Streaming is a critical skill for YouTube success, but the approach changes depending on your audience and channel size. For audience growth, the strategies differ significantly from general best practices. This guide breaks down exactly what audience growth creators need to know about live streaming, including specific examples, tools, and techniques that deliver results. Whether you're just starting out or looking to refine your approach, understanding how live streaming applies to audience growth will help you create more effective content and grow faster.",
+      "category": "youtube-features",
+      "relatedTerms": [
+        "using-youtube-super-chat-for-community-building",
+        "using-youtube-cards-for-call-to-actions",
+        "ab-testing",
+        "copyright-claims"
+      ],
+      "relatedBlogs": [],
+      "id": "live-streaming-for-audience-growth",
+      "_source": "combinatorial"
+    },
+    {
+      "term": "Audience Retention for Content Strategy",
+      "slug": "audience-retention-for-content-strategy",
+      "shortDefinition": "Learn how to optimize audience retention specifically for content strategy. This guide covers tailored strategies, common challenges, and proven techniques that work for content strategy channels and creators in 2026.",
+      "expandedDefinition": "Audience Retention is a critical skill for YouTube success, but the approach changes depending on your audience and channel size. For content strategy, the strategies differ significantly from general best practices. This guide breaks down exactly what content strategy creators need to know about audience retention, including specific examples, tools, and techniques that deliver results. Whether you're just starting out or looking to refine your approach, understanding how audience retention applies to content strategy will help you create more effective content and grow faster.",
+      "category": "analytics",
+      "relatedTerms": [
+        "youtube-analytics-for-non-monetized-channels",
+        "youtube-analytics-for-personal-branding",
+        "youtube-analytics-for-gaming-channels",
+        "average-view-duration"
+      ],
+      "relatedBlogs": [],
+      "id": "audience-retention-for-content-strategy",
       "_source": "combinatorial"
     }
   ]
