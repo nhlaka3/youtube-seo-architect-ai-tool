@@ -1,0 +1,86 @@
+/* ════════════════════════════════════════════════════════════════════
+   MOTION UTILITIES — site-wide image & chart animation layer
+   ════════════════════════════════════════════════════════════════════
+   CONVENTIONS (apply to ALL new images, visuals, and charts):
+   - Content images (article/blog/tool/entry contexts) get a gentle
+     hover-zoom AUTOMATICALLY — no class needed.
+   - Opt-in classes for extras:
+       .motion-float      → gentle idle float (hero shots, visuals)
+       .motion-float-slow → slower float variant
+       .motion-lift       → hover lift (cards, CTAs, thumbnails)
+       [data-motion=zoom] → explicit opt-in hover zoom on any element
+   - Chart containers: .chart-wrap / .chart-container / [data-chart]
+     get a barely-perceptible hover emphasis automatically.
+   - ALL motion below uses transform/opacity ONLY → 60fps, GPU-composited.
+   - prefers-reduced-motion: everything is disabled (see bottom).
+   ════════════════════════════════════════════════════════════════════ */
+
+/* ── Hover zoom — auto-applies to content images site-wide ── */
+article img,
+.content img,
+.entry-content img,
+.blog-body img,
+.blog-hero img,
+.tool-hero img,
+.post-card img,
+.bento-card img,
+[data-motion="zoom"] {
+  transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+}
+article img:hover,
+.content img:hover,
+.entry-content img:hover,
+.blog-body img:hover,
+.blog-hero img:hover,
+.tool-hero img:hover,
+.post-card img:hover,
+.bento-card img:hover,
+[data-motion="zoom"]:hover {
+  transform: scale(1.035);
+}
+
+/* ── Idle float — opt-in (.motion-float / .motion-float-slow) ── */
+.motion-float {
+  animation: motionFloat 7s ease-in-out infinite alternate;
+  will-change: transform;
+}
+.motion-float-slow {
+  animation: motionFloat 10s ease-in-out infinite alternate;
+  will-change: transform;
+}
+@keyframes motionFloat {
+  from { transform: translateY(0); }
+  to   { transform: translateY(-8px); }
+}
+
+/* ── Hover lift — opt-in (.motion-lift) ── */
+.motion-lift {
+  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.motion-lift:hover {
+  transform: translateY(-4px);
+}
+
+/* ── Chart containers — gentle hover emphasis (auto) ── */
+.chart-wrap,
+.chart-container,
+[data-chart] {
+  transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.chart-wrap:hover,
+.chart-container:hover,
+[data-chart]:hover {
+  transform: scale(1.015);
+}
+
+/* ── Reduced motion: disable everything above ── */
+@media (prefers-reduced-motion: reduce) {
+  article img, .content img, .entry-content img, .blog-body img,
+  .blog-hero img, .tool-hero img, .post-card img, .bento-card img,
+  [data-motion="zoom"], .motion-float, .motion-float-slow, .motion-lift,
+  .chart-wrap, .chart-container, [data-chart] {
+    animation: none !important;
+    transition: none !important;
+    transform: none !important;
+  }
+}

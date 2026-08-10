@@ -831,3 +831,14 @@ npx hyperframes lint && npx hyperframes validate && npx hyperframes render --out
 - Manim output color scheme: dark background (#0a0b10), cyan accents (#00f2ff) — matches Cyber-Luxe Dark
 - Manim produces NO audio — all audio comes from HyperFrames
 - HyperFrames `<video>` rule: never nest in a timed div, never animate video dimensions, never call play/pause/seek from JS
+
+## Motion Conventions (site-wide)
+
+Shared layer: `public/motion-utilities.css` (linked in ALL static pages via `scripts/batch-add-motion-css.py`, plus `api/blog-renderer.js`, `scripts/generate-blog-tools.mjs`, `scripts/generate-all-metric-tools.mjs`, `public/glossary/_template.html`).
+
+- Content images (article/blog/tool/entry contexts) get automatic hover-zoom — no class needed.
+- Opt-in extras: `.motion-float` / `.motion-float-slow` (idle float), `.motion-lift` (hover lift), `[data-motion="zoom"]`, chart containers `.chart-wrap`/`.chart-container`/`[data-chart]` get hover emphasis.
+- ALL motion must be transform/opacity only (60fps, GPU-composited); `prefers-reduced-motion` is handled globally.
+- When adding NEW pages/templates: always include `<link rel="stylesheet" href="/motion-utilities.css">`.
+- Re-run `python3 scripts/batch-add-motion-css.py` after adding new static HTML files (idempotent).
+- Framework reference: `web-animation` skill (motion taxonomy, sector vocabulary, Golden Rules).

@@ -948,6 +948,7 @@ function generateToolPage(tool) {
     .idea-card .idea-meta{color:#8b8b9e;font-size:.8rem;margin-top:.25rem}
     input[type="color"]{height:48px;padding:4px;cursor:pointer}
   </style>
+<link rel="stylesheet" href="/motion-utilities.css">
 </head>
 <body>
   <header class="header">
