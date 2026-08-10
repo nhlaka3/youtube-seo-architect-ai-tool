@@ -757,6 +757,34 @@
 
     /* Hero initial state — visible immediately */
     .hero.reveal { opacity: 1; transform: none; }
+
+    /* ═══ Capability marquee — proof-of-capability motion (GPU-safe transform loop) ═══ */
+    .tools-marquee {
+      overflow: hidden;
+      padding: 0.25rem 0 1.75rem;
+      -webkit-mask-image: linear-gradient(90deg, transparent, #000 15%, #000 85%, transparent);
+      mask-image: linear-gradient(90deg, transparent, #000 15%, #000 85%, transparent);
+    }
+    .tools-marquee-track {
+      display: flex;
+      width: max-content;
+      animation: marquee-scroll 38s linear infinite;
+      will-change: transform;
+    }
+    .tools-marquee-track span {
+      display: inline-flex;
+      align-items: center;
+      gap: 2.75rem;
+      padding-right: 2.75rem;
+      white-space: nowrap;
+      font-size: 0.92rem;
+      font-weight: 500;
+      color: var(--text-muted);
+      letter-spacing: 0.02em;
+    }
+    .tools-marquee-track span::after { content: '✦'; color: var(--primary); font-size: 0.65rem; opacity: 0.75; }
+    @keyframes marquee-scroll { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+    @media (prefers-reduced-motion: reduce) { .tools-marquee-track { animation: none; will-change: auto; } }
   </style>
 </head>
 
@@ -810,20 +838,20 @@
           <i data-lucide="play" aria-hidden="true"></i> How It Works
         </a>
       </div>
-      <div class="hero-stats">
-        <div class="stat-item">
+      <div class="hero-stats stagger-grid">
+        <div class="stat-item stagger-item">
           <span class="stat-num">All</span>
           <span class="stat-label">AI Tools</span>
         </div>
-        <div class="stat-item">
+        <div class="stat-item stagger-item">
           <span class="stat-num">30-50%</span>
           <span class="stat-label">Higher CTR</span>
         </div>
-        <div class="stat-item">
+        <div class="stat-item stagger-item">
           <span class="stat-num">Unlimited</span>
           <span class="stat-label">100% Free</span>
         </div>
-        <div class="stat-item">
+        <div class="stat-item stagger-item">
           <span class="stat-num">Free</span>
           <span class="stat-label">Forever</span>
         </div>
@@ -1146,16 +1174,16 @@
         <h3>We Connect to YouTube. That's It.</h3>
         <p>You sign in through Google's official OAuth screen — the same system every YouTube SEO tool uses. We request <strong>read and manage</strong> permissions to fetch your videos and apply optimizations when you click "Apply." We <strong>never</strong> see your password. We <strong>never</strong> post, delete, or modify anything without you clicking a button first. Your access token lives in your browser, not on our servers. Revoke it anytime from your Google Account.</p>
 
-        <div class="case-study-stats">
-          <div>
+        <div class="case-study-stats stagger-grid">
+          <div class="stagger-item">
             <div class="case-stat-num">Google</div>
             <div class="case-stat-label">OAuth Login</div>
           </div>
-          <div>
+          <div class="stagger-item">
             <div class="case-stat-num">1 Click</div>
             <div class="case-stat-label">To Apply Changes</div>
           </div>
-          <div>
+          <div class="stagger-item">
             <div class="case-stat-num">Anytime</div>
             <div class="case-stat-label">Revoke Access</div>
           </div>
@@ -1178,6 +1206,13 @@
         </div>
       </div>
     </section>
+
+    <!-- Capability marquee — proof-of-capability motion vocabulary -->
+    <div class="tools-marquee" aria-hidden="true">
+      <div class="tools-marquee-track">
+        <span>Tag Generator</span><span>Title Optimizer</span><span>Description Writer</span><span>Thumbnail Color Analyzer</span><span>Video Idea Generator</span><span>Keyword Research</span><span>Engagement Rate Calculator</span><span>Competition Analyzer</span><span>Channel Health Score</span><span>Monetization Readiness Checker</span><span>Upload Schedule Optimizer</span><span>Cost-Per-View Calculator</span><span>Watch Time Estimator</span><span>Hashtag Performance Checker</span><span>Playlist Performance Analyzer</span><span>End-Screen Effectiveness Checker</span><span>Tag Generator</span><span>Title Optimizer</span><span>Description Writer</span><span>Thumbnail Color Analyzer</span><span>Video Idea Generator</span><span>Keyword Research</span><span>Engagement Rate Calculator</span><span>Competition Analyzer</span><span>Channel Health Score</span><span>Monetization Readiness Checker</span><span>Upload Schedule Optimizer</span><span>Cost-Per-View Calculator</span><span>Watch Time Estimator</span><span>Hashtag Performance Checker</span><span>Playlist Performance Analyzer</span><span>End-Screen Effectiveness Checker</span>
+      </div>
+    </div>
 
     <!-- Social Proof -->
     <section class="social-proof reveal reveal-fade-up" style="padding-bottom:0;" aria-labelledby="results-heading">
@@ -1365,7 +1400,7 @@
       const revealObserver = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
           if (entry.isIntersecting) {
-            entry.target.classList.add('visible');
+            entry.target.classList.add('visible', 'revealed');
             revealObserver.unobserve(entry.target);
           }
         });
@@ -1374,7 +1409,7 @@
       document.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
     } else {
       // Show everything immediately for reduced-motion users
-      document.querySelectorAll('.reveal').forEach(el => el.classList.add('visible'));
+      document.querySelectorAll('.reveal').forEach(el => el.classList.add('visible', 'revealed'));
     }
 
     // ── Staggered grid animations ──
