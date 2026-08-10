@@ -1,15 +1,15 @@
 {
-  "timestamp": "2026-08-03T11:17:19.252Z",
-  "total": 201,
-  "checked": 201,
-  "live": 200,
+  "timestamp": "2026-08-10T09:13:36.345Z",
+  "total": 260,
+  "checked": 260,
+  "live": 260,
   "redirect": 0,
-  "dead": 1,
+  "dead": 0,
   "errors": 0,
   "byType": {
     "blog": {
-      "total": 18,
-      "live": 18,
+      "total": 62,
+      "live": 62,
       "dead": 0
     },
     "blog-index": {
@@ -19,8 +19,8 @@
     },
     "comparison": {
       "total": 1,
-      "live": 0,
-      "dead": 1
+      "live": 1,
+      "dead": 0
     },
     "dashboard": {
       "total": 1,
@@ -53,8 +53,8 @@
       "dead": 0
     },
     "tool": {
-      "total": 95,
-      "live": 95,
+      "total": 110,
+      "live": 110,
       "dead": 0
     },
     "tools-index": {
@@ -63,7 +63,5 @@
       "dead": 0
     }
   },
-  "notFound": [
-    "https://yt-seo-architect.vercel.app/glossary/vidiq-vs-tubebuddy"
-  ]
+  "notFound": []
 }
