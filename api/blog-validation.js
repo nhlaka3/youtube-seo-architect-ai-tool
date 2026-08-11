@@ -35,16 +35,180 @@ const DEFAULT_MIN_SCORE = Number(process.env.BLOG_MIN_SCORE || 70);
 const CATEGORY_MAX = { content: 30, seo: 25, eeat: 15, technical: 15, aiCitation: 15 };
 
 /**
- * Count authored visuals in HTML content: <img>, <object> (SVG/chart embeds),
- * and inline <svg>. Used to enforce a minimum-visuals quality requirement on
- * NEW posts (existing posts have 0 visuals, so this is opt-in per caller).
+ * Content-visual analysis for blog posts.
+ *
+ * "Content visual" = a visual an author added to convey meaning:
+ *   - <img> tags (always content)
+ *   - <object> embeds (always content)
+ *   - inline <svg> charts — an <svg> counts ONLY if it is a real chart
+ *     (viewBox/width >= 60 units, or wrapped in .chart-wrap/.chart-container
+ *     /[data-chart]). Tiny icon sprites (24×24 share buttons, logos, play
+ *     buttons) are chrome and are deliberately excluded — otherwise the
+ *     share-bar icons alone would satisfy the 3-visual standard.
+ *
+ * A visual is "animated" if it — or a wrapper container around it (picture,
+ * figure, .chart-wrap, .media-wrap, any open ancestor) — carries an
+ * entrance/animation class: .chart-entrance, .media-entrance,
+ * .motion-float(-slow), .motion-lift, or data-motion="zoom". Hover-only
+ * effects ([data-chart] scale) do NOT count as animated.
+ *
+ * Standard: a post must have >= 3 content visuals, ALL animated.
+ * fixVisualAnimations() auto-corrects posts that fall short (wraps bare
+ * visuals in animated containers) instead of just failing the gate.
  */
+
+const ANIM_CLASS_RE = /\b(chart-entrance|media-entrance|motion-float|motion-float-slow|motion-lift)\b/;
+const ANIM_ATTR_RE = /data-motion="zoom"/;
+const CONTAINER_CLASS_RE = /\b(chart-wrap|chart-container|media-wrap|chart-figure)\b/;
+const VOID_TAGS = new Set(['img', 'object', 'input', 'br', 'hr', 'meta', 'link', 'source', 'area', 'base', 'col', 'embed', 'track', 'wbr']);
+
+function classOf(attrs) {
+  return (attrs.match(/class="([^"]*)"/) || attrs.match(/class='([^']*)'/) || [])[1] || '';
+}
+
+/**
+ * One-pass tag walker. Returns visual records with positions + ancestor
+ * chain so the fixer can edit the HTML without a DOM:
+ *   { name, cls, attrs, start, end, closeEnd, selfClose, animated, ancestors }
+ */
+function parseVisuals(html) {
+  const re = /<(\/)?([a-zA-Z][\w-]*)((?:\s+[a-zA-Z-]+(?:\s*=\s*(?:"[^"]*"|'[^']*'|[^\s>]+))?)*)\s*(\/?)>/g;
+  const stack = [];
+  const visuals = [];
+  let m;
+  while ((m = re.exec(html))) {
+    const closing = m[1];
+    const name = m[2];
+    const rest = m[3] || '';
+    const selfClose = !!m[4];
+    const start = m.index;
+    const end = start + m[0].length;
+    if (closing) {
+      for (let i = stack.length - 1; i >= 0; i--) {
+        if (stack[i].name === name) {
+          stack[i].closeEnd = end;
+          stack.splice(i);
+          break;
+        }
+      }
+      continue;
+    }
+    const cls = classOf(rest);
+    const entry = { name, cls, attrs: rest, start, end, closeEnd: null, selfClose };
+    if (name === 'img' || name === 'object' || name === 'svg') {
+      let isContent = true;
+      if (name === 'svg') {
+        const vw = parseInt((rest.match(/viewBox="[^"]*?\s(\d+)\s*"/) || [])[1] || '0', 10);
+        const w = parseInt((rest.match(/\swidth="(\d+)/) || [])[1] || '0', 10);
+        const inChartContainer = stack.some(o => /\b(chart-wrap|chart-container)\b/.test(o.cls) || /data-chart/.test(o.attrs));
+        isContent = inChartContainer || Math.max(vw, w) >= 60;
+      }
+      if (isContent) {
+        const animated = ANIM_CLASS_RE.test(cls) || ANIM_ATTR_RE.test(rest) ||
+          stack.some(o => ANIM_CLASS_RE.test(o.cls) || ANIM_ATTR_RE.test(o.attrs));
+        entry.animated = animated;
+        entry.ancestors = stack.slice();
+        visuals.push(entry);
+      }
+    }
+    if (!selfClose && !VOID_TAGS.has(name)) {
+      stack.push(entry);
+    } else {
+      entry.closeEnd = end;
+    }
+  }
+  return visuals;
+}
+
+/**
+ * Analyze content visuals: count (icons excluded) + which are not animated.
+ * @returns {{ count: number, unanimated: Array<{name:string, tag:string}> }}
+ */
+export function analyzeVisuals(html) {
+  if (!html) return { count: 0, unanimated: [] };
+  const visuals = parseVisuals(html);
+  return {
+    count: visuals.length,
+    unanimated: visuals.filter(v => !v.animated).map(v => ({
+      name: v.name,
+      tag: html.slice(v.start, Math.min(v.start + 120, html.length)).replace(/\s+/g, ' '),
+    })),
+  };
+}
+
+/** Count content visuals (icons excluded). Back-compat wrapper. */
 export function countVisuals(html) {
-  if (!html) return 0;
-  const img = (html.match(/<img[\s>]/gi) || []).length;
-  const obj = (html.match(/<object[\s>]/gi) || []).length;
-  const svg = (html.match(/<svg[\s>]/gi) || []).length;
-  return img + obj + svg;
+  return analyzeVisuals(html).count;
+}
+
+/**
+ * AUTO-CORRECT: wrap every non-animated content visual in an animated
+ * container, so a post short on animation is fixed rather than just blocked.
+ *   - visual inside <picture>/<figure>/.chart-wrap/.media-wrap → entrance
+ *     class injected into that wrapper
+ *   - bare <img> → wrapped in <div class="media-wrap media-entrance">
+ *   - bare <svg>/<object> chart → wrapped in
+ *     <div class="chart-wrap chart-entrance" data-chart role="img">
+ * @returns {{ html: string, fixed: number, report: string[] }}
+ */
+export function fixVisualAnimations(html) {
+  if (!html) return { html, fixed: 0, report: [] };
+  const visuals = parseVisuals(html);
+  const edits = [];
+  const report = [];
+  const marked = new Set(); // container/img start offsets already receiving a class
+  let fixed = 0;
+
+  const injectClass = (entry, addCls) => {
+    if (marked.has(entry.start)) return false;
+    marked.add(entry.start);
+    const tag = html.slice(entry.start, entry.end);
+    const cm = tag.match(/class="([^"]*)"/) || tag.match(/class='([^']*)'/);
+    if (cm) {
+      // insert just BEFORE the closing quote so the class lands inside
+      // class="... existing new" (cm[0] ends with the closing quote char)
+      edits.push({ start: entry.start + cm.index + cm[0].length - 1, end: entry.start + cm.index + cm[0].length - 1, replacement: ' ' + addCls });
+    } else {
+      const nameEnd = tag.match(/^<[a-zA-Z][\w-]*/)[0].length;
+      edits.push({ start: entry.start + nameEnd, end: entry.start + nameEnd, replacement: ` class="${addCls}"` });
+    }
+    return true;
+  };
+
+  for (const v of visuals) {
+    if (v.animated) continue;
+    const container = v.ancestors.slice().reverse().find(o =>
+      o.name === 'picture' || o.name === 'figure' || CONTAINER_CLASS_RE.test(o.cls));
+    if (container && !marked.has(container.start)) {
+      const addCls = /\b(chart-wrap|chart-container|chart-figure)\b/.test(container.cls) ? 'chart-entrance' : 'media-entrance';
+      if (injectClass(container, addCls)) {
+        fixed++;
+        report.push(`${v.name}: added "${addCls}" to <${container.name}> wrapper`);
+        continue;
+      }
+    }
+    if (v.name === 'img') {
+      if (classOf(v.attrs) && !marked.has(v.start) && injectClass(v, 'media-entrance')) {
+        fixed++;
+        report.push('img: added "media-entrance" to <img>');
+      } else if (!marked.has(v.start)) {
+        edits.push({ start: v.start, end: v.start, replacement: '<div class="media-wrap media-entrance">' });
+        edits.push({ start: v.end, end: v.end, replacement: '</div>' });
+        fixed++;
+        report.push('img: wrapped in .media-wrap.media-entrance');
+      }
+    } else {
+      edits.push({ start: v.start, end: v.start, replacement: '<div class="chart-wrap chart-entrance" data-chart role="img">' });
+      edits.push({ start: v.closeEnd ?? v.end, end: v.closeEnd ?? v.end, replacement: '</div>' });
+      fixed++;
+      report.push(`${v.name}: wrapped in .chart-wrap.chart-entrance[data-chart]`);
+    }
+  }
+  if (!edits.length) return { html, fixed, report };
+  edits.sort((a, b) => b.start - a.start);
+  let out = html;
+  for (const e of edits) out = out.slice(0, e.start) + e.replacement + out.slice(e.end);
+  return { html: out, fixed, report };
 }
 
 /**

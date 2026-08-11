@@ -33,7 +33,7 @@ function svgOpen(w, h, label) {
 }
 const svgClose = '</svg>';
 const FIG_START = (type, label) =>
-  `<figure class="chart-figure" data-chart="${type}">${svgOpen(560, 300, label)}`;
+  `<figure class="chart-figure chart-entrance" data-chart="${type}">${svgOpen(560, 300, label)}`;
 const FIG_END = (caption) =>
   `</svg><figcaption style="font-size:.8rem;color:#8b8b9e;text-align:center;margin-top:.4rem">${caption}</figcaption></figure>`;
 

@@ -3,7 +3,7 @@
  * Publish public/blog/youtube-seo-tips-for-creators-in-2026.html to seoPages (Neon DB).
  * Mirrors the upsert pattern of publish-blog-db.js. Idempotent (onConflictDoUpdate).
  */
-import { readFileSync } from 'fs';
+import { readFileSync, writeFileSync } from 'fs';
 import { resolve } from 'path';
 import { config as loadEnv } from 'dotenv';
 // Prefer Vercel-pulled envs (production DB); fall back to local env file.
@@ -15,7 +15,7 @@ if (readFileSync(envFile, 'utf-8').includes('DATABASE_URL=')) {
 }
 import { initDatabase } from '../src/database/connection.js';
 import { seoPages } from '../src/database/schema.js';
-import { countVisuals } from '../api/blog-validation.js';
+import { countVisuals, analyzeVisuals, fixVisualAnimations } from '../api/blog-validation.js';
 
 const POST = {
   file: 'public/blog/youtube-seo-tips-for-creators-in-2026.html',
@@ -50,17 +50,32 @@ async function main() {
     console.error('Failed to connect to database. Check DATABASE_URL.');
     process.exit(1);
   }
+  const fullHtml0 = readFileSync(resolve(process.cwd(), POST.file), 'utf-8');
+  const article0 = extractArticleContent(fullHtml0);
+  // AUTO-CORRECT first: wrap any non-animated visual so the post is fixed,
+  // not just blocked. Write the corrected HTML back to the file.
+  const fixRes = fixVisualAnimations(article0);
+  if (fixRes.fixed > 0) {
+    console.log(`✏️  Auto-corrected ${fixRes.fixed} non-animated visual(s):`);
+    for (const r of fixRes.report) console.log('   - ' + r);
+    writeFileSync(resolve(process.cwd(), POST.file), fullHtml0.replace(article0, fixRes.html));
+  }
   const fullHtml = readFileSync(resolve(process.cwd(), POST.file), 'utf-8');
   const content = extractArticleContent(fullHtml);
   const wordCount = countWords(content);
   const visuals = countVisuals(content);
-  console.log(`Slug: ${POST.slug} | Word count: ${wordCount} | Visuals: ${visuals}`);
+  const { unanimated } = analyzeVisuals(content);
+  console.log(`Slug: ${POST.slug} | Word count: ${wordCount} | Visuals: ${visuals} | Unanimated: ${unanimated.length}`);
   if (wordCount < 1200) {
     console.error(`Word count ${wordCount} below 1200 minimum — aborting.`);
     process.exit(1);
   }
   if (visuals < 3) {
-    console.error(`Only ${visuals} visuals (images/inline SVG) — site standard requires 3+ (see AGENTS.md Motion Conventions). Aborting.`);
+    console.error(`Only ${visuals} content visuals (images/inline SVG charts) — site standard requires 3+ (see AGENTS.md Motion Conventions). Could not auto-correct: add at least ${3 - visuals} more image/chart. Aborting.`);
+    process.exit(1);
+  }
+  if (unanimated.length) {
+    console.error(`${unanimated.length} visual(s) still not animated after auto-fix (${unanimated.map(u => `<${u.name}>`).join(', ')}) — see AGENTS.md Motion Conventions. Aborting.`);
     process.exit(1);
   }
   if (!fullHtml.includes('motion-utilities.css')) {

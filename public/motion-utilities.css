@@ -74,7 +74,8 @@ article img:hover,
 }
 
 /* ── Chart entrance — one-time fade-up (GPU-safe; opt-in .chart-entrance) ── */
-.chart-entrance {
+.chart-entrance,
+.media-entrance {
   animation: chartIn 0.8s cubic-bezier(0.16, 1, 0.3, 1) both;
 }
 @keyframes chartIn {
@@ -82,12 +83,22 @@ article img:hover,
   to   { opacity: 1; transform: none; }
 }
 
+/* ── Media wrapper — auto-added by fixVisualAnimations() around bare <img> ── */
+.media-wrap {
+  line-height: 0;
+  text-align: center;
+}
+.media-wrap img {
+  border-radius: 12px;
+}
+
 /* ── Reduced motion: disable everything above ── */
 @media (prefers-reduced-motion: reduce) {
   article img, .content img, .entry-content img, .blog-body img,
   .blog-hero img, .tool-hero img, .post-card img, .bento-card img,
   [data-motion="zoom"], .motion-float, .motion-float-slow, .motion-lift,
-  .chart-wrap, .chart-container, [data-chart] {
+  .chart-wrap, .chart-container, [data-chart],
+  .chart-entrance, .media-entrance {
     animation: none !important;
     transition: none !important;
     transform: none !important;

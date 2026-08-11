@@ -843,10 +843,12 @@ Shared layer: `public/motion-utilities.css` (linked in ALL static pages via `scr
 - Re-run `python3 scripts/batch-add-motion-css.py` after adding new static HTML files (idempotent).
 - Framework reference: `web-animation` skill (motion taxonomy, sector vocabulary, Golden Rules).
 
-### Blog image standard (3+ animated visuals)
+### Blog image standard (3+ ANIMATED visuals, auto-corrected)
 
-Every blog post requires >= 3 visuals inside `<article>` — images (`<img>`), `<object>` embeds, or inline `<svg>` charts — and the `motion-utilities.css` link in `<head>` so they animate (hover-zoom / chart entrance / hover emphasis; reduced-motion safe).
+Every blog post requires >= 3 CONTENT visuals inside `<article>` — images (`<img>`), `<object>` embeds, or inline `<svg>` charts — and EVERY one of them must be animated (entrance/float/lift class on the visual or its wrapper), plus the `motion-utilities.css` link in `<head>` (reduced-motion safe). Icon sprites (share bars, logos, play buttons — `<svg>` smaller than 60 units, not in a chart container) do NOT count toward the 3.
 
-- Enforced before DB publish by `scripts/publish-seo-tips-post-db.js` (fails if < 3 or missing motion link).
-- Manual check: `node scripts/check-post-visuals.js public/blog/<slug>.html`.
-- Inline SVG charts: wrap in `<div class="chart-wrap chart-entrance" data-chart role="img" aria-label="...">` — auto hover emphasis + one-time fade-up entrance; the CI generator enforces the same 3-visual floor via `BLOG_MIN_VISUALS=3`.
+- "Animated" = `.chart-entrance` / `.media-entrance` (one-time fade-up), `.motion-float(-slow)`, `.motion-lift`, or `data-motion="zoom"` on the visual itself or a wrapper (`<picture>`, `<figure>`, `.chart-wrap`, `.media-wrap`). Hover-only effects (`[data-chart]` scale) don't count.
+- AUTO-CORRECT, not just block: `fixVisualAnimations()` in `api/blog-validation.js` wraps any bare visual (img → `.media-wrap.media-entrance`; svg/object chart → `.chart-wrap.chart-entrance[data-chart]`; injects the entrance class into existing `<picture>`/`<figure>`/`.chart-wrap` wrappers). It runs FIRST in every publish path, so a short post gets fixed and the corrected HTML written back before the gate.
+- Gates (all fail only if still non-compliant AFTER auto-fix): `scripts/publish-seo-tips-post-db.js` (DB publish, also verifies 0 unanimated), `scripts/publish-blog-post.mjs` (CI publisher, `BLOG_MIN_VISUALS=3`), `scripts/auto-blog-generator.mjs` (daily cron).
+- Manual check + fix: `node scripts/check-post-visuals.js public/blog/<slug>.html [--fix]` (reports count + unanimated, rewrites file with `--fix`).
+- Inline SVG charts: wrap in `<div class="chart-wrap chart-entrance" data-chart role="img" aria-label="...">` — auto hover emphasis + one-time fade-up entrance; the CI generator enforces the same 3-visual floor via `BLOG_MIN_VISUALS=3` and emits `.chart-figure chart-entrance` figures.

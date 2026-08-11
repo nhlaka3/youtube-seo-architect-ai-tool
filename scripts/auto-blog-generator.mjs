@@ -56,7 +56,7 @@ const SITEMAP_FILE = resolve(PROJECT, 'sitemap.xml');
 // ── Load dependencies (project modules) ────────────────────────────
 
 const { renderBlogTemplate } = await import('../api/blog-renderer.js');
-const { validateBlogPost, countVisuals } = await import('../api/blog-validation.js');
+const { validateBlogPost, countVisuals, analyzeVisuals, fixVisualAnimations } = await import('../api/blog-validation.js');
 
 // Database for dynamic sitemap
 let dbService = null;
@@ -1478,6 +1478,18 @@ async function main() {
       console.log(`  ✅ JS visuals injected: ${Math.min(toAdd.length, uniq.length)} (total now ${countVisuals(articleHTML)})`);
     } else {
       console.log(`  🖼 Visuals already present: ${countVisuals(articleHTML)} (>= ${BLOG_MIN_VISUALS})`);
+    }
+    // AUTO-CORRECT (fix, don't just block): animate any remaining bare
+    // visual so every shipped post has 3+ ANIMATED visuals.
+    const fixRes = fixVisualAnimations(articleHTML);
+    if (fixRes.fixed > 0) {
+      articleHTML = fixRes.html;
+      console.log(`  ✏️  auto-animated ${fixRes.fixed} visual(s):`);
+      for (const r of fixRes.report) console.log('     - ' + r);
+    }
+    const { unanimated } = analyzeVisuals(articleHTML);
+    if (unanimated.length) {
+      console.log(`  ⚠ ${unanimated.length} visual(s) could not be auto-animated (${unanimated.map(u => `<${u.name}>`).join(', ')})`);
     }
   } catch (e) {
     console.log(`  ⚠ JS visual top-up skipped (non-fatal): ${e.message}`);

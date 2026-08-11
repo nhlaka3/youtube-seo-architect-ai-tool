@@ -87,7 +87,7 @@ if (!htmlPath || !slug || !title) {
 
 // ── Load project modules ───────────────────────────────────────────
 const { renderBlogTemplate } = await import('../api/blog-renderer.js');
-const { validateBlogPost, countVisuals } = await import('../api/blog-validation.js');
+const { validateBlogPost, countVisuals, analyzeVisuals, fixVisualAnimations } = await import('../api/blog-validation.js');
 
 // ── HTML helpers ───────────────────────────────────────────────────
 
@@ -227,9 +227,24 @@ if (visuals < minVisuals) {
   visuals = countVisuals(body);
   console.log(`  🎨 auto-injected ${toAdd.length} visual(s) → now ${visuals}`);
 }
+// AUTO-CORRECT (fix, don't just block): wrap any non-animated visual in an
+// animated container so the post ships with all visuals animated.
+const fixRes = fixVisualAnimations(body);
+if (fixRes.fixed > 0) {
+  body = fixRes.html;
+  console.log(`  ✏️  auto-animated ${fixRes.fixed} visual(s):`);
+  for (const r of fixRes.report) console.log('     - ' + r);
+}
+const { count: visualsFinal, unanimated } = analyzeVisuals(body);
+visuals = visualsFinal;
 if (visuals < minVisuals) {
   console.log(`\n  ❌ BLOCKED: only ${visuals} images/charts (need ${minVisuals} minimum).`);
   console.log('  Pass --min-visuals 0 to skip, or add more visuals.');
+  console.log('  Nothing was saved.');
+  process.exit(2);
+}
+if (unanimated.length) {
+  console.log(`\n  ❌ BLOCKED: ${unanimated.length} visual(s) could not be auto-animated (${unanimated.map(u => `<${u.name}>`).join(', ')}).`);
   console.log('  Nothing was saved.');
   process.exit(2);
 }
