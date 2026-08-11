@@ -127,16 +127,24 @@ def html_to_clean_markdown(html):
     return md.strip()
 
 def get_existing_articles(api_key):
-    """Fetch all existing dev.to articles to check for duplicates."""
+    """Fetch all existing dev.to articles to check for duplicates.
+
+    Uses curl (not urllib) — dev.to returns 403 Forbidden Bots to urllib's
+    User-Agent, which made this function always return an empty set and the
+    daily run would try to repost an already-published canonical (422).
+    """
+    import subprocess
     try:
-        req = urllib.request.Request(
-            'https://dev.to/api/articles/me?per_page=100',
-            headers={'api-key': api_key}
-        )
-        with urllib.request.urlopen(req) as resp:
-            articles = json.loads(resp.read())
-            # Return set of canonical URLs already posted
-            return {a.get('canonical_url', '').rstrip('/') for a in articles}
+        result = subprocess.run([
+            'curl', '-s',
+            '-H', f'api-key: {api_key}',
+            'https://dev.to/api/articles/me?per_page=100&state=published',
+        ], capture_output=True, text=True, timeout=60)
+        if result.returncode != 0:
+            raise RuntimeError(result.stderr[:200])
+        articles = json.loads(result.stdout)
+        # Return set of canonical URLs already posted
+        return {a.get('canonical_url', '').rstrip('/') for a in articles}
     except Exception as e:
         print(f"  Warning: Could not fetch existing articles: {e}")
         return set()
