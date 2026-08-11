@@ -6,7 +6,13 @@
 import { readFileSync } from 'fs';
 import { resolve } from 'path';
 import { config as loadEnv } from 'dotenv';
-loadEnv({ path: '.env.local' });
+// Prefer Vercel-pulled envs (production DB); fall back to local env file.
+const envFile = resolve(process.cwd(), '.env.vercel');
+if (readFileSync(envFile, 'utf-8').includes('DATABASE_URL=')) {
+  loadEnv({ path: '.env.vercel' });
+} else {
+  loadEnv({ path: '.env.local' });
+}
 import { initDatabase } from '../src/database/connection.js';
 import { seoPages } from '../src/database/schema.js';
 

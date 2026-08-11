@@ -944,6 +944,7 @@ app.get(['/blog/categories', '/blog/category'], async (req, res) => {
       { slug: 'youtube-subscriber-growth-2026', date: '2026-07-29' },
       { slug: 'youtube-thumbnail-tips-2026', date: '2026-07-29' },
       { slug: 'using-youtube-features-to-enhance-viewer-experience-2026', date: '2026-07-30' },
+      { slug: 'youtube-seo-tips-for-creators-in-2026', date: '2026-08-11' },
     ];
     const dbSlugs = new Set(pages.map(p => p.slug));
     for (const entry of KNOWN_BLOG_SLUGS) {
@@ -1019,6 +1020,7 @@ app.get('/blog/category/:slug', async (req, res) => {
       { slug: 'youtube-subscriber-growth-2026', date: '2026-07-29' },
       { slug: 'youtube-thumbnail-tips-2026', date: '2026-07-29' },
       { slug: 'using-youtube-features-to-enhance-viewer-experience-2026', date: '2026-07-30' },
+      { slug: 'youtube-seo-tips-for-creators-in-2026', date: '2026-08-11' },
     ];
     const dbSlugs = new Set(allPages.map(p => p.slug));
     for (const entry of KNOWN_BLOG_SLUGS) {
@@ -1083,6 +1085,7 @@ app.get('/blog', async (req, res) => {
       { slug: 'youtube-subscriber-growth-2026', date: '2026-07-29' },
       { slug: 'youtube-thumbnail-tips-2026', date: '2026-07-29' },
       { slug: 'using-youtube-features-to-enhance-viewer-experience-2026', date: '2026-07-30' },
+      { slug: 'youtube-seo-tips-for-creators-in-2026', date: '2026-08-11' },
     ];
     const dbSlugs = new Set(pages.map(p => p.slug));
     for (const entry of KNOWN_BLOG_SLUGS) {
@@ -1597,6 +1600,7 @@ function renderPillarPage() {
     { slug: 'youtube-algorithm-checklist-2026', title: 'YouTube Algorithm Checklist 2026' },
     { slug: 'youtube-seo-checklist-beginners-2026', title: 'YouTube SEO Checklist for Beginners 2026' },
     { slug: 'youtube-tags-2026', title: 'YouTube Tags 2026' },
+    { slug: 'youtube-seo-tips-for-creators-in-2026', title: 'YouTube SEO Tips for Creators in 2026' },
     { slug: 'youtube-title-examples-2026', title: 'YouTube Title Examples That Get Clicks' },
     { slug: 'how-to-keywords-youtube', title: 'How to Find YouTube Keywords' },
     { slug: 'how-to-metadata-youtube', title: 'How to Optimize YouTube Metadata' },
@@ -2470,7 +2474,7 @@ const INDEXED_COMPARISONS = new Set([
 const COMPARISON_CATEGORY_BLOGS = {
   'analytics': ['youtube-impressions-guide-2026', 'youtube-retention-graph-explained-2026'],
   'algorithm': ['how-youtube-algorithm-works-2026', 'youtube-algorithm-changes-2026'],
-  'seo-optimization': ['youtube-tags-2026', 'how-to-keywords-youtube', 'youtube-thumbnail-tips-2026', 'youtube-thumbnail-ab-testing-guide'],
+  'seo-optimization': ['youtube-tags-2026', 'how-to-keywords-youtube', 'youtube-thumbnail-tips-2026', 'youtube-thumbnail-ab-testing-guide', 'youtube-seo-tips-for-creators-in-2026'],
   'monetization': ['youtube-monetization-2026', 'maximizing-youtube-revenue-with-sponsorships-2026'],
   'content-strategy': ['developing-a-youtube-content-calendar-strategy-2026'],
   'youtube-features': ['youtube-shorts-seo-ranking-guide-2026', 'youtube-community-posts-strategy-2026', 'youtube-playlist-optimization-strategy'],
