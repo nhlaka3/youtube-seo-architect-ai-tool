@@ -142,15 +142,15 @@
        IMAGE PROTOCOL:
        ═══════════════════════════════════════════════════════════════
       - Hero: loading="eager", fetchpriority="high", 800×400.
-      - Generate with: python3 scripts/generate-blog-hero.py <slug> "Title Line 1" "Title Line 2" "Optional Line 3" "CATEGORY BADGE"
-      - Saves to: public/blog/[SLUG]-hero.png. Reference as /blog/[SLUG]-hero.png.
-      - OG image: Uses [SLUG]-og.png (1200×630 generated alongside hero).
-      - SVG: Prefer inline SVGs for technical diagrams.
-      - SECOND IMAGE: Add a diagram, screenshot, or comparison chart in the
-        implementation or trade-offs section. Run the generator again with a
-        different title for your second image:
-        python3 scripts/generate-blog-hero.py <slug>-diagram "Section Title" "" "" "DIAGRAM"
-        This creates [SLUG]-diagram-hero.png. Use loading="lazy" in-content.
+      - Generate with: node scripts/generate-hero-scene.mjs <slug> "Title Line 1" "Title Line 2" "<keyword>" "BADGE"
+        (renders a dashboard product-shot scene — retention curve + stat cards
+        + keyword search chip — via headless Chrome; NO text-on-card heroes).
+      - Saves to: public/blog/[SLUG]-hero.png (+ -hero.webp). Reference as /blog/[SLUG]-hero.png.
+      - OG image: [SLUG]-og.png (1200×630) is generated alongside the hero.
+        Commit PNGs with: git add -f (they are gitignored).
+      - SVG: Prefer inline SVGs for technical diagrams (charts — see Motion Conventions).
+      - SECOND IMAGE: Add an inline SVG chart (see scripts/blog-visuals.mjs /
+        chart-wrap pattern) in the implementation or trade-offs section.
 
        ═══════════════════════════════════════════════════════════════
        POST-PUBLISH CHECKLIST:
