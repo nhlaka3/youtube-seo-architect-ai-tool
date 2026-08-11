@@ -84,8 +84,8 @@ function main() {
     const path = resolve(BLOG_DIR, f);
     let html = readFileSync(path, 'utf-8');
 
-    // Idempotency: already has related section
-    if (/id="related-posts"|Related Posts|related-articles/.test(html)) {
+    // Idempotency: already has related section OR hub link
+    if (/id="related-posts"|Related Posts|related-articles|cluster-hub-link/.test(html)) {
       skipped++;
       continue;
     }
