@@ -1,0 +1,13 @@
+/goal Turn yt-seo-architect.vercel.app into the go-to website for YouTube SEO in 2026
+verify:
+  - 30+ indexed pages tightly focused on YouTube SEO (tools, guides, templates, case studies)
+  - At least 5 pages ranking in top 10 for core queries like “YouTube SEO”, “YouTube keyword research”, “YouTube tags”, “YouTube description template”
+  - 20+ referring domains from relevant niches (creator tools, SEO, marketing, tech blogs)
+  - Clear topic-cluster structure visible in sitemap and internal linking
+constraints:
+  - All content must be original, technically accurate, and aligned with 2026 best practices
+  - No keyword stuffing; prioritize user value and clarity
+  - Maintain fast load times and good Core Web Vitals on all new pages
+boundaries:
+  - Focus on YouTube SEO niche: keyword research, metadata optimization, tags, titles, descriptions, thumbnails, analytics, playlists, Shorts, channel growth
+  - Use the existing site structure (/blog, /tools, /guides) and extend it with topic clusters

@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 /** Read-only check: is the new post in seo_pages, and does it match what the API would query? */
 import { config as loadEnv } from 'dotenv';
-loadEnv({ path: '.env.local' });
+loadEnv({ path: '.env.vercel' });
 import { initDatabase } from '../src/database/connection.js';
 import { seoPages } from '../src/database/schema.js';
 import { eq } from 'drizzle-orm';

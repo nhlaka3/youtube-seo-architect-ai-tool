@@ -1,0 +1,7 @@
+[PASS] Gate 1: Capability Discovery
+       warning:   live tool availability not provided; MCP image tools cannot be verified from declarations
+[PASS] Gate 2: Format Completeness
+[PASS] Gate 3: Visual Verification
+       warning:   backend: playwright
+[PASS] Gate 4: Content Review
+[PASS] Gate 5: Asset + Link Integrity

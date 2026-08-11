@@ -41,7 +41,7 @@
  */
 
 import { readFileSync, writeFileSync, appendFileSync, existsSync, readdirSync, rmSync } from 'fs';
-import { resolve, dirname } from 'path';
+import { resolve, dirname, basename } from 'path';
 import { fileURLToPath } from 'url';
 import { execSync } from 'child_process';
 
@@ -1628,6 +1628,51 @@ async function main() {
   }
 
   // Skip static sitemap and blog listing updates — API handles both dynamically
+
+  // ── Hero image: every post ships with 1 hero + 3 charts ──────────
+  // The 3-chart floor is enforced by the BLOG_MIN_VISUALS gate above; the
+  // hero is generated here (topic-based scene, rendered via rsvg-convert on
+  // CI runners or headless chrome locally). Env args avoid shell-quoting
+  // issues with LLM-generated titles.
+  try {
+    const wrapTitle2 = (s, maxw = 52) => {
+      const lines = [''];
+      for (const w of s.split()) {
+        if (lines[lines.length - 1].length + w.length + 1 <= maxw) {
+          lines[lines.length - 1] = (lines[lines.length - 1] + ' ' + w).trim();
+        } else {
+          lines.push(w);
+        }
+      }
+      if (lines.length > 2) lines[1] = lines.slice(1).join(' ');
+      while (lines.length < 2) lines.push('');
+      return [lines[0].slice(0, 56), lines[1].slice(0, 56)];
+    };
+    const [hl1, hl2] = wrapTitle2(title);
+    execSync('node scripts/generate-hero-scene.mjs', {
+      cwd: PROJECT,
+      stdio: 'pipe',
+      timeout: 120000,
+      env: {
+        ...process.env,
+        HERO_SLUG: keywordEntry.slug,
+        HERO_TITLE_1: hl1,
+        HERO_TITLE_2: hl2,
+        HERO_KEYWORD: keywordEntry.keyword || keywordEntry.slug,
+        HERO_BADGE: 'GUIDE',
+      },
+    });
+    const heroAssets = ['-hero.png', '-hero.webp', '-og.png'].map((suf) =>
+      resolve(BLOG_DIR, keywordEntry.slug + suf));
+    const missing = heroAssets.filter((p) => !existsSync(p));
+    if (missing.length === 0) {
+      console.log('  ✅ Hero image generated (topic scene + og + webp)');
+    } else {
+      console.log(`  ⚠ Hero image generated but assets missing: ${missing.map((p) => basename(p)).join(', ')}`);
+    }
+  } catch (e) {
+    console.log(`  ⚠ Hero generation skipped (non-fatal): ${String(e.message).slice(0, 140)}`);
+  }
 
   // Mark keyword as done
   markDone(data, keywordEntry.slug);

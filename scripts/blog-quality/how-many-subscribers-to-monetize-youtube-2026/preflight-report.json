@@ -1,0 +1,184 @@
+{
+  "draft": "/mnt/c/Users/nhlaka/Desktop/Youtube seo tool/scripts/blog-quality/how-many-subscribers-to-monetize-youtube-2026",
+  "strict": true,
+  "blocked": false,
+  "gates": [
+    {
+      "gate": 1,
+      "name": "Capability Discovery",
+      "passed": true,
+      "violations": [],
+      "warnings": [
+        "live tool availability not provided; MCP image tools cannot be verified from declarations"
+      ],
+      "capabilities": {
+        "live_tools": [],
+        "live_tools_source": "not-provided",
+        "env_keys_present": {
+          "GOOGLE_AI_API_KEY": true,
+          "UNSPLASH_ACCESS_KEY": false,
+          "PEXELS_API_KEY": false,
+          "PIXABAY_API_KEY": false
+        },
+        "python_deps": {
+          "patchright": false,
+          "playwright": true,
+          "weasyprint": false,
+          "google.genai": false,
+          "requests": true,
+          "markdown": true
+        },
+        "project_root_files": {
+          "BRAND.md": false,
+          "VOICE.md": false,
+          "DISCOURSE.md": false
+        },
+        "agents": {
+          "blog-reviewer": true,
+          "blog-researcher": true,
+          "blog-writer": true,
+          "blog-seo": true,
+          "blog-translator": true
+        },
+        "scripts": {
+          "scripts/lint_prose.py": true,
+          "scripts/load_untrusted_root.py": true,
+          "scripts/analyze_blog.py": true
+        },
+        "image_gen_path_available": true,
+        "openverse_assumed_available": true
+      }
+    },
+    {
+      "gate": 2,
+      "name": "Format Completeness",
+      "passed": true,
+      "violations": [],
+      "warnings": [],
+      "artifacts": {
+        "slug": "how-many-subscribers-to-monetize-youtube-2026",
+        "md": [
+          "how-many-subscribers-to-monetize-youtube-2026.md"
+        ],
+        "html": [
+          "how-many-subscribers-to-monetize-youtube-2026.html"
+        ],
+        "pdf": [
+          "how-many-subscribers-to-monetize-youtube-2026.pdf"
+        ],
+        "hero": [
+          "hero.jpg",
+          "hero.png"
+        ],
+        "review_present": true
+      }
+    },
+    {
+      "gate": 3,
+      "name": "Visual Verification",
+      "passed": true,
+      "violations": [],
+      "warnings": [
+        "backend: playwright"
+      ],
+      "per_viewport": {
+        "mobile": {
+          "result": {
+            "overflows": [],
+            "bg": "rgb(250, 250, 249)",
+            "jsonLdValid": true,
+            "jsonLdType": "BlogPosting",
+            "jsonLdMissingFields": [],
+            "jsonLdVisibleConsistent": true,
+            "jsonLdConsistencyMismatches": [],
+            "jsonLdWordCount": 1771
+          },
+          "console_errors": []
+        },
+        "tablet": {
+          "result": {
+            "overflows": [],
+            "bg": "rgb(250, 250, 249)",
+            "jsonLdValid": true,
+            "jsonLdType": "BlogPosting",
+            "jsonLdMissingFields": [],
+            "jsonLdVisibleConsistent": true,
+            "jsonLdConsistencyMismatches": [],
+            "jsonLdWordCount": 1771
+          },
+          "console_errors": []
+        },
+        "desktop": {
+          "result": {
+            "overflows": [],
+            "bg": "rgb(250, 250, 249)",
+            "jsonLdValid": true,
+            "jsonLdType": "BlogPosting",
+            "jsonLdMissingFields": [],
+            "jsonLdVisibleConsistent": true,
+            "jsonLdConsistencyMismatches": [],
+            "jsonLdWordCount": 1771
+          },
+          "console_errors": [],
+          "back_button": {
+            "attempted_back": true,
+            "observation_complete": true,
+            "returned_to_previous": true,
+            "before_url": "file:///mnt/c/Users/nhlaka/Desktop/Youtube%20seo%20tool/scripts/blog-quality/how-many-subscribers-to-monetize-youtube-2026/how-many-subscribers-to-monetize-youtube-2026.html",
+            "after_url": "about:blank",
+            "checked": true,
+            "conclusive": true,
+            "obstructed": false,
+            "violation": null
+          }
+        },
+        "desktop-dark": {
+          "bg": "rgb(24, 24, 27)",
+          "light_bg": "rgb(250, 250, 249)"
+        }
+      }
+    },
+    {
+      "gate": 4,
+      "name": "Content Review",
+      "passed": true,
+      "violations": [],
+      "warnings": [],
+      "blocking": false,
+      "reason": "95/100 above threshold, no P0 issues; iteration-3 fixes verified \u2014 3 unique Tier-1 external sources, 2022 rollout cited, 2nd branded chart image present",
+      "score": 95
+    },
+    {
+      "gate": 5,
+      "name": "Asset + Link Integrity",
+      "passed": true,
+      "violations": [],
+      "warnings": [],
+      "imgs": [
+        "hero.png",
+        "how-many-subscribers-to-monetize-youtube-2026-visual-1.png"
+      ],
+      "links_checked": 10,
+      "json_ld_valid": true,
+      "declared_word_count": 1771,
+      "schema_validation_source": "source_html",
+      "actual_word_count": 1771,
+      "googlebot_byte_check": {
+        "limit_bytes": 2097152,
+        "artifact_bytes": 19823,
+        "critical_positions": {
+          "title": 297,
+          "meta": 365,
+          "canonical": 561,
+          "json_ld": 2237,
+          "main_content": 6336
+        },
+        "critical_after_cutoff": [],
+        "inline_bloat_bytes": 4082
+      },
+      "discover_check": {
+        "enabled": false
+      }
+    }
+  ]
+}

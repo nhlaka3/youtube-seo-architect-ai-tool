@@ -83,6 +83,48 @@
           "detail": "OK"
         }
       }
+    },
+    {
+      "timestamp": "2026-08-09T10:14:12.348176",
+      "results": {
+        "auto-internal-links": {
+          "success": false,
+          "detail": "node:internal/modules/cjs/loader:1386\n  throw err;\n  ^\n\nError: Cannot find module '/mnt/c/Users/nhlaka/Desktop/Youtube seo tool/scripts/auto-internal-links.mjs'\n    at Function._resolveFilename (node:"
+        },
+        "generate-comparisons": {
+          "success": true,
+          "detail": "OK"
+        },
+        "auto-index": {
+          "success": true,
+          "detail": "Submitted core pages"
+        },
+        "competitor-backlink-replicator": {
+          "success": true,
+          "detail": "OK"
+        }
+      }
+    },
+    {
+      "timestamp": "2026-08-11T18:18:51.857110",
+      "results": {
+        "auto-internal-links": {
+          "success": false,
+          "detail": "node:internal/modules/cjs/loader:1386\n  throw err;\n  ^\n\nError: Cannot find module '/mnt/c/Users/nhlaka/Desktop/Youtube seo tool/scripts/auto-internal-links.mjs'\n    at Function._resolveFilename (node:"
+        },
+        "generate-comparisons": {
+          "success": true,
+          "detail": "OK"
+        },
+        "auto-index": {
+          "success": true,
+          "detail": "Submitted core pages"
+        },
+        "competitor-backlink-replicator": {
+          "success": true,
+          "detail": "OK"
+        }
+      }
     }
   ]
 }

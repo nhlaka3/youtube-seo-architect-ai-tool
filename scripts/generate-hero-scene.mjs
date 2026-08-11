@@ -21,17 +21,24 @@ import { resolve, join } from 'path';
 import { homedir } from 'os';
 
 const args = process.argv.slice(2);
-const SLUG = args[0] || 'generic';
-const TITLE_L1 = args[1] || 'Blog Post';
-const TITLE_L2 = args[2] || '';
-const KEYWORD = args[3] || 'youtube seo tips 2026';
-const BADGE = (args[4] || 'BLOG').toUpperCase();
+// Env-based args (CI-safe: no shell quoting issues with titles/keywords)
+const SLUG = process.env.HERO_SLUG || args[0] || 'generic';
+const TITLE_L1 = process.env.HERO_TITLE_1 || args[1] || 'Blog Post';
+const TITLE_L2 = process.env.HERO_TITLE_2 || args[2] || '';
+const KEYWORD = process.env.HERO_KEYWORD || args[3] || 'youtube seo tips 2026';
+const BADGE = (process.env.HERO_BADGE || args[4] || 'BLOG').toUpperCase();
 
 const OUT = resolve(process.cwd(), 'public', 'blog');
 mkdirSync(OUT, { recursive: true });
 const TMP = '/tmp/hero-scenes';
 mkdirSync(TMP, { recursive: true });
 
+// ── Rasterizer: prefer rsvg-convert (GitHub runners, no Chrome), fall back
+//    to the cached headless Chromium (local WSL) ─────────────────────
+function hasCmd(cmd) {
+  try { execFileSync('which', [cmd], { stdio: 'pipe' }); return true; } catch { return false; }
+}
+const RSVG = hasCmd('rsvg-convert');
 function findChrome() {
   for (const base of [join(homedir(), '.cache', 'ms-playwright'), '/home/nhlaka/.cache/ms-playwright']) {
     if (!existsSync(base)) continue;
@@ -43,8 +50,11 @@ function findChrome() {
   }
   return null;
 }
-const CHROME = findChrome();
-if (!CHROME) { console.error('✋ chrome-headless-shell not found'); process.exit(1); }
+const CHROME = RSVG ? null : findChrome();
+if (!RSVG && !CHROME) {
+  console.error('✋ No rasterizer found: install librsvg2-bin (apt) or playwright chrome-headless-shell');
+  process.exit(1);
+}
 
 function hashStr(s) {
   let h = 5381;
@@ -381,7 +391,15 @@ function sceneSvg() {
 </svg>`;
 }
 
-function shot(htmlPath, pngPath, w, h) {
+function shot(svgStr, pngPath, w, h) {
+  const svgPath = join(TMP, `${SLUG}-${w}x${h}.svg`);
+  writeFileSync(svgPath, svgStr);
+  if (RSVG) {
+    execFileSync('rsvg-convert', ['-w', String(w), '-h', String(h), svgPath, '-o', pngPath], { stdio: 'pipe' });
+    return;
+  }
+  const htmlPath = join(TMP, `${SLUG}-${w}x${h}.html`);
+  writeFileSync(htmlPath, `<div style="width:${w}px;height:${h}px;margin:0;overflow:hidden;background:#0a0b10"><div style="width:${w}px;height:${h}px">${svgStr}</div></div>`);
   execFileSync(CHROME, [
     '--headless', '--disable-gpu', '--no-sandbox', '--hide-scrollbars',
     '--force-device-scale-factor=1', `--window-size=${w},${h}`,
@@ -390,19 +408,20 @@ function shot(htmlPath, pngPath, w, h) {
 }
 
 const svg = sceneSvg();
-const heroHtml = `${svg}`;
-const heroPath = join(TMP, `${SLUG}-hero.html`);
-writeFileSync(heroPath, heroHtml);
 const heroPng = join(OUT, `${SLUG}-hero.png`);
-shot(heroPath, heroPng, 800, 400);
+shot(svg, heroPng, 800, 400);
 
-const ogHtml = `<div style="width:1200px;height:630px;margin:0;overflow:hidden;background:#0a0b10"><div style="transform:translateY(15px) scale(1.5);transform-origin:top left;width:800px;height:400px">${svg}</div></div>`;
-const ogPath = join(TMP, `${SLUG}-og.html`);
-writeFileSync(ogPath, ogHtml);
+// OG 1200×630: render the 2:1 scene at 1200×600, pad 15px top/bottom (no stretch)
 const ogPng = join(OUT, `${SLUG}-og.png`);
-shot(ogPath, ogPng, 1200, 630);
+if (RSVG) {
+  const og600 = join(TMP, `${SLUG}-og-600.png`);
+  shot(svg, og600, 1200, 600);
+  execFileSync('ffmpeg', ['-y', '-i', og600, '-vf', 'pad=1200:630:0:15:color=#0a0b10', ogPng], { stdio: 'pipe' });
+} else {
+  shot(svg, ogPng, 1200, 630);
+}
 
 const heroWebp = join(OUT, `${SLUG}-hero.webp`);
 execFileSync('ffmpeg', ['-y', '-i', heroPng, '-c:v', 'libwebp', '-quality', '82', heroWebp], { stdio: 'pipe' });
 
-console.log(`✅ ${SLUG}-hero.png (800×400) archetype: ${ARCH} | accent: ${A}`);
+console.log(`✅ ${SLUG}-hero.png (800×400) archetype: ${ARCH} | raster: ${RSVG ? 'rsvg-convert' : 'chrome'}`);
