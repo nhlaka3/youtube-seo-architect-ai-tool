@@ -29,7 +29,15 @@ function hashStr(s) {
 function barW(v) { return Math.max(18, Math.min(300, Math.round(3 * v))); }
 
 function svgOpen(w, h, label) {
-  return `<svg viewBox="0 0 ${w} ${h}" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="${label}" style="width:100%;height:auto;max-width:620px;display:block;margin:0 auto">`;
+  return `<svg viewBox="0 0 ${w} ${h}" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="${label}" style="width:100%;height:auto;max-width:620px;display:block;margin:0 auto"><style>
+.bar-grow{transform-box:fill-box;transform-origin:left center;animation:barGrow .9s cubic-bezier(.16,1,.3,1) both}
+@keyframes barGrow{from{transform:scaleX(0)}to{transform:scaleX(1)}}
+.pop{transform-box:fill-box;transform-origin:center;animation:popIn .6s cubic-bezier(.34,1.56,.64,1) both}
+@keyframes popIn{from{transform:scale(0)}to{transform:scale(1)}}
+.fade-in{opacity:0;animation:fadeIn .7s ease-out forwards}
+@keyframes fadeIn{to{opacity:1}}
+@media (prefers-reduced-motion: reduce){.bar-grow,.pop,.fade-in{animation:none!important;opacity:1!important;transform:none!important}}
+</style>`;
 }
 const svgClose = '</svg>';
 const FIG_START = (type, label) =>
@@ -52,8 +60,8 @@ function keywordChart(keyword) {
   const colors = ['#4ade80', '#fb923c', '#a5b4fc', '#f472b6'];
   bars.forEach((b, i) => {
     rows += `<text x="24" y="${y + 14}" font-family="sans-serif" font-size="12" fill="#c4b5fd">${b.label}</text>`;
-    rows += `<rect x="170" y="${y}" width="${barW(b.v)}" height="18" rx="5" fill="${colors[i]}" opacity="0.9"/>`;
-    rows += `<text x="${178 + barW(b.v)}" y="${y + 14}" font-family="sans-serif" font-size="11" fill="#e2e8f0">${b.v}</text>`;
+    rows += `<g class="bar-grow" style="animation-delay:${(0.1 + i * 0.12).toFixed(2)}s"><rect x="170" y="${y}" width="${barW(b.v)}" height="18" rx="5" fill="${colors[i]}" opacity="0.9"/></g>`;
+    rows += `<text class="fade-in" style="animation-delay:${(0.6 + i * 0.12).toFixed(2)}s" x="${178 + barW(b.v)}" y="${y + 14}" font-family="sans-serif" font-size="11" fill="#e2e8f0">${b.v}</text>`;
     y += 44;
   });
   const label = `Illustrative keyword opportunity scores for ${k}`;
@@ -82,8 +90,8 @@ function metadataChart(slug) {
   const colors = ['#4ade80', '#fb923c', '#a5b4fc', '#f472b6'];
   bars.forEach((b, i) => {
     rows += `<text x="24" y="${y + 14}" font-family="sans-serif" font-size="12" fill="#c4b5fd">${b.label}</text>`;
-    rows += `<rect x="170" y="${y}" width="${barW(b.v)}" height="18" rx="5" fill="${colors[i]}" opacity="0.9"/>`;
-    rows += `<text x="${178 + barW(b.v)}" y="${y + 14}" font-family="sans-serif" font-size="11" fill="#e2e8f0">${b.v}</text>`;
+    rows += `<g class="bar-grow" style="animation-delay:${(0.1 + i * 0.12).toFixed(2)}s"><rect x="170" y="${y}" width="${barW(b.v)}" height="18" rx="5" fill="${colors[i]}" opacity="0.9"/></g>`;
+    rows += `<text class="fade-in" style="animation-delay:${(0.6 + i * 0.12).toFixed(2)}s" x="${178 + barW(b.v)}" y="${y + 14}" font-family="sans-serif" font-size="11" fill="#e2e8f0">${b.v}</text>`;
     y += 44;
   });
   const label = 'Illustrative metadata scorecard for the steps in this guide';
@@ -104,8 +112,8 @@ function flowChart() {
   let boxes = '';
   steps.forEach((s, i) => {
     const x = 40 + i * 128;
-    boxes += `<rect x="${x}" y="120" width="104" height="52" rx="10" fill="#1e1b4b" stroke="#4f46e5" stroke-width="1.5"/>`;
-    boxes += `<text x="${x + 52}" y="150" text-anchor="middle" font-family="sans-serif" font-size="12" font-weight="700" fill="#a5b4fc">${s}</text>`;
+    boxes += `<g class="pop" style="animation-delay:${(0.1 + i * 0.15).toFixed(2)}s"><rect x="${x}" y="120" width="104" height="52" rx="10" fill="#1e1b4b" stroke="#4f46e5" stroke-width="1.5"/>`;
+    boxes += `<text x="${x + 52}" y="150" text-anchor="middle" font-family="sans-serif" font-size="12" font-weight="700" fill="#a5b4fc">${s}</text></g>`;
     if (i < steps.length - 1) {
       boxes += `<text x="${x + 106}" y="148" font-family="sans-serif" font-size="16" fill="#4f46e5">→</text>`;
     }
