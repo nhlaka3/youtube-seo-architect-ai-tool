@@ -163,8 +163,9 @@ jobs:
         run: |
           git config user.name "YT SEO Bot"
           git config user.email "hnhlaka142@gmail.com"
-          # hero PNGs/webp are gitignored — force-add so every post ships its hero
-          git add -f public/blog/*-hero.png public/blog/*-hero.webp public/blog/*-og.png 2>/dev/null || true
+          # hero/og/matplotlib PNGs + webp are gitignored — force-add so every
+          # post ships its hero, og image, and in-article visuals
+          git add -f public/blog/*.png public/blog/*.webp 2>/dev/null || true
           git add -A
           if git diff --staged --quiet; then
             echo "✅ No changes to commit"
