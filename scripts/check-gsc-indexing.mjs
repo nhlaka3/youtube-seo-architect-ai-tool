@@ -142,10 +142,20 @@ async function main() {
   const token = await getToken(key);
   console.log('✅ Authenticated to Google Search Console\n');
 
-  // Load sitemap for URL discovery
-  const smRes = await fetch(`${SITE}/sitemap.xml`);
-  const smXml = await smRes.text();
-  const locs = [...smXml.matchAll(/<loc>([^<]+)<\/loc>/g)].map(m => m[1]).filter(u => u.startsWith(SITE));
+  // Load sitemap for URL discovery — recurse through sitemap indexes
+  // (sitemap.xml is an index pointing at sitemap-core.xml etc.)
+  async function loadSitemapLocs(url) {
+    const res = await fetch(url);
+    const xml = await res.text();
+    const locs = [...xml.matchAll(/<loc>([^<]+)<\/loc>/g)].map(m => m[1]);
+    const out = [];
+    for (const loc of locs) {
+      if (loc.includes('sitemap-') && loc.endsWith('.xml')) out.push(...await loadSitemapLocs(loc));
+      else if (loc.startsWith(SITE)) out.push(loc);
+    }
+    return out;
+  }
+  const locs = await loadSitemapLocs(`${SITE}/sitemap.xml`);
   console.log(`📋 Sitemap: ${locs.length} URLs`);
 
   // Choose URLs
