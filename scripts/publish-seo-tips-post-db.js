@@ -15,6 +15,7 @@ if (readFileSync(envFile, 'utf-8').includes('DATABASE_URL=')) {
 }
 import { initDatabase } from '../src/database/connection.js';
 import { seoPages } from '../src/database/schema.js';
+import { countVisuals } from '../api/blog-validation.js';
 
 const POST = {
   file: 'public/blog/youtube-seo-tips-for-creators-in-2026.html',
@@ -52,9 +53,18 @@ async function main() {
   const fullHtml = readFileSync(resolve(process.cwd(), POST.file), 'utf-8');
   const content = extractArticleContent(fullHtml);
   const wordCount = countWords(content);
-  console.log(`Slug: ${POST.slug} | Word count: ${wordCount}`);
+  const visuals = countVisuals(content);
+  console.log(`Slug: ${POST.slug} | Word count: ${wordCount} | Visuals: ${visuals}`);
   if (wordCount < 1200) {
     console.error(`Word count ${wordCount} below 1200 minimum — aborting.`);
+    process.exit(1);
+  }
+  if (visuals < 3) {
+    console.error(`Only ${visuals} visuals (images/inline SVG) — site standard requires 3+ (see AGENTS.md Motion Conventions). Aborting.`);
+    process.exit(1);
+  }
+  if (!fullHtml.includes('motion-utilities.css')) {
+    console.error('Missing motion-utilities.css link — post visuals will not be animated. Aborting.');
     process.exit(1);
   }
   await db.insert(seoPages).values({

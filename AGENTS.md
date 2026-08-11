@@ -842,3 +842,11 @@ Shared layer: `public/motion-utilities.css` (linked in ALL static pages via `scr
 - When adding NEW pages/templates: always include `<link rel="stylesheet" href="/motion-utilities.css">`.
 - Re-run `python3 scripts/batch-add-motion-css.py` after adding new static HTML files (idempotent).
 - Framework reference: `web-animation` skill (motion taxonomy, sector vocabulary, Golden Rules).
+
+### Blog image standard (3+ animated visuals)
+
+Every blog post requires >= 3 visuals inside `<article>` — images (`<img>`), `<object>` embeds, or inline `<svg>` charts — and the `motion-utilities.css` link in `<head>` so they animate (hover-zoom / chart entrance / hover emphasis; reduced-motion safe).
+
+- Enforced before DB publish by `scripts/publish-seo-tips-post-db.js` (fails if < 3 or missing motion link).
+- Manual check: `node scripts/check-post-visuals.js public/blog/<slug>.html`.
+- Inline SVG charts: wrap in `<div class="chart-wrap chart-entrance" data-chart role="img" aria-label="...">` — auto hover emphasis + one-time fade-up entrance; the CI generator enforces the same 3-visual floor via `BLOG_MIN_VISUALS=3`.

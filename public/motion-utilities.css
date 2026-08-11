@@ -73,6 +73,15 @@ article img:hover,
   transform: scale(1.015);
 }
 
+/* ── Chart entrance — one-time fade-up (GPU-safe; opt-in .chart-entrance) ── */
+.chart-entrance {
+  animation: chartIn 0.8s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+@keyframes chartIn {
+  from { opacity: 0; transform: translateY(12px); }
+  to   { opacity: 1; transform: none; }
+}
+
 /* ── Reduced motion: disable everything above ── */
 @media (prefers-reduced-motion: reduce) {
   article img, .content img, .entry-content img, .blog-body img,
