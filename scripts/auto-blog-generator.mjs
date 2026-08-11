@@ -1651,7 +1651,7 @@ async function main() {
     const [hl1, hl2] = wrapTitle2(title);
     execSync('node scripts/generate-hero-scene.mjs', {
       cwd: PROJECT,
-      stdio: 'pipe',
+      stdio: 'inherit', // stream hero-gen logs straight into the workflow output
       timeout: 120000,
       env: {
         ...process.env,

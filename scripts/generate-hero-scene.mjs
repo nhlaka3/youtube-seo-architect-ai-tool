@@ -391,20 +391,30 @@ function sceneSvg() {
 </svg>`;
 }
 
+function run(cmd, args, opts = {}) {
+  try {
+    execFileSync(cmd, args, { stdio: 'pipe', ...opts });
+  } catch (e) {
+    console.error(`❌ ${cmd} failed: ${e.message}`);
+    if (e.stderr) console.error(String(e.stderr).slice(0, 2000));
+    process.exit(1);
+  }
+}
+
 function shot(svgStr, pngPath, w, h) {
   const svgPath = join(TMP, `${SLUG}-${w}x${h}.svg`);
   writeFileSync(svgPath, svgStr);
   if (RSVG) {
-    execFileSync('rsvg-convert', ['-w', String(w), '-h', String(h), svgPath, '-o', pngPath], { stdio: 'pipe' });
+    run('rsvg-convert', ['-w', String(w), '-h', String(h), svgPath, '-o', pngPath]);
     return;
   }
   const htmlPath = join(TMP, `${SLUG}-${w}x${h}.html`);
   writeFileSync(htmlPath, `<div style="width:${w}px;height:${h}px;margin:0;overflow:hidden;background:#0a0b10"><div style="width:${w}px;height:${h}px">${svgStr}</div></div>`);
-  execFileSync(CHROME, [
+  run(CHROME, [
     '--headless', '--disable-gpu', '--no-sandbox', '--hide-scrollbars',
     '--force-device-scale-factor=1', `--window-size=${w},${h}`,
     '--virtual-time-budget=4000', `--screenshot=${pngPath}`, `file://${htmlPath}`,
-  ], { stdio: 'pipe' });
+  ]);
 }
 
 const svg = sceneSvg();
@@ -416,12 +426,12 @@ const ogPng = join(OUT, `${SLUG}-og.png`);
 if (RSVG) {
   const og600 = join(TMP, `${SLUG}-og-600.png`);
   shot(svg, og600, 1200, 600);
-  execFileSync('ffmpeg', ['-y', '-i', og600, '-vf', 'pad=1200:630:0:15:color=#0a0b10', ogPng], { stdio: 'pipe' });
+  run('ffmpeg', ['-y', '-i', og600, '-vf', 'pad=1200:630:0:15:color=#0a0b10', ogPng]);
 } else {
   shot(svg, ogPng, 1200, 630);
 }
 
 const heroWebp = join(OUT, `${SLUG}-hero.webp`);
-execFileSync('ffmpeg', ['-y', '-i', heroPng, '-c:v', 'libwebp', '-quality', '82', heroWebp], { stdio: 'pipe' });
+run('ffmpeg', ['-y', '-i', heroPng, '-c:v', 'libwebp', '-quality', '82', heroWebp]);
 
 console.log(`✅ ${SLUG}-hero.png (800×400) archetype: ${ARCH} | raster: ${RSVG ? 'rsvg-convert' : 'chrome'}`);

@@ -70,10 +70,11 @@ jobs:
         run: |
           python3 -m pip install --quiet matplotlib
 
-      - name: 🖼️ Install hero image rasterizer (librsvg)
+      - name: 🖼️ Install hero image rasterizer (librsvg + ffmpeg)
         run: |
-          sudo apt-get update -qq && sudo apt-get install -y -qq librsvg2-bin
+          sudo apt-get update -qq && sudo apt-get install -y -qq librsvg2-bin ffmpeg
           rsvg-convert --version
+          ffmpeg -version | head -1
 
       - name: 🏗️ Build command
         id: build-cmd
