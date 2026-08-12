@@ -1984,15 +1984,26 @@ async function buildSitemapChunks() {
   }
 
   // Blog posts (validated)
+  const emittedBlogSlugs = new Set();
   for (const page of allPages) {
     const validation = validateBlogPost({
       slug: page.slug, title: page.title, content: page.content, wordCount: page.wordCount,
     });
     if (!validation.valid) continue;
+    emittedBlogSlugs.add(page.slug);
     const date = page.publishedAt ? new Date(page.publishedAt).toISOString().split('T')[0] : '2026-05-27';
     core += `  <url><loc>${site}/blog/${page.slug}</loc><lastmod>${date}</lastmod></url>\n`;
   }
+
+  // Auto-generated registry posts (static files on disk; can't pass content
+  // validation without a DB row — emit directly since the pages are indexable)
+  for (const e of BLOG_SLUGS_EXTRA) {
+    if (emittedBlogSlugs.has(e.slug)) continue;
+    core += `  <url><loc>${site}/blog/${e.slug}</loc><lastmod>${e.date}</lastmod></url>\n`;
+    emittedBlogSlugs.add(e.slug);
+  }
   core += footer;
+
 
   // ── Chunk 2: glossary term pages (en/es/pt) ──
   let terms = header;
