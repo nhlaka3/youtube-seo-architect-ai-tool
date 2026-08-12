@@ -76,6 +76,26 @@ jobs:
           rsvg-convert --version
           ffmpeg -version | head -1
 
+      - name: 🔐 Pull DATABASE_URL from Vercel (production env)
+        env:
+          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+        run: |
+          # Link project + pull production envs so the generator can DB-insert posts
+          # (no DATABASE_URL secret on the repo — Vercel holds the prod value).
+          npx --yes vercel@latest link --yes --project yt-seo-architect --token="$VERCEL_TOKEN" >/dev/null 2>&1 || true
+          npx --yes vercel@latest env pull .env.vercel --environment=production --yes --token="$VERCEL_TOKEN" >/dev/null 2>&1 || true
+          if [ -f .env.vercel ]; then
+            DB_URL=$(grep -E '^DATABASE_URL=' .env.vercel | head -1 | cut -d= -f2- | tr -d '"' | tr -d "'")
+            if [ -n "$DB_URL" ]; then
+              echo "DATABASE_URL=$DB_URL" >> "$GITHUB_ENV"
+              echo "✅ DATABASE_URL pulled from Vercel ($(echo -n $DB_URL | wc -c) chars)"
+            else
+              echo "⚠ DATABASE_URL not found in .env.vercel — DB insert will be skipped"
+            fi
+          else
+            echo "⚠ vercel env pull failed — DB insert will be skipped"
+          fi
+
       - name: 🏗️ Build command
         id: build-cmd
         run: |
