@@ -214,8 +214,14 @@ async function main() {
   }
 
   const idxHtml = generateIndex();
-  writeFileSync(resolve(OUT_DIR, 'index.html'), idxHtml);
-  console.log(`  ✅ index.html  (${(idxHtml.length / 1024).toFixed(1)} KB) — Guides hub`);
+  // Hub (index.html) is maintained separately (pillar cards + modern design) —
+  // only write it if it doesn't exist yet, so the daily workflow never clobbers it.
+  if (!existsSync(resolve(OUT_DIR, 'index.html'))) {
+    writeFileSync(resolve(OUT_DIR, 'index.html'), idxHtml);
+    console.log(`  ✅ index.html  (${(idxHtml.length / 1024).toFixed(1)} KB) — Guides hub`);
+  } else {
+    console.log('  ⏭ index.html exists — hub is maintained separately, skipping');
+  }
   console.log('');
   console.log(`  Summary: ${count} how-to guides + index`);
 }
