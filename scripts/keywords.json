@@ -1,6 +1,6 @@
 {
   "description": "Curated low-competition YouTube SEO keywords. Each entry has a keyword, slug, category, and status (pending/done/skipped). The generator picks the next 'pending' keyword.",
-  "lastUpdated": "2026-08-11",
+  "lastUpdated": "2026-08-12",
   "keywords": [
     {
       "keyword": "youtube community posts strategy 2026",
@@ -1010,6 +1010,27 @@
       "status": "done",
       "notes": "Emergency force-add (demand 5/100, rankability 52/100)",
       "generatedAt": "2026-08-11T06:51:25.889Z"
+    },
+    {
+      "keyword": "youtube optimization for new channels in 2026",
+      "slug": "youtube-optimization-for-new-channels-in-2026",
+      "category": "Growth",
+      "status": "pending",
+      "notes": "Emergency force-add (demand 5/100, rankability 52/100)"
+    },
+    {
+      "keyword": "increasing youtube engagement through social media 2026",
+      "slug": "increasing-youtube-engagement-through-social-media-2026",
+      "category": "Engagement",
+      "status": "pending",
+      "notes": "Emergency force-add (demand 5/100, rankability 52/100)"
+    },
+    {
+      "keyword": "youtube thumbnail templates for tutorials in 2026",
+      "slug": "youtube-thumbnail-templates-for-tutorials-in-2026",
+      "category": "Thumbnails",
+      "status": "pending",
+      "notes": "Emergency force-add (demand 5/100, rankability 52/100)"
     }
   ]
 }
