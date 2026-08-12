@@ -33,11 +33,15 @@ SITE FACTS (copy-paste for every form)
 
 BEST ASSET PER DIRECTORY (link the tool, not the homepage)
 ----------------------------------------------------------
+- Pillar guide (best): https://yt-seo-architect.vercel.app/guides/youtube-seo-strategy-2026
+- Pillar guide #2:      https://yt-seo-architect.vercel.app/guides/youtube-keyword-research-master-guide
 - Tag Generator:      https://yt-seo-architect.vercel.app/tools/tag-generator
 - Title Optimizer:    https://yt-seo-architect.vercel.app/tools/title-optimizer
 - Keyword Research:   https://yt-seo-architect.vercel.app/tools/keywords-youtube
 - Description Writer: https://yt-seo-architect.vercel.app/tools/description-writer
 - Full tools index:   https://yt-seo-architect.vercel.app/tools/
+(Updated 2026-08-12: the /guides pillar pages are now the strongest authority
+assets — 1,700-2,100 words each, schema, FAQ. Link these for directory submits.)
 
 DIRECTORY LIST (17 free, from BACKLINK-STRATEGY.md Tier 2)
 ===========================================================
@@ -61,15 +65,20 @@ DIRECTORY LIST (17 free, from BACKLINK-STRATEGY.md Tier 2)
 
 BONUS (beyond directories — more domains)
 =========================================
-[ ] dev.to (DONE — DR 91, 4+ posts live w/ canonical)
-[ ] Medium (needs MEDIUM_SID + MEDIUM_UID secrets)
-[ ] Hashnode (needs HASHNODE_TOKEN + PUBLICATION_ID secrets)
+[x] dev.to (DONE — DR 91, 4+ posts live w/ canonical, daily crossposter runs)
+[ ] Medium (needs MEDIUM_SID + MEDIUM_UID secrets — run npm run publish-to-medium once creds set)
+[ ] Hashnode (needs HASHNODE_TOKEN + PUBLICATION_ID secrets — set in GH Actions)
 [ ] Quora (answer "youtube seo tool" / "vidiq alternative" questions)
 [ ] Reddit r/NewTubers (1 post/month max, 90/10 rule)
-[ ] GitHub (opensource/ as proper repo → README + badges)
+[x] GitHub (DONE — youtube-title-scorer public repo + 5 awesome-* repos, README
+    + badges link back; github.com counts once as a referring domain)
 
 PROGRESS TRACKING
 =================
 Add the domain + date here as you complete each:
 - dev.to — 2026-08-11 (4 posts live, canonical back to blog)
+- github.com — 2026-08-12 (repo exists since May, verified README links)
+- broken-link outreach — 2026-08-12: 4 fresh prospects in
+  marketing/backlink-reports/opportunities-2026-08-12.csv (c-istudios.com page,
+  broken links: outbrain/ahrefs/apollo/taboola). Needs SMTP creds to send.
 - (next: ___)
