@@ -799,6 +799,30 @@ export function renderBlogTemplate(page) {
         <a href="${templateUrl}" style="display:inline-block;background:var(--green, #00ff88);color:#000;padding:0.75rem 2rem;border-radius:8px;text-decoration:none;font-weight:700;">Open the Template →</a>
       </div>`;
   }
+
+  // 3d. Pillar-cluster CTA — links cluster articles back to their pillar guide.
+  // Keep in sync with scripts/pillars-data.js clusters lists.
+  const PILLAR_BLOG_MAP = {
+    "youtube-seo-strategy-2026": ["youtube-seo-tips-for-creators-in-2026", "youtube-seo-checklist-beginners-2026", "best-youtube-seo-tools-2026", "youtube-seo-examples-2026", "youtube-seo-audit-diagnostic-fix-2026", "youtube-algorithm-best-strategies-2026", "youtube-for-small-channels-2026", "youtube-seo-for-business-channels-2026", "how-youtube-algorithm-works-2026"],
+    "youtube-keyword-research-master-guide": ["how-to-keywords-youtube", "youtube-tags-2026", "youtube-competitor-analysis-reverse-engineer", "youtube-seo-for-gaming-channels-2026", "youtube-seo-for-cooking-channels-2026", "youtube-metadata-auditor-vs-vidiq-shadow-ban"],
+    "youtube-metadata-optimization": ["how-to-metadata-youtube", "youtube-title-examples-2026", "youtube-description-templates-2026", "youtube-chapter-timestamps-seo-guide", "youtube-thumbnail-tips-2026", "what-does-youtube-ctr-actually-mean", "youtube-impressions-guide-2026", "youtube-intro-hook-first-3-seconds", "youtube-thumbnail-ab-testing-guide"],
+    "youtube-channel-growth-analytics": ["youtube-subscriber-growth-2026", "youtube-analytics-explained-2026", "youtube-analytics-4-metrics-that-matter", "how-to-increase-youtube-retention-2026", "youtube-community-posts-strategy-2026", "youtube-playlist-optimization-strategy", "youtube-end-screens-cards-guide-2026", "youtube-retention-graph-explained-2026"],
+  };
+  const PILLAR_NAMES = {
+    "youtube-seo-strategy-2026": "Complete YouTube SEO Strategy 2026",
+    "youtube-keyword-research-master-guide": "YouTube Keyword Research Master Guide",
+    "youtube-metadata-optimization": "YouTube Metadata Optimization",
+    "youtube-channel-growth-analytics": "Channel Growth & Analytics",
+  };
+  const pillarKey = Object.keys(PILLAR_BLOG_MAP).find(k =>
+    PILLAR_BLOG_MAP[k].includes(blogSlug) || PILLAR_BLOG_MAP[k].includes(page.slug));
+  if (pillarKey) {
+    const pillarUrl = `/guides/${pillarKey}`;
+    const pillarName = PILLAR_NAMES[pillarKey] || 'Pillar Guide';
+    contentHTML += `\n      <div class="pillar-cta" style="background:rgba(0,242,255,0.04);border-left:3px solid #00f2ff;border-radius:8px;padding:.7rem 1rem;margin:1.25rem 0;font-size:.93rem;color:#cbd5e1;">
+        📖 This article is part of the <a href="${pillarUrl}" style="color:#00f2ff;text-decoration:none;font-weight:600;">${pillarName}</a> cluster — read the full guide for the complete system.
+      </div>`;
+  }
   // 3c. Try-the-Tool CTA (if a corresponding interactive tool page exists AND no template matched)
   // Dynamically check if a tool file exists for this blog slug
   let toolExists = false;
