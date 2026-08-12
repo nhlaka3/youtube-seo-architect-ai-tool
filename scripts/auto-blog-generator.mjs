@@ -439,6 +439,27 @@ async function generateSectionViaNvidia(systemPrompt, sectionPrompt) {
   return cleanHTML(content);
 }
 
+// ── Fabricated-statistics gate ──────────────────────────────────
+// The AI occasionally ignores the prompt's factuality rules and invents
+// percentages/attributions ("70% of creators", "a study by Hootsuite").
+// Detect after each section; regenerate, then scrub as last resort.
+
+const FABRICATED_STAT_RE = /(according to|a study (by|from)|studies (show|suggest|found)|research (shows|found|suggests)|survey (found|shows)|we analyzed (data|metrics|results)|our (research|analysis) (found|shows)|(\d{1,3}% of (youtube )?(creators|viewers|channels|users|marketers|businesses|influencers))|(\d{1,3}% (increase|decrease|boost|more|higher|uplift|lift)))/i;
+
+function hasFabricatedStats(html) {
+  return FABRICATED_STAT_RE.test(html || '');
+}
+
+function scrubFabricatedStats(html) {
+  // Remove <p>/<li> blocks that contain fabricated-stat patterns (last resort)
+  let out = html;
+  out = out.replace(/<p[^>]*>[\s\S]*?<\/p>/gi, m => FABRICATED_STAT_RE.test(m) ? '' : m);
+  out = out.replace(/<li[^>]*>[\s\S]*?<\/li>/gi, m => FABRICATED_STAT_RE.test(m) ? '' : m);
+  return out;
+}
+
+// ── Section generation ──────────────────────────────────────────
+
 async function generateSection(systemPrompt, sectionPrompt) {
   const groqKey = process.env.GROQ_API_KEY;
   const geminiKey = process.env.GEMINI_API_KEY;
@@ -494,7 +515,7 @@ async function generateArticle(keyword, slug) {
       sections: [
         { id: 'definition', prompt: `Write section 1 of a blog post about "${keyword}" (${year}). DEFINITION and INTRODUCTION.
 H2: <h2 id="definition">What Is [Topic] and Why It Matters in ${year}</h2>
-300-400 words. Define the concept, explain why it matters for YouTube creators. Include a statistic ONLY if you can cite a real primary source inline; otherwise keep claims qualitative.
+300-400 words. Define the concept, explain why it matters for YouTube creators. Do NOT include statistics, percentages, or attributed findings — write claims qualitatively.
 End with: <div class="tip-card"><strong>\ud83d\udca1 EXPERT TIP:</strong> [pro tip]</div>
 Return ONLY the HTML.` },
         { id: 'deep-dive', prompt: `Write section 2 of a blog post about "${keyword}" (${year}). DEEP DIVE.
@@ -662,7 +683,7 @@ End with CTA to /dashboard. Return ONLY the HTML.` },
       sections: [
         { id: 'hook', prompt: `Write the HOOK for a data-driven article about "${keyword}" (${year}).
 H2: <h2 id="hook">The Numbers Don't Lie: [Topic] in ${year}</h2>
-200-300 words. Open with a striking fact or question, or a common creator pain point. Use a statistic only if it is real and citable.
+200-300 words. Open with a striking fact or question, or a common creator pain point. Do NOT include statistics, percentages, or attributed findings — write claims qualitatively.
 Include: <div class="tip-card"><strong>\ud83d\udca1 KEY INSIGHT:</strong> [one-sentence takeaway]</div>
 Return ONLY the HTML.` },
         { id: 'data-overview', prompt: `Write DATA OVERVIEW for "${keyword}" (${year}).
@@ -711,16 +732,19 @@ CRITICAL RULES — VIOLATION = REJECTION:
 - Also AVOID: "take it to the next level", "ultimate guide" (overused),
   "comprehensive" (AI signal), "myriad", "plethora", "facilitate"
 - FACTUALITY (hard rule, same weight as the ban list above):
-  - NEVER invent statistics, percentages, surveys, studies, or quotes.
+  - ABSOLUTE BAN: do NOT include statistics, percentages, survey results,
+    or attributed numeric findings ("70% of creators", "a study by Hootsuite",
+    "research shows", "we analyzed data") ANYWHERE in the article.
   - NEVER attribute a number or finding to a real company, tool, or person
-    (e.g. "a study by Hootsuite", "according to Pew Research", "TubeFilter found")
-    unless you are certain of the finding AND you include an inline link to the
-    primary source. A fabricated attribution is a hard violation.
+    (e.g. "a study by Hootsuite", "according to Pew Research", "TubeFilter found").
   - NEVER invent case studies with specific before/after metrics for real or
     invented channels/creators.
-  - If you do not have a real, citable number, write the claim qualitatively
-    ("higher", "stronger", "most channels", "many creators") — do NOT invent a
-    figure to make the point concrete.
+  - Write EVERY claim qualitatively: "higher", "stronger", "most channels",
+    "many creators", "commonly", "often". If you cannot verify a number from a
+    primary source in your context, do not write it — a qualitative claim is
+    always better than a fabricated figure.
+  - If a number is genuinely required (e.g. YouTube's 4,000 watch-hour
+    threshold), use only universally known platform facts and link them.
 - Write for YouTube creators who want actionable advice, not theory.
 - Use HTML: <h2 id="...">, <h3>, <p>, <ul>/<ol>, <table>, <strong>.
 - Mention YT SEO Architect naturally 2-3 times (link to /dashboard).
@@ -738,6 +762,7 @@ CRITICAL RULES — VIOLATION = REJECTION:
   const allSections = [];
   let totalWords = 0;
   let failedSections = 0;
+  let statWarnings = 0;
 
   for (let i = 0; i < sections.length; i++) {
     const section = sections[i];
@@ -746,6 +771,23 @@ CRITICAL RULES — VIOLATION = REJECTION:
     let html;
     try {
       html = await generateSection(systemPrompt, section.prompt);
+      // Fabricated-statistics gate: regenerate up to 2x, then scrub
+      let statAttempts = 0;
+      while (hasFabricatedStats(html) && statAttempts < 2) {
+        console.log(`    ⚠ Section contains fabricated-stat patterns — regenerating (${statAttempts + 1}/2)`);
+        try {
+          html = await generateSection(systemPrompt, section.prompt);
+        } catch (e) {
+          console.error(`    ❌ Regeneration failed: ${e.message}`);
+          break;
+        }
+        statAttempts++;
+      }
+      if (hasFabricatedStats(html)) {
+        html = scrubFabricatedStats(html);
+        console.log('    ⚠ Scrubbed fabricated-stat sentences (last resort)');
+        statWarnings++;
+      }
       const words = countWords(html);
       totalWords += words;
       allSections.push(html);
@@ -840,6 +882,31 @@ function countWords(html) {
 }
 
 // ── Sitemap update ─────────────────────────────────────────────────
+
+// ── Auto-generated post registry (for /blog listing + sitemap fallback) ────
+// The CI runner has no DATABASE_URL, so posts can't DB-insert. The API imports
+// scripts/blog-slugs.js and merges these into the listing + sitemap.
+
+function registerBlogSlug(slug) {
+  const slugsFile = resolve(PROJECT, 'scripts/blog-slugs.js');
+  try {
+    const existing = readFileSync(slugsFile, 'utf-8');
+    if (existing.includes(`slug: '${slug}'`)) {
+      console.log('  ⏭ Slug already registered');
+      return;
+    }
+    const today = new Date().toISOString().split('T')[0];
+    const newEntry = `  { slug: '${slug}', date: '${today}' },`;
+    const updated = existing.replace(
+      /export const BLOG_SLUGS_EXTRA = \[\n/,
+      `export const BLOG_SLUGS_EXTRA = [\n${newEntry}\n`
+    );
+    writeFileSync(slugsFile, updated);
+    console.log(`  ✅ Registered ${slug} in blog-slugs.js`);
+  } catch (e) {
+    console.log(`  ⚠ Could not register slug: ${e.message}`);
+  }
+}
 
 // ── Blog listing page update ─────────────────────────────────────
 
@@ -1687,6 +1754,10 @@ async function main() {
     console.log('  ✅ Static HTML file written');
     saveResult.wroteFile = true;
   }
+
+  // Register in blog-slugs.js so /blog listing + sitemap include this post
+  // even when the DB insert didn't happen (CI runner has no DATABASE_URL).
+  registerBlogSlug(keywordEntry.slug);
 
   // Skip static sitemap and blog listing updates — API handles both dynamically
 

@@ -11,6 +11,15 @@ import { readFileSync } from 'fs';
 import { resolve, dirname } from 'path';
 import { fileURLToPath } from 'url';
 
+// Auto-generated post registry (posts that couldn't DB-insert on the CI runner)
+import { BLOG_SLUGS_EXTRA } from '../scripts/blog-slugs.js';
+function mergeExtraSlugs(list) {
+  for (const e of BLOG_SLUGS_EXTRA) {
+    if (!list.some(x => x.slug === e.slug)) list.push(e);
+  }
+  return list;
+}
+
 
 
 // Initialize Sentry
@@ -946,6 +955,7 @@ app.get(['/blog/categories', '/blog/category'], async (req, res) => {
       { slug: 'using-youtube-features-to-enhance-viewer-experience-2026', date: '2026-07-30' },
       { slug: 'youtube-seo-tips-for-creators-in-2026', date: '2026-08-11' },
     ];
+    mergeExtraSlugs(KNOWN_BLOG_SLUGS);
     const dbSlugs = new Set(pages.map(p => p.slug));
     for (const entry of KNOWN_BLOG_SLUGS) {
       if (!dbSlugs.has(entry.slug)) {
@@ -1022,6 +1032,7 @@ app.get('/blog/category/:slug', async (req, res) => {
       { slug: 'using-youtube-features-to-enhance-viewer-experience-2026', date: '2026-07-30' },
       { slug: 'youtube-seo-tips-for-creators-in-2026', date: '2026-08-11' },
     ];
+    mergeExtraSlugs(KNOWN_BLOG_SLUGS);
     const dbSlugs = new Set(allPages.map(p => p.slug));
     for (const entry of KNOWN_BLOG_SLUGS) {
       if (!dbSlugs.has(entry.slug)) {
@@ -1087,6 +1098,7 @@ app.get('/blog', async (req, res) => {
       { slug: 'using-youtube-features-to-enhance-viewer-experience-2026', date: '2026-07-30' },
       { slug: 'youtube-seo-tips-for-creators-in-2026', date: '2026-08-11' },
     ];
+    mergeExtraSlugs(KNOWN_BLOG_SLUGS);
     const dbSlugs = new Set(pages.map(p => p.slug));
     for (const entry of KNOWN_BLOG_SLUGS) {
       if (!dbSlugs.has(entry.slug)) {
@@ -1889,6 +1901,21 @@ async function buildSitemapChunks() {
     .where(eq(s.seoPages.status, 'published'))
     .orderBy(desc(s.seoPages.publishedAt))
     .limit(500);
+
+  // Include auto-generated posts that couldn't DB-insert (CI runner has no DATABASE_URL)
+  const knownSlugs = new Set(allPages.map(p => p.slug));
+  for (const e of BLOG_SLUGS_EXTRA) {
+    if (!knownSlugs.has(e.slug)) {
+      allPages.push({
+        slug: e.slug,
+        title: e.slug.replace(/-/g, ' ').replace(/\b\w/g, c => c.toUpperCase()),
+        wordCount: 0,
+        content: '',
+        publishedAt: e.date,
+      });
+      knownSlugs.add(e.slug);
+    }
+  }
 
   const site = 'https://yt-seo-architect.vercel.app';
   const today = new Date().toISOString().split('T')[0];
