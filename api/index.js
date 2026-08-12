@@ -1987,10 +1987,11 @@ app.get('/sitemap.xml', async (req, res) => {
   try {
     const { counts } = await buildSitemapChunks();
     const index = '<?xml version="1.0" encoding="UTF-8"?>\n'
-      + '<sitemapindex xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n'
-      + '  <sitemap><loc>https://yt-seo-architect.vercel.app/sitemap-core.xml</loc></sitemap>\n'
-      + '  <sitemap><loc>https://yt-seo-architect.vercel.app/sitemap-glossary-terms.xml</loc></sitemap>\n'
-      + '</sitemapindex>';
+          + '<sitemapindex xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n'
+          + '  <sitemap><loc>https://yt-seo-architect.vercel.app/sitemap-core.xml</loc></sitemap>\n'
+          + '  <sitemap><loc>https://yt-seo-architect.vercel.app/sitemap-glossary-terms.xml</loc></sitemap>\n'
+          + '  <sitemap><loc>https://yt-seo-architect.vercel.app/sitemap-glossary-pairs.xml</loc></sitemap>\n'
+          + '</sitemapindex>';
     res.header('Content-Type', 'application/xml');
     res.header('Cache-Control', 'public, max-age=3600');
     res.send(index);
@@ -2464,9 +2465,16 @@ const INDEXED_COMPARISONS = new Set([
   'call-to-action-vs-youtube-creator-academy',
   'calls-to-action-vs-description',
   'description-vs-pinned-comment',
-  'external-traffic-vs-traffic-source',
-  'calls-to-action-vs-shorts-algorithm',
-]);
+    'external-traffic-vs-traffic-source',
+    'calls-to-action-vs-shorts-algorithm',
+    // Tier-3 promotions (GSC study 2026-08-11: 13-19 imp, pos 7-10 — proven demand, not yet indexed)
+    'analytics-vs-external-traffic',
+    'playlist-vs-youtube-creator-academy',
+    'calls-to-action-vs-hook',
+    'outro-vs-video-intro-structure',
+    'calls-to-action-vs-shorts-monetization',
+    'content-pillar-vs-youtube-creator-academy',
+  ]);
 
 // Category → blog post slugs (verified live 2026-08-07) used to give every
 // comparison page a real outbound link mesh to the blog. The noindex tail still
