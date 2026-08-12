@@ -82,13 +82,21 @@ jobs:
         run: |
           # Link project + pull production envs so the generator can DB-insert posts
           # (no DATABASE_URL secret on the repo — Vercel holds the prod value).
-          npx --yes vercel@latest link --yes --project yt-seo-architect --token="$VERCEL_TOKEN" >/dev/null 2>&1 || true
-          npx --yes vercel@latest env pull .env.vercel --environment=production --yes --token="$VERCEL_TOKEN" >/dev/null 2>&1 || true
+          set +e
+          echo "--- installing vercel CLI ---"
+          npm install -g vercel@54.9.1 >/dev/null 2>&1
+          echo "vercel: $(vercel --version 2>&1)"
+          echo "--- linking project ---"
+          vercel link --yes --project yt-seo-architect 2>&1 | tail -2
+          echo "link exit: $?"
+          echo "--- pulling production envs ---"
+          vercel env pull .env.vercel --environment=production --yes 2>&1 | tail -2
+          echo "pull exit: $?"
           if [ -f .env.vercel ]; then
             DB_URL=$(grep -E '^DATABASE_URL=' .env.vercel | head -1 | cut -d= -f2- | tr -d '"' | tr -d "'")
             if [ -n "$DB_URL" ]; then
               echo "DATABASE_URL=$DB_URL" >> "$GITHUB_ENV"
-              echo "✅ DATABASE_URL pulled from Vercel ($(echo -n $DB_URL | wc -c) chars)"
+              echo "✅ DATABASE_URL pulled from Vercel ($(echo -n "$DB_URL" | wc -c) chars)"
             else
               echo "⚠ DATABASE_URL not found in .env.vercel — DB insert will be skipped"
             fi
