@@ -717,9 +717,90 @@ export function renderBlogTemplate(page) {
   const linked = linkGlossaryTerms(bodyContent);
   contentHTML += linked;
 
-  // 3b. Try-the-Tool CTA (if a corresponding interactive tool page exists)
-  // Dynamically check if a tool file exists for this blog slug
+  // 3b. Try-the-Template CTA lookup FIRST — when a template page matches this post,
+  // the template wins over the tool CTA so only one CTA box renders per post.
   const blogSlug = (page.slug || '').replace(/^(how-to-|what-does-|why-|when-to-)/, '');
+  const TEMPLATE_BLOG_MAP = {
+    "youtube-description-templates-2026": "youtube-description-template",
+    "youtube-title-examples-2026": "youtube-title-template",
+    "youtube-tags-2026": "youtube-tags-template",
+    "youtube-thumbnail-tips-2026": "youtube-thumbnail-template",
+    "creating-effective-youtube-thumbnails-for-clicks-2026": "youtube-thumbnail-ideas",
+    "what-does-youtube-ctr-actually-mean": "youtube-thumbnail-template",
+    "youtube-end-screens-cards-guide-2026": "youtube-end-screen-template",
+    "youtube-intro-hook-first-3-seconds": "youtube-intro-template",
+    "youtube-seo-for-gaming-channels-2026": "youtube-tags-for-gaming",
+    "youtube-shorts-seo-guide-2026": "youtube-description-template-for-shorts",
+    "youtube-shorts-seo-ranking-guide-2026": "youtube-description-template-for-shorts",
+    "youtube-seo-checklist-beginners-2026": "youtube-description-template",
+    "youtube-video-not-getting-views-diagnostic-fix-2026": "youtube-description-template-copy-paste",
+    "youtube-seo-examples-2026": "youtube-title-ideas",
+    "youtube-for-tutorials-2026": "youtube-video-description-template-copy",
+    "how-to-increase-youtube-retention-2026": "youtube-video-script-template",
+    "increasing-youtube-watch-time-with-analytics-2026": "youtube-chapters-template",
+    "youtube-analytics-explained-2026": "youtube-chapters-template",
+    "youtube-channel-branding-tips-for-consistency-2026": "youtube-thumbnail-template",
+    "youtube-impressions-guide-2026": "youtube-title-template",
+    "using-youtube-features-to-enhance-viewer-experience-2026": "youtube-end-screen-template",
+    "youtube-playlist-optimization-strategy": "youtube-end-screen-template",
+    "youtube-seo-template-2026": "youtube-description-template-copy-paste",
+  };
+  const TEMPLATE_NAMES = {
+    "youtube-description-template": "YouTube Description Template",
+    "youtube-description-template-copy-paste": "Copy-Paste Description Templates",
+    "youtube-description-template-for-shorts": "Shorts Description Template",
+    "youtube-description-template-for-vlogs": "Vlog Description Template",
+    "youtube-video-description-template-copy": "Video Description Templates to Copy",
+    "youtube-video-description-template": "Video Description Template",
+    "youtube-title-template": "YouTube Title Template",
+    "youtube-title-ideas": "YouTube Title Ideas",
+    "youtube-video-title-generator": "Video Title Formula Generator",
+    "youtube-tags-template": "YouTube Tags Template",
+    "youtube-tags-for-gaming": "Gaming Tags Template",
+    "youtube-thumbnail-template": "YouTube Thumbnail Template",
+    "youtube-thumbnail-ideas": "Thumbnail Layout Ideas",
+    "youtube-end-screen-template": "End Screen Template",
+    "youtube-intro-template": "Intro Template",
+    "youtube-outro-template": "Outro Template",
+    "youtube-video-script-template": "Video Script Template",
+    "youtube-script-template-for-videos": "Script Templates by Format",
+    "youtube-chapters-template": "Chapters Template",
+    "youtube-description-generator": "Description Generator",
+  };
+  let templateKey = TEMPLATE_BLOG_MAP[blogSlug] || TEMPLATE_BLOG_MAP[page.slug];
+  if (!templateKey) {
+    // keyword fallback for posts not in the curated map (e.g. future cron posts)
+    const slugCheck = `${blogSlug} ${page.slug || ''}`.toLowerCase();
+    const rules = [
+      ["description", "youtube-description-template"],
+      ["title", "youtube-title-template"],
+      ["tag", "youtube-tags-template"],
+      ["thumbnail", "youtube-thumbnail-template"],
+      ["end-screen", "youtube-end-screen-template"],
+      ["intro", "youtube-intro-template"],
+      ["outro", "youtube-outro-template"],
+      ["script", "youtube-video-script-template"],
+      ["chapter", "youtube-chapters-template"],
+      ["retention", "youtube-video-script-template"],
+      ["shorts", "youtube-description-template-for-shorts"],
+      ["gaming", "youtube-tags-for-gaming"],
+      ["vlog", "youtube-description-template-for-vlogs"],
+    ];
+    for (const [kw, slug] of rules) {
+      if (slugCheck.includes(kw)) { templateKey = slug; break; }
+    }
+  }
+  if (templateKey) {
+    const templateUrl = `/templates/${templateKey}`;
+    const templateName = TEMPLATE_NAMES[templateKey] || 'Copy-Paste Template';
+    contentHTML += `\n      <div class="template-cta" style="margin:2.5rem 0;padding:1.5rem;background:rgba(0,255,136,0.04);border:1px solid rgba(0,255,136,0.2);border-radius:12px;text-align:center;">
+        <h3 style="color:var(--green, #00ff88);margin-bottom:0.5rem;">📋 Get the Copy-Paste Template</h3>
+        <p style="color:#a8b2c1;margin-bottom:1rem;">Skip the guesswork — grab the ${templateName} with fill-in-the-blank sections, usage notes, and niche variations.</p>
+        <a href="${templateUrl}" style="display:inline-block;background:var(--green, #00ff88);color:#000;padding:0.75rem 2rem;border-radius:8px;text-decoration:none;font-weight:700;">Open the Template →</a>
+      </div>`;
+  }
+  // 3c. Try-the-Tool CTA (if a corresponding interactive tool page exists AND no template matched)
+  // Dynamically check if a tool file exists for this blog slug
   let toolExists = false;
   const STATIC_TOOL_SLUGS = [
       "best-youtube-seo-tools-2026", "fix-youtube-shadow-ban-2026", "keywords-youtube",
@@ -740,7 +821,7 @@ export function renderBlogTemplate(page) {
       "youtube-video-not-getting-views-diagnostic-fix-2026",
     ];
     toolExists = STATIC_TOOL_SLUGS.includes(blogSlug) || STATIC_TOOL_SLUGS.includes(page.slug);
-  if (toolExists) {
+  if (toolExists && !templateKey) {
     const toolSlug = blogSlug || page.slug;
     const toolUrl = `/tools/${toolSlug}`;
     contentHTML += `\n      <div class="tool-cta" style="margin:2.5rem 0;padding:1.5rem;background:rgba(0,242,255,0.04);border:1px solid rgba(0,242,255,0.2);border-radius:12px;text-align:center;">
