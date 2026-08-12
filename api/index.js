@@ -1900,6 +1900,11 @@ async function buildSitemapChunks() {
   let core = header;
   const corePages = [
     { loc: '/' }, { loc: '/blog' }, { loc: '/tools' }, { loc: '/about' }, { loc: '/pricing' },
+    { loc: '/guides' },
+    { loc: '/guides/youtube-seo-strategy-2026' },
+    { loc: '/guides/youtube-keyword-research-master-guide' },
+    { loc: '/guides/youtube-metadata-optimization' },
+    { loc: '/guides/youtube-channel-growth-analytics' },
   ];
   for (const p of corePages) core += `  <url><loc>${site}${p.loc}</loc></url>\n`;
 

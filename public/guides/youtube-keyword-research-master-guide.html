@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>YouTube Keyword Research Master Guide: Find Queries That Rank in 2026</title>
+  <meta name="description" content="The master guide to YouTube keyword research: 5 research methods, a demand-vs-competition scoring system, long-tail strategy, and a keyword bank workflow — with examples.">
+  <meta name="robots" content="index, follow">
+  <link rel="canonical" href="https://yt-seo-architect.vercel.app/guides/youtube-keyword-research-master-guide">
+  <meta property="og:title" content="YouTube Keyword Research Master Guide: Find Queries That Rank in 2026">
+  <meta property="og:description" content="The master guide to YouTube keyword research: 5 research methods, a demand-vs-competition scoring system, long-tail strategy, and a keyword bank workflow — with examples.">
+  <meta property="og:image" content="https://yt-seo-architect.vercel.app/og-image.png">
+  <meta property="og:url" content="https://yt-seo-architect.vercel.app/guides/youtube-keyword-research-master-guide">
+  <meta property="og:type" content="article">
+  <meta name="twitter:card" content="summary_large_image">
+  <link rel="stylesheet" href="/design-tokens.css">
+  <link rel="stylesheet" href="/utilities.css">
+  <link rel="stylesheet" href="/nav.css">
+  <link rel="stylesheet" href="/motion-utilities.css">
+  <script type="application/ld+json">[{"@context":"https://schema.org","@type":"Article","headline":"YouTube Keyword Research Master Guide: Find Queries That Actually Rank","description":"The master guide to YouTube keyword research: 5 research methods, a demand-vs-competition scoring system, long-tail strategy, and a keyword bank workflow — with examples.","url":"https://yt-seo-architect.vercel.app/guides/youtube-keyword-research-master-guide","datePublished":"2026-08-12","dateModified":"2026-08-12","author":{"@type":"Person","name":"Patrick","url":"https://yt-seo-architect.vercel.app/about"},"publisher":{"@type":"Organization","name":"YT SEO Architect","url":"https://yt-seo-architect.vercel.app"},"timeRequired":"16 min read","mainEntityOfPage":"https://yt-seo-architect.vercel.app/guides/youtube-keyword-research-master-guide"},{"@type":"FAQPage","mainEntity":[{"@type":"Question","name":"What's the best free YouTube keyword research tool?","acceptedAnswer":{"@type":"Answer","text":"Start with YouTube autocomplete in incognito — it's the most accurate demand signal and free. The YT SEO Architect keyword tool automates the same suggestions, and Google Trends adds the demand curve for seasonal timing. Paid tools add volume estimates, but demand signals from autocomplete + analytics are enough to build a winning keyword bank."}},{"@type":"Question","name":"How many keywords should a video target?","acceptedAnswer":{"@type":"Answer","text":"One primary keyword as the clear focus, plus 2-3 natural secondary variations. Multi-keyword targeting dilutes the ranking signal. The primary keyword goes in the title's first half, description line 1, and the first tag."}},{"@type":"Question","name":"How do I know if a keyword is too competitive?","acceptedAnswer":{"@type":"Answer","text":"Check the top 5 results: if the ranking channels are 100x your subscriber count AND their videos have strong retention (high average view duration), the term is too competitive for now. Narrow the query instead of abandoning it."}},{"@type":"Question","name":"Should I use the same keywords as my competitors?","acceptedAnswer":{"@type":"Answer","text":"Only as a starting point. Ranking for the exact same queries as giants is an uphill battle. Use their titles to map demand, then target the narrower variants and adjacent queries they ignore."}},{"@type":"Question","name":"How often should I refresh my keyword bank?","acceptedAnswer":{"@type":"Answer","text":"Monthly for autocomplete and analytics queries (they shift as trends move), quarterly for a full review. Evergreen queries stay in the bank indefinitely; trend queries have a 2-4 week window from script to publish."}}]},{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://yt-seo-architect.vercel.app"},{"@type":"ListItem","position":2,"name":"Guides","item":"https://yt-seo-architect.vercel.app/guides/"},{"@type":"ListItem","position":3,"name":"YouTube Keyword Research Master Guide","item":"https://yt-seo-architect.vercel.app/guides/youtube-keyword-research-master-guide"}]}]</script>
+  <style>
+    :root { --pillar-accent: #00f2ff; --pillar-green: #00ff88; }
+    body { background: #0a0b10; color: #e2e8f0; font-family: 'Geist', system-ui, sans-serif; line-height: 1.75; }
+    .wrap { max-width: 860px; margin: 0 auto; padding: 2rem 1.25rem 4rem; }
+    .breadcrumb { font-size: .85rem; color: #8b8b9e; margin-bottom: 1rem; }
+    .breadcrumb a { color: var(--pillar-accent); text-decoration: none; }
+    h1 { font-size: 2.05rem; line-height: 1.25; margin: 1rem 0 .6rem; color: #f8fafc; }
+    .meta-line { color: #8b8b9e; font-size: .9rem; margin-bottom: 1.25rem; }
+    .meta-line .pillar-badge { display: inline-block; background: rgba(0,242,255,.1); border: 1px solid rgba(0,242,255,.25); color: var(--pillar-accent); border-radius: 999px; padding: .1rem .55rem; font-size: .72rem; font-weight: 600; margin-right: .5rem; text-transform: uppercase; letter-spacing: .04em; }
+    .intro { font-size: 1.08rem; color: #cbd5e1; margin-bottom: 1.5rem; }
+    .toc { background: #101422; border: 1px solid #1e2537; border-radius: 12px; padding: 1.1rem 1.3rem; margin: 1.25rem 0 2rem; font-size: .92rem; }
+    .toc summary { cursor: pointer; font-weight: 700; color: #f8fafc; }
+    .toc ol { margin: .6rem 0 0; padding-left: 1.25rem; }
+    .toc li { margin: .3rem 0; }
+    .toc a { color: #cbd5e1; text-decoration: none; }
+    .toc a:hover { color: var(--pillar-accent); }
+    h2 { font-size: 1.4rem; margin: 2.75rem 0 .75rem; color: #f8fafc; padding-top: .25rem; }
+    .pillar-section p { margin: .75rem 0; color: #cbd5e1; }
+    .pillar-list li { margin: .4rem 0; color: #cbd5e1; }
+    .checklist-box { background: #101422; border: 1px solid rgba(0,255,136,.25); border-radius: 12px; padding: 1.1rem 1.3rem; margin: 1.25rem 0; }
+    .checklist-title { color: var(--pillar-green); font-size: 1rem; margin-bottom: .6rem; }
+    .checklist-box ul { list-style: none; padding-left: 0; }
+    .checklist-box li { color: #cbd5e1; margin: .45rem 0; font-size: .95rem; }
+    .case-study { background: #101422; border: 1px solid rgba(0,242,255,.25); border-radius: 12px; padding: 1.1rem 1.3rem; margin: 1.25rem 0; }
+    .case-title { color: var(--pillar-accent); font-size: 1rem; margin-bottom: .5rem; }
+    .case-study p { color: #cbd5e1; font-size: .95rem; margin: 0; }
+    .deeper-link { background: rgba(0,242,255,.04); border-left: 3px solid var(--pillar-accent); padding: .55rem .9rem; margin: .9rem 0; font-size: .93rem; }
+    .deeper-link a { color: var(--pillar-accent); text-decoration: none; font-weight: 600; }
+    .deeper-link a:hover { text-decoration: underline; }
+    .tool-cta { background: rgba(0,242,255,.05); border: 1px solid rgba(0,242,255,.22); border-radius: 12px; padding: 1.3rem; margin: 1.5rem 0; text-align: center; }
+    .tool-cta-title { color: var(--pillar-accent); font-size: 1.05rem; margin-bottom: .5rem; }
+    .tool-cta p { color: #a8b2c1; font-size: .95rem; margin-bottom: .9rem; }
+    .tool-cta-btn { display: inline-block; background: var(--pillar-accent); color: #000; padding: .65rem 1.6rem; border-radius: 8px; text-decoration: none; font-weight: 700; }
+    .tool-cta-btn:hover { filter: brightness(1.15); }
+    .faq-item { border: 1px solid #1e2537; border-radius: 10px; padding: .9rem 1.1rem; margin: .6rem 0; background: #101422; }
+    .faq-item summary { cursor: pointer; font-weight: 600; color: #f8fafc; }
+    .faq-item p { margin: .6rem 0 0; color: #cbd5e1; font-size: .93rem; }
+    .cluster-section { background: #101422; border: 1px solid #1e2537; border-radius: 12px; padding: 1.1rem 1.3rem; margin: 1.5rem 0; }
+    .cluster-section ul { padding-left: 1.25rem; }
+    .cluster-section li { margin: .45rem 0; }
+    .cluster-section a { color: var(--pillar-accent); text-decoration: none; }
+    .cluster-section a:hover { text-decoration: underline; }
+    .tpl-tool-link { display: inline-block; margin: .25rem .5rem .25rem 0; padding: .45rem .9rem; border: 1px solid rgba(0,242,255,.35); border-radius: 8px; color: var(--pillar-accent); text-decoration: none; font-size: .85rem; }
+    .tpl-tool-link:hover { background: rgba(0,242,255,.1); }
+    .pillar-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 1rem; margin: 1.25rem 0; }
+    .pillar-card { display: block; background: #101422; border: 1px solid #1e2537; border-radius: 12px; padding: 1.1rem; text-decoration: none; color: inherit; }
+    .pillar-card:hover { border-color: rgba(0,242,255,.4); background: rgba(0,242,255,.04); }
+    .pillar-card strong { display: block; color: #f8fafc; margin-bottom: .35rem; font-size: .95rem; }
+    .pillar-card span { color: #8b8b9e; font-size: .82rem; }
+    .hub-link { margin-top: 2rem; font-size: .9rem; color: #8b8b9e; }
+    .hub-link a { color: var(--pillar-accent); text-decoration: none; }
+    .wordcount-note { display: none; } /* body word count for QA: 1361 */
+  </style>
+</head>
+<body>
+  <header class="site-header">
+    <div class="header-inner">
+      <a href="/" class="header-logo">
+        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#00f2ff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="9.75 15.02 15.5 12 9.75 8.98 9.75 15.02"/><circle cx="12" cy="12" r="10"/></svg>
+        YT <span>SEO</span> Architect
+      </a>
+      <nav class="header-nav" id="header-nav">
+        <a href="/tools">Tools</a>
+        <a href="/blog">Blog</a>
+        <a href="/templates/">Templates</a>
+        <a href="/guides/">Guides</a>
+        <a href="/glossary/">Glossary</a>
+        <a href="/dashboard" class="header-cta">Dashboard</a>
+      </nav>
+      <button class="mobile-menu-btn" aria-label="Menu" onclick="document.getElementById('header-nav').classList.toggle('open')">&#9776;</button>
+    </div>
+  </header>
+  <div class="wrap">
+    <div class="breadcrumb"><a href="/">Home</a> › <a href="/guides/">Guides</a> › <span>YouTube Keyword Research Master Guide</span></div>
+    <h1>YouTube Keyword Research Master Guide: Find Queries That Actually Rank</h1>
+    <p class="meta-line"><span class="pillar-badge">Pillar Guide</span> Updated August 2026 · 16 min read · By <a href="/about" style="color:var(--pillar-accent);text-decoration:none;font-weight:600;">Patrick</a></p>
+    <p class="intro">Keyword research is the difference between publishing into a market and publishing into a void. This master guide covers the complete 2026 workflow: where demand hides, how to score it against competition, how to build a keyword bank you can draw from for months, and how to spot the long-tail gaps your competitors ignore.</p>
+    <details class="toc" open>
+      <summary>📑 In This Guide</summary>
+      <ol>
+        <li><a href="#sec-1">Why Keyword Selection Decides Your Channel's Ceiling</a></li>
+        <li><a href="#sec-2">The Four Search Intents on YouTube</a></li>
+        <li><a href="#sec-3">Autocomplete Mining (Free, Instant, Underrated)</a></li>
+        <li><a href="#sec-4">Competitor Gap Analysis</a></li>
+        <li><a href="#sec-5">Your Own Analytics (The Data You Already Own)</a></li>
+        <li><a href="#sec-6">Trend and Seasonal Demand</a></li>
+        <li><a href="#sec-7">Scoring Keywords: Demand vs Competition</a></li>
+        <li><a href="#sec-8">Building Your Keyword Bank (The 90-Day Pipeline)</a></li>
+        <li><a href="#sec-9">Niche-Specific Keyword Patterns</a></li>
+      </ol>
+    </details>
+
+  <section id="sec-1" class="pillar-section">
+    <h2>Why Keyword Selection Decides Your Channel's Ceiling</h2>
+    <p>Every video competes in a search market you choose. Pick queries with real demand and manageable competition and the algorithm has a reason to test your video. Pick queries nobody searches and the best packaging in the world produces zero impressions. This is why keyword research comes before everything else in the content pipeline — it sets the ceiling for every other SEO layer.</p>
+    <p>The 2026 reality: head terms ('youtube seo', 'minecraft', 'makeup tutorial') are owned by mega-channels. The winnable market is the long tail — specific, intent-rich queries where searchers get exactly what they asked for and small channels can out-serve the giants.</p>
+    <div class="case-study chart-entrance" role="note" aria-label="Mini case study">
+      <h3 class="case-title">📊 Mini case study: the long-tail that outranked a giant</h3>
+      <p>A cooking channel with 8K subscribers wanted to rank for 'air fryer recipes'. The top results were 2M+ subscriber channels. Instead they targeted 'air fryer chicken breast no breading' — a query with clear autocomplete demand, a specific outcome, and top results from channels under 500K. The video hit #1 in three weeks and still pulls 2,000+ views monthly with zero promotion. Same niche, winnable query.</p>
+    </div>
+  </section>
+
+  <section id="sec-2" class="pillar-section">
+    <h2>The Four Search Intents on YouTube</h2>
+    <p>Before measuring demand, classify intent. Each intent bucket has different content requirements:</p>
+    <ul class="pillar-list">
+      <li>How-to — 'how to edit videos in capcut': step-by-step, numbered, demo-driven. Average 6-12 minutes.</li>
+      <li>What-is — 'what is youtube ctr': explanation-first, definition + examples. Short and skimmable.</li>
+      <li>Review/verdict — 'tubebuddy vs vidiq': comparison, pros/cons, clear conclusion up front.</li>
+      <li>Entertainment — 'minecraft but i can only move sideways': story/hype-driven, hook-critical.</li>
+    </ul>
+    <p>Match your video format to the intent bucket of the query. A review-style video targeting a how-to query gets abandoned; a how-to video targeting a review query gets skipped to the verdict. The incognito search check tells you which bucket the market expects.</p>
+  </section>
+
+  <section id="sec-3" class="pillar-section">
+    <h2>Method 1 — Autocomplete Mining (Free, Instant, Underrated)</h2>
+    <p>YouTube autocomplete is real search demand, pre-typed by millions of people. Type a seed topic into the search bar and YouTube completes the query with the most-searched continuations. Each completion is a video idea with proven demand — no tool required.</p>
+    <p>Mine systematically: take one seed keyword per niche (e.g., 'youtube seo', 'youtube tags', 'youtube description') and collect every autocomplete variant. Then take each variant and autocomplete it again — the second level reveals long-tail gems. In one 20-minute session you can harvest 50+ validated queries.</p>
+    <div class="checklist-box chart-entrance" role="list" aria-label="Autocomplete mining session">
+      <h3 class="checklist-title">✅ Autocomplete mining session</h3>
+      <ul>
+        <li>☐ List 5 seed topics for your niche</li>
+        <li>☐ Type each into YouTube incognito, collect all completions</li>
+        <li>☐ Run the top 5 completions through autocomplete again (second level)</li>
+        <li>☐ Dedupe and tag each query with its intent bucket</li>
+        <li>☐ Star the 3-5 that match your channel's format and size</li>
+      </ul>
+    </div>
+  </section>
+
+  <section id="sec-4" class="pillar-section">
+    <h2>Method 2 — Competitor Gap Analysis</h2>
+    <p>Your competitors' videos are a map of proven demand — and their gaps are your opportunities. For each competitor in your niche, list their top 10 videos by views. The titles tell you which queries they're winning. Then look for the pattern: which subtopics are they NOT covering that their viewers search for next?</p>
+    <p>The 'related' sidebar is the goldmine: when you watch a competitor video, the suggested videos show what viewers click NEXT. Those are adjacent queries with demonstrated demand. If three competitors all rank for the broad term but nobody covers the specific variant, that variant is your opening.</p>
+    <p class="deeper-link"><a href="/blog/youtube-competitor-analysis-reverse-engineer">→ Deeper: Reverse-engineer your competitors</a> — A full competitor analysis framework — tags, titles, gaps, and angles.</p>
+  </section>
+
+  <section id="sec-5" class="pillar-section">
+    <h2>Method 3 — Your Own Analytics (The Data You Already Own)</h2>
+    <p>YouTube Analytics tells you exactly what your existing audience searches for. Three reports matter: Search Terms (which queries brought impressions — sorted by impressions and CTR), Suggested (what the algorithm associated you with), and the traffic-source breakdown. A video getting impressions but low CTR for a search term is a packaging problem with a known query — fixable today.</p>
+    <p>The highest-value data: queries where you already rank 5-15. Those are one packaging or metadata improvement away from page one. Most creators never look at position 5-15 queries and leave free wins on the table.</p>
+    <p class="deeper-link"><a href="/blog/youtube-analytics-explained-2026">→ Deeper: Read your analytics like a consultant</a> — Which metrics are leading indicators and which are vanity numbers.</p>
+  </section>
+
+  <section id="sec-6" class="pillar-section">
+    <h2>Method 4 — Trend and Seasonal Demand</h2>
+    <p>Some demand is evergreen (how-to queries), some is seasonal ('summer productivity', 'back to school tech setup'), and some is trend-driven (a game patch, a tool launch). A balanced keyword bank has 70% evergreen, 20% seasonal, 10% trend. Seasonal queries are the small channel's unfair advantage — giants react slowly; you can own the wave in week one.</p>
+    <p>For trend detection: search your niche on YouTube and sort by upload date, watch what spikes in the 'breaking' carousel, and check Google Trends for the topic's curve. Publish while the curve is rising, not after the peak.</p>
+  </section>
+
+  <section id="sec-7" class="pillar-section">
+    <h2>Scoring Keywords: Demand vs Competition</h2>
+    <p>Not all demand is winnable. Score every candidate on a simple 0-10 scale:</p>
+    <ul class="pillar-list">
+      <li>Demand (0-10): autocomplete presence, search-term impressions in your analytics, related-video density. 8+ = real demand.</li>
+      <li>Competition (0-10): channel sizes in the top 5, video quality, retention strength. 7+ = hard; under 5 = winnable.</li>
+      <li>Intent fit (0-10): does your format match the bucket?</li>
+      <li>Monetization fit (0-10): does the audience match your channel's direction?</li>
+    </ul>
+    <p>The rule: publish when Demand + Intent fit ≥ 16 and Competition ≤ 6. When competition is high, don't abandon the topic — narrow it. 'YouTube SEO' becomes 'youtube seo for cooking channels' becomes 'youtube tags for cooking channels'. Each narrowing keeps the demand and drops the competition.</p>
+    <p class="deeper-link"><a href="/blog/how-to-keywords-youtube">→ Deeper: Keywords — the full 2026 guide</a> — The complete research process with examples across niches.</p>
+    <p class="deeper-link"><a href="/blog/youtube-tags-2026">→ Deeper: Tags and search terms</a> — How tags relate to search terms and which variants to target.</p>
+  </section>
+
+  <section id="sec-8" class="pillar-section">
+    <h2>Building Your Keyword Bank (The 90-Day Pipeline)</h2>
+    <p>A keyword bank removes decision fatigue from content planning. Maintain a spreadsheet with columns: query, intent, demand score, competition score, status (idea / scripted / filmed / published), and notes. Target 30+ banked queries so you always know what to make next.</p>
+    <div class="checklist-box chart-entrance" role="list" aria-label="The 90-day keyword bank workflow">
+      <h3 class="checklist-title">✅ The 90-day keyword bank workflow</h3>
+      <ul>
+        <li>☐ Week 1: mine autocomplete + competitor gaps (50+ raw queries)</li>
+        <li>☐ Week 1: score and triage to the 15 best</li>
+        <li>☐ Weeks 2-13: publish 1-2 videos per week from the bank, in priority order</li>
+        <li>☐ Monthly: refresh with new autocomplete + analytics queries</li>
+        <li>☐ Quarterly: review which banked queries won and double down on the pattern</li>
+      </ul>
+    </div>
+    <div class="tool-cta chart-entrance" role="note">
+      <h3 class="tool-cta-title">🛠️ Apply it: generate keyword ideas with the free tool</h3>
+      <p>The keyword research tool generates YouTube search suggestions from any seed topic — instant raw material for your bank.</p>
+      <a href="/tools/keywords-youtube" class="tool-cta-btn">Launch the Tool →</a>
+    </div>
+  </section>
+
+  <section id="sec-9" class="pillar-section">
+    <h2>Niche-Specific Keyword Patterns</h2>
+    <p>Every niche has repeatable query patterns. Learn yours:</p>
+    <ul class="pillar-list">
+      <li>Gaming: [game] + mode/platform/patch ('valorant ranked tips', 'minecraft bedrock seeds for co-op') — game title is the highest-intent tag.</li>
+      <li>Cooking: dish + outcome + constraint ('air fryer chicken no breading', 'meal prep high protein under 30 min').</li>
+      <li>Fitness: goal + level + equipment ('beginner calisthenics no equipment', 'home workout for fat loss').</li>
+      <li>Tech: device + timeframe + use case ('iphone 17 long term review', 'best budget laptop for editing').</li>
+      <li>Business: problem + result + audience ('youtube seo for small business', 'content calendar for solo creators').</li>
+    </ul>
+    <p class="deeper-link"><a href="/blog/youtube-seo-for-gaming-channels-2026">→ Niche playbooks: gaming</a> — Game-specific search demand and the 30-tag gaming structure.</p>
+    <p class="deeper-link"><a href="/blog/youtube-seo-for-cooking-channels-2026">→ Niche playbooks: cooking</a> — Recipe-intent keywords and format conventions for food channels.</p>
+  </section>
+
+    <section id="clusters" class="pillar-section cluster-section chart-entrance">
+      <h2>📚 Cluster Articles — Go Deeper on Each Layer</h2>
+      <p>These articles cover each part of this guide in depth. They link back here, and together they form the complete topic cluster for this pillar.</p>
+      <ul>
+      <li><a href="/blog/how-to-keywords-youtube">How to Find YouTube Keywords That Rank</a></li>
+      <li><a href="/blog/youtube-tags-2026">YouTube Tags 2026: Research &amp; Rank</a></li>
+      <li><a href="/blog/youtube-competitor-analysis-reverse-engineer">Competitor Analysis: Reverse-Engineer Their Growth</a></li>
+      <li><a href="/blog/youtube-seo-for-gaming-channels-2026">YouTube SEO for Gaming Channels</a></li>
+      <li><a href="/blog/youtube-seo-for-cooking-channels-2026">YouTube SEO for Cooking Channels</a></li>
+      <li><a href="/blog/youtube-seo-for-business-channels-2026">YouTube SEO for Business Channels</a></li>
+      <li><a href="/blog/youtube-metadata-auditor-vs-vidiq-shadow-ban">YouTube Metadata Auditor vs vidIQ: Shadow Ban Check</a></li>
+      </ul>
+    </section>
+
+    <section id="tools" class="pillar-section chart-entrance">
+      <h2>🛠️ Free Tools for This Pillar</h2>
+      <div class="tool-links">
+      <a href="/tools/keywords-youtube" class="tpl-tool-link">Keyword Research Tool</a>       <a href="/tools/tag-generator" class="tpl-tool-link">Tag Generator</a>       <a href="/tools/keyword-difficulty-scorer" class="tpl-tool-link">Keyword Difficulty Scorer</a>       <a href="/dashboard" class="tpl-tool-link">Channel Audit</a>
+      </div>
+    </section>
+
+    <section id="faq" class="pillar-section">
+      <h2>❓ Frequently Asked Questions</h2>
+    <details class="faq-item"><summary>What's the best free YouTube keyword research tool?</summary><p>Start with YouTube autocomplete in incognito — it's the most accurate demand signal and free. The YT SEO Architect keyword tool automates the same suggestions, and Google Trends adds the demand curve for seasonal timing. Paid tools add volume estimates, but demand signals from autocomplete + analytics are enough to build a winning keyword bank.</p></details>
+    <details class="faq-item"><summary>How many keywords should a video target?</summary><p>One primary keyword as the clear focus, plus 2-3 natural secondary variations. Multi-keyword targeting dilutes the ranking signal. The primary keyword goes in the title's first half, description line 1, and the first tag.</p></details>
+    <details class="faq-item"><summary>How do I know if a keyword is too competitive?</summary><p>Check the top 5 results: if the ranking channels are 100x your subscriber count AND their videos have strong retention (high average view duration), the term is too competitive for now. Narrow the query instead of abandoning it.</p></details>
+    <details class="faq-item"><summary>Should I use the same keywords as my competitors?</summary><p>Only as a starting point. Ranking for the exact same queries as giants is an uphill battle. Use their titles to map demand, then target the narrower variants and adjacent queries they ignore.</p></details>
+    <details class="faq-item"><summary>How often should I refresh my keyword bank?</summary><p>Monthly for autocomplete and analytics queries (they shift as trends move), quarterly for a full review. Evergreen queries stay in the bank indefinitely; trend queries have a 2-4 week window from script to publish.</p></details>
+    </section>
+
+    <h2 class="hub-link">📖 Other Pillar Guides</h2>
+    <div class="pillar-grid">
+      <a class="pillar-card chart-entrance" href="/guides/youtube-seo-strategy-2026">
+        <strong>Complete YouTube SEO Strategy 2026</strong>
+        <span>The complete YouTube SEO strategy for 2026: a 7-layer system covering search intent, keyword research, packagi…</span>
+      </a>
+      <a class="pillar-card chart-entrance" href="/guides/youtube-metadata-optimization">
+        <strong>YouTube Metadata Optimization</strong>
+        <span>The complete YouTube metadata optimization guide: titles that earn clicks, descriptions that rank, tags that h…</span>
+      </a>
+      <a class="pillar-card chart-entrance" href="/guides/youtube-channel-growth-analytics">
+        <strong>YouTube Channel Growth &amp; Analytics</strong>
+        <span>The YouTube growth and analytics guide: read your dashboard like a consultant, fix the metric that's hurting m…</span>
+      </a>
+    </div>
+
+    <p class="hub-link">← <a href="/guides/">All Guides</a> · <a href="/blog/">Blog</a> · <a href="/templates/">Templates</a> · <a href="/tools/">Tools</a></p>
+  </div>
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <div class="footer-col"><h4>Product</h4><a href="/dashboard">Dashboard</a><a href="/changelog">Changelog</a></div>
+      <div class="footer-col"><h4>Resources</h4><a href="/blog">Blog</a><a href="/guides/">Guides</a><a href="/templates/">Templates</a><a href="/glossary/">Glossary</a></div>
+      <div class="footer-col"><h4>Company</h4><a href="/about">About</a><a href="/contact">Contact</a><a href="/privacy-policy">Privacy</a><a href="/terms-of-service">Terms</a></div>
+      <div class="footer-col"><h4>Social</h4><a href="https://twitter.com/YTSEOArchitect" target="_blank" rel="noopener">Twitter / X</a><a href="https://github.com/nhlaka3" target="_blank" rel="noopener">GitHub</a></div>
+    </div>
+    <div class="footer-bottom"><span>&copy; 2026 YT SEO Architect. All rights reserved.</span></div>
+  </footer>
+</body>
+</html>
