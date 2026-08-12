@@ -234,17 +234,34 @@ function getExistingTitles() {
   return titles;
 }
 
+// Domain-common words that inflate similarity (every title has them) —
+// "youtube optimization for new channels in 2026" vs "youtube seo optimization
+// for gaming channels 2026" scored 100% because of youtube/channels/2026.
+const DEDUP_STOPWORDS = new Set([
+  'youtube', 'seo', 'video', 'videos', 'channel', 'channels', 'creator', 'creators',
+  'guide', 'guides', 'tips', 'best', 'top', 'how', 'what', 'why', 'when', 'for',
+  'the', 'and', 'with', 'your', 'you', 'can', '2026', '2025', '2027', 'new', 'free',
+  'complete', 'ultimate', 'explained', 'strategy', 'strategies', 'optimization',
+  'growth', 'increase', 'increasing', 'improve', 'improving', 'using', 'use',
+]);
+
+function distinctiveWords(text) {
+  return text.toLowerCase()
+    .split(/\s+/)
+    .filter(w => w.length > 3 && !DEDUP_STOPWORDS.has(w) && !/^\d{4}$/.test(w));
+}
+
 function checkDeduplication(keyword, slug) {
   const existingSlugs = getExistingSlugs();
   if (existingSlugs.includes(slug)) {
     return { duplicate: true, reason: `Post ${slug}.html already exists` };
   }
 
-  // Check keyword similarity against existing titles
-  const kwWords = keyword.toLowerCase().split(/\s+/).filter(w => w.length > 4);
+  // Check keyword similarity against existing titles — on DISTINCTIVE words only
+  const kwWords = distinctiveWords(keyword);
   const existingTitles = getExistingTitles();
   for (const title of existingTitles) {
-    const titleWords = title.toLowerCase().split(/\s+/).filter(w => w.length > 4);
+    const titleWords = distinctiveWords(title);
     const overlap = kwWords.filter(w => titleWords.includes(w)).length;
     const similarity = overlap / Math.max(kwWords.length, 1);
     if (similarity > 0.8) {

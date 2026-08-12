@@ -55,7 +55,7 @@ def get_google_suggestions(query):
     If Google returns 0 suggestions → the keyword has near-zero search volume.
     More suggestions = higher relative demand.
     """
-    url = 'http://suggestqueries.google.com/complete/search?client=firefox&q=' + urllib.parse.quote(query)
+    url = 'https://suggestqueries.google.com/complete/search?client=firefox&q=' + urllib.parse.quote(query)
     try:
         req = urllib.request.Request(url, headers={
             'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36',
@@ -68,6 +68,14 @@ def get_google_suggestions(query):
         return suggestions
     except Exception as e:
         return None
+
+
+def strip_year_suffix(keyword):
+    """Google Suggest rarely autocompletes year-qualified / long-tail phrases —
+    strip trailing '2026' / 'in 2026' so the base query gets real suggestions."""
+    import re as _re
+    k = _re.sub(r'\s*(in\s+)?20\d{2}\s*$', '', keyword.strip())
+    return k if k.strip() else keyword
 
 
 def estimate_demand_score(keyword, suggestions):
@@ -455,13 +463,27 @@ def main():
     
     # Step 1: Check Google Suggest first (fast, fails fast for zero-demand)
     print("   📊 Checking Google Suggest demand...", end=' ', flush=True)
-    suggestions = get_google_suggestions(keyword)
+    # Year-qualified / long-tail phrases rarely autocomplete — check the base query
+    suggestions = get_google_suggestions(strip_year_suffix(keyword))
     demand_score, demand_rating = estimate_demand_score(keyword, suggestions)
+    # Google Suggest reliably returns [] for long/mid-phrase queries even when
+    # demand is real (verified: "youtube seo for gaming channels" → [] but the
+    # query has clear demand). A 5+ word query with zero suggestions is an
+    # autocomplete MISS, not a zero-demand signal → fail OPEN.
+    if demand_score is not None and demand_score < 10 and len(keyword.split()) >= 5:
+        demand_score = None
+        demand_rating = "Ambiguous — long query with zero autocomplete (fail-open)"
     if demand_score is not None:
         print(f"{demand_score}/100")
         print(f"      → {demand_rating}")
     else:
-        print("⚠️  API unavailable (continuing anyway)")
+        # Ambiguous (network failure OR empty autocomplete for a long/qualified query).
+        # Fail OPEN — the keyword bank is the real demand filter; a suggest miss is
+        # not proof of zero demand (CI runners + long-tail queries both hit this).
+        print("⚠️  Unknown (ambiguous — treating as pass-through)")
+        print("DEMAND SCORE")
+        print("   Score: N/A (unknown — fail-open)")
+        sys.exit(2)
     
     print()
     
@@ -472,7 +494,9 @@ def main():
         print(f"⚠️  {error or 'No SERP results'}")
         word_count = len(keyword.split())
         print(f"   Quick estimate: {'🟢 Low' if word_count >= 4 else '🟡 Medium' if word_count >= 3 else '🔴 High'} competition")
-        sys.exit(0)
+        # Don't exit early — fall through so DEMAND SCORE + RANKABILITY still print
+        # for the mjs parser; use the quick estimate as the competition score.
+        results = []
     
     covered = load_existing_posts()
     kw_words = set(keyword.lower().split())
@@ -480,6 +504,15 @@ def main():
         print(f"   ⚠️  WARNING: This topic may overlap with existing blog posts.\n")
     
     analysis = analyze_serp(results, keyword, result_count)
+    if analysis.get('error'):
+        # DDG fallback: use the word-count quick estimate as the competition score
+        wc = len(keyword.split())
+        comp = 70 if wc >= 4 else 50 if wc >= 3 else 30
+        analysis = {
+            'competition_score': comp,
+            'signals': [{'name': 'DDG unavailable — estimate', 'score': 0, 'detail': f'used word-count heuristic ({wc} words)'}],
+            'top_results': [],
+        }
     analysis['demand_score'] = demand_score
     analysis['demand_rating'] = demand_rating
     

@@ -166,6 +166,7 @@ jobs:
           # hero/og/matplotlib PNGs + webp are gitignored — force-add so every
           # post ships its hero, og image, and in-article visuals
           git add -f public/blog/*.png public/blog/*.webp 2>/dev/null || true
+          git add -f scripts/keywords.json 2>/dev/null || true
           git add -A
           if git diff --staged --quiet; then
             echo "✅ No changes to commit"
