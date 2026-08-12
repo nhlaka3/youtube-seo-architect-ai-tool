@@ -15,6 +15,7 @@ const __dirname = dirname(fileURLToPath(import.meta.url));
 const PROJECT = resolve(__dirname, '..');
 const BLOG_DIR = resolve(PROJECT, 'public/blog');
 const DRY_RUN = process.argv.includes('--dry-run');
+const FORCE = process.argv.includes('--force');
 
 // Curated blog-slug → template-page map (keep in sync with api/blog-renderer.js)
 const TEMPLATE_BLOG_MAP = {
@@ -86,7 +87,11 @@ for (const file of files) {
   const slug = file.replace('.html', '');
   let html = readFileSync(filePath, 'utf-8');
 
-  if (html.includes('class="template-cta"')) { skipped++; continue; }
+  if (html.includes('class="template-cta"')) {
+    if (!FORCE) { skipped++; continue; }
+    // strip existing template CTA blocks for re-insertion
+    html = html.replace(/<div class="template-cta"[\s\S]*?<\/div>\s*<\/div>\s*<\/div>\s*/gi, '');
+  }
 
   const templateKey = findTemplateKey(slug);
   if (!templateKey) { noMatch++; continue; }
@@ -106,9 +111,9 @@ for (const file of files) {
     removedTool = true;
   }
 
-  // Insert before the first real content <h2> (skipping the TOC heading), else before </body>
+  // Insert before the first real content <h2> (skipping TOC + TL;DR headings), else before </body>
   const h2s = [...html.matchAll(/<h2[^>]*>[\s\S]*?<\/h2>/gi)];
-  const contentH2 = h2s.find(m => !/in this article|table of contents|overview/i.test(m[0]));
+  const contentH2 = h2s.find(m => !/in this article|table of contents|overview|tldr/i.test(m[0]));
   if (contentH2 && contentH2.index > 200) {
     html = html.slice(0, contentH2.index) + cta + '\n\n' + html.slice(contentH2.index);
   } else {
