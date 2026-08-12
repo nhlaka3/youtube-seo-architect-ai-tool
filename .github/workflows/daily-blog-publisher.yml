@@ -83,15 +83,16 @@ jobs:
           # Link project + pull production envs so the generator can DB-insert posts
           # (no DATABASE_URL secret on the repo — Vercel holds the prod value).
           set +e
+          set -o pipefail
           echo "--- installing vercel CLI ---"
           npm install -g vercel@54.9.1 >/dev/null 2>&1
           echo "vercel: $(vercel --version 2>&1)"
           echo "--- linking project ---"
-          vercel link --yes --project yt-seo-architect 2>&1 | tail -2
-          echo "link exit: $?"
+          vercel link --yes --project yt-seo-architect 2>&1 | tail -3
+          echo "link exit: ${PIPESTATUS[0]}"
           echo "--- pulling production envs ---"
-          vercel env pull .env.vercel --environment=production --yes 2>&1 | tail -2
-          echo "pull exit: $?"
+          vercel env pull .env.vercel --environment=production --yes 2>&1 | tail -3
+          echo "pull exit: ${PIPESTATUS[0]}"
           if [ -f .env.vercel ]; then
             DB_URL=$(grep -E '^DATABASE_URL=' .env.vercel | head -1 | cut -d= -f2- | tr -d '"' | tr -d "'")
             if [ -n "$DB_URL" ]; then
