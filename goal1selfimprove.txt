@@ -1,0 +1,105 @@
+goal: turn yt-seo-architect.vercel.app into the go-to website for YouTube SEO in 2026
+====================================================================================
+
+verify (from goal1.txt — unchanged):
+  - 30+ indexed pages tightly focused on YouTube SEO (tools, guides, templates, case studies)
+  - At least 5 pages ranking in top 10 for core queries like "YouTube SEO",
+    "YouTube keyword research", "YouTube tags", "YouTube description template"
+  - 20+ referring domains from relevant niches (creator tools, SEO, marketing, tech blogs)
+  - Clear topic-cluster structure visible in sitemap and internal linking
+
+constraints (from goal1.txt — unchanged):
+  - All content must be original, technically accurate, and aligned with 2026 best practices
+  - No keyword stuffing; prioritize user value and clarity
+  - Maintain fast load times and good Core Web Vitals on all new pages
+
+boundaries (from goal1.txt — unchanged):
+  - Focus on YouTube SEO niche: keyword research, metadata optimization, tags, titles,
+    descriptions, thumbnails, analytics, playlists, Shorts, channel growth
+  - Use the existing site structure (/blog, /tools, /guides) and extend it with topic clusters
+
+------------------------------------------------------------------------------------
+operating_loop (self-improving — run every cycle, adapt every 2-4 weeks)
+------------------------------------------------------------------------------------
+observe:
+  - GSC search analytics: python3 /home/nhlaka/.hermes/skills/seo/google-search-console/scripts/gsc_study.py
+      (clicks, impressions, CTR, avg position, 90-day trend, top queries, quick wins, sitemap status)
+  - Indexation truth: node scripts/check-gsc-indexing.mjs --sample 20
+      (Indexed vs Unknown vs Discovered-not-indexed; watch es/pt glossary + tool pages)
+  - Backlinks: node scripts/verify-confirmed-backlinks.mjs --target yt-seo-architect.vercel.app
+      --prospects marketing/backlink-reports/qualified-prospects-*.json
+      (count of live referring domains — goal needs 20+)
+  - Crosspost state: dev.to author API (canonicals back to site), devto-posted.json, sent-outreach.json
+  - Referrals/engagement: dashboard metrics, YouTube API, llms.txt citation mentions where available
+  - Core Web Vitals: PageSpeed/CrUX when quota allows (PSI shared key; GOOGLE_API_KEY absent)
+
+diagnose:
+  - Declining pages: query rows whose impressions fell vs prior cycle
+  - Missing topics: core-query gaps ("youtube seo", "keyword research", "description template"
+      show no/weak presence; the 4 goal target pages exist but lack authority)
+  - Packaging problems: pages with >=100 impressions and CTR <1% → retitle/meta/schema
+      (known cases: thumbnail-ab-testing-guide 2713imp/0.2%, intro-hook 1075/0.2%,
+       impressions-guide 413/0.5%, thumbnail-optimization-vs-creator-academy 257/0%,
+       tags-2026 208/1%)
+  - Index gaps: Unknown URLs (API-rendered es/pt glossary), Discovered-not-indexed tools pages
+  - Weak internal links: missing hub-and-spoke edges; posts without related/hub links
+  - Underperforming templates: comparison pairs with GSC impressions but noindex'd
+  - Technical: robots, canonicals, duplicates, sitemap coverage, 404s
+
+prioritize:
+  - Score every candidate by: impact (impressions/click potential) x confidence
+    (evidence in GSC data) / effort (code vs content vs manual) x strategic_relevance (goal criteria)
+  - Risk gate: no keyword stuffing, no fabricated stats, no self-serving schema
+  - Known top lever (as of 2026-08-11): "how to use ai for youtube thumbnail and title a/b
+    testing 2026" = 781 impressions (42% of all site impressions), pos 8.7, 0 clicks → 
+    HowTo schema + direct-answer intro already shipped; re-check position next cycle.
+
+execute:
+  - create: new posts/pages for validated modifiers (ho.txt: 60%+ modifier volume rule; 8+ data points/page)
+  - update: retitle/rewrite declining or packaging-failed pages; add/refresh schema
+  - interlink: node scripts/auto-internal-links.mjs (hub-and-spoke, idempotent)
+  - promote: dev.to crossposter (daily, canonical back), directory submissions (17 free targets
+    in marketing/directory-submission-kit.md), outreach sender (SMTP, dedupe via sent-outreach.json)
+  - test: schema validation (JSON-LD parse), SERP position of targeted queries
+  - improve: expand INDEXED_COMPARISONS from observed GSC demand; add pairs chunk to sitemap index
+
+measure:
+  - Baseline (2026-08-11 study, 90d to 08-07): 29 clicks / ~5,900 impressions / 0.5% CTR /
+    avg pos 12.3; 508 pages at pos <=10; 2 confirmed referring domains; sitemap 472 submitted
+  - Per-cycle deltas: impressions, clicks, CTR by page and query; pos<=10 count; indexed count;
+    referring-domain count; dev.to posts live
+  - Control group: unchanged pages/queries to isolate experiment effects
+
+learn:
+  - Record per change: what shipped, observed delta, conditions (date, GSC window,
+    competing SERP features like AI Overviews)
+  - Log format: marketing/backlink-reports/ or docs/planning/; keep failures as data, not excuses
+
+adapt:
+  - Update content roadmap: double down on clusters with proven impressions
+    (creator-academy family, CTA meaning family, AI-packaging query)
+  - Update templates: carry winning schema (HowTo, DefinedTerm, FAQPage) into generators
+  - Update internal-link rules: promote pages that rank 4-10 with 0 clicks
+  - Update outreach targets: refresh qualified-prospects CSV quarterly
+  - Update publishing priorities: shift daily dev.to rotation toward impression leaders
+
+protect:
+  - Reject actions that violate: originality (no thin/duplicate content), accuracy (no
+    fabricated statistics — data must be sourced), speed (transform/opacity-only animations,
+    no heavy payloads), community rules (Reddit 90/10, no spam outreach)
+  - Never submit: stub files, placeholder content, broken assets (learned: cron stub incident
+    2026-08-11 broke /blog and /sitemap.xml — gates exist in auto-blog-generator, respect them)
+
+------------------------------------------------------------------------------------
+cadence
+------------------------------------------------------------------------------------
+  - Weekly: observe + diagnose (GSC study, indexation sample, backlink verify)
+  - Biweekly: prioritize + execute batch (schema/template/link fixes, INDEXED_COMPARISONS sweep)
+  - Monthly: full loop + adapt (roadmap, outreach refresh, baseline re-anchor)
+  - Continuous: dev.to daily crosspost (automatic), monitor for stub/broken-output incidents
+
+definition_of_done (all four must hold):
+  - 30+ indexed pages focused on YouTube SEO
+  - >=5 pages in top 10 for the core queries
+  - >=20 referring domains from relevant niches
+  - topic-cluster structure clear in sitemap + internal links
