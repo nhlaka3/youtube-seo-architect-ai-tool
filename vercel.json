@@ -448,6 +448,14 @@
       "destination": "/guides/$1.html"
     },
     {
+      "source": "/templates",
+      "destination": "/templates/index.html"
+    },
+    {
+      "source": "/templates/(.*)",
+      "destination": "/templates/$1.html"
+    },
+    {
       "source": "/tools/(.*)",
       "destination": "/tools/$1.html"
     },

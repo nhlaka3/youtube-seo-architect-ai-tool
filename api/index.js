@@ -1927,6 +1927,20 @@ async function buildSitemapChunks() {
   ];
   for (const slug of TOOL_SLUGS) core += `  <url><loc>${site}/tools/${slug}</loc></url>\n`;
 
+  // Template pages (goal2 — programmatic SEO templates under /templates)
+  const TEMPLATE_SLUGS = [
+    "youtube-description-template", "youtube-video-description-template",
+    "youtube-description-template-copy-paste", "youtube-title-template",
+    "youtube-title-ideas", "youtube-video-title-generator", "youtube-tags-template",
+    "youtube-thumbnail-template", "youtube-thumbnail-ideas", "youtube-description-generator",
+    "youtube-end-screen-template", "youtube-video-script-template", "youtube-chapters-template",
+    "youtube-intro-template", "youtube-outro-template", "youtube-tags-for-gaming",
+    "youtube-description-template-for-shorts", "youtube-description-template-for-vlogs",
+    "youtube-video-description-template-copy", "youtube-script-template-for-videos",
+  ];
+  for (const slug of TEMPLATE_SLUGS) core += `  <url><loc>${site}/templates/${slug}</loc></url>\n`;
+  core += `  <url><loc>${site}/templates</loc></url>\n`;
+
   // Blog categories + guide + vs comparisons
   for (const [catSlug, cat] of Object.entries(BLOG_CATEGORIES)) {
     core += `  <url><loc>${site}/blog/category/${catSlug}</loc></url>\n`;

@@ -1,0 +1,912 @@
+{
+  "meta": {
+    "generated": "2026-08-12",
+    "route": "/templates",
+    "standard": "Each page: copy-paste template + usage notes + 3-4 niche variations + mistakes + tool links + FAQ. Demand-validated via scripts/check-keyword.py (Google Suggest)."
+  },
+  "templates": [
+    {
+      "slug": "youtube-description-template",
+      "query": "youtube description template",
+      "demand": 100,
+      "title": "YouTube Description Template (2026): Copy-Paste Format That Ranks",
+      "meta": "A proven YouTube description template with copy-paste format, keyword placement, timestamps, and links — plus niche variations for gaming, tutorials, and vlogs.",
+      "h1": "YouTube Description Template: The Copy-Paste Format That Ranks in 2026",
+      "family": "description",
+      "intro": "The first 2-3 lines of your YouTube description are indexed like a headline — YouTube uses them for search ranking and they appear in search results. This template puts keywords, timestamps, and links in the exact order that maximizes discovery.",
+      "template": [
+        ["Line 1 — Primary keyword + value", "How to {topic} — {result} in {timeframe} (2026 Guide)"],
+        ["Line 2 — Secondary keyword sentence", "Learn {specific outcome} with this step-by-step {type} tutorial covering {3 key subtopics}."],
+        ["Line 3 — Social proof + credentials", "Based on {source/experience}: {1-2 line proof of why this works}."],
+        ["Timestamps", "00:00 Intro\\n02:15 {section 1}\\n05:40 {section 2}\\n09:10 {section 3}"],
+        ["Links block", "🔗 Resources:\\n📌 {tool or guide link}\\n📌 {related video link}\\n📌 {playlist link}"],
+        ["CTA + hashtags", "👍 If this helped, subscribe for weekly {niche} tips.\\n#youtube #seo #creators"]
+      ],
+      "usage": "Write line 1 as a search query someone would type. Put your primary keyword in the first 100 characters. Add timestamps after the video is edited so they match exactly. Keep the total under 5,000 characters (YouTube's limit) but always include the first-3-lines hook.",
+      "niche_variations": [
+        "Gaming: lead with the game title + patch/season, add match timestamps, link your best kill-compilation.",
+        "Tutorial: lead with the exact problem solved, number the steps in timestamps, link prerequisites.",
+        "Vlog: lead with the story hook + location, add chapter timestamps, link the previous vlog."
+      ],
+      "mistakes": [
+        "Keyword stuffing in the first line (reads robotic, gets ignored)",
+        "No timestamps (hurts session time and re-watching)",
+        "Links buried below the fold where YouTube collapses them",
+        "Copy-pasting the same description on every video (cannibalization)"
+      ],
+      "tools": [
+        ["Title Optimizer", "/tools/title-optimizer"],
+        ["Description Writer", "/tools/description-writer"],
+        ["Tag Generator", "/tools/tag-generator"]
+      ],
+      "related": [
+        ["YouTube Description Templates: 10 Proven Formats", "/blog/youtube-description-templates-2026"],
+        ["How to Find YouTube Keywords That Rank", "/blog/how-to-keywords-youtube"],
+        ["YouTube Tags 2026: Research & Rank", "/blog/youtube-tags-2026"]
+      ],
+      "faq": [
+        ["How long should a YouTube description be?", "Aim for 150-500 words. YouTube indexes the full text but only shows ~100-150 characters before the 'more' button — front-load keywords and value in the first 2 lines."],
+        ["Do YouTube descriptions affect ranking?", "Yes. YouTube's official help says descriptions help viewers and search understand your video. The first 2-3 lines and the keyword match matter most."],
+        ["Should I use hashtags in descriptions?", "Use 3-5 relevant hashtags max. The first 3 appear above the title; more than that can look spammy."]
+      ]
+    },
+    {
+      "slug": "youtube-video-description-template",
+      "query": "youtube video description template",
+      "demand": 100,
+      "title": "YouTube Video Description Template: 6-Section Format for More Views",
+      "meta": "A 6-section YouTube video description template: keyword hook, context, timestamps, links, CTA, hashtags. Copy-paste it for any video type and rank in search.",
+      "h1": "YouTube Video Description Template: The 6-Section Format That Earns Views",
+      "family": "description",
+      "intro": "Most creators write descriptions backward — they start with links and bury the searchable text. This template forces the keyword-rich content first, then supports it with structure.",
+      "template": [
+        ["Section 1 — Keyword hook", "{Primary keyword}: {what viewer learns}. {Result} in {timeframe}."],
+        ["Section 2 — Context", "In this video you'll see {outline of what happens}, including {unique angle}."],
+        ["Section 3 — Timestamps", "00:00 Intro\\n01:30 {step 1}\\n04:00 {step 2}\\n07:45 {results}"],
+        ["Section 4 — Resources", "📌 Tools used: {link}\\n📌 Free guide: {link}"],
+        ["Section 5 — CTA", "Subscribe for {cadence} {niche} videos. Comment your {question} below."],
+        ["Section 6 — Hashtags", "#{niche} #youtube #tutorial"]
+      ],
+      "usage": "Fill section 1 first — it's what search and the 'more' button show. Keep sections 2-5 skimmable with line breaks. Update timestamps after publishing if you re-cut the video.",
+      "niche_variations": [
+        "Review videos: lead with the verdict + rating, add specs table, link the product.",
+        "News/updates: lead with the date + headline, add sources, pin the most relevant comment.",
+        "Podcasts: lead with guest name + episode topic, add episode timestamps, link audio platforms."
+      ],
+      "mistakes": [
+        "Starting with 'Hey guys welcome back' (wastes the indexed first line)",
+        "No line breaks (mobile shows a wall of text)",
+        "Links with no context (viewers don't know what they'll get)",
+        "Missing the keyword in the first 100 characters"
+      ],
+      "tools": [
+        ["Description Writer", "/tools/description-writer"],
+        ["Keyword Research", "/tools/keywords-youtube"],
+        ["Title Optimizer", "/tools/title-optimizer"]
+      ],
+      "related": [
+        ["YouTube Description Templates: 10 Proven Formats", "/blog/youtube-description-templates-2026"],
+        ["YouTube Impressions Guide 2026", "/blog/youtube-impressions-guide-2026"],
+        ["How to Write YouTube Titles: Examples", "/blog/youtube-title-examples-2026"]
+      ],
+      "faq": [
+        ["What's the ideal YouTube description length?", "150-500 words is the sweet spot — long enough for keywords and context, short enough that viewers actually read it."],
+        ["Do timestamps in descriptions help SEO?", "Yes — they create chapter markers that improve session time and let Google surface specific parts of your video."],
+        ["Where should I put affiliate links in a description?", "Below the timestamps and after the keyword-rich content, so the searchable text stays at the top."]
+      ]
+    },
+    {
+      "slug": "youtube-description-template-copy-paste",
+      "query": "youtube description template copy paste",
+      "demand": 75,
+      "title": "YouTube Description Template Copy-Paste (2026) — 5 Ready-to-Use Formats",
+      "meta": "5 copy-paste YouTube description templates you can drop into Studio today: tutorial, vlog, gaming, product review, and Shorts formats with keyword structure.",
+      "h1": "YouTube Description Templates: 5 Copy-Paste Formats for 2026",
+      "family": "description",
+      "intro": "Stop writing descriptions from scratch. These 5 copy-paste templates cover the most common video types — fill in the {placeholders} and publish.",
+      "template": [
+        ["Tutorial format", "{What you'll learn}: {specific outcome} in {steps} steps.\\n\\n📌 Free tools: {link}\\n00:00 Intro\\n01:00 {step}\\n\\n#tutorial #howto"],
+        ["Vlog format", "{Hook}: {story teaser} (vlog #{number}).\\n\\n📍 Location: {place}\\n🎥 Gear: {gear list}\\n\\n#vlog #{niche}"],
+        ["Gaming format", "{Game} {patch/season} — {achievement or challenge}.\\n\\n🎮 Watch next: {video link}\\n⌛ Timestamps below\\n\\n#gaming #{game}"],
+        ["Product review format", "{Product} review after {timeframe}: {verdict}.\\n\\n✅ Pros: {list}\\n❌ Cons: {list}\\n🔗 Buy: {link}\\n\\n#review #{niche}"],
+        ["Shorts format", "{Question}? {Answer in 1 line}.\\n\\n👍 Full video: {link}\\n\\n#shorts #{niche}"]
+      ],
+      "usage": "Copy the format that matches your video type, replace every {placeholder}, and paste into Studio. Swap the hashtags for your niche. Keep the first line under 100 characters.",
+      "niche_variations": [
+        "Swap 'tutorial' for 'review' in education channels to match search intent.",
+        "Add a channel-name hashtag on every video to grow brand searches.",
+        "For faceless channels, lead with the topic, not a personal intro."
+      ],
+      "mistakes": [
+        "Leaving {placeholders} unfilled (publishing half-finished descriptions)",
+        "Using the same format for every video type (mismatched intent)",
+        "No timestamps in long-form formats",
+        "Forgetting the keyword in the first line"
+      ],
+      "tools": [
+        ["Description Writer", "/tools/description-writer"],
+        ["Tag Generator", "/tools/tag-generator"],
+        ["Title Optimizer", "/tools/title-optimizer"]
+      ],
+      "related": [
+        ["YouTube Description Templates: 10 Proven Formats", "/blog/youtube-description-templates-2026"],
+        ["YouTube Tags 2026", "/blog/youtube-tags-2026"],
+        ["YouTube SEO for Business Channels", "/blog/youtube-seo-for-business-channels-2026"]
+      ],
+      "faq": [
+        ["Can I copy-paste the same description every video?", "No — that's duplicate content. Use the same FORMAT but write unique first lines and keywords per video."],
+        ["What goes in the first 100 characters?", "Your primary keyword plus the core promise. That's what shows in search results and YouTube's 'more' preview."],
+        ["Do Shorts need a description?", "Yes — the first line is indexed and shows in the Shorts feed. Keep it short with 1-2 hashtags."]
+      ]
+    },
+    {
+      "slug": "youtube-title-template",
+      "query": "youtube title template",
+      "demand": 100,
+      "title": "YouTube Title Template (2026): 8 Formulas That Lift CTR",
+      "meta": "8 YouTube title templates with CTR psychology: numbers, curiosity, problem-solution, listicle, question, comparison, story, and how-to formats with real examples.",
+      "h1": "YouTube Title Template: 8 Formulas That Lift Click-Through Rate",
+      "family": "title",
+      "intro": "Your title decides whether the algorithm tests your video — and CTR is the first test. These 8 formulas cover every hook type, each with a fill-in structure and example.",
+      "template": [
+        ["Numbers formula", "How I {achievement} in {number} {timeframe} — {lesson}"],
+        ["Curiosity formula", "Why {common belief} is wrong (and what to do instead)"],
+        ["Problem-solution formula", "Fix {specific problem} in {timeframe} — {no-nonsense solution}"],
+        ["Listicle formula", "{Number} {topic} Tips That Actually Work in 2026"],
+        ["Question formula", "{Question the viewer is already asking}? ({number} answers)"],
+        ["Comparison formula", "{A} vs {B} in 2026: Which One Should You Use?"],
+        ["Story formula", "I {action} for {timeframe} — here's what {happened}"],
+        ["How-to formula", "How to {outcome} ({number} step framework)"]
+      ],
+      "usage": "Pick the formula that matches your video's strongest angle. Put the keyword at the front. Keep under 60 characters (Google truncates ~60-70 in results). Test 2-3 variants with YouTube's Test & Compare.",
+      "niche_variations": [
+        "Tutorials: use How-to or Numbers formulas — explicit outcomes win.",
+        "Gaming: use Story or Curiosity — hype + specific patch details.",
+        "Finance/business: use Problem-solution or Comparison — specificity builds trust."
+      ],
+      "mistakes": [
+        "Clickbait mismatch (title promises what the video doesn't deliver — kills retention)",
+        "Keywords buried at the end",
+        "Titles over 60 characters truncating mid-phrase",
+        "No differentiation from competitors ranking for the same query"
+      ],
+      "tools": [
+        ["Title Optimizer", "/tools/title-optimizer"],
+        ["Thumbnail Analyzer", "/dashboard"],
+        ["Keyword Research", "/tools/keywords-youtube"]
+      ],
+      "related": [
+        ["11 YouTube Title Examples That Get Clicks", "/blog/youtube-title-examples-2026"],
+        ["YouTube Thumbnail A/B Testing Guide", "/blog/youtube-thumbnail-ab-testing-guide"],
+        ["YouTube SEO Examples That Rank", "/blog/youtube-seo-examples-2026"]
+      ],
+      "faq": [
+        ["How long should a YouTube title be?", "Under 60 characters. Google shows roughly 60-70 before truncation, and mobile shows even less."],
+        ["Do titles affect ranking or just CTR?", "Both. YouTube uses title keywords for ranking, and CTR determines whether the algorithm keeps showing your video."],
+        ["Should I A/B test titles?", "Yes — YouTube's Test & Compare lets you upload 2-3 titles and shows the winner on real impressions."]
+      ]
+    },
+    {
+      "slug": "youtube-title-ideas",
+      "query": "youtube title ideas",
+      "demand": 100,
+      "title": "YouTube Title Ideas: 25 Proven Examples That Get Clicks (2026)",
+      "meta": "25 YouTube title ideas with CTR psychology explained — numbers, curiosity, problem-solution, and story hooks with templates to adapt for any niche.",
+      "h1": "YouTube Title Ideas: 25 Examples That Actually Get Clicks",
+      "family": "title",
+      "intro": "Writer's block on titles? This list of 25 proven title ideas covers every hook type — steal the structure, swap in your topic, and test.",
+      "template": [
+        ["Numbers ideas", "1) 5 Mistakes Killing Your {niche} Growth\\n2) 10 {topic} Hacks That Take 5 Minutes\\n3) How I Got {number} Views with {strategy}"],
+        ["Curiosity ideas", "4) The {topic} Secret No One Talks About\\n5) Why Your {outcome} Isn't Working\\n6) What {successful entity} Does Differently"],
+        ["Problem-solution ideas", "7) Fix {problem} Once and For All\\n8) Stop {bad habit} — Start {good habit}\\n9) The {timeframe} Fix for {problem}"],
+        ["Question ideas", "10) Does {strategy} Actually Work?\\n11) What Happens When You {action}?\\n12) Can You {outcome} Without {expensive thing}?"],
+        ["Comparison ideas", "13) {Tool A} vs {Tool B}: The Honest 2026 Verdict\\n14) Free vs Paid {tool}: Which Wins?\\n15) {Method A} vs {Method B} — {number} Tests Later"],
+        ["Story ideas", "16) I Tried {strategy} for {timeframe} — Here's What Happened\\n17) From {start} to {result} in {timeframe}\\n18) The Day I {pivotal moment}"],
+        ["How-to ideas", "19) How to {outcome} in {number} Steps\\n20) How I'd Learn {topic} If I Started Today\\n21) How to {outcome} With Zero {expensive resource}"],
+        ["Authority ideas", "22) What {industry source} Gets Wrong About {topic}\\n23) The {year} {topic} Playbook\\n24) {topic}: What Actually Works (Data-Backed)\\n25) The Only {topic} Guide You Need"]
+      ],
+      "usage": "Pick 5 ideas that fit your video, rank them by how specifically they match the content, and A/B test the top 2. Match the title's promise exactly — mismatch kills retention.",
+      "niche_variations": [
+        "Gaming: 'I Beat {game} With {challenge} — Here's How'",
+        "Cooking: 'The {dish} Trick Chefs Don't Tell You'",
+        "Tech: '{Device} After {timeframe}: Honest Long-Term Review'"
+      ],
+      "mistakes": [
+        "Copying a competitor's title verbatim (looks identical in search)",
+        "Title promises the video can't keep",
+        "All caps or excessive punctuation (spam signals)",
+        "No keyword match to what people actually search"
+      ],
+      "tools": [
+        ["Title Optimizer", "/tools/title-optimizer"],
+        ["YouTube Title Examples Guide", "/blog/youtube-title-examples-2026"],
+        ["A/B Testing Guide", "/blog/youtube-thumbnail-ab-testing-guide"]
+      ],
+      "related": [
+        ["11 YouTube Title Examples", "/blog/youtube-title-examples-2026"],
+        ["YouTube Title Template Formulas", "/templates/youtube-title-template"],
+        ["How to Find YouTube Keywords", "/blog/how-to-keywords-youtube"]
+      ],
+      "faq": [
+        ["Where do good title ideas come from?", "Search autocomplete, competitor top videos, and your own analytics — find the query with impressions but low CTR and write a better title for it."],
+        ["How many title ideas should I generate?", "5-10 per video. Generate more, filter to the 2 best, and let Test & Compare pick the winner."],
+        ["Do title ideas differ by niche?", "The psychology is the same — specificity, curiosity, and outcome — but the vocabulary should match your audience."]
+      ]
+    },
+    {
+      "slug": "youtube-video-title-generator",
+      "query": "youtube video title generator",
+      "demand": 100,
+      "title": "YouTube Video Title Generator: 20 CTAs, Formats & a Free Tool",
+      "meta": "Generate YouTube video titles with this formula system: 20 fill-in templates, CTR psychology, niche examples, and a free AI title optimizer tool.",
+      "h1": "YouTube Video Title Generator: 20 Formulas + Free Tool",
+      "family": "title",
+      "intro": "This page IS the generator: 20 fill-in title formulas grouped by hook type, with a free tool that scores your titles against CTR heuristics.",
+      "template": [
+        ["Direct outcome", "1) {Outcome} — {timeframe} Method\\n2) Get {outcome} Without {pain point}"],
+        ["Specific numbers", "3) {Number} {topic} Tips That Work\\n4) {Number}% {Improvement} in {timeframe}"],
+        ["Urgency", "5) {topic} Is Changing {timeframe} — Here's the New Way\\n6) Stop Doing {outdated thing} Now"],
+        ["Authority", "7) What {expert/source} Gets Wrong About {topic}\\n8) The {year} {topic} Playbook"],
+        ["Curiosity", "9) Why {common result} Happens (It's Not What You Think)\\n10) The {topic} Secret {competitor} Won't Share"],
+        ["Question", "11) Can You {outcome} with {resource}?\\n12) What Happens If You {action}?"],
+        ["Comparison", "13) {A} vs {B}: {year} Honest Verdict\\n14) Is {tool} Worth It? {timeframe} Test"],
+        ["Story", "15) I {action} for {timeframe} — Results\\n16) From {zero} to {result}: My {topic} Journey"],
+        ["How-to", "17) How to {outcome} (Beginner to Pro)\\n18) How to {outcome} with Zero {resource}"],
+        ["Listicle", "19) {Number} {topic} Mistakes to Avoid in {year}\\n20) {Number} {topic} Ideas That Rank"]
+      ],
+      "usage": "Pick the formula matching your video's angle, insert your topic, then score the result in the Title Optimizer tool. A/B test the top 2 with YouTube's Test & Compare.",
+      "niche_variations": [
+        "Education: outcome + numbers formulas dominate",
+        "Entertainment: curiosity + story formulas win",
+        "Business: problem-solution + authority formulas convert"
+      ],
+      "mistakes": [
+        "Generating titles without matching the video's actual content",
+        "Ignoring character limits (60-70 max)",
+        "Using the same formula on every video",
+        "Not testing — publishing the first idea"
+      ],
+      "tools": [
+        ["Title Optimizer", "/tools/title-optimizer"],
+        ["Title Template Formulas", "/templates/youtube-title-template"],
+        ["Keyword Research", "/tools/keywords-youtube"]
+      ],
+      "related": [
+        ["YouTube Title Examples 2026", "/blog/youtube-title-examples-2026"],
+        ["YouTube Thumbnail Template", "/templates/youtube-thumbnail-template"],
+        ["YouTube SEO Examples", "/blog/youtube-seo-examples-2026"]
+      ],
+      "faq": [
+        ["What makes a good video title?", "Specificity + a clear outcome or curiosity gap, under 60 characters, with the target keyword near the front."],
+        ["How is this different from AI title generators?", "These are structured formulas you control — you pick the angle. AI tools can draft variants, but you decide the promise."],
+        ["Should every title be a question?", "No — questions work for informational queries, but outcome and comparison titles often outperform them."]
+      ]
+    },
+    {
+      "slug": "youtube-tags-template",
+      "query": "youtube tags template",
+      "demand": 68,
+      "title": "YouTube Tags Template: The 30-Tag Structure That Works in 2026",
+      "meta": "A copy-paste YouTube tags template: 30 tags in 5 groups (broad, specific, long-tail, variations, brand). Plus how to research tags that match search intent.",
+      "h1": "YouTube Tags Template: 30 Tags in 5 Groups That Actually Work",
+      "family": "tags",
+      "intro": "Tags are a minor ranking factor in 2026, but they still help YouTube understand your video and match misspellings. This template covers the full structure without wasting effort.",
+      "template": [
+        ["Group 1 — Broad topic", "youtube seo, youtube tips, {niche} tips"],
+        ["Group 2 — Specific topic", "{exact video topic}, {topic} 2026, {topic} tutorial"],
+        ["Group 3 — Long-tail", "how to {outcome}, {topic} for beginners, {topic} step by step"],
+        ["Group 4 — Variations", "{topic} guide, {topic} explained, best {topic}"],
+        ["Group 5 — Brand + channel", "{channel name}, {channel name} tutorial, {your brand topic}"]
+      ],
+      "usage": "Fill each group with 5-7 tags for ~30 total. Lead with the exact video topic. Add misspellings of your main keyword. Don't stuff — YouTube ignores tags beyond the first ~300 characters.",
+      "niche_variations": [
+        "Gaming: include game title + platform + mode + patch/season.",
+        "Cooking: include dish name + cuisine + dietary tag + equipment.",
+        "Tech: include device + model + OS version + use case."
+      ],
+      "mistakes": [
+        "Using irrelevant trending tags (hurts relevance signals)",
+        "Copying tags from top videos (YouTube treats this as spammy duplication)",
+        "More than 30-40 tags (wasted effort, ignored)",
+        "No misspellings or variations of the main keyword"
+      ],
+      "tools": [
+        ["Tag Generator", "/tools/tag-generator"],
+        ["YouTube Tags 2026 Guide", "/blog/youtube-tags-2026"],
+        ["Keyword Research", "/tools/keywords-youtube"]
+      ],
+      "related": [
+        ["YouTube Tags 2026: How to Research & Rank", "/blog/youtube-tags-2026"],
+        ["YouTube Tags Template for Vlogs", "/templates/youtube-tags-template-for-vlogs"],
+        ["YouTube SEO Tips 2026", "/blog/youtube-seo-tips-for-creators-in-2026"]
+      ],
+      "faq": [
+        ["Do YouTube tags matter in 2026?", "Less than they used to — YouTube says tags play a minimal role. Use them for misspellings and exact variants, not as your main optimization."],
+        ["How many tags should I use?", "About 30 covering broad, specific, long-tail, and variations. Quality and relevance beat quantity."],
+        ["Should I copy tags from popular videos?", "No — it reads as duplicate relevance signals and wastes the opportunity to target your own variants."]
+      ]
+    },
+    {
+      "slug": "youtube-thumbnail-template",
+      "query": "youtube thumbnail template",
+      "demand": 100,
+      "title": "YouTube Thumbnail Template: The 3-Layer Design That Doubles CTR",
+      "meta": "A YouTube thumbnail template with 3 layers — subject, emotion, text — plus color rules, size specs, and A/B testing guidance to lift CTR in 2026.",
+      "h1": "YouTube Thumbnail Template: The 3-Layer Design System",
+      "family": "thumbnail",
+      "intro": "Thumbnails are the #1 CTR lever in 2026 — YouTube's own research says most clicks come from thumbnails, not titles. This template layers subject + emotion + minimal text.",
+      "template": [
+        ["Layer 1 — Subject", "1 clear subject (face or product), 1/3 of frame, facing the action. No more than 2 focal points."],
+        ["Layer 2 — Emotion/action", "Exaggerated expression or motion blur that matches the title's promise. Match the emotion to the video's outcome."],
+        ["Layer 3 — Text (3 words max)", "3-5 words, 60+ pt, high-contrast color, readable at 120x90px mobile size. Never cover the subject's face."],
+        ["Background", "High-contrast solid or gradient — no clutter. The subject must pop at small sizes."],
+        ["Brand consistency", "Same font family + 2-3 accent colors per channel so regulars recognize your content in the feed."]
+      ],
+      "usage": "Start from your title — the thumbnail should visualize the title's promise. Design at 1280x720, export PNG, and check readability by viewing at 25% zoom. Upload 2-3 variants to Test & Compare.",
+      "niche_variations": [
+        "Gaming: show the game screen + your reaction face split.",
+        "Cooking: finished dish hero shot + steam/action element.",
+        "Finance: big number or chart + your face reacting to the result."
+      ],
+      "mistakes": [
+        "Too much text (viewers can't read it, YouTube collapses it)",
+        "Clickbait mismatch with the title or content",
+        "Same thumbnail for every video (no curiosity in the feed)",
+        "Ignoring mobile — designing only at desktop size"
+      ],
+      "tools": [
+        ["Thumbnail Analyzer", "/dashboard"],
+        ["Thumbnail Color Analyzer", "/tools/thumbnail-color-analyzer"],
+        ["A/B Testing Guide", "/blog/youtube-thumbnail-ab-testing-guide"]
+      ],
+      "related": [
+        ["YouTube Thumbnail A/B Testing Guide", "/blog/youtube-thumbnail-ab-testing-guide"],
+        ["YouTube Thumbnail Tips 2026", "/blog/youtube-thumbnail-tips-2026"],
+        ["Thumbnail Template Ideas", "/templates/youtube-thumbnail-ideas"]
+      ],
+      "faq": [
+        ["What size should a YouTube thumbnail be?", "1280x720 pixels (16:9), under 2MB, and it should read clearly at mobile size — that's how most viewers see it."],
+        ["How many words on a thumbnail?", "3 or fewer. Text-heavy thumbnails get ignored and look spammy."],
+        ["Do thumbnails matter more than titles?", "YouTube's official research found viewers are most influenced by thumbnails. Test both, but prioritize the thumbnail."]
+      ]
+    },
+    {
+      "slug": "youtube-thumbnail-ideas",
+      "query": "youtube thumbnail ideas",
+      "demand": 100,
+      "title": "YouTube Thumbnail Ideas: 15 Layouts That Stop the Scroll (2026)",
+      "meta": "15 YouTube thumbnail layout ideas with examples: face+arrow, before/after, split screen, big number, product hero, reaction, and more — with CTR principles.",
+      "h1": "YouTube Thumbnail Ideas: 15 Layouts That Stop the Scroll",
+      "family": "thumbnail",
+      "intro": "Great thumbnails follow repeatable layouts. These 15 ideas cover every format — adapt the structure, keep the 3-layer rule, and test.",
+      "template": [
+        ["1. Face + arrow", "Surprised face + arrow pointing at the subject — classic CTR winner."],
+        ["2. Before/after", "Split frame showing transformation — works for tutorials and reviews."],
+        ["3. Big number", "One giant statistic or price — instant specificity."],
+        ["4. Product hero", "Product shot on clean background + tiny context — reviews and unboxings."],
+        ["5. Split screen", "Two options compared side by side — comparisons and choices."],
+        ["6. Reaction", "Extreme emotion + the thing causing it — entertainment and gaming."],
+        ["7. Question mark", "Visual question mark over the subject — curiosity hook."],
+        ["8. Circle zoom", "Zoomed detail of the key element — draws the eye."],
+        ["9. List preview", "Numbered list teaser (5 things...) — listicles."],
+        ["10. Red circle", "Highlight the key detail with a red circle — tutorials."],
+        ["11. Color contrast", "Subject in bright color on dark background — pops in the feed."],
+        ["12. Text punch", "One bold word (e.g. 'FREE') + minimal art — direct promise."],
+        ["13. Collage", "3-4 image grid previewing multiple examples — compilations."],
+        ["14. Silhouette", "Silhouette + dramatic lighting — story and mystery content."],
+        ["15. Meme mashup", "Relevant meme format + your topic — entertainment and trend riding."]
+      ],
+      "usage": "Match the layout to the video type and title. Build the thumbnail at 1280x720, verify mobile readability, and A/B test 2-3 layouts with Test & Compare.",
+      "niche_variations": [
+        "Education: before/after + big number layouts lead.",
+        "Gaming: reaction + circle zoom dominate.",
+        "Reviews: product hero + split screen convert."
+      ],
+      "mistakes": [
+        "Every thumbnail the same layout (feed fatigue)",
+        "Layout contradicts the title promise",
+        "Too many elements — no single focal point",
+        "Text that's illegible at mobile size"
+      ],
+      "tools": [
+        ["Thumbnail Color Analyzer", "/tools/thumbnail-color-analyzer"],
+        ["Thumbnail Template", "/templates/youtube-thumbnail-template"],
+        ["A/B Testing Guide", "/blog/youtube-thumbnail-ab-testing-guide"]
+      ],
+      "related": [
+        ["YouTube Thumbnail Tips 2026", "/blog/youtube-thumbnail-tips-2026"],
+        ["YouTube Thumbnail A/B Testing", "/blog/youtube-thumbnail-ab-testing-guide"],
+        ["YouTube Title Ideas", "/templates/youtube-title-ideas"]
+      ],
+      "faq": [
+        ["How do I get thumbnail ideas?", "Study your niche's top videos, note the layouts that repeat, then adapt them with your own twist. Test what works for YOUR audience."],
+        ["What makes a thumbnail stop the scroll?", "A single clear focal point, an emotion that matches the title, and contrast that pops at mobile size."],
+        ["Should I copy viral thumbnails?", "Copy the STRUCTURE, not the exact design. Originality matters for trust and E-E-A-T."]
+      ]
+    },
+    {
+      "slug": "youtube-description-generator",
+      "query": "youtube description generator",
+      "demand": 100,
+      "title": "YouTube Description Generator: Free Tool + 6-Step Manual Method",
+      "meta": "Generate YouTube descriptions with a free AI tool or the 6-step manual method: keyword hook, context, timestamps, links, CTA, hashtags — with examples.",
+      "h1": "YouTube Description Generator: Free Tool + Manual Method",
+      "family": "tool",
+      "intro": "Two ways to generate descriptions: the free Description Writer tool for instant drafts, or the 6-step manual method below when you want full control.",
+      "template": [
+        ["Step 1 — Keyword hook", "Extract your primary keyword from the title. Write the first line as a search query: 'How to {outcome} — {result}.'"],
+        ["Step 2 — Context", "2-3 sentences on what the video covers, the unique angle, and who it's for."],
+        ["Step 3 — Timestamps", "List 3-8 chapter markers matching the video's edits."],
+        ["Step 4 — Links", "2-4 contextual links: related video, playlist, free tool or guide."],
+        ["Step 5 — CTA", "One subscribe CTA + one engagement question."],
+        ["Step 6 — Hashtags", "3-5 niche hashtags."]
+      ],
+      "usage": "For the tool: paste your title/keywords into the Description Writer and refine the draft. For manual: follow the 6 steps, keeping the first 2 lines under 150 characters.",
+      "niche_variations": [
+        "Affiliate videos: add a disclosure line before the links block.",
+        "Music: add lyrics, credits, and streaming links.",
+        "Local content: add location, hours, and map link."
+      ],
+      "mistakes": [
+        "Accepting AI drafts without fact-checking specifics",
+        "No timestamps in generated descriptions",
+        "Keyword-stuffed first line",
+        "No unique angle — generic AI boilerplate"
+      ],
+      "tools": [
+        ["Description Writer", "/tools/description-writer"],
+        ["Title Optimizer", "/tools/title-optimizer"],
+        ["Tag Generator", "/tools/tag-generator"]
+      ],
+      "related": [
+        ["YouTube Description Template", "/templates/youtube-description-template"],
+        ["YouTube Description Template Copy-Paste", "/templates/youtube-description-template-copy-paste"],
+        ["YouTube SEO Examples", "/blog/youtube-seo-examples-2026"]
+      ],
+      "faq": [
+        ["Can AI write my YouTube descriptions?", "Yes, as a first draft — but verify facts, add your timestamps and links, and rewrite the first line so it matches your actual keyword."],
+        ["How long should a generated description be?", "150-500 words. AI tends to over-produce; trim to the essentials."],
+        ["Is the Description Writer tool free?", "Yes — it's free with no signup, like all the tools on this site."]
+      ]
+    },
+    {
+      "slug": "youtube-end-screen-template",
+      "query": "youtube end screen template",
+      "demand": 100,
+      "title": "YouTube End Screen Template: The 4-Element Layout That Holds Viewers",
+      "meta": "A YouTube end screen template with 4 elements — video, playlist, subscribe, channel — placement rules, timing, and mistakes to avoid in 2026.",
+      "h1": "YouTube End Screen Template: 4 Elements, 1 Layout, More Retention",
+      "family": "features",
+      "intro": "End screens are the cheapest session-time lever you have: 5-20 seconds at the end of every video that keeps viewers inside your channel. This template covers the standard 4-element layout.",
+      "template": [
+        ["Element 1 — Best next video", "A video that continues the topic — placed top-left, largest element."],
+        ["Element 2 — Playlist", "The series playlist — top-right, second priority."],
+        ["Element 3 — Subscribe button", "Bottom-left, always present."],
+        ["Element 4 — Channel (optional)", "Bottom-right only if you have 4 slots and a clear next action."],
+        ["Timing", "Enable for the last 5-20 seconds; make sure the video's natural ending aligns so the elements don't cover important content."]
+      ],
+      "usage": "Choose the single most-relevant next video — matching topics convert far better than random. Update the end screen element per video, don't set it once globally.",
+      "niche_variations": [
+        "Series: end screen links the NEXT episode explicitly.",
+        "Tutorials: link the prerequisite or advanced follow-up.",
+        "Vlogs: link the previous vlog to enable binge-watching."
+      ],
+      "mistakes": [
+        "Linking an unrelated video (kills session relevance)",
+        "Elements covering the video's conclusion",
+        "Skipping the subscribe button",
+        "End screen on videos shorter than 25 seconds (not allowed)"
+      ],
+      "tools": [
+        ["YouTube End Screens & Cards Guide", "/blog/youtube-end-screens-cards-guide-2026"],
+        ["Channel Audit", "/dashboard"],
+        ["Retention Analyzer", "/dashboard"]
+      ],
+      "related": [
+        ["YouTube End Screens & Cards Guide 2026", "/blog/youtube-end-screens-cards-guide-2026"],
+        ["YouTube Intro Template", "/templates/youtube-intro-template"],
+        ["YouTube Chapters Template", "/templates/youtube-chapters-template"]
+      ],
+      "faq": [
+        ["How long should an end screen be?", "5-20 seconds — YouTube's window for end screen elements."],
+        ["Can end screens hurt retention?", "No—they only appear at the end of the video. But covering your conclusion with elements can annoy viewers, so leave the last spoken line visible and choose the best next video."],
+        ["How many elements should I use?", "3-4 max. More clutters the screen and dilutes the click."]
+      ]
+    },
+    {
+      "slug": "youtube-video-script-template",
+      "query": "youtube video script template",
+      "demand": 100,
+      "title": "YouTube Video Script Template: The Hook-Body-CTA Structure (2026)",
+      "meta": "A YouTube video script template with the hook-body-CTA structure: cold open, pattern interrupt, value sections, and outro — with fill-in sections for any niche.",
+      "h1": "YouTube Video Script Template: Hook, Body, CTA",
+      "family": "script",
+      "intro": "Great videos are scripted, even when they sound unscripted. This template gives you the skeleton every high-retention video follows — fill in your topic.",
+      "template": [
+        ["Cold open (0-15s)", "{Hook that stops the scroll}: '{bold claim or question}' — then the promise: 'In this video you'll learn {outcome}.'"],
+        ["Pattern interrupt (15-30s)", "Change of scene, visual, or tone — show the result early (proof shot)."],
+        ["Context (30-60s)", "Who this is for: \"If you {pain point}, this is for you.\" One line on why it matters."],
+        ["Value section 1", "{Topic point 1}: claim + example + takeaway. Include a visual or demo."],
+        ["Value section 2", "{Topic point 2}: claim + example + takeaway."],
+        ["Value section 3", "{Topic point 3}: claim + example + takeaway."],
+        ["Recap + CTA (last 30s)", "Summarize the 3 takeaways, then: 'If this helped, subscribe + comment {question}.' Then end screen."]
+      ],
+      "usage": "Write the cold open LAST — you'll know the real hook after writing the body. Keep value sections to 3 max (retention drops past ~10 min without variety). Read the script aloud once before recording.",
+      "niche_variations": [
+        "Gaming: structure around a run/match narrative, not sections.",
+        "Tutorials: value sections = numbered steps with screen recording.",
+        "Storytelling: value sections become act 1/2/3 with escalating stakes."
+      ],
+      "mistakes": [
+        "No cold open — starting with 'Hey guys welcome back'",
+        "Scripting every word (sounds robotic; use bullet beats instead)",
+        "No early proof — viewers leave before the payoff",
+        "CTA only at the end, never mid-video"
+      ],
+      "tools": [
+        ["Script Generator", "/dashboard"],
+        ["Intro Template", "/templates/youtube-intro-template"],
+        ["Retention Analyzer", "/dashboard"]
+      ],
+      "related": [
+        ["YouTube Intro Hook: First 3 Seconds", "/blog/youtube-intro-hook-first-3-seconds"],
+        ["YouTube Retention Guide", "/blog/youtube-retention-graph-explained-2026"],
+        ["YouTube Script Template for Videos", "/templates/youtube-script-template-for-videos"]
+      ],
+      "faq": [
+        ["How long should a video script be?", "About 130-150 words per minute of video. A 10-minute video ≈ 1,300-1,500 words."],
+        ["Should I memorize the script?", "No — use bullet beats and improvise the words. Memorized scripts sound flat."],
+        ["What's the most important part of the script?", "The first 30 seconds. If you lose viewers there, the rest doesn't matter."]
+      ]
+    },
+    {
+      "slug": "youtube-chapters-template",
+      "query": "youtube chapters template",
+      "demand": 68,
+      "title": "YouTube Chapters Template: Timestamp Format That Boosts Retention",
+      "meta": "A YouTube chapters template with the exact timestamp format, chapter naming rules, and structure examples that improve session time and search visibility.",
+      "h1": "YouTube Chapters Template: The Timestamp Format Viewers Love",
+      "family": "features",
+      "intro": "Chapters turn one long video into a menu — viewers jump to what they need, watch more, and YouTube rewards the session time. The format is strict; here's the template.",
+      "template": [
+        ["Chapter 1", "00:00 Intro — what the video covers + why it matters"],
+        ["Chapter 2", "01:30 {Step or section name} — lead with a verb or outcome"],
+        ["Chapter 3", "04:15 {Step or section name}"],
+        ["Chapter 4", "07:00 {Step or section name}"],
+        ["Chapter 5", "09:30 Results / Recap / Q&A"],
+        ["Format rules", "MM:SS or H:MM:SS, first chapter must be 00:00, at least 3 chapters for the feature to appear"]
+      ],
+      "usage": "Put timestamps in the description's first lines or use YouTube's built-in chapters editor. Name chapters with the keyword + outcome, not vague labels.",
+      "niche_variations": [
+        "Tutorials: chapters = the numbered steps.",
+        "Reviews: chapters = specs, test results, verdict.",
+        "Podcasts: chapters = topics with guest names."
+      ],
+      "mistakes": [
+        "No 00:00 chapter (feature won't activate)",
+        "Vague names like 'Part 1' instead of outcomes",
+        "Timestamps that don't match the edited video",
+        "Fewer than 3 chapters"
+      ],
+      "tools": [
+        ["Video Chapters Guide", "/blog/youtube-chapter-timestamps-seo-guide"],
+        ["Description Template", "/templates/youtube-description-template"],
+        ["Retention Analyzer", "/dashboard"]
+      ],
+      "related": [
+        ["YouTube Chapter Timestamps SEO Guide", "/blog/youtube-chapter-timestamps-seo-guide"],
+        ["YouTube End Screen Template", "/templates/youtube-end-screen-template"],
+        ["YouTube Description Template", "/templates/youtube-description-template"]
+      ],
+      "faq": [
+        ["Do YouTube chapters help SEO?", "Indirectly — they improve session time and let your sections appear in Google search results as key moments."],
+        ["How many chapters should a video have?", "3-10. Enough to make sections skimmable, few enough to stay meaningful."],
+        ["What's the exact timestamp format?", "MM:SS (e.g., 04:15) or H:MM:SS for videos over an hour, with the first chapter always 00:00."]
+      ]
+    },
+    {
+      "slug": "youtube-intro-template",
+      "query": "youtube intro template",
+      "demand": 68,
+      "title": "YouTube Intro Template: The 15-Second Hook That Keeps Viewers",
+      "meta": "A YouTube intro template for the first 15 seconds: cold open, pattern interrupt, promise. With examples for tutorials, vlogs, gaming, and channels.",
+      "h1": "YouTube Intro Template: The First 15 Seconds That Decide Retention",
+      "family": "script",
+      "intro": "The first 15 seconds decide your retention curve. This template replaces 'welcome back' with a structure that hooks immediately.",
+      "template": [
+        ["0-3s — Cold open", "Start mid-action or with the boldest claim: '{result} is possible — here's proof.'"],
+        ["3-8s — Pattern interrupt", "Visual/audio change + proof shot of the end result."],
+        ["8-15s — Promise + who it's for", "'In {timeframe} you'll learn {outcome}. If you {pain point}, this is for you.'"],
+        ["15s+ — Content begins", "Jump straight to value section 1 — no 'welcome back' filler."]
+      ],
+      "usage": "Film the cold open after the body so you know the real hook. Keep the intro under 20 seconds total — longer intros bleed retention on every platform.",
+      "niche_variations": [
+        "Tutorials: cold open = the finished result on screen.",
+        "Gaming: cold open = best moment of the run.",
+        "Vlogs: cold open = the most dramatic 3 seconds."
+      ],
+      "mistakes": [
+        "Welcome-back intros (retention killer)",
+        "Long channel intro animations (viewers skip)",
+        "Intro promises the video doesn't keep",
+        "No early proof — claims without evidence"
+      ],
+      "tools": [
+        ["Intro Hook Guide", "/blog/youtube-intro-hook-first-3-seconds"],
+        ["Script Template", "/templates/youtube-video-script-template"],
+        ["Retention Analyzer", "/dashboard"]
+      ],
+      "related": [
+        ["YouTube Intro Hook: First 3 Seconds", "/blog/youtube-intro-hook-first-3-seconds"],
+        ["YouTube Video Script Template", "/templates/youtube-video-script-template"],
+        ["YouTube Outro Template", "/templates/youtube-outro-template"]
+      ],
+      "faq": [
+        ["How long should a YouTube intro be?", "Under 20 seconds, ideally under 10. The first 15 seconds are where retention is won or lost."],
+        ["Do I need an intro animation?", "No — channel intros reduce retention. Jump straight into value."],
+        ["What's a pattern interrupt?", "A sudden change — cut, zoom, sound, or text — that refocuses attention right when viewers might leave."]
+      ]
+    },
+    {
+      "slug": "youtube-outro-template",
+      "query": "youtube outro template",
+      "demand": 53,
+      "title": "YouTube Outro Template: Recap, CTA, End Screen (30-Second Close)",
+      "meta": "A YouTube outro template for the final 30 seconds: recap 3 takeaways, one CTA, end screen placement — the structure that drives subscribes and session time.",
+      "h1": "YouTube Outro Template: The 30-Second Close That Converts",
+      "family": "features",
+      "intro": "The outro is where you convert attention into action. This template structures the last 30 seconds so viewers subscribe, click, and stay in your channel.",
+      "template": [
+        ["0-10s — Recap", "Restate the 3 takeaways in one sentence each: 'So — {1}, {2}, and {3}.'"],
+        ["10-20s — CTA", "One primary action: 'If this helped, subscribe and hit the bell.' Then one engagement prompt: 'Comment {question}.'"],
+        ["20-30s — End screen", "Next video + playlist elements appear; speak the next video's topic aloud to drive the click."],
+        ["Hard cut", "End cleanly at 30s — no trailing silence or outtakes."]
+      ],
+      "usage": "Write the recap from your 3 value-section takeaways — it reinforces retention. Choose the end screen video BEFORE recording so you can mention it naturally.",
+      "niche_variations": [
+        "Tutorials: outro links the advanced follow-up video.",
+        "Gaming: outro teases the next challenge/episode.",
+        "Business: outro points to the free tool or lead magnet."
+      ],
+      "mistakes": [
+        "No recap (viewers forget what they learned)",
+        "Multiple CTAs competing ('subscribe AND comment AND follow...')",
+        "End screen video not mentioned aloud",
+        "Outro longer than 30 seconds"
+      ],
+      "tools": [
+        ["End Screen Template", "/templates/youtube-end-screen-template"],
+        ["Video Script Template", "/templates/youtube-video-script-template"],
+        ["Channel Audit", "/dashboard"]
+      ],
+      "related": [
+        ["YouTube End Screens & Cards Guide", "/blog/youtube-end-screens-cards-guide-2026"],
+        ["YouTube Intro Template", "/templates/youtube-intro-template"],
+        ["YouTube Video Script Template", "/templates/youtube-video-script-template"]
+      ],
+      "faq": [
+        ["How long should an outro be?", "20-30 seconds — enough for recap + CTA + end screen, short enough to not feel padded."],
+        ["Should I ask for likes in the outro?", "One CTA max. Choose the action that matters most — usually subscribe or the next video."],
+        ["Does the outro affect retention?", "No — it's at the end. But a weak outro wastes the session you already earned; a good one sends viewers to the next video."]
+      ]
+    },
+    {
+      "slug": "youtube-tags-for-gaming",
+      "query": "youtube tags for gaming",
+      "demand": 100,
+      "title": "YouTube Tags for Gaming: The 30-Tag Template That Works (2026)",
+      "meta": "YouTube tags for gaming channels: a 30-tag template covering game title, platform, mode, patch, long-tail, and brand tags — plus research tips.",
+      "h1": "YouTube Tags for Gaming: The 30-Tag Gaming Template",
+      "family": "tags",
+      "intro": "Gaming tags need game-specific structure — title, platform, mode, and patch matter more than generic 'gaming' tags. This template covers the full set.",
+      "template": [
+        ["Game title", "{game title}, {game title} gameplay, {game title} {year}"],
+        ["Platform + mode", "{game} {platform}, {game} multiplayer, {game} solo, {game} ranked"],
+        ["Content type", "{game} lets play, {game} tutorial, {game} highlights, {game} montage"],
+        ["Long-tail", "how to {outcome} in {game}, best {game} {strategy}, {game} {patch} update"],
+        ["Brand + channel", "{channel name}, {channel name} {game}"]
+      ],
+      "usage": "Lead with the exact game title — that's the highest-intent tag. Add platform (PC/PS5/Xbox) and mode. Update patch/season tags when the game updates.",
+      "niche_variations": [
+        "Speedruns: add {game} speedrun, any% / 100% tags.",
+        "Esports: add team/player names + tournament.",
+        "Reviews: add {game} review + {game} worth it + verdict tags."
+      ],
+      "mistakes": [
+        "Generic 'gaming' tags without the game title",
+        "Tags for games you're not playing (irrelevance)",
+        "No platform or mode tags (misses search variants)",
+        "Stale patch tags after updates"
+      ],
+      "tools": [
+        ["Tag Generator", "/tools/tag-generator"],
+        ["YouTube Tags 2026 Guide", "/blog/youtube-tags-2026"],
+        ["YouTube SEO for Gaming Channels", "/blog/youtube-seo-for-gaming-channels-2026"]
+      ],
+      "related": [
+        ["YouTube Tags 2026 Guide", "/blog/youtube-tags-2026"],
+        ["YouTube SEO for Gaming Channels", "/blog/youtube-seo-for-gaming-channels-2026"],
+        ["YouTube Tags Template", "/templates/youtube-tags-template"]
+      ],
+      "faq": [
+        ["What are the best gaming tags?", "Start with the exact game title, then platform, mode, content type, and long-tail how-to queries. Generic 'gaming' alone does nothing."],
+        ["Do gaming tags still matter?", "Moderately — title and thumbnail matter more, but tags help match misspellings and platform variants."],
+        ["How often should I update gaming tags?", "When the game patches or a new season drops, refresh the patch/season tags on new videos."]
+      ]
+    },
+    {
+      "slug": "youtube-description-template-for-shorts",
+      "query": "youtube description template for shorts",
+      "demand": 53,
+      "title": "YouTube Shorts Description Template: The 3-Line Format That Gets Views",
+      "meta": "A YouTube Shorts description template: 3 lines for hook, context, and CTA — plus hashtag rules and a full-length video link strategy.",
+      "h1": "YouTube Shorts Description Template: The 3-Line Format",
+      "family": "description",
+      "intro": "Shorts descriptions are short by nature — but the first line still gets indexed. This template maximizes the 3 lines you actually use.",
+      "template": [
+        ["Line 1 — Hook + keyword", "{Primary keyword}: {the payoff in one line}"],
+        ["Line 2 — Context", "{What the short shows} — full guide linked below."],
+        ["Line 3 — CTA + hashtags", "👍 Full video: {link} #shorts #{niche} #youtube"]
+      ],
+      "usage": "Put the keyword in line 1 — it's indexed and shows in the feed. Link the full-length video in line 2-3 to convert Shorts viewers into long-form watch time.",
+      "niche_variations": [
+        "Gaming: line 1 = game + clip payoff.",
+        "Cooking: line 1 = dish + one-line recipe hook.",
+        "Comedy: line 1 = setup; line 2 = punchline context."
+      ],
+      "mistakes": [
+        "Leaving the description empty (missed indexing)",
+        "Hashtag spam (more than 3-5 hurts)",
+        "No link to the full video (wasted conversion)",
+        "Keyword buried after hashtags"
+      ],
+      "tools": [
+        ["Description Writer", "/tools/description-writer"],
+        ["YouTube Shorts SEO Guide", "/blog/youtube-shorts-seo-guide-2026"],
+        ["Tag Generator", "/tools/tag-generator"]
+      ],
+      "related": [
+        ["YouTube Shorts SEO Guide 2026", "/blog/youtube-shorts-seo-guide-2026"],
+        ["YouTube Description Template", "/templates/youtube-description-template"],
+        ["YouTube Shorts Monetization Guide", "/blog/youtube-shorts-monetization-requirements-2026"]
+      ],
+      "faq": [
+        ["Do Shorts descriptions matter?", "Yes — the first line is indexed and appears in the Shorts feed. Use it for the keyword and payoff."],
+        ["How many hashtags on Shorts?", "3-5 max. The first 3 appear above the title; more looks spammy."],
+        ["Should I link a full video in Shorts?", "Yes — Shorts are a discovery surface; the link converts viewers to long-form where watch time counts more."]
+      ]
+    },
+    {
+      "slug": "youtube-description-template-for-vlogs",
+      "query": "youtube description template for vlogs",
+      "demand": 30,
+      "title": "YouTube Vlog Description Template: Story + Context + Chapters",
+      "meta": "A YouTube vlog description template that turns a personal video into a searchable one: story hook, context, location, chapters, and links.",
+      "h1": "YouTube Vlog Description Template: Make Personal Videos Searchable",
+      "family": "description",
+      "intro": "Vlogs feel personal, but they can rank too — if the description gives search something to grab. This template adds structure without killing the voice.",
+      "template": [
+        ["Line 1 — Story hook", "{Hook}: {the moment or question that opens the vlog} (vlog #{number})."],
+        ["Context", "Spent {timeframe} {activity/location}. Here's what happened — including {unique moment}."],
+        ["Chapters", "00:00 {hook}\\n01:20 {location/event 1}\\n04:30 {moment 2}\\n08:00 {reflection}"],
+        ["Links", "📍 Location: {place}\\n🎥 Previous vlog: {link}\\n📌 {tool or resource}"],
+        ["CTA + hashtags", "Subscribe for {cadence} vlogs. What should I do next — {choice}?\\n#vlog #{niche} #youtube"]
+      ],
+      "usage": "Write line 1 as a hook that works in search, not just for your audience. Add chapters even to casual vlogs — they improve session time and let viewers find the moment they care about.",
+      "niche_variations": [
+        "Travel vlogs: location + itinerary in context; link maps.",
+        "Daily vlogs: theme each vlog (routine / challenge / event).",
+        "Behind-the-scenes: name the project + role in the hook."
+      ],
+      "mistakes": [
+        "No keyword anywhere (vlogs rank only via watch time)",
+        "Chapters missing (long vlogs lose navigation)",
+        "No CTA (viewers drift after the video)",
+        "Over-personalized first line that no one searches"
+      ],
+      "tools": [
+        ["Description Writer", "/tools/description-writer"],
+        ["Video Script Template", "/templates/youtube-video-script-template"],
+        ["Title Optimizer", "/tools/title-optimizer"]
+      ],
+      "related": [
+        ["YouTube Description Template", "/templates/youtube-description-template"],
+        ["YouTube Intro Template", "/templates/youtube-intro-template"],
+        ["YouTube Description Templates: 10 Formats", "/blog/youtube-description-templates-2026"]
+      ],
+      "faq": [
+        ["Can vlogs rank in YouTube search?", "Yes — with a searchable title and description. Add a topic angle ('my first 24 hours in {city}') instead of just 'vlog #12', use chapters and a keyword line, and vlogs get discovery beyond the subscriber feed."],
+        ["How long should a vlog description be?", "100-300 words — enough context for search, short enough to stay personal."],
+        ["What's the best vlog CTA?", "A choice question ('where should I go next?') drives comments and community."]
+      ]
+    },
+    {
+      "slug": "youtube-video-description-template-copy",
+      "query": "youtube video description template copy",
+      "demand": 63,
+      "title": "YouTube Video Description Template Copy: 5 Ready Formats (2026)",
+      "meta": "5 ready-to-copy YouTube video description formats: educational, review, vlog, gaming, and Shorts — each with keyword structure and timestamps.",
+      "h1": "YouTube Video Description Templates to Copy: 5 Formats",
+      "family": "description",
+      "intro": "Ready-to-copy video descriptions for the 5 most common formats — replace the {placeholders} and publish. Each format matches its search intent.",
+      "template": [
+        ["Educational", "{Topic} explained in {timeframe}: {outcome}.\\n\\n00:00 Intro\\n01:00 {concept 1}\\n03:30 {concept 2}\\n\\n📌 Free tool: {link}\\n#tutorial #howto"],
+        ["Review", "{Product} review after {timeframe} — {verdict}.\\n\\n✅ Pros: {pros}\\n❌ Cons: {cons}\\n\\n🔗 {affiliate/product link}\\n#review #{niche}"],
+        ["Vlog", "{hook} — vlog #{n}.\\n\\n📍 {location}\\n🎥 {gear}\\n\\n#vlog #{niche}"],
+        ["Gaming", "{game} {patch}: {achievement}.\\n\\n🎮 Watch: {next video}\\n⌛ Timestamps below\\n\\n#gaming #{game}"],
+        ["Shorts", "{keyword}: {payoff}.\\n\\nFull video: {link}\\n#shorts #{niche}"]
+      ],
+      "usage": "Match the format to the video type — a review format on a tutorial confuses both viewers and search. Fill every placeholder, keep line 1 under 100 characters.",
+      "niche_variations": [
+        "Add a disclosure line for affiliate links in review/educational formats.",
+        "Educational: add 'chapters' instead of generic timestamps.",
+        "Gaming: swap {patch} for {season} on live-service games."
+      ],
+      "mistakes": [
+        "Wrong format for the video type",
+        "Unfilled placeholders shipped live",
+        "No timestamps in long-form formats",
+        "Missing disclosure on affiliate links"
+      ],
+      "tools": [
+        ["Description Writer", "/tools/description-writer"],
+        ["Tag Generator", "/tools/tag-generator"],
+        ["Title Optimizer", "/tools/title-optimizer"]
+      ],
+      "related": [
+        ["YouTube Description Template Copy-Paste", "/templates/youtube-description-template-copy-paste"],
+        ["YouTube Description Template", "/templates/youtube-description-template"],
+        ["YouTube Description Templates: 10 Formats", "/blog/youtube-description-templates-2026"]
+      ],
+      "faq": [
+        ["What's the difference from the copy-paste template page?", "This page is organized by video FORMAT (educational/review/vlog/gaming/Shorts); the other organizes by optimization goal. Both are copy-ready."],
+        ["Can I use these for old videos?", "Yes — editing an old video's description can revive it if the title and content match the new description."],
+        ["Should descriptions change per format?", "Yes — intent differs. Tutorial viewers want steps; review viewers want verdict + pros/cons."]
+      ]
+    },
+    {
+      "slug": "youtube-script-template-for-videos",
+      "query": "youtube script template for videos",
+      "demand": 40,
+      "title": "YouTube Script Template for Videos: 5 Formats (Tutorial, Review, Vlog, Gaming, Podcast)",
+      "meta": "5 YouTube script templates by video format — tutorial, review, vlog, gaming, podcast — with hook, value sections, and CTA structure for each.",
+      "h1": "YouTube Script Templates: 5 Formats for Any Video",
+      "family": "script",
+      "intro": "One script structure doesn't fit all video types. These 5 format-specific templates keep the hook-body-CTA backbone while matching each genre's rhythm.",
+      "template": [
+        ["Tutorial", "Hook: '{outcome} in {steps} steps — no fluff.' → Context → Step 1-5 with demos → Recap → CTA. ~150 words/min."],
+        ["Review", "Hook: '{product} after {timeframe}: {verdict}.' → Context → Specs → Tests → Pros/Cons → Verdict → CTA."],
+        ["Vlog", "Hook: {most dramatic 3s} → Context → 2-3 moments/scenes → Reflection → CTA. Looser beats, no word-for-word script."],
+        ["Gaming", "Hook: {best moment} → Context (game/setting) → Play-by-play beats → Result → CTA. Narrate the action, don't script it."],
+        ["Podcast", "Hook: {episode question} → Guest intro → 3 topic beats → Takeaway → CTA + next episode tease."]
+      ],
+      "usage": "Pick the format, write the hook last, then fill the beats with bullets (not full sentences). Target 130-150 words per minute of video.",
+      "niche_variations": [
+        "Education: tutorial format + numbered steps.",
+        "Entertainment: vlog format with scripted beats only.",
+        "Business: review/podcast formats for authority content."
+      ],
+      "mistakes": [
+        "Full word-for-word script (sounds robotic)",
+        "Tutorial script with no demos or visuals",
+        "Review script that buries the verdict",
+        "No CTA or end-screen hook in the script"
+      ],
+      "tools": [
+        ["Script Generator", "/dashboard"],
+        ["Video Script Template", "/templates/youtube-video-script-template"],
+        ["Intro Template", "/templates/youtube-intro-template"]
+      ],
+      "related": [
+        ["YouTube Video Script Template", "/templates/youtube-video-script-template"],
+        ["YouTube Intro Template", "/templates/youtube-intro-template"],
+        ["YouTube Retention Guide", "/blog/youtube-retention-graph-explained-2026"]
+      ],
+      "faq": [
+        ["How do I write a script fast?", "Use the format template, write hook last, and use bullet beats — 10 minutes of video ≈ 1,300-1,500 words of beats."],
+        ["Should all videos be scripted?", "Scripted beats, yes — word-for-word, no. Structure keeps retention; spontaneity keeps trust."],
+        ["What's the difference from the main script template?", "This page is format-specific; the main template is the universal hook-body-CTA backbone."]
+      ]
+    }
+  ]
+}
