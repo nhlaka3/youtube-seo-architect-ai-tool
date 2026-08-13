@@ -47,5 +47,19 @@
     "to_email": "hello@youngurbanproject.com",
     "subject": "Found a broken link on your www.youngurbanproject.com page",
     "sent_at": "2026-07-28T10:58:29Z"
+  },
+  {
+    "source_page": "https://www.youngurbanproject.com/youtube-seo-tools/",
+    "broken_url": "https://joseangelostudios.com/b2b-seo/?utm_medium=ig&#038;utm_term=deleted&#038;utm_content=ad.name&#038;utm_campaign=ay",
+    "to_email": "hello@youngurbanproject.com",
+    "subject": "Found a broken link on your www.youngurbanproject.com page",
+    "sent_at": "2026-08-13T10:10:53Z"
+  },
+  {
+    "source_page": "https://www.youngurbanproject.com/youtube-seo-tools/",
+    "broken_url": "https://www.globalmediainsight.com/blog/youtube-users-statistics/?utm_medium=ig&#038;utm_term=deleted&#038;utm_content=ad.name&#038;utm_campaign=ay",
+    "to_email": "hello@youngurbanproject.com",
+    "subject": "Found a broken link on your www.youngurbanproject.com page",
+    "sent_at": "2026-08-13T10:11:39Z"
   }
 ]
