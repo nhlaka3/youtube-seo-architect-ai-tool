@@ -1,6 +1,6 @@
 {
   "description": "Curated low-competition YouTube SEO keywords. Each entry has a keyword, slug, category, and status (pending/done/skipped). The generator picks the next 'pending' keyword.",
-  "lastUpdated": "2026-08-18",
+  "lastUpdated": "2026-08-20",
   "keywords": [
     {
       "keyword": "youtube community posts strategy 2026",
@@ -1103,8 +1103,9 @@
       "keyword": "best youtube seo tools for beginners 2026",
       "slug": "best-youtube-seo-tools-for-beginners-2026",
       "category": "Tools",
-      "status": "pending",
-      "notes": "Auto-generated (demand-verified)"
+      "status": "done",
+      "notes": "Auto-generated (demand-verified)",
+      "generatedAt": "2026-08-20T06:33:21.009Z"
     },
     {
       "keyword": "youtube branding guidelines 2026",
