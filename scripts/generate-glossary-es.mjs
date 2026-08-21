@@ -274,7 +274,7 @@ function generateIndexPage(data) {
     .related-card p{font-size:.8rem;color:#8b8b9e;margin:0}
     @media(max-width:640px){.glossary-hero{padding:2rem 1rem}.glossary-hero h1{font-size:1.5rem}}
   </style>
-</head>
+<script defer src="/ga.js"></script></head>
 <body>
   <header class="header"><a href="/">⚡ YT SEO Architect</a><a href="/tools/" class="cta">Herramientas</a></header>
   <main>

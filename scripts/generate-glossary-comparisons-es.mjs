@@ -122,7 +122,7 @@ function generateComparisonPage(a, b, aName, bName, aCat, bCat, aDef, bDef, allT
     footer a{color:#8b8b9e;text-decoration:none}
     @media(max-width:480px){.dimension{flex-direction:column;gap:4px}}
   </style>
-</head>
+<script defer src="/ga.js"></script></head>
 <body>
   <header class="header">
     <a href="/">⚡ YT SEO Architect</a>

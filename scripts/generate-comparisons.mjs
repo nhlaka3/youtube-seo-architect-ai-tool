@@ -178,7 +178,7 @@ function renderComparisonPage(key, data) {
     footer a { color: #6366f1; text-decoration: none; }
     @media(max-width:640px) { .hero h1 { font-size: 1.8rem; } .comparison-table th, .comparison-table td { padding: 10px 12px; font-size: 0.85rem; } }
   </style>
-</head>
+<script defer src="/ga.js"></script></head>
 <body>
   <nav class="nav-bar">
     <a href="/" class="brand">⚡ YT SEO <span>Architect</span></a>

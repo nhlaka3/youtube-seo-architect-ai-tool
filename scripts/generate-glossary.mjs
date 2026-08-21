@@ -551,7 +551,7 @@ function generateIndexPage(data) {
     @media(max-width:640px){.glossary-hero{padding:2rem 1rem}.glossary-hero h1{font-size:1.6rem}.related-grid{grid-template-columns:1fr}}
     .cta-box{border:1px solid #4f46e5;margin:2rem 0}
   </style>
-</head>
+<script defer src="/ga.js"></script></head>
 <body>
 
   <header class="header">

@@ -102,7 +102,7 @@ function generatePage(g) {
     footer a { color: #6366f1; text-decoration: none; }
     @media(max-width:640px) { .hero h1 { font-size: 1.5rem; } .step-card { padding: 1.25rem; } }
   </style>
-</head>
+<script defer src="/ga.js"></script></head>
 <body>
   <nav class="nav-bar">
     <a href="/" class="brand">⚡ YT SEO <span>Architect</span></a>

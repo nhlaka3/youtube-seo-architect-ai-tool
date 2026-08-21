@@ -213,7 +213,7 @@ function buildPage(t) {
     .chart-wrap { margin: 1.25rem 0; }
     @media (max-width: 640px) { h1 { font-size: 1.5rem; } .tpl-label { white-space: normal; width: 40%; } }
   </style>
-</head>
+<script defer src="/ga.js"></script></head>
 <body>
   ${SITE_HEADER}
   <div class="wrap">

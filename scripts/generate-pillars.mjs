@@ -231,7 +231,7 @@ ${blocks}  </section>\n`;
     .hub-link a { color: var(--pillar-accent); text-decoration: none; }
     .wordcount-note { display: none; } /* body word count for QA: ${wordCount} */
   </style>
-</head>
+<script defer src="/ga.js"></script></head>
 <body>
 ${HEADER}
   <div class="wrap">

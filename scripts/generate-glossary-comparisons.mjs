@@ -232,7 +232,7 @@ function generateComparisonPage(termA, termB, slugA, slugB, dataA, dataB) {
     .cta-box{border:1px solid #4f46e5;margin:2rem 0}
     @media(max-width:640px){.hero{padding:2rem 1rem}.hero h1{font-size:1.3rem}}
   </style>
-</head>
+<script defer src="/ga.js"></script></head>
 <body>
   <header class="header">
     <a href="/">⚡ YT SEO Architect</a>

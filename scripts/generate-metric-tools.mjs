@@ -301,7 +301,7 @@ function generatePage(tool) {
     footer{text-align:center;padding:2rem;color:#6b7280;font-size:.8rem}
     footer a{color:#8b8b9e;text-decoration:none}
   </style>
-</head>
+<script defer src="/ga.js"></script></head>
 <body>
   <header class="header">
     <a href="/">⚡ YT SEO Architect</a>

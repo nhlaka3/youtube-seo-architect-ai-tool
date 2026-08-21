@@ -915,7 +915,7 @@ function renderCategoryHeader(catSlug, pages) {
     + '.blog-hero p{color:var(--text-secondary);font-size:1.05rem;max-width:600px;margin:0 auto;line-height:1.7}'
     + '.blog-hero .stat{display:inline-block;margin-top:1rem;background:rgba(0,242,255,0.08);border:1px solid rgba(0,242,255,0.15);color:var(--cyan);padding:.3rem 1rem;border-radius:9999px;font-size:.85rem;font-weight:600}'
     + '@media(max-width:640px){.blog-hero{padding:2rem 1rem}.blog-hero h1{font-size:1.5rem}}'
-    + '</style></head><body>'
+    + '</style><script defer src="/ga.js"></script></head><body>'
     + '<a href="#blog-content" class="skip-link">Skip to content</a>'
     + '<header class="site-header"><div class="header-inner">'
     + '<a href="/" class="header-logo"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#00f2ff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="9.75 15.02 15.5 12 9.75 8.98 9.75 15.02"/><circle cx="12" cy="12" r="10"/></svg>YT <span>SEO</span> Architect</a>'

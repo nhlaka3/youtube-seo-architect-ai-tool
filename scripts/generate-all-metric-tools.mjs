@@ -949,7 +949,7 @@ function generateToolPage(tool) {
     input[type="color"]{height:48px;padding:4px;cursor:pointer}
   </style>
 <link rel="stylesheet" href="/motion-utilities.css">
-</head>
+<script defer src="/ga.js"></script></head>
 <body>
   <header class="header">
     <a href="/">⚡ YT SEO Architect</a>
