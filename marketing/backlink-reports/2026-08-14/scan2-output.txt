@@ -1,0 +1,86 @@
+
+============================================================
+COMPETITOR BACKLINK REPLICATOR
+Scanning for pages that link to YouTube SEO tool competitors
+Our site: https://yt-seo-architect.vercel.app
+Competitors tracked: 10
+============================================================
+
+🔄 Stage 1: Searching for relevant pages...
+  [1/26] "best youtube seo tools"
+  [2/26] "best free youtube seo tools"
+  [3/26] "youtube seo tools 2026"
+  [4/26] "youtube keyword research tools"
+  [5/26] "youtube tag generator tools"
+  [6/26] "best tools for youtube growth"
+  [7/26] "youtube optimization tools"
+  [8/26] "youtube analytics tools"
+  [9/26] "alternatives to vidiq"
+  [10/26] "alternatives to tubebuddy"
+  [11/26] "free alternatives to vidiq"
+  [12/26] "vidiq vs tubebuddy"
+  [13/26] "vidiq alternative free"
+  [14/26] "tubebuddy alternative free"
+  [15/26] "youtube tools list"
+  [16/26] "youtube seo resources"
+  [17/26] "tools for youtube creators"
+  [18/26] "youtube marketing tools"
+  [19/26] "best free tools for youtubers"
+  [20/26] "youtube creator toolkit"
+  [21/26] "essential youtube tools"
+  [22/26] "youtube growth tools"
+  [23/26] "how to optimize youtube videos tools"
+  [24/26] "youtube seo guide tools"
+  [25/26] "youtube thumbnail maker tools"
+  [26/26] "youtube description generator tools"
+  Found 50 unique results across all queries
+
+  Raw results saved: /home/runner/work/yt-seo-architect-private/yt-seo-architect-private/marketing/backlink-reports/competitor-raw-results-2026-08-14.json
+
+🔄 Stage 2: Fetching pages and analyzing links...
+  [1/15] 🎯 MISSING https://influencermarketinghub.com/youtube-seo-too
+       Links to: RapidTags + KeywordTool.io + vidIQ + TubeBuddy + Canva
+  [2/15] [SKIP] https://www.tastyedits.com/youtube-seo-tools/ — 0-0 competitor links
+  [SKIP] https://thecmo.com/tools/youtube-seo-tools/ — HTTP Error 403: Forbidden
+  [4/15] [SKIP] https://joseangelostudios.com/best-youtube-seo-too — 0-0 competitor links
+  [5/15] [SKIP] https://rankxdigital.com/blog/youtube-seo-tools/ — 0-0 competitor links
+  [6/15] 🎯 MISSING https://contentmavericks.com/best-youtube-seo-tool
+       Links to: TubeBuddy
+  [7/15] [SKIP] https://stuartkerrs.com/best-seo-tools-for-youtube — 0-0 competitor links
+  [8/15] [SKIP] https://www.youtool.io/ — 0-0 competitor links
+  [9/15] [SKIP] https://outlierkit.com/resources/youtube-seo/ — 0-0 competitor links
+  [10/15] 🎯 MISSING https://www.braiv.co/articles/best-youtube-seo-too
+       Links to: Tubics + KeywordTool.io + vidIQ + TubeBuddy
+  [11/15] 🎯 MISSING https://www.tubebuddy.com/blog/seo-tools-youtube/
+       Links to: vidIQ + TubeBuddy
+  [12/15] 🎯 MISSING https://vidiq.com/features/keyword-tools/
+       Links to: vidIQ
+  [13/15] [SKIP] https://www.collabpals.com/tools/youtube-keyword-r — 0-0 competitor links
+  [14/15] [SKIP] https://www.ryrob.com/youtube-keyword-tool/ — 0-0 competitor links
+  [15/15] 🎯 MISSING https://alanspicer.com/best-youtube-seo-tools-2026
+       Links to: vidIQ
+
+  Analyzed 6 pages with competitor links
+
+🔄 Stage 3: Finding pages that DON'T link to us yet...
+  Missing our link: 6 pages
+
+  Top opportunities:
+    🎯 [links 5 comps] https://influencermarketinghub.com/youtube-seo-tools/
+         Competitors: RapidTags + KeywordTool.io + vidIQ + TubeBuddy + Canva
+    🎯 [links 4 comps] https://www.braiv.co/articles/best-youtube-seo-tools-2026
+         Competitors: Tubics + KeywordTool.io + vidIQ + TubeBuddy
+    🎯 [links 2 comps] https://www.tubebuddy.com/blog/seo-tools-youtube/
+         Competitors: vidIQ + TubeBuddy
+    🎯 [links 1 comps] https://contentmavericks.com/best-youtube-seo-tools/
+         Competitors: TubeBuddy
+    🎯 [links 1 comps] https://vidiq.com/features/keyword-tools/
+         Competitors: vidIQ
+    🎯 [links 1 comps] https://alanspicer.com/best-youtube-seo-tools-2026/
+         Competitors: vidIQ
+
+🔄 Stage 4: Generating personalized outreach templates...
+  New opportunities: 0
+  Skipped (already seen): 6
+
+No new opportunities found. Run with more search queries or different terms.

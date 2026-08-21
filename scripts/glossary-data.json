@@ -1,9 +1,9 @@
 {
   "meta": {
     "description": "Complete YouTube SEO glossary with 60+ terms. Free definitions, examples, and optimization tips for every YouTube creator metric and feature.",
-    "generatedAt": "2026-08-10",
-    "totalTerms": 112,
-    "lastAutoExpand": "2026-08-10T09:16:53.986Z"
+    "generatedAt": "2026-08-17",
+    "totalTerms": 129,
+    "lastAutoExpand": "2026-08-17T08:39:23.128Z"
   },
   "categories": [
     {
@@ -1787,6 +1787,232 @@
       ],
       "relatedBlogs": [],
       "id": "audience-retention-for-content-strategy",
+      "_source": "combinatorial"
+    },
+    {
+      "term": "YouTube Video Embeds",
+      "slug": "youtube-video-embeds",
+      "shortDefinition": "Optimizing videos for embeds and shares across the web.",
+      "expandedDefinition": "Understand how YouTube video embeds affect your video's visibility, engagement, and ranking. Learn how to optimize your videos for embeds and shares across the web, including best practices for embedding videos on websites, blogs, and social media.",
+      "category": "seo-optimization",
+      "relatedTerms": [],
+      "relatedBlogs": [
+        "5 Ways to Boost Video Engagement on YouTube",
+        "The Ultimate Guide to Video Sharing on Social Media"
+      ],
+      "id": "youtube-video-embeds"
+    },
+    {
+      "term": "YouTube Community Guidelines Compliance",
+      "slug": "youtube-community-guidelines-compliance",
+      "shortDefinition": "Understanding and following YouTube's community guidelines to avoid penalties and strikes.",
+      "expandedDefinition": "Learn how to navigate YouTube's community guidelines and avoid common mistakes that can lead to penalties and strikes. Understand the consequences of non-compliance and how to maintain a healthy community on your YouTube channel.",
+      "category": "seo-optimization",
+      "relatedTerms": [],
+      "relatedBlogs": [
+        "10 Ways to Build a Loyal Community on YouTube",
+        "The Importance of Video Moderation on YouTube"
+      ],
+      "id": "youtube-community-guidelines-compliance"
+    },
+    {
+      "term": "YouTube Super Chat and Super Stickers",
+      "slug": "youtube-super-chat-and-super-stickers",
+      "shortDefinition": "Using Super Chat and Super Stickers to increase viewer engagement and revenue.",
+      "expandedDefinition": "Understand the benefits and best practices of using Super Chat and Super Stickers on YouTube. Learn how to encourage viewers to participate and increase revenue through these features.",
+      "category": "monetization",
+      "relatedTerms": [],
+      "relatedBlogs": [
+        "The Ultimate Guide to Super Chat and Super Stickers on YouTube",
+        "5 Ways to Boost Viewer Engagement on YouTube"
+      ],
+      "id": "youtube-super-chat-and-super-stickers"
+    },
+    {
+      "term": "YouTube Cards and End Screens",
+      "slug": "youtube-cards-and-end-screens",
+      "shortDefinition": "Using Cards and End Screens to diversify income streams and promote other content.",
+      "expandedDefinition": "Learn how to create and use YouTube Cards and End Screens to diversify your income streams and promote other content. Understand the best practices for using these features to increase engagement and revenue.",
+      "category": "monetization",
+      "relatedTerms": [],
+      "relatedBlogs": [
+        "The Ultimate Guide to YouTube Cards and End Screens",
+        "5 Ways to Diversify Your Income Streams on YouTube"
+      ],
+      "id": "youtube-cards-and-end-screens"
+    },
+    {
+      "term": "YouTube Video Sitemap Submission",
+      "slug": "youtube-video-sitemap-submission",
+      "shortDefinition": "Submitting video sitemaps to improve video discovery and SEO.",
+      "expandedDefinition": "Understand the importance of submitting YouTube video sitemaps and how to do it effectively. Learn how to improve video discovery and SEO by submitting your video sitemaps.",
+      "category": "analytics",
+      "relatedTerms": [],
+      "relatedBlogs": [
+        "The Ultimate Guide to Video Sitemap Submission on YouTube",
+        "5 Ways to Improve Video Discovery on YouTube"
+      ],
+      "id": "youtube-video-sitemap-submission"
+    },
+    {
+      "term": "YouTube Video Description Formatting",
+      "slug": "youtube-video-description-formatting",
+      "shortDefinition": "Optimizing video descriptions for better readability and SEO.",
+      "expandedDefinition": "Learn how to format your YouTube video descriptions for better readability and SEO. Understand the best practices for writing and formatting video descriptions to increase engagement and visibility.",
+      "category": "seo-optimization",
+      "relatedTerms": [],
+      "relatedBlogs": [
+        "The Ultimate Guide to Video Description Formatting on YouTube",
+        "5 Ways to Optimize Your Video Descriptions for Better SEO"
+      ],
+      "id": "youtube-video-description-formatting"
+    },
+    {
+      "term": "YouTube Video Thumbnail Best Practices",
+      "slug": "youtube-video-thumbnail-best-practices",
+      "shortDefinition": "Creating eye-catching and effective video thumbnails.",
+      "expandedDefinition": "Understand the best practices for creating eye-catching and effective video thumbnails on YouTube. Learn how to increase click-through rates and improve video visibility with well-designed thumbnails.",
+      "category": "seo-optimization",
+      "relatedTerms": [],
+      "relatedBlogs": [
+        "The Ultimate Guide to Video Thumbnail Best Practices on YouTube",
+        "5 Ways to Create Eye-Catching Video Thumbnails"
+      ],
+      "id": "youtube-video-thumbnail-best-practices"
+    },
+    {
+      "term": "YouTube Video Tagging Best Practices",
+      "slug": "youtube-video-tagging-best-practices",
+      "shortDefinition": "Using relevant and accurate video tags for better SEO and discoverability.",
+      "expandedDefinition": "Learn how to use relevant and accurate video tags on YouTube for better SEO and discoverability. Understand the best practices for tagging your videos to increase visibility and engagement.",
+      "category": "seo-optimization",
+      "relatedTerms": [],
+      "relatedBlogs": [
+        "The Ultimate Guide to Video Tagging Best Practices on YouTube",
+        "5 Ways to Improve Video SEO with Accurate Tags"
+      ],
+      "id": "youtube-video-tagging-best-practices"
+    },
+    {
+      "term": "YouTube Video Length Optimization",
+      "slug": "youtube-video-length-optimization",
+      "shortDefinition": "Finding the optimal video length for better engagement and SEO.",
+      "expandedDefinition": "Understand how to find the optimal video length for better engagement and SEO on YouTube. Learn how to balance video length with viewer engagement and how to optimize your videos for maximum impact.",
+      "category": "seo-optimization",
+      "relatedTerms": [],
+      "relatedBlogs": [
+        "The Ultimate Guide to Video Length Optimization on YouTube",
+        "5 Ways to Optimize Your Video Length for Better Engagement"
+      ],
+      "id": "youtube-video-length-optimization"
+    },
+    {
+      "term": "YouTube Video Captioning and Subtitles",
+      "slug": "youtube-video-captioning-and-subtitles",
+      "shortDefinition": "Adding captions and subtitles to increase accessibility and engagement.",
+      "expandedDefinition": "Learn how to add captions and subtitles to your YouTube videos to increase accessibility and engagement. Understand the benefits of captioning and subtitling your videos and how to do it effectively.",
+      "category": "seo-optimization",
+      "relatedTerms": [],
+      "relatedBlogs": [
+        "The Ultimate Guide to Video Captioning and Subtitling on YouTube",
+        "5 Ways to Increase Video Accessibility with Captions and Subtitles"
+      ],
+      "id": "youtube-video-captioning-and-subtitles"
+    },
+    {
+      "term": "YouTube Video Monetization Strategies",
+      "slug": "youtube-video-monetization-strategies",
+      "shortDefinition": "Exploring alternative monetization strategies beyond ads.",
+      "expandedDefinition": "Understand the benefits and best practices of exploring alternative monetization strategies beyond ads on YouTube. Learn how to diversify your income streams and increase revenue through sponsorships, merchandise, and more.",
+      "category": "monetization",
+      "relatedTerms": [],
+      "relatedBlogs": [
+        "The Ultimate Guide to Video Monetization Strategies on YouTube",
+        "5 Ways to Diversify Your Income Streams on YouTube"
+      ],
+      "id": "youtube-video-monetization-strategies"
+    },
+    {
+      "term": "YouTube Video Promotion Strategies",
+      "slug": "youtube-video-promotion-strategies",
+      "shortDefinition": "Increasing video visibility through social media and other channels.",
+      "expandedDefinition": "Learn how to increase video visibility through social media and other channels on YouTube. Understand the best practices for promoting your videos and reaching a wider audience.",
+      "category": "content-strategy",
+      "relatedTerms": [],
+      "relatedBlogs": [
+        "The Ultimate Guide to Video Promotion Strategies on YouTube",
+        "5 Ways to Promote Your Videos on Social Media"
+      ],
+      "id": "youtube-video-promotion-strategies"
+    },
+    {
+      "term": "YouTube Video Engagement Metrics",
+      "slug": "youtube-video-engagement-metrics",
+      "shortDefinition": "Understanding and tracking video engagement metrics on YouTube Analytics.",
+      "expandedDefinition": "Understand the importance of video engagement metrics on YouTube Analytics and how to track them effectively. Learn how to use these metrics to improve video engagement and increase revenue.",
+      "category": "analytics",
+      "relatedTerms": [
+        "youtube-analytics"
+      ],
+      "relatedBlogs": [
+        "The Ultimate Guide to Video Engagement Metrics on YouTube Analytics",
+        "5 Ways to Improve Video Engagement with YouTube Analytics"
+      ],
+      "id": "youtube-video-engagement-metrics"
+    },
+    {
+      "term": "YouTube Video A/B Testing",
+      "slug": "youtube-video-ab-testing",
+      "shortDefinition": "Testing video variations to improve engagement and conversion rates.",
+      "expandedDefinition": "Learn how to test video variations on YouTube using A/B testing to improve engagement and conversion rates. Understand the benefits and best practices of A/B testing your videos and how to get started.",
+      "category": "content-strategy",
+      "relatedTerms": [],
+      "relatedBlogs": [
+        "The Ultimate Guide to Video A/B Testing on YouTube",
+        "5 Ways to Improve Video Engagement with A/B Testing"
+      ],
+      "id": "youtube-video-ab-testing"
+    },
+    {
+      "term": "YouTube Video Localization Strategies",
+      "slug": "youtube-video-localization-strategies",
+      "shortDefinition": "Targeting specific audiences through language and cultural adaptation.",
+      "expandedDefinition": "Understand the benefits and best practices of targeting specific audiences through language and cultural adaptation on YouTube. Learn how to localize your videos for different regions and languages and increase engagement and revenue.",
+      "category": "content-strategy",
+      "relatedTerms": [],
+      "relatedBlogs": [
+        "The Ultimate Guide to Video Localization Strategies on YouTube",
+        "5 Ways to Localize Your Videos for Global Markets"
+      ],
+      "id": "youtube-video-localization-strategies"
+    },
+    {
+      "term": "YouTube Video Security and Encryption",
+      "slug": "youtube-video-security-and-encryption",
+      "shortDefinition": "Protecting video content from piracy and unauthorized use.",
+      "expandedDefinition": "Learn how to protect your video content from piracy and unauthorized use on YouTube. Understand the importance of video security and encryption and how to use these measures to safeguard your intellectual property.",
+      "category": "youtube-features",
+      "relatedTerms": [],
+      "relatedBlogs": [
+        "The Ultimate Guide to Video Security and Encryption on YouTube",
+        "5 Ways to Protect Your Videos from Piracy and Unauthorized Use"
+      ],
+      "id": "youtube-video-security-and-encryption"
+    },
+    {
+      "term": "Audience Retention for Video Structure",
+      "slug": "audience-retention-for-video-structure",
+      "shortDefinition": "Learn how to optimize audience retention specifically for video structure. This guide covers tailored strategies, common challenges, and proven techniques that work for video structure channels and creators in 2026.",
+      "expandedDefinition": "Audience Retention is a critical skill for YouTube success, but the approach changes depending on your audience and channel size. For video structure, the strategies differ significantly from general best practices. This guide breaks down exactly what video structure creators need to know about audience retention, including specific examples, tools, and techniques that deliver results. Whether you're just starting out or looking to refine your approach, understanding how audience retention applies to video structure will help you create more effective content and grow faster.",
+      "category": "analytics",
+      "relatedTerms": [
+        "youtube-analytics-for-non-monetized-channels",
+        "youtube-analytics-for-personal-branding",
+        "audience-retention-for-content-strategy",
+        "youtube-analytics-for-content-strategy"
+      ],
+      "relatedBlogs": [],
+      "id": "audience-retention-for-video-structure",
       "_source": "combinatorial"
     }
   ]

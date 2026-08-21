@@ -8,7 +8,13 @@
   {
     "slug": "youtube-monetization-2026",
     "quality_score": 30,
-    "words": 2621,
+    "words": 2990,
+    "action": "refresh"
+  },
+  {
+    "slug": "youtube-seo-for-gaming-channels-2026",
+    "quality_score": 30,
+    "words": 1926,
     "action": "refresh"
   },
   {
@@ -18,63 +24,81 @@
     "action": "refresh"
   },
   {
-    "slug": "youtube-seo-for-gaming-channels-2026",
+    "slug": "youtube-description-templates-2026",
     "quality_score": 31,
-    "words": 1809,
+    "words": 2578,
+    "action": "refresh"
+  },
+  {
+    "slug": "youtube-playlist-optimization-strategy",
+    "quality_score": 31,
+    "words": 2219,
+    "action": "refresh"
+  },
+  {
+    "slug": "youtube-shorts-seo-ranking-guide-2026",
+    "quality_score": 31,
+    "words": 2035,
     "action": "refresh"
   },
   {
     "slug": "best-youtube-seo-tools-2026",
     "quality_score": 32,
-    "words": 2754,
+    "words": 2784,
     "action": "refresh"
   },
   {
-    "slug": "youtube-description-templates-2026",
+    "slug": "youtube-tags-2026",
     "quality_score": 32,
-    "words": 2506,
-    "action": "refresh"
-  },
-  {
-    "slug": "youtube-playlist-optimization-strategy",
-    "quality_score": 32,
-    "words": 2126,
+    "words": 2368,
     "action": "refresh"
   },
   {
     "slug": "what-does-youtube-ctr-actually-mean",
     "quality_score": 32,
-    "words": 2068,
-    "action": "refresh"
-  },
-  {
-    "slug": "youtube-shorts-seo-ranking-guide-2026",
-    "quality_score": 32,
-    "words": 1981,
+    "words": 2142,
     "action": "refresh"
   },
   {
     "slug": "youtube-community-posts-strategy-2026",
     "quality_score": 32,
-    "words": 1871,
+    "words": 1901,
     "action": "refresh"
   },
   {
     "slug": "youtube-algorithm-checklist-2026",
     "quality_score": 32,
-    "words": 1520,
+    "words": 1554,
     "action": "refresh"
   },
   {
     "slug": "youtube-seo-for-cooking-channels-2026",
     "quality_score": 33,
-    "words": 2959,
+    "words": 3018,
     "action": "refresh"
   },
   {
     "slug": "youtube-thumbnail-tips-2026",
     "quality_score": 33,
-    "words": 2771,
+    "words": 2850,
+    "action": "refresh"
+  },
+  {
+    "slug": "youtube-shorts-seo-guide-2026",
+    "quality_score": 33,
+    "words": 2744,
+    "action": "refresh"
+  },
+  {
+    "slug": "youtube-impressions-guide-2026",
+    "quality_score": 33,
+    "words": 2598,
+    "action": "refresh"
+  },
+  {
+    "slug": "youtube-for-tutorials-2026",
+    "quality_score": 33,
+    "words": 2520,
     "action": "refresh"
   },
   {
@@ -84,45 +108,51 @@
     "action": "refresh"
   },
   {
-    "slug": "youtube-tags-2026",
-    "quality_score": 33,
-    "words": 2296,
-    "action": "refresh"
-  },
-  {
     "slug": "youtube-seo-audit-diagnostic-fix-2026",
     "quality_score": 33,
-    "words": 2149,
+    "words": 2204,
     "action": "refresh"
   },
   {
-    "slug": "youtube-monetization-tips-2026",
+    "slug": "how-to-increase-youtube-retention-2026",
     "quality_score": 33,
-    "words": 2022,
+    "words": 2118,
     "action": "refresh"
   },
   {
     "slug": "youtube-metadata-auditor-vs-vidiq-shadow-ban",
     "quality_score": 33,
-    "words": 2012,
+    "words": 2047,
+    "action": "refresh"
+  },
+  {
+    "slug": "youtube-monetization-tips-2026",
+    "quality_score": 33,
+    "words": 2032,
     "action": "refresh"
   },
   {
     "slug": "how-to-metadata-youtube",
     "quality_score": 33,
-    "words": 1783,
+    "words": 1812,
     "action": "refresh"
   },
   {
     "slug": "how-to-fix-youtube-shadow-ban-2026",
     "quality_score": 33,
-    "words": 1581,
+    "words": 1604,
     "action": "refresh"
   },
   {
     "slug": "youtube-content-strategy-for-beginners-2026",
     "quality_score": 34,
-    "words": 3295,
+    "words": 3309,
+    "action": "refresh"
+  },
+  {
+    "slug": "youtube-seo-checklist-beginners-2026",
+    "quality_score": 34,
+    "words": 3003,
     "action": "refresh"
   },
   {
@@ -132,75 +162,75 @@
     "action": "refresh"
   },
   {
-    "slug": "youtube-shorts-seo-guide-2026",
-    "quality_score": 34,
-    "words": 2677,
-    "action": "refresh"
-  },
-  {
-    "slug": "improving-youtube-engagement-with-live-streaming-2026",
-    "quality_score": 34,
-    "words": 2580,
-    "action": "refresh"
-  },
-  {
     "slug": "using-youtube-features-to-enhance-viewer-experience-2026",
     "quality_score": 34,
-    "words": 2568,
-    "action": "refresh"
-  },
-  {
-    "slug": "how-youtube-algorithm-works-2026",
-    "quality_score": 34,
-    "words": 2538,
+    "words": 2622,
     "action": "refresh"
   },
   {
     "slug": "increasing-youtube-watch-time-with-analytics-2026",
     "quality_score": 34,
-    "words": 2530,
+    "words": 2611,
     "action": "refresh"
   },
   {
-    "slug": "youtube-impressions-guide-2026",
+    "slug": "how-youtube-algorithm-works-2026",
     "quality_score": 34,
-    "words": 2524,
+    "words": 2594,
+    "action": "refresh"
+  },
+  {
+    "slug": "improving-youtube-engagement-with-live-streaming-2026",
+    "quality_score": 34,
+    "words": 2594,
     "action": "refresh"
   },
   {
     "slug": "youtube-subscriber-growth-2026",
     "quality_score": 34,
-    "words": 2498,
+    "words": 2520,
     "action": "refresh"
   },
   {
-    "slug": "youtube-for-tutorials-2026",
+    "slug": "youtube-seo-audit-for-gaming-channels-2026",
     "quality_score": 34,
-    "words": 2455,
+    "words": 2507,
+    "action": "refresh"
+  },
+  {
+    "slug": "youtube-retention-graph-explained-2026",
+    "quality_score": 34,
+    "words": 2500,
     "action": "refresh"
   },
   {
     "slug": "youtube-seo-for-business-channels-2026",
     "quality_score": 34,
-    "words": 2329,
+    "words": 2388,
+    "action": "refresh"
+  },
+  {
+    "slug": "youtube-seo-optimization-for-gaming-channels-2026",
+    "quality_score": 34,
+    "words": 2367,
     "action": "refresh"
   },
   {
     "slug": "youtube-seo-for-music-channels-2026",
     "quality_score": 34,
-    "words": 2254,
+    "words": 2291,
     "action": "refresh"
   },
   {
     "slug": "youtube-seo-for-fitness-channels-2026",
     "quality_score": 34,
-    "words": 2192,
+    "words": 2229,
     "action": "refresh"
   },
   {
-    "slug": "how-to-increase-youtube-retention-2026",
+    "slug": "youtube-seo-tips-for-creators-in-2026",
     "quality_score": 34,
-    "words": 2026,
+    "words": 2055,
     "action": "refresh"
   },
   {
@@ -210,123 +240,141 @@
     "action": "refresh"
   },
   {
-    "slug": "youtube-seo-checklist-beginners-2026",
+    "slug": "youtube-seo-examples-2026",
     "quality_score": 35,
-    "words": 2913,
+    "words": 3334,
+    "action": "refresh"
+  },
+  {
+    "slug": "youtube-video-visibility-increase-strategies-2026",
+    "quality_score": 35,
+    "words": 2679,
+    "action": "refresh"
+  },
+  {
+    "slug": "youtube-creator-community-engagement-strategies-2026",
+    "quality_score": 35,
+    "words": 2510,
     "action": "refresh"
   },
   {
     "slug": "youtube-end-screens-cards-guide-2026",
     "quality_score": 35,
-    "words": 2426,
+    "words": 2480,
     "action": "refresh"
   },
   {
     "slug": "youtube-for-small-channels-2026",
     "quality_score": 35,
+    "words": 2401,
+    "action": "refresh"
+  },
+  {
+    "slug": "youtube-video-optimization-strategy-for-gaming-channels-2026",
+    "quality_score": 35,
+    "words": 2401,
+    "action": "refresh"
+  },
+  {
+    "slug": "youtube-shorts-monetization-requirements-2026",
+    "quality_score": 35,
     "words": 2350,
     "action": "refresh"
   },
   {
-    "slug": "youtube-seo-optimization-for-gaming-channels-2026",
+    "slug": "how-many-subscribers-to-monetize-youtube-2026",
     "quality_score": 35,
-    "words": 2272,
-    "action": "refresh"
-  },
-  {
-    "slug": "youtube-seo-examples-2026",
-    "quality_score": 36,
-    "words": 3254,
+    "words": 2323,
     "action": "refresh"
   },
   {
     "slug": "youtube-intro-hook-first-3-seconds",
-    "quality_score": 36,
-    "words": 2080,
+    "quality_score": 35,
+    "words": 2152,
     "action": "refresh"
   },
   {
-    "slug": "youtube-algorithm-best-strategies-2026",
+    "slug": "youtube-algorithm-changes-2026",
     "quality_score": 37,
-    "words": 2976,
+    "words": 3526,
+    "action": "refresh"
+  },
+  {
+    "slug": "youtube-title-examples-2026",
+    "quality_score": 37,
+    "words": 3048,
     "action": "refresh"
   },
   {
     "slug": "youtube-analytics-explained-2026",
     "quality_score": 37,
-    "words": 2926,
+    "words": 3015,
+    "action": "refresh"
+  },
+  {
+    "slug": "youtube-algorithm-best-strategies-2026",
+    "quality_score": 37,
+    "words": 3010,
     "action": "refresh"
   },
   {
     "slug": "youtube-thumbnail-ab-testing-guide",
     "quality_score": 37,
-    "words": 2561,
+    "words": 2629,
     "action": "refresh"
   },
   {
     "slug": "youtube-competitor-analysis-reverse-engineer",
     "quality_score": 37,
-    "words": 2467,
+    "words": 2489,
     "action": "refresh"
   },
   {
     "slug": "youtube-analytics-4-metrics-that-matter",
     "quality_score": 37,
-    "words": 2238,
+    "words": 2288,
     "action": "refresh"
   },
   {
     "slug": "how-to-keywords-youtube",
     "quality_score": 37,
-    "words": 1900,
-    "action": "refresh"
-  },
-  {
-    "slug": "youtube-title-examples-2026",
-    "quality_score": 38,
-    "words": 2970,
+    "words": 1922,
     "action": "refresh"
   },
   {
     "slug": "creating-effective-youtube-thumbnails-for-clicks-2026",
     "quality_score": 38,
-    "words": 2431,
+    "words": 2493,
     "action": "refresh"
   },
   {
     "slug": "developing-a-youtube-content-calendar-strategy-2026",
     "quality_score": 38,
-    "words": 2315,
+    "words": 2323,
     "action": "refresh"
   },
   {
-    "slug": "youtube-algorithm-changes-2026",
+    "slug": "youtube-algorithm-changes-2026-impact-on-gaming-channels",
     "quality_score": 39,
-    "words": 3499,
+    "words": 2640,
     "action": "refresh"
   },
   {
     "slug": "understanding-youtube-algorithm-updates-for-creators-2026",
     "quality_score": 39,
-    "words": 2490,
+    "words": 2524,
     "action": "refresh"
   },
   {
     "slug": "youtube-channel-branding-tips-for-consistency-2026",
     "quality_score": 40,
-    "words": 2621,
-    "action": "refresh"
-  },
-  {
-    "slug": "youtube-algorithm-changes-2026-impact-on-gaming-channels",
-    "quality_score": 40,
-    "words": 2549,
+    "words": 2683,
     "action": "refresh"
   },
   {
     "slug": "youtube-video-not-getting-views-diagnostic-fix-2026",
     "quality_score": 40,
-    "words": 2444,
+    "words": 2513,
     "action": "refresh"
   }
 ]
