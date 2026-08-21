@@ -1,0 +1,314 @@
+{
+  "summary": {
+    "health_score": 78,
+    "business_type": "Free AI SaaS tool (YouTube SEO toolkit)",
+    "top_findings": [
+      "Site lives entirely on free vercel.app subdomain — yt-seo-architect.com does not resolve (HTTP 000); no domain authority, backlink tracking, or brand-entity growth possible until a custom domain is live",
+      "Templated, grammatically broken blog meta descriptions ('Learn how to creating high click-through rates…') across ~59 posts + 5 pages with meta descriptions outside 120-160 chars (175-256 chars)",
+      "Blog posts make statistical claims with zero citations — external links are Amazon affiliate tags, social share buttons, and GitHub; only 1 of 4 sampled posts cites primary sources (support.google.com, backlinko)",
+      "/tools/keyword-difficulty-scorer is a 59-word shell with no H2 — thin content targeting a head term",
+      "No Core Web Vitals field or lab data obtainable this audit (PSI rate-limited without API key; GSC/CrUX not connected; local Lighthouse interrupted) — proxy signals (77KB HTML, HTTP/2, Brotli, 0.29s TTFT) are healthy",
+      "Internal linking gaps: blog posts link to ZERO tool/guide pages; /tools index links only 23 of 52 tool pages; 8 /blog/category/* pages orphaned; /dashboard, /contact, /privacy-policy, /terms-of-service missing from sitemaps",
+      "Stale freshness badge: homepage footer says 'Updated May 2026' while llms.txt and newest post are 2026-08-17 — contradictory freshness signals for AI crawlers",
+      "Common Crawl has no host-level backlink data for vercel.app subdomain — backlink profile unverifiable without commercial index or GSC"
+    ],
+    "quick_wins": [
+      "Fix the 5 meta description length violations + broken 'Learn how to creating…' template (regenerate descriptions, target 120-160 chars)",
+      "Update homepage footer freshness badge from 'May 2026' to current date or remove it",
+      "Unify tool count: '85 free tools' (llms.txt) vs '90+ free tools' (homepage/llms.txt header)",
+      "Add /dashboard, /contact, /privacy-policy, /terms-of-service to sitemap-core.xml",
+      "Link /contact from the footer (currently hidden — hurts trust signals)",
+      "Add lastmod to the 393 glossary sitemap URLs (currently 0/393 have lastmod)",
+      "Add H2 sections to /blog index (currently 0 H2s) for LLM/crawler summarization",
+      "Add affiliate disclosure near Amazon links on blog posts (compliance risk)"
+    ]
+  },
+  "categories": [
+    {
+      "name": "Technical SEO",
+      "score": 88,
+      "what_works": [
+        "robots.txt exemplary: search + 8 AI answer-engine crawlers allowed, 14 training crawlers blocked, sitemap advertised",
+        "All 550 sitemap URLs return HTTP 200 — zero broken pages",
+        "Sitemap index + 3 children well-formed, zero duplicates, full coverage",
+        "Self-referencing canonicals on all sampled pages; index,follow everywhere; no noindex leaks",
+        "Security headers exemplary: CSP, HSTS preload, nosniff, X-Frame-Options, Referrer-Policy",
+        "Brotli + HTTP/2 + CDN cache hits"
+      ],
+      "findings": [
+        {
+          "title": "lastmod missing on 89.5% of sitemap URLs",
+          "severity": "Medium",
+          "description": "Only 58/550 URLs have lastmod (all in sitemap-core.xml). The two glossary sitemaps (393 URLs) have zero lastmod entries.",
+          "recommendation": "Add lastmod (or changefreq/priority) to glossary sitemap URLs to strengthen freshness signals."
+        },
+        {
+          "title": "No Core Web Vitals field data available",
+          "severity": "Medium",
+          "description": "PSI/CrUX API rate-limited without API key; GSC not connected; local Lighthouse was interrupted. LCP/CLS/INP unverified. Proxy signals healthy: 77KB HTML homepage, HTTP/2, Brotli, 0.29s TTFT.",
+          "recommendation": "Connect GSC once custom domain is live, add PageSpeed API key, and run full CrUX + Lighthouse to confirm LCP<2.5s / CLS<0.1 / INP<200ms."
+        },
+        {
+          "title": "Redirect and 404 behavior unverified",
+          "severity": "Low",
+          "description": "Redirect (http->https, trailing slash) and 404 handling checks were interrupted by a command guard. Vercel defaults are 308 http->https; custom 404 page existence unconfirmed.",
+          "recommendation": "Manually verify with curl once convenient; ensure a branded 404 with internal links."
+        }
+      ]
+    },
+    {
+      "name": "Content Quality",
+      "score": 64,
+      "what_works": [
+        "Blog posts are substantial (2,200-2,600 words each) with strong H2/H3 hierarchy (10-13 H2s incl. TL;DR, FAQ, Key Takeaways)",
+        "Pillar guide (2,147 words) and homepage (1,872 words) are healthy",
+        "Visible author byline 'Patrick' + dates on all posts; one post cites primary sources (support.google.com, backlinko)",
+        "Contact page exists with form; privacy policy + terms live in footer"
+      ],
+      "findings": [
+        {
+          "title": "Blog posts make claims with zero citations",
+          "severity": "High",
+          "description": "3 of 4 sampled posts contain numeric/statistical claims (thumbnail dimensions, revenue figures, FAQ answers) with no sources. External links are Amazon affiliate tags (tag=44HlecM), social share buttons, GitHub, youtube.com. Only /blog/youtube-seo-tips-for-creators-in-2026 cites support.google.com answers + backlinko.",
+          "recommendation": "Add primary-source citations (support.google.com/youtube, YouTube Creator blog, credible studies) to every post making claims; standardize the citation practice from the seo-tips post across the pipeline."
+        },
+        {
+          "title": "Thin tool page: /tools/keyword-difficulty-scorer",
+          "severity": "High",
+          "description": "59 words of visible text, zero H2s, no FAQ, no how-to copy, no internal links to guides. Targets the 'keyword difficulty' head term with an empty shell (content is client-side generated).",
+          "recommendation": "Build out the page with 300-600 words of how-to copy, FAQ, and links to relevant guides/tools."
+        },
+        {
+          "title": "Readability at 11th-12th grade level",
+          "severity": "Medium",
+          "description": "Flesch Reading Ease 41.9-49.1 (Flesch-Kincaid grade 11.3-12.0) on sampled posts, for a target audience of YouTube creators (typically high-school reading level).",
+          "recommendation": "Shorten sentences, simplify vocabulary; target FRE 60+."
+        },
+        {
+          "title": "Affiliate links without disclosure",
+          "severity": "Medium",
+          "description": "All sampled posts contain Amazon affiliate links (tag=44HlecM) and Canva/Adobe affiliate params without visible disclosure.",
+          "recommendation": "Add 'contains affiliate links' disclosure near affiliate links (FTC compliance + trust)."
+        },
+        {
+          "title": "Thin founder identity on /about",
+          "severity": "Medium",
+          "description": "'Patrick' has no surname, photo, LinkedIn, credentials story, or email on About page. Organization sameAs has only 3 entries. Single shared author across all posts reads as automated.",
+          "recommendation": "Expand founder identity: full name, photo, bio, credentials, LinkedIn; vary author attribution where genuine."
+        },
+        {
+          "title": "/pricing is thin (266 words)",
+          "severity": "Low",
+          "description": "Thin but acceptable for a $0 pricing page; lacks FAQ/feature detail for 'youtube seo tool pricing' queries.",
+          "recommendation": "Add feature comparison + FAQ to pricing page."
+        }
+      ]
+    },
+    {
+      "name": "On-Page SEO",
+      "score": 71,
+      "what_works": [
+        "Every page has exactly one H1; titles present and brand-suffixed on all pages",
+        "Blog posts have excellent H2/H3 hierarchy; homepage 10 H2 / 26 H3",
+        "Internal linking on homepage strong (47 links, 41 internal, descriptive anchors, zero generic anchors)",
+        "All 59 blog posts linked from /blog index; related-post links in bodies; breadcrumbs present"
+      ],
+      "findings": [
+        {
+          "title": "Templated, grammatically broken blog meta descriptions",
+          "severity": "High",
+          "description": "'Learn how to youtube content calendar template 2026. Step-by-step guide with examples, tools, and strategies for 2026. Free tools included.' — identical skeleton with keyword swapped; 'Learn how to creating high click-through rates…' is broken grammar. Pattern appears on all ~59 posts.",
+          "recommendation": "Regenerate unique, grammatical meta descriptions per post (120-160 chars) in the blog pipeline."
+        },
+        {
+          "title": "Meta description length violations on 5 pages",
+          "severity": "High",
+          "description": "/ = 175 chars, /guides = 169, /guides/youtube-seo-strategy-2026 = 193, /tools/channel-audit-score = 256 (severely over, wrong boilerplate describing a text analyzer), /tools/keyword-difficulty-scorer = 108 (short).",
+          "recommendation": "Rewrite to 120-160 chars; fix channel-audit-score boilerplate that describes the wrong tool."
+        },
+        {
+          "title": "Ungrammatical templated titles on blog posts",
+          "severity": "Medium",
+          "description": "'Creating High Click-through Rates Youtube Thumbnails 2026', 'Boost Youtube Channel Revenue Streams 2026' — missing articles, lowercase 'youtube', templated 'X 2026 — YT SEO Architect' pattern.",
+          "recommendation": "Rewrite titles with proper grammar; add articles ('How to Create High CTR YouTube Thumbnails in 2026')."
+        },
+        {
+          "title": "Title/H1 mismatch on /blog/youtube-seo-tips-for-creators-in-2026",
+          "severity": "Medium",
+          "description": "<title> = 'YouTube Tags 2026…' but H1 = 'YouTube SEO Tips for Creators in 2026…' — title describes a different article, ends with literal '…' ellipsis (template bug).",
+          "recommendation": "Fix the title to match the article topic."
+        },
+        {
+          "title": "Blog posts link to zero tools/guides; /tools index links only 23 of 52 tool pages",
+          "severity": "Medium",
+          "description": "Money pages (85 tools) get no contextual link equity from articles; ~29 tool pages are unreachable from the tools hub (only via guides/sitemap).",
+          "recommendation": "Add contextual tool/guide links inside post bodies; complete the /tools index to list all tool pages."
+        },
+        {
+          "title": "8 orphaned /blog/category/* pages",
+          "severity": "Medium",
+          "description": "Category pages (monetization, shorts, analytics, optimization, strategy, growth, tools, niche) exist in sitemap but are linked from nowhere; no post links to its category.",
+          "recommendation": "Link categories from posts and blog index, or noindex them."
+        },
+        {
+          "title": "/dashboard, /contact, /privacy-policy, /terms-of-service missing from sitemaps",
+          "severity": "Medium",
+          "description": "All live (200) but absent from sitemap-core.xml; /contact also missing from footer (only reachable via in-content links).",
+          "recommendation": "Add to sitemap; add /contact to footer."
+        },
+        {
+          "title": "/blog index has zero H2 structure",
+          "severity": "Low",
+          "description": "1 H3, no H2s — no category grouping for crawlers/LLMs summarizing the listing of 72 posts.",
+          "recommendation": "Add H2 sections (Latest Guides, Popular Topics, By Channel Type)."
+        }
+      ]
+    },
+    {
+      "name": "Schema / Structured Data",
+      "score": 88,
+      "what_works": [
+        "All JSON-LD parses valid (0 parse errors across all audited pages)",
+        "Homepage @graph: Organization (name, url, logo, email, 3 sameAs, founder Person w/ GitHub), WebSite, SoftwareApplication (price 0, 17 features, speakable), FAQPage (8 Q/A), BreadcrumbList",
+        "Blog posts: Article schema complete (headline, datePublished, dateModified, author, mainEntityOfPage) + FAQPage (5 Q/A) + speakable xpaths",
+        "Tool/guide/about/pricing pages all carry correct page types (WebApplication, CollectionPage, AboutPage, WebPage)"
+      ],
+      "findings": [
+        {
+          "title": "Article used instead of BlogPosting on blog posts",
+          "severity": "Low",
+          "description": "Posts use 'Article' — valid, but BlogPosting is the recommended, more specific type for blog posts.",
+          "recommendation": "Switch posts to BlogPosting."
+        },
+        {
+          "title": "WebSite schema lacks SearchAction; /blog index has zero structured data",
+          "severity": "Low",
+          "description": "No sitelinks searchbox potentialAction; blog hub has no ItemList/Blog schema while /tools has WebPage + ItemList.",
+          "recommendation": "Add SearchAction to WebSite; add ItemList/Blog schema to /blog."
+        },
+        {
+          "title": "Homepage BreadcrumbList has only 1 item",
+          "severity": "Info",
+          "description": "Technically valid but useless — a single-item breadcrumb.",
+          "recommendation": "Remove or populate with real breadcrumbs."
+        }
+      ]
+    },
+    {
+      "name": "Performance (CWV)",
+      "score": 70,
+      "what_works": [
+        "Proxy signals healthy: 77KB homepage HTML, HTTP/2, Brotli compression, 0.29s TTFT, CDN cache hits",
+        "Images dimensioned, lazy-loaded except LCP hero (eager + fetchpriority=high — correct)",
+        "No heavy third-party render-blocking scripts in raw HTML"
+      ],
+      "findings": [
+        {
+          "title": "No lab or field CWV numbers obtainable this audit",
+          "severity": "Medium",
+          "description": "PSI/CrUX API rate-limited without API key (240 QPM shared pool); GSC/CrUX not connected; local Lighthouse interrupted by command guard. LCP/CLS/INP unverified.",
+          "recommendation": "Add a PageSpeed API key, connect GSC, run CrUX + Lighthouse. Asset profile suggests good CWV but it is unverified."
+        }
+      ]
+    },
+    {
+      "name": "AI Search Readiness",
+      "score": 82,
+      "what_works": [
+        "robots.txt exemplary AI policy: ChatGPT-User, Google-Extended, PerplexityBot, ClaudeBot, anthropic-ai, OAI-SearchBot, Applebot-Extended, Bytespider allowed; GPTBot, CCBot, GrokBot, Amazonbot, cohere-ai, AI2Bot etc. blocked",
+        "llms.txt: spec-perfect (H1, blockquote, H2 sections, 316 bullet links), fresh (Updated 2026-08-17), deep coverage (core pages + 72 posts + 126 guides + 111 glossary terms)",
+        "Citability strong: bylines, dates, article:published_time, primary-source citations on monetize post, speakable schema, Direct Answer-first structure",
+        "Full Organization/WebSite/SoftwareApplication entity graph with logo + sameAs"
+      ],
+      "findings": [
+        {
+          "title": "Site entirely on free vercel.app subdomain — no custom domain",
+          "severity": "High",
+          "description": "yt-seo-architect.com does not resolve (HTTP 000, DNS NXDOMAIN). All content, llms.txt, JSON-LD, canonicals, social shares live on the vercel.app subdomain. Consequence: no domain authority; vercel.app subdomains filtered by SEO tools and some AI link extractors; brand queries can't surface a branded domain; backlink building unattributeable at domain level.",
+          "recommendation": "Register yt-seo-architect.com (and consider .ai/.io), point DNS at Vercel, add custom domain in project settings, 301-redirect vercel.app → custom domain, update llms.txt, sitemap, and all JSON-LD url/@id fields."
+        },
+        {
+          "title": "Stale freshness badge contradicts llms.txt",
+          "severity": "Medium",
+          "description": "Homepage footer badge: '✅ Updated May 2026 — actively maintained' while llms.txt says 2026-08-17 and newest post is dated 2026-08-17. AI crawlers reading both see conflicting freshness.",
+          "recommendation": "Update the footer badge to the current date or remove it."
+        },
+        {
+          "title": "Tool count inconsistency (85 vs 90+)",
+          "severity": "Low",
+          "description": "llms.txt Tools bullet says '85 free interactive tools'; homepage meta and llms.txt header say '90+ tools'.",
+          "recommendation": "Pick one number and use it everywhere."
+        },
+        {
+          "title": "No blockquotes; thin author entity; generic affiliate links",
+          "severity": "Low",
+          "description": "Zero blockquotes (quotes boost citability); author 'Patrick' has no last name/LinkedIn in Person schema; Amazon affiliate links are generic/off-topic.",
+          "recommendation": "Add expert quotes, enrich author bio, keep affiliate links topically relevant."
+        }
+      ]
+    },
+    {
+      "name": "Images",
+      "score": 95,
+      "what_works": [
+        "0/3 images missing alt, 0/3 missing width/height across homepage + blog post",
+        "Descriptive, keyword-relevant alt text; correct lazy/eager strategy (LCP hero eager + fetchpriority=high)",
+        "og:image 1200x630 verified 200 with og:image:width/height/type; twitter:card summary_large_image",
+        "Logo (10KB), hero (142KB), og-image (197KB) all live"
+      ],
+      "findings": []
+    }
+  ],
+  "action_plan": {
+    "phases": [
+      {
+        "name": "Phase 1: Critical Fixes",
+        "timeframe": "Week 1",
+        "items": [
+          "Register custom domain (yt-seo-architect.com + optional .ai/.io), point DNS at Vercel, 301-redirect vercel.app, update llms.txt/sitemap/JSON-LD URLs — unblocks authority, backlinks, brand entity (HIGH)",
+          "Regenerate grammatical, unique meta descriptions for all ~59 blog posts + fix 5 over/under-length descriptions (/, /guides, strategy guide, channel-audit-score, keyword-difficulty-scorer) (HIGH)",
+          "Add source citations to blog posts making claims — standardize the citation pattern from the seo-tips post across the pipeline (HIGH)",
+          "Build out /tools/keyword-difficulty-scorer with 300-600 words, FAQ, guide links (HIGH)"
+        ]
+      },
+      {
+        "name": "Phase 2: High-Impact Improvements",
+        "timeframe": "Weeks 2-3",
+        "items": [
+          "Fix title/H1 mismatch on youtube-seo-tips-for-creators-in-2026; rewrite ungrammatical post titles (MEDIUM)",
+          "Add contextual links from blog posts to tools/guides; complete /tools index (23→52 tool pages) (MEDIUM)",
+          "De-orphan 8 /blog/category/* pages (link from posts or noindex) (MEDIUM)",
+          "Add /dashboard, /contact, /privacy-policy, /terms-of-service to sitemap-core.xml (MEDIUM)",
+          "Add /contact to footer (MEDIUM)",
+          "Add affiliate disclosure near Amazon/Canva/Adobe links (MEDIUM)",
+          "Fix stale 'Updated May 2026' footer badge; unify 85-vs-90 tool count (MEDIUM/LOW)",
+          "Improve blog readability to FRE 60+ (MEDIUM)"
+        ]
+      },
+      {
+        "name": "Phase 3: Content & Authority",
+        "timeframe": "Month 2",
+        "items": [
+          "Expand founder identity on /about (surname, photo, LinkedIn, credentials) (MEDIUM)",
+          "Switch Article → BlogPosting; add SearchAction to WebSite; add ItemList/Blog schema to /blog index (LOW)",
+          "Add H2 sections to /blog index; add blockquotes/expert quotes to posts (LOW)",
+          "Start backlink building once custom domain is live: dev.to, GitHub, niche directories, guest posts (HIGH impact, requires Phase 1)"
+        ]
+      },
+      {
+        "name": "Phase 4: Monitoring & Iteration",
+        "timeframe": "Ongoing",
+        "items": [
+          "Connect GSC + add PageSpeed API key; verify CWV field data (LCP<2.5s, CLS<0.1, INP<200ms) (MEDIUM)",
+          "Add lastmod to glossary sitemaps (393 URLs) (MEDIUM)",
+          "Monitor indexation via GSC once connected; track head-term rankings",
+          "Re-run this audit after custom domain migration to confirm canonicals/llms.txt/schema updated"
+        ]
+      }
+    ]
+  },
+  "artifacts": {
+    "findings_dir": "findings/",
+    "screenshots_dir": "screenshots/"
+  }
+}

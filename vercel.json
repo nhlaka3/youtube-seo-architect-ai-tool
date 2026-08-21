@@ -86,6 +86,11 @@
       "permanent": true
     },
     {
+      "source": "/public/tools/:path*.html",
+      "destination": "/tools/:path*",
+      "permanent": true
+    },
+    {
       "source": "/public/tools",
       "destination": "/tools/",
       "permanent": true
