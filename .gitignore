@@ -205,3 +205,14 @@ opensource/
 # Google service account key — never commit
 config/google-indexing-key.json
 .env*
+
+# Stub files that SHADOW API routes (/blog, /sitemap.xml) — Vercel serves
+# static files before afterFiles rewrites, so a 14-byte stub here kills the
+# real route. These are cron fail-open leftovers / initial-commit placeholders.
+# Recurrence of 1db141ed — NEVER commit these, no matter what git add -A sees.
+public/blog.html
+public/blog/.html
+public/blog/generic.html
+public/blog/how-to-ranking-youtube.html
+public/blog/seo-for-cooking-channels-2026.html
+public/sitemap.xml

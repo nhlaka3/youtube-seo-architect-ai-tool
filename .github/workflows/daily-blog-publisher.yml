@@ -192,6 +192,12 @@ jobs:
         run: |
           git config user.name "YT SEO Bot"
           git config user.email "hnhlaka142@gmail.com"
+          # Scrub API-shadowing stubs BEFORE git add -A: these files shadow
+          # /blog + /sitemap.xml API routes (Vercel serves static before
+          # afterFiles rewrites). Recurrence of 1db141ed — never ship them.
+          rm -f public/blog.html public/blog/.html public/blog/generic.html \
+                public/blog/how-to-ranking-youtube.html \
+                public/blog/seo-for-cooking-channels-2026.html public/sitemap.xml
           # hero/og/matplotlib PNGs + webp are gitignored — force-add so every
           # post ships its hero, og image, and in-article visuals
           git add -f public/blog/*.png public/blog/*.webp 2>/dev/null || true
