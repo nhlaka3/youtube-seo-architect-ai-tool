@@ -86,8 +86,8 @@
       "permanent": true
     },
     {
-      "source": "/public/tools/:path*.html",
-      "destination": "/tools/:path*",
+      "source": "/public/tools/(.*)\\.html",
+      "destination": "/tools/$1",
       "permanent": true
     },
     {
