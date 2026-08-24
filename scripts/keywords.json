@@ -1,6 +1,6 @@
 {
   "description": "Curated low-competition YouTube SEO keywords. Each entry has a keyword, slug, category, and status (pending/done/skipped). The generator picks the next 'pending' keyword.",
-  "lastUpdated": "2026-08-21",
+  "lastUpdated": "2026-08-24",
   "keywords": [
     {
       "keyword": "youtube community posts strategy 2026",
@@ -1119,29 +1119,33 @@
       "keyword": "niching down on youtube for better engagement 2026",
       "slug": "niching-down-on-youtube-for-better-engagement-2026",
       "category": "Niche",
-      "status": "pending",
-      "notes": "Auto-generated (demand-verified)"
+      "status": "done",
+      "notes": "Auto-generated (demand-verified)",
+      "generatedAt": "2026-08-22T06:26:14.140Z"
     },
     {
       "keyword": "youtube shorts advertising strategies 2026",
       "slug": "youtube-shorts-advertising-strategies-2026",
       "category": "Shorts",
-      "status": "pending",
-      "notes": "Auto-generated (demand-verified)"
+      "status": "done",
+      "notes": "Auto-generated (demand-verified)",
+      "generatedAt": "2026-08-23T06:28:00.810Z"
     },
     {
       "keyword": "understanding youtube algorithm updates 2026",
       "slug": "understanding-youtube-algorithm-updates-2026",
       "category": "Algorithm",
-      "status": "pending",
-      "notes": "Auto-generated (demand-verified)"
+      "status": "done",
+      "notes": "Auto-generated (demand-verified)",
+      "generatedAt": "2026-08-24T06:38:50.994Z"
     },
     {
       "keyword": "youtube video features that increase engagement",
       "slug": "youtube-video-features-that-increase-engagement",
       "category": "Features",
-      "status": "pending",
-      "notes": "Auto-generated (demand-verified)"
+      "status": "done",
+      "notes": "Auto-generated (demand-verified)",
+      "generatedAt": "2026-08-24T06:40:46.378Z"
     },
     {
       "keyword": "diagnosing youtube video view drop 2026",
