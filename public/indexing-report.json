@@ -1,15 +1,15 @@
 {
-  "timestamp": "2026-08-17T08:36:57.221Z",
-  "total": 287,
-  "checked": 287,
-  "live": 287,
+  "timestamp": "2026-08-24T08:41:40.382Z",
+  "total": 300,
+  "checked": 300,
+  "live": 300,
   "redirect": 0,
   "dead": 0,
   "errors": 0,
   "byType": {
     "blog": {
-      "total": 73,
-      "live": 73,
+      "total": 79,
+      "live": 79,
       "dead": 0
     },
     "blog-index": {
@@ -53,8 +53,8 @@
       "dead": 0
     },
     "tool": {
-      "total": 126,
-      "live": 126,
+      "total": 133,
+      "live": 133,
       "dead": 0
     },
     "tools-index": {
