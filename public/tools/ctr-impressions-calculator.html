@@ -74,7 +74,30 @@
   <main>
     <h1>🎯 CTR ↔ Impressions Calculator</h1>
     <p class="sub">Calculate your YouTube click-through rate from views and impressions, or estimate impressions needed for a target CTR. Free interactive tool.</p>
-    <div id="tool-root">undefined</div>
+    <div id="tool-root">
+
+      <div class="tool-card">
+        <h2>Calculate CTR</h2>
+        <div class="input-group"><label for="ctr-views">Views (clicks)</label><input id="ctr-views" type="number" placeholder="e.g. 5000" /></div>
+        <div class="input-group"><label for="ctr-impressions">Impressions</label><input id="ctr-impressions" type="number" placeholder="e.g. 100000" /></div>
+        <button onclick="document.getElementById('ctr-result-box').classList.add('show');ToolLogic.calcCTR()">Calculate CTR</button>
+        <div class="result-box" id="ctr-result-box">
+          <div class="result-big" id="ctr-result">—</div>
+          <div class="result-detail" id="ctr-detail">click-through rate</div>
+          <div class="result-row"><span class="label">Grade</span><span class="value" id="ctr-grade">—</span></div>
+        </div>
+      </div>
+      <div class="tool-card">
+        <h2>Find Impressions Needed for a Target CTR</h2>
+        <div class="input-group"><label for="imp-target-views">Target views</label><input id="imp-target-views" type="number" placeholder="e.g. 10000" /></div>
+        <div class="input-group"><label for="imp-target-ctr">Target CTR (%)</label><input id="imp-target-ctr" type="number" step="0.1" placeholder="e.g. 5" /></div>
+        <button onclick="document.getElementById('imp-result-box').classList.add('show');ToolLogic.calcImpressions()">Calculate</button>
+        <div class="result-box" id="imp-result-box">
+          <div class="result-big" id="imp-result">—</div>
+          <div class="result-detail" id="imp-detail">impressions needed</div>
+        </div>
+      </div>
+    </div>
     <div class="cta-box">
       <h3>🚀 More Free Tools</h3>
       <p>17 AI-powered tools to optimize your YouTube titles, tags, descriptions, and more.</p>
@@ -113,7 +136,7 @@ const ToolLogic = {
     document.getElementById('imp-detail').textContent = 'needed to get ' + v + ' views at ' + c + '% CTR';
   }
 };
-  document.getElementById('tool-root').innerHTML = `undefined`;
+  // tool UI rendered statically; logic wired via onclick
   </script>
 </body>
 </html>

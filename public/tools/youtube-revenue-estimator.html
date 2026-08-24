@@ -74,7 +74,26 @@
   <main>
     <h1>💰 Revenue Estimator</h1>
     <p class="sub">Estimate your YouTube ad revenue based on views, CPM, and RPM. See how much you could earn from your videos.</p>
-    <div id="tool-root">undefined</div>
+    <div id="tool-root">
+
+      <div class="tool-card">
+        <h2>Estimate Revenue</h2>
+        <div class="input-group"><label for="rev-views">Monthly views</label><input id="rev-views" type="number" placeholder="e.g. 500000" /></div>
+        <div class="input-row">
+          <div class="input-group"><label for="rev-cpm">CPM ($)</label><input id="rev-cpm" type="number" step="0.1" placeholder="e.g. 5" /></div>
+          <div class="input-group"><label for="rev-rpm">RPM ($, optional)</label><input id="rev-rpm" type="number" step="0.1" placeholder="e.g. 2" /></div>
+        </div>
+        <button onclick="document.getElementById('rev-result-box').classList.add('show');ToolLogic.calcRevenue()">Estimate Revenue</button>
+        <div class="result-box" id="rev-result-box">
+          <div class="result-row"><span class="label">Revenue (CPM)</span><span class="value" id="rev-cpm-result">—</span></div>
+          <div class="result-row"><span class="label">Revenue (RPM)</span><span class="value" id="rev-rpm-result">—</span></div>
+          <div class="result-row"><span class="label">Monthly estimate</span><span class="value" id="rev-monthly">—</span></div>
+          <div class="result-row"><span class="label">Yearly estimate</span><span class="value" id="rev-yearly">—</span></div>
+          <div class="result-detail" id="rev-detail"></div>
+          <div class="advice-box" id="rev-benchmark">📊 Enter views + CPM for a benchmark.</div>
+        </div>
+      </div>
+    </div>
     <div class="cta-box">
       <h3>🚀 More Free Tools</h3>
       <p>17 AI-powered tools to optimize your YouTube titles, tags, descriptions, and more.</p>
@@ -113,7 +132,7 @@ const ToolLogic = {
     document.getElementById('rev-benchmark').innerHTML = '📊 <strong>CPM Benchmark:</strong> ' + bench;
   }
 };
-  document.getElementById('tool-root').innerHTML = `undefined`;
+  // tool UI rendered statically; logic wired via onclick
   </script>
 </body>
 </html>

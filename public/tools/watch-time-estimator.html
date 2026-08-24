@@ -74,7 +74,22 @@
   <main>
     <h1>⏱️ Watch Time Estimator</h1>
     <p class="sub">Estimate total watch time from views and average view duration. Calculate how many hours of watch time your videos generate.</p>
-    <div id="tool-root">undefined</div>
+    <div id="tool-root">
+
+      <div class="tool-card">
+        <h2>Estimate Watch Time</h2>
+        <div class="input-group"><label for="wt-views">Total views</label><input id="wt-views" type="number" placeholder="e.g. 100000" /></div>
+        <div class="input-group"><label for="wt-duration">Average view duration (seconds)</label><input id="wt-duration" type="number" placeholder="e.g. 240" /></div>
+        <button onclick="document.getElementById('wt-result-box').classList.add('show');ToolLogic.calcWatchTime()">Calculate Watch Time</button>
+        <div class="result-box" id="wt-result-box">
+          <div class="result-big" id="wt-minutes">—</div>
+          <div class="result-detail">total watch minutes</div>
+          <div class="result-row"><span class="label">Watch hours</span><span class="value" id="wt-hours">—</span></div>
+          <div class="result-row"><span class="label">Calculation</span><span class="value" id="wt-per-video">—</span></div>
+          <div class="advice-box" id="wt-eligibility">⏳ Enter views + duration to check YPP eligibility.</div>
+        </div>
+      </div>
+    </div>
     <div class="cta-box">
       <h3>🚀 More Free Tools</h3>
       <p>17 AI-powered tools to optimize your YouTube titles, tags, descriptions, and more.</p>
@@ -110,7 +125,7 @@ const ToolLogic = {
     }
   }
 };
-  document.getElementById('tool-root').innerHTML = `undefined`;
+  // tool UI rendered statically; logic wired via onclick
   </script>
 </body>
 </html>

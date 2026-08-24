@@ -4,17 +4,17 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Keyword Difficulty Checker — Free YouTube SEO Tool</title>
-  <meta name="description" content="Score YouTube keyword difficulty and find low-competition opportunities. Free SEO tool for content creators." />
+  <meta name="description" content="Find YouTube keyword competition scores and low-difficulty ranking opportunities. Free keyword difficulty checker with opportunity scoring for creators." />
   <meta name="robots" content="index, follow" />
   <link rel="canonical" href="https://yt-seo-architect.vercel.app/tools/keyword-difficulty-scorer" />
   <meta property="og:title" content="Keyword Difficulty Checker — Free YouTube SEO Tool" />
-  <meta property="og:description" content="Score YouTube keyword difficulty and find low-competition opportunities. Free SEO tool for content creators." />
+  <meta name="description" content="Find YouTube keyword competition scores and low-difficulty ranking opportunities. Free keyword difficulty checker with opportunity scoring for creators." />
   <meta property="og:image" content="https://yt-seo-architect.vercel.app/og-image.png" />
   <meta property="og:type" content="website" />
   <meta property="og:url" content="https://yt-seo-architect.vercel.app/tools/keyword-difficulty-scorer" />
   <meta name="twitter:card" content="summary_large_image" />
   <meta name="twitter:title" content="Keyword Difficulty Checker — Free YouTube SEO Tool" />
-  <meta name="twitter:description" content="Score YouTube keyword difficulty and find low-competition opportunities. Free SEO tool for content creators." />
+  <meta name="description" content="Find YouTube keyword competition scores and low-difficulty ranking opportunities. Free keyword difficulty checker with opportunity scoring for creators." />
   <meta name="twitter:image" content="https://yt-seo-architect.vercel.app/og-image.png" />
   <script type="application/ld+json">
   {
@@ -28,7 +28,21 @@
     "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" }
   }
   </script>
-  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3831668789026424" crossorigin="anonymous"></script>
+    <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "HowTo",
+    "name": "How to Find YouTube Keyword Competition Score",
+    "description": "How to score YouTube keyword competition and find low-difficulty ranking opportunities in 4 steps.",
+    "step": [
+      { "@type": "HowToStep", "position": 1, "name": "Enter your keyword", "text": "Type the exact keyword you want to rank for (e.g. 'how to grow a youtube channel') into the keyword field." },
+      { "@type": "HowToStep", "position": 2, "name": "Estimate its monthly search volume", "text": "Use YouTube search suggestions or a keyword tool to estimate monthly searches for the phrase, then enter the number." },
+      { "@type": "HowToStep", "position": 3, "name": "Set the competition level", "text": "Choose how competitive the niche is, from Very Low to Very High, based on how many established channels target the same phrase." },
+      { "@type": "HowToStep", "position": 4, "name": "Get your difficulty score", "text": "The tool returns a 0-100 difficulty score with an opportunity rating and grade. Scores under 45 are the easiest to rank for." }
+    ]
+  }
+  </script>
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3831668789026424" crossorigin="anonymous"></script>
   <style>
     *{box-sizing:border-box;margin:0;padding:0}
     body{font-family:'Outfit','Geist',-apple-system,BlinkMacSystemFont,sans-serif;background:#0a0a0f;color:#e2e8f0;line-height:1.6}
@@ -74,7 +88,34 @@
   <main>
     <h1>🔍 Keyword Difficulty Score</h1>
     <p class="sub">Score any YouTube keyword for competition and opportunity. Find low-competition keywords that are easier to rank for.</p>
-    <div id="tool-root">undefined</div>
+    <div id="tool-root">
+
+      <div class="tool-card">
+        <h2>Score Your Keyword</h2>
+        <div class="input-group"><label for="kd-keyword">Keyword</label><input id="kd-keyword" type="text" placeholder="e.g. how to grow a youtube channel" /></div>
+        <div class="input-row">
+          <div class="input-group"><label for="kd-volume">Monthly search volume (est.)</label><input id="kd-volume" type="number" placeholder="e.g. 1500" /></div>
+          <div class="input-group"><label for="kd-competition">Competition level</label><select id="kd-competition"><option value="1">Very Low</option><option value="2">Low</option><option value="3" selected>Medium</option><option value="4">High</option><option value="5">Very High</option></select></div>
+        </div>
+        <button onclick="document.getElementById('kd-result-box').classList.add('show');ToolLogic.scoreKeyword()">Score Keyword</button>
+        <div class="result-box" id="kd-result-box">
+          <div class="result-big" id="kd-score">—</div>
+          <div class="result-detail">Keyword difficulty score (0-100)</div>
+          <div class="result-row"><span class="label">Opportunity score</span><span class="value" id="kd-opportunity">—</span></div>
+          <div class="result-row"><span class="label">Difficulty grade</span><span class="value" id="kd-grade">—</span></div>
+          <div class="advice-box" id="kd-advice">💡 Enter a keyword to get scoring advice.</div>
+          <div id="kd-factors"></div>
+        </div>
+      </div>
+    </div>
+    <h2 style="font-size:1.4rem;color:#e2e8f0;margin:2rem 0 1rem">How to Find a YouTube Keyword Competition Score</h2>
+    <ol style="color:#cbd5e1;padding-left:1.4rem;margin-bottom:1rem;display:grid;gap:.6rem">
+      <li><strong style="color:#f8fafc">Start with the exact keyword</strong> — write down the phrase viewers actually type, e.g. <em>how to grow a youtube channel</em>. Long-tail phrases (3+ words) are dramatically easier to rank for than one-word head terms.</li>
+      <li><strong style="color:#f8fafc">Estimate monthly search volume</strong> — check YouTube's own search suggestions and autocomplete for the phrase. High-suggest counts mean real demand; zero suggestions usually means zero searches.</li>
+      <li><strong style="color:#f8fafc">Assess the competition</strong> — search the phrase on YouTube and note how many videos from established channels target it directly. If the top results are old, low-quality videos, the competition is weak.</li>
+      <li><strong style="color:#f8fafc">Score it with this tool</strong> — enter the keyword, its estimated volume, and the competition level above. Scores under 45 are low-difficulty opportunities you can realistically rank for as a growing channel.</li>
+    </ol>
+    <p style="color:#8b8b9e;font-size:.9rem;margin-bottom:2rem">A keyword competition score combines search volume, competition level, and long-tail bonus into one 0-100 number: the higher the score, the harder the keyword is to rank for. Target scores under 45, then pair the keyword with a strong title, description, and tags using our other free tools.</p>
     <div class="cta-box">
       <h3>🚀 More Free Tools</h3>
       <p>17 AI-powered tools to optimize your YouTube titles, tags, descriptions, and more.</p>
@@ -127,7 +168,7 @@ const ToolLogic = {
       '<div class="factor"><span>Long-tail bonus:</span><span>+' + tailBonus + '</span></div>';
   }
 };
-  document.getElementById('tool-root').innerHTML = `undefined`;
+  // tool UI rendered statically; logic wired via onclick
   </script>
 </body>
 </html>

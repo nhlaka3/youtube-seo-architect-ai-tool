@@ -74,7 +74,26 @@
   <main>
     <h1>📈 Subscriber Growth Rate</h1>
     <p class="sub">Calculate your YouTube channel subscriber growth rate. Track monthly, weekly, or yearly growth and project future subscribers.</p>
-    <div id="tool-root">undefined</div>
+    <div id="tool-root">
+
+      <div class="tool-card">
+        <h2>Calculate Growth Rate</h2>
+        <div class="input-group"><label for="gr-start">Starting subscribers</label><input id="gr-start" type="number" placeholder="e.g. 1000" /></div>
+        <div class="input-group"><label for="gr-end">Subscribers now</label><input id="gr-end" type="number" placeholder="e.g. 1500" /></div>
+        <div class="input-group"><label for="gr-days">Days between</label><input id="gr-days" type="number" placeholder="e.g. 30" /></div>
+        <button onclick="document.getElementById('gr-result-box').classList.add('show');ToolLogic.calcGrowth()">Calculate Growth</button>
+        <div class="result-box" id="gr-result-box">
+          <div class="result-row"><span class="label">Subscribers gained</span><span class="value" id="gr-gained">—</span></div>
+          <div class="result-row"><span class="label">Total growth</span><span class="value" id="gr-pct">—</span></div>
+          <div class="result-row"><span class="label">Daily rate</span><span class="value" id="gr-daily">—</span></div>
+          <div class="result-row"><span class="label">Weekly rate</span><span class="value" id="gr-weekly">—</span></div>
+          <div class="result-row"><span class="label">Monthly rate</span><span class="value" id="gr-monthly">—</span></div>
+          <div class="result-row"><span class="label">Projected subs (90 days)</span><span class="value" id="gr-proj-90">—</span></div>
+          <div class="result-row"><span class="label">Projected subs (365 days)</span><span class="value" id="gr-proj-365">—</span></div>
+          <div class="result-row"><span class="label">Growth grade</span><span class="value" id="gr-grade">—</span></div>
+        </div>
+      </div>
+    </div>
     <div class="cta-box">
       <h3>🚀 More Free Tools</h3>
       <p>17 AI-powered tools to optimize your YouTube titles, tags, descriptions, and more.</p>
@@ -123,7 +142,7 @@ const ToolLogic = {
     document.getElementById('gr-grade').style.color = color;
   }
 };
-  document.getElementById('tool-root').innerHTML = `undefined`;
+  // tool UI rendered statically; logic wired via onclick
   </script>
 </body>
 </html>
