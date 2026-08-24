@@ -143,7 +143,7 @@ const ToolLogic = {
     const tailBonus = isLongTail ? 15 : 0;
     const specificityBonus = wordCount >= 4 ? 10 : (wordCount >= 3 ? 5 : 0);
 
-    const total = Math.min(100, volumeScore + compScore - tailBonus - specificityBonus);
+    const total = Math.max(0, Math.min(100, volumeScore + compScore - tailBonus - specificityBonus));
     const opportunity = Math.max(0, 100 - total);
 
     document.getElementById('kd-score').textContent = Math.round(total);
