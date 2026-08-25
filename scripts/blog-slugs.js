@@ -4,6 +4,7 @@
 // Format: [{ slug, date }] — NEWEST FIRST. Do not hand-edit; the generator
 // registers each new post via registerBlogSlug().
 export const BLOG_SLUGS_EXTRA = [
+  { slug: 'diagnosing-youtube-video-view-drop-2026', date: '2026-08-25' },
   { slug: 'youtube-video-features-that-increase-engagement', date: '2026-08-24' },
   { slug: 'youtube-shorts-advertising-strategies-2026', date: '2026-08-23' },
   { slug: 'niching-down-on-youtube-for-better-engagement-2026', date: '2026-08-22' },
