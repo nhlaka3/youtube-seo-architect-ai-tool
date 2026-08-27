@@ -61,5 +61,40 @@
     "to_email": "hello@youngurbanproject.com",
     "subject": "Found a broken link on your www.youngurbanproject.com page",
     "sent_at": "2026-08-13T10:11:39Z"
+  },
+  {
+    "source_page": "https://influencermarketinghub.com/youtube-seo-tools/",
+    "broken_url": "https://www.ytrank.ai/",
+    "to_email": "hello@influencermarketinghub.com",
+    "subject": "Found a broken link on your influencermarketinghub.com page",
+    "sent_at": "2026-08-27T19:35:56Z"
+  },
+  {
+    "source_page": "https://influencermarketinghub.com/youtube-seo-tools/",
+    "broken_url": "https://www.canva.com/",
+    "to_email": "hello@influencermarketinghub.com",
+    "subject": "Found a broken link on your influencermarketinghub.com page",
+    "sent_at": "2026-08-27T19:36:44Z"
+  },
+  {
+    "source_page": "https://influencermarketinghub.com/youtube-seo-tools/",
+    "broken_url": "https://vidiq.com/",
+    "to_email": "hello@influencermarketinghub.com",
+    "subject": "Found a broken link on your influencermarketinghub.com page",
+    "sent_at": "2026-08-27T19:37:31Z"
+  },
+  {
+    "source_page": "https://influencermarketinghub.com/youtube-seo-tools/",
+    "broken_url": "https://serpstat.com/",
+    "to_email": "hello@influencermarketinghub.com",
+    "subject": "Found a broken link on your influencermarketinghub.com page",
+    "sent_at": "2026-08-27T19:38:18Z"
+  },
+  {
+    "source_page": "https://www.subsub.io/blog/youtube-seo-tools-for-faster-channel-growth",
+    "broken_url": "TubeBuddy + vidIQ + KeywordTool.io",
+    "to_email": "creators@subsub.io",
+    "subject": "Your www.subsub.io list is missing a free YouTube SEO tool",
+    "sent_at": "2026-08-27T19:39:05Z"
   }
 ]
