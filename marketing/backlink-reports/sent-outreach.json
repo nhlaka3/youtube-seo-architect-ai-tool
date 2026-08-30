@@ -96,5 +96,19 @@
     "to_email": "creators@subsub.io",
     "subject": "Your www.subsub.io list is missing a free YouTube SEO tool",
     "sent_at": "2026-08-27T19:39:05Z"
+  },
+  {
+    "source_page": "https://influencermarketinghub.com/youtube-seo-tools/",
+    "broken_url": "https://snappa.com/",
+    "to_email": "hello@influencermarketinghub.com",
+    "subject": "Found a broken link on your influencermarketinghub.com page",
+    "sent_at": "2026-08-30T14:18:21Z"
+  },
+  {
+    "source_page": "https://nealschaffer.com/youtube-tools/",
+    "broken_url": "Resource page (15 Powerful YouTube Tools You Need to Grow Your Au)",
+    "to_email": "neal@nealschaffer.com",
+    "subject": "Suggestion for your nealschaffer.com resource page",
+    "sent_at": "2026-08-30T14:19:13Z"
   }
 ]
