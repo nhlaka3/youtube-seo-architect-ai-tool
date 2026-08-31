@@ -1,14 +1,14 @@
 {
-  "timestamp": "2026-08-24T08:41:40.382Z",
-  "total": 300,
-  "checked": 300,
-  "live": 300,
+  "timestamp": "2026-08-31T15:46:14.283Z",
+  "total": 306,
+  "checked": 306,
+  "live": 304,
   "redirect": 0,
   "dead": 0,
-  "errors": 0,
+  "errors": 2,
   "byType": {
     "blog": {
-      "total": 79,
+      "total": 81,
       "live": 79,
       "dead": 0
     },
@@ -28,8 +28,8 @@
       "dead": 0
     },
     "glossary": {
-      "total": 75,
-      "live": 75,
+      "total": 76,
+      "live": 76,
       "dead": 0
     },
     "glossary-category": {
@@ -53,8 +53,8 @@
       "dead": 0
     },
     "tool": {
-      "total": 133,
-      "live": 133,
+      "total": 136,
+      "live": 136,
       "dead": 0
     },
     "tools-index": {
