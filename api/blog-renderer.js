@@ -392,6 +392,40 @@ function heroImageHTML(slug, title) {
     </div>`;
 }
 
+// ── Companion Video Embeds (blog slug → YouTube video on the YT SEO Architect channel) ──
+// Injected under the hero on the matching article so site search traffic funnels into the channel.
+const VIDEO_EMBEDS = {
+  'youtube-title-examples-2026': { id: 'e7GBnAEIRY8', label: 'Watch: 11 YouTube Title Examples That Get More Clicks' },
+  'how-to-keywords-youtube': { id: 'eX4SFKoC1Z0', label: 'Watch: How to Find YouTube Keywords That Actually Rank' },
+  'youtube-description-templates-2026': { id: 'QVkbSMTTHAo', label: 'Watch: YouTube Description Templates 2026' },
+  'youtube-intro-hook-first-3-seconds': { id: '2wddUllMBjk', label: 'Watch: Why 91% of Videos Die in the First 30 Seconds' },
+  'youtube-subscriber-growth-2026': { id: 'OPaptkW53TM', label: 'Watch: How to Turn Shorts Views Into Long Form Subscribers' },
+  'youtube-video-not-getting-views-diagnostic-fix-2026': { id: 'qKoeOh2TC3s', label: 'Watch: Step-by-Step Guide to Increasing Your YouTube Views' },
+  'youtube-monetization-2026': { id: '92phK9zfB1I', label: 'Watch: How to Make Money on YouTube (Why Views Don\'t Matter)' },
+};
+
+function videoEmbedHTML(slug) {
+  const v = VIDEO_EMBEDS[slug];
+  if (!v) return '';
+  return `<div class="video-embed" style="margin:24px 0;">
+    <div style="position:relative;padding-top:56.25%;border-radius:12px;overflow:hidden;border:1px solid rgba(0,242,255,0.25);box-shadow:0 8px 30px rgba(0,0,0,0.35);background:#000;">
+      <iframe
+        src="https://www.youtube-nocookie.com/embed/${v.id}?rel=0&modestbranding=1"
+        title="${escAttr(v.label)} — YT SEO Architect"
+        loading="lazy"
+        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+        referrerpolicy="strict-origin-when-cross-origin"
+        allowfullscreen
+        style="position:absolute;top:0;left:0;width:100%;height:100%;border:0;"
+      ></iframe>
+    </div>
+    <p style="margin:0.6rem 0 0;font-size:0.85rem;color:#a8b2c1;text-align:center;">
+      <a href="https://www.youtube.com/@YTSEOArchitect?sub_confirmation=1" rel="noopener" target="_blank" style="color:#00f2ff;font-weight:600;text-decoration:none;">▶ ${v.label}</a>
+      &nbsp;·&nbsp; More on the <a href="https://www.youtube.com/@YTSEOArchitect" rel="noopener" target="_blank" style="color:#a8b2c1;">YT SEO Architect channel</a>
+    </p>
+  </div>`;
+}
+
 // ── Affiliate Disclosure + Gear Sections ──────────────────────────────
 
 const AFFILIATE_TAG = '44HlecM';
@@ -835,6 +869,9 @@ export function renderBlogTemplate(page) {
 
       <!-- Hero / Featured Image (auto-detected from content or injected) -->
       ${hasHero ? '' : heroImageHTML(slug, title)}
+
+      <!-- Companion video embed (site search traffic → channel) -->
+      ${videoEmbedHTML(slug)}
 
       <!-- Article body with auto-generated structural sections -->
       ${contentHTML}
