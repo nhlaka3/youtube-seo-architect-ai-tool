@@ -40,8 +40,8 @@
  *   8. Deploy to Vercel
  */
 
-import { readFileSync, writeFileSync, existsSync, readdirSync } from 'fs';
-import { resolve, dirname } from 'path';
+import { readFileSync, writeFileSync, appendFileSync, existsSync, readdirSync, rmSync } from 'fs';
+import { resolve, dirname, basename } from 'path';
 import { fileURLToPath } from 'url';
 import { execSync } from 'child_process';
 
@@ -56,7 +56,7 @@ const SITEMAP_FILE = resolve(PROJECT, 'sitemap.xml');
 // ── Load dependencies (project modules) ────────────────────────────
 
 const { renderBlogTemplate } = await import('../api/blog-renderer.js');
-const { validateBlogPost } = await import('../api/blog-validation.js');
+const { validateBlogPost, countVisuals, analyzeVisuals, fixVisualAnimations } = await import('../api/blog-validation.js');
 
 // Database for dynamic sitemap
 let dbService = null;
@@ -98,6 +98,16 @@ const VALIDATE_SLUG = args.includes('--validate-slug')
 const KEYWORD_OVERRIDE = args.includes('--keyword')
   ? args[args.indexOf('--keyword') + 1]
   : null;
+
+// Scored quality-gate threshold (0-100). Override via BLOG_MIN_SCORE env.
+// Existing published posts score ~85-100; 70 blocks only genuinely thin output.
+const BLOG_MIN_SCORE = Number(process.env.BLOG_MIN_SCORE || 70);
+
+// Minimum authored visuals (images/charts) required per post. Default 3.
+// WARNING: existing cron posts have 0 visuals, so with the default this BLOCKS
+// daily publishing until the generator adds visuals. Set BLOG_MIN_VISUALS=0 to
+// keep publishing text-only posts.
+const BLOG_MIN_VISUALS = Number(process.env.BLOG_MIN_VISUALS || 3);
 
 // ── Constants ──────────────────────────────────────────────────────
 
@@ -224,17 +234,34 @@ function getExistingTitles() {
   return titles;
 }
 
+// Domain-common words that inflate similarity (every title has them) —
+// "youtube optimization for new channels in 2026" vs "youtube seo optimization
+// for gaming channels 2026" scored 100% because of youtube/channels/2026.
+const DEDUP_STOPWORDS = new Set([
+  'youtube', 'seo', 'video', 'videos', 'channel', 'channels', 'creator', 'creators',
+  'guide', 'guides', 'tips', 'best', 'top', 'how', 'what', 'why', 'when', 'for',
+  'the', 'and', 'with', 'your', 'you', 'can', '2026', '2025', '2027', 'new', 'free',
+  'complete', 'ultimate', 'explained', 'strategy', 'strategies', 'optimization',
+  'growth', 'increase', 'increasing', 'improve', 'improving', 'using', 'use',
+]);
+
+function distinctiveWords(text) {
+  return text.toLowerCase()
+    .split(/\s+/)
+    .filter(w => w.length > 3 && !DEDUP_STOPWORDS.has(w) && !/^\d{4}$/.test(w));
+}
+
 function checkDeduplication(keyword, slug) {
   const existingSlugs = getExistingSlugs();
   if (existingSlugs.includes(slug)) {
     return { duplicate: true, reason: `Post ${slug}.html already exists` };
   }
 
-  // Check keyword similarity against existing titles
-  const kwWords = keyword.toLowerCase().split(/\s+/).filter(w => w.length > 4);
+  // Check keyword similarity against existing titles — on DISTINCTIVE words only
+  const kwWords = distinctiveWords(keyword);
   const existingTitles = getExistingTitles();
   for (const title of existingTitles) {
-    const titleWords = title.toLowerCase().split(/\s+/).filter(w => w.length > 4);
+    const titleWords = distinctiveWords(title);
     const overlap = kwWords.filter(w => titleWords.includes(w)).length;
     const similarity = overlap / Math.max(kwWords.length, 1);
     if (similarity > 0.8) {
@@ -412,6 +439,27 @@ async function generateSectionViaNvidia(systemPrompt, sectionPrompt) {
   return cleanHTML(content);
 }
 
+// ── Fabricated-statistics gate ──────────────────────────────────
+// The AI occasionally ignores the prompt's factuality rules and invents
+// percentages/attributions ("70% of creators", "a study by Hootsuite").
+// Detect after each section; regenerate, then scrub as last resort.
+
+const FABRICATED_STAT_RE = /(according to|a study (by|from)|studies (show|suggest|found)|research (shows|found|suggests)|survey (found|shows)|we analyzed (data|metrics|results)|our (research|analysis) (found|shows)|(\d{1,3}% of (youtube )?(creators|viewers|channels|users|marketers|businesses|influencers))|(\d{1,3}% (increase|decrease|boost|more|higher|uplift|lift)))/i;
+
+function hasFabricatedStats(html) {
+  return FABRICATED_STAT_RE.test(html || '');
+}
+
+function scrubFabricatedStats(html) {
+  // Remove <p>/<li> blocks that contain fabricated-stat patterns (last resort)
+  let out = html;
+  out = out.replace(/<p[^>]*>[\s\S]*?<\/p>/gi, m => FABRICATED_STAT_RE.test(m) ? '' : m);
+  out = out.replace(/<li[^>]*>[\s\S]*?<\/li>/gi, m => FABRICATED_STAT_RE.test(m) ? '' : m);
+  return out;
+}
+
+// ── Section generation ──────────────────────────────────────────
+
 async function generateSection(systemPrompt, sectionPrompt) {
   const groqKey = process.env.GROQ_API_KEY;
   const geminiKey = process.env.GEMINI_API_KEY;
@@ -467,7 +515,7 @@ async function generateArticle(keyword, slug) {
       sections: [
         { id: 'definition', prompt: `Write section 1 of a blog post about "${keyword}" (${year}). DEFINITION and INTRODUCTION.
 H2: <h2 id="definition">What Is [Topic] and Why It Matters in ${year}</h2>
-300-400 words. Define the concept, explain why it matters for YouTube creators, include 1-2 statistics from real data.
+300-400 words. Define the concept, explain why it matters for YouTube creators. Do NOT include statistics, percentages, or attributed findings — write claims qualitatively.
 End with: <div class="tip-card"><strong>\ud83d\udca1 EXPERT TIP:</strong> [pro tip]</div>
 Return ONLY the HTML.` },
         { id: 'deep-dive', prompt: `Write section 2 of a blog post about "${keyword}" (${year}). DEEP DIVE.
@@ -490,7 +538,7 @@ Include: <div class="alert-box"><strong>\u2139\ufe0f NOTE:</strong> [insight]</d
 Be blunt and specific — no vague advice. Return ONLY the HTML.` },
         { id: 'advanced-tips', prompt: `Write the FINAL section of a blog post about "${keyword}" (${year}). ADVANCED TIPS.
 H2: <h2 id="advanced-tips">Advanced Strategies for [Topic] in ${year}</h2>
-250-350 words. 2-3 advanced strategies with specific numbers or examples.
+250-350 words. 2-3 advanced strategies with concrete examples. Use a number only if it is a real, citable fact; otherwise keep claims qualitative.
 Include a tip-card div.
 End with CTA: try YT SEO Architect free tools. Link to /dashboard.
 NO "in conclusion". Return ONLY the HTML.` },
@@ -502,7 +550,7 @@ NO "in conclusion". Return ONLY the HTML.` },
       sections: [
         { id: 'intro', prompt: `Write the INTRODUCTION for a listicle about "${keyword}" (${year}).
 H2: <h2 id="intro">Why [Topic] Matters More Than Ever in ${year}</h2>
-200-300 words. Hook with a stat. Explain what the list covers.
+200-300 words. Hook with a relatable fact, question, or pain point. Explain what the list covers.
 End with: <div class="tip-card"><strong>\ud83d\udca1 PRO TIP:</strong> [tip for using this list]</div>
 Return ONLY the HTML.` },
         { id: 'list-1', prompt: `Write items 1-4 of a listicle about "${keyword}" (${year}).
@@ -535,7 +583,7 @@ Questions real creators search for. Return ONLY the HTML.` },
         { id: 'setup', prompt: `Write the SETUP for a case study about "${keyword}" (${year}).
 H2: <h2 id="setup">The Challenge: What We Set Out to Prove</h2>
 250-350 words. Frame as investigation/experiment. Hypothesis, channels studied, timeframe.
-Use realistic numbers. Return ONLY the HTML.` },
+Use only real numbers if you have them; otherwise describe findings qualitatively. NEVER invent figures. Return ONLY the HTML.` },
         { id: 'methodology', prompt: `Write METHODOLOGY for "${keyword}" (${year}).
 H2: <h2 id="methodology">How We Tested This</h2>
 250-350 words. Step-by-step approach.
@@ -543,8 +591,8 @@ Include a <table> (columns: Variable, Control, Test, Expected Outcome).
 Be transparent about limitations. Return ONLY the HTML.` },
         { id: 'findings', prompt: `Write FINDINGS for "${keyword}" (${year}).
 H2: <h2 id="findings">What the Data Actually Shows</h2>
-350-450 words. Results with specific numbers.
-Include <table> with before/after metrics (columns: Metric, Before, After, Change %).
+350-450 words. Report results accurately — use real numbers only, otherwise describe findings qualitatively. NEVER invent metrics.
+If a <table> with before/after metrics is used, every figure must be real and verifiable; otherwise omit the table.
 Include: <div class="tip-card"><strong>\ud83d\udca1 KEY FINDING:</strong> [insight]</div>
 Return ONLY the HTML.` },
         { id: 'analysis', prompt: `Write ANALYSIS for "${keyword}" (${year}).
@@ -635,13 +683,13 @@ End with CTA to /dashboard. Return ONLY the HTML.` },
       sections: [
         { id: 'hook', prompt: `Write the HOOK for a data-driven article about "${keyword}" (${year}).
 H2: <h2 id="hook">The Numbers Don't Lie: [Topic] in ${year}</h2>
-200-300 words. Open with a surprising statistic or data point. Set up what the article will reveal.
+200-300 words. Open with a striking fact or question, or a common creator pain point. Do NOT include statistics, percentages, or attributed findings — write claims qualitatively.
 Include: <div class="tip-card"><strong>\ud83d\udca1 KEY INSIGHT:</strong> [one-sentence takeaway]</div>
 Return ONLY the HTML.` },
         { id: 'data-overview', prompt: `Write DATA OVERVIEW for "${keyword}" (${year}).
 H2: <h2 id="data-overview">What the Data Shows</h2>
 300-400 words. Present3-5 key data points with context. Use <table> with columns: Metric, Finding, Why It Matters.
-Be specific with numbers (percentages, counts, timeframes). Return ONLY the HTML.` },
+Be specific with timeframes and qualitative scope; use exact numbers only if they are real and citable. Return ONLY the HTML.` },
         { id: 'deep-analysis', prompt: `Write DEEP ANALYSIS for "${keyword}" (${year}).
 H2: <h2 id="deep-analysis">Breaking Down the Patterns</h2>
 350-450 words. Analyze WHY the data looks this way. Connect patterns to YouTube algorithm behavior.
@@ -683,11 +731,27 @@ CRITICAL RULES — VIOLATION = REJECTION:
   "without further ado"
 - Also AVOID: "take it to the next level", "ultimate guide" (overused),
   "comprehensive" (AI signal), "myriad", "plethora", "facilitate"
+- FACTUALITY (hard rule, same weight as the ban list above):
+  - ABSOLUTE BAN: do NOT include statistics, percentages, survey results,
+    or attributed numeric findings ("70% of creators", "a study by Hootsuite",
+    "research shows", "we analyzed data") ANYWHERE in the article.
+  - NEVER attribute a number or finding to a real company, tool, or person
+    (e.g. "a study by Hootsuite", "according to Pew Research", "TubeFilter found").
+  - NEVER invent case studies with specific before/after metrics for real or
+    invented channels/creators.
+  - Write EVERY claim qualitatively: "higher", "stronger", "most channels",
+    "many creators", "commonly", "often". If you cannot verify a number from a
+    primary source in your context, do not write it — a qualitative claim is
+    always better than a fabricated figure.
+  - If a number is genuinely required (e.g. YouTube's 4,000 watch-hour
+    threshold), use only universally known platform facts and link them.
 - Write for YouTube creators who want actionable advice, not theory.
 - Use HTML: <h2 id="...">, <h3>, <p>, <ul>/<ol>, <table>, <strong>.
 - Mention YT SEO Architect naturally 2-3 times (link to /dashboard).
 - Each section must be SUBSTANTIAL — at least 350 words of real content.
-- Include specific examples, numbers, and step-by-step instructions.
+- Include specific, concrete examples and step-by-step instructions. Use a
+  specific number ONLY when it is a real, verifiable fact; otherwise keep
+  claims qualitative — never fabricate figures.
 - NO filler paragraphs, NO vague summaries, NO "in conclusion" garbage.
 - Write like a human who actually uses YouTube — casual where appropriate,
   specific where it matters, blunt about what doesn't work.
@@ -698,6 +762,7 @@ CRITICAL RULES — VIOLATION = REJECTION:
   const allSections = [];
   let totalWords = 0;
   let failedSections = 0;
+  let statWarnings = 0;
 
   for (let i = 0; i < sections.length; i++) {
     const section = sections[i];
@@ -706,6 +771,23 @@ CRITICAL RULES — VIOLATION = REJECTION:
     let html;
     try {
       html = await generateSection(systemPrompt, section.prompt);
+      // Fabricated-statistics gate: regenerate up to 2x, then scrub
+      let statAttempts = 0;
+      while (hasFabricatedStats(html) && statAttempts < 2) {
+        console.log(`    ⚠ Section contains fabricated-stat patterns — regenerating (${statAttempts + 1}/2)`);
+        try {
+          html = await generateSection(systemPrompt, section.prompt);
+        } catch (e) {
+          console.error(`    ❌ Regeneration failed: ${e.message}`);
+          break;
+        }
+        statAttempts++;
+      }
+      if (hasFabricatedStats(html)) {
+        html = scrubFabricatedStats(html);
+        console.log('    ⚠ Scrubbed fabricated-stat sentences (last resort)');
+        statWarnings++;
+      }
       const words = countWords(html);
       totalWords += words;
       allSections.push(html);
@@ -746,10 +828,10 @@ This section covers REAL-WORLD EXAMPLES AND CASE STUDIES.
 Requirements:
 - H2 tag: <h2 id="examples">Real-World Examples: [Topic] That Actually Work</h2>
 - 400-500 words minimum
-- Include 2-3 specific examples with numbers (views gained, CTR improvement, etc.)
+- Include 2-3 specific examples with practical details (what was changed, why it worked). NEVER invent view counts, CTR figures, or results for creators — describe strategies qualitatively.
 - Format each example as: <h3>Example 1: [Description]</h3> followed by details
-- Reference YouTube creators who used these strategies successfully
-- Be specific — channel names, video types, results achieved
+- You may reference well-known YouTube creators and their general strategies, but DO NOT fabricate specific performance numbers for them.
+- Be specific about the strategy and approach; describe outcomes qualitatively ("more", "higher", "stronger") unless a real, citable figure exists
 - End with a key insight about what all examples have in common
 
 Return ONLY the HTML for this section.`
@@ -800,6 +882,31 @@ function countWords(html) {
 }
 
 // ── Sitemap update ─────────────────────────────────────────────────
+
+// ── Auto-generated post registry (for /blog listing + sitemap fallback) ────
+// The CI runner has no DATABASE_URL, so posts can't DB-insert. The API imports
+// scripts/blog-slugs.js and merges these into the listing + sitemap.
+
+function registerBlogSlug(slug) {
+  const slugsFile = resolve(PROJECT, 'scripts/blog-slugs.js');
+  try {
+    const existing = readFileSync(slugsFile, 'utf-8');
+    if (existing.includes(`slug: '${slug}'`)) {
+      console.log('  ⏭ Slug already registered');
+      return;
+    }
+    const today = new Date().toISOString().split('T')[0];
+    const newEntry = `  { slug: '${slug}', date: '${today}' },`;
+    const updated = existing.replace(
+      /export const BLOG_SLUGS_EXTRA = \[\n/,
+      `export const BLOG_SLUGS_EXTRA = [\n${newEntry}\n`
+    );
+    writeFileSync(slugsFile, updated);
+    console.log(`  ✅ Registered ${slug} in blog-slugs.js`);
+  } catch (e) {
+    console.log(`  ⚠ Could not register slug: ${e.message}`);
+  }
+}
 
 // ── Blog listing page update ─────────────────────────────────────
 
@@ -1117,7 +1224,7 @@ function validateExistingPost(slug) {
     title: slug,
     content,
     wordCount,
-  });
+  }, { minScore: BLOG_MIN_SCORE });
 
   if (result.valid) {
     console.log('  ✅ Structural validation PASSED');
@@ -1126,6 +1233,13 @@ function validateExistingPost(slug) {
     for (const f of result.failures) {
       console.log(`    - ${f}`);
     }
+  }
+
+  // v2: scored quality report (diagnostic)
+  console.log(`  📊 Quality score: ${result.score}/100 (grade ${result.grade}, threshold ${result.threshold})`);
+  console.log(`     passing: ${result.passing}`);
+  for (const [cat, val] of Object.entries(result.categoryScores)) {
+    console.log(`       ${cat}: ${val}`);
   }
 
   // Quality gate
@@ -1362,6 +1476,110 @@ async function main() {
   }
   console.log('');
 
+  // ── Generate branded visuals and inject into the article body ──────
+  // Charts match the post's sections (scripts/generate-blog-visuals.py,
+  // Cyber-Luxe branding). PNGs land in public/blog/ and are committed +
+  // deployed with the post. Failures are non-fatal — the post still ships.
+  console.log('  🎨 Generating branded visuals...');
+  try {
+    const tmpVisual = resolve(BLOG_DIR, `_visuals-${keywordEntry.slug}.html`);
+    writeFileSync(tmpVisual, articleHTML);
+    // Prefer the manim venv (local WSL); CI has python3 + matplotlib
+    let visualPy = resolve(process.env.HOME || '/root', '.venv/manim/bin/python');
+    try {
+      execSync(`"${visualPy}" -c "import matplotlib"`, { stdio: 'pipe' });
+    } catch {
+      visualPy = 'python3';
+    }
+    const visOut = execSync(
+      `"${visualPy}" "${resolve(PROJECT, 'scripts/generate-blog-visuals.py')}" "${tmpVisual}" --auto --slug "${keywordEntry.slug}" --out-dir "${BLOG_DIR}"`,
+      { encoding: 'utf-8', maxBuffer: 10 * 1024 * 1024 }
+    );
+    rmSync(tmpVisual, { force: true });
+    const visStart = visOut.indexOf('{');
+    if (visStart !== -1) {
+      const charts = JSON.parse(visOut.slice(visStart)).charts || [];
+      const h2s = [...articleHTML.matchAll(/<h2[^>]*>.*?<\/h2>/gi)];
+      let injected = 0;
+      for (const chart of charts) {
+        if (articleHTML.includes(chart.file)) continue;
+        // Anchor under a heading matching the chart's topic keywords
+        const needles = {
+          ctr: ['ctr', 'click', 'thumbnail', 'position', 'impression'],
+          retention: ['retention', 'watch time', 'audience', 'hold'],
+          rpm: ['rpm', 'revenue', 'monetiz', 'sponsorship', 'earn'],
+          funnel: ['funnel', 'subscriber', 'conversion'],
+          traffic: ['traffic', 'impression', 'visibility', 'algorithm', 'suggested'],
+          growth: ['upload', 'frequency', 'cadence', 'consistency'],
+        }[chart.type] || [];
+        let anchor = -1;
+        for (const m of h2s) {
+          const t = m[0].replace(/<[^>]+>/g, '').toLowerCase();
+          if (needles.some(n => t.includes(n))) { anchor = m.index + m[0].length; break; }
+        }
+        if (anchor === -1 && h2s.length >= 2) {
+          anchor = h2s[1].index + h2s[1][0].length; // fallback: after 2nd section
+        }
+        if (anchor !== -1) {
+          articleHTML = articleHTML.slice(0, anchor) + '\n' + chart.figure_html + '\n' + articleHTML.slice(anchor);
+          injected++;
+        }
+      }
+      console.log(`  ✅ ${injected}/${charts.length} visual(s) injected into article`);
+    }
+  } catch (e) {
+    console.log(`  ⚠ Visual generation skipped (non-fatal): ${e.message}`);
+  }
+
+  // ── JS visual top-up: guarantee BLOG_MIN_VISUALS charts ──────────
+  // The Python pipeline above is non-fatal and silently no-ops on CI runners
+  // without matplotlib — that's why older cron posts ship with 0 visuals.
+  // This zero-dependency generator injects inline <svg> charts (no assets to
+  // deploy) so the min-visuals gate is reliably satisfied.
+  try {
+    const { generatePostVisuals } = await import('./blog-visuals.mjs');
+    const needed = BLOG_MIN_VISUALS - countVisuals(articleHTML);
+    if (needed > 0) {
+      const visuals = generatePostVisuals({ slug: keywordEntry.slug, keyword: keywordEntry.keyword });
+      const toAdd = visuals.slice(0, needed);
+      const h2s = [...articleHTML.matchAll(/<h2[^>]*>.*?<\/h2>/gi)];
+      // Anchor after the 1st, middle, and last H2 (fall back to body start).
+      const anchors = [
+        h2s[0] ? h2s[0].index + h2s[0][0].length : -1,
+        h2s[Math.floor(h2s.length / 2)] ? h2s[Math.floor(h2s.length / 2)].index + h2s[Math.floor(h2s.length / 2)][0].length : -1,
+        h2s[h2s.length - 1] ? h2s[h2s.length - 1].index + h2s[h2s.length - 1][0].length : -1,
+      ].filter(p => p >= 0);
+      const uniq = [...new Set(anchors)].sort((a, b) => a - b).slice(0, toAdd.length);
+      let result = '';
+      let last = 0;
+      toAdd.forEach((v, i) => {
+        const pos = uniq[i] ?? articleHTML.length;
+        result += articleHTML.slice(last, pos) + '\n' + v.figure_html + '\n';
+        last = pos;
+      });
+      result += articleHTML.slice(last);
+      articleHTML = result;
+      console.log(`  ✅ JS visuals injected: ${Math.min(toAdd.length, uniq.length)} (total now ${countVisuals(articleHTML)})`);
+    } else {
+      console.log(`  🖼 Visuals already present: ${countVisuals(articleHTML)} (>= ${BLOG_MIN_VISUALS})`);
+    }
+    // AUTO-CORRECT (fix, don't just block): animate any remaining bare
+    // visual so every shipped post has 3+ ANIMATED visuals.
+    const fixRes = fixVisualAnimations(articleHTML);
+    if (fixRes.fixed > 0) {
+      articleHTML = fixRes.html;
+      console.log(`  ✏️  auto-animated ${fixRes.fixed} visual(s):`);
+      for (const r of fixRes.report) console.log('     - ' + r);
+    }
+    const { unanimated } = analyzeVisuals(articleHTML);
+    if (unanimated.length) {
+      console.log(`  ⚠ ${unanimated.length} visual(s) could not be auto-animated (${unanimated.map(u => `<${u.name}>`).join(', ')})`);
+    }
+  } catch (e) {
+    console.log(`  ⚠ JS visual top-up skipped (non-fatal): ${e.message}`);
+  }
+  console.log('');
+
   // Build page object for renderer
   const today = new Date();
   const titleRaw = keywordEntry.keyword
@@ -1383,13 +1601,59 @@ async function main() {
     updatedAt: today,
   };
 
+  // ── Hero image BEFORE the render ──────────────────────────────────
+  // blog-renderer.js only injects the hero <picture> when the file exists
+  // (heroExists), so the hero must be on disk before renderBlogTemplate.
+  // Every post ships with 1 hero + 3 charts (charts gated by BLOG_MIN_VISUALS).
+  try {
+    const wrapTitle2 = (s, maxw = 52) => {
+      const lines = [''];
+      for (const w of s.split()) {
+        if (lines[lines.length - 1].length + w.length + 1 <= maxw) {
+          lines[lines.length - 1] = (lines[lines.length - 1] + ' ' + w).trim();
+        } else {
+          lines.push(w);
+        }
+      }
+      if (lines.length > 2) lines[1] = lines.slice(1).join(' ');
+      while (lines.length < 2) lines.push('');
+      return [lines[0].slice(0, 56), lines[1].slice(0, 56)];
+    };
+    const [hl1, hl2] = wrapTitle2(title);
+    execSync('node scripts/generate-hero-scene.mjs', {
+      cwd: PROJECT,
+      stdio: 'inherit', // stream hero-gen logs straight into the workflow output
+      timeout: 120000,
+      env: {
+        ...process.env,
+        HERO_SLUG: keywordEntry.slug,
+        HERO_TITLE_1: hl1,
+        HERO_TITLE_2: hl2,
+        HERO_KEYWORD: keywordEntry.keyword || keywordEntry.slug,
+        HERO_BADGE: 'GUIDE',
+      },
+    });
+    const heroAssets = ['-hero.png', '-hero.webp', '-og.png'].map((suf) =>
+      resolve(BLOG_DIR, keywordEntry.slug + suf));
+    const missing = heroAssets.filter((p) => !existsSync(p));
+    if (missing.length === 0) {
+      console.log('  ✅ Hero image generated (topic scene + og + webp)');
+    } else {
+      console.log(`  ⚠ Hero image generated but assets missing: ${missing.map((p) => basename(p)).join(', ')}`);
+    }
+  } catch (e) {
+    console.log(`  ⚠ Hero generation skipped (non-fatal): ${String(e.message).slice(0, 140)}`);
+  }
+
   // Wrap in full template
   console.log('  Wrapping in blog template...');
   const fullHTML = renderBlogTemplate(page);
 
-  // Validate
-  console.log('  Validating structure...');
-  const validation = validateBlogPost(page);
+  // Validate the final wrapped artifact (what actually ships) with the scored gate.
+  // v2: score the wrapped fullHTML — schema, canonical, author box, FAQ, internal
+  // links are all present there, so the score reflects the real published page.
+  console.log('  Validating structure + quality...');
+  const validation = validateBlogPost({ ...page, content: fullHTML }, { minScore: BLOG_MIN_SCORE });
   if (!validation.valid) {
     console.log(`  ⚠ Structural issues (non-blocking):`);
     for (const f of validation.failures) {
@@ -1398,6 +1662,35 @@ async function main() {
     console.log('  Continuing (renderer will auto-fix structural issues)...');
   } else {
     console.log('  ✅ Structural validation passed');
+  }
+  console.log(`  📊 Quality score: ${validation.score}/100 (grade ${validation.grade}, threshold ${validation.threshold})`);
+  for (const [cat, val] of Object.entries(validation.categoryScores)) {
+    console.log(`      ${cat}: ${val}`);
+  }
+
+  // Surface the score to the GitHub Actions run summary (report step reads these)
+  if (process.env.GITHUB_OUTPUT) {
+    try {
+      appendFileSync(process.env.GITHUB_OUTPUT, `quality_score=${validation.score}\nquality_grade=${validation.grade}\n`);
+    } catch (e) { /* non-fatal — score still logged to console */ }
+  }
+
+  if (!validation.passing) {
+    console.log('');
+    console.log(`  ❌ BLOCKED by quality gate: score ${validation.score} < threshold ${validation.threshold}`);
+    console.log('  To force-publish anyway, set BLOG_MIN_SCORE lower (e.g. 0).');
+    console.log('  No post was saved — daily run reported as blocked.');
+    process.exit(2);
+  }
+
+  // Minimum authored visuals (images/charts). Counts the authored body, not the
+  // template-wrapped output, so related-post thumbnails can't satisfy the rule.
+  const authoredVisuals = countVisuals(page.content || '');
+  console.log(`  🖼 Authored visuals: ${authoredVisuals} (need ${BLOG_MIN_VISUALS})`);
+  if (authoredVisuals < BLOG_MIN_VISUALS) {
+    console.log(`  ❌ BLOCKED by visuals requirement: ${authoredVisuals} < ${BLOG_MIN_VISUALS}`);
+    console.log('  Add images/charts to the post, or set BLOG_MIN_VISUALS=0 to skip.');
+    process.exit(2);
   }
 
   // Dry run check
@@ -1461,6 +1754,10 @@ async function main() {
     console.log('  ✅ Static HTML file written');
     saveResult.wroteFile = true;
   }
+
+  // Register in blog-slugs.js so /blog listing + sitemap include this post
+  // even when the DB insert didn't happen (CI runner has no DATABASE_URL).
+  registerBlogSlug(keywordEntry.slug);
 
   // Skip static sitemap and blog listing updates — API handles both dynamically
 

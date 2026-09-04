@@ -1,0 +1,18 @@
+dashboard-DkPwrTR4.js:1 [main.js] Loading...
+dashboard-DkPwrTR4.js:245 ✅ Google GIS Loaded
+dashboard-DkPwrTR4.js:1692 ✅ Functions exposed to window (sync)
+dashboard-DkPwrTR4.js:1775 ✅ All 2026 Modern Features Loaded
+dashboard-DkPwrTR4.js:1775 ✅ SaaS Logic exposed to Global Window
+dashboard-DkPwrTR4.js:4 🚀 Platform Initialization (Tier 1) starting...
+dashboard-DkPwrTR4.js:4 ✅ Lucide Icons initialized
+dashboard-DkPwrTR4.js:4 ✅ Tier 1 Initialization Complete.
+dashboard-DkPwrTR4.js:4 [CSRF] Token initialized before tools
+dashboard-DkPwrTR4.js:195 ✅ Analytics loaded for: Simply Decoded
+dashboard-DkPwrTR4.js:195 ✅ Analytics loaded for: Simply Decoded
+dashboard-DkPwrTR4.js:195 [CSRF] Token refreshed
+dashboard-DkPwrTR4.js:245 Plan set to: agency
+api/dev/refill:1  Failed to load resource: the server responded with a status of 404 ()
+dashboard-DkPwrTR4.js:4 🔬 Hydrating Optics Module...
+dashboard-DkPwrTR4.js:756 [Generate Proposal Error]: TypeError: Assignment to constant variable.
+    at fn (dashboard-DkPwrTR4.js:756:71)
+fn @ dashboard-DkPwrTR4.js:756

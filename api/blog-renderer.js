@@ -1,3 +1,13 @@
+import { existsSync } from 'fs';
+import { resolve } from 'path';
+
+// Self-hosted hero detection (public/ is served at the site root)
+function heroExists(url) {
+  try {
+    return existsSync(resolve(process.cwd(), 'public', String(url).replace(/^\//, '')));
+  } catch { return false; }
+}
+
 // Zero-dependency date formatting (replaces date-fns)
 function formatDateStr(date, pattern) {
   const MONTHS = ['January','February','March','April','May','June','July','August','September','October','November','December'];
@@ -92,16 +102,19 @@ function linkGlossaryTerms(html) {
   const sortedTerms = GLOSSARY_MAP.map(g => g[0]).sort((a, b) => b.length - a.length);
   let result = html;
 
-  // Protect existing links
-  const LINKED_REGION = /<a\s[^>]*>.*?<\/a>/gi;
+  // Protect script/style/pre/code blocks, existing links, AND every HTML tag — so term
+  // matching only ever touches visible text nodes. Without this, terms inside attribute
+  // values (e.g. img alt="...") or JSON-LD strings get wrapped in <a> tags, corrupting markup.
   const protectedRegions = [];
   let protectedIdx = 0;
-  result = result.replace(LINKED_REGION, (match) => {
-    const token = `__PROTECTED_LINK_${protectedIdx}__`;
-    protectedRegions.push(match);
-    protectedIdx++;
-    return token;
-  });
+  const protect = (m) => { const t = `__PROTECTED_LINK_${protectedIdx}__`; protectedRegions.push(m); protectedIdx++; return t; };
+  result = result
+    .replace(/<script[\s\S]*?<\/script>/gi, protect)
+    .replace(/<style[\s\S]*?<\/style>/gi, protect)
+    .replace(/<pre[\s\S]*?<\/pre>/gi, protect)
+    .replace(/<code[\s\S]*?<\/code>/gi, protect)
+    .replace(/<a\s[^>]*>.*?<\/a>/gi, protect)
+    .replace(/<[^>]*>/g, protect);
 
   for (const term of sortedTerms) {
     // Find the slug for this term
@@ -119,10 +132,9 @@ function linkGlossaryTerms(html) {
     });
   }
 
-  // Restore protected regions
-  for (let i = 0; i < protectedRegions.length; i++) {
-    result = result.replace(`__PROTECTED_LINK_${i}__`, protectedRegions[i]);
-  }
+  // Restore protected regions in ONE pass — per-token replace would be O(n^2) now that
+  // every tag is protected. Function replacer keeps `$` patterns (e.g. "$1,000") intact.
+  result = result.replace(/__PROTECTED_LINK_(\d+)__/g, (match, i) => protectedRegions[Number(i)]);
 
   return result;
 }
@@ -338,19 +350,32 @@ function generateDualSchema(page, faqItems) {
     dateModified: isoUpdate,
     author: {
       '@type': 'Person',
-      name: 'Patrick'
+      name: 'Patrick',
+      url: 'https://yt-seo-architect.vercel.app/about',
+      sameAs: ['https://github.com/nhlaka3'],
+      knowsAbout: ['YouTube SEO', 'YouTube Analytics', 'YouTube Algorithm', 'Content Strategy']
     },
     publisher: {
       '@type': 'Organization',
       name: 'YT SEO Architect',
+      url: 'https://yt-seo-architect.vercel.app/',
       logo: {
         '@type': 'ImageObject',
         url: 'https://yt-seo-architect.vercel.app/og-image.png'
-      }
+      },
+      sameAs: [
+        'https://twitter.com/YTSEOArchitect',
+        'https://linkedin.com/company/yt-seo-architect',
+        'https://github.com/nhlaka3'
+      ]
     },
     mainEntityOfPage: {
       '@type': 'WebPage',
       '@id': `https://yt-seo-architect.vercel.app/blog/${slug}`
+    },
+    speakable: {
+      '@type': 'SpeakableSpecification',
+      xpath: ['/html/head/title', '//h1', "//*[@id='direct-answer']", "//*[@class='tldr']"]
     }
   };
 
@@ -364,7 +389,11 @@ function generateDualSchema(page, faqItems) {
         '@type': 'Answer',
         text: f.answer || f.question
       }
-    }))
+    })),
+    speakable: {
+      '@type': 'SpeakableSpecification',
+      xpath: ['/h1', "//*[@id='direct-answer']/@content", "//meta[@name='description']/@content"]
+    }
   } : null;
 
   return JSON.stringify(faqSchema ? [articleSchema, faqSchema] : [articleSchema]);
@@ -377,18 +406,19 @@ function escAttr(s) { return (s || '').replace(/"/g, '&quot;'); }
 function formatDate(d) { return new Date(d).toISOString().split('T')[0]; }
 
 function heroImageHTML(slug, title) {
-  const seed = slug.replace(/[^a-z0-9-]/g, '').substring(0, 30);
+  // Self-hosted branded hero when available; otherwise fall back to the site OG image.
+  // (picsum.photos hotlinks were removed — external images hurt reliability and SEO.)
   const alt = (title || slug).replace(/—.*/, '').trim();
+  const heroWebp = `/blog/${slug}-hero.webp`;
+  const heroPng = `/blog/${slug}-hero.png`;
+  const useWebp = heroExists(heroWebp);
+  const src = useWebp ? heroWebp : (heroExists(heroPng) ? heroPng : '/og-image.png');
+  const fallback = useWebp ? (heroExists(heroPng) ? heroPng : '/og-image.png') : null;
+  const picture = useWebp
+    ? `<picture><source srcset="${heroWebp}" type="image/webp" /><img src="${fallback}" alt="${escAttr(alt)} guide — YT SEO Architect" width="800" height="400" loading="eager" fetchpriority="high" style="width:100%;height:auto;max-width:800px;border-radius:12px;border:1px solid #2D215E;" /></picture>`
+    : `<img src="${src}" alt="${escAttr(alt)} guide — YT SEO Architect" width="800" height="400" loading="eager" fetchpriority="high" style="width:100%;height:auto;max-width:800px;border-radius:12px;border:1px solid #2D215E;" />`;
   return `<div class="featured-image-wrapper" style="margin:24px 0;text-align:center;">
-      <img
-        src="https://picsum.photos/seed/${seed}/800/400"
-        alt="${escAttr(alt)} guide — YT SEO Architect"
-        width="800"
-        height="400"
-        loading="eager"
-        fetchpriority="high"
-        style="width:100%;height:auto;max-width:800px;border-radius:12px;border:1px solid #2D215E;"
-      />
+      ${picture}
     </div>`;
 }
 
@@ -617,6 +647,10 @@ export function renderBlogTemplate(page) {
   const formattedUpdateDate = formatDateStr(new Date(updateDate), 'MMMM yyyy');
   const slug = page.slug;
   const title = page.title || '';
+  // Truncate SERP title to <=60 chars (Google display limit); keep body H1 + schema full
+  const metaTitle = title.length > 60
+    ? title.substring(0, 57).replace(/\s+\S*$/, '') + '…'
+    : title;
   const metaDesc = (page.metaDescription || '').replace(/"/g, '&quot;');
   const rawContent = page.content || '';
   // Calculate word count from actual content (strips HTML tags)
@@ -638,16 +672,69 @@ export function renderBlogTemplate(page) {
   const h2s = extractH2s(rawContent);
   const faqItems = extractFAQItems(rawContent);
 
+  // Extract the article body early — needed to hoist a content-provided TL;DR
+  // above the TOC (canonical order: TL;DR → TOC → ad → body).
+  let bodyContent = rawContent;
+  const articleMatchB = bodyContent.match(/<article>([\s\S]*?)<\/article>/i);
+  if (articleMatchB) {
+    bodyContent = articleMatchB[1].trim();
+  }
+  // Strip duplicate H1 (template provides one) and any existing related-posts/footer sections
+  // Also strip share bars, meta lines, author box, hero image — template renders these
+  bodyContent = bodyContent
+    // Some DB posts store a FULL HTML page (incl. <head> with its own canonical/meta).
+    // Strip the embedded head so we never emit duplicate <link rel=canonical> / meta tags.
+    .replace(/<head[^>]*>[\s\S]*?<\/head>/gi, '')
+    .replace(/<h1[^>]*>.*?<\/h1>/i, '')
+    .replace(/<nav\s[^>]*class="related-posts"[^>]*>[\s\S]*?<\/nav>/gi, '')
+    .replace(/<footer[\s\S]*?<\/footer>/gi, '')
+    .replace(/<div\s[^>]*class="share-bar[^>]*>[\s\S]*?<\/div>/gi, '')
+    .replace(/<p\s[^>]*class="meta"[^>]*>[\s\S]*?<\/p>/gi, '')
+    .replace(/<div\s[^>]*class="author-box[^>]*>[\s\S]*?<\/div>/gi, '')
+    .replace(/<div\s[^>]*class="adsense-blog[^"]*"[^>]*>[\s\S]*?<\/div>/gi, '')
+    .replace(/<div\s[^>]*class="featured-image-wrapper[^>]*>[\s\S]*?<\/div>/gi, '')
+    // Strip any JSON-LD blocks embedded in the article body — schema belongs in the
+    // <head> (the template emits one clean block via JSON.stringify below). Embedded
+    // blocks from generators are often unparseable and break rich results.
+    .replace(/<script[^>]*type=["']application\/ld\+json["'][^>]*>[\s\S]*?<\/script>/gi, '')
+    .trim();
+  // Hoist a content-provided TL;DR block (from ANY position) so it renders
+  // above the TOC. Stored full-page posts embed their own tldr/toc/breadcrumb
+  // chrome — strip the duplicates and let the template regenerate them.
+  let hoistedTLDR = '';
+  let strippedTOC = false;
+  const anyTLDR = bodyContent.match(/<div\s[^>]*class=["'][^"']*tldr[^"']*["'][^>]*>[\s\S]*?<\/div>/i);
+  if (anyTLDR) {
+    hoistedTLDR = anyTLDR[0].trim();
+  }
+  bodyContent = bodyContent
+    .replace(/<div\s[^>]*class=["'][^"']*tldr[^"']*["'][^>]*>[\s\S]*?<\/div>/gi, '')
+    .replace(/<nav\s[^>]*class="toc"[^>]*>[\s\S]*?<\/nav>/gi, (_m) => { strippedTOC = true; return ''; })
+    .replace(/<nav\s[^>]*class="breadcrumb"[^>]*>[\s\S]*?<\/nav>/gi, '')
+    .replace(/<!--\s*Breadcrumb\s*-->/gi, '')
+    .trim();
+
   // Build content sections (insert structural wrappers where missing)
   let contentHTML = '';
 
   // 1. TL;DR block
-  if (!hasTLDR) {
+  if (hoistedTLDR) {
+    contentHTML += hoistedTLDR;
+  } else if (!hasTLDR) {
     contentHTML += generateTLDRBlock(page);
   }
 
-  // AdSense: Post-TL;DR
-  contentHTML += `<div class="adsense-blog-top" style="margin:2rem 0; text-align:center;">
+  // 2. TOC nav (before any ad — keeps the TL;DR → TOC → content flow tight;
+  // regenerate when the stored copy was stripped)
+  if (h2s.length >= 3 && (!hasTOC || strippedTOC)) {
+    const contentH2s = h2s.filter(h => !/faq|key takeaways|conclusion|in this article/i.test(h.text));
+    contentHTML += generateTOCNav(contentH2s);
+  }
+
+  // AdSense: Post-TOC (moved below the TOC so it doesn't separate TL;DR from
+  // the article; auto-collapses when no ad is served so unfilled units never
+  // leave a gap in the layout)
+  contentHTML += `<div class="adsense-blog-top" style="margin:1rem 0 1.5rem; text-align:center;">
     <ins class="adsbygoogle"
          style="display:inline-block;width:728px;height:90px"
          data-ad-client="ca-pub-3831668789026424"
@@ -659,38 +746,119 @@ export function renderBlogTemplate(page) {
     <\/script>
   </div>`;
 
-  // 2. TOC nav
-  if (!hasTOC && h2s.length >= 3) {
-    const contentH2s = h2s.filter(h => !/faq|key takeaways|conclusion/i.test(h.text));
-    contentHTML += generateTOCNav(contentH2s);
-  }
-
   // 3. Body content (the AI-generated or template-generated HTML) — with auto-linked glossary terms
-  // Extract just the article body — rawContent is a full HTML page saved in DB,
-  // but the template wraps it in another full page. Strip H1 too (template provides one).
-  let bodyContent = rawContent;
-  const articleMatch = bodyContent.match(/<article>([\s\S]*?)<\/article>/i);
-  if (articleMatch) {
-    bodyContent = articleMatch[1].trim();
-  }
-  // Strip duplicate H1 (template provides one) and any existing related-posts/footer sections
-  // Also strip share bars, meta lines, author box, hero image — template renders these
-  bodyContent = bodyContent
-    .replace(/<h1[^>]*>.*?<\/h1>/i, '')
-    .replace(/<nav\s[^>]*class="related-posts"[^>]*>[\s\S]*?<\/nav>/gi, '')
-    .replace(/<footer[\s\S]*?<\/footer>/gi, '')
-    .replace(/<div\s[^>]*class="share-bar[^>]*>[\s\S]*?<\/div>/gi, '')
-    .replace(/<p\s[^>]*class="meta"[^>]*>[\s\S]*?<\/p>/gi, '')
-    .replace(/<div\s[^>]*class="author-box[^>]*>[\s\S]*?<\/div>/gi, '')
-    .replace(/<div\s[^>]*class="adsense-blog[^"]*"[^>]*>[\s\S]*?<\/div>/gi, '')
-    .replace(/<div\s[^>]*class="featured-image-wrapper[^>]*>[\s\S]*?<\/div>/gi, '')
-    .trim();
+  // (bodyContent was extracted and cleaned above, incl. TL;DR hoisting)
   const linked = linkGlossaryTerms(bodyContent);
   contentHTML += linked;
 
-  // 3b. Try-the-Tool CTA (if a corresponding interactive tool page exists)
-  // Dynamically check if a tool file exists for this blog slug
+  // 3b. Try-the-Template CTA lookup FIRST — when a template page matches this post,
+  // the template wins over the tool CTA so only one CTA box renders per post.
   const blogSlug = (page.slug || '').replace(/^(how-to-|what-does-|why-|when-to-)/, '');
+  const TEMPLATE_BLOG_MAP = {
+    "youtube-description-templates-2026": "youtube-description-template",
+    "youtube-title-examples-2026": "youtube-title-template",
+    "youtube-tags-2026": "youtube-tags-template",
+    "youtube-thumbnail-tips-2026": "youtube-thumbnail-template",
+    "creating-effective-youtube-thumbnails-for-clicks-2026": "youtube-thumbnail-ideas",
+    "what-does-youtube-ctr-actually-mean": "youtube-thumbnail-template",
+    "youtube-end-screens-cards-guide-2026": "youtube-end-screen-template",
+    "youtube-intro-hook-first-3-seconds": "youtube-intro-template",
+    "youtube-seo-for-gaming-channels-2026": "youtube-tags-for-gaming",
+    "youtube-shorts-seo-guide-2026": "youtube-description-template-for-shorts",
+    "youtube-shorts-seo-ranking-guide-2026": "youtube-description-template-for-shorts",
+    "youtube-seo-checklist-beginners-2026": "youtube-description-template",
+    "youtube-video-not-getting-views-diagnostic-fix-2026": "youtube-description-template-copy-paste",
+    "youtube-seo-examples-2026": "youtube-title-ideas",
+    "youtube-for-tutorials-2026": "youtube-video-description-template-copy",
+    "how-to-increase-youtube-retention-2026": "youtube-video-script-template",
+    "increasing-youtube-watch-time-with-analytics-2026": "youtube-chapters-template",
+    "youtube-analytics-explained-2026": "youtube-chapters-template",
+    "youtube-channel-branding-tips-for-consistency-2026": "youtube-thumbnail-template",
+    "youtube-impressions-guide-2026": "youtube-title-template",
+    "using-youtube-features-to-enhance-viewer-experience-2026": "youtube-end-screen-template",
+    "youtube-playlist-optimization-strategy": "youtube-end-screen-template",
+    "youtube-seo-template-2026": "youtube-description-template-copy-paste",
+  };
+  const TEMPLATE_NAMES = {
+    "youtube-description-template": "YouTube Description Template",
+    "youtube-description-template-copy-paste": "Copy-Paste Description Templates",
+    "youtube-description-template-for-shorts": "Shorts Description Template",
+    "youtube-description-template-for-vlogs": "Vlog Description Template",
+    "youtube-video-description-template-copy": "Video Description Templates to Copy",
+    "youtube-video-description-template": "Video Description Template",
+    "youtube-title-template": "YouTube Title Template",
+    "youtube-title-ideas": "YouTube Title Ideas",
+    "youtube-video-title-generator": "Video Title Formula Generator",
+    "youtube-tags-template": "YouTube Tags Template",
+    "youtube-tags-for-gaming": "Gaming Tags Template",
+    "youtube-thumbnail-template": "YouTube Thumbnail Template",
+    "youtube-thumbnail-ideas": "Thumbnail Layout Ideas",
+    "youtube-end-screen-template": "End Screen Template",
+    "youtube-intro-template": "Intro Template",
+    "youtube-outro-template": "Outro Template",
+    "youtube-video-script-template": "Video Script Template",
+    "youtube-script-template-for-videos": "Script Templates by Format",
+    "youtube-chapters-template": "Chapters Template",
+    "youtube-description-generator": "Description Generator",
+  };
+  let templateKey = TEMPLATE_BLOG_MAP[blogSlug] || TEMPLATE_BLOG_MAP[page.slug];
+  if (!templateKey) {
+    // keyword fallback for posts not in the curated map (e.g. future cron posts)
+    const slugCheck = `${blogSlug} ${page.slug || ''}`.toLowerCase();
+    const rules = [
+      ["description", "youtube-description-template"],
+      ["title", "youtube-title-template"],
+      ["tag", "youtube-tags-template"],
+      ["thumbnail", "youtube-thumbnail-template"],
+      ["end-screen", "youtube-end-screen-template"],
+      ["intro", "youtube-intro-template"],
+      ["outro", "youtube-outro-template"],
+      ["script", "youtube-video-script-template"],
+      ["chapter", "youtube-chapters-template"],
+      ["retention", "youtube-video-script-template"],
+      ["shorts", "youtube-description-template-for-shorts"],
+      ["gaming", "youtube-tags-for-gaming"],
+      ["vlog", "youtube-description-template-for-vlogs"],
+    ];
+    for (const [kw, slug] of rules) {
+      if (slugCheck.includes(kw)) { templateKey = slug; break; }
+    }
+  }
+  if (templateKey) {
+    const templateUrl = `/templates/${templateKey}`;
+    const templateName = TEMPLATE_NAMES[templateKey] || 'Copy-Paste Template';
+    contentHTML += `\n      <div class="template-cta" style="margin:2.5rem 0;padding:1.5rem;background:rgba(0,255,136,0.04);border:1px solid rgba(0,255,136,0.2);border-radius:12px;text-align:center;">
+        <h3 style="color:var(--green, #00ff88);margin-bottom:0.5rem;">📋 Get the Copy-Paste Template</h3>
+        <p style="color:#a8b2c1;margin-bottom:1rem;">Skip the guesswork — grab the ${templateName} with fill-in-the-blank sections, usage notes, and niche variations.</p>
+        <a href="${templateUrl}" style="display:inline-block;background:var(--green, #00ff88);color:#000;padding:0.75rem 2rem;border-radius:8px;text-decoration:none;font-weight:700;">Open the Template →</a>
+      </div>`;
+  }
+
+  // 3d. Pillar-cluster CTA — links cluster articles back to their pillar guide.
+  // Keep in sync with scripts/pillars-data.js clusters lists.
+  const PILLAR_BLOG_MAP = {
+    "youtube-seo-strategy-2026": ["youtube-seo-tips-for-creators-in-2026", "youtube-seo-checklist-beginners-2026", "best-youtube-seo-tools-2026", "youtube-seo-examples-2026", "youtube-seo-audit-diagnostic-fix-2026", "youtube-algorithm-best-strategies-2026", "youtube-for-small-channels-2026", "youtube-seo-for-business-channels-2026", "how-youtube-algorithm-works-2026"],
+    "youtube-keyword-research-master-guide": ["how-to-keywords-youtube", "youtube-tags-2026", "youtube-competitor-analysis-reverse-engineer", "youtube-seo-for-gaming-channels-2026", "youtube-seo-for-cooking-channels-2026", "youtube-metadata-auditor-vs-vidiq-shadow-ban"],
+    "youtube-metadata-optimization": ["how-to-metadata-youtube", "youtube-title-examples-2026", "youtube-description-templates-2026", "youtube-chapter-timestamps-seo-guide", "youtube-thumbnail-tips-2026", "what-does-youtube-ctr-actually-mean", "youtube-impressions-guide-2026", "youtube-intro-hook-first-3-seconds", "youtube-thumbnail-ab-testing-guide"],
+    "youtube-channel-growth-analytics": ["youtube-subscriber-growth-2026", "youtube-analytics-explained-2026", "youtube-analytics-4-metrics-that-matter", "how-to-increase-youtube-retention-2026", "youtube-community-posts-strategy-2026", "youtube-playlist-optimization-strategy", "youtube-end-screens-cards-guide-2026", "youtube-retention-graph-explained-2026"],
+  };
+  const PILLAR_NAMES = {
+    "youtube-seo-strategy-2026": "Complete YouTube SEO Strategy 2026",
+    "youtube-keyword-research-master-guide": "YouTube Keyword Research Master Guide",
+    "youtube-metadata-optimization": "YouTube Metadata Optimization",
+    "youtube-channel-growth-analytics": "Channel Growth & Analytics",
+  };
+  const pillarKey = Object.keys(PILLAR_BLOG_MAP).find(k =>
+    PILLAR_BLOG_MAP[k].includes(blogSlug) || PILLAR_BLOG_MAP[k].includes(page.slug));
+  if (pillarKey) {
+    const pillarUrl = `/guides/${pillarKey}`;
+    const pillarName = PILLAR_NAMES[pillarKey] || 'Pillar Guide';
+    contentHTML += `\n      <div class="pillar-cta" style="background:rgba(0,242,255,0.04);border-left:3px solid #00f2ff;border-radius:8px;padding:.7rem 1rem;margin:1.25rem 0;font-size:.93rem;color:#cbd5e1;">
+        📖 This article is part of the <a href="${pillarUrl}" style="color:#00f2ff;text-decoration:none;font-weight:600;">${pillarName}</a> cluster — read the full guide for the complete system.
+      </div>`;
+  }
+  // 3c. Try-the-Tool CTA (if a corresponding interactive tool page exists AND no template matched)
+  // Dynamically check if a tool file exists for this blog slug
   let toolExists = false;
   const STATIC_TOOL_SLUGS = [
       "best-youtube-seo-tools-2026", "fix-youtube-shadow-ban-2026", "keywords-youtube",
@@ -711,7 +879,7 @@ export function renderBlogTemplate(page) {
       "youtube-video-not-getting-views-diagnostic-fix-2026",
     ];
     toolExists = STATIC_TOOL_SLUGS.includes(blogSlug) || STATIC_TOOL_SLUGS.includes(page.slug);
-  if (toolExists) {
+  if (toolExists && !templateKey) {
     const toolSlug = blogSlug || page.slug;
     const toolUrl = `/tools/${toolSlug}`;
     contentHTML += `\n      <div class="tool-cta" style="margin:2.5rem 0;padding:1.5rem;background:rgba(0,242,255,0.04);border:1px solid rgba(0,242,255,0.2);border-radius:12px;text-align:center;">
@@ -761,15 +929,16 @@ export function renderBlogTemplate(page) {
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <link rel="icon" href="/favicon.ico" />
 
-  <title>${title} — YT SEO Architect</title>
+  <title>${metaTitle} — YT SEO Architect</title>
   <meta name="description" content="${metaDesc}" />
+  <meta name="author" content="Patrick" />
   <meta name="robots" content="index, follow" />
   <link rel="canonical" href="https://yt-seo-architect.vercel.app/blog/${slug}" />
 
   <!-- Open Graph -->
   <meta property="og:type" content="article" />
   <meta property="og:url" content="https://yt-seo-architect.vercel.app/blog/${slug}" />
-  <meta property="og:title" content="${title}" />
+  <meta property="og:title" content="${metaTitle}" />
   <meta property="og:description" content="${metaDesc}" />
   <meta property="og:image" content="https://yt-seo-architect.vercel.app/blog/${slug}-og.png" />
   <meta property="og:image:width" content="1200" />
@@ -779,7 +948,7 @@ export function renderBlogTemplate(page) {
 
   <!-- Twitter -->
   <meta name="twitter:card" content="summary_large_image" />
-  <meta name="twitter:title" content="${title}" />
+  <meta name="twitter:title" content="${metaTitle}" />
   <meta name="twitter:description" content="${metaDesc}" />
   <meta name="twitter:image" content="https://yt-seo-architect.vercel.app/blog/${slug}-og.png" />
 
@@ -810,7 +979,8 @@ export function renderBlogTemplate(page) {
     /* ── Inline share-bar styles ── */
     /* ── Social Share Bar ──────────────────────────────────── */ .share-bar{display: flex;align-items: center;gap: 0.5rem;margin: 1.5rem 0;flex-wrap: wrap}.share-bar .share-label{font-size: 0.75rem;font-weight: 700;color: var(--text-muted);text-transform: uppercase;letter-spacing: 0.08em;margin-right: 0.25rem}.share-btn{display: inline-flex;align-items: center;gap: 0.35rem;padding: 0.4rem 0.85rem;border-radius: var(--radius-md);font-size: 0.78rem;font-weight: 600;text-decoration: none;transition: all 0.25s var(--ease-precise);border: 1px solid transparent;cursor: pointer;font-family: var(--font)}.share-btn:hover{transform: translateY(-2px);text-decoration: none}.share-btn:active{transform: translateY(0)}.share-btn svg{width: 14px;height: 14px;flex-shrink: 0}.share-btn.reddit{background: rgba(255, 69, 0, 0.08);color: #ff4500;border-color: rgba(255, 69, 0, 0.15)}.share-btn.reddit:hover{background: rgba(255, 69, 0, 0.15);border-color: rgba(255, 69, 0, 0.3);box-shadow: 0 4px 12px rgba(255, 69, 0, 0.2)}.share-btn.x-twitter{background: rgba(29, 155, 240, 0.08);color: #1d9bf0;border-color: rgba(29, 155, 240, 0.15)}.share-btn.x-twitter:hover{background: rgba(29, 155, 240, 0.15);border-color: rgba(29, 155, 240, 0.3);box-shadow: 0 4px 12px rgba(29, 155, 240, 0.2)}.share-btn.linkedin{background: rgba(10, 102, 194, 0.08);color: #0a66c2;border-color: rgba(10, 102, 194, 0.15)}.share-btn.linkedin:hover{background: rgba(10, 102, 194, 0.15);border-color: rgba(10, 102, 194, 0.3);box-shadow: 0 4px 12px rgba(10, 102, 194, 0.2)}.share-btn.facebook{background: rgba(24, 119, 242, 0.08);color: #1877f2;border-color: rgba(24, 119, 242, 0.15)}.share-btn.facebook:hover{background: rgba(24, 119, 242, 0.15);border-color: rgba(24, 119, 242, 0.3);box-shadow: 0 4px 12px rgba(24, 119, 242, 0.2)}.share-btn.whatsapp{background: rgba(37, 211, 102, 0.08);color: #25d366;border-color: rgba(37, 211, 102, 0.15)}.share-btn.whatsapp:hover{background: rgba(37, 211, 102, 0.15);border-color: rgba(37, 211, 102, 0.3);box-shadow: 0 4px 12px rgba(37, 211, 102, 0.2)}.share-btn.telegram{background: rgba(0, 136, 204, 0.08);color: #0088cc;border-color: rgba(0, 136, 204, 0.15)}.share-btn.telegram:hover{background: rgba(0, 136, 204, 0.15);border-color: rgba(0, 136, 204, 0.3);box-shadow: 0 4px 12px rgba(0, 136, 204, 0.2)}.share-btn.copy-link{background: rgba(255, 255, 255, 0.05);color: var(--text-secondary);border-color: var(--border)}.share-btn.copy-link:hover{background: rgba(255, 255, 255, 0.1);color: var(--text);border-color: var(--border-hover)}.share-btn.copy-link.copied{background: rgba(0, 255, 136, 0.1);color: var(--green);border-color: rgba(0, 255, 136, 0.25)}.share-bar-bottom{margin-top: 2.5rem;padding-top: 1.5rem;border-top: 1px solid var(--border)}/* ── Glossary Links ─────────────────────────────────────── */ .glossary-link{color: var(--cyan);text-decoration: none;border-bottom: 1px dotted rgba(0, 242, 255, 0.35);transition: all 0.2s var(--ease-precise);cursor: help}.glossary-link:hover{color: var(--green);border-bottom-color: var(--green)}/* ── Template Box (code templates) ──────────────────────── */ .template-box{background: var(--surface);border: 1px solid var(--border);border-radius: var(--radius-lg);padding: 1.5rem;margin: 1rem 0;white-space: pre-wrap;font-family: var(--font-mono);font-size: 0.85rem;color: var(--text-secondary);line-height: 1.6;transition: all 0.3s var(--ease-precise)}.template-box:hover{border-color: var(--border-hover)}/* ── Infographic Container ──────────────────────────────── */ .infographic-container{text-align: center;margin: 2rem 0}/* ── Optional Badge ─────────────────────────────────────── */ .optional-badge{display: inline-block;background: rgba(0, 242, 255, 0.08);color: var(--cyan);border: 1px solid rgba(0, 242, 255, 0.15);border-radius: 999px;padding: 0.1rem 0.5rem;font-size: 0.7rem;font-weight: 600;letter-spacing: 0.03em;text-transform: lowercase;margin-left: 0.5rem;vertical-align: middle}/* ── AdSense Ad Unit ──────────────────────────────────── */ .adsense-blog-top{margin: 2rem 0;text-align: center}/* ── Footer ─────────────────────────────────────────────── */ .footer{text-align: center;padding: 2rem;border-top: 1px solid var(--border);color: var(--text-muted);font-size: 0.82rem;background: rgba(10, 11, 16, 0.5);backdrop-filter: blur(12px);-webkit-backdrop-filter: blur(12px)}.footer a{color: var(--cyan);text-decoration: none;font-weight: 500}.footer a:hover{text-decoration: underline}/* ── Responsive ─────────────────────────────────────────── */ @media (max-width: 768px){h1{font-size: 1.7rem}h2{font-size: 1.3rem;margin-top: 2rem}h3{font-size: 1.05rem}article{padding: 1.5rem 1rem}.header{padding: 0.75rem 1rem}.author-box{flex-direction: column;text-align: center;padding: 1.25rem}.toc{position: static;max-height: none}.step-guide .step{padding-left: 3.5rem}.step-guide .step::before{left: 0.75rem;width: 2rem;height: 2rem;font-size: 0.85rem}.related-posts-grid{grid-template-columns: 1fr}.related-posts{padding: 0 1rem}.share-btn span:not(.share-label){display: none}}@media (max-width: 480px){h1{font-size: 1.4rem}article{padding: 1rem 0.75rem}.cta-box{padding: 1.5rem}.tldr, .key-takeaways, .trending-now{padding: 1rem 1.25rem}.share-bar{gap: 0.35rem}.share-btn{padding: 0.35rem 0.65rem;font-size: 0.72rem}}/* ── Reduced Motion ─────────────────────────────────────── */ @media (prefers-reduced-motion: reduce){*, *::before, *::after{animation-duration: 0.01ms !important;animation-iteration-count: 1 !important;transition-duration: 0.01ms !important}}/* ── Print Styles ───────────────────────────────────────── */ @media print{.header, .footer, .share-bar, .cta-box, .reading-progress, .related-posts, .social-proof, .trending-now{display: none}body{background: #fff;color: #000}a{color: #000;text-decoration: underline}article{max-width: 100%;padding: 0}}
   </style>
-</head>
+  <link rel="stylesheet" href="/motion-utilities.css">
+<script defer src="/ga.js"></script></head>
 <body>
   <!-- Skip to content -->
   <a href="#main-content" class="skip-link">Skip to content</a>
@@ -826,10 +996,10 @@ export function renderBlogTemplate(page) {
         YT <span>SEO</span> Architect
       </a>
       <nav class="header-nav" id="header-nav">
-        <a href="/tools.html">Tools</a>
+        <a href="/tools">Tools</a>
         <a href="/blog">Blog</a>
-        <a href="/public/glossary">Glossary</a>
-       <a href="/dashboard.html" class="header-cta">Dashboard</a>
+        <a href="/glossary/">Glossary</a>
+       <a href="/dashboard" class="header-cta">Dashboard</a>
       </nav>
       <button class="mobile-menu-btn" aria-label="Menu" onclick="document.getElementById('header-nav').classList.toggle('open')">☰</button>
     </div>
@@ -849,7 +1019,7 @@ export function renderBlogTemplate(page) {
 
       <!-- Meta line + last-updated badge -->
       <p class="meta">
-        Published ${formattedDate} · ${readMinutes} min read · By YT SEO Architect
+        Published ${formattedDate} · ${readMinutes} min read · By <a href="https://yt-seo-architect.vercel.app/about" style="color:var(--cyan);text-decoration:none;font-weight:600;">Patrick</a>
         <span class="last-updated">✓ Updated ${formattedUpdateDate}</span>
       </p>
 
@@ -859,10 +1029,10 @@ export function renderBlogTemplate(page) {
       <!-- E-E-A-T: Author credentials (improved) -->
       ${hasAuthorBox ? '' : `
       <div class="author-box">
-        <div class="avatar">YT</div>
+        <div class="avatar">P</div>
         <div class="author-info">
-          <h4>YT SEO Architect Team</h4>
-          <p>We help 5,000+ creators optimize their YouTube channels with free AI-powered tools. Our guides are researched and tested — not theoretical.</p>
+          <h4>Patrick</h4>
+          <p>Founder of YT SEO Architect. I research and test every strategy in this guide on real YouTube channels — no theory, no fabricated stats. Free tools for every creator.</p>
         </div>
       </div>
       `}
@@ -878,7 +1048,7 @@ export function renderBlogTemplate(page) {
 
       <!-- Social proof counter -->
       <div class="social-proof">
-        <div class="stat"><strong>17</strong><span>Free AI Tools</span></div>
+        <div class="stat"><strong>90+</strong><span>Free AI Tools</span></div>
         <div class="stat"><strong>5,000+</strong><span>Active Creators</span></div>
         <div class="stat"><strong>100</strong><span>Free Credits/Month</span></div>
         <div class="stat"><strong>No CC</strong><span>Required</span></div>
@@ -901,8 +1071,12 @@ export function renderBlogTemplate(page) {
       <!-- Social Share Buttons (Bottom) -->
       ${generateShareBar(slug, title, true)}
 
-      <!-- AdSense: Bottom -->
-      <div class="adsense-blog-bottom" style="margin:2rem 0; text-align:center;">
+      <!-- Related posts -->
+      ${generateRelatedPosts(page)}
+
+      <!-- AdSense: Bottom (after related posts — keeps share bar → related
+           cards contiguous so unfilled ad units don't leave a void) -->
+      <div class="adsense-blog-bottom" style="margin:1.5rem 0 0.5rem; text-align:center;">
         <ins class="adsbygoogle"
              style="display:block;width:100%;height:250px"
              data-ad-client="ca-pub-3831668789026424"
@@ -914,8 +1088,19 @@ export function renderBlogTemplate(page) {
         <\/script>
       </div>
 
-      <!-- Related posts -->
-      ${generateRelatedPosts(page)}
+      <!-- Collapse unfilled ad units so they never leave layout gaps -->
+      <script>
+        (function () {
+          setTimeout(function () {
+            document.querySelectorAll('.adsense-blog-top, .adsense-blog-bottom').forEach(function (w) {
+              var ins = w.querySelector('ins.adsbygoogle');
+              if (ins && !ins.querySelector('iframe') && ins.getAttribute('data-ad-status') !== 'filled') {
+                w.style.display = 'none';
+              }
+            });
+          }, 3500);
+        })();
+      <\/script>
 
     </article>
   </main>
@@ -931,21 +1116,21 @@ export function renderBlogTemplate(page) {
     <div class="footer-inner">
       <div class="footer-col">
         <h4>Product</h4>
-       <a href="/dashboard.html">Dashboard</a>
-        <a href="/changelog.html">Changelog</a>
+       <a href="/dashboard">Dashboard</a>
+        <a href="/changelog">Changelog</a>
       </div>
       <div class="footer-col">
         <h4>Resources</h4>
         <a href="/blog">Blog</a>
-        <a href="/public/glossary">Glossary</a>
-        <a href="/public/guides">Guides</a>
+        <a href="/glossary/">Glossary</a>
+        <a href="/tools/">Guides</a>
       </div>
       <div class="footer-col">
         <h4>Company</h4>
-        <a href="/about.html">About</a>
-        <a href="/contact.html">Contact</a>
-        <a href="/privacy-policy.html">Privacy</a>
-        <a href="/terms-of-service.html">Terms</a>
+        <a href="/about">About</a>
+        <a href="/contact">Contact</a>
+        <a href="/privacy-policy">Privacy</a>
+        <a href="/terms-of-service">Terms</a>
       </div>
       <div class="footer-col">
         <h4>Social</h4>

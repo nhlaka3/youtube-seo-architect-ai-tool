@@ -1,0 +1,212 @@
+{
+  "summary": {
+    "health_score": 96,
+    "business_type": "SaaS Web Application (free AI YouTube SEO tool)",
+    "audit_date": "2026-08-05",
+    "top_findings": [
+      "All 2026-08-03 critical/high issues verified fixed and live",
+      "CSS pipeline fixed: no data: URI CSP blocks, no duplicate stylesheet sets (~428KB saved)",
+      "WebP adoption complete: 102 blog heroes + homepage dashboard hero",
+      "llms.txt regenerated: 54 posts + 98 tools + 150 glossary terms, clean descriptions",
+      "Zero broken sitemap URLs (250/250 sample = 200)",
+      "Remaining: external authority (backlinks, owned domain, Google API creds for field CWV)"
+    ],
+    "quick_wins": [
+      "Add secondary AI crawler rules to robots.txt (GrokBot, Amazonbot, Meta-ExternalAgent, etc.)",
+      "Fix homepage H1 spacing typo 'Generator.100%'",
+      "Add lastmod to glossary sitemap entries",
+      "Enable field CWV via GOOGLE_API_KEY"
+    ]
+  },
+  "categories": [
+    {
+      "name": "Technical SEO",
+      "score": 98,
+      "what_works": [
+        "Sitemap 0% broken (was 28.75%) — 250/250 sampled URLs return 200",
+        "Security headers complete: HSTS preload, CSP, XFO, nosniff, Referrer-Policy",
+        "robots.txt exemplary AI-crawler policy",
+        "No soft-404s; real 404s for nonexistent URLs",
+        "Immutable caching on /assets/* and /js/*",
+        "CSP whitelists cdn.jsdelivr.net (Vercel Analytics works)"
+      ],
+      "findings": [
+        {
+          "title": "Secondary AI training crawlers not addressed in robots.txt",
+          "severity": "Medium",
+          "description": "11 secondary crawlers (GrokBot, Amazonbot, Meta-ExternalAgent, Cohere-Research, YouBot, etc.) have no explicit rules — silently allowed by User-agent: * catch-all. If training-block intent is desired, they should be disallowed.",
+          "recommendation": "Add Disallow rules for training crawlers (GrokBot, Amazonbot, Meta-ExternalAgent, Cohere-Research, AI2Bot, etc.) while keeping search/AI-answer crawlers allowed."
+        },
+        {
+          "title": "lastmod missing on glossary sitemap entries",
+          "severity": "Low",
+          "description": "17,682 glossary URLs have no lastmod (removed to avoid build-stamp distrust). Google treats them as unknown freshness.",
+          "recommendation": "Emit real per-term lastmod from glossary-data.json, or accept unknown freshness for programmatic terms."
+        },
+        {
+          "title": "Divergent CSPs across routes",
+          "severity": "Low",
+          "description": "vercel.json CSP (comprehensive) vs helmet short CSP on some API routes.",
+          "recommendation": "Consolidate to a single CSP definition."
+        }
+      ]
+    },
+    {
+      "name": "Content Quality",
+      "score": 95,
+      "what_works": [
+        "All 98 tool pages now 500+ visible words with how-to + FAQ + related tools (verified live: 552-589 words sampled)",
+        "Category hubs expanded to 500+ words with CollectionPage schema",
+        "Named author Patrick in Person schema + bylines + meta author",
+        "About page 1,232 words with founder attribution",
+        "Zero thin pages (<300 words) found in scan"
+      ],
+      "findings": [
+        {
+          "title": "Some tool-page FAQ content uses shared boilerplate",
+          "severity": "Low",
+          "description": "Fallback content template shared across ~78 tool pages; 20 have custom niche content. Not duplicate (topic-specific), but lower uniqueness than ideal.",
+          "recommendation": "Prioritize custom content for highest-traffic tools; acceptable for long-tail."
+        }
+      ]
+    },
+    {
+      "name": "On-Page SEO",
+      "score": 97,
+      "what_works": [
+        "Homepage H1 targets 'Free YouTube SEO Tool' head term",
+        "Meta descriptions present on all sampled pages",
+        "1 H1 per page site-wide (scan verified 0 multi-H1)",
+        "Canonicals clean — no 3xx targets",
+        "Cannibalization resolved (blog/tools 301s)"
+      ],
+      "findings": [
+        {
+          "title": "Homepage H1 spacing typo",
+          "severity": "Low",
+          "description": "H1 renders 'Generator.100% Free, Unlimited.' — missing space after period (line break artifact).",
+          "recommendation": "Add space: 'Generator. 100% Free, Unlimited.'"
+        },
+        {
+          "title": "Tool inventory count mismatch",
+          "severity": "Medium",
+          "description": "Hub links 23 tools vs title/meta '90+' vs llms.txt 98. Multiple URL forms exist (/tools/X, /tools.html, /public/tools/X.html).",
+          "recommendation": "Consolidate tool URL forms; align displayed count with linked count."
+        }
+      ]
+    },
+    {
+      "name": "Schema / Structured Data",
+      "score": 100,
+      "what_works": [
+        "Homepage: valid @graph with Organization, WebSite, SoftwareApplication, FAQPage, BreadcrumbList",
+        "Blog posts: Article + FAQPage with Person author 'Patrick' (verified 40/40 valid)",
+        "Category hubs: CollectionPage + BreadcrumbList",
+        "/tools: WebPage + ItemList; /about: AboutPage + Organization + founder; /pricing: WebPage + Offer",
+        "Glossary terms + /vs pages: Article/FAQPage valid"
+      ],
+      "findings": []
+    },
+    {
+      "name": "Performance (CWV)",
+      "score": 90,
+      "what_works": [
+        "CSS pipeline fixed: 5 async links, no data: URI CSP blocks, no duplicate sets (~428KB saved)",
+        "lucide bundled locally with immutable caching",
+        "WebP images across blog + homepage hero",
+        "HTML cached, hashed assets immutable"
+      ],
+      "findings": [
+        {
+          "title": "Dashboard JS bundle 536KB (146KB gzip) unsplit",
+          "severity": "Medium",
+          "description": "dashboard-vLhkHsXF.js ships all feature code on first paint; no route-level code splitting.",
+          "recommendation": "Route-level dynamic import per tool; target <150KB gzip per route."
+        },
+        {
+          "title": "No field CWV data (CrUX)",
+          "severity": "Medium",
+          "description": "No GOOGLE_API_KEY — LCP/INP/CLS estimated from structure only.",
+          "recommendation": "Configure GOOGLE_API_KEY for CrUX field data (script exists: scripts/fetch-crux-field-data.mjs)."
+        }
+      ]
+    },
+    {
+      "name": "AI Search Readiness (GEO)",
+      "score": 68,
+      "what_works": [
+        "robots.txt: 8 AI search/answer crawlers allowed, GPTBot/CCBot blocked",
+        "llms.txt regenerated: 54 posts + 98 tools + 150 glossary terms, clean descriptions",
+        "FAQPage schema feeds direct AI answers",
+        "Hreflang en/es/pt correct"
+      ],
+      "findings": [
+        {
+          "title": "llms.txt secondary crawler policy gaps",
+          "severity": "Medium",
+          "description": "GrokBot, Amazonbot, Meta-ExternalAgent, Cohere-Research and 7 others have no explicit robots rules.",
+          "recommendation": "Add explicit rules for all known AI crawlers."
+        }
+      ]
+    },
+    {
+      "name": "Images",
+      "score": 95,
+      "what_works": [
+        "Homepage dashboard hero (WebP 43KB + PNG fallback, descriptive alt, width/height)",
+        "102 blog hero/OG images converted to WebP (quality 82)",
+        "DB-rendered blog heroes now use <picture> WebP with PNG fallback",
+        "og-image.png 1200x630 serves 200"
+      ],
+      "findings": []
+    }
+  ],
+  "action_plan": {
+    "phases": [
+      {
+        "name": "Phase 1: Verified Fixed (2026-08-05)",
+        "timeframe": "Complete",
+        "items": [
+          "CSS pipeline (data: URI CSP block + duplicate sets) — deployed",
+          "WebP blog heroes via <picture> — deployed",
+          "llms.txt coverage 30→54 posts, 40→98 tools, clean descriptions — deployed",
+          "/js/* immutable caching — deployed",
+          "Homepage hero image with alt — deployed"
+        ]
+      },
+      {
+        "name": "Phase 2: Quick Wins",
+        "timeframe": "Week 1",
+        "items": [
+          "Add secondary AI crawler rules to robots.txt",
+          "Fix H1 spacing typo",
+          "Align tool inventory count + URL forms"
+        ]
+      },
+      {
+        "name": "Phase 3: External Authority",
+        "timeframe": "Month 1-2",
+        "items": [
+          "Connect GOOGLE_API_KEY for CrUX field data",
+          "Acquire owned domain + 301 (H5)",
+          "Earn first 10 third-party dofollow backlinks (C3)",
+          "Common Crawl presence + GSC/Bing verification"
+        ]
+      },
+      {
+        "name": "Phase 4: Monitoring",
+        "timeframe": "Ongoing",
+        "items": [
+          "Re-run /seo audit monthly",
+          "Track GSC impressions post-fix",
+          "Drift baseline after 30 days"
+        ]
+      }
+    ]
+  },
+  "artifacts": {
+    "findings_dir": "findings-reaudit/",
+    "screenshots_dir": "screenshots/",
+    "specialists": ["technical", "performance", "content", "cluster", "schema", "sitemap", "geo", "sxo", "visual", "images", "backlinks"]
+  }
+}

@@ -948,7 +948,8 @@ function generateToolPage(tool) {
     .idea-card .idea-meta{color:#8b8b9e;font-size:.8rem;margin-top:.25rem}
     input[type="color"]{height:48px;padding:4px;cursor:pointer}
   </style>
-</head>
+<link rel="stylesheet" href="/motion-utilities.css">
+<script defer src="/ga.js"></script></head>
 <body>
   <header class="header">
     <a href="/">⚡ YT SEO Architect</a>

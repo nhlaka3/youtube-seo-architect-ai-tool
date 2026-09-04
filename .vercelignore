@@ -25,12 +25,13 @@ __pycache__/
 *.mkv
 *.wav
 *.svg
+!public/logo.svg
 *.pyc
 
 # Exclude auto-generated glossary comparison pages (thousands of files)
 public/glossary/*-vs-*.html
 public/glossary/es/*-vs-*.html
-public/glossary/category/*
+# Category hub pages ARE deployed (hub-and-spoke internal linking per wise playbook)
 public/blog/_archive/
 node_modules/
 .git/
@@ -43,4 +44,12 @@ logs/
 *.txt
 *.md
 *.docx
+# Re-include llms.txt files so they deploy (Google ignores them, but Claude/Perplexity discovery benefits)
+!public/llms.txt
+!public/llms-full.txt
+# Re-include IndexNow key files so Bing/Yandex can verify domain ownership
+# (auto-index.mjs submits via IndexNow; a 404 on the key file = submissions silently dropped)
+!public/8825c721ac4f49c5b25af78d7418a2b8.txt
+!public/aa2b0b7d0ada465f886246090f01165f.txt
+!public/ff2b6b4085ec395bb99c5e71a65691a9.txt
 designs.txt

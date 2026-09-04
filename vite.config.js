@@ -15,11 +15,14 @@ export default defineConfig({
         main: resolve(__dirname, 'index.html'),
         dashboard: resolve(__dirname, 'dashboard.html'),
         about: resolve(__dirname, 'about.html'),
+        contact: resolve(__dirname, 'contact.html'),
+        pricing: resolve(__dirname, 'pricing.html'),
         privacy: resolve(__dirname, 'privacy-policy.html'),
         terms: resolve(__dirname, 'terms-of-service.html'),
         changelog: resolve(__dirname, 'changelog.html'),
         landing: resolve(__dirname, 'warriorplus-landing.html'),
-        redirect: resolve(__dirname, 'redirect.html')
+        redirect: resolve(__dirname, 'redirect.html'),
+        notfound: resolve(__dirname, '404.html')
       },
       output: {
         manualChunks(id) {

@@ -1,0 +1,73 @@
+  Search error: <urlopen error timed out>
+  Search error: <urlopen error timed out>
+  Search error: <urlopen error timed out>
+  Search error: <urlopen error timed out>
+  Search error: <urlopen error timed out>
+  Search error: <urlopen error timed out>
+  Search error: <urlopen error timed out>
+  Search error: <urlopen error timed out>
+  Search error: <urlopen error timed out>
+  Search error: <urlopen error timed out>
+  Search error: <urlopen error timed out>
+  Search error: <urlopen error timed out>
+  Search error: <urlopen error timed out>
+  Search error: <urlopen error timed out>
+  Search error: <urlopen error timed out>
+
+============================================================
+GUEST BLOGGING SCANNER
+Finding sites that accept guest posts in the YouTube/SEO niche
+============================================================
+
+🔄 Stage 1: Searching for guest posting opportunities...
+  [1/15] "write for us youtube seo"
+  [2/15] "guest post youtube tools"
+  [3/15] "write for us youtube creator"
+  [4/15] "guest post youtube marketing"
+  [5/15] "write for us content creation"
+  [6/15] "submit guest post video marketing"
+  [7/15] "write for us social media"
+  [8/15] "guest posting guidelines seo tools"
+  [9/15] "write for us digital marketing"
+  [10/15] "become a contributor youtube"
+  [11/15] "guest post guidelines content marketing"
+  [12/15] "write for us online marketing"
+  [13/15] "submit article youtube growth"
+  [14/15] "write for us video seo"
+  [15/15] "guest author youtube tips"
+  Found 0 unique results from DDG
+  DDG returned 0. Using curated fallback list...
+  Using 19 fallback pages
+  Total pages to scan: 19
+
+🔄 Stage 2: Fetching and analyzing up to 15 pages...
+  [1/15] [SKIP] https://www.jeffbullas.com/write-for-us/ — HTTP Error 404: Not Found
+  [2/15] [SKIP] https://blog.hubspot.com/marketing/guest-blogging- — HTTP Error 404: Not Found
+  [3/15] [SKIP] https://later.com/blog/guest-post/ — HTTP Error 404: Not Found
+  [4/15] [SKIP] https://www.socialmediaexaminer.com/write-for-us/ — HTTP Error 404: Not Found
+  [5/15] [SKIP] https://buffer.com/resources/guest-posting/ — HTTP Error 404: Not Found
+  [6/15] [SKIP] https://sproutsocial.com/insights/guest-contributo — HTTP Error 404: Not Found
+  [7/15] 🎯 PITCH OPPORTUNITY https://neilpatel.com/blog/guest-post/, email: neil@advanced.npdigital.com
+       Score: 10 | How to Get Featured on Forbes - Neil Patel
+  [8/15] 🎯 PITCH OPPORTUNITY https://coschedule.com/blog/write-for-us
+       Score: 13 | Write For The CoSchedule Marketing Blog &amp; Cont
+  [9/15] [SKIP] https://hootsuite.com/about/guest-contributors — HTTP Error 404: Not Found
+  [10/15] [SKIP] https://www.semrush.com/blog/write-for-us/ — HTTP Error 404: Not Found
+  [11/15] [SKIP] https://searchengineland.com/write-for-us — HTTP Error 403: Forbidden
+  [12/15] [SKIP] https://moz.com/blog/write-for-us — HTTP Error 404: Not Found
+  [13/15] [SKIP] https://backlinko.com/guest-posting-guidelines — HTTP Error 404: Not Found
+  [14/15] 🎯 PITCH OPPORTUNITY https://www.wordstream.com/guest-posting
+       Score: 9 | Guest Posting Guidelines for the WordStream Blog
+  [15/15] 🎯 PITCH OPPORTUNITY https://searchenginejournal.com/write-for-us/, email: ce1a6e4081594e5e6d533e8e4fc66a0c@o4510320006397952.ingest.us.sentry.io
+       Score: 6 | Contact Search Engine Journal
+
+  Found 4 relevant guest post sites
+
+  Guest post opportunities: 4 sites
+
+🔄 Stage 4: Generating guest post pitches...
+
+  New pitches: 0
+  Skipped (seen): 4
+
+No new guest posting opportunities found.

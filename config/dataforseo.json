@@ -1,0 +1,17 @@
+{
+  "login": "YOUR_DATAFORSEO_LOGIN",
+  "password": "YOUR_DATAFORSEO_PASSWORD",
+  "location_code": 2840,
+  "language_code": "en",
+  "target_domain": "yt-seo-architect.vercel.app",
+  "competitors": [
+    "vidiq.com",
+    "tubebuddy.com",
+    "morningfa.me",
+    "tubics.com",
+    "keywordtool.io",
+    "vidonapp.com",
+    "socialpilot.co",
+    "hootsuite.com"
+  ]
+}

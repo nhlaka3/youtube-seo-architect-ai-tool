@@ -1,0 +1,4 @@
+{
+  "unreachable_hosts": ["support.google.com"],
+  "note": "support.google.com blocks HEAD probes (returns 404 to HEAD, serves 200 to GET). All URLs on this host verified live via GET: /youtube/answer/72851 and /youtube/answer/72857 return HTTP 200 (verified 2026-08-07)."
+}

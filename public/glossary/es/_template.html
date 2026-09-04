@@ -13,6 +13,7 @@
   <link rel="canonical" href="https://yt-seo-architect.vercel.app/glossary/es/{{SLUG}}" />
   <link rel="alternate" hreflang="en" href="https://yt-seo-architect.vercel.app/glossary/{{SLUG}}" />
   <link rel="alternate" hreflang="es" href="https://yt-seo-architect.vercel.app/glossary/es/{{SLUG}}" />
+  <link rel="alternate" hreflang="pt" href="https://yt-seo-architect.vercel.app/glossary/pt/{{SLUG}}" />
   <link rel="alternate" hreflang="x-default" href="https://yt-seo-architect.vercel.app/glossary/{{SLUG}}" />
 
   <meta property="og:type" content="article" />
@@ -27,17 +28,38 @@
   <meta name="twitter:description" content="{{SHORT_DEFINITION}}" />
 
   <script type="application/ld+json">
-  {
-    "@context": "https://schema.org",
-    "@type": "Article",
-    "headline": "{{TERM}} — Definición y Guía de Optimización",
-    "description": "{{SCHEMA_DESCRIPTION}}",
-    "inLanguage": "es",
-    "author": { "@type": "Person", "name": "Patrick", "url": "https://yt-seo-architect.vercel.app/about" },
-    "publisher": { "@type": "Organization", "name": "YT SEO Architect", "logo": { "@type": "ImageObject", "url": "https://yt-seo-architect.vercel.app/logo.svg" } },
-    "mainEntityOfPage": { "@type": "WebPage", "@id": "https://yt-seo-architect.vercel.app/glossary/es/{{SLUG}}" }
+{
+  "@context": "https://schema.org",
+  "@type": "Article",
+  "headline": "{{TERM}} — Definición y Guía de Optimización",
+  "description": "{{SCHEMA_DESCRIPTION}}",
+  "inLanguage": "es",
+  "author": {
+    "@type": "Person",
+    "name": "Patrick",
+    "url": "https://yt-seo-architect.vercel.app/about"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "YT SEO Architect",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://yt-seo-architect.vercel.app/logo.png"
+    }
+  },
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "https://yt-seo-architect.vercel.app/glossary/es/{{SLUG}}"
+  },
+  "speakable": {
+    "@type": "SpeakableSpecification",
+    "xpath": [
+      "//h1",
+      "//meta[@name='description']/@content"
+    ]
   }
-  </script>
+}
+</script>
 
   <script type="application/ld+json">
   {
@@ -69,7 +91,7 @@
     <link rel="stylesheet" href="/nav.css">
     <link rel="stylesheet" href="/blog-article.css">
   </noscript>
-</head>
+<script defer src="/ga.js"></script></head>
 <body>
 
   <!-- Skip to content -->
@@ -83,10 +105,10 @@
         YT <span>SEO</span> Architect
       </a>
       <nav class="header-nav" id="header-nav">
-        <a href="/tools.html">Tools</a>
+        <a href="/tools">Tools</a>
         <a href="/blog">Blog</a>
-        <a href="/public/glossary">Glossary</a>
-       <a href="/dashboard.html" class="header-cta">Dashboard</a>
+        <a href="/glossary/">Glossary</a>
+       <a href="/dashboard" class="header-cta">Dashboard</a>
       </nav>
       <button class="mobile-menu-btn" aria-label="Menu" onclick="document.getElementById('header-nav').classList.toggle('open')">☰</button>
     </div>
@@ -95,24 +117,25 @@
   <main id="main-content">
     <div class="term-wrap">
       <nav class="breadcrumb" aria-label="Migas de pan">
-        <a href="/">Inicio</a> › <a href="/glossary/">Glosario</a> › <a href="/glossary/?category={{CATEGORY_SLUG}}">{{CATEGORY_NAME}}</a> › <strong>{{TERM}}</strong>
-        <a href="/glossary/{{SLUG}}" class="lang-switch" hreflang="en">🇺🇸 English</a>
+        <a href="/">Inicio</a> › <a href="/glossary/">Glosario</a> › <a href="/glossary/es/category/{{CATEGORY_SLUG}}">{{CATEGORY_NAME}}</a> › <strong>{{TERM}}</strong>
+        <a href="/glossary/{{SLUG}}" class="lang-switch" hreflang="en" rel="alternate">🇺🇸 English</a>
+        <a href="/glossary/pt/{{SLUG}}" class="lang-switch" hreflang="pt" rel="alternate">🇧🇷 Português</a>
       </nav>
 
       <div class="glossary-hero">
-        <div class="category-badge">{{CATEGORY_EMOJI}} {{CATEGORY_NAME}}</div>
+        <a class="category-badge" href="/glossary/es/category/{{CATEGORY_SLUG}}">{{CATEGORY_EMOJI}} {{CATEGORY_NAME}}</a>
         <h1>{{TERM}}</h1>
         <p>{{SHORT_DEFINITION}}</p>
       </div>
 
       <nav class="glossary-nav" aria-label="Navegación de categorías">
         <a href="/glossary/es/">📖 Todos los Términos</a>
-        <a href="/glossary/es/?category=analytics">📊 Analíticas</a>
-        <a href="/glossary/es/?category=algorithm">🤖 Algoritmo</a>
-        <a href="/glossary/es/?category=seo-optimization">🔍 SEO</a>
-        <a href="/glossary/es/?category=monetization">💰 Monetización</a>
-        <a href="/glossary/es/?category=content-strategy">📝 Estrategia</a>
-        <a href="/glossary/es/?category=youtube-features">⚙️ Funciones</a>
+        <a href="/glossary/es/category/analytics">📊 Analíticas</a>
+        <a href="/glossary/es/category/algorithm">🤖 Algoritmo</a>
+        <a href="/glossary/es/category/seo-optimization">🔍 SEO</a>
+        <a href="/glossary/es/category/monetization">💰 Monetización</a>
+        <a href="/glossary/es/category/content-strategy">📝 Estrategia</a>
+        <a href="/glossary/es/category/youtube-features">⚙️ Funciones</a>
       </nav>
 
       <div class="glossary-content">
@@ -165,21 +188,21 @@
     <div class="footer-inner">
       <div class="footer-col">
         <h4>Product</h4>
-       <a href="/dashboard.html">Dashboard</a>
-        <a href="/changelog.html">Changelog</a>
+       <a href="/dashboard">Dashboard</a>
+        <a href="/changelog">Changelog</a>
       </div>
       <div class="footer-col">
         <h4>Resources</h4>
         <a href="/blog">Blog</a>
-        <a href="/public/glossary">Glossary</a>
-        <a href="/public/guides">Guides</a>
+        <a href="/glossary/">Glossary</a>
+        <a href="/tools/">Guides</a>
       </div>
       <div class="footer-col">
         <h4>Company</h4>
-        <a href="/about.html">About</a>
-        <a href="/contact.html">Contact</a>
-        <a href="/privacy-policy.html">Privacy</a>
-        <a href="/terms-of-service.html">Terms</a>
+        <a href="/about">About</a>
+        <a href="/contact">Contact</a>
+        <a href="/privacy-policy">Privacy</a>
+        <a href="/terms-of-service">Terms</a>
       </div>
       <div class="footer-col">
         <h4>Social</h4>

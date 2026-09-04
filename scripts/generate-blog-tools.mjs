@@ -2047,7 +2047,7 @@ function generateToolHtml(slug) {
   <link rel="canonical" href="${SITE}/tools/${slug}" />
   <meta property="og:title" content="${metaTitle}" />
   <meta property="og:description" content="${metaDesc}" />
-  <meta property="og:image" content="${SITE}/logo.svg" />
+  <meta property="og:image" content="${SITE}/og-image.png" />
   <meta name="robots" content="index, follow" />
   <script type="application/ld+json">
   { "@context": "https://schema.org", "@type": "WebApplication",
@@ -2097,7 +2097,8 @@ function generateToolHtml(slug) {
     .footer a { color: var(--accent2); text-decoration: none; }
     @media (max-width: 600px) { .container { padding: 1rem; } h1 { font-size: 1.5rem; } .header { padding: 0.75rem 1rem; } }
   </style>
-</head>
+<link rel="stylesheet" href="/motion-utilities.css">
+<script defer src="/ga.js"></script></head>
 <body data-keyword="${slug.replace(/-/g, ' ')}">
   <div class="header">
     <a href="/" class="header-logo"><span>🛠️</span> YT SEO Architect</a>

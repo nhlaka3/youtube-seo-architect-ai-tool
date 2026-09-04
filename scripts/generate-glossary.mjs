@@ -93,11 +93,11 @@ const FAQ_QUESTION_TEMPLATES = {
   }),
   'algorithm': (term, lower) => ({
     q1: `How does the ${lower} work in 2026?`,
-    a1: `The ${lower} in 2026 operates across three main surfaces: Search (matches your metadata to viewer queries), Suggested Videos (recommends content based on watch sessions and viewer history), and the Homepage (personalized recommendations based on viewing behavior). The algorithm prioritizes session time — how long viewers stay on YouTube after watching your video — over individual video performance. It evaluates titles, thumbnails, description keywords, watch time, CTR, and viewer satisfaction signals (likes, comments, shares). Understanding how these signals work together is the key to consistent growth.`,
+    a1: `The ${lower} in 2026 ranks videos across three surfaces: Search, Suggested, and the Homepage. It prioritizes session time — how long viewers stay on YouTube after watching your video — over individual video performance. Titles, thumbnails, watch time, CTR, and satisfaction signals (likes, comments, shares) all feed its ranking decisions. Understanding how these signals combine is the key to consistent growth.`,
     q2: `What signals does ${lower} use?`,
-    a2: `The ${lower} evaluates over 200 signals, but the most important ones are: (1) Title and description keyword matching — are you using the same words viewers search for? (2) Click-through rate from impressions — does your thumbnail + title combo make people click? (3) Watch time and retention — do viewers stay after clicking? (4) Session time — do viewers watch more YouTube after your video? (5) Engagement — likes, comments, shares. The algorithm weights recency heavily — the first 24-48 hours of performance determine initial reach.`,
+    a2: `The ${lower} evaluates over 200 signals, but five matter most: keyword matching, click-through rate, watch time and retention, session time, and engagement. It also weights recency heavily — performance in the first 24-48 hours determines initial reach. Optimize these five signals consistently and you're working with the algorithm, not against it.`,
     q3: `How to optimize videos for ${lower}`,
-    a3: `To optimize for the ${lower}, focus on: 1) Front-load your keyword in the title and mention it in the first 30 seconds of your video (transcript SEO). 2) Design thumbnails that create curiosity gaps — the algorithm tracks CTR as an early relevance signal. 3) Structure videos to maximize retention — hook viewers in the first 5 seconds and pace your content to avoid drop-off points. 4) Use end screens and cards to extend session time by funneling viewers to related content. 5) Upload consistently — the algorithm favors channels with predictable publishing schedules. Use YT SEO Architect's <a href="/tools/tag-generator">Tag Generator</a> to find keyword gaps competitors are missing.`,
+    a3: `To optimize for the ${lower}: front-load your keyword in the title and first 30 seconds; design thumbnails that create curiosity gaps; hook viewers in the first 5 seconds to protect retention; use end screens and cards to extend session time; and upload on a consistent schedule. Use YT SEO Architect's <a href="/tools/tag-generator">Tag Generator</a> to find keyword gaps competitors miss.`,
   }),
   'seo-optimization': (term, lower) => ({
     q1: `Why ${lower} matters for YouTube ranking`,
@@ -485,9 +485,10 @@ function generateIndexPage(data) {
 
     catSections += `
     <section id="${cat.slug}">
-      <h2 style="color:#e0e7ff;font-size:1.3rem;margin:2rem 0 1rem;display:flex;align-items:center;gap:.5rem">
+      <h2 style="color:#e0e7ff;font-size:1.3rem;margin:2rem 0 1rem;display:flex;align-items:center;gap:.5rem;flex-wrap:wrap">
         ${getCategoryEmoji(cat.slug)} ${cat.name}
         <span style="font-size:.8rem;color:#8b8b9e;font-weight:400">(${catTerms.length} terms)</span>
+        <a href="/glossary/category/${cat.slug}" style="font-size:.75rem;color:#a5b4fc;text-decoration:none;border:1px solid #4f46e5;padding:.15rem .6rem;border-radius:9999px">View hub →</a>
       </h2>
       <div class="related-grid">
         ${termLinks}
@@ -505,6 +506,10 @@ function generateIndexPage(data) {
   <meta name="description" content="Complete YouTube SEO glossary with ${total}+ terms covering analytics, algorithm, optimization, monetization, content strategy, and YouTube features. Free definitions and optimization tips." />
   <meta name="robots" content="index, follow" />
   <link rel="canonical" href="https://yt-seo-architect.vercel.app/glossary/" />
+  <link rel="alternate" hreflang="en" href="https://yt-seo-architect.vercel.app/glossary/" />
+  <link rel="alternate" hreflang="es" href="https://yt-seo-architect.vercel.app/glossary/es/" />
+  <link rel="alternate" hreflang="pt" href="https://yt-seo-architect.vercel.app/glossary/pt/" />
+  <link rel="alternate" hreflang="x-default" href="https://yt-seo-architect.vercel.app/glossary/" />
   <meta property="og:title" content="YouTube SEO Glossary — ${total}+ Terms Defined" />
   <meta property="og:description" content="Complete YouTube SEO glossary with ${total}+ terms. Free definitions and optimization tips for every creator." />
   <meta name="twitter:card" content="summary_large_image" />
@@ -546,7 +551,7 @@ function generateIndexPage(data) {
     @media(max-width:640px){.glossary-hero{padding:2rem 1rem}.glossary-hero h1{font-size:1.6rem}.related-grid{grid-template-columns:1fr}}
     .cta-box{border:1px solid #4f46e5;margin:2rem 0}
   </style>
-</head>
+<script defer src="/ga.js"></script></head>
 <body>
 
   <header class="header">
@@ -559,10 +564,13 @@ function generateIndexPage(data) {
     <h1>📖 YouTube SEO Glossary</h1>
     <p>${total}+ terms defined, explained, and optimized for YouTube creators. Click any term for a full definition with optimization tips.</p>
     <div class="stat">${total} terms · 6 categories · Free</div>
+    <br>
+    <a href="/glossary/es/" class="lang-switch" hreflang="es" rel="alternate" style="display:inline-flex;align-items:center;gap:4px;font-size:.8rem;color:#a5b4fc;text-decoration:none;padding:4px 12px;border:1px solid rgba(165,180,252,.3);border-radius:9999px;transition:all .2s">🇪🇸 Versión en Español</a>
+    <a href="/glossary/pt/" class="lang-switch" hreflang="pt" rel="alternate" style="display:inline-flex;align-items:center;gap:4px;font-size:.8rem;color:#a5b4fc;text-decoration:none;padding:4px 12px;border:1px solid rgba(165,180,252,.3);border-radius:9999px;transition:all .2s">🇧🇷 Versão em Português</a>
   </div>
 
   <nav class="glossary-nav" aria-label="Category navigation">
-    ${categories.map(c => `<a href="#${c.slug}">${getCategoryEmoji(c.slug)} ${c.name}</a>`).join('\n    ')}
+    ${categories.map(c => `<a href="/glossary/category/${c.slug}">${getCategoryEmoji(c.slug)} ${c.name}</a>`).join('\n    ')}
     <a href="/blog/" style="background:#312e81">📝 Blog</a>
     <a href="/tools/" style="background:#312e81">🛠️ Tools</a>
   </nav>

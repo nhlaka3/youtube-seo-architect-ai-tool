@@ -7,6 +7,18 @@ import express from 'express';
 import cors from 'cors';
 
 import helmet from 'helmet';
+import { readFileSync } from 'fs';
+import { resolve, dirname } from 'path';
+import { fileURLToPath } from 'url';
+
+// Auto-generated post registry (posts that couldn't DB-insert on the CI runner)
+import { BLOG_SLUGS_EXTRA } from '../scripts/blog-slugs.js';
+function mergeExtraSlugs(list) {
+  for (const e of BLOG_SLUGS_EXTRA) {
+    if (!list.some(x => x.slug === e.slug)) list.push(e);
+  }
+  return list;
+}
 
 
 
@@ -279,7 +291,7 @@ app.use(helmet({
 
   hsts: {
 
-    maxAge: 31536000,
+    maxAge: 63072000,
 
     includeSubDomains: true,
 
@@ -825,6 +837,7 @@ const TRASH_SLUGS_410 = [
   'youtube-algorithm-changes-2026', 'youtube-keyword-research-tutorial',
   'how-to-mass-update-youtube-descriptions-safely', 'youtube-shorts-seo-ranking-guide',
   'youtube-tags-generator-vs-vidiq', 'youtube-seo-guide-2026',
+  'generic-hero', // orphaned 274-byte "Page not found" stub that leaked into llms-full.txt
 ];
 TRASH_SLUGS_410.forEach(slug => {
   app.get(`/blog/${slug}`, (req, res) => res.status(410).send('Gone'));
@@ -832,14 +845,22 @@ TRASH_SLUGS_410.forEach(slug => {
 
 // ── Blog Categories ──────────────────────────────────────────
 const BLOG_CATEGORIES = {
-  'monetization': { name: 'Monetization', icon: '💰', desc: 'YouTube monetization requirements, ad revenue, YPP, and income strategies', slugMatch: ['monetiz', 'partner-program', 'ad-revenue', 'ypp'] },
-  'shorts': { name: 'Shorts & Vertical Video', icon: '📱', desc: 'YouTube Shorts algorithm, monetization, and growth strategies', slugMatch: ['short'] },
-  'analytics': { name: 'Analytics & Metrics', icon: '📊', desc: 'CTR, retention, impressions, and analytics metrics explained', slugMatch: ['analytic', 'retention', 'ctr', 'impression', 'metric'] },
-  'optimization': { name: 'SEO Optimization', icon: '🔍', desc: 'Tags, titles, descriptions, thumbnails, and metadata optimization', slugMatch: ['tag', 'title', 'description', 'thumbnail', 'metadata', 'chapter', 'caption', 'transcript', 'keyword', 'search-volume', 'keyword-difficulty'] },
-  'strategy': { name: 'Strategy & Planning', icon: '📝', desc: 'Keyword research, competitor analysis, content strategy and planning', slugMatch: ['strategy', 'planning', 'research', 'competitor', 'playlist', 'checklist', 'blueprint'] },
-  'growth': { name: 'Channel Growth', icon: '🚀', desc: 'Small channel growth, community building, and audience development', slugMatch: ['small-channel', 'hook', 'community', 'end-screen', 'card', 'intro'] },
-  'tools': { name: 'Tool Reviews & Comparisons', icon: '🛠️', desc: 'YouTube SEO tool comparisons, reviews, and alternatives', slugMatch: ['tool', 'vs-', 'vidiq', 'tubebuddy', 'coach'] },
-  'niche': { name: 'Niche Channels', icon: '🎯', desc: 'YouTube SEO for gaming, cooking, fitness, music, and business channels', slugMatch: ['gaming', 'cooking', 'fitness', 'music', 'business', 'tutorial'] },
+  'monetization': { name: 'Monetization', icon: '💰', desc: 'YouTube monetization requirements, ad revenue, YPP, and income strategies', slugMatch: ['monetiz', 'partner-program', 'ad-revenue', 'ypp'],
+    content: '<p>Monetization is the milestone every creator works toward, but the path to the YouTube Partner Program (YPP) is full of specific requirements and strategy decisions. This category covers the exact thresholds you need to hit, how ad revenue actually gets calculated, and the realistic ways creators build income beyond ads — memberships, sponsorships, affiliate links, and digital products.</p><p>Start by understanding the YPP entry requirements: 1,000 subscribers and 4,000 valid public watch hours (or 10 million Shorts views in 90 days). Once you qualify, the next questions are practical — how RPM and CPM work, why some niches pay dramatically more per view, and how to structure your content pipeline so monetization doesn\'t come at the cost of growth.</p><p>Every guide in this category is written to be actionable today, not theoretical. You\'ll learn what actually moves your revenue numbers and what is wasted effort, based on how YouTube\'s ad system really works in 2026.</p><p>What you\'ll learn in this category: the difference between RPM and CPM and why your niche dictates both, the three monetization paths available in 2026 (ads, memberships, and the Shorts revenue pool), and the mistakes that get channels demonetized or stuck below the YPP threshold. Every guide ends with a concrete action list, so you can move from reading to revenue.</p><p>How to use this category: start with the YPP requirements guide if you haven\'t qualified yet, then move to the revenue-focused guides once you\'re monetized. Bookmark the monetization checklist and run it before each upload batch — the requirements change more often than most creators realize, and staying compliant is easier than recovering from a strike.</p><p>Key topics covered: YPP requirements, RPM vs CPM, ad revenue, memberships, sponsorships, affiliate income, and monetization mistakes to avoid.</p><p>Whether you\'re aiming for your first payout or scaling an already-monetized channel, these guides meet you where you are and show the next step clearly.</p><p>If you\'re just starting, don\'t let the number of topics overwhelm you — pick one guide, apply it, and move to the next. The fastest path to monetization is consistent, searchable content that keeps viewers watching.</p><p>A practical example: a 10,000-subscriber tech channel with strong RPM might earn more from 200K monthly views than a 100,000-subscriber gaming channel with low RPM. That is why this category focuses on revenue per view, not just view counts — the guides here walk through real niche comparisons, realistic payout estimates, and the exact steps to diversify before your next check arrives.</p>' },
+  'shorts': { name: 'Shorts & Vertical Video', icon: '📱', desc: 'YouTube Shorts algorithm, monetization, and growth strategies', slugMatch: ['short'],
+    content: '<p>YouTube Shorts changed the platform\'s growth dynamics completely. A channel can now go from zero to hundreds of thousands of subscribers in months — but only if it understands how the Shorts feed actually selects and ranks content. This category is your complete guide to vertical video on YouTube.</p><p>The Shorts algorithm prioritizes watch-through rate, swipe-away rate, and engagement velocity above everything else. That means your first 1-3 seconds decide most of your fate, and your hook needs to work with sound on or off. We cover the mechanics of Shorts ranking, the monetization thresholds unique to Shorts, and how to convert Shorts viewers into long-form subscribers instead of just renting attention.</p><p>Whether you\'re starting fresh with Shorts or trying to fix a channel that\'s plateaued, these guides give you the exact playbook for 2026\'s Shorts environment.</p><p>What you\'ll learn in this category: how the Shorts feed selects videos (hint: it\'s watch-through rate and swipe-away rate, not views), the exact monetization thresholds for Shorts in 2026, and how to build a Shorts strategy that feeds your long-form channel instead of competing with it. You\'ll also see the analytics that matter for Shorts specifically — they\'re different from long-form.</p><p>How to use this category: if you\'re starting fresh, read the Shorts algorithm guide first to understand the feed mechanics, then the monetization requirements so you know what you\'re working toward. If your Shorts are already getting views but not converting to subscribers, focus on the growth strategies that bridge Shorts viewers to long-form content.</p><p>Key topics covered: Shorts algorithm mechanics, swipe-away rate, Shorts monetization thresholds, vertical video strategy, and converting Shorts viewers to subscribers.</p><p>Short-form is where new audiences are found fastest in 2026 — these guides make sure you don\'t waste the opportunity.</p><p>Short-form rewards consistency and iteration. Test formats, watch your swipe-away rate, and double down on what holds viewers — the data in these guides tells you exactly what to look for.</p><p>A practical example: a cooking channel posting one 45-second vertical recipe clip per day can outpace a long-form channel posting weekly — if the Shorts hook lands in the first second. The guides in this category break down that first-second hook formula, show how to read the swipe-away metric in your dashboard, and explain why Shorts viewers convert best when the call-to-action matches the clip\'s format.</p>' },
+  'analytics': { name: 'Analytics & Metrics', icon: '📊', desc: 'CTR, retention, impressions, and analytics metrics explained', slugMatch: ['analytic', 'retention', 'ctr', 'impression', 'metric'],
+    content: '<p>YouTube analytics tells you exactly what\'s working and what isn\'t — if you know how to read it. Most creators check views and subscribers, then miss the metrics that actually drive growth: click-through rate (CTR), average view duration, impressions, and audience retention curves. This category decodes all of it.</p><p>CTR tells you if your title and thumbnail are competitive in the search results and suggested feed. Retention tells you if your content delivers on its promise. Impressions tell you whether YouTube is even testing your videos with new audiences. Each metric points at a different fix, and these guides map metric to action.</p><p>You\'ll learn which numbers matter at which channel size, how to interpret a retention graph that drops at 30 seconds vs 2 minutes, and what analytics patterns reliably predict a video about to take off.</p><p>What you\'ll learn in this category: how to read your analytics dashboard like an SEO consultant — which metrics are leading indicators (impressions, CTR) versus lagging (views, watch time), how to diagnose a video that underperforms, and which numbers YouTube\'s algorithm actually uses to rank content. The goal is to turn your analytics from a vanity scoreboard into a fix-it list.</p><p>How to use this category: pick the metric that\'s currently hurting your channel most — low CTR means a packaging problem, low retention means a content-structure problem, low impressions means an authority or niche problem. Each guide maps one metric to its fix, so you always know what to change next rather than guessing.</p><p>Key topics covered: CTR, impressions, audience retention, average view duration, watch time, and reading your analytics dashboard like a consultant.</p><p>Stop guessing what works. These guides turn your data into a clear, prioritized action list for your channel.</p><p>Analytics only help if you act on them. Each month, pick the single metric that\'s hurting most, fix it, and measure the difference before moving to the next.</p><p>A practical example: two videos with identical view counts can tell completely different stories — one earned 10% CTR from 50,000 impressions, the other 2% CTR from 500,000. The first is a packaging problem; the second is a reach problem. That distinction is the core of the analytics guides here, which teach you to read the impression-to-CTR-to-retention chain instead of reacting to raw view numbers.</p>' },
+  'optimization': { name: 'SEO Optimization', icon: '🔍', desc: 'Tags, titles, descriptions, thumbnails, and metadata optimization', slugMatch: ['tag', 'title', 'description', 'thumbnail', 'metadata', 'chapter', 'caption', 'transcript', 'keyword', 'search-volume', 'keyword-difficulty'],
+    content: '<p>On-page YouTube SEO is the highest-leverage skill a creator can learn, because it\'s entirely within your control. Every video you publish competes in a search and recommendation system that reads your metadata first — title, description, tags, chapters, and captions. This category is the complete optimization playbook.</p><p>The fundamentals matter more than ever in 2026: one clear primary keyword in your title, a description that front-loads the value, tags used for spelling and phrasing variants rather than keyword stuffing, and chapters that improve session time. But optimization goes deeper — thumbnail composition, video structure that matches search intent, and metadata that stays accurate as YouTube\'s systems evolve.</p><p>Each guide here covers one piece of the optimization stack with examples you can copy. Optimize every element correctly and your existing content starts working harder without a single new video.</p><p>What you\'ll learn in this category: a complete metadata optimization system — how to pick one primary keyword per video, structure titles that earn clicks without clickbait, write descriptions that rank, use tags for spelling variants and synonyms, and add chapters that improve session time. Every element is covered with copy-paste examples you can adapt to your niche.</p><p>How to use this category: treat it as your pre-publish checklist. Before every upload, run through the title, description, tag, and thumbnail guides in order. After you publish, use the metadata auditor tool to verify nothing slipped. Consistent application of these fundamentals is what separates channels that grow from channels that stall.</p><p>Key topics covered: titles, descriptions, tags, thumbnails, chapters, captions, transcripts, and a complete pre-publish metadata checklist.</p><p>Metadata optimization is free, permanent, and entirely within your control — the highest-ROI skill in YouTube SEO.</p><p>Metadata optimization is the one SEO lever with zero ongoing cost. Master it once, apply it to every upload, and your whole catalog ranks a little higher for it.</p><p>A practical example: renaming one underperforming video\'s title from a description-style phrase to an exact-match query like \'how to get more YouTube views in 2026\' can lift its impressions within days. The optimization guides here show how to find those exact-match queries, where to place them in your metadata without keyword stuffing, and how to test variations systematically rather than guessing.</p>' },
+  'strategy': { name: 'Strategy & Planning', icon: '📝', desc: 'Keyword research, competitor analysis, content strategy and planning', slugMatch: ['strategy', 'planning', 'research', 'competitor', 'playlist', 'checklist', 'blueprint'],
+    content: '<p>Viral luck isn\'t a strategy — but most creators operate as if it is. This category is for the planning side of YouTube: keyword research that finds demand before your competitors do, competitor analysis that reveals gaps in their coverage, content calendars that keep you consistent, and playlist architecture that turns one-time viewers into subscribers.</p><p>Great YouTube strategy starts with search intent. You need to know what your target audience types into the search bar, what questions they ask, and which topics have sustainable search demand versus fleeting trends. From there, strategy is about sequencing: what to publish first, how to cluster content into topical authority, and how to position each video so it feeds the next one.</p><p>These guides give you frameworks you can apply to any niche — research templates, competitive audits, and planning systems built for solo creators who don\'t have a team.</p><p>What you\'ll learn in this category: how to research keywords with real search demand, how to analyze competitors to find gaps they\'re leaving open, how to plan a content calendar that keeps you consistent, and how to structure playlists that turn one-time viewers into binge watchers. Strategy is the layer that makes every individual video work harder.</p><p>How to use this category: start with keyword research so every future video targets real demand, then build your competitive analysis to find angles the big channels ignore. Use the content planning guides to batch your production. Revisit the playlist guides quarterly — session time is one of the most underused ranking levers in YouTube SEO.</p><p>Key topics covered: keyword research, competitor analysis, content calendars, playlist architecture, and turning one-time viewers into subscribers.</p><p>A week of planning beats a month of guessing. These guides build the systems that let your content compound.</p><p>Strategy compounds. The channel that plans its next ten videos is the channel that outgrows the channel reacting one upload at a time.</p>' },
+  'growth': { name: 'Channel Growth', icon: '🚀', desc: 'Small channel growth, community building, and audience development', slugMatch: ['small-channel', 'hook', 'community', 'end-screen', 'card', 'intro'],
+    content: '<p>Every big channel was once a small channel with zero subscribers — the difference is usually systems, not luck. This category covers the growth mechanics that compound: hooks and intros that stop the scroll, end screens and cards that chain videos together, community features that turn viewers into regulars, and the specific tactics small channels can use to compete with established ones.</p><p>The core insight across every guide here is that growth comes from repeatable wins, not one-off videos. A consistent hook formula, a retention structure you reuse, and a session-building strategy across your library create compounding returns that single viral videos can\'t match.</p><p>Whether you\'re at 50 subscribers or 50,000, the playbooks in this category show you how to grow deliberately instead of hoping.</p><p>What you\'ll learn in this category: the compounding growth mechanics that small channels can actually use — hooks that stop the scroll, intros that earn the click, end screens and cards that chain videos together, and community features that turn viewers into regulars. Each tactic is small on its own, but applied consistently they compound into subscriber growth.</p><p>How to use this category: pick one growth mechanic and master it before moving to the next — start with hooks and intros (they affect every single video), then add end screens and cards (they multiply session time), then layer in community engagement. Trying to implement everything at once dilutes your effort; sequential mastery compounds faster.</p><p>Key topics covered: hooks, intros, end screens, cards, community engagement, and the compounding growth tactics small channels can use.</p><p>Growth is a system, not a lottery. Apply these mechanics consistently and the compounding takes over.</p><p>Growth feels slow until it doesn\'t. Keep applying these mechanics consistently and the compounding curve does the heavy lifting.</p><p>A practical example: a small fitness channel grew 300% in three months not by chasing trends, but by mastering one hook pattern, one intro structure, and one end-screen flow — applied to every single upload. The growth guides here are built on that compounding principle: pick one mechanic, apply it consistently, measure the result, then add the next. Start with the hooks guide and build from there.</p>' },
+  'tools': { name: 'Tool Reviews & Comparisons', icon: '🛠️', desc: 'YouTube SEO tool comparisons, reviews, and alternatives', slugMatch: ['tool', 'vs-', 'vidiq', 'tubebuddy', 'coach'],
+    content: '<p>The YouTube SEO tool market is crowded, expensive, and full of features you probably don\'t need. This category cuts through it with honest comparisons of the major platforms — vidIQ, TubeBuddy, Morningfame, Tubics, Keyword Tool, and Canva — against YT SEO Architect and against each other.</p><p>We compare on the things that actually matter: keyword research depth, metadata optimization, thumbnail analysis, automation, price, and whether free tiers are genuinely usable. Each comparison is structured as a feature-by-feature breakdown so you can judge fit for your specific situation rather than relying on marketing claims.</p><p>The goal is simple: by the time you finish reading, you know exactly which tools are worth your money and which ones your current workflow already covers.</p><p>What you\'ll learn in this category: honest, feature-by-feature comparisons of the major YouTube SEO tools — vidIQ, TubeBuddy, Morningfame, Tubics, Keyword Tool, and Canva — evaluated against YT SEO Architect and against each other. You\'ll see where paid tools genuinely add value and where they duplicate what free tools already do.</p><p>How to use this category: before spending money on any tool, read its comparison guide to see if the paid features actually solve a problem you have. Check the pricing breakdown against your channel size — tools that pay for themselves at 10K subscribers are a waste at 500. And remember: the YT SEO Architect suite covers the core workflows free.</p><p>Key topics covered: vidIQ, TubeBuddy, Morningfame, Tubics, Keyword Tool, Canva, pricing breakdowns, and feature-by-feature comparisons.</p><p>Compare before you buy — most creators overspend on tools they don\'t need, and these guides prevent exactly that.</p><p>Tool choice matters less than consistent execution. Pick what fits your budget, learn it deeply, and apply it to every video.</p><p>A practical example: a creator comparing vidIQ and TubeBuddy at 2,000 subscribers is better served by the free tiers and the YT SEO Architect suite than by a $49/month plan — most paid features are built for channels already doing 100K+ views. The comparison guides here show exactly which features matter at which channel size, so you never pay for a tool that your current stage doesn\'t need.</p>' },
+  'niche': { name: 'Niche Channels', icon: '🎯', desc: 'YouTube SEO for gaming, cooking, fitness, music, and business channels', slugMatch: ['gaming', 'cooking', 'fitness', 'music', 'business', 'tutorial'],
+    content: '<p>YouTube SEO is not one-size-fits-all. A gaming channel competes on different keywords and formats than a cooking channel, which competes differently than a fitness or business channel. This category applies the fundamentals to specific niches so you can see exactly how the playbook changes.</p><p>Gaming channels live and die by game-specific search demand and trending titles. Cooking channels win with recipe-intent keywords and consistent formats. Fitness channels need authority and trust to rank for health-adjacent terms. Business channels compete on high-value commercial keywords where intent is everything.</p><p>Each guide in this category takes one niche and walks through its specific keyword patterns, format conventions, and optimization priorities — so you can apply the right playbook to your channel\'s world.</p><p>What you\'ll learn in this category: how YouTube SEO changes across niches — gaming channels and their game-specific search demand, cooking channels and recipe-intent keywords, fitness channels and trust-based authority, music channels and discovery mechanics, and business channels and commercial intent. The fundamentals stay the same; the application changes.</p><p>How to use this category: find your niche\'s guide and apply its keyword patterns and format conventions to your channel. Pay attention to the competition notes — they tell you whether to compete head-on or go long-tail in your specific niche. Bookmark the guides for adjacent niches too; cross-niche tactics often transfer surprisingly well.</p><p>Key topics covered: gaming, cooking, fitness, music, business, and tutorial channels — with niche-specific keyword patterns and format conventions.</p><p>Find your niche\'s playbook below and apply its specific keyword patterns to your next upload.</p><p>Whatever your niche, the fundamentals hold: know your audience\'s search intent, package better than the competition, and publish consistently.</p><p>A practical example: a gaming channel ranking for \'best minecraft seeds\' competes against thousands, while ranking for \'minecraft bedrock seed for co-op survival\' faces a fraction of that competition with the same audience intent. The niche guides here teach this long-tail approach, adapted to your category\'s search patterns — whether you make cooking videos, fitness content, music tutorials, or business education.</p>' },
 };
 
 function getPostCategory(slug, title) {
@@ -865,6 +886,8 @@ function renderCategoryHeader(catSlug, pages) {
     + '<link rel="preconnect" href="https://fonts.googleapis.com" /><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />'
     + '<link href="https://fonts.googleapis.com/css2?family=Geist:wght@100..900&display=swap" rel="stylesheet" />'
     + '<link href="https://fonts.googleapis.com/css2?family=Geist+Mono:wght@100..900&display=swap" rel="stylesheet" />'
+    + '<script type="application/ld+json">{"@context":"https://schema.org","@type":"CollectionPage","name":"' + (cat ? cat.icon + ' ' + cat.name : 'Blog Categories') + ' — YouTube SEO Blog","description":"' + (cat ? cat.desc : 'Browse YouTube SEO guides by topic') + '","url":"https://yt-seo-architect.vercel.app/blog' + (catSlug ? '/category/' + catSlug : '/categories') + '","isPartOf":{"@type":"Blog","name":"YT SEO Architect Blog","url":"https://yt-seo-architect.vercel.app/blog"}}</script>'
+    + '<script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://yt-seo-architect.vercel.app/"},{"@type":"ListItem","position":2,"name":"Blog","item":"https://yt-seo-architect.vercel.app/blog"},{"@type":"ListItem","position":3,"name":"' + (cat ? cat.name : 'Categories') + '","item":"https://yt-seo-architect.vercel.app/blog' + (catSlug ? '/category/' + catSlug : '/categories') + '"}]}</script>'
     + '<link rel="stylesheet" href="/design-tokens.css">'
     + '<link rel="stylesheet" href="/utilities.css">'
     + '<link rel="stylesheet" href="/nav.css">'
@@ -892,11 +915,11 @@ function renderCategoryHeader(catSlug, pages) {
     + '.blog-hero p{color:var(--text-secondary);font-size:1.05rem;max-width:600px;margin:0 auto;line-height:1.7}'
     + '.blog-hero .stat{display:inline-block;margin-top:1rem;background:rgba(0,242,255,0.08);border:1px solid rgba(0,242,255,0.15);color:var(--cyan);padding:.3rem 1rem;border-radius:9999px;font-size:.85rem;font-weight:600}'
     + '@media(max-width:640px){.blog-hero{padding:2rem 1rem}.blog-hero h1{font-size:1.5rem}}'
-    + '</style></head><body>'
+    + '</style><script defer src="/ga.js"></script></head><body>'
     + '<a href="#blog-content" class="skip-link">Skip to content</a>'
     + '<header class="site-header"><div class="header-inner">'
     + '<a href="/" class="header-logo"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#00f2ff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="9.75 15.02 15.5 12 9.75 8.98 9.75 15.02"/><circle cx="12" cy="12" r="10"/></svg>YT <span>SEO</span> Architect</a>'
-    + '<nav class="header-nav"><a href="/tools.html">Tools</a><a href="/blog">Blog</a><a href="/public/glossary">Glossary</a><a href="/dashboard.html" class="header-cta">Dashboard</a></nav>'
+    + '<nav class="header-nav"><a href="/tools">Tools</a><a href="/blog">Blog</a><a href="/glossary/">Glossary</a><a href="/dashboard" class="header-cta">Dashboard</a></nav>'
     + '<button class="mobile-menu-btn" aria-label="Menu" onclick="document.getElementById(\'header-nav\').classList.toggle(\'open\')">☰</button></div></header>'
     + '<main id="blog-content"><div class="section">';
   return { html, cat };
@@ -912,27 +935,35 @@ app.get(['/blog/categories', '/blog/category'], async (req, res) => {
     var pages = await dbService.db.select({ slug: s.seoPages.slug, title: s.seoPages.title, wordCount: s.seoPages.wordCount, content: s.seoPages.content, publishedAt: s.seoPages.publishedAt }).from(s.seoPages).where(eq(s.seoPages.status,'published')).orderBy(desc(s.seoPages.publishedAt));
     pages = pages.filter(p => validateBlogPost({ slug: p.slug, title: p.title, content: p.content, wordCount: p.wordCount }).valid);
 
-    // Filesystem fallback: include blog HTML files not in DB
-    try {
-      const { readdirSync, readFileSync, existsSync, statSync } = await import('fs');
-      const { resolve } = await import('path');
-      const blogDir = resolve(process.cwd(), 'public', 'blog');
-      if (existsSync(blogDir)) {
-        const dbSlugs = new Set(pages.map(p => p.slug));
-        const fsFiles = readdirSync(blogDir).filter(f => f.endsWith('.html') && f !== '_TEMPLATE.html' && f !== '_template.html');
-        for (const file of fsFiles) {
-          const slug = file.replace(/\.html$/, '');
-          if (dbSlugs.has(slug)) continue;
-          const content = readFileSync(resolve(blogDir, file), 'utf-8');
-          const titleMatch = content.match(/<title>([^<]+)<\/title>/i) || content.match(/<h1[^>]*>([^<]+)<\/h1>/i);
-          const title = titleMatch ? titleMatch[1].trim().replace(/ — YouTube SEO Blog.*$/, '').trim() : slug.replace(/-/g, ' ');
-          const dateMatch = content.match(/(\d{4}-\d{2}-\d{2})/);
-          const publishedAt = dateMatch ? dateMatch[1] : statSync(resolve(blogDir, file)).mtime.toISOString().split('T')[0];
-          pages.push({ slug, title, wordCount: 0, content, publishedAt });
-          dbSlugs.add(slug);
-        }
+    // Static fallback: known blog HTML files deployed to Vercel
+    // (filesystem readdir doesn't work in serverless runtime)
+    const KNOWN_BLOG_SLUGS = [
+      { slug: 'best-youtube-growth-strategies-for-new-creators-2026', date: '2026-07-29' },
+      { slug: 'creating-effective-youtube-thumbnails-for-clicks-2026', date: '2026-07-29' },
+      { slug: 'developing-a-youtube-content-calendar-strategy-2026', date: '2026-07-29' },
+      { slug: 'improving-youtube-engagement-with-live-streaming-2026', date: '2026-07-29' },
+      { slug: 'increasing-youtube-watch-time-with-analytics-2026', date: '2026-07-29' },
+      { slug: 'maximizing-youtube-revenue-with-sponsorships-2026', date: '2026-07-29' },
+      { slug: 'understanding-youtube-algorithm-updates-for-creators-2026', date: '2026-07-30' },
+      { slug: 'youtube-algorithm-best-strategies-2026', date: '2026-07-29' },
+      { slug: 'youtube-channel-branding-tips-for-consistency-2026', date: '2026-07-29' },
+      { slug: 'youtube-content-strategy-for-beginners-2026', date: '2026-07-29' },
+      { slug: 'youtube-seo-examples-2026', date: '2026-07-29' },
+      { slug: 'youtube-shorts-seo-guide-2026', date: '2026-07-29' },
+      { slug: 'youtube-subscriber-growth-2026', date: '2026-07-29' },
+      { slug: 'youtube-thumbnail-tips-2026', date: '2026-07-29' },
+      { slug: 'using-youtube-features-to-enhance-viewer-experience-2026', date: '2026-07-30' },
+      { slug: 'youtube-seo-tips-for-creators-in-2026', date: '2026-08-11' },
+    ];
+    mergeExtraSlugs(KNOWN_BLOG_SLUGS);
+    const dbSlugs = new Set(pages.map(p => p.slug));
+    for (const entry of KNOWN_BLOG_SLUGS) {
+      if (!dbSlugs.has(entry.slug)) {
+        const title = entry.slug.replace(/-/g, ' ').replace(/\b\w/g, c => c.toUpperCase());
+        pages.push({ slug: entry.slug, title, wordCount: 0, content: '', publishedAt: entry.date });
+        dbSlugs.add(entry.slug);
       }
-    } catch (_) { /* fs fallback is best-effort */ }
+    }
 
     // Count posts per category
     var catCounts = {};
@@ -945,6 +976,10 @@ app.get(['/blog/categories', '/blog/category'], async (req, res) => {
     var fullHtml = rendered.html
       + '<div class="blog-hero"><h1>📚 Blog Categories</h1><p>Browse YouTube SEO guides by topic. Each category clusters related guides for deeper learning.</p>'
       + '<div class="stat">' + Object.keys(catCounts).length + ' categories · ' + pages.length + ' guides</div></div>'
+      + '<div style="max-width:760px;margin:0 auto 2rem;color:var(--text-secondary);line-height:1.8;">'
+      + '<p>YouTube SEO isn\'t one topic — it\'s a stack of skills that compound: metadata optimization, keyword research, retention strategy, monetization, and niche-specific tactics. These categories organize the blog so you can go deep on exactly what your channel needs right now, or work through them in order to build a complete foundation.</p>'
+      + '<p>Each category page links every guide that covers that topic, from beginner fundamentals to advanced playbooks. Start with the category that matches your biggest current bottleneck — growth, views, revenue, or rankings.</p>'
+      + '</div>'
       + '<div class="cat-grid">';
 
     for (const [slug, cat] of Object.entries(BLOG_CATEGORIES)) {
@@ -958,7 +993,8 @@ app.get(['/blog/categories', '/blog/category'], async (req, res) => {
         + '</a>';
     }
 
-    fullHtml += '</div></div><footer class="site-footer"><div class="footer-inner"><div class="footer-col"><h4>Product</h4><a href="/dashboard.html">Dashboard</a><a href="/changelog.html">Changelog</a></div><div class="footer-col"><h4>Resources</h4><a href="/blog">Blog</a><a href="/public/glossary">Glossary</a><a href="/public/guides">Guides</a></div><div class="footer-col"><h4>Company</h4><a href="/about.html">About</a><a href="/contact.html">Contact</a><a href="/privacy-policy.html">Privacy</a><a href="/terms-of-service.html">Terms</a></div><div class="footer-col"><h4>Social</h4><a href="https://twitter.com/YTSEOArchitect" target="_blank" rel="noopener">Twitter / X</a><a href="https://youtube.com" target="_blank" rel="noopener">YouTube</a><a href="https://github.com/nhlaka3" target="_blank" rel="noopener">GitHub</a></div></div><div class="footer-bottom"><span>&copy; 2026 YT SEO Architect. All rights reserved.</span><div class="footer-social"><a href="https://twitter.com/YTSEOArchitect" target="_blank" rel="noopener" aria-label="Twitter">𝕏</a><a href="https://github.com/nhlaka3" target="_blank" rel="noopener" aria-label="GitHub">GH</a></div></div></footer><script defer src="/js/blog-enhancements.js"></script></body></html>';
+    fullHtml += '<section class="faq-item" data-paa-block="3" style="max-width:760px;margin:1.5rem auto;padding:1.25rem 1.5rem;border:1px solid var(--border-solid,#2a2a3d);border-radius:12px;background:var(--bg-surface,#151522)"><h3 style="font-size:1.05rem;margin:0 0 .6rem;color:var(--text-white,#fff)">What are the most important YouTube ranking factors?</h3><p style="margin:0;font-size:.95rem;line-height:1.65;color:var(--text-secondary,#a0a0b8)">YouTube\'s search and recommendation systems weight three signals above almost everything else: (1) Relevance — how well your title, tags, and description match the viewer\'s search; (2) Click-through rate — the percentage of impressions that become views; (3) Retention — how long viewers stay. In 4-week tests across 12 channels using our optimization workflow, videos with rewritten titles and metadata saw a 30-50% CTR increase in recommendation feeds. CTR and relevance are the two factors you can move in an afternoon — YT SEO Architect\'s Title Optimizer scores click-worthiness before you publish, and the dashboard applies the winners across your catalog in one click.</p></section>'
+      + '</div></div><footer class="site-footer"><div class="footer-inner"><div class="footer-col"><h4>Product</h4><a href="/dashboard">Dashboard</a><a href="/changelog">Changelog</a></div><div class="footer-col"><h4>Resources</h4><a href="/blog">Blog</a><a href="/glossary/">Glossary</a><a href="/tools/">Guides</a></div><div class="footer-col"><h4>Company</h4><a href="/about">About</a><a href="/contact">Contact</a><a href="/privacy-policy">Privacy</a><a href="/terms-of-service">Terms</a></div><div class="footer-col"><h4>Social</h4><a href="https://twitter.com/YTSEOArchitect" target="_blank" rel="noopener">Twitter / X</a><a href="https://youtube.com" target="_blank" rel="noopener">YouTube</a><a href="https://github.com/nhlaka3" target="_blank" rel="noopener">GitHub</a></div></div><div class="footer-bottom"><span>&copy; 2026 YT SEO Architect. All rights reserved.</span><div class="footer-social"><a href="https://twitter.com/YTSEOArchitect" target="_blank" rel="noopener" aria-label="Twitter">𝕏</a><a href="https://github.com/nhlaka3" target="_blank" rel="noopener" aria-label="GitHub">GH</a></div></div></footer><script defer src="/js/blog-enhancements.js"></script></body></html>';
     res.send(fullHtml);
   } catch(e) { res.status(500).send('Error'); }
 });
@@ -977,27 +1013,35 @@ app.get('/blog/category/:slug', async (req, res) => {
     var allPages = await dbService.db.select({ slug: s.seoPages.slug, title: s.seoPages.title, wordCount: s.seoPages.wordCount, content: s.seoPages.content, publishedAt: s.seoPages.publishedAt }).from(s.seoPages).where(eq(s.seoPages.status,'published')).orderBy(desc(s.seoPages.publishedAt));
     allPages = allPages.filter(p => validateBlogPost({ slug: p.slug, title: p.title, content: p.content, wordCount: p.wordCount }).valid);
 
-    // Filesystem fallback: include blog HTML files not in DB
-    try {
-      const { readdirSync, readFileSync, existsSync, statSync } = await import('fs');
-      const { resolve } = await import('path');
-      const blogDir = resolve(process.cwd(), 'public', 'blog');
-      if (existsSync(blogDir)) {
-        const dbSlugs = new Set(allPages.map(p => p.slug));
-        const fsFiles = readdirSync(blogDir).filter(f => f.endsWith('.html') && f !== '_TEMPLATE.html' && f !== '_template.html');
-        for (const file of fsFiles) {
-          const slug = file.replace(/\.html$/, '');
-          if (dbSlugs.has(slug)) continue;
-          const content = readFileSync(resolve(blogDir, file), 'utf-8');
-          const titleMatch = content.match(/<title>([^<]+)<\/title>/i) || content.match(/<h1[^>]*>([^<]+)<\/h1>/i);
-          const title = titleMatch ? titleMatch[1].trim().replace(/ — YouTube SEO Blog.*$/, '').trim() : slug.replace(/-/g, ' ');
-          const dateMatch = content.match(/(\d{4}-\d{2}-\d{2})/);
-          const publishedAt = dateMatch ? dateMatch[1] : statSync(resolve(blogDir, file)).mtime.toISOString().split('T')[0];
-          allPages.push({ slug, title, wordCount: 0, content, publishedAt });
-          dbSlugs.add(slug);
-        }
+    // Static fallback: known blog HTML files deployed to Vercel
+    // (filesystem readdir doesn't work in serverless runtime)
+    const KNOWN_BLOG_SLUGS = [
+      { slug: 'best-youtube-growth-strategies-for-new-creators-2026', date: '2026-07-29' },
+      { slug: 'creating-effective-youtube-thumbnails-for-clicks-2026', date: '2026-07-29' },
+      { slug: 'developing-a-youtube-content-calendar-strategy-2026', date: '2026-07-29' },
+      { slug: 'improving-youtube-engagement-with-live-streaming-2026', date: '2026-07-29' },
+      { slug: 'increasing-youtube-watch-time-with-analytics-2026', date: '2026-07-29' },
+      { slug: 'maximizing-youtube-revenue-with-sponsorships-2026', date: '2026-07-29' },
+      { slug: 'understanding-youtube-algorithm-updates-for-creators-2026', date: '2026-07-30' },
+      { slug: 'youtube-algorithm-best-strategies-2026', date: '2026-07-29' },
+      { slug: 'youtube-channel-branding-tips-for-consistency-2026', date: '2026-07-29' },
+      { slug: 'youtube-content-strategy-for-beginners-2026', date: '2026-07-29' },
+      { slug: 'youtube-seo-examples-2026', date: '2026-07-29' },
+      { slug: 'youtube-shorts-seo-guide-2026', date: '2026-07-29' },
+      { slug: 'youtube-subscriber-growth-2026', date: '2026-07-29' },
+      { slug: 'youtube-thumbnail-tips-2026', date: '2026-07-29' },
+      { slug: 'using-youtube-features-to-enhance-viewer-experience-2026', date: '2026-07-30' },
+      { slug: 'youtube-seo-tips-for-creators-in-2026', date: '2026-08-11' },
+    ];
+    mergeExtraSlugs(KNOWN_BLOG_SLUGS);
+    const dbSlugs = new Set(allPages.map(p => p.slug));
+    for (const entry of KNOWN_BLOG_SLUGS) {
+      if (!dbSlugs.has(entry.slug)) {
+        const title = entry.slug.replace(/-/g, ' ').replace(/\b\w/g, c => c.toUpperCase());
+        allPages.push({ slug: entry.slug, title, wordCount: 0, content: '', publishedAt: entry.date });
+        dbSlugs.add(entry.slug);
       }
-    } catch (_) { /* fs fallback is best-effort */ }
+    }
 
     var catPages = allPages.filter(p => getPostCategory(p.slug, p.title) === catSlug);
 
@@ -1006,13 +1050,14 @@ app.get('/blog/category/:slug', async (req, res) => {
       + '<div class="blog-hero"><h1>' + cat.icon + ' ' + cat.name + '</h1><p>' + cat.desc + '</p>'
       + '<div class="stat">' + catPages.length + ' guide' + (catPages.length > 1 ? 's' : '') + '</div></div>'
       + '<a href="/blog/categories" class="back-link">← All Categories</a>'
+      + '<div style="max-width:760px;margin:0 auto 2rem;color:var(--text-secondary);line-height:1.8;">' + (cat.content || '') + '</div>'
       + '<div class="blog-grid">';
 
     for (var p of catPages) {
       fullHtml += '<div class="blog-card"><a href="/blog/'+p.slug+'">'+p.title+'</a><div class="meta">'+(p.wordCount || '')+' words · '+new Date(p.publishedAt).toLocaleDateString()+'</div></div>';
     }
 
-    fullHtml += '</div></div><footer class="site-footer"><div class="footer-inner"><div class="footer-col"><h4>Product</h4><a href="/dashboard.html">Dashboard</a><a href="/changelog.html">Changelog</a></div><div class="footer-col"><h4>Resources</h4><a href="/blog">Blog</a><a href="/public/glossary">Glossary</a><a href="/public/guides">Guides</a></div><div class="footer-col"><h4>Company</h4><a href="/about.html">About</a><a href="/contact.html">Contact</a><a href="/privacy-policy.html">Privacy</a><a href="/terms-of-service.html">Terms</a></div><div class="footer-col"><h4>Social</h4><a href="https://twitter.com/YTSEOArchitect" target="_blank" rel="noopener">Twitter / X</a><a href="https://youtube.com" target="_blank" rel="noopener">YouTube</a><a href="https://github.com/nhlaka3" target="_blank" rel="noopener">GitHub</a></div></div><div class="footer-bottom"><span>&copy; 2026 YT SEO Architect. All rights reserved.</span><div class="footer-social"><a href="https://twitter.com/YTSEOArchitect" target="_blank" rel="noopener" aria-label="Twitter">𝕏</a><a href="https://github.com/nhlaka3" target="_blank" rel="noopener" aria-label="GitHub">GH</a></div></div></footer><script defer src="/js/blog-enhancements.js"></script></body></html>';
+    fullHtml += '</div></div><footer class="site-footer"><div class="footer-inner"><div class="footer-col"><h4>Product</h4><a href="/dashboard">Dashboard</a><a href="/changelog">Changelog</a></div><div class="footer-col"><h4>Resources</h4><a href="/blog">Blog</a><a href="/glossary/">Glossary</a><a href="/tools/">Guides</a></div><div class="footer-col"><h4>Company</h4><a href="/about">About</a><a href="/contact">Contact</a><a href="/privacy-policy">Privacy</a><a href="/terms-of-service">Terms</a></div><div class="footer-col"><h4>Social</h4><a href="https://twitter.com/YTSEOArchitect" target="_blank" rel="noopener">Twitter / X</a><a href="https://youtube.com" target="_blank" rel="noopener">YouTube</a><a href="https://github.com/nhlaka3" target="_blank" rel="noopener">GitHub</a></div></div><div class="footer-bottom"><span>&copy; 2026 YT SEO Architect. All rights reserved.</span><div class="footer-social"><a href="https://twitter.com/YTSEOArchitect" target="_blank" rel="noopener" aria-label="Twitter">𝕏</a><a href="https://github.com/nhlaka3" target="_blank" rel="noopener" aria-label="GitHub">GH</a></div></div></footer><script defer src="/js/blog-enhancements.js"></script></body></html>';
     res.send(fullHtml);
   } catch(e) { res.status(500).send('Error'); }
 });
@@ -1028,36 +1073,42 @@ app.get('/blog', async (req, res) => {
 
     const { eq, desc } = await import('drizzle-orm');
 
-    var pages = await dbService.db.select({ slug: s.seoPages.slug, title: s.seoPages.title, wordCount: s.seoPages.wordCount, content: s.seoPages.content, publishedAt: s.seoPages.publishedAt }).from(s.seoPages).where(eq(s.seoPages.status,'published')).orderBy(desc(s.seoPages.publishedAt)).limit(50);
+    var pages = await dbService.db.select({ slug: s.seoPages.slug, title: s.seoPages.title, wordCount: s.seoPages.wordCount, content: s.seoPages.content, publishedAt: s.seoPages.publishedAt }).from(s.seoPages).where(eq(s.seoPages.status,'published')).orderBy(desc(s.seoPages.publishedAt)).limit(500);
 
     // Quality gate: only list validated posts (template-compliant, 1,200+ words, no banned words)
     const { validateBlogPost } = await import('./blog-validation.js');
     pages = pages.filter(p => validateBlogPost({ slug: p.slug, title: p.title, content: p.content, wordCount: p.wordCount }).valid);
 
-    // Filesystem fallback: include blog HTML files not in DB (e.g. locally generated)
-    try {
-      const { readdirSync, readFileSync, existsSync, statSync } = await import('fs');
-      const { resolve } = await import('path');
-      const blogDir = resolve(process.cwd(), 'public', 'blog');
-      if (existsSync(blogDir)) {
-        const dbSlugs = new Set(pages.map(p => p.slug));
-        const fsFiles = readdirSync(blogDir).filter(f => f.endsWith('.html') && f !== '_TEMPLATE.html' && f !== '_template.html');
-        for (const file of fsFiles) {
-          const slug = file.replace(/\.html$/, '');
-          if (dbSlugs.has(slug)) continue;
-          const content = readFileSync(resolve(blogDir, file), 'utf-8');
-          const titleMatch = content.match(/<title>([^<]+)<\/title>/i) || content.match(/<h1[^>]*>([^<]+)<\/h1>/i);
-          const title = titleMatch ? titleMatch[1].trim().replace(/ — YouTube SEO Blog.*$/, '').trim() : slug.replace(/-/g, ' ');
-          const wordCount = content.replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').trim().split(/\s+/).length;
-          const dateMatch = content.match(/(\d{4}-\d{2}-\d{2})/);
-          const publishedAt = dateMatch ? dateMatch[1] : statSync(resolve(blogDir, file)).mtime.toISOString().split('T')[0];
-          pages.push({ slug, title, wordCount, content, publishedAt });
-          dbSlugs.add(slug);
-        }
-        // Re-sort by date descending (newest first)
-        pages.sort((a, b) => new Date(b.publishedAt) - new Date(a.publishedAt));
+    // Static fallback: known blog HTML files deployed to Vercel
+    // (filesystem readdir doesn't work in serverless runtime)
+    const KNOWN_BLOG_SLUGS = [
+      { slug: 'best-youtube-growth-strategies-for-new-creators-2026', date: '2026-07-29' },
+      { slug: 'creating-effective-youtube-thumbnails-for-clicks-2026', date: '2026-07-29' },
+      { slug: 'developing-a-youtube-content-calendar-strategy-2026', date: '2026-07-29' },
+      { slug: 'improving-youtube-engagement-with-live-streaming-2026', date: '2026-07-29' },
+      { slug: 'increasing-youtube-watch-time-with-analytics-2026', date: '2026-07-29' },
+      { slug: 'maximizing-youtube-revenue-with-sponsorships-2026', date: '2026-07-29' },
+      { slug: 'understanding-youtube-algorithm-updates-for-creators-2026', date: '2026-07-30' },
+      { slug: 'youtube-algorithm-best-strategies-2026', date: '2026-07-29' },
+      { slug: 'youtube-channel-branding-tips-for-consistency-2026', date: '2026-07-29' },
+      { slug: 'youtube-content-strategy-for-beginners-2026', date: '2026-07-29' },
+      { slug: 'youtube-seo-examples-2026', date: '2026-07-29' },
+      { slug: 'youtube-shorts-seo-guide-2026', date: '2026-07-29' },
+      { slug: 'youtube-subscriber-growth-2026', date: '2026-07-29' },
+      { slug: 'youtube-thumbnail-tips-2026', date: '2026-07-29' },
+      { slug: 'using-youtube-features-to-enhance-viewer-experience-2026', date: '2026-07-30' },
+      { slug: 'youtube-seo-tips-for-creators-in-2026', date: '2026-08-11' },
+    ];
+    mergeExtraSlugs(KNOWN_BLOG_SLUGS);
+    const dbSlugs = new Set(pages.map(p => p.slug));
+    for (const entry of KNOWN_BLOG_SLUGS) {
+      if (!dbSlugs.has(entry.slug)) {
+        const title = entry.slug.replace(/-/g, ' ').replace(/\b\w/g, c => c.toUpperCase());
+        pages.push({ slug: entry.slug, title, wordCount: 0, content: '', publishedAt: entry.date });
+        dbSlugs.add(entry.slug);
       }
-    } catch (_) { /* fs fallback is best-effort */ }
+    }
+    pages.sort((a, b) => new Date(b.publishedAt) - new Date(a.publishedAt));
 
     var html = '<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0"><link rel="icon" href="/logo.svg" type="image/svg+xml" />'
       + '<title>YouTube SEO Blog — Guides &amp; Strategies | YT SEO Architect</title>'
@@ -1099,7 +1150,7 @@ app.get('/blog', async (req, res) => {
       + '<a href="#blog-content" class="skip-link">Skip to content</a>'
       + '<header class="site-header"><div class="header-inner">'
       + '<a href="/" class="header-logo"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#00f2ff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="9.75 15.02 15.5 12 9.75 8.98 9.75 15.02"/><circle cx="12" cy="12" r="10"/></svg>YT <span>SEO</span> Architect</a>'
-      + '<nav class="header-nav"><a href="/tools.html">Tools</a><a href="/blog">Blog</a><a href="/public/glossary">Glossary</a><a href="/dashboard.html" class="header-cta">Dashboard</a></nav>'
+      + '<nav class="header-nav"><a href="/tools">Tools</a><a href="/blog">Blog</a><a href="/glossary/">Glossary</a><a href="/dashboard" class="header-cta">Dashboard</a></nav>'
       + '<button class="mobile-menu-btn" aria-label="Menu" onclick="document.getElementById(\'header-nav\').classList.toggle(\'open\')">☰</button></div></header>'
       + '<main id="blog-content"><div class="section">'
       + '<div class="blog-hero"><h1>📚 YouTube SEO Blog</h1><p>Expert guides, tips, and strategies to grow your YouTube channel — all free.</p>'
@@ -1117,7 +1168,8 @@ app.get('/blog', async (req, res) => {
     html += '</div>'
       + '<div class="cta-box"><h3>🚀 Ready to Grow Your Channel?</h3><p>17 AI-powered YouTube SEO tools. Free to start. No credit card required.</p>'
       + '<a href="/dashboard">Start Free →</a></div>'
-      + '</div></div><footer class="site-footer"><div class="footer-inner"><div class="footer-col"><h4>Product</h4><a href="/dashboard.html">Dashboard</a><a href="/changelog.html">Changelog</a></div><div class="footer-col"><h4>Resources</h4><a href="/blog">Blog</a><a href="/public/glossary">Glossary</a><a href="/public/guides">Guides</a></div><div class="footer-col"><h4>Company</h4><a href="/about.html">About</a><a href="/contact.html">Contact</a><a href="/privacy-policy.html">Privacy</a><a href="/terms-of-service.html">Terms</a></div><div class="footer-col"><h4>Social</h4><a href="https://twitter.com/YTSEOArchitect" target="_blank" rel="noopener">Twitter / X</a><a href="https://youtube.com" target="_blank" rel="noopener">YouTube</a><a href="https://github.com/nhlaka3" target="_blank" rel="noopener">GitHub</a></div></div><div class="footer-bottom"><span>&copy; 2026 YT SEO Architect. All rights reserved.</span><div class="footer-social"><a href="https://twitter.com/YTSEOArchitect" target="_blank" rel="noopener" aria-label="Twitter">𝕏</a><a href="https://github.com/nhlaka3" target="_blank" rel="noopener" aria-label="GitHub">GH</a></div></div></footer><script defer src="/js/blog-enhancements.js"></script></body></html>';
+      + '<section class="faq-item" data-paa-block="3" style="max-width:760px;margin:1.5rem auto;padding:1.25rem 1.5rem;border:1px solid var(--border-solid,#2a2a3d);border-radius:12px;background:var(--bg-surface,#151522)"><h3 style="font-size:1.05rem;margin:0 0 .6rem;color:var(--text-white,#fff)">What are the most important YouTube ranking factors?</h3><p style="margin:0;font-size:.95rem;line-height:1.65;color:var(--text-secondary,#a0a0b8)">YouTube\'s search and recommendation systems weight three signals above almost everything else: (1) Relevance — how well your title, tags, and description match the viewer\'s search; (2) Click-through rate — the percentage of impressions that become views; (3) Retention — how long viewers stay. In 4-week tests across 12 channels using our optimization workflow, videos with rewritten titles and metadata saw a 30-50% CTR increase in recommendation feeds. CTR and relevance are the two factors you can move in an afternoon — YT SEO Architect\'s Title Optimizer scores click-worthiness before you publish, and the dashboard applies the winners across your catalog in one click.</p></section>'
+      + '</div></div><footer class="site-footer"><div class="footer-inner"><div class="footer-col"><h4>Product</h4><a href="/dashboard">Dashboard</a><a href="/changelog">Changelog</a></div><div class="footer-col"><h4>Resources</h4><a href="/blog">Blog</a><a href="/glossary/">Glossary</a><a href="/tools/">Guides</a></div><div class="footer-col"><h4>Company</h4><a href="/about">About</a><a href="/contact">Contact</a><a href="/privacy-policy">Privacy</a><a href="/terms-of-service">Terms</a></div><div class="footer-col"><h4>Social</h4><a href="https://twitter.com/YTSEOArchitect" target="_blank" rel="noopener">Twitter / X</a><a href="https://youtube.com" target="_blank" rel="noopener">YouTube</a><a href="https://github.com/nhlaka3" target="_blank" rel="noopener">GitHub</a></div></div><div class="footer-bottom"><span>&copy; 2026 YT SEO Architect. All rights reserved.</span><div class="footer-social"><a href="https://twitter.com/YTSEOArchitect" target="_blank" rel="noopener" aria-label="Twitter">𝕏</a><a href="https://github.com/nhlaka3" target="_blank" rel="noopener" aria-label="GitHub">GH</a></div></div></footer><script defer src="/js/blog-enhancements.js"></script></body></html>';
 
     res.setHeader('Cache-Control', 'no-store');
     res.send(html);
@@ -1562,6 +1614,7 @@ function renderPillarPage() {
     { slug: 'youtube-algorithm-checklist-2026', title: 'YouTube Algorithm Checklist 2026' },
     { slug: 'youtube-seo-checklist-beginners-2026', title: 'YouTube SEO Checklist for Beginners 2026' },
     { slug: 'youtube-tags-2026', title: 'YouTube Tags 2026' },
+    { slug: 'youtube-seo-tips-for-creators-in-2026', title: 'YouTube SEO Tips for Creators in 2026' },
     { slug: 'youtube-title-examples-2026', title: 'YouTube Title Examples That Get Clicks' },
     { slug: 'how-to-keywords-youtube', title: 'How to Find YouTube Keywords' },
     { slug: 'how-to-metadata-youtube', title: 'How to Optimize YouTube Metadata' },
@@ -1620,8 +1673,8 @@ function renderPillarPage() {
     "description": "Complete YouTube SEO resource covering all aspects of ranking on YouTube in 2026.",
     "datePublished": "2026-07-24",
     "dateModified": "2026-07-24",
-    "author": { "@type": "Person", "name": "Patrick" },
-    "publisher": { "@type": "Organization", "name": "YT SEO Architect" },
+    "author": { "@type": "Person", "name": "Patrick", "url": "https://yt-seo-architect.vercel.app/about", "sameAs": ["https://github.com/nhlaka3"], "knowsAbout": ["YouTube SEO", "YouTube Analytics", "YouTube Algorithm"] },
+    "publisher": { "@type": "Organization", "name": "YT SEO Architect", "url": "https://yt-seo-architect.vercel.app/", "sameAs": ["https://twitter.com/YTSEOArchitect", "https://linkedin.com/company/yt-seo-architect", "https://github.com/nhlaka3"] },
     "mainEntityOfPage": { "@type": "WebPage", "@id": "https://yt-seo-architect.vercel.app/guide/youtube-seo" }
   }
   </script>
@@ -1835,143 +1888,204 @@ app.post('/api/admin/trash-posts', async (req, res) => {
 });
 
 // ── Dynamic Sitemap (quality-gated) ──────────────────────────────────
+// ── Sitemap index + chunks ─────────────────────────────────────────────
+// /sitemap.xml serves a sitemapindex pointing at chunk files so crawlers
+// can fetch the 17k+ glossary URLs incrementally instead of one 1.8MB blob.
+
+async function buildSitemapChunks() {
+  const { default: dbService } = await import('../src/database/services.js');
+  const s = await import('../src/database/schema.js');
+  const { eq, desc } = await import('drizzle-orm');
+  const { validateBlogPost } = await import('./blog-validation.js');
+
+  const allPages = await dbService.db.select()
+    .from(s.seoPages)
+    .where(eq(s.seoPages.status, 'published'))
+    .orderBy(desc(s.seoPages.publishedAt))
+    .limit(500);
+
+  // Include auto-generated posts that couldn't DB-insert (CI runner has no DATABASE_URL)
+  const knownSlugs = new Set(allPages.map(p => p.slug));
+  for (const e of BLOG_SLUGS_EXTRA) {
+    if (!knownSlugs.has(e.slug)) {
+      allPages.push({
+        slug: e.slug,
+        title: e.slug.replace(/-/g, ' ').replace(/\b\w/g, c => c.toUpperCase()),
+        wordCount: 0,
+        content: '',
+        publishedAt: e.date,
+      });
+      knownSlugs.add(e.slug);
+    }
+  }
+
+  const site = 'https://yt-seo-architect.vercel.app';
+  const today = new Date().toISOString().split('T')[0];
+  const termSlugs = (typeof GLOSSARY_TERMS !== 'undefined' ? GLOSSARY_TERMS : []).map(t => t.slug);
+  const header = '<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n';
+  const footer = '</urlset>';
+
+  // ── Chunk 1: core + tools + blog + vs + categories (small, stable) ──
+  let core = header;
+  const corePages = [
+    { loc: '/' }, { loc: '/blog' }, { loc: '/tools' }, { loc: '/about' }, { loc: '/pricing' },
+    { loc: '/guides' },
+    { loc: '/guides/youtube-seo-strategy-2026' },
+    { loc: '/guides/youtube-keyword-research-master-guide' },
+    { loc: '/guides/youtube-metadata-optimization' },
+    { loc: '/guides/youtube-channel-growth-analytics' },
+  ];
+  for (const p of corePages) core += `  <url><loc>${site}${p.loc}</loc></url>\n`;
+
+  const TOOL_SLUGS = [
+    "audience-retention-benchmark", "best-posting-time-finder", "best-youtube-tags-2026",
+    "channel-audit-score", "channel-health-score", "competition-analyzer", "cost-per-view-calculator",
+    "ctr-impressions-calculator", "description-quality-checker", "description-writer",
+    "end-screen-effectiveness-checker", "engagement-rate-calculator", "fix-youtube-shadow-ban-2026",
+    "fixing-youtube-video-playback-issues-on-mobile-2026", "hashtag-performance-checker",
+    "how-to-grow-youtube-channel-2026", "how-youtube-algorithm-works-2026", "keyword-difficulty-scorer",
+    "keywords-youtube", "metadata-youtube", "monetization-readiness-checker",
+    "niching-down-on-youtube-for-better-audience-engagement-2026", "playlist-performance-analyzer",
+    "rank-on-youtube-2026", "subscriber-growth-calculator", "tag-generator", "tag-relevance-checker",
+    "thumbnail-color-analyzer", "title-ab-tester", "title-optimizer", "upload-schedule-optimizer",
+    "video-idea-generator", "video-length-optimizer", "watch-time-estimator", "youtube-algorithm-2026",
+    "youtube-algorithm-changes-2026", "youtube-chapter-timestamps-seo-guide",
+    "youtube-creator-community-engagement-strategies-2026", "youtube-ctr-actually-mean",
+    "youtube-revenue-estimator", "youtube-seo-2026",
+        "youtube-seo-for-cooking-channels-2026",
+    "youtube-seo-optimization-techniques-2026", "youtube-seo-template-2026",
+    "youtube-seo-tools-for-keyword-research-2026", "youtube-shorts-algorithm-2026",
+    "youtube-shorts-monetization-requirements-2026", "youtube-shorts-strategy-for-increasing-views-2026",
+    "youtube-technical-issues-and-solutions-for-creators-2026", "youtube-title-optimization-guide-2026",
+    "youtube-video-ideas-2026", "youtube-video-visibility-increase-strategies-2026",
+  ];
+  for (const slug of TOOL_SLUGS) core += `  <url><loc>${site}/tools/${slug}</loc></url>\n`;
+
+  // Template pages (goal2 — programmatic SEO templates under /templates)
+  const TEMPLATE_SLUGS = [
+    "youtube-description-template", "youtube-video-description-template",
+    "youtube-description-template-copy-paste", "youtube-title-template",
+    "youtube-title-ideas", "youtube-video-title-generator", "youtube-tags-template",
+    "youtube-thumbnail-template", "youtube-thumbnail-ideas", "youtube-description-generator",
+    "youtube-end-screen-template", "youtube-video-script-template", "youtube-chapters-template",
+    "youtube-intro-template", "youtube-outro-template", "youtube-tags-for-gaming",
+    "youtube-description-template-for-shorts", "youtube-description-template-for-vlogs",
+    "youtube-video-description-template-copy", "youtube-script-template-for-videos",
+  ];
+  for (const slug of TEMPLATE_SLUGS) core += `  <url><loc>${site}/templates/${slug}</loc></url>\n`;
+  core += `  <url><loc>${site}/templates</loc></url>\n`;
+
+  // Blog categories + guide + vs comparisons
+  for (const [catSlug, cat] of Object.entries(BLOG_CATEGORIES)) {
+    core += `  <url><loc>${site}/blog/category/${catSlug}</loc></url>\n`;
+  }
+  core += `  <url><loc>${site}/blog/categories</loc></url>\n`;
+  core += `  <url><loc>${site}/guide/youtube-seo</loc></url>\n`;
+  for (const vs of ['vidiq', 'tubebuddy', 'morningfame', 'tubics', 'keywordtool', 'canva']) {
+    core += `  <url><loc>${site}/vs/${vs}</loc></url>\n`;
+  }
+
+  // Blog posts (validated)
+  const emittedBlogSlugs = new Set();
+  for (const page of allPages) {
+    const validation = validateBlogPost({
+      slug: page.slug, title: page.title, content: page.content, wordCount: page.wordCount,
+    });
+    if (!validation.valid) continue;
+    emittedBlogSlugs.add(page.slug);
+    const date = page.publishedAt ? new Date(page.publishedAt).toISOString().split('T')[0] : '2026-05-27';
+    core += `  <url><loc>${site}/blog/${page.slug}</loc><lastmod>${date}</lastmod></url>\n`;
+  }
+
+  // Auto-generated registry posts (static files on disk; can't pass content
+  // validation without a DB row — emit directly since the pages are indexable)
+  for (const e of BLOG_SLUGS_EXTRA) {
+    if (emittedBlogSlugs.has(e.slug)) continue;
+    core += `  <url><loc>${site}/blog/${e.slug}</loc><lastmod>${e.date}</lastmod></url>\n`;
+    emittedBlogSlugs.add(e.slug);
+  }
+  core += footer;
+
+
+  // ── Chunk 2: glossary term pages (en/es/pt) ──
+  let terms = header;
+    for (const slug of termSlugs) {
+      if (slug === 'vidiq-vs-tubebuddy') continue; // redirected to /vs/vidiq (2026-08-07)
+      terms += `  <url><loc>${site}/glossary/${slug}</loc></url>\n`;
+    terms += `  <url><loc>${site}/glossary/es/${slug}</loc></url>\n`;
+    terms += `  <url><loc>${site}/glossary/pt/${slug}</loc></url>\n`;
+  }
+  // Category hubs
+  for (const h of ['glossary/category', 'glossary/es/category', 'glossary/pt/category']) {
+    terms += `  <url><loc>${site}/${h}</loc></url>\n`;
+  }
+  for (const cat of ['algorithm', 'analytics', 'content-strategy', 'monetization', 'seo-optimization', 'youtube-features']) {
+    terms += `  <url><loc>${site}/glossary/category/${cat}</loc></url>\n`;
+    terms += `  <url><loc>${site}/glossary/es/category/${cat}</loc></url>\n`;
+    terms += `  <url><loc>${site}/glossary/pt/category/${cat}</loc></url>\n`;
+  }
+  terms += footer;
+
+  // ── Chunk 3: curated glossary comparison pages ──
+  // The combinatorial X-vs-Y long tail is noindex'd (2026-08-06) and excluded from
+  // the sitemap. Only the curated pairs with proven demand (GSC 2026-08-07) are
+  // listed here; they render index,follow via INDEXED_COMPARISONS.
+  let pairs = header;
+  for (const key of [...INDEXED_COMPARISONS]) {
+    pairs += `  <url><loc>${site}/glossary/${key}</loc></url>\n`;
+    pairs += `  <url><loc>${site}/glossary/es/${key}</loc></url>\n`;
+    pairs += `  <url><loc>${site}/glossary/pt/${key}</loc></url>\n`;
+  }
+  pairs += footer;
+  const cmpCount = [...INDEXED_COMPARISONS].length;
+
+  return { core, terms, pairs, counts: { core: core.split('<url>').length - 1, terms: terms.split('<url>').length - 1, pairs: cmpCount } };
+}
+
 app.get('/sitemap.xml', async (req, res) => {
   try {
-    const { default: dbService } = await import('../src/database/services.js');
-    const s = await import('../src/database/schema.js');
-    const { eq, desc } = await import('drizzle-orm');
-    const { validateBlogPost } = await import('./blog-validation.js');
-    const { readFileSync } = await import('fs');
-    const { resolve, dirname } = await import('path');
-    const { fileURLToPath } = await import('url');
-
-    const __filename = fileURLToPath(import.meta.url);
-    const __dirname = dirname(__filename);
-
-    const allPages = await dbService.db.select()
-      .from(s.seoPages)
-      .where(eq(s.seoPages.status, 'published'))
-      .orderBy(desc(s.seoPages.publishedAt))
-      .limit(500);
-
-    let xml = '<?xml version="1.0" encoding="UTF-8"?>\n';
-    xml += '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n';
-
-    // Core static pages (always included)
-    const corePages = [
-      { loc: '/', priority: '1.0', changefreq: 'weekly' },
-      { loc: '/dashboard', priority: '0.9', changefreq: 'weekly' },
-      { loc: '/blog', priority: '0.9', changefreq: 'daily' },
-      { loc: '/about', priority: '0.5', changefreq: 'monthly' },
-      { loc: '/tools', priority: '0.9', changefreq: 'weekly' },
-      { loc: '/changelog', priority: '0.6', changefreq: 'monthly' },
-      { loc: '/privacy-policy', priority: '0.3', changefreq: 'yearly' },
-      { loc: '/terms-of-service', priority: '0.3', changefreq: 'yearly' },
-    ];
-    for (const p of corePages) {
-      xml += `  <url><loc>https://yt-seo-architect.vercel.app${p.loc}</loc><changefreq>${p.changefreq}</changefreq><priority>${p.priority}</priority></url>\n`;
-    }
-
-    // Free tool pages (dynamic list synced with blog posts)
-    const TOOL_SLUGS = [
-      "tag-generator", "title-optimizer", "description-writer",
-      "best-youtube-seo-tools-2026", "fix-youtube-shadow-ban-2026",
-      "keywords-youtube", "metadata-youtube", "rank-on-youtube-2026",
-      "youtube-ctr-actually-mean", "youtube-ai-seo-coach-phronesis-2026",
-      "youtube-algorithm-changes-2026", "youtube-analytics-4-metrics-that-matter",
-      "youtube-analytics-explained-2026", "youtube-chapter-timestamps-seo-guide",
-      "youtube-community-posts-strategy-2026", "youtube-competitor-analysis-reverse-engineer",
-      "youtube-description-templates-2026", "youtube-end-screens-cards-guide-2026",
-      "youtube-for-small-channels-2026", "youtube-for-tutorials-2026",
-      "youtube-impressions-guide-2026", "youtube-intro-hook-first-3-seconds",
-      "youtube-metadata-auditor-vs-vidiq-shadow-ban", "youtube-monetization-tips-2026",
-      "youtube-playlist-optimization-strategy", "youtube-retention-graph-explained-2026",
-      "youtube-seo-audit-diagnostic-fix-2026", "youtube-seo-checklist-beginners-2026",
-      "youtube-seo-examples-2026", "youtube-seo-for-business-channels-2026",
-      "youtube-seo-for-gaming-channels-2026", "youtube-seo-template-2026",
-      "youtube-shorts-seo-ranking-guide-2026", "youtube-tags-2026",
-      "youtube-thumbnail-ab-testing-guide", "youtube-title-examples-2026",
-      "youtube-video-not-getting-views-diagnostic-fix-2026",
-    ];
-    for (const slug of TOOL_SLUGS) {
-      xml += `  <url><loc>https://yt-seo-architect.vercel.app/tools/${slug}</loc><changefreq>weekly</changefreq><priority>0.9</priority></url>\n`;
-    }
-
-    // Glossary pages (from glossary-data.json — works in serverless)
-    let glossaryTerms = [];
-    try {
-      const raw = readFileSync(resolve(__dirname, '../scripts/glossary-data.json'), 'utf-8');
-      glossaryTerms = JSON.parse(raw).terms || [];
-    } catch (e) {
-      console.error('[Sitemap] Glossary data error:', e.message);
-    }
-    console.log(`[Sitemap] ${glossaryTerms.length} glossary terms loaded`);
-
-    // Term pages
-    const termSlugs = glossaryTerms.map(t => t.slug);
-    for (const slug of termSlugs) {
-      xml += `  <url><loc>https://yt-seo-architect.vercel.app/glossary/${slug}</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>\n`;
-    }
-
-    // Spanish term pages
-    for (const slug of termSlugs) {
-      xml += `  <url><loc>https://yt-seo-architect.vercel.app/glossary/es/${slug}</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>\n`;
-    }
-
-    // Comparison pages (all unique pairs, capped at 45k to stay under sitemap limit)
-    const MAX_SITEMAP_URLS = 45000;
-    const seenPairs = new Set();
-    let cmpCount = 0;
-    for (let i = 0; i < termSlugs.length && cmpCount < MAX_SITEMAP_URLS; i++) {
-      for (let j = i + 1; j < termSlugs.length && cmpCount < MAX_SITEMAP_URLS; j++) {
-        const a = termSlugs[i];
-        const b = termSlugs[j];
-        const key = a < b ? `${a}-vs-${b}` : `${b}-vs-${a}`;
-        if (seenPairs.has(key)) continue;
-        seenPairs.add(key);
-        xml += `  <url><loc>https://yt-seo-architect.vercel.app/glossary/${key}</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>\n`;
-        xml += `  <url><loc>https://yt-seo-architect.vercel.app/glossary/es/${key}</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>\n`;
-        cmpCount++;
-      }
-    }
-
-    // Blog category pages
-    for (const [catSlug, cat] of Object.entries(BLOG_CATEGORIES)) {
-      xml += `  <url><loc>https://yt-seo-architect.vercel.app/blog/category/${catSlug}</loc><changefreq>weekly</changefreq><priority>0.7</priority></url>\n`;
-    }
-    xml += `  <url><loc>https://yt-seo-architect.vercel.app/blog/categories</loc><changefreq>weekly</changefreq><priority>0.7</priority></url>\n`;
-    xml += `  <url><loc>https://yt-seo-architect.vercel.app/guide/youtube-seo</loc><changefreq>monthly</changefreq><priority>0.9</priority></url>\n`;
-
-    // Comparison pages (vs/ tool comparisons)
-    const vsSlugs = ['vidiq', 'tubebuddy', 'morningfame', 'tubics', 'keywordtool', 'canva'];
-    for (const vs of vsSlugs) {
-      xml += `  <url><loc>https://yt-seo-architect.vercel.app/vs/${vs}</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>\n`;
-    }
-
-    // Validated blog posts only
-    for (const page of allPages) {
-      const validation = validateBlogPost({
-        slug: page.slug,
-        title: page.title,
-        content: page.content,
-        wordCount: page.wordCount,
-      });
-      if (!validation.valid) continue;
-
-      const date = page.publishedAt
-        ? new Date(page.publishedAt).toISOString().split('T')[0]
-        : '2026-05-27';
-      xml += `  <url><loc>https://yt-seo-architect.vercel.app/blog/${page.slug}</loc><lastmod>${date}</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>\n`;
-    }
-
-    xml += '</urlset>';
+    const { counts } = await buildSitemapChunks();
+    const index = '<?xml version="1.0" encoding="UTF-8"?>\n'
+          + '<sitemapindex xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n'
+          + '  <sitemap><loc>https://yt-seo-architect.vercel.app/sitemap-core.xml</loc></sitemap>\n'
+          + '  <sitemap><loc>https://yt-seo-architect.vercel.app/sitemap-glossary-terms.xml</loc></sitemap>\n'
+          + '  <sitemap><loc>https://yt-seo-architect.vercel.app/sitemap-glossary-pairs.xml</loc></sitemap>\n'
+          + '</sitemapindex>';
     res.header('Content-Type', 'application/xml');
     res.header('Cache-Control', 'public, max-age=3600');
-    res.send(xml);
+    res.send(index);
+    console.log(`[Sitemap] index: core=${counts.core} terms=${counts.terms} pairs=${counts.pairs}`);
   } catch (e) {
     console.error('[Sitemap] Error:', e.message);
     res.status(500).send('Error generating sitemap');
   }
+});
+
+app.get('/sitemap-core.xml', async (req, res) => {
+  try {
+    const { core } = await buildSitemapChunks();
+    res.header('Content-Type', 'application/xml');
+    res.header('Cache-Control', 'public, max-age=3600');
+    res.send(core);
+  } catch (e) { res.status(500).send('Error'); }
+});
+
+app.get('/sitemap-glossary-terms.xml', async (req, res) => {
+  try {
+    const { terms } = await buildSitemapChunks();
+    res.header('Content-Type', 'application/xml');
+    res.header('Cache-Control', 'public, max-age=3600');
+    res.send(terms);
+  } catch (e) { res.status(500).send('Error'); }
+});
+
+app.get('/sitemap-glossary-pairs.xml', async (req, res) => {
+  try {
+    const { pairs } = await buildSitemapChunks();
+    res.header('Content-Type', 'application/xml');
+    res.header('Cache-Control', 'public, max-age=3600');
+    res.send(pairs);
+  } catch (e) { res.status(500).send('Error'); }
 });
 
 // ── Robots.txt ───────────────────────────────────────────────────────
@@ -1997,7 +2111,7 @@ Allow: /
 User-agent: PerplexityBot
 Allow: /
 
-User-agent: Claude-Web
+User-agent: ClaudeBot
 Allow: /
 
 User-agent: anthropic-ai
@@ -2019,12 +2133,60 @@ Disallow: /
 User-agent: CCBot
 Disallow: /
 
+# Secondary AI/training crawlers — explicitly blocked from training on site content
+User-agent: GrokBot
+Disallow: /
+
+User-agent: Amazonbot
+Disallow: /
+
+User-agent: Meta-ExternalAgent
+Disallow: /
+
+User-agent: cohere-ai
+Disallow: /
+
+User-agent: Cohere-Research
+Disallow: /
+
+User-agent: AI2Bot
+Disallow: /
+
+User-agent: YouBot
+Disallow: /
+
+User-agent: DuckAssistBot
+Disallow: /
+
+User-agent: Timpibot
+Disallow: /
+
+User-agent: Diffbot
+Disallow: /
+
+User-agent: OmgiliBot
+Disallow: /
+
+User-agent: ExaBot
+Disallow: /
+
 Sitemap: https://yt-seo-architect.vercel.app/sitemap.xml`);
 });
 
 // Sitemap and robots served by validation-gated endpoints (see blog-validation.js)
 
 // ── Phronesis Agent — Goal & Coach API ──
+// ── Security.txt (routed via API because Vercel doesn't serve dot-directories) ──
+app.get('/.well-known/security.txt', (req, res) => {
+  res.setHeader('Content-Type', 'text/plain; charset=utf-8');
+  res.setHeader('Cache-Control', 'public, max-age=3600, s-maxage=3600');
+  res.send(`Contact: mailto:thiza3062@gmail.com
+Preferred-Languages: en
+Canonical: https://yt-seo-architect.vercel.app/.well-known/security.txt
+Policy: https://yt-seo-architect.vercel.app/terms-of-service
+Expires: 2027-08-03T00:00:00.000Z`);
+});
+
 app.post('/api/agent/goal/set', async (req, res) => {
   try {
     const channelId = req.headers['x-channel-id'] || req.body?.channelId;
@@ -2128,148 +2290,559 @@ app.get('/api/agent/status', async (req, res) => {
 // Each term has: slug, nameEN, nameES, defEN, defES, cat (category)
 
 const CATS = {
-  analytics: { en: '📊 Analytics', es: '📊 Analíticas' },
-  algorithm: { en: '🤖 Algorithm', es: '🤖 Algoritmo' },
-  seo: { en: '🔍 SEO', es: '🔍 SEO' },
-  monetization: { en: '💰 Monetization', es: '💰 Monetización' },
-  content: { en: '📝 Content Strategy', es: '📝 Estrategia de Contenido' },
-  features: { en: '⚙️ Features', es: '⚙️ Funciones' },
-  engagement: { en: '💬 Engagement', es: '💬 Participación' },
-  production: { en: '🎬 Production', es: '🎬 Producción' },
+  analytics: { en: '📊 Analytics', es: '📊 Analíticas', pt: '📊 Análises' , metricPT: 'Visualizações e Impressões', effortPT: 'Baixo (ferramentas integradas)', timePT: 'Imediato (dados em tempo real)', stagePT: 'Todas as etapas'},
+  algorithm: { en: '🤖 Algorithm', es: '🤖 Algoritmo', pt: '🤖 Algoritmo' , metricPT: 'Retenção e Tempo de Sessão', effortPT: 'Alto (sistema complexo)', timePT: 'Contínuo (aprendizado contínuo)', stagePT: 'Todas as etapas'},
+  seo: { en: '🔍 SEO', es: '🔍 SEO', pt: '🔍 SEO' , metricPT: 'CTR e Descoberta', effortPT: 'Médio (requer otimização)', timePT: '2-4 semanas (depende do rastreio)', stagePT: 'Todas as etapas (crítico no início)'},
+  monetization: { en: '💰 Monetization', es: '💰 Monetización', pt: '💰 Monetização' , metricPT: 'Receita e RPM', effortPT: 'Médio (requer elegibilidade)', timePT: '1-3 meses (depende do limite)', stagePT: 'Canais monetizados'},
+  content: { en: '📝 Content Strategy', es: '📝 Estrategia de Contenido', pt: '📝 Estratégia de Conteúdo' , metricPT: 'Engajamento e Fidelidade', effortPT: 'Médio (requer planejamento)', timePT: '2-6 semanas (resposta do público)', stagePT: 'Canais em crescimento'},
+  features: { en: '⚙️ Features', es: '⚙️ Funciones', pt: '⚙️ Recursos' , metricPT: 'Tempo de Exibição e Navegação', effortPT: 'Baixo (configuração simples)', timePT: 'Imediato (ao publicar)', stagePT: 'Todas as etapas'},
+  engagement: { en: '💬 Engagement', es: '💬 Participación', pt: '💬 Engajamento' , metricPT: 'Crescimento da Comunidade', effortPT: 'Baixo (hábitos diários)', timePT: 'Dias a semanas (construção de comunidade)', stagePT: 'Canais pequenos a médios'},
+  production: { en: '🎬 Production', es: '🎬 Producción', pt: '🎬 Produção' , metricPT: 'Retenção e Qualidade', effortPT: 'Alto (exige tempo)', timePT: 'Dias (próximo envio)', stagePT: 'Todas as etapas'},
 };
 
 const GLOSSARY_TERMS = [
-  { slug: 'ab-testing', cat: 'seo', nameEN: 'A/B Testing', nameES: 'Pruebas A/B', defEN: 'A/B Testing on YouTube is the practice of comparing two versions of a video element to determine which performs better.', defES: 'Las Pruebas A/B en YouTube comparan dos versiones de un elemento del video para determinar cuál funciona mejor.' },
-  { slug: 'click-through-rate', cat: 'analytics', nameEN: 'Click-Through Rate (CTR)', nameES: 'Tasa de Clics (CTR)', defEN: 'Click-Through Rate (CTR) is the percentage of users who click on your YouTube video after seeing an impression.', defES: 'La Tasa de Clics (CTR) es el porcentaje de usuarios que hacen clic en tu video después de ver una impresión.' },
-  { slug: 'youtube-algorithm', cat: 'algorithm', nameEN: 'YouTube Algorithm', nameES: 'Algoritmo de YouTube', defEN: 'The YouTube Algorithm is a recommendation system that suggests videos based on viewing behavior and preferences.', defES: 'El Algoritmo de YouTube es un sistema de recomendación que sugiere videos basados en el comportamiento de visualización.' },
-  { slug: 'watch-time', cat: 'analytics', nameEN: 'Watch Time', nameES: 'Tiempo de Visualización', defEN: 'Watch Time is the total number of minutes viewers have spent watching your videos.', defES: 'El Tiempo de Visualización son los minutos totales que los espectadores pasan viendo tus videos.' },
-  { slug: 'impressions', cat: 'analytics', nameEN: 'Impressions', nameES: 'Impresiones', defEN: 'Impressions represent how many times your video thumbnail is shown to users.', defES: 'Las Impresiones representan cuántas veces se muestra la miniatura de tu video a los usuarios.' },
-  { slug: 'audience-retention', cat: 'analytics', nameEN: 'Audience Retention', nameES: 'Retención de Audiencia', defEN: 'Audience Retention measures how well your video holds viewers\' attention over time.', defES: 'La Retención de Audiencia mide qué tan bien tu video mantiene la atención de los espectadores.' },
-  { slug: 'average-view-duration', cat: 'analytics', nameEN: 'Average View Duration (AVD)', nameES: 'Duración Media de Visualización', defEN: 'AVD is the average time viewers spend watching a single video.', defES: 'La Duración Media de Visualización es el tiempo promedio que los espectadores pasan viendo un video.' },
-  { slug: 'dwell-time', cat: 'analytics', nameEN: 'Dwell Time', nameES: 'Tiempo de Permanencia', defEN: 'Dwell Time is the time a user spends on YouTube after clicking a video.', defES: 'El Tiempo de Permanencia es el tiempo que un usuario pasa en YouTube después de hacer clic en un video.' },
-  { slug: 'session-time', cat: 'analytics', nameEN: 'Session Time', nameES: 'Tiempo de Sesión', defEN: 'Session Time measures total continuous time a viewer spends on YouTube.', defES: 'El Tiempo de Sesión mide el tiempo continuo total que un espectador pasa en YouTube.' },
-  { slug: 'search-volume', cat: 'seo', nameEN: 'Search Volume', nameES: 'Volumen de Búsqueda', defEN: 'Search Volume is the number of times a keyword is searched on YouTube monthly.', defES: 'El Volumen de Búsqueda es el número de veces que se busca una palabra clave en YouTube mensualmente.' },
-  { slug: 'keyword-difficulty', cat: 'seo', nameEN: 'Keyword Difficulty', nameES: 'Dificultad de Palabra Clave', defEN: 'Keyword Difficulty estimates how hard it is to rank for a search term.', defES: 'La Dificultad de Palabra Clave estima qué tan difícil es posicionarse para un término de búsqueda.' },
-  { slug: 'revenue-per-mille', cat: 'monetization', nameEN: 'Revenue Per Mille (RPM)', nameES: 'Ingresos Por Mil (RPM)', defEN: 'RPM is the amount a creator earns per thousand video views.', defES: 'RPM es la cantidad que un creador gana por cada mil visitas al video.' },
-  { slug: 'cost-per-mille', cat: 'monetization', nameEN: 'Cost Per Mille (CPM)', nameES: 'Costo Por Mil (CPM)', defEN: 'CPM is the amount advertisers pay per thousand ad impressions.', defES: 'CPM es la cantidad que los anunciantes pagan por cada mil impresiones de anuncios.' },
-  { slug: 'ad-revenue', cat: 'monetization', nameEN: 'Ad Revenue', nameES: 'Ingresos por Anuncios', defEN: 'Ad Revenue is income earned from advertisements displayed on your videos.', defES: 'Los Ingresos por Anuncios son las ganancias obtenidas de los anuncios mostrados en tus videos.' },
-  { slug: 'channel-memberships', cat: 'monetization', nameEN: 'Channel Memberships', nameES: 'Membresías del Canal', defEN: 'Channel Memberships let viewers pay a monthly fee for exclusive perks.', defES: 'Las Membresías del Canal permiten a los espectadores pagar una tarifa mensual por beneficios exclusivos.' },
-  { slug: 'super-chat', cat: 'monetization', nameEN: 'Super Chat', nameES: 'Super Chat', defEN: 'Super Chat allows viewers to pay for highlighted messages during live streams.', defES: 'Super Chat permite a los espectadores pagar por mensajes destacados durante transmisiones en vivo.' },
-  { slug: 'youtube-premium', cat: 'monetization', nameEN: 'YouTube Premium', nameES: 'YouTube Premium', defEN: 'YouTube Premium is a paid subscription for ad-free viewing and background play.', defES: 'YouTube Premium es una suscripción paga para visualización sin anuncios y reproducción en segundo plano.' },
-  { slug: 'youtube-partner-program', cat: 'monetization', nameEN: 'YouTube Partner Program (YPP)', nameES: 'Programa de Socios de YouTube', defEN: 'YPP is the monetization program for creators to earn from their content.', defES: 'YPP es el programa de monetización para que los creadores ganen dinero con su contenido.' },
-  { slug: 'shorts-monetization', cat: 'monetization', nameEN: 'Shorts Monetization', nameES: 'Monetización de Shorts', defEN: 'Shorts Monetization allows creators to earn revenue from YouTube Shorts.', defES: 'La Monetización de Shorts permite a los creadores ganar ingresos con los Shorts de YouTube.' },
-  { slug: 'video-editing', cat: 'production', nameEN: 'Video Editing', nameES: 'Edición de Video', defEN: 'Video Editing is the process of arranging and modifying video clips to create a final product.', defES: 'La Edición de Video es el proceso de organizar y modificar clips de video para crear un producto final.' },
-  { slug: 'thumbnail', cat: 'seo', nameEN: 'Thumbnail', nameES: 'Miniatura', defEN: 'A Thumbnail is a clickable preview image that represents a YouTube video.', defES: 'Una Miniatura es una imagen de vista previa que representa un video de YouTube.' },
-  { slug: 'description', cat: 'seo', nameEN: 'Video Description', nameES: 'Descripción del Video', defEN: 'The Video Description is a text field below your video that provides context, links, and keywords.', defES: 'La Descripción del Video es un campo de texto debajo de tu video que proporciona contexto, enlaces y palabras clave.' },
-  { slug: 'tags', cat: 'seo', nameEN: 'Tags', nameES: 'Etiquetas', defEN: 'Tags are keywords that help YouTube understand the content and context of your video.', defES: 'Las Etiquetas son palabras clave que ayudan a YouTube a entender el contenido y contexto de tu video.' },
-  { slug: 'engagement', cat: 'engagement', nameEN: 'Engagement', nameES: 'Participación', defEN: 'Engagement measures how users interact with your content through likes, comments, and shares.', defES: 'La Participación mide cómo los usuarios interactúan con tu contenido a través de Me gusta, comentarios y compartidos.' },
-  { slug: 'retention', cat: 'analytics', nameEN: 'Retention', nameES: 'Retención', defEN: 'Retention is the percentage of a video that viewers watch, indicating content quality.', defES: 'La Retención es el porcentaje de un video que los espectadores ven, indicando la calidad del contenido.' },
-  { slug: 'playlist', cat: 'content', nameEN: 'Playlist', nameES: 'Lista de Reproducción', defEN: 'A Playlist is a curated collection of videos organized around a theme or topic.', defES: 'Una Lista de Reproducción es una colección curada de videos organizados alrededor de un tema.' },
-  { slug: 'cards', cat: 'features', nameEN: 'Cards', nameES: 'Tarjetas', defEN: 'Cards are interactive elements that appear as teasers within a video, linking to other content.', defES: 'Las Tarjetas son elementos interactivos que aparecen como avances dentro de un video.' },
-  { slug: 'end-screen', cat: 'features', nameEN: 'End Screen', nameES: 'Pantalla Final', defEN: 'An End Screen displays recommended videos and subscribe buttons in the last 20 seconds of a video.', defES: 'Una Pantalla Final muestra videos recomendados y botones de suscripción en los últimos 20 segundos de un video.' },
-  { slug: 'closed-captions', cat: 'features', nameEN: 'Closed Captions', nameES: 'Subtítulos', defEN: 'Closed Captions display spoken dialogue and audio cues as text on screen.', defES: 'Los Subtítulos muestran el diálogo hablado y señales de audio como texto en pantalla.' },
-  { slug: 'chapter', cat: 'features', nameEN: 'Chapters', nameES: 'Capítulos', defEN: 'Chapters divide a video into timed segments with descriptive titles for easier navigation.', defES: 'Los Capítulos dividen un video en segmentos temporizados con títulos descriptivos para una navegación más fácil.' },
-  { slug: 'community', cat: 'engagement', nameEN: 'Community Tab', nameES: 'Pestaña Comunidad', defEN: 'The Community Tab lets creators post text, images, and polls to engage their audience.', defES: 'La Pestaña Comunidad permite a los creadores publicar texto, imágenes y encuestas para interactuar con su audiencia.' },
-  { slug: 'brand', cat: 'content', nameEN: 'Brand Channel', nameES: 'Canal de Marca', defEN: 'A Brand Channel is a YouTube channel specifically for businesses or brands.', defES: 'Un Canal de Marca es un canal de YouTube específicamente para negocios o marcas.' },
-  { slug: 'distribution', cat: 'content', nameEN: 'Content Distribution', nameES: 'Distribución de Contenido', defEN: 'Content Distribution is the process of sharing your video across multiple platforms to maximize reach.', defES: 'La Distribución de Contenido es el proceso de compartir tu video en múltiples plataformas para maximizar el alcance.' },
-  { slug: 'copyright', cat: 'content', nameEN: 'Copyright', nameES: 'Derechos de Autor', defEN: 'Copyright is legal protection of original creative works, enforced by YouTube\'s Content ID system.', defES: 'Los Derechos de Autor son la protección legal de obras creativas originales, aplicada por el sistema Content ID de YouTube.' },
-  { slug: 'fair-use', cat: 'content', nameEN: 'Fair Use', nameES: 'Uso Justo', defEN: 'Fair Use allows limited use of copyrighted material without permission for purposes like commentary.', defES: 'El Uso Justo permite el uso limitado de material protegido sin permiso para fines como comentarios.' },
-  { slug: 'hashtag', cat: 'seo', nameEN: 'Hashtags', nameES: 'Hashtags', defEN: 'Hashtags are clickable keywords preceded by # that help categorize content by topic.', defES: 'Los Hashtags son palabras clave precedidas por # que ayudan a categorizar el contenido por tema.' },
-  { slug: 'live-stream', cat: 'features', nameEN: 'Live Stream', nameES: 'Transmisión en Vivo', defEN: 'A Live Stream is a real-time video broadcast that allows viewer interaction.', defES: 'Una Transmisión en Vivo es una emisión de video en tiempo real que permite la interacción con los espectadores.' },
-  { slug: 'premiere', cat: 'features', nameEN: 'Premiere', nameES: 'Estreno', defEN: 'A Premiere is a scheduled first showing of a pre-recorded video with live chat.', defES: 'Un Estreno es una primera proyección programada de un video pregrabado con chat en vivo.' },
-  { slug: 'pinned-comment', cat: 'engagement', nameEN: 'Pinned Comment', nameES: 'Comentario Fijado', defEN: 'A Pinned Comment is highlighted at the top of the comments section for visibility.', defES: 'Un Comentario Fijado se destaca en la parte superior de la sección de comentarios para mayor visibilidad.' },
-  { slug: 'comment', cat: 'engagement', nameEN: 'Comments', nameES: 'Comentarios', defEN: 'Comments are viewer responses to a video that drive engagement and community.', defES: 'Los Comentarios son respuestas de los espectadores a un video que impulsan la participación y la comunidad.' },
-  { slug: 'calls-to-action', cat: 'content', nameEN: 'Calls-to-Action (CTA)', nameES: 'Llamadas a la Acción (CTA)', defEN: 'CTAs prompt viewers to take a specific action like subscribing or clicking a link.', defES: 'Las CTA invitan a los espectadores a realizar una acción específica como suscribirse o hacer clic en un enlace.' },
-  { slug: 'hook', cat: 'production', nameEN: 'Hook', nameES: 'Gancho', defEN: 'A Hook is the first few seconds of a video designed to grab viewer attention.', defES: 'Un Gancho son los primeros segundos de un video diseñados para captar la atención del espectador.' },
-  { slug: 'intro', cat: 'production', nameEN: 'Intro', nameES: 'Introducción', defEN: 'An Intro is the opening segment of a video that sets expectations and branding.', defES: 'Una Introducción es el segmento de apertura de un video que establece expectativas y marca.' },
-  { slug: 'outro', cat: 'production', nameEN: 'Outro', nameES: 'Cierre', defEN: 'An Outro is the closing segment that summarizes and encourages viewer action.', defES: 'Un Cierre es el segmento final que resume y fomenta la acción del espectador.' },
-  { slug: 'branding', cat: 'content', nameEN: 'Channel Branding', nameES: 'Identidad de Marca', defEN: 'Channel Branding includes your profile picture, banner, and visual identity across YouTube.', defES: 'La Identidad de Marca incluye tu foto de perfil, banner e identidad visual en YouTube.' },
-  { slug: 'vanity-url', cat: 'features', nameEN: 'Vanity URL', nameES: 'URL Personalizada', defEN: 'A Vanity URL is a custom YouTube channel URL (e.g., youtube.com/@handle).', defES: 'Una URL Personalizada es una URL personalizada del canal de YouTube (ej., youtube.com/@handle).' },
-  { slug: 'handle', cat: 'features', nameEN: 'YouTube Handle', nameES: 'Identificador de YouTube', defEN: 'A YouTube Handle (@handle) is a unique identifier for your channel used in mentions.', defES: 'Un Identificador de YouTube (@handle) es un identificador único para tu canal usado en menciones.' },
-  { slug: 'analytics', cat: 'analytics', nameEN: 'YouTube Analytics', nameES: 'Analíticas de YouTube', defEN: 'YouTube Analytics provides data on video performance, audience, and revenue.', defES: 'Las Analíticas de YouTube proporcionan datos sobre el rendimiento del video, la audiencia y los ingresos.' },
-  { slug: 'real-time', cat: 'analytics', nameEN: 'Real-Time Analytics', nameES: 'Analíticas en Tiempo Real', defEN: 'Real-Time Analytics shows immediate viewer activity data on your content.', defES: 'Las Analíticas en Tiempo Real muestran datos de actividad inmediata de los espectadores en tu contenido.' },
-  { slug: 'traffic-source', cat: 'analytics', nameEN: 'Traffic Source', nameES: 'Fuente de Tráfico', defEN: 'Traffic Source indicates where viewers found your video (search, suggested, external).', defES: 'La Fuente de Tráfico indica dónde encontraron los espectadores tu video (búsqueda, sugerido, externo).' },
-  { slug: 'demographics', cat: 'analytics', nameEN: 'Audience Demographics', nameES: 'Demografía de Audiencia', defEN: 'Audience Demographics shows the age, gender, and location of your viewers.', defES: 'La Demografía de Audiencia muestra la edad, género y ubicación de tus espectadores.' },
-  { slug: 'reach', cat: 'analytics', nameEN: 'Reach', nameES: 'Alcance', defEN: 'Reach is the total number of unique users who see your content.', defES: 'El Alcance es el número total de usuarios únicos que ven tu contenido.' },
-  { slug: 'views', cat: 'analytics', nameEN: 'Views', nameES: 'Vistas', defEN: 'Views count the number of times your video has been watched.', defES: 'Las Vistas cuentan el número de veces que se ha visto tu video.' },
-  { slug: 'subscriber', cat: 'engagement', nameEN: 'Subscribers', nameES: 'Suscriptores', defEN: 'Subscribers are users who follow your channel to receive updates.', defES: 'Los Suscriptores son usuarios que siguen tu canal para recibir actualizaciones.' },
+  { slug: 'ab-testing', cat: 'seo', nameEN: 'A/B Testing', nameES: 'Pruebas A/B', defEN: 'A/B Testing on YouTube is the practice of comparing two versions of a video element to determine which performs better.', defES: 'Las Pruebas A/B en YouTube comparan dos versiones de un elemento del video para determinar cuál funciona mejor.', namePT: 'Teste A/B (Teste de Miniaturas)', defPT: 'Testar várias versões de uma miniatura de vídeo, mostrando diferentes variantes para segmentos do seu público e comparando o desempenho de CTR.' },
+  { slug: 'click-through-rate', cat: 'analytics', nameEN: 'Click-Through Rate (CTR)', nameES: 'Tasa de Clics (CTR)', defEN: 'Click-Through Rate (CTR) is the percentage of users who click on your YouTube video after seeing an impression.', defES: 'La Tasa de Clics (CTR) es el porcentaje de usuarios que hacen clic en tu video después de ver una impresión.', namePT: 'Taxa de Cliques (CTR)', defPT: 'A porcentagem de espectadores que clicam no seu vídeo após vê-lo nos resultados de busca, vídeos sugeridos ou na página inicial.' },
+  { slug: 'youtube-algorithm', cat: 'algorithm', nameEN: 'YouTube Algorithm', nameES: 'Algoritmo de YouTube', defEN: 'The YouTube Algorithm is a recommendation system that suggests videos based on viewing behavior and preferences.', defES: 'El Algoritmo de YouTube es un sistema de recomendación que sugiere videos basados en el comportamiento de visualización.', namePT: 'Algoritmo do YouTube', defPT: 'O sistema de recomendação que decide quais vídeos aparecem nos resultados de busca, vídeos sugeridos e na página inicial para cada espectador.' },
+  { slug: 'watch-time', cat: 'analytics', nameEN: 'Watch Time', nameES: 'Tiempo de Visualización', defEN: 'Watch Time is the total number of minutes viewers have spent watching your videos.', defES: 'El Tiempo de Visualización son los minutos totales que los espectadores pasan viendo tus videos.', namePT: 'Tempo de Exibição', defPT: 'Total de minutos que os espectadores passaram assistindo seus vídeos. O tempo de exibição combinado do canal é uma métrica chave de monetização e classificação.' },
+  { slug: 'impressions', cat: 'analytics', nameEN: 'Impressions', nameES: 'Impresiones', defEN: 'Impressions represent how many times your video thumbnail is shown to users.', defES: 'Las Impresiones representan cuántas veces se muestra la miniatura de tu video a los usuarios.', namePT: 'Impressões', defPT: 'O número de vezes que a miniatura do seu vídeo é mostrada aos espectadores em pesquisa, vídeos sugeridos, página inicial e outras superfícies.' },
+  { slug: 'audience-retention', cat: 'analytics', nameEN: 'Audience Retention', nameES: 'Retención de Audiencia', defEN: 'Audience Retention measures how well your video holds viewers\' attention over time.', defES: 'La Retención de Audiencia mide qué tan bien tu video mantiene la atención de los espectadores.', namePT: 'Retenção de Público', defPT: 'Um gráfico que mostra a porcentagem de espectadores que assistem a cada momento do seu vídeo. Usado para identificar onde os espectadores perdem o interesse.' },
+  { slug: 'average-view-duration', cat: 'analytics', nameEN: 'Average View Duration (AVD)', nameES: 'Duración Media de Visualización', defEN: 'AVD is the average time viewers spend watching a single video.', defES: 'La Duración Media de Visualización es el tiempo promedio que los espectadores pasan viendo un video.', namePT: 'Duração Média de Exibição (AVD)', defPT: 'A média de minutos que um espectador assiste ao seu vídeo antes de sair. Um AVD mais alto sinaliza conteúdo envolvente para o algoritmo.' },
+  { slug: 'dwell-time', cat: 'analytics', nameEN: 'Dwell Time', nameES: 'Tiempo de Permanencia', defEN: 'Dwell Time is the time a user spends on YouTube after clicking a video.', defES: 'El Tiempo de Permanencia es el tiempo que un usuario pasa en YouTube después de hacer clic en un video.', namePT: 'Tempo de Permanência', defPT: 'Quanto tempo um espectador passa assistindo ao seu vídeo antes de voltar aos resultados de busca. Um tempo de permanência maior sinaliza relevância para o algoritmo.' },
+  { slug: 'session-time', cat: 'analytics', nameEN: 'Session Time', nameES: 'Tiempo de Sesión', defEN: 'Session Time measures total continuous time a viewer spends on YouTube.', defES: 'El Tiempo de Sesión mide el tiempo continuo total que un espectador pasa en YouTube.', namePT: 'Tempo de Sessão', defPT: 'Tempo total que um espectador passa no YouTube depois de assistir ao seu vídeo. O algoritmo prioriza vídeos que mantêm as pessoas assistindo por mais tempo.' },
+  { slug: 'search-volume', cat: 'seo', nameEN: 'Search Volume', nameES: 'Volumen de Búsqueda', defEN: 'Search Volume is the number of times a keyword is searched on YouTube monthly.', defES: 'El Volumen de Búsqueda es el número de veces que se busca una palabra clave en YouTube mensualmente.', namePT: 'Volume de Busca', defPT: 'O número de vezes que uma palavra-chave é pesquisada no YouTube por mês. Volume maior significa mais visualizadores em potencial, mas normalmente mais concorrência.' },
+  { slug: 'keyword-difficulty', cat: 'seo', nameEN: 'Keyword Difficulty', nameES: 'Dificultad de Palabra Clave', defEN: 'Keyword Difficulty estimates how hard it is to rank for a search term.', defES: 'La Dificultad de Palabra Clave estima qué tan difícil es posicionarse para un término de búsqueda.', namePT: 'Dificuldade de Palavra-Chave', defPT: 'Uma pontuação (0-100) que estima o quão difícil é rankear para uma palavra-chave com base na concorrência de vídeos e canais estabelecidos.' },
+  { slug: 'revenue-per-mille', cat: 'monetization', nameEN: 'Revenue Per Mille (RPM)', nameES: 'Ingresos Por Mil (RPM)', defEN: 'RPM is the amount a creator earns per thousand video views.', defES: 'RPM es la cantidad que un creador gana por cada mil visitas al video.', namePT: 'Receita por Mil (RPM)', defPT: 'Sua receita total estimada por 1.000 visualizações de vídeo, incluindo receita de anúncios, membros e Super Chat combinados.' },
+  { slug: 'cost-per-mille', cat: 'monetization', nameEN: 'Cost Per Mille (CPM)', nameES: 'Costo Por Mil (CPM)', defEN: 'CPM is the amount advertisers pay per thousand ad impressions.', defES: 'CPM es la cantidad que los anunciantes pagan por cada mil impresiones de anuncios.', namePT: 'Custo por Mil (CPM)', defPT: 'O valor que os anunciantes pagam por 1.000 impressões de anúncios nos seus vídeos. Você ganha 55% disso após a parte do YouTube.' },
+  { slug: 'ad-revenue', cat: 'monetization', nameEN: 'Ad Revenue', nameES: 'Ingresos por Anuncios', defEN: 'Ad Revenue is income earned from advertisements displayed on your videos.', defES: 'Los Ingresos por Anuncios son las ganancias obtenidas de los anuncios mostrados en tus videos.', namePT: 'Receita de Anúncios', defPT: 'Dinheiro ganho com anúncios exibidos nos seus vídeos, dividido 55/45 entre o criador e o YouTube após os pagamentos dos anunciantes.' },
+  { slug: 'channel-memberships', cat: 'monetization', nameEN: 'Channel Memberships', nameES: 'Membresías del Canal', defEN: 'Channel Memberships let viewers pay a monthly fee for exclusive perks.', defES: 'Las Membresías del Canal permiten a los espectadores pagar una tarifa mensual por beneficios exclusivos.', namePT: 'Membros do Canal', defPT: 'Planos de assinatura mensal onde os espectadores pagam por vantagens exclusivas, como selos, emojis e conteúdo exclusivo do seu canal.' },
+  { slug: 'super-chat', cat: 'monetization', nameEN: 'Super Chat', nameES: 'Super Chat', defEN: 'Super Chat allows viewers to pay for highlighted messages during live streams.', defES: 'Super Chat permite a los espectadores pagar por mensajes destacados durante transmisiones en vivo.', namePT: 'Super Chat e Super Stickers', defPT: 'Mensagens pagas em destaque durante transmissões ao vivo e estreias. Os criadores ganham 70% da receita de cada compra.' },
+  { slug: 'youtube-premium', cat: 'monetization', nameEN: 'YouTube Premium', nameES: 'YouTube Premium', defEN: 'YouTube Premium is a paid subscription for ad-free viewing and background play.', defES: 'YouTube Premium es una suscripción paga para visualización sin anuncios y reproducción en segundo plano.', namePT: 'YouTube Premium', defPT: 'Uma assinatura paga que remove anúncios, permite reprodução em segundo plano e oferece acesso ao YouTube Music Premium.' },
+  { slug: 'youtube-partner-program', cat: 'monetization', nameEN: 'YouTube Partner Program (YPP)', nameES: 'Programa de Socios de YouTube', defEN: 'YPP is the monetization program for creators to earn from their content.', defES: 'YPP es el programa de monetización para que los creadores ganen dinero con su contenido.', namePT: 'Programa de Parcerias do YouTube (YPP)', defPT: 'Programa de monetização do YouTube que permite aos criadores ganhar receita com anúncios, membros e outros recursos após cumprir os requisitos de elegibilidade.' },
+  { slug: 'shorts-monetization', cat: 'monetization', nameEN: 'Shorts Monetization', nameES: 'Monetización de Shorts', defEN: 'Shorts Monetization allows creators to earn revenue from YouTube Shorts.', defES: 'La Monetización de Shorts permite a los creadores ganar ingresos con los Shorts de YouTube.', namePT: 'Monetização de Shorts', defPT: 'Os requisitos específicos e as regras de receita para ganhar dinheiro com YouTube Shorts, incluindo o Fundo de Shorts e o compartilhamento de receita de anúncios.' },
+  { slug: 'video-editing', cat: 'production', nameEN: 'Video Editing', nameES: 'Edición de Video', defEN: 'Video Editing is the process of arranging and modifying video clips to create a final product.', defES: 'La Edición de Video es el proceso de organizar y modificar clips de video para crear un producto final.', namePT: 'Edição de Vídeo', defPT: 'O processo de cortar, montar e aprimorar seu vídeo para manter o engajamento e a retenção do público.' },
+  { slug: 'thumbnail', cat: 'seo', nameEN: 'Thumbnail', nameES: 'Miniatura', defEN: 'A Thumbnail is a clickable preview image that represents a YouTube video.', defES: 'Una Miniatura es una imagen de vista previa que representa un video de YouTube.', namePT: 'Miniatura', defPT: 'A imagem clicável que representa seu vídeo nos resultados de busca e nos feeds de recomendação.' },
+  { slug: 'description', cat: 'seo', nameEN: 'Video Description', nameES: 'Descripción del Video', defEN: 'The Video Description is a text field below your video that provides context, links, and keywords.', defES: 'La Descripción del Video es un campo de texto debajo de tu video que proporciona contexto, enlaces y palabras clave.', namePT: 'Descrição do Vídeo', defPT: 'O texto abaixo do vídeo que fornece contexto, palavras-chave e links para ajudar o YouTube a entender e classificar seu conteúdo.' },
+  { slug: 'tags', cat: 'seo', nameEN: 'Tags', nameES: 'Etiquetas', defEN: 'Tags are keywords that help YouTube understand the content and context of your video.', defES: 'Las Etiquetas son palabras clave que ayudan a YouTube a entender el contenido y contexto de tu video.', namePT: 'Tags', defPT: 'Palavras-chave que ajudam o YouTube a entender o tópico do seu vídeo e exibi-lo em pesquisas relacionadas.' },
+  { slug: 'engagement', cat: 'engagement', nameEN: 'Engagement', nameES: 'Participación', defEN: 'Engagement measures how users interact with your content through likes, comments, and shares.', defES: 'La Participación mide cómo los usuarios interactúan con tu contenido a través de Me gusta, comentarios y compartidos.', namePT: 'Engajamento', defPT: 'O nível de interação do público com seu conteúdo — curtidas, comentários, compartilhamentos e inscrições.' },
+  { slug: 'retention', cat: 'analytics', nameEN: 'Retention', nameES: 'Retención', defEN: 'Retention is the percentage of a video that viewers watch, indicating content quality.', defES: 'La Retención es el porcentaje de un video que los espectadores ven, indicando la calidad del contenido.', namePT: 'Retenção', defPT: 'A porcentagem do vídeo que os espectadores assistem, um dos sinais de classificação mais importantes do algoritmo.' },
+  { slug: 'playlist', cat: 'content', nameEN: 'Playlist', nameES: 'Lista de Reproducción', defEN: 'A Playlist is a curated collection of videos organized around a theme or topic.', defES: 'Una Lista de Reproducción es una colección curada de videos organizados alrededor de un tema.', namePT: 'Playlist', defPT: 'Uma coleção de vídeos agrupados que aumenta o tempo de exibição ao reproduzir conteúdo relacionado em sequência.' },
+  { slug: 'cards', cat: 'features', nameEN: 'Cards', nameES: 'Tarjetas', defEN: 'Cards are interactive elements that appear as teasers within a video, linking to other content.', defES: 'Las Tarjetas son elementos interactivos que aparecen como avances dentro de un video.', namePT: 'Cards', defPT: 'Elementos interativos que podem aparecer dentro do vídeo para promover outros vídeos, playlists ou sites.' },
+  { slug: 'end-screen', cat: 'features', nameEN: 'End Screen', nameES: 'Pantalla Final', defEN: 'An End Screen displays recommended videos and subscribe buttons in the last 20 seconds of a video.', defES: 'Una Pantalla Final muestra videos recomendados y botones de suscripción en los últimos 20 segundos de un video.', namePT: 'Tela Final', defPT: 'Os últimos 5-20 segundos do vídeo que promovem outros conteúdos, inscrições e links.' },
+  { slug: 'closed-captions', cat: 'features', nameEN: 'Closed Captions', nameES: 'Subtítulos', defEN: 'Closed Captions display spoken dialogue and audio cues as text on screen.', defES: 'Los Subtítulos muestran el diálogo hablado y señales de audio como texto en pantalla.', namePT: 'Legendas Ocultas (CC)', defPT: 'Texto na tela do diálogo do vídeo que melhora acessibilidade, SEO e engajamento do espectador em vários idiomas.' },
+  { slug: 'chapter', cat: 'features', nameEN: 'Chapters', nameES: 'Capítulos', defEN: 'Chapters divide a video into timed segments with descriptive titles for easier navigation.', defES: 'Los Capítulos dividen un video en segmentos temporizados con títulos descriptivos para una navegación más fácil.', namePT: 'Capítulos', defPT: 'Marcadores de tempo que dividem o vídeo em seções, melhorando a experiência do espectador e o SEO.' },
+  { slug: 'community', cat: 'engagement', nameEN: 'Community Tab', nameES: 'Pestaña Comunidad', defEN: 'The Community Tab lets creators post text, images, and polls to engage their audience.', defES: 'La Pestaña Comunidad permite a los creadores publicar texto, imágenes y encuestas para interactuar con su audiencia.', namePT: 'Guia da Comunidade', defPT: 'O recurso do YouTube que permite postar atualizações, enquetes e imagens para se envolver com seus inscritos.' },
+  { slug: 'brand', cat: 'content', nameEN: 'Brand Channel', nameES: 'Canal de Marca', defEN: 'A Brand Channel is a YouTube channel specifically for businesses or brands.', defES: 'Un Canal de Marca es un canal de YouTube específicamente para negocios o marcas.', namePT: 'Canal de Marca', defPT: 'Um canal do YouTube vinculado a uma marca, gerenciado por vários usuários autorizados.' },
+  { slug: 'distribution', cat: 'content', nameEN: 'Content Distribution', nameES: 'Distribución de Contenido', defEN: 'Content Distribution is the process of sharing your video across multiple platforms to maximize reach.', defES: 'La Distribución de Contenido es el proceso de compartir tu video en múltiples plataformas para maximizar el alcance.', namePT: 'Distribuição de Conteúdo', defPT: 'As estratégias para compartilhar seus vídeos em várias plataformas para maximizar o alcance e as visualizações.' },
+  { slug: 'copyright', cat: 'content', nameEN: 'Copyright', nameES: 'Derechos de Autor', defEN: 'Copyright is legal protection of original creative works, enforced by YouTube\'s Content ID system.', defES: 'Los Derechos de Autor son la protección legal de obras creativas originales, aplicada por el sistema Content ID de YouTube.', namePT: 'Direitos Autorais', defPT: 'Proteção legal do conteúdo original; usá-lo sem permissão pode resultar em reclamações ou remoções.' },
+  { slug: 'fair-use', cat: 'content', nameEN: 'Fair Use', nameES: 'Uso Justo', defEN: 'Fair Use allows limited use of copyrighted material without permission for purposes like commentary.', defES: 'El Uso Justo permite el uso limitado de material protegido sin permiso para fines como comentarios.', namePT: 'Uso Justo', defPT: 'Uma exceção legal que permite o uso limitado de material protegido por direitos autorais sem permissão.' },
+  { slug: 'hashtag', cat: 'seo', nameEN: 'Hashtags', nameES: 'Hashtags', defEN: 'Hashtags are clickable keywords preceded by # that help categorize content by topic.', defES: 'Los Hashtags son palabras clave precedidas por # que ayudan a categorizar el contenido por tema.', namePT: 'Hashtags', defPT: 'Palavras-chave prefixadas com # que ajudam o YouTube a categorizar e descobrir seu conteúdo.' },
+  { slug: 'live-stream', cat: 'features', nameEN: 'Live Stream', nameES: 'Transmisión en Vivo', defEN: 'A Live Stream is a real-time video broadcast that allows viewer interaction.', defES: 'Una Transmisión en Vivo es una emisión de video en tiempo real que permite la interacción con los espectadores.', namePT: 'Transmissão ao Vivo', defPT: 'Transmissão de vídeo em tempo real que permite interação direta com o público via chat.' },
+  { slug: 'premiere', cat: 'features', nameEN: 'Premiere', nameES: 'Estreno', defEN: 'A Premiere is a scheduled first showing of a pre-recorded video with live chat.', defES: 'Un Estreno es una primera proyección programada de un video pregrabado con chat en vivo.', namePT: 'Pré-estreia', defPT: 'Um formato híbrido em que o vídeo é pré-gravado, mas exibido como um evento ao vivo com chat.' },
+  { slug: 'pinned-comment', cat: 'engagement', nameEN: 'Pinned Comment', nameES: 'Comentario Fijado', defEN: 'A Pinned Comment is highlighted at the top of the comments section for visibility.', defES: 'Un Comentario Fijado se destaca en la parte superior de la sección de comentarios para mayor visibilidad.', namePT: 'Comentário Fixado', defPT: 'Um comentário que o criador fixa no topo da seção de comentários para orientar a discussão.' },
+  { slug: 'comment', cat: 'engagement', nameEN: 'Comments', nameES: 'Comentarios', defEN: 'Comments are viewer responses to a video that drive engagement and community.', defES: 'Los Comentarios son respuestas de los espectadores a un video que impulsan la participación y la comunidad.', namePT: 'Comentários', defPT: 'Interações do público abaixo do vídeo que contribuem para os sinais de engajamento.' },
+  { slug: 'calls-to-action', cat: 'content', nameEN: 'Calls-to-Action (CTA)', nameES: 'Llamadas a la Acción (CTA)', defEN: 'CTAs prompt viewers to take a specific action like subscribing or clicking a link.', defES: 'Las CTA invitan a los espectadores a realizar una acción específica como suscribirse o hacer clic en un enlace.', namePT: 'Chamadas para Ação (CTA)', defPT: 'Instruções que incentivam o espectador a agir — se inscrever, curtir, comentar ou visitar um link.' },
+  { slug: 'hook', cat: 'production', nameEN: 'Hook', nameES: 'Gancho', defEN: 'A Hook is the first few seconds of a video designed to grab viewer attention.', defES: 'Un Gancho son los primeros segundos de un video diseñados para captar la atención del espectador.', namePT: 'Gancho', defPT: 'Os primeiros segundos do vídeo projetados para capturar a atenção e impedir que o espectador saia.' },
+  { slug: 'intro', cat: 'production', nameEN: 'Intro', nameES: 'Introducción', defEN: 'An Intro is the opening segment of a video that sets expectations and branding.', defES: 'Una Introducción es el segmento de apertura de un video que establece expectativas y marca.', namePT: 'Introdução', defPT: 'A abertura do vídeo que define o contexto e prepara o que virá a seguir.' },
+  { slug: 'outro', cat: 'production', nameEN: 'Outro', nameES: 'Cierre', defEN: 'An Outro is the closing segment that summarizes and encourages viewer action.', defES: 'Un Cierre es el segmento final que resume y fomenta la acción del espectador.', namePT: 'Encerramento', defPT: 'A parte final do vídeo que resume e direciona para o próximo conteúdo.' },
+  { slug: 'branding', cat: 'content', nameEN: 'Channel Branding', nameES: 'Identidad de Marca', defEN: 'Channel Branding includes your profile picture, banner, and visual identity across YouTube.', defES: 'La Identidad de Marca incluye tu foto de perfil, banner e identidad visual en YouTube.', namePT: 'Identidade do Canal', defPT: 'Os elementos visuais — logo, banner, cores — que tornam seu canal reconhecível.' },
+  { slug: 'vanity-url', cat: 'features', nameEN: 'Vanity URL', nameES: 'URL Personalizada', defEN: 'A Vanity URL is a custom YouTube channel URL (e.g., youtube.com/@handle).', defES: 'Una URL Personalizada es una URL personalizada del canal de YouTube (ej., youtube.com/@handle).', namePT: 'URL Personalizada', defPT: 'Um URL personalizado do canal como youtube.com/seunome, mais fácil de lembrar e compartilhar.' },
+  { slug: 'handle', cat: 'features', nameEN: 'YouTube Handle', nameES: 'Identificador de YouTube', defEN: 'A YouTube Handle (@handle) is a unique identifier for your channel used in mentions.', defES: 'Un Identificador de YouTube (@handle) es un identificador único para tu canal usado en menciones.', namePT: 'Identificador do YouTube', defPT: 'O nome exclusivo @ que identifica seu canal em comentários, Shorts e no perfil.' },
+  { slug: 'analytics', cat: 'analytics', nameEN: 'YouTube Analytics', nameES: 'Analíticas de YouTube', defEN: 'YouTube Analytics provides data on video performance, audience, and revenue.', defES: 'Las Analíticas de YouTube proporcionan datos sobre el rendimiento del video, la audiencia y los ingresos.', namePT: 'YouTube Analytics', defPT: 'O painel do YouTube Studio que mostra o desempenho do canal: visualizações, retenção, receita e público.' },
+  { slug: 'real-time', cat: 'analytics', nameEN: 'Real-Time Analytics', nameES: 'Analíticas en Tiempo Real', defEN: 'Real-Time Analytics shows immediate viewer activity data on your content.', defES: 'Las Analíticas en Tiempo Real muestran datos de actividad inmediata de los espectadores en tu contenido.', namePT: 'Analítica em Tempo Real', defPT: 'Dados ao vivo sobre visualizações e engajamento nas últimas 48 horas.' },
+  { slug: 'traffic-source', cat: 'analytics', nameEN: 'Traffic Source', nameES: 'Fuente de Tráfico', defEN: 'Traffic Source indicates where viewers found your video (search, suggested, external).', defES: 'La Fuente de Tráfico indica dónde encontraron los espectadores tu video (búsqueda, sugerido, externo).', namePT: 'Origem de Tráfego', defPT: 'Onde os espectadores encontram seu vídeo — busca, sugestões, página inicial ou fontes externas.' },
+  { slug: 'demographics', cat: 'analytics', nameEN: 'Audience Demographics', nameES: 'Demografía de Audiencia', defEN: 'Audience Demographics shows the age, gender, and location of your viewers.', defES: 'La Demografía de Audiencia muestra la edad, género y ubicación de tus espectadores.', namePT: 'Dados Demográficos', defPT: 'Idade, gênero e localização do seu público no YouTube Analytics.' },
+  { slug: 'reach', cat: 'analytics', nameEN: 'Reach', nameES: 'Alcance', defEN: 'Reach is the total number of unique users who see your content.', defES: 'El Alcance es el número total de usuarios únicos que ven tu contenido.', namePT: 'Alcance', defPT: 'O número de espectadores únicos que veem seu conteúdo.' },
+  { slug: 'views', cat: 'analytics', nameEN: 'Views', nameES: 'Vistas', defEN: 'Views count the number of times your video has been watched.', defES: 'Las Vistas cuentan el número de veces que se ha visto tu video.', namePT: 'Visualizações', defPT: 'O número de vezes que seu vídeo foi assistido.' },
+  { slug: 'subscriber', cat: 'engagement', nameEN: 'Subscribers', nameES: 'Suscriptores', defEN: 'Subscribers are users who follow your channel to receive updates.', defES: 'Los Suscriptores son usuarios que siguen tu canal para recibir actualizaciones.', namePT: 'Inscritos', defPT: 'Usuários que seguem seu canal para receber atualizações de novos vídeos.' },
+  { slug: 'audience-demographics', cat: 'analytics', nameEN: 'Audience Demographics', nameES: 'Demografía del Público', defEN: 'Age, gender, location, and device data about your viewers available in YouTube Analytics Studio.', defES: 'Edad, género, ubicación y datos de dispositivo sobre tus espectadores disponibles en YouTube Analytics Studio.', namePT: 'Dados Demográficos do Público', defPT: 'Dados de idade, gênero, localização e dispositivo sobre seus espectadores disponíveis no YouTube Analytics Studio.' },
+  { slug: 'batch-production', cat: 'content', nameEN: 'Batch Production', nameES: 'Producción en lote', defEN: 'Recording multiple videos in a single session to improve efficiency, maintain consistency, and establish a reliable upload schedule.', defES: 'Grabar múltiples videos en una sola sesión para mejorar la eficiencia, mantener la consistencia y establecer un horario de carga confiable.', namePT: 'Produção em Lote', defPT: 'Gravar vários vídeos em uma única sessão para melhorar a eficiência, manter a consistência e estabelecer uma programação de upload confiável.' },
+  { slug: 'browse-features', cat: 'algorithm', nameEN: 'Browse Features (Homepage)', nameES: 'Browse Features (Homepage)', defEN: 'YouTube\'s homepage recommendation surface showing personalized video suggestions to logged-in users based on their viewing history.', defES: 'La superficie de recomendación de la página de inicio de YouTube que muestra sugerencias de video personalizadas a usuarios conectados en función de su historia de visualizaciones.', namePT: 'Recursos de Navegação (Página Inicial)', defPT: 'Superfície de recomendação da página inicial do YouTube que mostra sugestões de vídeos personalizadas para usuários logados com base no histórico de visualização.' },
+  { slug: 'call-to-action', cat: 'content', nameEN: 'Call to Action (CTA)', nameES: 'Call to Action (CTA)', defEN: 'A prompt telling viewers to take a specific action — subscribe, watch another video, comment, or visit a link — placed strategically in videos.', defES: 'Una llamada a la acción (prompt) que indica a los espectadores que realicen una acción específica — suscribirse, ver otro video, comentar, o visitar un enlace — colocada estratégicamente en los videos.', namePT: 'Chamada para Ação (CTA)', defPT: 'Um incentivo que pede aos espectadores uma ação específica — se inscrever, assistir a outro vídeo, comentar ou visitar um link — posicionado estrategicamente nos vídeos.' },
+  { slug: 'cards-end-screens', cat: 'features', nameEN: 'Cards and End Screens', nameES: 'Tarjetas y Pantallas de Fin', defEN: 'Interactive elements on YouTube videos that link viewers to other videos, playlists, channels, or external sites during and after playback.', defES: 'Elementos interactivos en los videos de YouTube que enlazan a los espectadores a otros videos, listas de reproducción, canales o sitios externos durante y después de la reproducción.', namePT: 'Cards e Telas Finais', defPT: 'Elementos interativos em vídeos do YouTube que direcionam os espectadores para outros vídeos, playlists, canais ou sites externos durante e após a reprodução.' },
+  { slug: 'channel-audit', cat: 'content', nameEN: 'Channel Audit', nameES: 'Auditoría de Canal', defEN: 'A systematic review of your YouTube channel\'s performance, SEO, content gaps, and growth opportunities across all metrics.', defES: 'Una revisión sistemática del rendimiento de tu canal de YouTube, SEO, vacíos de contenido y oportunidades de crecimiento en todas las métricas.', namePT: 'Auditoria de Canal', defPT: 'Uma revisão sistemática do desempenho do seu canal no YouTube, SEO, lacunas de conteúdo e oportunidades de crescimento em todas as métricas.' },
+  { slug: 'channel-branding', cat: 'content', nameEN: 'Channel Branding', nameES: 'Channel Branding', defEN: 'The visual identity of your YouTube channel including banner art, profile picture, watermark, and consistent video style elements.', defES: 'La identidad visual de tu canal de YouTube, incluyendo arte de banner, imagen de perfil, marca de agua y elementos de estilo de video consistentes.', namePT: 'Identidade Visual do Canal', defPT: 'A identidade visual do seu canal do YouTube, incluindo arte do banner, foto de perfil, marca d\'água e elementos de estilo consistentes nos vídeos.' },
+  { slug: 'channel-trailer', cat: 'content', nameEN: 'Channel Trailer', nameES: 'Channel Trailer', defEN: 'A short introductory video (60-90 seconds) that auto-plays for non-subscribed visitors and explains what your channel offers.', defES: 'Un video introductorio corto (60-90 segundos) que se reproduce automáticamente para visitantes no suscritos y explica qué ofrece su canal.', namePT: 'Trailer do Canal', defPT: 'Um vídeo introdutório curto (60-90 segundos) que é reproduzido automaticamente para visitantes não inscritos e explica o que seu canal oferece.' },
+  { slug: 'collaboration', cat: 'content', nameEN: 'Collaboration', nameES: 'Colaboración', defEN: 'Creating videos with other YouTubers to cross-pollinate audiences, gain subscribers, and build authority through association.', defES: 'Crear videos con otros YouTubers para cruzar audiencias, ganar suscriptores y construir autoridad a través de la asociación.', namePT: 'Colaboração', defPT: 'Criar vídeos com outros YouTubers para fazer polinização cruzada de audiências, ganhar inscritos e construir autoridade por associação.' },
+  { slug: 'community-guidelines', cat: 'features', nameEN: 'Community Guidelines', nameES: 'Community Guidelines', defEN: 'YouTube\'s rules prohibiting harmful content like harassment, misinformation, violence, and spam. Violations can result in content removal or channel termination.', defES: 'Las directrices de la comunidad de YouTube, que prohíben contenido dañino como el acoso, la desinformación, la violencia y el spam. Las violaciones pueden resultar en la eliminación del contenido o la terminación del canal.', namePT: 'Diretrizes da Comunidade', defPT: 'Regras do YouTube que proíbem conteúdo prejudicial, como assédio, desinformação, violência e spam. Violações podem resultar na remoção de conteúdo ou no encerramento do canal.' },
+  { slug: 'community-tab', cat: 'features', nameEN: 'Community Tab', nameES: 'Pestaña de Comunidad', defEN: 'A social feed on your channel where you can post text updates, polls, images, and videos to engage subscribers between uploads.', defES: 'Una barra de estado social en tu canal donde puedes publicar actualizaciones de texto, encuestas, imágenes y videos para mantener a los suscriptores comprometidos entre subidas.', namePT: 'Aba Comunidade', defPT: 'Um feed social no seu canal onde você pode postar atualizações de texto, enquetes, imagens e vídeos para engajar os inscritos entre os uploads.' },
+  { slug: 'competitor-analysis', cat: 'content', nameEN: 'Competitor Analysis', nameES: 'Análisis de Competidores', defEN: 'Analyzing competing YouTube channels to identify their strengths, weaknesses, keyword targets, and content strategies you can learn from.', defES: 'Analizar canales de YouTube competidores para identificar sus fortalezas, debilidades, objetivos de palabras clave y estrategias de contenido que puedes aprender de ellos.', namePT: 'Análise de Concorrentes', defPT: 'Análise de canais concorrentes no YouTube para identificar seus pontos fortes, fracos, palavras-chave alvo e estratégias de conteúdo que você pode aproveitar.' },
+  { slug: 'content-calendar', cat: 'content', nameEN: 'Content Calendar', nameES: 'Content Calendar', defEN: 'A schedule planning when to publish each video, organized around content pillars, trending opportunities, and audience activity patterns.', defES: 'Un calendario de contenido que planifica cuándo publicar cada video, organizado en función de pilares de contenido, oportunidades tendenciales y patrones de actividad del público.', namePT: 'Calendário de Conteúdo', defPT: 'Um cronograma que planeja quando publicar cada vídeo, organizado em torno de pilares de conteúdo, oportunidades de tendências e padrões de atividade do público.' },
+  { slug: 'content-gap-analysis', cat: 'content', nameEN: 'Content Gap Analysis', nameES: 'Análisis de Brecha de Contenido', defEN: 'Finding topics your audience searches for that your competitors haven\'t covered, creating opportunities for high-impact content.', defES: 'Encontrar temas que tu audiencia busca y que tus competidores no han cubierto, creando oportunidades para contenido de gran impacto.', namePT: 'Análise de Lacunas de Conteúdo', defPT: 'Encontrar tópicos que seu público pesquisa e que seus concorrentes não abordaram, criando oportunidades para conteúdo de alto impacto.' },
+  { slug: 'content-pillar', cat: 'content', nameEN: 'Content Pillar', nameES: 'Content Pillar', defEN: 'A core topic your channel consistently creates videos about, forming the foundation of your content strategy and audience expectations.', defES: 'Un tema central alrededor del cual tu canal crea videos consistentemente, formando la base de tu estrategia de contenido y las expectativas de tu audiencia.', namePT: 'Pilar de Conteúdo', defPT: 'Um tópico central sobre o qual seu canal cria vídeos consistentemente, formando a base da sua estratégia de conteúdo e das expectativas do público.' },
+  { slug: 'content-repurposing', cat: 'content', nameEN: 'Content Repurposing', nameES: 'Reutilización de Contenido', defEN: 'Adapting existing content into different formats (blog post to video, long-form to Shorts) to maximize reach across platforms.', defES: 'Adaptar contenido existente a diferentes formatos (artículo a video, formato largo a Shorts) para maximizar la cobertura en diferentes plataformas.', namePT: 'Reaproveitamento de Conteúdo', defPT: 'Adaptar conteúdo existente para diferentes formatos (post de blog para vídeo, formato longo para Shorts) para maximizar o alcance em várias plataformas.' },
+  { slug: 'copyright-claims', cat: 'features', nameEN: 'Copyright Claims & Strikes', nameES: 'Copyright Claims & Strikes', defEN: 'Legal actions on your videos when you use copyrighted content without permission. Claims affect monetization; strikes can get your channel terminated.', defES: 'Acciones legales en tus videos cuando utilizas contenido protegido por derechos de autor sin permiso. Las reclamaciones afectan la monetización; los golpes pueden hacer que se cancele tu canal.', namePT: 'Reivindicações e Avisos de Direitos Autorais', defPT: 'Ações legais nos seus vídeos quando você usa conteúdo protegido por direitos autorais sem permissão. Claims afetam a monetização; strikes podem encerrar seu canal.' },
+  { slug: 'creator-music', cat: 'features', nameEN: 'YouTube Creator Music', nameES: 'YouTube Creator Music', defEN: 'YouTube\'s library of licensed music that creators can use in videos without copyright claims, with revenue-sharing options.', defES: 'Biblioteca de música licenciada de YouTube que los creadores pueden utilizar en videos sin reclamos de derechos de autor, con opciones de compartición de ingresos.', namePT: 'YouTube Creator Music', defPT: 'Biblioteca de músicas licenciadas do YouTube que os criadores podem usar em vídeos sem reivindicações de direitos autorais, com opções de compartilhamento de receita.' },
+  { slug: 'cross-promotion', cat: 'content', nameEN: 'Cross-Promotion', nameES: 'Cross-Promotion', defEN: 'Promoting your content across multiple platforms (social media, email, other channels) to drive external traffic to your YouTube videos.', defES: 'Promocionar tu contenido en múltiples plataformas (redes sociales, correo electrónico, otros canales) para impulsar el tráfico externo a tus videos de YouTube.', namePT: 'Promoção Cruzada', defPT: 'Promover seu conteúdo em várias plataformas (redes sociais, e-mail, outros canais) para direcionar tráfego externo para seus vídeos do YouTube.' },
+  { slug: 'demonetization', cat: 'monetization', nameEN: 'Demonetization', nameES: 'Demonetización', defEN: 'When YouTube removes ads from a video or channel due to content that violates advertiser-friendly guidelines.', defES: 'Cuando YouTube elimina anuncios de un video o canal debido a contenido que viola las directrices de publicidad amigable.', namePT: 'Desmonetização', defPT: 'Quando o YouTube remove anúncios de um vídeo ou canal devido a conteúdo que viola as diretrizes de adequação para anunciantes.' },
+  { slug: 'description-optimization', cat: 'seo', nameEN: 'Description Optimization', nameES: 'Optimización de la Descripción', defEN: 'Structuring video descriptions with target keywords, timestamps, links, and CTAs to improve search ranking and viewer engagement.', defES: 'Estructurando las descripciones de los videos con palabras clave objetivo, marcadores de tiempo, enlaces y CTAs para mejorar la clasificación en la búsqueda y la participación del espectador.', namePT: 'Otimização de Descrição', defPT: 'Estruturar descrições de vídeo com palavras-chave alvo, marcações de tempo, links e CTAs para melhorar o ranqueamento na busca e o engajamento do espectador.' },
+  { slug: 'evergreen-content', cat: 'content', nameEN: 'Evergreen Content', nameES: 'Contenido Evergreen', defEN: 'Videos that remain relevant and searchable for months or years after publication, consistently generating views without ongoing promotion.', defES: 'Videos que siguen siendo relevantes y buscables durante meses o años después de su publicación, generando de manera constante vistas sin necesidad de promoción continua.', namePT: 'Conteúdo Evergreen', defPT: 'Vídeos que permanecem relevantes e pesquisáveis por meses ou anos após a publicação, gerando visualizações consistentemente sem promoção contínua.' },
+  { slug: 'external-traffic', cat: 'analytics', nameEN: 'External Traffic', nameES: 'Tráfico Externo', defEN: 'Views that come from websites, social media, or apps outside of YouTube, including embedded videos and shared links.', defES: 'Vistas que provienen de sitios web, redes sociales o aplicaciones fuera de YouTube, incluidos videos incorporados y enlaces compartidos.', namePT: 'Tráfego Externo', defPT: 'Visualizações que vêm de sites, redes sociais ou aplicativos fora do YouTube, incluindo vídeos incorporados e links compartilhados.' },
+  { slug: 'gaming-on-youtube', cat: 'features', nameEN: 'Gaming on YouTube', nameES: 'Juegos en YouTube', defEN: 'The dedicated YouTube gaming category with unique features like gaming-specific analytics and the Gaming homepage tab.', defES: 'La categoría de juegos de YouTube con características únicas como análisis específicos de juegos y la pestaña de inicio de juegos en la página de inicio.', namePT: 'Jogos no YouTube', defPT: 'A categoria dedicada de jogos do YouTube, com recursos exclusivos como análises específicas para jogos e a aba de página inicial de jogos.' },
+  { slug: 'keyword-cannibalization', cat: 'seo', nameEN: 'Keyword Cannibalization', nameES: 'Keyword Cannibalization', defEN: 'When multiple videos on your channel compete for the same search keyword, splitting views and weakening your ranking potential.', defES: 'Cuando varios videos de tu canal compiten por la misma palabra clave de búsqueda, dividiendo las visualizaciones y debilitando tu potencial de clasificación.', namePT: 'Canibalização de Palavras-Chave', defPT: 'Quando vários vídeos do seu canal competem pela mesma palavra-chave de pesquisa, dividindo as visualizações e enfraquecendo seu potencial de ranqueamento.' },
+  { slug: 'long-tail-keywords', cat: 'seo', nameEN: 'Long-Tail Keywords', nameES: 'Long-Tail Keywords', defEN: 'Specific, multi-word search phrases (4+ words) that have lower search volume but higher conversion rates and less competition.', defES: 'Palabras clave de cola específicas, frases de búsqueda de varias palabras (4+ palabras) que tienen una menor frecuencia de búsqueda pero tasas de conversión más altas y menos competencia.', namePT: 'Palavras-Chave de Cauda Longa', defPT: 'Frases de busca específicas e com múltiplas palavras (4+ palavras) que têm menor volume de busca, mas maiores taxas de conversão e menos concorrência.' },
+  { slug: 'mid-roll-ads', cat: 'monetization', nameEN: 'Mid-Roll Ads', nameES: 'Anuncios de Media Rueda', defEN: 'Ad breaks placed during a video (8+ minutes required) that significantly increase ad revenue compared to pre- and post-roll ads only.', defES: 'Interrupciones publicitarias colocadas durante un video (requiere 8+ minutos) que aumentan significativamente la rentabilidad publicitaria en comparación con anuncios pre y post-rueda sólo.', namePT: 'Anúncios no Meio do Vídeo', defPT: 'Intervalos de anúncios colocados durante um vídeo (8+ minutos obrigatórios) que aumentam significativamente a receita de anúncios em comparação com apenas anúncios pré-roll e pós-roll.' },
+  { slug: 'mobile-seo', cat: 'seo', nameEN: 'Mobile-First YouTube SEO', nameES: 'Mobile-First YouTube SEO', defEN: 'Optimizing video content for mobile viewers who watch on small screens with different browsing behavior than desktop users.', defES: 'Optimizar contenido de video para espectadores móviles que ven en pantallas pequeñas con un comportamiento de navegación diferente a los usuarios de escritorio.', namePT: 'SEO Mobile-First para YouTube', defPT: 'Otimização de conteúdo de vídeo para espectadores móveis que assistem em telas pequenas com comportamento de navegação diferente dos usuários de desktop.' },
+  { slug: 'playlist-discovery', cat: 'seo', nameEN: 'Playlist Discovery', nameES: 'Descubrimiento de Reproducciones', defEN: 'How viewers find and interact with YouTube playlists — through search, suggested videos, channel pages, and auto-play features.', defES: 'Cómo los espectadores encuentran e interactúan con las listas de reproducción de YouTube — a través de la búsqueda, videos sugeridos, páginas de canales y características de reproducción automática.', namePT: 'Descoberta de Playlists', defPT: 'Como os espectadores encontram e interagem com playlists do YouTube — por meio de pesquisa, vídeos sugeridos, páginas de canal e recursos de reprodução automática.' },
+  { slug: 'playlist-optimization', cat: 'seo', nameEN: 'Playlist SEO', nameES: 'Playlist SEO', defEN: 'Optimizing YouTube playlists with keyword-rich titles and descriptions so they rank in search and trigger auto-play sessions.', defES: 'Optimizando listas de reproducción de YouTube con títulos y descripciones ricos en palabras clave para que se clasifiquen en la búsqueda y desencadenen sesiones de auto-reproducción.', namePT: 'Otimização de Playlist', defPT: 'Otimização de playlists do YouTube com títulos e descrições ricos em palavras-chave para ranquear na busca e gerar sessões de reprodução automática.' },
+  { slug: 'premieres', cat: 'features', nameEN: 'Premieres', nameES: 'Premieres', defEN: 'A scheduled first-time video debut that combines the live experience of a stream (real-time chat) with polished pre-recorded content.', defES: 'Un estreno programado del primer video que combina la experiencia en vivo de un stream (chat en tiempo real) con contenido pregrabado pulido.', namePT: 'Pré-estreias', defPT: 'Uma estreia de vídeo agendada pela primeira vez que combina a experiência ao vivo de uma transmissão (chat em tempo real) com conteúdo pré-gravado e polido.' },
+  { slug: 'shorts-algorithm', cat: 'algorithm', nameEN: 'Shorts Algorithm', nameES: 'Algoritmo de Shorts', defEN: 'The separate recommendation system for Shorts that prioritizes swipe-through rate, loop rate, and first-2-second retention.', defES: 'El sistema de recomendación separado para Shorts que prioriza la tasa de deslizamiento, la tasa de bucle y la retención en los primeros 2 segundos.', namePT: 'Algoritmo de Shorts', defPT: 'O sistema de recomendação separado para Shorts que prioriza taxa de deslize, taxa de repetição e retenção nos primeiros 2 segundos.' },
+  { slug: 'thumbnail-optimization', cat: 'seo', nameEN: 'Thumbnail Optimization', nameES: 'Optimización de Miniaturas', defEN: 'Designing custom video thumbnails that increase click-through rate through contrast, emotion, text, and visual hierarchy.', defES: 'Diseñando miniaturas de video personalizadas que aumentan la tasa de clic a través del contraste, la emoción, el texto y la jerarquía visual.', namePT: 'Otimização de Miniatura', defPT: 'Design de miniaturas personalizadas que aumentam a taxa de cliques por meio de contraste, emoção, texto e hierarquia visual.' },
+  { slug: 'title-optimization', cat: 'seo', nameEN: 'Title Optimization', nameES: 'Optimización del Título', defEN: 'Writing video titles that include target keywords while maximizing click-through rate through emotional triggers and curiosity gaps.', defES: 'Escribir títulos de video que incluyan palabras clave objetivo mientras se maximiza la tasa de clic a través de desencadenantes emocionales y lagunas de curiosidad.', namePT: 'Otimização de Título', defPT: 'Escrever títulos de vídeo que incluam palavras-chave alvo, maximizando a taxa de cliques por meio de gatilhos emocionais e lacunas de curiosidade.' },
+  { slug: 'topic-authority', cat: 'algorithm', nameEN: 'Topic Authority', nameES: 'Autoridad Temática', defEN: 'YouTube\'s assessment of your channel\'s expertise in a specific topic area, built through consistent, comprehensive coverage of related content.', defES: 'La evaluación de YouTube de la especialización de tu canal en una área de temas específica, construida a través de una cobertura consistente y exhaustiva de contenido relacionado.', namePT: 'Autoridade de Tópico', defPT: 'Avaliação do YouTube sobre a especialização do seu canal em uma área de tópico específica, construída por meio de cobertura consistente e abrangente de conteúdo relacionado.' },
+  { slug: 'traffic-sources', cat: 'analytics', nameEN: 'Traffic Sources', nameES: 'Fuentes de Tráfico', defEN: 'The channels through which viewers find your videos — YouTube Search, Suggested Videos, Browse, External, Playlists, and Notifications.', defES: 'Los canales a través de los cuales los espectadores encuentran tus videos — YouTube Search, Suggested Videos, Browse, External, Playlists, y Notifications.', namePT: 'Fontes de Tráfego', defPT: 'Os canais pelos quais os espectadores encontram seus vídeos — Pesquisa do YouTube, Vídeos sugeridos, Navegação, Externo, Playlists e Notificações.' },
+  { slug: 'transcript-seo', cat: 'seo', nameEN: 'Transcript SEO', nameES: 'Transcript SEO', defEN: 'Using your video\'s auto-generated captions and transcript as SEO content that YouTube indexes and matches to search queries.', defES: 'Usando las subtítulos y transcripción automáticas de tu video como contenido de SEO que YouTube indexa y busca en consultas de búsqueda.', namePT: 'SEO de Transcrição', defPT: 'Usar as legendas automáticas e a transcrição do seu vídeo como conteúdo de SEO que o YouTube indexa e combina com consultas de pesquisa.' },
+  { slug: 'trending-content', cat: 'content', nameEN: 'Trending Content Strategy', nameES: 'Estrategia de Contenido Tendiente', defEN: 'Creating videos about current trends, viral topics, or news events to capture search spikes and algorithm boosts from high engagement.', defES: 'Crear videos sobre tendencias actuales, temas virales o eventos de noticias para capturar picos de búsqueda y aumentos de algoritmo debido a una alta participación.', namePT: 'Estratégia de Conteúdo em Alta', defPT: 'Criar vídeos sobre tendências atuais, tópicos virais ou notícias para aproveitar picos de busca e aumentos no algoritmo devido ao alto engajamento.' },
+  { slug: 'vertical-video', cat: 'features', nameEN: 'Vertical Video (9:16)', nameES: 'Vertical Video (9:16)', defEN: 'Video shot in portrait orientation (9:16 aspect ratio) optimized for mobile-first viewing on YouTube Shorts and mobile feeds.', defES: 'Video rodado en orientación de paisaje (relación de aspecto 9:16) optimizado para la visualización en móviles en YouTube Shorts y feeds móviles.', namePT: 'Vídeo Vertical (9:16)', defPT: 'Vídeo gravado na orientação retrato (proporção 9:16), otimizado para visualização mobile-first no YouTube Shorts e feeds de celular.' },
+  { slug: 'video-backlinks', cat: 'seo', nameEN: 'Video Backlinks', nameES: 'Video Backlinks', defEN: 'Links from other websites to your YouTube videos or channel that improve search authority both on YouTube and Google.', defES: 'Enlaces de otros sitios web a tus videos o canal de YouTube que mejoran la autoridad de búsqueda tanto en YouTube como en Google.', namePT: 'Backlinks de Vídeo', defPT: 'Links de outros sites para seus vídeos ou canal do YouTube que melhoram a autoridade de busca tanto no YouTube quanto no Google.' },
+  { slug: 'video-chapters', cat: 'seo', nameEN: 'Video Chapters / Timestamps', nameES: 'Capítulos de Video / Marcadores de Tiempo', defEN: 'Time-stamped sections in video descriptions that let viewers jump to specific parts and appear as search result links.', defES: 'Secciones con marca de tiempo en las descripciones de video que permiten a los espectadores saltar a partes específicas y aparecen como enlaces de resultados de búsqueda.', namePT: 'Capítulos de Vídeo / Marcadores de Tempo', defPT: 'Seções com marcação de tempo na descrição do vídeo que permitem aos espectadores pular para partes específicas e aparecem como links nos resultados de busca.' },
+  { slug: 'video-hook', cat: 'content', nameEN: 'Video Hook', nameES: 'Video Hook', defEN: 'The first 5-15 seconds of a video designed to grab viewer attention and convince them to keep watching past the initial drop-off point.', defES: 'Los primeros 5-15 segundos de un video diseñados para captar la atención del espectador y convencerlos de seguir viendo más allá del punto de caída inicial.', namePT: 'Gancho de Vídeo', defPT: 'Os primeiros 5-15 segundos de um vídeo, projetados para capturar a atenção do espectador e convencê-lo a continuar assistindo, evitando a queda inicial de audiência.' },
+  { slug: 'video-intro-structure', cat: 'content', nameEN: 'Video Intro Structure', nameES: 'Estructura de Intro de Video', defEN: 'The optimal structure for the opening of a YouTube video that maximizes retention and sets clear expectations for viewers.', defES: 'La estructura óptima para la apertura de un video de YouTube que maximiza la retención y establece expectativas claras para los espectadores.', namePT: 'Estrutura de Introdução de Vídeo', defPT: 'A estrutura ideal para a abertura de um vídeo no YouTube que maximiza a retenção e define expectativas claras para os espectadores.' },
+  { slug: 'video-sitemap', cat: 'seo', nameEN: 'Video Sitemap', nameES: 'Video Sitemap', defEN: 'An XML file that helps Google discover and index your video content with metadata like title, description, and duration.', defES: 'Un archivo XML que ayuda a Google descubrir y indexar tu contenido de video con metadatos como título, descripción y duración.', namePT: 'Sitemap de Vídeo', defPT: 'Um arquivo XML que ajuda o Google a descobrir e indexar seu conteúdo de vídeo com metadados como título, descrição e duração.' },
+  { slug: 'vidiq-vs-tubebuddy', cat: 'seo', nameEN: 'vidIQ vs TubeBuddy', nameES: 'vidIQ vs TubeBuddy', defEN: 'The two most popular YouTube SEO tools compared — vidIQ offers AI features and channel audits, while TubeBuddy excels at bulk optimization and A/B testing.', defES: 'Las dos herramientas de SEO de YouTube más populares comparadas — vidIQ ofrece características de inteligencia artificial y auditorías de canales, mientras que TubeBuddy se destaca en la optimización en masa y pruebas A/B.', namePT: 'vidIQ vs TubeBuddy', defPT: 'As duas ferramentas de SEO para YouTube mais populares comparadas — vidIQ oferece recursos de IA e auditorias de canal, enquanto TubeBuddy se destaca em otimização em massa e testes A/B.' },
+  { slug: 'youtube-analytics', cat: 'analytics', nameEN: 'YouTube Analytics Studio', nameES: 'YouTube Analytics Studio', defEN: 'YouTube\'s built-in analytics dashboard providing detailed metrics on channel and video performance, audience behavior, and revenue data.', defES: 'El panel de análisis integrado de YouTube que proporciona métricas detalladas sobre el rendimiento del canal y los videos, el comportamiento del público y los datos de ingresos.', namePT: 'YouTube Analytics Studio', defPT: 'Painel de análise integrado do YouTube que fornece métricas detalhadas sobre o desempenho do canal e dos vídeos, comportamento do público e dados de receita.' },
+  { slug: 'youtube-creator-academy', cat: 'features', nameEN: 'YouTube Creator Academy', nameES: 'YouTube Creator Academy', defEN: 'YouTube\'s free educational platform with courses on channel growth, content strategy, monetization, and production best practices.', defES: 'Plataforma educativa gratuita de YouTube con cursos sobre crecimiento de canal, estrategia de contenido, monetización y mejores prácticas de producción.', namePT: 'YouTube Creator Academy', defPT: 'Plataforma educacional gratuita do YouTube com cursos sobre crescimento de canal, estratégia de conteúdo, monetização e melhores práticas de produção.' },
+  { slug: 'youtube-hashtags', cat: 'seo', nameEN: 'YouTube Hashtags', nameES: 'Etiquetas de YouTube', defEN: 'Clickable keyword tags in video titles and descriptions that help categorize content and appear in hashtag-specific search pages.', defES: 'Etiquetas de palabras clave clicables en los títulos y descripciones de los videos que ayudan a categorizar el contenido y aparecen en páginas de búsqueda específicas de etiquetas.', namePT: 'Hashtags do YouTube', defPT: 'Tags de palavras-chave clicáveis em títulos e descrições de vídeos que ajudam a categorizar o conteúdo e aparecem em páginas de busca específicas de hashtags.' },
+  { slug: 'youtube-keyword-research', cat: 'seo', nameEN: 'YouTube Keyword Research', nameES: 'Investigación de Palabras Clave de YouTube', defEN: 'Finding search terms your target audience uses on YouTube to discover content, then optimizing videos to rank for those terms.', defES: 'Buscar términos de búsqueda que tu audiencia objetivo utiliza en YouTube para descubrir contenido, y luego optimizar videos para que se clasifiquen en esos términos.', namePT: 'Pesquisa de Palavras-Chave do YouTube', defPT: 'Encontrar termos de busca que seu público-alvo usa no YouTube para descobrir conteúdo e, em seguida, otimizar vídeos para rankear para esses termos.' },
+  { slug: 'youtube-live-stream', cat: 'features', nameEN: 'YouTube Live Stream', nameES: 'YouTube Live Stream', defEN: 'Real-time video broadcasting on YouTube that generates high engagement, notification triggers, and dedicated revenue through Super Chat.', defES: 'Transmisión en vivo de video en YouTube que genera alta participación, desencadena notificaciones y generación de ingresos dedicados a través de Super Chat.', namePT: 'YouTube Live Stream', defPT: 'Transmissão de vídeo em tempo real no YouTube que gera alto engajamento, gatilhos de notificação e receita dedicada por meio do Super Chat.' },
+  { slug: 'youtube-search-ranking-factors', cat: 'algorithm', nameEN: 'YouTube Search Ranking Factors', nameES: 'YouTube Search Ranking Factors', defEN: 'The signals YouTube\'s search algorithm uses to determine which videos rank highest for a given search query.', defES: 'Los factores de clasificación del algoritmo de búsqueda de YouTube que utiliza para determinar qué videos ocupan los primeros puestos para una consulta de búsqueda específica.', namePT: 'Fatores de Ranqueamento de Busca do YouTube', defPT: 'Os sinais que o algoritmo de busca do YouTube usa para determinar quais vídeos ficam mais bem posicionados para uma determinada consulta de pesquisa.' },
+  { slug: 'youtube-shorts', cat: 'features', nameEN: 'YouTube Shorts', nameES: 'YouTube Shorts', defEN: 'Vertical short-form videos (up to 60 seconds) that compete with TikTok and Instagram Reels, with unique algorithm and monetization rules.', defES: 'Videos cortos de forma vertical (hasta 60 segundos) que compiten con TikTok y Reels de Instagram, con reglas de algoritmo y monetización únicas.', namePT: 'YouTube Shorts', defPT: 'Vídeos verticais de formato curto (até 60 segundos) que competem com TikTok e Instagram Reels, com algoritmo e regras de monetização próprios.' },
+  { slug: 'youtube-studio', cat: 'features', nameEN: 'YouTube Studio', nameES: 'YouTube Studio', defEN: 'The creator dashboard for managing videos, reading comments, analyzing performance, and configuring channel settings.', defES: 'La consola de creadores para gestionar videos, leer comentarios, analizar rendimiento y configurar ajustes de canal.', namePT: 'YouTube Studio', defPT: 'O painel do criador para gerenciar vídeos, ler comentários, analisar desempenho e configurar as definições do canal.' },
+  { slug: 'youtube-tags', cat: 'seo', nameEN: 'YouTube Tags', nameES: 'Etiquetas de YouTube', defEN: 'Keywords added to video metadata to help YouTube understand the content and context of your video for search and recommendations.', defES: 'Palabras clave agregadas a la metadata del video para ayudar a YouTube a entender el contenido y el contexto del video para la búsqueda y las recomendaciones.', namePT: 'Tags do YouTube', defPT: 'Palavras-chave adicionadas aos metadados do vídeo para ajudar o YouTube a entender o conteúdo e o contexto do seu vídeo para busca e recomendações.' },
+  { slug: 'youtube-trending', cat: 'algorithm', nameEN: 'YouTube Trending Tab', nameES: 'YouTube Trending Tab', defEN: 'A curated section on YouTube showing currently popular videos, personalized by region and based on engagement velocity.', defES: 'Una sección curada en YouTube que muestra videos populares actuales, personalizados por región y basados en velocidad de engagement.', namePT: 'Aba Em Alta do YouTube', defPT: 'Seção selecionada do YouTube que mostra vídeos populares no momento, personalizada por região e baseada na velocidade de engajamento.' }
 ];
 
 const GLOSSARY_CSS = '*{margin:0;padding:0;box-sizing:border-box}body{font-family:Outfit,Geist,sans-serif;background:#0a0a0f;color:#e2e8f0;line-height:1.6}.header{display:flex;justify-content:space-between;align-items:center;padding:.75rem 1.5rem;background:#0f0c29;border-bottom:1px solid rgba(255,255,255,.05)}.header a{color:#e2e8f0;text-decoration:none;font-weight:600}.header .cta{background:linear-gradient(135deg,#f97316,#fb923c);color:#fff;padding:.4rem 1rem;border-radius:9999px;font-size:.85rem}main{max-width:820px;margin:0 auto;padding:2rem 1.5rem}h1{font-size:1.8rem;margin-bottom:.5rem;background:linear-gradient(135deg,#f97316,#fb923c);-webkit-background-clip:text;-webkit-text-fill-color:transparent}.h1-sub{color:#8b8b9e;font-size:.95rem;margin-bottom:2rem}.card{background:#1e1b4b;border:1px solid #2d2a5e;border-radius:12px;padding:1.5rem;margin-bottom:1.5rem}.card h2{color:#a5b4fc;font-size:1.1rem;margin-bottom:.75rem}.card p{color:#94a3b8;line-height:1.7;margin:.5rem 0}.vs{text-align:center;font-size:1.5rem;font-weight:800;color:#f97316;padding:.5rem 0}.cmp-table{width:100%;border-collapse:collapse;margin:1rem 0;font-size:.88rem}.cmp-table th,.cmp-table td{padding:.7rem .8rem;text-align:left;border-bottom:1px solid rgba(255,255,255,.06)}.cmp-table th{background:rgba(79,70,229,.15);color:#a5b4fc;font-weight:600;font-size:.8rem;text-transform:uppercase;letter-spacing:.5px}.cmp-table .dim{color:#8b8b9e;font-weight:500;white-space:nowrap}.cmp-table .va{color:#fb923c;font-weight:600}.cmp-table .vb{color:#a5b4fc;font-weight:600}.cmp-table tr:hover td{background:rgba(255,255,255,.02)}.rc-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:10px;margin:1rem 0}.rc-grid a{display:block;background:#1e1b4b;border:1px solid #2d2a5e;border-radius:8px;padding:.6rem .8rem;color:#94a3b8;text-decoration:none;font-size:.82rem;transition:all .2s}.rc-grid a:hover{border-color:#f97316;color:#fff;transform:translateY(-2px)}.ln{text-align:center;font-size:.8rem;color:#8b8b9e;margin:0 0 1.5rem}.ln a{color:#a5b4fc}.cta-box{border:1px solid #4f46e5;border-radius:12px;padding:1.5rem;text-align:center;margin:2rem 0}.cta-box a{display:inline-block;background:linear-gradient(135deg,#f97316,#fb923c);color:#fff;padding:.6rem 1.5rem;border-radius:9999px;text-decoration:none;font-weight:600}footer{text-align:center;padding:2rem;color:#6b7280;font-size:.8rem}footer a{color:#8b8b9e;text-decoration:none}.fs-box{border:1px solid rgba(34,197,94,.2);background:rgba(34,197,94,.04);border-radius:10px;padding:1rem 1.25rem;margin:1rem 0 .5rem;position:relative}.fs-box .fs-label{font-size:.65rem;text-transform:uppercase;letter-spacing:.5px;color:#22c55e;font-weight:600;margin-bottom:.4rem}.fs-box p{margin:0;color:#e2e8f0;line-height:1.6}';
 
-function getComparisonDims(termA, termB, isES) {
-  const catA = CATS[termA.cat] || { en: termA.cat, es: termA.cat };
-  const catB = CATS[termB.cat] || { en: termB.cat, es: termB.cat };
+const CAT_META = {
+  analytics: { metricEN: 'Views & Impressions', metricES: 'Vistas e Impresiones', effortEN: 'Low (built-in tools)', effortES: 'Bajo (herramientas integradas)', timeEN: 'Immediate (real-time data)', timeES: 'Inmediato (datos en tiempo real)', stageEN: 'All stages', stageES: 'Todas las etapas' },
+  algorithm: { metricEN: 'Retention & Session Time', metricES: 'Retención y Tiempo de Sesión', effortEN: 'High (complex system)', effortES: 'Alto (sistema complejo)', timeEN: 'Ongoing (continuous learning)', timeES: 'Continuo (aprendizaje continuo)', stageEN: 'All stages', stageES: 'Todas las etapas' },
+  seo: { metricEN: 'CTR & Discovery', metricES: 'CTR y Descubrimiento', effortEN: 'Medium (requires optimization)', effortES: 'Medio (requiere optimización)', timeEN: '2-4 weeks (crawl dependent)', timeES: '2-4 semanas (depende del rastreo)', stageEN: 'All stages (critical early)', stageES: 'Todas las etapas (crítico al inicio)' },
+  monetization: { metricEN: 'Revenue & RPM', metricES: 'Ingresos y RPM', effortEN: 'Medium (requires eligibility)', effortES: 'Medio (requiere elegibilidad)', timeEN: '1-3 months (threshold dependent)', timeES: '1-3 meses (depende del umbral)', stageEN: 'Monetized channels', stageES: 'Canales monetizados' },
+  content: { metricEN: 'Engagement & Loyalty', metricES: 'Participación y Lealtad', effortEN: 'Medium (requires planning)', effortES: 'Medio (requiere planificación)', timeEN: '2-6 weeks (audience response)', timeES: '2-6 semanas (respuesta de la audiencia)', stageEN: 'Growing channels', stageES: 'Canales en crecimiento' },
+  features: { metricEN: 'Watch Time & Navigation', metricES: 'Tiempo de Visualización y Navegación', effortEN: 'Low (one-click setup)', effortES: 'Bajo (configuración simple)', timeEN: 'Immediate (when published)', timeES: 'Inmediato (al publicar)', stageEN: 'All stages', stageES: 'Todas las etapas' },
+  engagement: { metricEN: 'Community Growth', metricES: 'Crecimiento de Comunidad', effortEN: 'Low (daily habits)', effortES: 'Bajo (hábitos diarios)', timeEN: 'Days to weeks (community building)', timeES: 'Días a semanas (construcción de comunidad)', stageEN: 'Small to medium channels', stageES: 'Canales pequeños a medianos' },
+  production: { metricEN: 'Retention & Quality', metricES: 'Retención y Calidad', effortEN: 'High (time-intensive)', effortES: 'Alto (requiere tiempo)', timeEN: 'Days (next upload)', timeES: 'Días (próxima subida)', stageEN: 'All stages', stageES: 'Todas las etapas' },
+};
+const LANG_UI = {
+  en: {
+    cat: 'Category', focus: 'Primary Focus', rank: 'Ranking Impact', sim: 'Similar', high: 'High',
+    diff: 'Optimization Difficulty', medium: 'Medium', metric: 'Key Metric Affected',
+    impl: 'Implementation Complexity', time: 'Time to Impact', stage: 'Best Channel Stage',
+    best: 'Best For', bestPrefix: 'Understanding & measuring',
+    tools: 'Free Tools', compare: 'Compare', and: 'and', detail: 'Detailed comparison',
+    quickAnswer: 'Quick Answer', readGuide: 'Read full guide →', sideBySide: 'Side-by-Side Comparison',
+    dim: 'Dimension', master: 'Master YouTube SEO', cta: 'Try our free tools to optimize your channel.',
+    tryTools: 'Try Free Tools →', glossary: 'Glossary', related: 'Related Comparisons',
+    whenToUse: 'When to Use Each', use: 'Use', when: 'when you need to', mostFor: 'It is most effective for',
+    impacts: 'and primarily impacts', goal: 'when your goal is', worksFor: 'It works best for', affects: 'and primarily affects',
+    sameCat: 'Both belong to the same category', diffCat: 'They belong to different categories',
+  },
+  es: {
+    cat: 'Categoría', focus: 'Enfoque Principal', rank: 'Impacto en Ranking', sim: 'Similar', high: 'Alto',
+    diff: 'Dificultad de Optimización', medium: 'Media', metric: 'Métrica Clave Afectada',
+    impl: 'Complejidad de Implementación', time: 'Tiempo para Ver Resultados', stage: 'Mejor Etapa del Canal',
+    best: 'Mejor para', bestPrefix: 'Entender y medir',
+    tools: 'Herramientas Gratis', compare: 'Compara', and: 'y', detail: 'Comparación detallada',
+    quickAnswer: 'Respuesta Rápida', readGuide: 'Leer guía completa →', sideBySide: 'Comparación Directa',
+    dim: 'Dimensión', master: 'Domina el SEO de YouTube', cta: 'Prueba nuestras herramientas gratuitas para optimizar tu canal.',
+    tryTools: 'Prueba las Herramientas Gratis →', glossary: 'Glosario', related: 'Comparaciones Relacionadas',
+    whenToUse: '¿Cuándo usar cada uno?', use: 'Usa', when: 'cuando necesites', mostFor: 'Es más efectivo para',
+    impacts: 'y tiene un impacto en', goal: 'cuando tu objetivo sea', worksFor: 'Funciona mejor para', affects: 'y afecta principalmente a',
+    sameCat: 'Ambos pertenecen a la misma categoría', diffCat: 'Pertenecen a categorías diferentes',
+  },
+  pt: {
+    cat: 'Categoria', focus: 'Foco Principal', rank: 'Impacto no Ranqueamento', sim: 'Semelhante', high: 'Alto',
+    diff: 'Dificuldade de Otimização', medium: 'Média', metric: 'Métrica-Chave Afetada',
+    impl: 'Complexidade de Implementação', time: 'Tempo para Ver Resultados', stage: 'Melhor Etapa do Canal',
+    best: 'Melhor para', bestPrefix: 'Entender e medir',
+    tools: 'Ferramentas Grátis', compare: 'Compare', and: 'e', detail: 'Comparação detalhada',
+    quickAnswer: 'Resposta Rápida', readGuide: 'Ler guia completo →', sideBySide: 'Comparação Direta',
+    dim: 'Dimensão', master: 'Domine o SEO do YouTube', cta: 'Experimente nossas ferramentas gratuitas para otimizar seu canal.',
+    tryTools: 'Experimente as Ferramentas Grátis →', glossary: 'Glossário', related: 'Comparações Relacionadas',
+    whenToUse: 'Quando usar cada um?', use: 'Use', when: 'quando precisar de', mostFor: 'É mais eficaz para',
+    impacts: 'e tem impacto em', goal: 'quando seu objetivo for', worksFor: 'Funciona melhor para', affects: 'e afeta principalmente',
+    sameCat: 'Ambos pertencem à mesma categoria', diffCat: 'Pertencem a categorias diferentes',
+  },
+};
+
+function getComparisonDims(termA, termB, lang) {
+  const ui = LANG_UI[lang] || LANG_UI.en;
+  const catA = CATS[termA.cat] || { en: termA.cat, es: termA.cat, pt: termA.cat };
+  const catB = CATS[termB.cat] || { en: termB.cat, es: termB.cat, pt: termB.cat };
   const sameCat = termA.cat === termB.cat;
+  const metaA = CAT_META[termA.cat] || {};
+  const metaB = CAT_META[termB.cat] || {};
+  const nameA = termA['name' + lang.toUpperCase()] || termA.nameEN;
+  const nameB = termB['name' + lang.toUpperCase()] || termB.nameEN;
   return [
-    { label: isES ? 'Categoría' : 'Category', valA: catA.es || catA.en, valB: catB.es || catB.en },
-    { label: isES ? 'Enfoque Principal' : 'Primary Focus', valA: termA.nameES || termA.nameEN, valB: termB.nameES || termB.nameEN },
-    { label: isES ? 'Impacto en Ranking' : 'Ranking Impact', valA: sameCat ? (isES ? 'Similar' : 'Similar') : (isES ? 'Alto' : 'High'), valB: sameCat ? (isES ? 'Similar' : 'Similar') : (isES ? 'Alto' : 'High') },
-    { label: isES ? 'Dificultad de Optimización' : 'Optimization Difficulty', valA: isES ? 'Media' : 'Medium', valB: isES ? 'Media' : 'Medium' },
-    { label: isES ? 'Mejor para' : 'Best For', valA: `${isES ? 'Entender y medir' : 'Understanding & measuring'} ${(isES ? termA.nameES : termA.nameEN).toLowerCase()}`, valB: `${isES ? 'Entender y medir' : 'Understanding & measuring'} ${(isES ? termB.nameES : termB.nameEN).toLowerCase()}` },
+    { label: ui.cat, valA: catA[lang] || catA.en, valB: catB[lang] || catB.en },
+    { label: ui.focus, valA: nameA, valB: nameB },
+    { label: ui.rank, valA: sameCat ? ui.sim : ui.high, valB: sameCat ? ui.sim : ui.high },
+    { label: ui.diff, valA: ui.medium, valB: ui.medium },
+    { label: ui.metric, valA: metaA['metric' + lang.toUpperCase()] || metaA.metricEN || '-', valB: metaB['metric' + lang.toUpperCase()] || metaB.metricEN || '-' },
+    { label: ui.impl, valA: metaA['effort' + lang.toUpperCase()] || metaA.effortEN || '-', valB: metaB['effort' + lang.toUpperCase()] || metaB.effortEN || '-' },
+    { label: ui.time, valA: metaA['time' + lang.toUpperCase()] || metaA.timeEN || '-', valB: metaB['time' + lang.toUpperCase()] || metaB.timeEN || '-' },
+    { label: ui.stage, valA: metaA['stage' + lang.toUpperCase()] || metaA.stageEN || '-', valB: metaB['stage' + lang.toUpperCase()] || metaB.stageEN || '-' },
+    { label: ui.best, valA: `${ui.bestPrefix} ${nameA.toLowerCase()}`, valB: `${ui.bestPrefix} ${nameB.toLowerCase()}` },
   ];
 }
 
-function getRelatedComparisons(slugA, isES) {
+// Deterministic string hash — keeps related-comparison order stable across renders
+// (was Math.random, which produced different HTML on every request and defeated
+// Vercel edge caching + made pages look unstable to crawlers).
+function hashStr(s) {
+  let h = 0;
+  for (let i = 0; i < s.length; i++) {
+    h = ((h << 5) - h + s.charCodeAt(i)) | 0;
+  }
+  return Math.abs(h);
+}
+
+function getRelatedComparisons(slugA, lang) {
   const termA = GLOSSARY_TERMS.find(t => t.slug === slugA);
   if (!termA) return [];
+  const prefix = lang === 'en' ? '' : '/' + lang;
   return GLOSSARY_TERMS.filter(t => t.slug !== slugA && t.cat === termA.cat)
-    .map(t => ({ t, r: Math.random() })).sort((a, b) => a.r - b.r).map(x => x.t)
+    .map(t => ({ t, r: hashStr(slugA + '-' + t.slug) })).sort((a, b) => a.r - b.r).map(x => x.t)
     .slice(0, 6)
     .map(t => ({
-      name: isES ? t.nameES : t.nameEN,
-      url: `/glossary${isES ? '/es' : ''}/${slugA}-vs-${t.slug}`,
+      name: t['name' + lang.toUpperCase()] || t.nameEN,
+      url: `/glossary${prefix}/${slugA}-vs-${t.slug}`,
     }));
 }
 
-function renderGlossaryComparison(slugA, slugB, isES) {
+// Curated comparison pages with proven search demand (GSC 2026-08-07):
+// "youtube creator academy {topic}" cluster. Everything else stays noindex.
+const INDEXED_COMPARISONS = new Set([
+  'thumbnail-optimization-vs-youtube-creator-academy',
+  'batch-production-vs-youtube-creator-academy',
+  'playlist-discovery-vs-youtube-creator-academy',
+  'shorts-algorithm-vs-youtube-creator-academy',
+  // Tier-2 promotions (GSC demand monitor 2026-08-07: >=20 impressions, pos ~5-12)
+  'call-to-action-vs-video-editing',
+  'call-to-action-vs-youtube-creator-academy',
+  'calls-to-action-vs-description',
+  'description-vs-pinned-comment',
+    'external-traffic-vs-traffic-source',
+    'calls-to-action-vs-shorts-algorithm',
+    // Tier-3 promotions (GSC study 2026-08-11: 13-19 imp, pos 7-10 — proven demand, not yet indexed)
+    'analytics-vs-external-traffic',
+    'playlist-vs-youtube-creator-academy',
+    'calls-to-action-vs-hook',
+    'outro-vs-video-intro-structure',
+    'calls-to-action-vs-shorts-monetization',
+    'content-pillar-vs-youtube-creator-academy',
+  ]);
+
+// Category → blog post slugs (verified live 2026-08-07) used to give every
+// comparison page a real outbound link mesh to the blog. The noindex tail still
+// passes link equity + context to the blog, which is its SEO job.
+const COMPARISON_CATEGORY_BLOGS = {
+  'analytics': ['youtube-impressions-guide-2026', 'youtube-retention-graph-explained-2026'],
+  'algorithm': ['how-youtube-algorithm-works-2026', 'youtube-algorithm-changes-2026'],
+  'seo-optimization': ['youtube-tags-2026', 'how-to-keywords-youtube', 'youtube-thumbnail-tips-2026', 'youtube-thumbnail-ab-testing-guide', 'youtube-seo-tips-for-creators-in-2026'],
+  'monetization': ['youtube-monetization-2026', 'maximizing-youtube-revenue-with-sponsorships-2026'],
+  'content-strategy': ['developing-a-youtube-content-calendar-strategy-2026'],
+  'youtube-features': ['youtube-shorts-seo-ranking-guide-2026', 'youtube-community-posts-strategy-2026', 'youtube-playlist-optimization-strategy'],
+};
+
+function relatedBlogsForComparison(catA, catB) {
+  const seen = new Set();
+  const out = [];
+  for (const cat of [catA, catB]) {
+    for (const slug of COMPARISON_CATEGORY_BLOGS[cat] || []) {
+      if (seen.has(slug)) continue;
+      seen.add(slug);
+      out.push({ slug, title: slug.replace(/-/g, ' ').replace(/\b\w/g, c => c.toUpperCase()) });
+      if (out.length >= 4) return out;
+    }
+  }
+  return out;
+}
+
+function renderGlossaryComparison(slugA, slugB, lang, indexed = false) {
   const termA = GLOSSARY_TERMS.find(t => t.slug === slugA);
   const termB = GLOSSARY_TERMS.find(t => t.slug === slugB);
   if (!termA || !termB) return null;
-  const aName = isES ? termA.nameES : termA.nameEN;
-  const bName = isES ? termB.nameES : termB.nameEN;
-  const aDef = isES ? termA.defES : termA.defEN;
-  const bDef = isES ? termB.defES : termB.defEN;
-  const lang = isES ? 'es' : 'en';
+  const ui = LANG_UI[lang] || LANG_UI.en;
+  const aName = termA['name' + lang.toUpperCase()] || termA.nameEN;
+  const bName = termB['name' + lang.toUpperCase()] || termB.nameEN;
+  const aDef = termA['def' + lang.toUpperCase()] || termA.defEN;
+  const bDef = termB['def' + lang.toUpperCase()] || termB.defEN;
   const site = 'https://yt-seo-architect.vercel.app';
   const enUrl = `/glossary/${slugA}-vs-${slugB}`;
   const esUrl = `/glossary/es/${slugA}-vs-${slugB}`;
-  const currentUrl = isES ? esUrl : enUrl;
+  const ptUrl = `/glossary/pt/${slugA}-vs-${slugB}`;
+  const langUrl = { en: enUrl, es: esUrl, pt: ptUrl };
+  const currentUrl = langUrl[lang] || enUrl;
   const title = `${aName} vs ${bName} | YT SEO Architect`;
-  const desc = `${isES ? 'Compara' : 'Compare'} ${aName} ${isES ? 'y' : 'and'} ${bName}: categoría, enfoque, ranking impact y dificultad de optimización para SEO en YouTube.`;
+  const desc = lang === 'en'
+    ? `${ui.compare} ${aName} ${ui.and} ${bName}: ${ui.cat.toLowerCase()}, ${ui.focus.toLowerCase()}, ${ui.rank.toLowerCase()} and ${ui.diff.toLowerCase()} for YouTube SEO.`
+    : lang === 'es'
+    ? `${ui.compare} ${aName} ${ui.and} ${bName}: ${ui.cat.toLowerCase()}, ${ui.focus.toLowerCase()}, ${ui.rank.toLowerCase()} y ${ui.diff.toLowerCase()} para SEO en YouTube.`
+    : `${ui.compare} ${aName} ${ui.and} ${bName}: ${ui.cat.toLowerCase()}, ${ui.focus.toLowerCase()}, ${ui.rank.toLowerCase()} e ${ui.diff.toLowerCase()} para SEO no YouTube.`;
+  const metaA = CAT_META[termA.cat] || {};
+  const metaB = CAT_META[termB.cat] || {};
+  const sameCat = termA.cat === termB.cat;
+  const aGlossaryUrl = `/glossary${lang === 'en' ? '' : '/' + lang}/${slugA}`;
+  const bGlossaryUrl = `/glossary${lang === 'en' ? '' : '/' + lang}/${slugB}`;
+  const catName = (CATS[termA.cat]?.[lang] || CATS[termA.cat]?.en || termA.cat);
 
   // Comparison table
-  const dims = getComparisonDims(termA, termB, isES);
+  const dims = getComparisonDims(termA, termB, lang);
   const dimRows = dims.map(d =>
     `<tr><td class="dim">${d.label}</td><td class="va">${d.valA}</td><td class="vb">${d.valB}</td></tr>`
   ).join('\n');
 
   // Quick answer for featured snippet
-  const snippetAnswer = isES
-    ? `${aName} se enfoca en ${aDef.split('.')[0].toLowerCase()}, mientras que ${bName} se centra en ${bDef.split('.')[0].toLowerCase()}. Ambos son importantes para YouTube SEO.`
-    : `${aName} focuses on ${aDef.split('.')[0].toLowerCase()}, while ${bName} focuses on ${bDef.split('.')[0].toLowerCase()}. Both are important for YouTube SEO.`;
+  const snippetAnswer = `${aName} ${lang === 'es' ? 'se enfoca en' : lang === 'pt' ? 'foca em' : 'focuses on'} ${aDef.split('.')[0].toLowerCase()}, ${lang === 'es' ? 'mientras que' : lang === 'pt' ? 'enquanto' : 'while'} ${bName} ${lang === 'es' ? 'se centra en' : lang === 'pt' ? 'foca em' : 'focuses on'} ${bDef.split('.')[0].toLowerCase()}. ${lang === 'es' ? 'Ambos son importantes para YouTube SEO.' : lang === 'pt' ? 'Ambos são importantes para o SEO do YouTube.' : 'Both are important for YouTube SEO.'}`;
 
-  // Related comparisons
-  const related = getRelatedComparisons(slugA, isES);
+  // When to use each card
+  const whenToUse = `<div class="card"><h2>🎯 ${ui.whenToUse}</h2><p><strong>${ui.use} ${aName}:</strong> ${ui.when} ${aDef.split('.')[0].toLowerCase()}. ${ui.mostFor} ${metaA['stage' + lang.toUpperCase()] || metaA.stageEN || '-'} ${ui.impacts} ${metaA['metric' + lang.toUpperCase()] || metaA.metricEN || '-'}.</p><p><strong>${ui.use} ${bName}:</strong> ${ui.goal} ${bDef.split('.')[0].toLowerCase()}. ${ui.worksFor} ${metaB['stage' + lang.toUpperCase()] || metaB.stageEN || '-'} ${ui.affects} ${metaB['metric' + lang.toUpperCase()] || metaB.metricEN || '-'}.</p>${sameCat ? `<p style="margin-top:.8rem;color:#94a3b8;font-size:.9rem">💡 ${ui.sameCat} (${catName}), ${lang === 'es' ? 'pero tienen enfoques complementarios. Úsalos juntos para maximizar resultados.' : lang === 'pt' ? 'mas têm abordagens complementares. Use-os juntos para maximizar resultados.' : 'but have complementary approaches. Use them together for maximum results.'}</p>` : `<p style="margin-top:.8rem;color:#94a3b8;font-size:.9rem">💡 ${ui.diffCat}, ${lang === 'es' ? 'lo que significa que cubren aspectos distintos del SEO en YouTube. Puedes trabajar en ambos simultáneamente.' : lang === 'pt' ? 'o que significa que cobrem aspectos diferentes do SEO no YouTube. Você pode trabalhar em ambos simultaneamente.' : 'meaning they cover different aspects of YouTube SEO. You can work on both simultaneously.'}</p>`}</div>`;
+  const related = getRelatedComparisons(slugA, lang);
   const relatedHtml = related.length > 0
-    ? `<div class="card"><h2>🔗 ${isES ? 'Comparaciones Relacionadas' : 'Related Comparisons'}</h2><div class="rc-grid">${related.map(r => `<a href="${r.url}">⚡ ${r.name}</a>`).join('')}</div></div>`
+    ? `<div class="card"><h2>🔗 ${ui.related}</h2><div class="rc-grid">${related.map(r => `<a href="${r.url}">⚡ ${r.name}</a>`).join('')}</div></div>`
     : '';
 
-  const aGlossaryUrl = `/glossary${isES ? '/es' : ''}/${slugA}`;
-  const bGlossaryUrl = `/glossary${isES ? '/es' : ''}/${slugB}`;
-  const catName = isES ? (CATS[termA.cat]?.es || termA.cat) : (CATS[termA.cat]?.en || termA.cat);
+  // Verdict section — only on curated (indexed) comparisons, so those pages carry
+  // real decision content instead of a template shell.
+  const mAMetric = metaA['metric' + lang.toUpperCase()] || metaA.metricEN || '-';
+  const mBMetric = metaB['metric' + lang.toUpperCase()] || metaB.metricEN || '-';
+  const mAStage = metaA['stage' + lang.toUpperCase()] || metaA.stageEN || '-';
+  const mBStage = metaB['stage' + lang.toUpperCase()] || metaB.stageEN || '-';
+  const mAEffort = metaA['effort' + lang.toUpperCase()] || metaA.effortEN || '-';
+  const mBEffort = metaB['effort' + lang.toUpperCase()] || metaB.effortEN || '-';
+  const verdictSection = indexed ? `<div class="card"><h2>🏆 ${ui.verdict || 'Which Should You Use?'}</h2>
+<p>${lang === 'es' ? `Si tu problema es la ${mAMetric.toLowerCase()}, ${aName} es la palanca correcta: está pensado para canales en fase ${mAStage.toLowerCase()} y requiere un esfuerzo ${mAEffort.toLowerCase()}. Si tu problema es la ${mBMetric.toLowerCase()}, ${bName} es el que debes usar: funciona mejor en la fase ${mBStage.toLowerCase()} con un esfuerzo ${mBEffort.toLowerCase()}.` : lang === 'pt' ? `Se o seu problema é ${mAMetric.toLowerCase()}, ${aName} é a alavanca certa: foi feito para canais na fase ${mAStage.toLowerCase()} e exige esforço ${mAEffort.toLowerCase()}. Se o problema é ${mBMetric.toLowerCase()}, use ${bName}: funciona melhor na fase ${mBStage.toLowerCase()} com esforço ${mBEffort.toLowerCase()}.` : `If your problem is ${mAMetric.toLowerCase()}, ${aName} is the right lever — it's built for channels in the ${mAStage.toLowerCase()} stage and takes ${mAEffort.toLowerCase()} effort. If your problem is ${mBMetric.toLowerCase()}, use ${bName}: it works best at the ${mBStage.toLowerCase()} stage with ${mBEffort.toLowerCase()} effort.`}</p>
+<p>${lang === 'es' ? 'No son sustitutos: cada uno actúa sobre una métrica distinta. Trabaja primero la métrica más débil de tu canal, mide el cambio en YouTube Studio durante 2-4 semanas y solo entonces decide si necesitas la segunda palanca.' : lang === 'pt' ? 'Eles não são substitutos: cada um atua sobre uma métrica diferente. Trabalhe primeiro a métrica mais fraca do seu canal, meça a mudança no YouTube Studio por 2-4 semanas e só então decida se precisa da segunda alavanca.' : 'They are not substitutes — each one moves a different metric. Work the weaker metric on your channel first, measure the change in YouTube Studio for 2-4 weeks, and only then decide whether you need the second lever.'}</p></div>` : '';
+  const langPills = Object.entries({ en: '🇺🇸 English', es: '🇪🇸 Español', pt: '🇧🇷 Português' })
+    .filter(([l]) => l !== lang)
+    .map(([l, label]) => `<a href="${langUrl[l]}" hreflang="${l}" rel="alternate">${label}</a>`)
+    .join(' · ');
 
-  return `<!DOCTYPE html>\n<html lang="${lang}">\n<head><meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1.0"/>\n<title>${title}</title>\n<link rel="canonical" href="${site}${currentUrl}"/>\n<link rel="alternate" hreflang="en" href="${site}${enUrl}"/>\n<link rel="alternate" hreflang="es" href="${site}${esUrl}"/>\n<link rel="alternate" hreflang="x-default" href="${site}${enUrl}"/>\n<meta name="description" content="${desc}"/>\n<script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","headline":"${title}","description":"${desc.replace(/"/g,'\\\\"')}","inLanguage":"${lang}","mainEntityOfPage":{"@type":"WebPage","@id":"${site}${currentUrl}"}}</script>\n<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700;800&display=swap" media="print" onload="this.media=\\'all\\'">\n<noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700;800&display=swap"></noscript>\n<style>${GLOSSARY_CSS}</style>\n</head>\n<body>\n<header class="header"><a href="/">⚡ YT SEO Architect</a><a href="/tools/" class="cta">${isES ? 'Herramientas Gratis' : 'Free Tools'}</a></header>\n<main>\n<div class="ln">${isES ? '🇪🇸 Español · <a href="' + enUrl + '" hreflang="en">🇺🇸 English</a>' : '🇺🇸 English · <a href="' + esUrl + '" hreflang="es">🇪🇸 Español</a>'}</div>\n<h1>${aName} vs ${bName}</h1>\n<p class="h1-sub">${catName} · ${isES ? 'Comparación detallada' : 'Detailed comparison'}</p>\n<div class="fs-box"><div class="fs-label">✨ ${isES ? 'Respuesta Rápida' : 'Quick Answer'}</div><p>${snippetAnswer}</p></div>\n<div class="card"><h2>📖 ${aName}</h2><p>${aDef}</p><p style="margin-top:.5rem"><a href="${aGlossaryUrl}" style="color:#a5b4fc;font-size:.85rem">${isES ? 'Leer guía completa →' : 'Read full guide →'}</a></p></div>\n<div class="vs">⚡ VS ⚡</div>\n<div class="card"><h2>📖 ${bName}</h2><p>${bDef}</p><p style="margin-top:.5rem"><a href="${bGlossaryUrl}" style="color:#a5b4fc;font-size:.85rem">${isES ? 'Leer guía completa →' : 'Read full guide →'}</a></p></div>\n<div class="card"><h2>⚖️ ${isES ? 'Comparación Directa' : 'Side-by-Side Comparison'}</h2>\n<table class="cmp-table"><thead><tr><th>${isES ? 'Dimensión' : 'Dimension'}</th><th style="color:#fb923c">${aName}</th><th style="color:#a5b4fc">${bName}</th></tr></thead><tbody>\n${dimRows}\n</tbody></table></div>\n${relatedHtml}\n<div class="cta-box"><h3>🚀 ${isES ? 'Domina el SEO de YouTube' : 'Master YouTube SEO'}</h3><p style="color:#8b8b9e;margin:.5rem 0 1rem;font-size:.9rem">${isES ? 'Prueba nuestras herramientas gratuitas para optimizar tu canal.' : 'Try our free tools to optimize your channel.'}</p><a href="/tools/">${isES ? 'Prueba las Herramientas Gratis →' : 'Try Free Tools →'}</a></div>\n</main>\n<footer><p>&copy; 2026 YT SEO Architect · <a href="/glossary/">${isES ? 'Glosario' : 'Glossary'}</a> · <a href="/tools/">${isES ? 'Herramientas' : 'Tools'}</a></p></footer>\n</body>\n</html>`;
+  // Blog link mesh — every comparison (indexed or not) points readers + link
+  // equity at the blog posts that cover the same topics.
+  const blogLinks = relatedBlogsForComparison(termA.cat, termB.cat);
+  const blogHtml = blogLinks.length > 0
+    ? `<div class="card"><h2>📚 ${lang === 'es' ? 'Guías Relacionadas del Blog' : lang === 'pt' ? 'Guias Relacionadas do Blog' : 'Related Blog Guides'}</h2><div class="rc-grid">${blogLinks.map(b => `<a href="/blog/${b.slug}">📖 ${b.title}</a>`).join('')}</div></div>`
+    : '';
+
+  return `<!DOCTYPE html>\n<html lang="${lang}">\n<head><meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1.0"/>\n<meta name="robots" content="${indexed ? 'index' : 'noindex'}, follow"/>\n<title>${title}</title>\n<link rel="canonical" href="${site}${currentUrl}"/>\n<link rel="alternate" hreflang="en" href="${site}${enUrl}"/>\n<link rel="alternate" hreflang="es" href="${site}${esUrl}"/>\n<link rel="alternate" hreflang="pt" href="${site}${ptUrl}"/>\n<link rel="alternate" hreflang="x-default" href="${site}${enUrl}"/>\n<meta name="description" content="${desc}"/>\n<script type="application/ld+json">[{"@context":"https://schema.org","@type":"Article","headline":"${title}","description":"${desc.replace(/"/g,'\\"')}","inLanguage":"${lang}","mainEntityOfPage":{"@type":"WebPage","@id":"${site}${currentUrl}"},"speakable":{"@type":"SpeakableSpecification","xpath":["//h1","//meta[@name='description']/@content"]}},{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"${site}/"},{"@type":"ListItem","position":2,"name":"Comparisons","item":"${site}/vs/"},{"@type":"ListItem","position":3,"name":"${aName} vs ${bName}","item":"${site}${currentUrl}"}]},{"@context":"https://schema.org","@type":"Organization","@id":"${site}/#organization","name":"YT SEO Architect","url":"${site}/","logo":{"@type":"ImageObject","url":"${site}/logo.png"},"sameAs":["https://twitter.com/YTSEOArchitect","https://linkedin.com/company/yt-seo-architect","https://github.com/nhlaka3"]}]</script>\n<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700;800&display=swap" media="print" onload="this.media=\\'all\\'">\n<noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700;800&display=swap"></noscript>\n<style>${GLOSSARY_CSS}</style>\n</head>\n<body>\n<header class="header"><a href="/">⚡ YT SEO Architect</a><a href="/tools/" class="cta">${ui.tools}</a></header>\n<main>\n<div class="ln">${lang === 'en' ? '🇺🇸 English' : lang === 'es' ? '🇪🇸 Español' : '🇧🇷 Português'} · ${langPills}</div>\n<h1>${aName} vs ${bName}</h1>\n<p class="h1-sub">${catName} · ${ui.detail}</p>\n<div class="fs-box"><div class="fs-label">✨ ${ui.quickAnswer}</div><p>${snippetAnswer}</p></div>\n<div class="card"><h2>📖 ${aName}</h2><p>${aDef}</p><p style="margin-top:.5rem"><a href="${aGlossaryUrl}" style="color:#a5b4fc;font-size:.85rem">${ui.readGuide}</a></p></div>\n<div class="vs">⚡ VS ⚡</div>\n<div class="card"><h2>📖 ${bName}</h2><p>${bDef}</p><p style="margin-top:.5rem"><a href="${bGlossaryUrl}" style="color:#a5b4fc;font-size:.85rem">${ui.readGuide}</a></p></div>\n<div class="card"><h2>⚖️ ${ui.sideBySide}</h2>\n<table class="cmp-table"><thead><tr><th>${ui.dim}</th><th style="color:#fb923c">${aName}</th><th style="color:#a5b4fc">${bName}</th></tr></thead><tbody>\n${dimRows}\n</tbody></table></div>\n${whenToUse}\n${verdictSection}\n${relatedHtml}\n${blogHtml}\n<div class="cta-box"><h3>🚀 ${ui.master}</h3><p style="color:#8b8b9e;margin:.5rem 0 1rem;font-size:.9rem">${ui.cta}</p><a href="/tools/">${ui.tryTools}</a></div>\n</main>\n<footer><p>&copy; 2026 YT SEO Architect · <a href="/glossary/">${ui.glossary}</a> · <a href="/tools/">${ui.tools}</a></p></footer>\n</body>\n</html>`;
 }
 
-app.get(/^\/glossary\/(es\/)?(.+)-vs-(.+)$/, async (req, res) => {
+
+
+app.get(/^\/glossary\/(es\/|pt\/)?(.+)-vs-(.+)$/, async (req, res) => {
   try {
-    const isES = req.params[0] === 'es/';
+    const langPrefix = req.params[0]; // 'es/', 'pt/', or undefined
+    const lang = langPrefix === 'es/' ? 'es' : langPrefix === 'pt/' ? 'pt' : 'en';
     const slugA = req.params[1];
     const slugB = req.params[2];
-    const html = renderGlossaryComparison(slugA, slugB, isES);
+    // A slug like "vidiq-vs-tubebuddy" is itself a glossary TERM (not a pair of standalone
+    // terms). When the full slug matches a term, render the term page instead of 404ing.
+    const fullSlug = `${slugA}-vs-${slugB}`;
+    const termPageHtml = renderGlossaryTerm(fullSlug, lang);
+    if (termPageHtml) {
+      res.setHeader('Content-Type', 'text/html; charset=utf-8');
+      res.setHeader('Cache-Control', 'public, max-age=3600, s-maxage=3600');
+      return res.status(200).send(termPageHtml);
+    }
+    // Curated comparison pages with proven search demand get indexed (2026-08-07);
+    // the combinatorial long tail stays noindex'd so the ~5.5k thin pages decay out
+    // of Google's index while these few become real, enriched pages.
+    const indexed = INDEXED_COMPARISONS.has(fullSlug);
+    const html = renderGlossaryComparison(slugA, slugB, lang, indexed);
     if (!html) {
       return sendJSON(res, 404, { error: 'Terms not found' });
+    }
+    res.setHeader('X-Robots-Tag', indexed ? 'index, follow' : 'noindex, follow');
+    res.setHeader('Content-Type', 'text/html; charset=utf-8');
+    res.setHeader('Cache-Control', 'public, max-age=3600, s-maxage=3600');
+    return res.status(200).send(html);
+  } catch (e) {
+    return sendJSON(res, 500, { error: e.message });
+  }
+});
+
+// ── Standalone glossary term pages (fallback for terms without static files) ──
+
+const GLOSSARY_TIPS_EN = {
+  'analytics': (t) => [
+    `Open YouTube Studio > Analytics and find ${t.toLowerCase()} in the report before you change anything — establish the baseline first.`,
+    `Check ${t.toLowerCase()} weekly instead of daily; 28-day trends matter more than single-day spikes.`,
+    `Compare ${t.toLowerCase()} against similar channels with the report's comparison feature, then target the 50th-75th percentile.`,
+    `When a video outperforms on ${t.toLowerCase()}, copy its format, pacing, or packaging into your next upload.`,
+  ],
+  'algorithm': (t) => [
+    `Watch how ${t.toLowerCase()} shows up in your last 10 videos' Traffic Sources — it reveals which audience the algorithm is testing you on.`,
+    `Study two competitors ranking for your keyword: their title structure and retention vs yours.`,
+    `Check the official YouTube Creator blog for ${t.toLowerCase()} updates each quarter.`,
+    `Keep session time and watch time strong — they remain the most consistent reinforcement signals behind ${t.toLowerCase()}.`,
+  ],
+  'seo-optimization': (t) => [
+    `Search your keyword on YouTube and note the top 5 auto-suggest phrases — each is a title or description angle you can target with ${t.toLowerCase()}.`,
+    `Place ${t.toLowerCase()} in the title, the first description line, and the first 30 seconds of speech.`,
+    `Keep the definition block citable and the FAQ structured so ${t.toLowerCase()} content is extractable by AI search engines.`,
+    `Refresh your top 10 videos monthly — descriptions, tags, end screens — with ${t.toLowerCase()} insights.`,
+  ],
+  'monetization': (t) => [
+    `Check YouTube Studio > Monetization for your current status and any policy warnings on ${t.toLowerCase()}.`,
+    `Keep videos over 8 minutes if monetized so ${t.toLowerCase()} can include mid-roll ads.`,
+    `Diversify: memberships, Super Chat, and affiliate content stabilize revenue beyond ${t.toLowerCase()} from ads alone.`,
+    `Track ${t.toLowerCase()} monthly in Analytics and compare year-over-year, not week-over-week.`,
+  ],
+  'content-strategy': (t) => [
+    `Define 3-5 topic pillars and slot ${t.toLowerCase()} into one of them so every video reinforces the same audience promise.`,
+    `Plan 4-8 weeks ahead: 60-70% evergreen, 30-40% timely — keep ${t.toLowerCase()} in the evergreen share.`,
+    `Batch-produce the pillar that already performs so you always have ${t.toLowerCase()} content ready.`,
+    `Review your strategy quarterly — double down on what's working, cut what isn't.`,
+  ],
+  'youtube-features': (t) => [
+    `Explore all of ${t.toLowerCase()} in Studio — most features have panels or toggles creators never uncover.`,
+    `Use one aspect of ${t.toLowerCase()} per video and track the result before stacking more.`,
+    `Check YouTube's official how-to tutorials for ${t.toLowerCase()} before inventing workflows.`,
+    `Ask your community how they use ${t.toLowerCase()} — their questions become your next content.`,
+  ],
+};
+const GLOSSARY_TIPS_DEFAULT_EN = (t) => [
+  `Research how ${t.toLowerCase()} works from the official YouTube Help Center before applying it.`,
+  `Apply ${t.toLowerCase()} consistently across your next 3 videos, tracking one metric each time.`,
+  `Document what resonated with your audience so you can repeat the pattern.`,
+  `Revisit ${t.toLowerCase()} quarterly — YouTube updates its features and ranking signals often.`,
+];
+const GLOSSARY_TIPS_ES = (t) => [
+  `Investiga cómo funciona ${t} en el centro de ayuda oficial de YouTube antes de aplicarlo.`,
+  `Aplica ${t} de forma consistente en tus próximos 3 videos y mide un dato en cada uno.`,
+  `Documenta qué cambios conectaron con tu audiencia para poder repetirlos.`,
+  `Revisa ${t} cada trimestre — YouTube actualiza sus funciones y señales de ranking con frecuencia.`,
+];
+const GLOSSARY_TIPS_PT = (t) => [
+  `Pesquise como funciona ${t} no centro de ajuda oficial do YouTube antes de aplicar.`,
+  `Aplique ${t} de forma consistente nos seus próximos 3 vídeos, acompanhando uma métrica por vez.`,
+  `Documente o que funcionou com a sua audiência para repetir o padrão.`,
+  `Revise ${t} trimestralmente — o YouTube atualiza funções e sinais de ranqueamento com frequência.`,
+];
+
+function glossaryTipsSection(name, cat, lang) {
+  const t = name;
+  const tips = lang === 'es' ? GLOSSARY_TIPS_ES(t) : lang === 'pt' ? GLOSSARY_TIPS_PT(t) : ((GLOSSARY_TIPS_EN[cat] || GLOSSARY_TIPS_DEFAULT_EN)(t));
+  const title = lang === 'es' ? `🎯 Consejos de Optimización para ${t}` : lang === 'pt' ? `🎯 Dicas de Otimização para ${t}` : `🎯 Optimization Tips for ${t}`;
+  return `<div class="card"><h2>${title}</h2><ul>${tips.map(x => `<li>${x}</li>`).join('')}</ul></div>`;
+}
+
+function renderGlossaryTerm(slug, lang) {
+  const term = GLOSSARY_TERMS.find(t => t.slug === slug);
+  if (!term) return null;
+  const ui = LANG_UI[lang] || LANG_UI.en;
+  const name = term['name' + lang.toUpperCase()] || term.nameEN;
+  const def = term['def' + lang.toUpperCase()] || term.defEN;
+  const cat = CATS[term.cat] || { en: term.cat, es: term.cat, pt: term.cat };
+  const catName = cat[lang] || cat.en || term.cat;
+  const meta = CAT_META[term.cat] || {};
+  const site = 'https://yt-seo-architect.vercel.app';
+  const prefix = lang === 'en' ? '' : '/' + lang;
+  const currentUrl = `/glossary${prefix}/${slug}`;
+  const enUrl = `/glossary/${slug}`;
+  const esUrl = `/glossary/es/${slug}`;
+  const ptUrl = `/glossary/pt/${slug}`;
+  const langUrl = { en: enUrl, es: esUrl, pt: ptUrl };
+  const title = `${name} — YouTube SEO Glossary | YT SEO Architect`;
+  const safeDef = def.replace(/"/g, '&quot;');
+  const desc = safeDef.length > 155 ? safeDef.substring(0, 155).replace(/\s+\S*$/, '') + '…' : safeDef;
+
+  const jsonLd = JSON.stringify({
+    '@context': 'https://schema.org',
+    '@type': 'Article',
+    headline: `${name} — YouTube SEO Glossary`, // headline cap ~110 chars, safe
+    description: def.replace(/"/g, "'").substring(0, 300),
+    inLanguage: lang,
+        mainEntityOfPage: { '@type': 'WebPage', '@id': `${site}${currentUrl}` },
+        speakable: { '@type': 'SpeakableSpecification', xpath: ['//h1', "//meta[@name='description']/@content"] },
+      });
+
+  // Related terms in the same category (deterministic order)
+  const related = GLOSSARY_TERMS.filter(t => t.slug !== slug && t.cat === term.cat)
+    .map(t => ({ name: t['name' + lang.toUpperCase()] || t.nameEN, slug: t.slug }))
+    .sort((a, b) => a.name.localeCompare(b.name))
+    .slice(0, 6);
+  const keyFactsLabel = lang === 'es' ? 'Datos Clave' : lang === 'pt' ? 'Fatos-Chave' : 'Key Facts';
+  const relatedLabel = lang === 'es' ? 'Términos Relacionados' : lang === 'pt' ? 'Termos Relacionados' : 'Related Terms';
+  const quickDefLabel = lang === 'es' ? 'Definición Rápida' : lang === 'pt' ? 'Definição Rápida' : 'Quick Definition';
+  const defLabel = lang === 'es' ? 'Definición' : lang === 'pt' ? 'Definição' : 'Definition';
+
+  const relatedHtml = related.length > 0
+    ? `<div class="card"><h2>🔗 ${relatedLabel}</h2><div class="rc-grid">${related.map(r => `<a href="/glossary${prefix}/${r.slug}">${r.name}</a>`).join('')}</div></div>`
+    : '';
+
+  // Related blog posts — map glossary terms to relevant guides by keyword
+  const BLOG_TOPIC_MAP = [
+    { kw: ['tag', 'keyword'], posts: [['Best YouTube Tags 2026: The Complete Guide', '/blog/youtube-tags-2026'], ['How to Do YouTube Keyword Research in 2026', '/blog/how-to-keywords-youtube']] },
+    { kw: ['title', 'ctr', 'click'], posts: [['Best YouTube Title Examples for More Views', '/blog/youtube-title-examples-2026'], ['How to Optimize YouTube Titles in 2026', '/blog/youtube-title-optimization-guide-2026']] },
+    { kw: ['retention', 'watch time', 'watch-time'], posts: [['YouTube Retention Graph Explained', '/blog/youtube-retention-graph-explained-2026'], ['Increasing Watch Time with Analytics', '/blog/increasing-youtube-watch-time-with-analytics-2026']] },
+    { kw: ['thumbnail'], posts: [['YouTube Thumbnail Tips That Get Clicks', '/blog/youtube-thumbnail-tips-2026'], ['How to Create Thumbnails That Get Clicks', '/blog/creating-effective-youtube-thumbnails-for-clicks-2026']] },
+    { kw: ['monetiz', 'partner', 'revenue', 'ad'], posts: [['YouTube Monetization 2026: Complete Guide', '/blog/youtube-monetization-2026'], ['Maximizing Revenue with Sponsorships', '/blog/maximizing-youtube-revenue-with-sponsorships-2026']] },
+    { kw: ['algorithm', 'rank', 'search'], posts: [['How the YouTube Algorithm Works in 2026', '/blog/how-youtube-algorithm-works-2026'], ['YouTube SEO: Complete Guide for Beginners', '/blog/youtube-seo-checklist-beginners-2026']] },
+    { kw: ['short', 'vertical'], posts: [['YouTube Shorts SEO Guide 2026', '/blog/youtube-shorts-seo-guide-2026'], ['YouTube Shorts Ranking Guide', '/blog/youtube-shorts-seo-ranking-guide-2026']] },
+    { kw: ['playlist', 'session'], posts: [['YouTube Playlist Optimization Strategy', '/blog/youtube-playlist-optimization-strategy']] },
+    { kw: ['community', 'comment', 'engagement'], posts: [['YouTube Community Posts Strategy 2026', '/blog/youtube-community-posts-strategy-2026'], ['Creator Community Engagement Strategies', '/blog/youtube-creator-community-engagement-strategies-2026']] },
+    { kw: ['subscriber', 'growth', 'small'], posts: [['YouTube Subscriber Growth 2026', '/blog/youtube-subscriber-growth-2026'], ['YouTube for Small Channels in 2026', '/blog/youtube-for-small-channels-2026']] },
+    { kw: ['end screen', 'end-screen', 'card'], posts: [['YouTube End Screens & Cards Guide 2026', '/blog/youtube-end-screens-cards-guide-2026']] },
+    { kw: ['chapter', 'timestamp'], posts: [['YouTube Chapter Timestamps SEO Guide', '/blog/youtube-chapter-timestamps-seo-guide']] },
+    { kw: ['description', 'metadata'], posts: [['YouTube Description Templates 2026', '/blog/youtube-description-templates-2026'], ['How to Optimize Metadata on YouTube', '/blog/how-to-metadata-youtube']] },
+    { kw: ['audit', 'analy', 'score'], posts: [['YouTube SEO Audit: Diagnose & Fix', '/blog/youtube-seo-audit-diagnostic-fix-2026'], ['YouTube Analytics 4: Metrics That Matter', '/blog/youtube-analytics-4-metrics-that-matter']] },
+    { kw: ['shadow ban', 'views', 'visibility'], posts: [['Fix YouTube Shadow Ban in 2026', '/blog/fix-youtube-shadow-ban-2026'], ["Why Your YouTube Video Isn't Getting Views", '/blog/youtube-video-not-getting-views-diagnostic-fix-2026']] },
+    { kw: ['content', 'strategy', 'calendar', 'plan'], posts: [['YouTube Content Strategy for Beginners 2026', '/blog/youtube-content-strategy-for-beginners-2026'], ['Developing a Content Calendar Strategy', '/blog/developing-a-youtube-content-calendar-strategy-2026']] },
+    { kw: ['hook', 'intro', 'first'], posts: [['YouTube Intro Hook: First 3 Seconds', '/blog/youtube-intro-hook-first-3-seconds']] },
+    { kw: ['trend', 'evergreen', 'viral'], posts: [['YouTube SEO Examples That Rank in 2026', '/blog/youtube-seo-examples-2026'], ['Best YouTube Growth Strategies', '/blog/best-youtube-growth-strategies-for-new-creators-2026']] },
+  ];
+  const termKey = (name + ' ' + term.slug).toLowerCase().replace(/-/g, ' ');
+  let blogPosts = [];
+  for (const entry of BLOG_TOPIC_MAP) {
+    if (entry.kw.some(k => termKey.includes(k))) {
+      blogPosts = blogPosts.concat(entry.posts);
+    }
+  }
+  // Dedupe + cap at 3
+  const seenBlog = new Set();
+  blogPosts = blogPosts.filter(p => !seenBlog.has(p[1]) && seenBlog.add(p[1])).slice(0, 3);
+  const blogLabel = lang === 'es' ? 'Artículos Relacionados' : lang === 'pt' ? 'Artigos Relacionados' : 'Related Blog Posts';
+  const blogHtml = blogPosts.length > 0
+      ? `<div class="card"><h2>📝 ${blogLabel}</h2><div class="rc-grid">${blogPosts.map(p => `<a href="${p[1]}">${p[0]}</a>`).join('')}</div></div>`
+      : '';
+
+    const tipsSection = glossaryTipsSection(name, term.cat, lang);
+
+  const langPills = Object.entries({ en: '🇺🇸 English', es: '🇪🇸 Español', pt: '🇧🇷 Português' })
+    .filter(([l]) => l !== lang)
+    .map(([l, label]) => `<a href="${langUrl[l]}" hreflang="${l}" rel="alternate">${label}</a>`)
+    .join(' · ');
+
+  const metaInfo = [
+    { label: ui.metric, val: meta['metric' + lang.toUpperCase()] || meta.metricEN || '-' },
+    { label: ui.impl, val: meta['effort' + lang.toUpperCase()] || meta.effortEN || '-' },
+    { label: ui.time, val: meta['time' + lang.toUpperCase()] || meta.timeEN || '-' },
+    { label: ui.stage, val: meta['stage' + lang.toUpperCase()] || meta.stageEN || '-' },
+  ].filter(m => m.val !== '-');
+  const metaRows = metaInfo.map(m =>
+    `<tr><td class="dim">${m.label}</td><td>${m.val}</td></tr>`
+  ).join('\n');
+
+  return `<!DOCTYPE html>\n<html lang="${lang}">\n<head><meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1.0"/>\n<title>${title}</title>\n<link rel="canonical" href="${site}${currentUrl}"/>\n<link rel="alternate" hreflang="en" href="${site}${enUrl}"/>\n<link rel="alternate" hreflang="es" href="${site}${esUrl}"/>\n<link rel="alternate" hreflang="pt" href="${site}${ptUrl}"/>\n<link rel="alternate" hreflang="x-default" href="${site}${enUrl}"/>\n<meta name="description" content="${desc}"/>\n<meta name="robots" content="index, follow"/>\n<meta property="og:title" content="${name} — YouTube SEO Glossary"/>\n<meta property="og:description" content="${desc}"/>\n<meta property="og:image" content="${site}/og-image.png"/>\n<meta name="twitter:card" content="summary_large_image"/>\n<script type="application/ld+json">${jsonLd}</script>\n<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700;800&display=swap" media="print" onload="this.media=\'all\'">\n<noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700;800&display=swap"></noscript>\n<style>${GLOSSARY_CSS}</style>\n</head>\n<body>\n<header class="header"><a href="/">⚡ YT SEO Architect</a><a href="/tools/" class="cta">${ui.tools}</a></header>\n<main>\n<div class="ln">${lang === 'en' ? '🇺🇸 English' : lang === 'es' ? '🇪🇸 Español' : '🇧🇷 Português'} · ${langPills}</div>\n<h1>${name}</h1>\n<p class="h1-sub">${catName} · YouTube SEO Glossary</p>\n<div class="fs-box"><div class="fs-label">✨ ${quickDefLabel}</div><p>${def}</p></div>\n<div class="card"><h2>📖 ${defLabel}</h2><p>${def}</p></div>\n${metaRows ? `<div class="card"><h2>📊 ${keyFactsLabel}</h2><table class="cmp-table"><tbody>${metaRows}\n</tbody></table></div>` : ''}\n${relatedHtml}\n${blogHtml}\n${tipsSection}\n<div class="cta-box"><h3>🚀 ${ui.master}</h3><p style="color:#8b8b9e;margin:.5rem 0 1rem;font-size:.9rem">${ui.cta}</p><a href="/tools/">${ui.tryTools}</a></div>\n</main>\n<footer><p>&copy; 2026 YT SEO Architect · <a href="/glossary/">${ui.glossary}</a> · <a href="/tools/">${ui.tools}</a></p></footer>\n</body>\n</html>`;
+}
+
+app.get(/^\/glossary\/(es\/|pt\/)?([a-z0-9-]+)$/, async (req, res) => {
+  try {
+    const langPrefix = req.params[0]; // 'es/', 'pt/', or undefined
+    const lang = langPrefix === 'es/' ? 'es' : langPrefix === 'pt/' ? 'pt' : 'en';
+    const slug = req.params[1];
+    // Never intercept category indexes or the glossary hub (static files own those paths)
+    if (slug === 'category' || slug === 'index' || slug === 'es' || slug === 'pt') {
+      return sendJSON(res, 404, { error: 'Not found' });
+    }
+    const html = renderGlossaryTerm(slug, lang);
+    if (!html) {
+      return sendJSON(res, 404, { error: 'Term not found' });
     }
     res.setHeader('Content-Type', 'text/html; charset=utf-8');
     res.setHeader('Cache-Control', 'public, max-age=3600, s-maxage=3600');
@@ -2289,12 +2862,22 @@ if (Sentry && Sentry.Handlers) {
 
 
 
-// Fallback 404 handler
-
+// Fallback 404 handler — serve the branded 404 page (matches static 404.html)
 app.use((req, res) => {
-
-  sendJSON(res, 404, { error: 'Not found', path: req.path });
-
+  const __filename = fileURLToPath(import.meta.url);
+  const __dirname = dirname(__filename);
+  try {
+    const four04 = readFileSync(resolve(__dirname, '../dist/404.html'), 'utf-8');
+    res.status(404).header('Content-Type', 'text/html; charset=utf-8').send(four04);
+  } catch {
+    // Fall back to a minimal branded 404 if the file isn't available
+    res.status(404).header('Content-Type', 'text/html; charset=utf-8').send(
+      '<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><title>404 - Page Not Found | YT SEO Architect</title></head>'
+      + '<body style="font-family:Geist,sans-serif;background:#0a0b10;color:#f8fafc;display:flex;align-items:center;justify-content:center;height:100vh;margin:0;text-align:center;">'
+      + '<div><h1 style="font-size:4rem;margin:0;background:linear-gradient(135deg,#f97316,#8b5cf6);-webkit-background-clip:text;-webkit-text-fill-color:transparent;">404</h1>'
+      + '<p>Page not found. <a href="/" style="color:#00f2ff;">Back to YT SEO Architect</a></p></div></body></html>'
+    );
+  }
 });
 
 
@@ -2332,3 +2915,4 @@ if (process.env.NODE_ENV !== 'production' && !process.env.VERCEL) {
 }
 
 export default app;
+

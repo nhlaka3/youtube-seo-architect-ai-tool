@@ -1,0 +1,23 @@
+SCENE 01 | hero_title
+A single number in your YouTube title can lift your click-through rate by 36 percent. That is not a guess — it comes from a real analysis of more than ten thousand titles across fourteen niches. In this five minute tutorial, I will show you the one title formula that wins most of the time, and the exact six step process for writing it.
+
+SCENE 02 | callout
+Your title is the single most important metadata element on YouTube. It tells the algorithm what your video is about, and it tells a scrolling viewer whether to stop. A great title balances three things: keyword placement for search, curiosity for clicks, and accuracy for retention. Miss any one of them, and the title quietly underperforms.
+
+SCENE 03 | text_card
+Here is the one formula that beats everything else. Number, plus benefit, plus timeframe. Example: Five Ways to Double Your YouTube Views in 30 Days. The number promises a quick list. The benefit, doubling your views, is specific. And the 30 days adds urgency. You can run the same engine in reverse. Seven YouTube title mistakes that kill your click-through rate. Same number, same benefit, same stakes. In head to head testing, this pattern produced the highest median click-through rate, around 8.7 percent, and the lowest bounce rate.
+
+SCENE 04 | kpi_grid
+The data tells us what actually works. First, numbers outperform everything. Titles with digits get thirty six percent more clicks, and odd numbers beat even ones, so eleven beats ten. Second, front load your keyword. Putting it in the first twenty characters gives you a fourteen percent boost in search impressions. Third, specificity beats generality by more than two to one. How to edit videos in premiere pro, outranks how to edit videos, every single time. And keep the title between forty and sixty characters, because anything longer gets truncated on mobile.
+
+SCENE 05 | text_card
+Three more patterns are worth stealing. The curiosity gap, which hints at a specific stat without giving it away. Negative framing, where five mistakes consistently outclicks five tips, because people fear loss more than they chase gain. And the year forward title, like YouTube SEO in 2026, which signals that your content is current. Throw in an honest question title, and you have a toolkit you can rotate across every video you publish.
+
+SCENE 06 | step_flow
+Here is the exact six step process. One, research your keyword and list the top auto complete suggestions. Two, pick the formula that fits your video. Three, write ten variations and do not edit as you go — most creators stop at three and miss the winner. Four, trim each one to forty to sixty characters, and cut every filler word. Five, score your variations against the competition. Six, verify the promise. Read the title out loud, and make sure the video delivers exactly what you promised.
+
+SCENE 07 | warning
+One trap sinks most strategies. Click through rate matters, but retention matters more. A title that over promises can inflate clicks and then die in the first fifteen seconds. A steady six to eight percent, with strong retention, beats a twelve percent that collapses every time. And never change a title on a video that is already ranking, because every change resets the algorithm's confidence.
+
+SCENE 08 | cta
+So keep the number honest, the outcome specific, and the promise true. Score your title against twelve real click through signals before you hit publish, with the free analyzer. That is the whole tutorial. Try it free, and grow your channel.

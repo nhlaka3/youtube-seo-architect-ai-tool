@@ -49,25 +49,46 @@ MODIFIERS = ['template', 'guide', 'tutorial', 'tips', 'checklist', 'examples',
 # NEW: Google Suggest Demand Estimation
 # ═══════════════════════════════════════════════════════════════
 
-def get_google_suggestions(query):
+def get_google_suggestions(query, client='firefox'):
     """Query Google Suggest autocomplete API and return suggestions list.
     
     If Google returns 0 suggestions → the keyword has near-zero search volume.
     More suggestions = higher relative demand.
+    client='firefox' → Google web suggestions (pure JSON array)
+    client='youtube' → YouTube suggestions (window.google.ac.h wrapper)
     """
-    url = 'http://suggestqueries.google.com/complete/search?client=firefox&q=' + urllib.parse.quote(query)
+    url = 'https://suggestqueries.google.com/complete/search?client=' + client + '&hl=en&q=' + urllib.parse.quote(query)
+    if client == 'youtube':
+        url += '&ds=yt'
     try:
         req = urllib.request.Request(url, headers={
             'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36',
             'Accept': 'application/json, text/javascript, */*; q=0.01'
         })
         with urllib.request.urlopen(req, timeout=10) as resp:
-            data = json.loads(resp.read().decode('utf-8'))
-        # Response format: [query, [suggestions...], ...]
-        suggestions = data[1] if len(data) > 1 else []
+            raw = resp.read().decode('utf-8')
+        if client == 'youtube':
+            # Response: window.google.ac.h(["query",[["suggestion",0,[512]],...]])
+            m = re.search(r'window\.google\.ac\.h\((.*)\)', raw)
+            if not m:
+                return []
+            data = json.loads(m.group(1))
+            suggestions = [item[0] for item in data[1]] if len(data) > 1 else []
+        else:
+            # Response format: [query, [suggestions...], ...]
+            data = json.loads(raw)
+            suggestions = data[1] if len(data) > 1 else []
         return suggestions
     except Exception as e:
         return None
+
+
+def strip_year_suffix(keyword):
+    """Google Suggest rarely autocompletes year-qualified / long-tail phrases —
+    strip trailing '2026' / 'in 2026' so the base query gets real suggestions."""
+    import re as _re
+    k = _re.sub(r'\s*(in\s+)?20\d{2}\s*$', '', keyword.strip())
+    return k if k.strip() else keyword
 
 
 def estimate_demand_score(keyword, suggestions):
@@ -337,6 +358,118 @@ def print_score_bar(score):
 
 
 # ═══════════════════════════════════════════════════════════════
+# NEW: Free recursive autocomplete keyword miner
+# (DataForSEO-free alternative — Google + YouTube suggest expansion)
+# ═══════════════════════════════════════════════════════════════
+
+def mine_keywords(seeds, max_depth=2, max_total=400, min_demand=15, max_score=600):
+    """Recursively expand seeds via Google + YouTube autocomplete.
+
+    BFS expansion: seed → suggestions → suggestions-of-suggestions.
+    Every suggestion is a REAL query people type (autocomplete-verified),
+    so the corpus is genuine demand data — no fabricated metrics.
+    max_total bounds expansion queries; max_score bounds demand-scoring
+    calls (scoring every collected phrase is unbounded otherwise).
+    Returns: (list of dicts, stats dict)
+    """
+    import time as _time
+    seen = {}            # keyword -> record
+    queue = [(s.strip().lower(), 0, None) for s in seeds if s.strip()]
+    queries = 0
+
+    def record(kw, parent, source):
+        if kw not in seen:
+            seen[kw] = {'keyword': kw, 'parent': parent, 'sources': [source], 'depth': 0}
+        elif source not in seen[kw]['sources']:
+            seen[kw]['sources'].append(source)
+
+    while queue and queries < max_total:
+        term, depth, parent = queue.pop(0)
+        if depth >= max_depth:
+            continue
+        for client, label in (('firefox', 'google'), ('youtube', 'youtube')):
+            if queries >= max_total:
+                break
+            queries += 1
+            suggestions = get_google_suggestions(term, client)
+            if not suggestions:
+                continue
+            for sug in suggestions:
+                sug = (sug or '').strip().lower()
+                # skip junk: too short, too long, or identical to seed
+                if len(sug) < 6 or len(sug.split()) > 9 or sug == term:
+                    continue
+                record(sug, term, label)
+                if depth + 1 < max_depth:
+                    queue.append((sug, depth + 1, term))
+            _time.sleep(0.25)  # polite rate limit
+
+    # ── demand-score found keywords (Google Suggest count proxy) ──
+    # Cap the scoring pass: score the most seed-adjacent phrases first
+    # (BFS order = closest to seeds), skip the rest to bound runtime.
+    scored = []
+    for i, rec in enumerate(seen.values()):
+        if i >= max_score:
+            break
+        dem, rating = estimate_demand_score(rec['keyword'], get_google_suggestions(rec['keyword']))
+        rec['demand'] = dem
+        rec['demand_rating'] = rating
+        _time.sleep(0.2)
+        if dem is not None and dem >= min_demand:
+            scored.append(rec)
+
+    scored.sort(key=lambda r: -(r['demand'] or 0))
+    stats = {'seeds': len(seeds), 'queries': queries, 'collected': len(seen),
+             'scored': min(len(seen), max_score), 'passed': len(scored)}
+    return scored, stats
+
+
+def save_mine_output(scored, stats, seeds):
+    """Write mined keywords to marketing/dataforseo/ + append top to vault reference."""
+    script_dir = os.path.dirname(os.path.abspath(__file__))
+    root = os.path.dirname(script_dir)
+    today = datetime.now().strftime('%Y-%m-%d')
+
+    # JSON for downstream consumers
+    out_dir = os.path.join(root, 'marketing', 'dataforseo')
+    os.makedirs(out_dir, exist_ok=True)
+    out_path = os.path.join(out_dir, f'keywords-mined-{today}.json')
+    with open(out_path, 'w') as f:
+        json.dump({
+            'description': 'Free recursive autocomplete keyword mine (Google+YouTube suggest). Real query phrases, demand-scored.',
+            'lastUpdated': today,
+            'seeds': seeds,
+            'stats': stats,
+            'keywords': scored,
+        }, f, indent=2)
+    print(f"  ✓ JSON: {out_path}")
+
+    # Vault append (top 30)
+    vault = '/mnt/c/Users/nhlaka/Desktop/yt-seo-architect-vault'
+    ref_path = os.path.join(vault, 'Keywords', 'categorized-keywords-reference.md')
+    if not os.path.exists(ref_path):
+        print(f"  ⚠ vault reference not found at {ref_path} — skipping append")
+        return out_path
+    with open(ref_path, 'r') as f:
+        original = f.read()
+    top = scored[:30]
+    lines = [f"- {r['keyword']} — demand {r['demand']}/100 ({', '.join(r['sources'])})" for r in top]
+    block = (
+        f"\n\n## 🔎 Free Autocomplete Mine — {today}\n\n"
+        f"Mined {stats['collected']} real query phrases from {stats['seeds']} seeds "
+        f"({stats['queries']} suggest queries, Google+YouTube). {stats['passed']} passed demand ≥ 15.\n\n"
+        + "\n".join(lines) + "\n"
+    )
+    if f"Free Autocomplete Mine — {today}" in original:
+        print("  ⏭ today's mine already appended to vault")
+    else:
+        with open(ref_path, 'w') as f:
+            f.write(original.rstrip() + block)
+        print(f"  ✓ Vault: {ref_path} (+{len(lines)} keywords)")
+    return out_path
+
+
+# ═══════════════════════════════════════════════════════════════
 # MAIN
 # ═══════════════════════════════════════════════════════════════
 
@@ -348,6 +481,40 @@ def main():
         print("  python3 scripts/check-keyword.py --audit                  # Find content gaps")
         sys.exit(1)
     
+    # ── MINE MODE: free recursive autocomplete keyword mining ──
+    if '--mine' in sys.argv:
+        print("🔎 MINE: recursive Google+YouTube autocomplete keyword mining (free)\n")
+        # seeds: CLI args after --mine, else the publishing-queue keywords.json
+        mine_idx = sys.argv.index('--mine')
+        cli_seeds = [a for a in sys.argv[mine_idx + 1:] if not a.startswith('--')]
+        if cli_seeds:
+            seeds = cli_seeds
+        else:
+            script_dir = os.path.dirname(os.path.abspath(__file__))
+            kw_path = os.path.join(os.path.dirname(script_dir), 'scripts', 'keywords.json')
+            if os.path.exists(kw_path):
+                with open(kw_path, 'r') as f:
+                    kw_data = json.load(f)
+                seeds = [k['keyword'] for k in kw_data.get('keywords', []) if k.get('keyword')]
+                print(f"   Loaded {len(seeds)} seeds from scripts/keywords.json")
+            else:
+                seeds = ['youtube seo', 'youtube tags', 'youtube growth']
+                print("   keywords.json not found — using default seeds")
+        scored, stats = mine_keywords(seeds)
+        print(f"\n   Stats: {stats['queries']} suggest queries → {stats['collected']} phrases collected, {stats['scored']} demand-scored, {stats['passed']} passed demand ≥ 15\n")
+        print(f"{'='*65}")
+        print(f"   🏆 TOP 25 MINED KEYWORDS (by demand):")
+        print(f"{'='*65}\n")
+        for i, s in enumerate(scored[:25], 1):
+            dem = s['demand'] or 0
+            emoji = '🟢' if dem >= 70 else '🟡' if dem >= 40 else '🟠'
+            print(f"   {i}. {emoji} Demand {dem}/100 — \"{s['keyword']}\"")
+            print(f"      sources: {', '.join(s['sources'])}")
+        print()
+        save_mine_output(scored, stats, seeds)
+        print("\n✅ Mine complete. Next: pick targets from the vault reference, or run --check on any keyword.")
+        sys.exit(0)
+
     # ── AUDIT MODE: Find gaps in blog coverage ──
     if '--audit' in sys.argv:
         print("🔍 AUDIT: Checking blog coverage gaps...\n")
@@ -455,13 +622,27 @@ def main():
     
     # Step 1: Check Google Suggest first (fast, fails fast for zero-demand)
     print("   📊 Checking Google Suggest demand...", end=' ', flush=True)
-    suggestions = get_google_suggestions(keyword)
+    # Year-qualified / long-tail phrases rarely autocomplete — check the base query
+    suggestions = get_google_suggestions(strip_year_suffix(keyword))
     demand_score, demand_rating = estimate_demand_score(keyword, suggestions)
+    # Google Suggest reliably returns [] for long/mid-phrase queries even when
+    # demand is real (verified: "youtube seo for gaming channels" → [] but the
+    # query has clear demand). A 5+ word query with zero suggestions is an
+    # autocomplete MISS, not a zero-demand signal → fail OPEN.
+    if demand_score is not None and demand_score < 10 and len(keyword.split()) >= 5:
+        demand_score = None
+        demand_rating = "Ambiguous — long query with zero autocomplete (fail-open)"
     if demand_score is not None:
         print(f"{demand_score}/100")
         print(f"      → {demand_rating}")
     else:
-        print("⚠️  API unavailable (continuing anyway)")
+        # Ambiguous (network failure OR empty autocomplete for a long/qualified query).
+        # Fail OPEN — the keyword bank is the real demand filter; a suggest miss is
+        # not proof of zero demand (CI runners + long-tail queries both hit this).
+        print("⚠️  Unknown (ambiguous — treating as pass-through)")
+        print("DEMAND SCORE")
+        print("   Score: N/A (unknown — fail-open)")
+        sys.exit(2)
     
     print()
     
@@ -472,7 +653,9 @@ def main():
         print(f"⚠️  {error or 'No SERP results'}")
         word_count = len(keyword.split())
         print(f"   Quick estimate: {'🟢 Low' if word_count >= 4 else '🟡 Medium' if word_count >= 3 else '🔴 High'} competition")
-        sys.exit(0)
+        # Don't exit early — fall through so DEMAND SCORE + RANKABILITY still print
+        # for the mjs parser; use the quick estimate as the competition score.
+        results = []
     
     covered = load_existing_posts()
     kw_words = set(keyword.lower().split())
@@ -480,6 +663,15 @@ def main():
         print(f"   ⚠️  WARNING: This topic may overlap with existing blog posts.\n")
     
     analysis = analyze_serp(results, keyword, result_count)
+    if analysis.get('error'):
+        # DDG fallback: use the word-count quick estimate as the competition score
+        wc = len(keyword.split())
+        comp = 70 if wc >= 4 else 50 if wc >= 3 else 30
+        analysis = {
+            'competition_score': comp,
+            'signals': [{'name': 'DDG unavailable — estimate', 'score': 0, 'detail': f'used word-count heuristic ({wc} words)'}],
+            'top_results': [],
+        }
     analysis['demand_score'] = demand_score
     analysis['demand_rating'] = demand_rating
     

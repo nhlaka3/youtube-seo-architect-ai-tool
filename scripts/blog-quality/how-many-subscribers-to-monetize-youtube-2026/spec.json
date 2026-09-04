@@ -1,0 +1,21 @@
+[
+  {
+    "type": "steps",
+    "title": "The Two Subscriber Gates to Monetization (2026)",
+    "data": [
+      {"label": "500 subs", "value": "3,000 hrs or 3M Shorts views — fan-funding tier"},
+      {"label": "1,000 subs", "value": "4,000 hrs or 10M Shorts views — full YPP"}
+    ],
+    "source": "Thresholds per YouTube partner policy"
+  },
+  {
+    "type": "bar",
+    "title": "Watch-Hour Requirement at Each Gate",
+    "data": [
+      {"label": "500 subs", "value": 3000},
+      {"label": "1,000 subs", "value": 4000}
+    ],
+    "unit": "h",
+    "source": "Source: YouTube partner policy"
+  }
+]

@@ -1,0 +1,115 @@
+{
+  "analytics": {
+    "en": {
+      "intro": "This hub collects every YouTube Analytics concept a creator needs to read their data like a consultant. Instead of tracking vanity counts, you'll learn the metrics that actually drive growth — impressions, click-through rate, average view duration, and retention — and how each one maps to a concrete fix on your channel.",
+      "why": "Analytics separate guessing from growth. Two videos with similar view counts can tell opposite stories: one earned 10% CTR from 50,000 impressions (a packaging problem), another 2% CTR from 500,000 (a reach problem). The metrics in this category tell you which lever to pull — packaging, content structure, or distribution — because most creators underperform by reacting to raw views instead of the impression → CTR → retention chain.",
+      "how": "Start with the Essential terms (views, impressions, CTR, retention) to build your baseline, then move to Core Concepts like watch time and traffic sources. After that, open the related blog posts at the bottom of this page and apply the metrics to your own Studio. Pick the single metric hurting most this month, fix it, and measure the difference before moving on — one lever at a time beats a dashboard of noise."
+    },
+    "es": {
+      "intro": "Este hub reúne cada concepto de los análisis de YouTube que un creador necesita para leer sus datos como un consultor. En lugar de perseguir métricas de vanidad, aprenderás las métricas que de verdad impulsan el crecimiento: CTR, duración media de visualización, retención e impresiones — y cómo cada una se traduce en una acción concreta para tu canal.",
+      "why": "Los datos de YouTube separan a quienes adivinan de quienes crecen con intención. Dos videos tuyos con vistas similares pueden contar historias opuestas: uno con 10% de CTR sobre 50,000 impresiones (problema de empaque) y otro con 2% sobre 500,000 (problema de alcance). Las métricas de esta categoría te indican qué palanca accionar — empaquetado, estructura o distribución — porque la mayoría de los creadores reaccionan a las vistas crudas en lugar de encadenar impresiones → CTR → retención.",
+      "how": "Empieza con los términos Esenciales (vistas, impresiones, CTR, retención) para crear tu línea base, y pasa después a los Conceptos Clave como tiempo de visualización y fuentes de tráfico. Luego abre los artículos de blog relacionados al final de esta página y aplica cada métrica a tu propio Studio. Escoge la métrica que más te esté costando este mes, corrégela y mide la diferencia antes de pasar a la siguiente."
+    },
+    "pt": {
+      "intro": "Este hub reúne todos os conceitos de análise do YouTube que um criador precisa para ler seus dados como um consultor. Em vez de métricas de vaidade, você aprende as métricas que realmente importam — CTR, duração média de exibição, retenção e impressões — e como cada uma vira uma ação concreta no seu canal.",
+      "why": "Os dados de análise separam quem adivinha de quem cresce com intenção. Dois vídeos com visualizações parecidas podem contar histórias opostas: um com 10% de CTR sobre 50.000 impressões (problema de embalagem) e outro com 2% sobre 500.000 (problema de alcance). As métricas desta categoria indicam qual alavanca puxar — embalagem, estrutura ou distribuição — pois a maioria dos criadores reage às visualizações brutas em vez da cadeia impressões → CTR → retenção.",
+      "how": "Comece pelos termos essenciais (visualizações, impressões, CTR, retenção) para criar sua base e depois avance para conceitos como tempo de exibição e fontes de tráfego. Em seguida, abra os artigos relacionados no rodapé e aplique as métricas no seu próprio Studio. Escolha a métrica que mais está travando seu canal neste mês, corrija-a e meça a diferença antes de partir para a próxima."
+    }
+  },
+  "algorithm": {
+    "en": {
+      "intro": "The YouTube algorithm decides which videos get recommended, searched, and surfaced — and it is more predictable than most creators think. This category explains the ranking signals that matter in 2026: session time, satisfaction indicators, niche authority, and the packaging that gets your video tested in the first place.",
+      "why": "Creators who understand the algorithm stop guessing. Every video is evaluated against a small set of consistent signals — CTR, retention curve, session time — and the recommendation system keeps expanding your audience while those signals stay strong. That's why one lever (a better hook) can change a video's entire trajectory: the algorithm rewards repeated viewing and completion far more than any individual metric in isolation.",
+      "how": "Learn the Essential terms first — impressions, CTR, retention, session time — because every algorithm concept refers back to them. Then read the Core Concepts on ranking and recommendation to see how signals combine. Finally, open your own Studio and apply the related blog guidance to your last five videos; look for a pattern in why one performed better and scale it."
+    },
+    "es": {
+      "intro": "El algoritmo de YouTube decide qué videos se recomiendan, se buscan y se muestran — y es más predecible de lo que la mayoría de los creadores cree. Este hub reúne las señales de ranking que importan en 2026: búsqueda, satisfacción, autoridad de nicho y el empaquetado que consigue que tu video se pruebe ante audiencias nuevas.",
+      "why": "Los creadores que entienden el algoritmo dejan de adivinar. Cada video se evalúa con un conjunto pequeño y repetible de señales — CTR, curva de retención, tiempo de sesión — y el sistema de recomendación amplía tu audiencia mientras esas señales se mantienen fuertes. Por eso una sola palanca (un mejor gancho) puede cambiar toda la trayectoria de un video: el algoritmo premia la reobservación y la finalización mucho más que una métrica individual.",
+      "how": "Empieza por los términos Esenciales — impresiones, CTR, retención, tiempo de sesión — porque cada concepto del algoritmo remite a ellos. Sigue con la sección Conceptos para entender cómo se combinan las señales y termina aplicando las guías de los artículos asociados a tus últimos cinco videos: busca el patrón del que mejor funcionó y réplícalo."
+    },
+    "pt": {
+      "intro": "O algoritmo do YouTube define o que é recomendado, pesquisado e exibido — e isso é mais previsível do que a maioria dos criadores imagina. Este hub reúne os sinais de ranqueamento que importam em 2026: busca, tempo de sessão, autoridade de nicho e a embalagem que faz o vídeo ser testado por novas audiências.",
+      "why": "Quem entende o algoritmo para de adivinhar. Cada vídeo é avaliado por um conjunto pequeno e consistente de sinais — CTR, curva de retenção, tempo de sessão — e o sistema de recomendação expande a audiência que esses sinais continuam bons. Por isso, uma única alavanca (um gancho melhor) pode mudar a trajetória do vídeo: o algoritmo premia alto tempo de exibição e vídeos concluídos muito além de uma métrica isolada.",
+      "how": "Comece pelos termos essenciais (impressões, CTR, retenção, tempo de sessão), porque todo conceito do algoritmo refere-se a eles. Depois leia os conceitos-chave para ver como os sinais se combinam e use os artigos relacionados nos seus últimos cinco vídeos: encontre o padrão no vídeo que se destacou e repetia."
+    }
+  },
+  "seo-optimization": {
+    "en": {
+      "intro": "YouTube is the second-largest search engine on the internet and every video is a searchable page. A practical hub for the metadata and structure work that helps you get found: keyword research, titles, descriptions, tags, chapters, transcripts, thumbnails — and the schema that AI search engines now read alongside the page.",
+      "why": "Search is a traffic source you can grow with near-certainty: every visit from YouTube Search is a user actively looking for a topic, so CTR and watch-time expectations are more predictable than in suggestions feeds. Long-tail keywords convert better than broad ones — a video about 'how to fix youtube not saving tags' answers a specific moment of intent, and that specificity is exactly what search ranking and AI curation reward today.",
+      "how": "Work through the Essential terms (keywords, title optimization, metadata, tags, transcripts), then the Core concepts on description and chapter structure. Put them into practice on your next three uploads: one keyword per video, one targeted title, one descriptive first line of description. Then audit your top 10 videos monthly and keep the definition + FAQ structure that every term page models — it's the citable block AI extraction depends on."
+    },
+    "es": {
+      "intro": "YouTube es el segundo buscador de Internet y cada video es una página buscable. Este hub reúne el trabajo de metadatos y estructura para que tu contenido se encuentre: títulos con palabras clave, descripciones, etiquetas, capítulos, transcripciones y el schema que los buscadores de IA también tienen en cuenta.",
+      "why": "La búsqueda es una fuente de tráfico casi garantizada: cada visita desde la búsqueda de YouTube pedía tu tema, así que el CTR y el tiempo de visualización son más predecibles que en las sugerencias. Las palabras clave de cola larga convertés mucho mejor; un video sobre "arreglar etiquetas de YouTube" responde un momento concreto de búsqueda, y esa especificidad es justo lo que premian el ranking y la curación de IA.",
+      "how": "Recorre los términos Esenciales (palabras clave, título, metadatos, etiquetas, transcripciones) y continua con los Conceptos sobre descripciones y busc.acías por capítulos. Practícalos en tus próximos 3 videos: una palabra clave por video, un título dirigido y una descripción que replique el lenguaje de búsqueda. Renueva tu top 10 mensualmente y conserva la estructura de definición + FAQ que ves en cada término, el bloque que la extracción de IA necesite."
+    },
+    "pt": {
+      "intro": "O YouTube é o segundo maior buscador da internet e cada vídeo é uma página pesquisável. Este hub reúne o trabalho de metadados e estrutura para você ser encontrado: títulos com palavras-chave, descrições, tags, capítulos, transcrições e o schema que os buscadores de IA agora leem.",
+      "why": "A busca é a fonte de tráfego mais previsível: cada visita oriunda da pesquisa do YouTube pediu aquele assunto, então CTR e tempo de visualização se tornam mais fáceis de otimizar do que nos feeds de sugestões. Palavras-chave de cauda longa convertem muito mais: um vídeo sobre «consertar etiquetas que não salvam no YouTube» atende um momento concreto de intenção — e essa especificidade é exatamente o que o ranqueamento e a IA curam.",
+      "how": "Comece pelos termos essenciais (palavras-chave, título, metadados, etiquetas, transcrições) e avance para os conceitos-chave (descrições, capítulos). Aplique nos seus próximos 3 vídeos: uma palavra-chave por vídeo, um título direcionado e uma descrição que replique a linguagem de busca. Revise seu top 10 mensalmente e mantenha a estrutura de definição + FAQ que você vê em cada termo — é o bloco citável que a extração de IA usa."
+    }
+  },
+  "monetization": {
+    "en": {
+      "intro": "Monetization is the economics layer of a channel: where revenue actually comes from and whether your content is eligible to earn. This hub covers the YouTube Partner Program requirements, RPM and CPM thinking, and the revenue additions that go beyond ads — memberships, Super Chat, Shopping, and sponsorships.",
+      "why": "Most creators chase view counts that don't pay. Revenue per view varies enormously with topic, audience country, and video length: two channels with identical views can earn 10x differently. Understanding RPM and eligibility rules (8-minute mid-rolls, subscriber thresholds, watch-time gates) lets you make channel decisions like a business — and, once the basics work, shift toward higher-CPM topics.",
+      "how": "Start with the YPP requirements in the Essential cluster so you know the exact monetization gate, then read RPM/CPM to understand the value of each view. When you diversify, check memberships, Super Chat, and Shopping terms in Core Concepts. Use the related blog posts for step-by-step playbooks — and since revenue is private, track your own RPM in Studio instead of trusting other channels' averages."
+    },
+    "es": {
+      "intro": "La monetización es la economía del canal: de dónde viene realmente el ingreso y por qué tu contenido es elegible para ganar. Este hub cubre los requisitos del Programa de Partners de YouTube, la mentalidad del RPM y CPM, y las fuentes de ingresos más allá de la publicidad: membresías, Super Chat, Shopping y patrocinios.",
+      "why": "La mayoría de los creadores persiguen vistas que no pagan. El ingreso por vista varía muchísimo según el tema, la audiencia y la duración: dos canales con las mismas vistas pueden ganar 10 veces distinto. Entender el RPM y las reglas de elegibilidad (anuncios en mitad del video desde los 8 minutos, requisitos de suscriptores, umbrales de tiempo) convierte al canal en la decisión de un negocio — y cuando lo básico funciona, puedes desplazar el contenido a temas con mejor CPM.",
+      "how": "Empieza revisando los requisitos del Program de Partners en los términos Esenciales; luego lee RPM/CPM responsable para entender el valor de cada vista. Cuando diversifiques, explora membresías, Super Chats y Shopping en los Conceptos. Usa las guías relacionadas como planes paso a paso — y como el ingreso es privado, mide tu propio RPM en Studio en lugar de confiar en promedios de otros canales."
+    },
+    "pt": {
+      "intro": "A monetização é a camada econômica do canal: de onde a renda vem e se o seu conteúdo pode ganhar. Este hub cobre os requisitos do YouTube Partner Program, a lógica de RPM e CPM e as receitas além dos anúncios — membership, Super Chat, Shopping e patrocínios.",
+      "why": "A maioria persegue visualizações que não rentabilizam. A renda por visualização varia muito de tema, país e duração: dois canais com as mesmas visualizações podem ganhar 10x diferente. Entender RPM e regras de elegibilidade (anúncios no meio a partir dos 8 minutos, gate de monetização, limites de horas) transforma o canal numa decisão de negócio — e, com o básico funcionando, dá para mover as ideias para temas com maior CPM.",
+      "how": "Comece lendo os requisitos do Program no capítulo Essencialidades para conhecer o único gate, depois estude RPM/CPM para entender quanto vale cada visualização. Quando for diversificar, explore Essentials, Super Chat e Shopping. Use os artigos relacionados como passo a passo e meça seu próprio RPM no Studio, porque a renda é privada e médias de outros nichos enganam."
+    }
+  },
+  "content-strategy": {
+    "en": {
+      "intro": "Content strategy is the layer between making videos and growing a channel: choosing pillars, formats, cadence, and the balance between evergreen and on-trend content. This hub covers the planning side of YouTube — how successful channels decide what to make and in what order.",
+      "why": "Without strategy, the algorithm sees a fog of unrelated uploads and your audience sees noise — random posts train viewers to expect nothing. Channels running on 3-5 topic pillars, a 4-8 week cadence, and 60-70% evergreen content build compounding authority: every video reinforces the previous one, and the archive keeps working after the publication spike is gone.",
+      "how": "Define your core pillars using the Essential terms (content pillars, niche, evergreen), then plan a calendar with the cadence terms. Batch-produce the pillar that already performs, keep the timely/evergreen balance, and review your roadmap quarterly — the way this article on pruning says: keep, improve, repurpose, or remove every content asset in rotation."
+    },
+    "es": {
+      "intro": "La estratégica es la capa entre «hacer videos» y «crecer un canal»: elegir pilares, formatos, cadencia y el equilibrio entre contenido evergreen y tendencia. Este hub cubre la filosofía de YouTube: cómo los canales exitosos deciden qué produce y en qué orden.",
+      "why": "Sin estrategia, el algoritmo ve una mezcla de publicaciones sin dirección y tu audiencia ve ruido — publicar rutas diferentes entrenan a los espectadores a no esperar nada. Los canales con 3-5 pilares de tema, cadencia de 4-8 semanas y 60-70% de evergreen construyen autoridad compuesta: cada video refuerza al anterior y el archivo sigue trabajando meses después del pico inicial.",
+      "how": "Define tus pilares usando los términos Esenciales (contenido, nicho, audiencia), luego construye un calendario con los términos de cadencia. Produce el pilar que ya funciona, mantén el balance evergreen/tendencia y revisaכל cach — la metodología es la de este artículo: conserva, mejora, reutilice o el papel simple descent."
+    },
+    "pt": {
+      "intro": "Estratégia de conteúdo é a camada entre «fazer vídeos» e «fazer o canal crescer»: escolher pilares, formatos, ritmo e o equilíbrio entre evergreen e tendência. Este hub reúne a filosofia do YouTube de sucesso — como canais grandes decidem o que produzir e em que ordem.",
+      "why": "Sem estratégia, o algoritmo vê um mar de uploads sem relação e a audiência vê ruído — postar sem ordem treina o público a esperar nada. Canais com 3-5 pilares de tema, cadência de 4-8 semanas e 60-70% evergreen constroem autoridade acumulada: cada vídeo reforça o anterior, e o arquivo continua rendendo mesmo depois do pico de lançamento.",
+      "how": "Defina seus pilares com os termos essenciais (nicho, audiência, conteúdo), monte um calendário usando os termos de cadência e produza primeiro o pilar que você vende. Mantenha a proporção evergreen/tendência e revise a rotação trimestralmente — a mesma lógica que a guia ensina: manter, melhorar, fundir ou descartar."
+    }
+  },
+  "youtube-features": {
+    "en": {
+      "intro": "YouTube's built-in features are free growth infrastructure most creators never fully use: cards, end screens, playlists, chapters, community posts, live streaming, and Shorts. This hub explains each one — what it does, when to use it, and how it changes retention or discovery.",
+      "why": "Features are the cheapest CTR and retention wins you can deploy: an end screen keeps session time rolling, a card traffic a second video, a playtime recycles old views. They don't require new production, only small placement decisions — yet most channels leave the entire toolset unused while chasing new uploads that don't play per the same user.",
+      "how": "Read one Essential term per recording session and apply it immediately: add end screens to your last 5 videos this week, place 3 cards on your next upload, or move a 7-part series into a playlist. Then check the related guides for deeper tactics — take one feature per video and track whether retention, sessions, or views move."
+    },
+    "es": {
+      "intro": "Las funciones integradas de YouTube son herramientas de crecimiento gratuitas que la mayoría de los creadores no usan: tarjetas, pantallas finales, listas de reproducción, capítulos, publicaciones en comunidad y en directos. Este hub cubre cada una: qué hace, cuándo usarla y cómo afecta a la retención o al descubrimiento del canal.",
+      "why": "Las funciones son los multiplicadores de CTR más baratos: una pantalla final retiene el tiempo de sesión, una lista devuelve visitas antiguas al archivo y los videos vivos vuelven a interesar. No piden producción nueva, si no cuando colocarlas — y sin embargo casi todos creadores las ignoran por completo mientras suben el siguiente video.",
+      "how": "Lee una funcionalidad por semana y aplícala de inmediato: pon pantallas finales a tus últimos 5 videos esta semana, coloca 3 tarjetas en tu próximo para controlar una métrica. Después revisa las guías relacionadas — una función por video y medir si retención o las sesiones cambian es mejor que activarlo todo de golpe."
+    },
+    "pt": {
+      "intro": "Os recursos nativos do YouTube são ferramentas de crescimento grátis que a maioria dos canais nunca usa: cartões, telas finais, playlists, capítulos, posts da comunidade e lives. Este hub explica cada um — o que faz, quando usar e como afeta retenção ou descoberta.",
+      "why": "Funcionalidades são os multiplicadores mais baratos de CTR: uma tela final amplia o tempo de sessão, uma playlist reativa visualizações antigas e os capítulos melhoram o do início. Não exigem produção a nova, apenas pequenas decisões — e mesmo assim a maioria dos criadores ignora essas ferramentas enquanto providencia o próximo upload sem o básico de conversão relevado.",
+      "how": "Leia um recurso por vez e aplique imاديatamente: adicione tela final nos últimos 5 vídeos, coloque 3 cartões no próximo, transforme uma série em playlist. Depois confira os guias relacionados — uma novidade por vídeo e acompanhe se retenção, sessões ou CTR se movem antes de adotar a seguinte."
+    }
+  },
+  "index": {
+    "en": {
+      "intro": "The glossary is organized into six working hubs — Analytics, Algorithm, SEO & Optimization, Monetization, Content Strategy, and YouTube Features. Pick the hub that matches the biggest problem on your channel right now: each one opens with the essential terms, then moves into the concepts that explain how they combine, and closes with the strategies tested for growth."
+    },
+    "es": {
+      "intro": "El glosario está organizado en seis hub — Analíticas, Algoritmo, SEO y Optimización, Monetización, Estrategia de Contenido y Funciones de YouTube. Elige el hub que coincida con el mayor problema de tu canal hoy: cada uno abre con los términos esenciales, avanza con los conceptos de conjunto y termina con las estrategias que se prueban para crecer."
+    },
+    "pt": {
+      "intro": "O glossário está organizado em seis hubs — Análises, Algoritmo, SEO e Otimização, Monetização, Estratégia de Conteúdo e Recursos do YouTube. Escolha o hub que combina com o maior problema do seu canal agora: cada hub abre com o essencial, segue para os conceitos e as estratégias, e fecha com as ações comprovadas de crescimento."
+    }
+  }
+}

@@ -1,0 +1,17 @@
+A/B Title Tester
+Test 2 titles on a video. Auto-applies each for 48h, measures views, declares winner.
+
+Video URL
+Variant A Title
+Variant B Title
+🚀 Start A/B Test
+ukR9_4-TSp4
+RUNNING
+🅰️ Phase A — 48h until next phase
+Variant A
+Vacuum Decay: Shocking Truth Behind Reality's Edge [2026]
+👁 Started at 89 views
+Variant B
+Vacuum Decay SHOCKING Truth: 2026 Reality Edge
+Waiting for phase B
+⏩ Advance in 48h

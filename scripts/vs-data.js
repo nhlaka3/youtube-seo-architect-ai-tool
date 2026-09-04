@@ -26,7 +26,7 @@ const tools = [
     verdict: 'vidIQ has deeper keyword research and a popular browser extension. YT SEO Architect wins on thumbnail scoring and A/B title testing — both free. Use YT SEO Architect for optimization, vidIQ for discovery.',
     bestFor: 'Creators who want AI thumbnail analysis and title A/B testing without paying.',
     score: { us: 8.5, them: 8.0 },
-    related: ['tubebuddy', 'morningfame', 'tubics'],
+    related: ['tubebuddy', 'morningfame', 'tubics', 'canva', 'keywordtool'],
   },
   {
     id: 'tubebuddy',
@@ -50,7 +50,7 @@ const tools = [
     verdict: 'TubeBuddy is a full channel management suite. YT SEO Architect focuses specifically on video optimization with AI scoring. Best together — TubeBuddy for workflow, YT SEO Architect for optimization intelligence.',
     bestFor: 'Creators who want AI-driven optimization scores and free tools.',
     score: { us: 8.5, them: 8.5 },
-    related: ['vidiq', 'morningfame', 'tubics'],
+    related: ['vidiq', 'morningfame', 'tubics', 'canva', 'keywordtool'],
   },
   {
     id: 'morningfame',
@@ -73,7 +73,7 @@ const tools = [
     verdict: 'Morningfame provides excellent growth analytics and content ideas. YT SEO Architect offers more hands-on optimization tools like thumbnail scoring and A/B testing. Different tools for different needs.',
     bestFor: 'Creators who want AI optimization tools for free.',
     score: { us: 8.0, them: 7.0 },
-    related: ['vidiq', 'tubebuddy', 'tubics'],
+    related: ['vidiq', 'tubebuddy', 'tubics', 'canva', 'keywordtool'],
   },
   {
     id: 'tubics',
@@ -96,7 +96,7 @@ const tools = [
     verdict: 'Tubics offers a solid SEO scoring system and competitor tracking. YT SEO Architect matches most features while staying completely free. If budget is a concern, YT SEO Architect is the better choice.',
     bestFor: 'Creators who want free SEO tools with thumbnail and A/B testing.',
     score: { us: 8.0, them: 7.5 },
-    related: ['vidiq', 'tubebuddy', 'morningfame'],
+    related: ['vidiq', 'tubebuddy', 'morningfame', 'canva', 'keywordtool'],
   },
   {
     id: 'canva',
@@ -120,7 +120,7 @@ const tools = [
     verdict: 'Canva designs thumbnails. YT SEO Architect tells you if they will work. Use both together — design in Canva, then optimize with YT SEO Architect.',
     bestFor: 'Creators who design in Canva and want to validate their thumbnails before publishing.',
     score: { us: 8.0, them: 6.5 },
-    related: ['vidiq', 'tubebuddy'],
+    related: ['vidiq', 'tubebuddy', 'morningfame', 'tubics', 'keywordtool'],
   },
   {
     id: 'keywordtool',
@@ -143,7 +143,7 @@ const tools = [
     verdict: 'Keyword Tool is excellent for multi-platform keyword research. YT SEO Architect combines keyword research with optimization tools (thumbnail scoring, title A/B testing) in one free platform. Better value for YouTube-specific creators.',
     bestFor: 'YouTube creators who want all-in-one optimization without paying for multiple tools.',
     score: { us: 8.0, them: 7.0 },
-    related: ['vidiq', 'tubebuddy', 'tubics'],
+    related: ['vidiq', 'tubebuddy', 'morningfame', 'tubics', 'canva'],
   },
 ];
 

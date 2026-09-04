@@ -1,0 +1,4 @@
+[gemini] google-genai not installed; skipping
+[http] https://api.openverse.engineering/v1/images/?[redacted]: HTTP Error 301: Moved Permanently
+[openverse] no results
+Hero image required but no generation path available. Configure Banana MCP, set GOOGLE_AI_API_KEY, set UNSPLASH_ACCESS_KEY / PEXELS_API_KEY / PIXABAY_API_KEY, or place a 1200x630 hero.png in the draft folder manually.

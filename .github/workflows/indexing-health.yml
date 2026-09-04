@@ -1,0 +1,46 @@
+name: 🩺 Indexing Health Check (daily)
+
+on:
+  schedule:
+    - cron: '0 9 * * *'     # Daily 09:00 UTC (11:00 SAST)
+  workflow_dispatch:         # Manual trigger
+
+permissions:
+  contents: write
+
+jobs:
+  health:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GH_PAT }}
+          fetch-depth: 1
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+
+      - name: 🩺 Run indexing health check
+        id: health
+        run: node scripts/check-indexing-health.mjs
+
+      - name: 💾 Commit health state
+        run: |
+          git config user.name "YT SEO Bot"
+          git config user.email "hnhlaka142@gmail.com"
+          git add public/indexing-health-state.json
+          if git diff --staged --quiet; then
+            echo "No health state changes"
+          else
+            git commit -m "indexing: health check state [skip ci]"
+            git push origin HEAD:main
+          fi
+
+      - name: 🔔 Alert on persistent failure
+        if: failure()
+        run: |
+          echo "::error::IndexNow key file down OR Bing/IndexNow 429 persisted 48h+."
+          echo "Check public/indexing-health-state.json for consecutive429 count."
+          exit 1

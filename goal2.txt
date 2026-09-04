@@ -1,0 +1,20 @@
+3) Programmatic SEO + templates at scale
+text
+/goal Launch a programmatic SEO system for YouTube SEO templates and checklists
+verify:
+- At least 20 template pages live, each targeting a specific long-tail query, e.g.:
+- “YouTube description template for gaming channels”
+- “YouTube title template for tutorial videos”
+- “YouTube tags template for vlogs”
+- Each page includes:
+- A copy-paste template
+- Short explanation of when/how to use it
+- Internal links to relevant tools and pillar guides
+- All pages pass basic SEO checks (unique titles/meta, H1, internal links)
+constraints:
+- Templates must be practical and up-to-date with 2026 best practices
+- Avoid thin or duplicate content; each page must have unique intro and usage notes
+boundaries:
+- Create under /templates route
+- Use a data-driven approach (spreadsheet/JSON of templates) to generate pages
+Programmatic pages like this are a common SaaS SEO tactic to capture long-tail traffic at scale.seobility+2

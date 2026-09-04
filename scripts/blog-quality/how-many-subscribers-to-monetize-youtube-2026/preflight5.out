@@ -1,0 +1,16 @@
+[PASS] Gate 1: Capability Discovery
+       warning:   live tool availability not provided; MCP image tools cannot be verified from declarations
+[PASS] Gate 2: Format Completeness
+[PASS] Gate 3: Visual Verification
+       warning:   backend: playwright
+[PASS] Gate 4: Content Review
+[FAIL] Gate 5: Asset + Link Integrity
+       violation: local link invalid path: /tools/monetization-readiness-checker (local path must be relative to draft: /tools/monetization-readiness-checker)
+       violation: local link invalid path: /tools/youtube-revenue-estimator (local path must be relative to draft: /tools/youtube-revenue-estimator)
+       violation: link returned 0: https://support.google.com/youtube/answer/72851
+       violation: link returned 0: https://support.google.com/youtube/answer/72857
+       violation: link returned 0: https://support.google.com/youtube/answer/72851
+       violation: link returned 0: https://support.google.com/youtube/answer/72851
+       violation: local link invalid path: /tools/subscriber-growth-calculator (local path must be relative to draft: /tools/subscriber-growth-calculator)
+       violation: local link invalid path: /tools/monetization-readiness-checker (local path must be relative to draft: /tools/monetization-readiness-checker)
+       violation: local link invalid path: /tools/youtube-revenue-estimator (local path must be relative to draft: /tools/youtube-revenue-estimator)

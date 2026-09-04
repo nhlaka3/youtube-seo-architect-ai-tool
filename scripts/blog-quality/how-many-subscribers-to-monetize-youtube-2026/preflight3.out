@@ -1,0 +1,7 @@
+[PASS] Gate 1: Capability Discovery
+       warning:   live tool availability not provided; MCP image tools cannot be verified from declarations
+[PASS] Gate 2: Format Completeness
+[PASS] Gate 3: Visual Verification
+       warning:   backend: playwright
+[FAIL] Gate 4: Content Review
+       violation: reviewer blocked: overall 82/100 below 90 Exceptional threshold; P0 on "dangling chart reference" — chart present in rendered-full.html but absent from the artifact under review

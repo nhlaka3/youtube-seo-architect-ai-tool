@@ -1,0 +1,90 @@
+
+============================================================
+RESOURCE PAGE OUTREACH
+Finding resource/list pages that could list YT SEO Architect
+Our site: https://yt-seo-architect.vercel.app
+============================================================
+
+🔄 Stage 1: Searching for resource pages...
+  [1/45] "best youtube tools for creators"
+  [2/45] "best youtube seo tools"
+  [3/45] "best free youtube tools"
+  [4/45] "best tools for youtube growth"
+  [5/45] "best youtube analytics tools"
+  [6/45] "best youtube keyword research tools"
+  [7/45] "best youtube thumbnail maker"
+  [8/45] "best youtube description generator"
+  [9/45] "top youtube tools every creator needs"
+  [10/45] "best free tools for youtubers"
+  [11/45] "best youtube marketing tools"
+  [12/45] "top free youtube tools"
+  [13/45] "youtube seo tools list"
+  [14/45] "free youtube tools"
+  [15/45] "youtube creator tools"
+  [16/45] "youtube tools guide"
+  [17/45] "tools for youtube channels"
+  [18/45] "youtube creator toolkit"
+  [19/45] "youtube tools list"
+  [20/45] "youtube seo resources"
+  [21/45] "essential youtube tools"
+  [22/45] "tools for youtube creators"
+  [23/45] "youtube growth resources"
+  [24/45] "helpful resources youtube creators"
+  [25/45] "youtube resources page"
+  [26/45] "tools i use for youtube"
+  [27/45] "tools i use as a youtuber"
+  [28/45] "youtube content creation tools"
+  [29/45] "youtube video optimization tools"
+  [30/45] "youtube tools and resources"
+  [31/45] "youtube creator resources"
+  [32/45] "free tools for youtube channels"
+  [33/45] "youtube seo checklist tools"
+  [34/45] "resources for youtube creators"
+  [35/45] "youtube toolkit"
+  [36/45] "tools i recommend for youtube"
+  [37/45] "my favorite youtube tools"
+  [38/45] "free youtube tag generator"
+  [39/45] "youtube thumbnail tools"
+  [40/45] "youtube keyword tool"
+  [41/45] "youtube title generator"
+  [42/45] "youtube description templates tools"
+  [43/45] "curated list of youtube tools"
+  [44/45] "youtube tool roundup"
+  [45/45] "best free seo tools for youtube"
+  Found 0 unique results from DDG
+  DDG returned 0 results. Trying fallback sources...
+  📂 Using resource database: 41 known pages
+  Total pages to scan: 30
+
+🔄 Stage 2: Fetching and analyzing up to 15 pages...
+  [1/15] 🎯 OPPORTUNITY https://contentmavericks.com/best-youtube-seo-tool, email: support@contentmavericks.com
+       Score: 4 | Title: 7 Best YouTube SEO Tools 2026 (50 Tools Reviewed)
+  [2/15] [SKIP] https://vidiq.com/youtube-seo-tools/ — HTTP Error 429: Too Many Requests
+  [3/15] [SKIP] https://tuberanker.com/ — HTTP Error 403: Forbidden
+  [4/15] [SKIP] https://www.tastyedits.com/youtube-seo-tools/ — HTTP Error 403: Forbidden
+  [5/15] [SKIP] https://thecmo.com/tools/youtube-seo-tools/ — HTTP Error 403: Forbidden
+  [6/15] 🎯 OPPORTUNITY https://rankxdigital.com/blog/youtube-seo-tools/, email: info@rankxdigital.com
+       Score: 4 | Title: Best YouTube SEO Tools In 2026: Free &amp; Paid (4
+  [7/15] [SKIP] https://joseangelostudios.com/best-youtube-seo-too — HTTP Error 403: Forbidden
+  [8/15] 🎯 OPPORTUNITY https://www.youngurbanproject.com/youtube-seo-tool, email: hello@youngurbanproject.com
+       Score: 6 | Title: 20 Best YouTube SEO Tools in 2026
+  [9/15] 🎯 OPPORTUNITY https://impressivemagazine.com/best-youtube-seo-to
+       Score: 4 | Title: 12 Best YouTube SEO Tools for Creators in 2026
+  [10/15] [SKIP] https://stuartkerrs.com/best-seo-tools-for-youtube — HTTP Error 403: Forbidden
+  [11/15] [SKIP] https://blog.hubspot.com/marketing/youtube-seo-too — HTTP Error 404: Not Found
+  [12/15] [SKIP] https://neilpatel.com/blog/youtube-seo-tools/ — HTTP Error 404: Not Found
+  [13/15] 🎯 OPPORTUNITY https://syscality.com/best-seo-tools-for-youtube/, email: support@syscality.com
+       Score: 7 | Title: Best SEO Tools for YouTube to Boost Video Rankings
+  [14/15] [SKIP] https://socialmediaexaminer.com/youtube-marketing- — HTTP Error 404: Not Found
+  [15/15] [SKIP] https://backlinko.com/youtube-seo-tools — HTTP Error 404: Not Found
+
+  Analyzed 5 relevant resource pages
+
+  Missing our link: 5 pages
+
+🔄 Stage 4: Generating outreach templates...
+
+  New opportunities: 0
+  Skipped (seen): 5
+
+No new opportunities found.

@@ -142,15 +142,15 @@
        IMAGE PROTOCOL:
        ═══════════════════════════════════════════════════════════════
       - Hero: loading="eager", fetchpriority="high", 800×400.
-      - Generate with: python3 scripts/generate-blog-hero.py <slug> "Title Line 1" "Title Line 2" "Optional Line 3" "CATEGORY BADGE"
-      - Saves to: public/blog/[SLUG]-hero.png. Reference as /blog/[SLUG]-hero.png.
-      - OG image: Uses [SLUG]-og.png (1200×630 generated alongside hero).
-      - SVG: Prefer inline SVGs for technical diagrams.
-      - SECOND IMAGE: Add a diagram, screenshot, or comparison chart in the
-        implementation or trade-offs section. Run the generator again with a
-        different title for your second image:
-        python3 scripts/generate-blog-hero.py <slug>-diagram "Section Title" "" "" "DIAGRAM"
-        This creates [SLUG]-diagram-hero.png. Use loading="lazy" in-content.
+      - Generate with: node scripts/generate-hero-scene.mjs <slug> "Title Line 1" "Title Line 2" "<keyword>" "BADGE"
+        (renders a dashboard product-shot scene — retention curve + stat cards
+        + keyword search chip — via headless Chrome; NO text-on-card heroes).
+      - Saves to: public/blog/[SLUG]-hero.png (+ -hero.webp). Reference as /blog/[SLUG]-hero.png.
+      - OG image: [SLUG]-og.png (1200×630) is generated alongside the hero.
+        Commit PNGs with: git add -f (they are gitignored).
+      - SVG: Prefer inline SVGs for technical diagrams (charts — see Motion Conventions).
+      - SECOND IMAGE: Add an inline SVG chart (see scripts/blog-visuals.mjs /
+        chart-wrap pattern) in the implementation or trade-offs section.
 
        ═══════════════════════════════════════════════════════════════
        POST-PUBLISH CHECKLIST:
@@ -201,33 +201,40 @@
 
   <!-- ── Article Schema (JSON-LD) ───────────────────────────────── -->
   <script type="application/ld+json">
-  {
-    "@context": "https://schema.org",
-    "@type": "Article",
-    "headline": "[HEADLINE — max 110 chars]",
-    "description": "[SCHEMA_DESCRIPTION]",
-    "datePublished": "[YYYY-MM-DD]",
-    "dateModified": "[YYYY-MM-DD]",
-    "timeRequired": "PT[READING_TIME]M",
-    "author": {
-      "@type": "Person",
-      "name": "Patrick",
-      "url": "https://yt-seo-architect.vercel.app/about"
-    },
-    "publisher": {
-      "@type": "Organization",
-      "name": "YT SEO Architect",
-      "logo": {
-        "@type": "ImageObject",
-        "url": "https://yt-seo-architect.vercel.app/logo.svg"
-      }
-    },
-    "mainEntityOfPage": {
-      "@type": "WebPage",
-      "@id": "https://yt-seo-architect.vercel.app/blog/[POST_SLUG]"
+{
+  "@context": "https://schema.org",
+  "@type": "Article",
+  "headline": "[HEADLINE — max 110 chars]",
+  "description": "[SCHEMA_DESCRIPTION]",
+  "datePublished": "[YYYY-MM-DD]",
+  "dateModified": "[YYYY-MM-DD]",
+  "timeRequired": "PT[READING_TIME]M",
+  "author": {
+    "@type": "Person",
+    "name": "Patrick",
+    "url": "https://yt-seo-architect.vercel.app/about"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "YT SEO Architect",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://yt-seo-architect.vercel.app/logo.png"
     }
+  },
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "https://yt-seo-architect.vercel.app/blog/[POST_SLUG]"
+  },
+  "speakable": {
+    "@type": "SpeakableSpecification",
+    "xpath": [
+      "//h1",
+      "//meta[@name='description']/@content"
+    ]
   }
-  </script>
+}
+</script>
 
   <!-- ── FAQ Schema (JSON-LD) ───────────────────────────────────────
        Rules: Exactly 5 questions. Answers < 50 words context-free.
@@ -235,53 +242,60 @@
        Google rejects mismatched JSON-LD + visible text.
   -->
   <script type="application/ld+json">
-  {
-    "@context": "https://schema.org",
-    "@type": "FAQPage",
-    "mainEntity": [
-      {
-        "@type": "Question",
-        "name": "[FAQ_QUESTION_1]",
-        "acceptedAnswer": {
-          "@type": "Answer",
-          "text": "[FAQ_ANSWER_1 — keep under 50 words, match visible FAQ exactly]"
-        }
-      },
-      {
-        "@type": "Question",
-        "name": "[FAQ_QUESTION_2]",
-        "acceptedAnswer": {
-          "@type": "Answer",
-          "text": "[FAQ_ANSWER_2]"
-        }
-      },
-      {
-        "@type": "Question",
-        "name": "[FAQ_QUESTION_3]",
-        "acceptedAnswer": {
-          "@type": "Answer",
-          "text": "[FAQ_ANSWER_3]"
-        }
-      },
-      {
-        "@type": "Question",
-        "name": "[FAQ_QUESTION_4]",
-        "acceptedAnswer": {
-          "@type": "Answer",
-          "text": "[FAQ_ANSWER_4]"
-        }
-      },
-      {
-        "@type": "Question",
-        "name": "[FAQ_QUESTION_5]",
-        "acceptedAnswer": {
-          "@type": "Answer",
-          "text": "[FAQ_ANSWER_5]"
-        }
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "[FAQ_QUESTION_1]",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "[FAQ_ANSWER_1 — keep under 50 words, match visible FAQ exactly]"
       }
+    },
+    {
+      "@type": "Question",
+      "name": "[FAQ_QUESTION_2]",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "[FAQ_ANSWER_2]"
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "[FAQ_QUESTION_3]",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "[FAQ_ANSWER_3]"
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "[FAQ_QUESTION_4]",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "[FAQ_ANSWER_4]"
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "[FAQ_QUESTION_5]",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "[FAQ_ANSWER_5]"
+      }
+    }
+  ],
+  "speakable": {
+    "@type": "SpeakableSpecification",
+    "xpath": [
+      "//h1",
+      "//meta[@name='description']/@content"
     ]
   }
-  </script>
+}
+</script>
 
   <!-- ── Speakable Schema for voice search ─────────────────────────── -->
   <script type="application/ld+json">
@@ -334,7 +348,8 @@
     <link rel="stylesheet" href="/nav.css">
     <link rel="stylesheet" href="/blog-article.css">
   </noscript>
-</head>
+<link rel="stylesheet" href="/motion-utilities.css">
+<script defer src="/ga.js"></script></head>
 <body>
 
   <!-- Skip to content -->
@@ -351,10 +366,10 @@
         YT <span>SEO</span> Architect
       </a>
       <nav class="header-nav" id="header-nav">
-        <a href="/tools.html">Tools</a>
+        <a href="/tools">Tools</a>
         <a href="/blog">Blog</a>
-        <a href="/public/glossary">Glossary</a>
-       <a href="/dashboard.html" class="header-cta">Dashboard</a>
+        <a href="/glossary/">Glossary</a>
+       <a href="/dashboard" class="header-cta">Dashboard</a>
       </nav>
       <button class="mobile-menu-btn" aria-label="Menu" onclick="document.getElementById('header-nav').classList.toggle('open')">☰</button>
     </div>
@@ -623,21 +638,21 @@
     <div class="footer-inner">
       <div class="footer-col">
         <h4>Product</h4>
-       <a href="/dashboard.html">Dashboard</a>
-        <a href="/changelog.html">Changelog</a>
+       <a href="/dashboard">Dashboard</a>
+        <a href="/changelog">Changelog</a>
       </div>
       <div class="footer-col">
         <h4>Resources</h4>
         <a href="/blog">Blog</a>
-        <a href="/public/glossary">Glossary</a>
-        <a href="/public/guides">Guides</a>
+        <a href="/glossary/">Glossary</a>
+        <a href="/tools/">Guides</a>
       </div>
       <div class="footer-col">
         <h4>Company</h4>
-        <a href="/about.html">About</a>
-        <a href="/contact.html">Contact</a>
-        <a href="/privacy-policy.html">Privacy</a>
-        <a href="/terms-of-service.html">Terms</a>
+        <a href="/about">About</a>
+        <a href="/contact">Contact</a>
+        <a href="/privacy-policy">Privacy</a>
+        <a href="/terms-of-service">Terms</a>
       </div>
       <div class="footer-col">
         <h4>Social</h4>

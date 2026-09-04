@@ -8,14 +8,31 @@
   <link rel="canonical" href="https://yt-seo-architect.vercel.app/tools/channel-audit-score" />
   <meta property="og:title" content="Channel audit score — Free Interactive Tool | YT SEO Architect" />
   <meta property="og:description" content="Analyze your text for SEO keywords, topic clusters, and readability. Get insights to improve your YouTube content. Apply what you learn from the channel audit score guide. Works entirely in your browser, no login required." />
-  <meta property="og:image" content="https://yt-seo-architect.vercel.app/logo.svg" />
+  <meta property="og:image" content="https://yt-seo-architect.vercel.app/og-image.png" />
   <meta name="robots" content="index, follow" />
   <script type="application/ld+json">
-  { "@context": "https://schema.org", "@type": "WebApplication",
-    "name": "Channel audit score", "description": "channel audit score for YouTube creators",
-    "url": "https://yt-seo-architect.vercel.app/tools/channel-audit-score", "applicationCategory": "MultimediaApplication",
-    "operatingSystem": "Web", "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" } }
-  </script>
+{
+  "@context": "https://schema.org",
+  "@type": "WebApplication",
+  "name": "Channel audit score",
+  "description": "channel audit score for YouTube creators",
+  "url": "https://yt-seo-architect.vercel.app/tools/channel-audit-score",
+  "applicationCategory": "MultimediaApplication",
+  "operatingSystem": "Web",
+  "offers": {
+    "@type": "Offer",
+    "price": "0",
+    "priceCurrency": "USD"
+  },
+  "speakable": {
+    "@type": "SpeakableSpecification",
+    "xpath": [
+      "//h1",
+      "//meta[@name='description']/@content"
+    ]
+  }
+}
+</script>
   <style>
     :root { --bg: #0f0f1a; --surface: #1a1a2e; --border: #2a2a4a; --accent: #6366f1; --accent2: #06b6d4; --text: #e2e8f0; --text2: #94a3b8; --text3: #64748b; --success: #22c55e; }
     * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -68,7 +85,8 @@
     <link rel="stylesheet" href="/nav.css">
     <link rel="stylesheet" href="/blog-article.css">
   </noscript>
-</head>
+<link rel="stylesheet" href="/motion-utilities.css">
+<script defer src="/ga.js"></script></head>
 <body data-keyword="channel audit score">
   <div class="header">
     <a href="/" class="header-logo"><span>🛠️</span> YT SEO Architect</a>
@@ -107,6 +125,25 @@
       <a href="/blog/channel-audit-score">Read the Complete Guide →</a>
     </div>
   </div>
+
+    <div class="seo-content" style="max-width:760px;margin:2.5rem auto 0;padding-top:2rem;border-top:1px solid var(--border);">
+      <h2 style="font-size:1.35rem;font-weight:800;color:var(--text-primary);margin-bottom:.75rem;">About This Tool</h2>
+      <p>This audit runs your channel through the same checks an SEO consultant would: metadata completeness, title and description optimization, tag usage, thumbnail quality, and content structure. It produces a prioritized list of fixes rather than a vague verdict.</p><p>Why this matters: YouTube's algorithm is a feedback loop — better metadata earns more impressions, more impressions surface your retention, and strong retention expands reach further. Tools like this one exist to make sure you are optimizing every variable in that loop, on every upload, without needing a consultant's budget. Used consistently, the small gains from each check compound into a channel that ranks.</p><p>The YT SEO Architect approach is deliberately simple: run the check, apply the result, move on. No dashboards to babysit, no credits to count. If you pair this tool with the matching guide on the blog, you get the "why" behind every "what" — the benchmarks, the examples, and the mistakes to avoid — so you are never applying advice blindly.</p>
+      <h2 style="font-size:1.35rem;font-weight:800;color:var(--text-primary);margin:1.5rem 0 .75rem;">How to Use It</h2>
+      <ol style="color:var(--text-secondary);line-height:1.8;padding-left:1.25rem;"><li>Enter your channel URL or answer the audit questions about your current metadata.</li><li>The tool scores each audit category and lists concrete fixes in priority order.</li><li>Tackle the high-impact fixes first — they are the ones directly tied to impressions and CTR.</li><li>Re-audit after applying the fixes to measure the delta.</li></ol>
+      <h2 style="font-size:1.35rem;font-weight:800;color:var(--text-primary);margin:1.5rem 0 .75rem;">Frequently Asked Questions</h2>
+      <div class="faq-item" style="margin-bottom:1rem;"><h3 style="font-size:1rem;color:var(--text-primary);margin-bottom:.3rem;">What does a YouTube SEO audit check?</h3><p style="color:var(--text-secondary);font-size:.9rem;line-height:1.7;margin:0;">It checks the elements that determine impressions and clicks: titles, descriptions, tags, thumbnails, chapters, playlists, and channel structure. Each element has a best-practice baseline the audit scores against.</p></div><div class="faq-item" style="margin-bottom:1rem;"><h3 style="font-size:1rem;color:var(--text-primary);margin-bottom:.3rem;">How often should I audit my channel?</h3><p style="color:var(--text-secondary);font-size:.9rem;line-height:1.7;margin:0;">Quarterly is the right cadence for a full audit, plus a quick metadata check before every upload. Audits catch the slow drift in packaging quality that quietly kills CTR.</p></div><div class="faq-item" style="margin-bottom:1rem;"><h3 style="font-size:1rem;color:var(--text-primary);margin-bottom:.3rem;">What is the highest-impact audit finding?</h3><p style="color:var(--text-secondary);font-size:.9rem;line-height:1.7;margin:0;">Usually packaging — weak titles or thumbnails. Fixing CTR lifts every metric downstream: impressions expand, retention matters more, and watch time grows.</p></div><div class="faq-item" style="margin-bottom:1rem;"><h3 style="font-size:1rem;color:var(--text-primary);margin-bottom:.3rem;">How does this tool fit into a full YouTube SEO workflow?</h3><p style="color:var(--text-secondary);font-size:.9rem;line-height:1.7;margin:0;">It covers one specific lever in the optimization stack. Use it alongside the title, description, tag, and thumbnail tools for a complete pre-publish checklist, then validate the results against your YouTube Studio analytics over the following weeks.</p></div><div class="faq-item" style="margin-bottom:1rem;"><h3 style="font-size:1rem;color:var(--text-primary);margin-bottom:.3rem;">Will this tool work for my channel size?</h3><p style="color:var(--text-secondary);font-size:.9rem;line-height:1.7;margin:0;">Yes — the recommendations are size-agnostic because they follow YouTube's ranking fundamentals, which apply equally to a 100-subscriber channel and a million-subscriber channel. What changes with size is how fast results show, not whether the optimization is correct.</p></div>
+      <h2 style="font-size:1.35rem;font-weight:800;color:var(--text-primary);margin:1.5rem 0 .75rem;">Related Tools</h2>
+      <div style="margin-bottom:.5rem;"><a href="/tools/channel-health-score" style="display:inline-block;margin:.25rem .5rem .25rem 0;background:rgba(0,242,255,.08);border:1px solid rgba(0,242,255,.15);color:var(--cyan);padding:.35rem .8rem;border-radius:9999px;font-size:.8rem;font-weight:600;text-decoration:none;">channel health score</a><a href="/tools/youtube-seo-template-2026" style="display:inline-block;margin:.25rem .5rem .25rem 0;background:rgba(0,242,255,.08);border:1px solid rgba(0,242,255,.15);color:var(--cyan);padding:.35rem .8rem;border-radius:9999px;font-size:.8rem;font-weight:600;text-decoration:none;">youtube seo template 2026</a><a href="/tools/metadata-youtube" style="display:inline-block;margin:.25rem .5rem .25rem 0;background:rgba(0,242,255,.08);border:1px solid rgba(0,242,255,.15);color:var(--cyan);padding:.35rem .8rem;border-radius:9999px;font-size:.8rem;font-weight:600;text-decoration:none;">metadata youtube</a></div>
+    </div>
+
+  
+
+
+  
+
+
+  
 
   <div class="footer">
     <p>Part of <a href="/">YT SEO Architect</a> — Free AI-powered YouTube SEO tools | <a href="/blog/channel-audit-score">Channel audit score</a></p>
@@ -324,22 +361,22 @@ function handleTool() {
     <div class="footer-inner">
       <div class="footer-col">
         <h4>Product</h4>
-        <a href="/public/tools">Free Tools</a>
-        <a href="/dashboard.html">Dashboard</a>
-        <a href="/changelog.html">Changelog</a>
+        <a href="/tools/">Free Tools</a>
+        <a href="/dashboard">Dashboard</a>
+        <a href="/changelog">Changelog</a>
       </div>
       <div class="footer-col">
         <h4>Resources</h4>
         <a href="/blog">Blog</a>
-        <a href="/public/glossary">Glossary</a>
-        <a href="/public/guides">Guides</a>
+        <a href="/glossary/">Glossary</a>
+        <a href="/tools/">Guides</a>
       </div>
       <div class="footer-col">
         <h4>Company</h4>
-        <a href="/about.html">About</a>
-        <a href="/contact.html">Contact</a>
-        <a href="/privacy-policy.html">Privacy</a>
-        <a href="/terms-of-service.html">Terms</a>
+        <a href="/about">About</a>
+        <a href="/contact">Contact</a>
+        <a href="/privacy-policy">Privacy</a>
+        <a href="/terms-of-service">Terms</a>
       </div>
       <div class="footer-col">
         <h4>Social</h4>

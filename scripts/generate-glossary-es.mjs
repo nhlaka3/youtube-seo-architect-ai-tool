@@ -140,6 +140,28 @@ function generateComparisonsSection(termData, allTerms) {
   return `\n      <h2>Comparar ${termName}</h2>\n      <p>Descubre cómo ${termName.toLowerCase()} se compara con conceptos relacionados:</p>\n      <div class="related-grid">${links}</div>`;
 }
 
+function generateRelatedBlogsSection(relatedBlogs) {
+  if (!relatedBlogs || relatedBlogs.length === 0) return '';
+
+  const links = relatedBlogs
+    .map(slug => {
+      const title = slug
+        .replace(/-/g, ' ')
+        .replace(/\b\w/g, c => c.toUpperCase());
+      return `<a href="/blog/${slug}" class="related-card" style="display:inline-block;margin-right:.5rem;margin-bottom:.5rem;padding:.5rem 1rem">
+        📖 ${title}
+      </a>`;
+    })
+    .join('\n      ');
+
+  return `
+      <h2>Artículos de Blog Relacionados</h2>
+      <p>Profundiza con estas guías completas:</p>
+      <div>
+      ${links}
+      </div>`;
+}
+
 function generateShortAnswer(termData) {
   const def = termData.shortDefinition_es || termData.shortDefinition || '';
   const firstLetter = def.charAt(0).toLowerCase();
@@ -176,6 +198,7 @@ function generatePage(termData, template, allTerms, catMeta) {
     '{{FAQ_SCHEMA}}': faqSchemaJSON,
     '{{COMMON_QUESTIONS_SECTION}}': faqSectionHTML,
     '{{RELATED_TERMS_SECTION}}': generateRelatedTermsSection(termData, allTerms),
+    '{{RELATED_BLOGS_SECTION}}': generateRelatedBlogsSection(termData.relatedBlogs),
     '{{COMPARISONS_SECTION}}': generateComparisonsSection(termData, allTerms),
     '{{SCHEMA_DESCRIPTION}}': truncateForSchema(termData.shortDefinition_es || termData.shortDefinition),
   };
@@ -204,9 +227,10 @@ function generateIndexPage(data) {
     }).join('\n        ');
 
     catSections += `\n    <section id="${cat.slug}">
-      <h2 style="color:#e0e7ff;font-size:1.3rem;margin:2rem 0 1rem;display:flex;align-items:center;gap:.5rem">
+      <h2 style="color:#e0e7ff;font-size:1.3rem;margin:2rem 0 1rem;display:flex;align-items:center;gap:.5rem;flex-wrap:wrap">
         ${getCategoryEmoji(cat.slug)} ${catName}
         <span style="font-size:.8rem;color:#8b8b9e;font-weight:400">(${catTerms.length} términos)</span>
+        <a href="/glossary/es/category/${cat.slug}" style="font-size:.75rem;color:#a5b4fc;text-decoration:none;border:1px solid #4f46e5;padding:.15rem .6rem;border-radius:9999px">Ver hub →</a>
       </h2>
       <div class="related-grid">${termLinks}</div>
     </section>`;
@@ -224,6 +248,7 @@ function generateIndexPage(data) {
   <meta property="og:title" content="Glosario SEO de YouTube — ${total}+ Términos en Español" />
   <link rel="alternate" hreflang="en" href="https://yt-seo-architect.vercel.app/glossary/" />
   <link rel="alternate" hreflang="es" href="https://yt-seo-architect.vercel.app/glossary/es/" />
+  <link rel="alternate" hreflang="pt" href="https://yt-seo-architect.vercel.app/glossary/pt/" />
   <link rel="stylesheet" href="/design-tokens.css" media="print" onload="this.media='all'">
   <link rel="stylesheet" href="/utilities.css" media="print" onload="this.media='all'">
   <link rel="stylesheet" href="/nav.css" media="print" onload="this.media='all'">
@@ -249,7 +274,7 @@ function generateIndexPage(data) {
     .related-card p{font-size:.8rem;color:#8b8b9e;margin:0}
     @media(max-width:640px){.glossary-hero{padding:2rem 1rem}.glossary-hero h1{font-size:1.5rem}}
   </style>
-</head>
+<script defer src="/ga.js"></script></head>
 <body>
   <header class="header"><a href="/">⚡ YT SEO Architect</a><a href="/tools/" class="cta">Herramientas</a></header>
   <main>
@@ -257,6 +282,9 @@ function generateIndexPage(data) {
       <h1>📖 Glosario SEO de YouTube</h1>
       <p>${total}+ términos definidos y explicados para creadores de contenido en español.</p>
       <div class="stat">${total} términos · 6 categorías · Gratis</div>
+      <br>
+      <a href="/glossary/" class="lang-switch" hreflang="en" rel="alternate" style="display:inline-flex;align-items:center;gap:4px;font-size:.8rem;color:#a5b4fc;text-decoration:none;padding:4px 12px;border:1px solid rgba(165,180,252,.3);border-radius:9999px;transition:all .2s">🇺🇸 English Version</a>
+      <a href="/glossary/pt/" class="lang-switch" hreflang="pt" rel="alternate" style="display:inline-flex;align-items:center;gap:4px;font-size:.8rem;color:#a5b4fc;text-decoration:none;padding:4px 12px;border:1px solid rgba(165,180,252,.3);border-radius:9999px;transition:all .2s">🇧🇷 Versão em Português</a>
     </div>
     <div class="lang-notice">🇪🇸 Estás viendo la versión en español. <a href="/glossary/">Ver en inglés →</a></div>
     ${catSections}

@@ -13,8 +13,8 @@
   <!-- Geist font (non-render-blocking) -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Geist:wght@100..900&display=swap" rel="stylesheet" />
-  <link href="https://fonts.googleapis.com/css2?family=Geist+Mono:wght@100..900&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Geist:wght@100..900&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
+  <link href="https://fonts.googleapis.com/css2?family=Geist+Mono:wght@100..900&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
 
   <link rel="dns-prefetch" href="https://www.google-analytics.com" />
   <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3831668789026424" crossorigin="anonymous"></script>
@@ -34,17 +34,44 @@
   <meta name="twitter:image" content="https://yt-seo-architect.vercel.app/og-image.png" />
 
   <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Blog",
+  "name": "YT SEO Architect Blog",
+  "description": "YouTube SEO tips, guides, and growth strategies for content creators.",
+  "url": "https://yt-seo-architect.vercel.app/blog",
+  "publisher": {
+    "@type": "Organization",
+    "name": "YT SEO Architect",
+    "url": "https://yt-seo-architect.vercel.app/"
+  },
+  "speakable": {
+    "@type": "SpeakableSpecification",
+    "xpath": [
+      "//h1",
+      "//meta[@name='description']/@content"
+    ]
+  }
+}
+</script>
+  <script type="application/ld+json">
   {
     "@context": "https://schema.org",
-    "@type": "Blog",
-    "name": "YT SEO Architect Blog",
-    "description": "YouTube SEO tips, guides, and growth strategies for content creators.",
-    "url": "https://yt-seo-architect.vercel.app/blog",
-    "publisher": {
-      "@type": "Organization",
-      "name": "YT SEO Architect",
-      "url": "https://yt-seo-architect.vercel.app/"
-    }
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      {
+        "@type": "ListItem",
+        "position": 1,
+        "name": "Home",
+        "item": "https://yt-seo-architect.vercel.app/"
+      },
+      {
+        "@type": "ListItem",
+        "position": 2,
+        "name": "Blog",
+        "item": "https://yt-seo-architect.vercel.app/blog"
+      }
+    ]
   }
   </script>
 
@@ -313,7 +340,8 @@
       .blog-hero h1 { font-size: 1.4rem; }
     }
   </style>
-</head>
+<link rel="stylesheet" href="/motion-utilities.css">
+<script defer src="/ga.js"></script></head>
 <body>
 
   <!-- Skip to content -->
@@ -332,7 +360,7 @@
       <nav class="header-nav" id="header-nav">
         <a href="/tools.html">Tools</a>
         <a href="/blog" class="active">Blog</a>
-        <a href="/public/glossary">Glossary</a>
+        <a href="/glossary/">Glossary</a>
        <a href="/dashboard.html" class="header-cta">Dashboard</a>
       </nav>
       <button class="mobile-menu-btn" aria-label="Menu" onclick="document.getElementById('header-nav').classList.toggle('open')">☰</button>
@@ -376,7 +404,7 @@
           <p>Get a free AI-powered audit of your channel's SEO — titles, tags, descriptions, and more — in 60 seconds.</p>
           <a href="/dashboard" class="audit-btn">Audit My Channel — Free</a>
           <div class="benefits">
-            <span class="benefit">17 AI tools</span>
+            <span class="benefit">Free AI tools</span>
             <span class="benefit">No credit card</span>
             <span class="benefit">60-second setup</span>
           </div>
@@ -420,7 +448,7 @@
             <span class="category">Monetization</span>
             <h3><a href="/blog/youtube-monetization-2026">YouTube Monetization 2026: Complete Guide</a></h3>
             <p class="excerpt">Everything you need to know about YouTube monetization requirements, AdSense, channel memberships, Super Chat, and alternative revenue streams.</p>
-            <div class="meta">July 24, 2026 · 10 min read</div>
+            <div class="meta">Updated August 17, 2026</div>
           </article>
 
         </div>
@@ -428,7 +456,7 @@
         <!-- CTA Widget (bottom) -->
         <div class="cta-widget reveal">
           <h3>🚀 Ready to Grow Your Channel?</h3>
-          <p>17 AI-powered YouTube SEO tools. Free to start. No credit card required.</p>
+          <p>Free AI YouTube SEO tools. Free to start. No credit card required.</p>
           <a href="/dashboard" class="audit-btn">Start Free Now</a>
           <div class="benefits">
             <span class="benefit">Tag Generator</span>
@@ -473,8 +501,8 @@
       <div class="footer-col">
         <h4>Resources</h4>
         <a href="/blog">Blog</a>
-        <a href="/public/glossary">Glossary</a>
-        <a href="/public/guides">Guides</a>
+        <a href="/glossary/">Glossary</a>
+        <a href="/tools/">Guides</a>
       </div>
       <div class="footer-col">
         <h4>Company</h4>

@@ -1,0 +1,975 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<style>
+  @page {
+    size: A4;
+    margin: 22mm 18mm 25mm 18mm;
+    @bottom-center {
+      content: "Page " counter(page) " of " counter(pages);
+      font-size: 9pt;
+      color: #6b7280;
+      font-family: 'DejaVu Serif', 'Times New Roman', Georgia, serif;
+    }
+    @bottom-left {
+      content: "Confidential";
+      font-size: 7pt;
+      color: #d6d3cc;
+      font-family: 'DejaVu Serif', 'Times New Roman', Georgia, serif;
+    }
+    @bottom-right {
+      content: "yt-seo-architect.vercel.app Google SEO Report";
+      font-size: 8pt;
+      color: #cbd5e1;
+      font-family: 'DejaVu Serif', 'Times New Roman', Georgia, serif;
+    }
+  }
+
+  @page :first {
+    margin: 0;
+    @bottom-left { content: none; }
+    @bottom-center { content: none; }
+    @bottom-right { content: none; }
+  }
+
+  @page toc {
+    @bottom-center {
+      content: counter(page);
+      font-size: 9pt;
+      color: #6b7280;
+    }
+  }
+
+  * {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+  }
+
+  body {
+    font-family: 'Times New Roman', 'DejaVu Serif', Georgia, serif;
+    font-size: 10pt;
+    line-height: 1.55;
+    color: #1e293b;
+    background: white;
+  }
+
+  /* ─── Title Page (Clean White) ─── */
+  .title-page {
+    page: first;
+    width: 210mm;
+    height: 297mm;
+    background: #ffffff;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    color: #1a1a2e;
+    position: relative;
+    padding: 50mm 30mm 40mm 30mm;
+    border-top: 6mm solid #1e3a5f;
+  }
+
+  .title-page .badge {
+    background: #f7f6f3;
+    border: 1px solid #d6d3cc;
+    border-radius: 20px;
+    padding: 6px 18px;
+    font-size: 9pt;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-bottom: 15mm;
+    color: #1e3a5f;
+  }
+
+  .title-page h1 {
+    font-size: 28pt;
+    font-weight: bold;
+    margin-bottom: 5mm;
+    letter-spacing: -0.5px;
+    line-height: 1.2;
+    color: #1a1a2e;
+  }
+
+  .title-page .subtitle {
+    font-size: 13pt;
+    color: #6b7280;
+    margin-bottom: 12mm;
+    font-weight: 300;
+  }
+
+  .title-page .url {
+    font-size: 12pt;
+    color: #1e3a5f;
+    margin-bottom: 15mm;
+    padding: 4mm 8mm;
+    border: 1px solid #d6d3cc;
+    border-radius: 6px;
+    background: #faf9f7;
+  }
+
+  .title-page .score-box {
+    background: #faf9f7;
+    border: 2px solid #d6d3cc;
+    border-radius: 12px;
+    padding: 6mm 12mm;
+    margin-bottom: 15mm;
+  }
+
+  .title-page .score-number {
+    font-size: 42pt;
+    font-weight: bold;
+    color: #1e3a5f;
+    line-height: 1;
+  }
+
+  .title-page .score-label {
+    font-size: 10pt;
+    color: #6b7280;
+    margin-top: 2mm;
+  }
+
+  .title-page .meta {
+    font-size: 9pt;
+    color: #6b7280;
+    margin-top: 8mm;
+    padding-top: 5mm;
+    border-top: 1px solid #d6d3cc;
+  }
+
+  .title-page .meta span {
+    margin: 0 8px;
+  }
+
+  /* ─── Table of Contents ─── */
+  .toc-page {
+    page: toc;
+    page-break-before: always;
+  }
+
+  .toc-page h2 {
+    font-size: 18pt;
+    color: #1e3a5f;
+    margin-bottom: 8mm;
+    padding-bottom: 3mm;
+    border-bottom: 2px solid #1e3a5f;
+  }
+
+  .toc-list {
+    list-style: none;
+    padding: 0;
+  }
+
+  .toc-list li {
+    padding: 2mm 0;
+    border-bottom: 1px solid #f1f5f9;
+    overflow: hidden;
+  }
+
+  .toc-list li.toc-section {
+    font-weight: bold;
+    font-size: 11pt;
+    padding-top: 4mm;
+    color: #0f172a;
+  }
+
+  .toc-list li.toc-sub {
+    padding-left: 8mm;
+    font-size: 9.5pt;
+    color: #475569;
+  }
+
+  .toc-score {
+    display: inline-block;
+    float: right;
+    padding: 1px 8px;
+    border-radius: 10px;
+    font-size: 9pt;
+    font-weight: bold;
+    color: white;
+  }
+
+  .score-good { background: #2d6a4f; }
+  .score-warn { background: #d4740e; }
+  .score-bad { background: #c53030; }
+
+  /* ─── Section Styles ─── */
+  div.section {
+    page-break-before: always;
+  }
+
+  .section-header {
+    background: #faf9f7;
+    border-left: 4px solid #1e3a5f;
+    padding: 5mm 6mm;
+    margin-bottom: 6mm;
+    page-break-after: avoid;
+  }
+
+  .section-header h2 {
+    font-size: 16pt;
+    color: #0f172a;
+    margin-bottom: 1mm;
+  }
+
+  .section-header .section-score {
+    font-size: 12pt;
+    font-weight: bold;
+    float: right;
+    margin-top: -6mm;
+  }
+
+  h3 {
+    font-size: 12pt;
+    color: #1e3a5f;
+    margin-top: 6mm;
+    margin-bottom: 3mm;
+    padding-bottom: 1.5mm;
+    border-bottom: 1px solid #d6d3cc;
+    page-break-after: avoid;
+  }
+
+  h4 {
+    font-size: 10.5pt;
+    color: #334155;
+    margin-top: 4mm;
+    margin-bottom: 2mm;
+    page-break-after: avoid;
+  }
+
+  p {
+    margin-bottom: 3mm;
+    color: #334155;
+  }
+
+  .highlight {
+    background: #fef3c7;
+    border-left: 3px solid #d4740e;
+    padding: 3mm 4mm;
+    margin: 4mm 0;
+    font-size: 9.5pt;
+    /* allow page breaks to prevent white gaps */
+  }
+
+  .critical-box {
+    background: #fef2f2;
+    border-left: 3px solid #c53030;
+    padding: 3mm 4mm;
+    margin: 4mm 0;
+    font-size: 9.5pt;
+    /* allow page breaks to prevent white gaps */
+  }
+
+  .success-box {
+    background: #f0fdf4;
+    border-left: 3px solid #2d6a4f;
+    padding: 3mm 4mm;
+    margin: 4mm 0;
+    font-size: 9.5pt;
+    /* allow page breaks to prevent white gaps */
+  }
+
+  /* ─── Tables ─── */
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 4mm 0 6mm 0;
+    font-size: 9pt;
+  }
+
+  thead th {
+    background: #f7f6f3;
+    color: #0f172a;
+    font-weight: bold;
+    padding: 3mm 4mm;
+    text-align: left;
+    border-bottom: 2px solid #d6d3cc;
+    font-size: 9pt;
+  }
+
+  tbody td {
+    padding: 2.5mm 3mm;
+    border-bottom: 1px solid #f1f5f9;
+    vertical-align: top;
+  }
+
+  tbody tr:nth-child(even) {
+    background: #fdfcfa;
+  }
+
+  .status-pass {
+    color: #2d6a4f;
+    font-weight: bold;
+  }
+
+  .status-fail {
+    color: #c53030;
+    font-weight: bold;
+  }
+
+  .status-warn {
+    color: #d4740e;
+    font-weight: bold;
+  }
+
+  .status-partial {
+    color: #4a5568;
+    font-weight: bold;
+  }
+
+  /* ─── Charts ─── */
+  .chart-container {
+    text-align: center;
+    margin: 4mm 0;
+  }
+
+  .chart-container img {
+    max-width: 100%;
+    max-height: 120mm;
+    height: auto;
+  }
+
+  .chart-caption {
+    font-size: 8.5pt;
+    color: #6b7280;
+    font-style: italic;
+    margin-top: 2mm;
+    text-align: center;
+  }
+
+  .chart-half {
+    display: inline-block;
+    width: 48%;
+    vertical-align: top;
+    text-align: center;
+    margin: 2mm 0;
+  }
+
+  .chart-half img {
+    max-width: 100%;
+    height: auto;
+  }
+
+  /* ─── Two column layout ─── */
+  .two-col {
+    display: table;
+    width: 100%;
+    table-layout: fixed;
+    margin: 3mm 0;
+  }
+
+  .two-col .col {
+    display: table-cell;
+    vertical-align: top;
+    padding: 0 2mm;
+  }
+
+  .four-col {
+    display: table;
+    width: 100%;
+    table-layout: fixed;
+    margin: 3mm 0;
+  }
+
+  .four-col .col {
+    display: table-cell;
+    vertical-align: top;
+    padding: 0 1.5mm;
+  }
+
+  /* ─── Metric Cards ─── */
+  .metric-card {
+    background: #faf9f7;
+    border: 1px solid #d6d3cc;
+    border-radius: 6px;
+    padding: 2.5mm 3mm;
+    text-align: center;
+    margin: 2mm 0;
+  }
+
+  .metric-card .value {
+    font-size: 14pt;
+    font-weight: bold;
+    line-height: 1.2;
+  }
+
+  .metric-card .label {
+    font-size: 7.5pt;
+    color: #64748b;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-top: 1mm;
+  }
+
+  /* ─── Action Plan ─── */
+  .action-item {
+    background: #faf9f7;
+    border-radius: 4px;
+    padding: 3mm 4mm;
+    margin: 3mm 0;
+    border-left: 3px solid #cbd5e1;
+    /* allow page breaks to prevent white gaps */
+  }
+
+  .action-item.critical {
+    border-left-color: #c53030;
+    background: #fdf2f2;
+  }
+
+  .action-item.high {
+    border-left-color: #d4740e;
+    background: #fdf8ef;
+  }
+
+  .action-item.medium {
+    border-left-color: #1e3a5f;
+    background: #f0f4f8;
+  }
+
+  .action-item.low {
+    border-left-color: #94a3b8;
+  }
+
+  .action-item h4 {
+    margin-top: 0;
+    margin-bottom: 1.5mm;
+    border-bottom: none;
+    padding-bottom: 0;
+  }
+
+  .action-item .effort {
+    font-size: 8.5pt;
+    color: #64748b;
+    float: right;
+  }
+
+  .priority-tag {
+    display: inline-block;
+    padding: 0.5mm 3mm;
+    border-radius: 3px;
+    font-size: 8pt;
+    font-weight: bold;
+    color: white;
+    margin-right: 2mm;
+    vertical-align: middle;
+  }
+
+  .priority-critical { background: #c53030; }
+  .priority-high { background: #d4740e; }
+  .priority-medium { background: #1e3a5f; }
+  .priority-low { background: #94a3b8; }
+
+  /* ─── Code blocks ─── */
+  .code-block {
+    background: #1e293b;
+    color: #e2e8f0;
+    padding: 3mm 4mm;
+    border-radius: 4px;
+    font-family: 'DejaVu Sans Mono', monospace;
+    font-size: 8pt;
+    line-height: 1.6;
+    margin: 3mm 0;
+    white-space: pre-wrap;
+    word-break: break-all;
+    /* allow page breaks to prevent white gaps */
+  }
+
+  /* ─── Divider ─── */
+  .divider {
+    border: none;
+    border-top: 1px solid #d6d3cc;
+    margin: 5mm 0;
+  }
+
+  /* ─── Roadmap ─── */
+  .roadmap-phase {
+    background: #faf9f7;
+    border-radius: 6px;
+    padding: 4mm 5mm;
+    margin: 4mm 0;
+    border: 1px solid #d6d3cc;
+    /* allow page breaks to prevent white gaps */
+  }
+
+  .roadmap-phase h4 {
+    margin-top: 0;
+    border-bottom: none;
+    color: #1e3a5f;
+  }
+
+  .roadmap-phase ul {
+    margin: 2mm 0 0 5mm;
+    padding: 0;
+  }
+
+  .roadmap-phase li {
+    margin-bottom: 1.5mm;
+    font-size: 9.5pt;
+    color: #334155;
+  }
+
+  /* ─── Lists ─── */
+  ul {
+    margin-left: 5mm;
+    margin-bottom: 3mm;
+  }
+
+  li {
+    margin-bottom: 1.5mm;
+  }
+
+  /* ─── Data freshness ─── */
+  .data-freshness {
+    font-size: 8pt;
+    color: #6b7280;
+    font-style: italic;
+    margin-top: 4mm;
+    padding-top: 2mm;
+    border-top: 1px solid #d6d3cc;
+  }
+
+</style>
+</head>
+<body>
+
+<!-- ======================================================= TITLE PAGE === -->
+<div class="title-page">
+  <div class="badge">Full SEO Audit Report</div>
+  <h1>yt-seo-architect.vercel.app</h1>
+  <div class="subtitle">Prepared by Claude SEO</div>
+  <div class="score-box">
+    <div class="score-number">59<span style="font-size: 20pt; color: #94a3b8;">/100</span></div>
+    <div class="score-label">SEO Health Score</div>
+  </div>
+  <div class="meta">
+    <span>July 31, 2026</span>
+    <span>Full Audit</span>
+  </div>
+</div>
+
+
+<!-- ======================================================= TABLE OF CONTENTS === -->
+<div class="toc-page">
+  <h2>Table of Contents</h2>
+  <ul class="toc-list">
+    <li class="toc-section"><span>1. Executive Summary</span></li>
+    <li class="toc-sub"><span>Key Metrics, Critical Issues &amp; Quick Wins</span></li>
+    <li class="toc-section"><span>2. Audit Categories</span></li>
+    <li class="toc-sub"><span>What Works</span></li>
+    <li class="toc-sub"><span>Findings by Severity</span></li>
+    <li class="toc-section"><span>3. Action Plan</span></li>
+    <li class="toc-sub"><span>Phased Roadmap</span></li>
+    <li class="toc-section"><span>4. Data Sources &amp; Methodology</span></li>
+  </ul>
+</div>
+
+
+<!-- ======================================================= 1. EXECUTIVE SUMMARY === -->
+<div class="section">
+  <div class="section-header">
+    <h2>1. Executive Summary</h2>
+  </div>
+
+  <p>This report presents a comprehensive SEO audit of <strong>yt-seo-architect.vercel.app</strong> for a <strong>SaaS — free AI YouTube SEO tool (SoftwareApplication) with pSEO glossary</strong> site, generated on July 31, 2026. Findings combine technical, content, schema, performance, visual, and search-readiness evidence as available.</p>
+
+  <div class="two-col">
+    <div class="col">
+      <div class="metric-card">
+        <div class="value" style="color: #d4740e;">59/100</div>
+        <div class="label">SEO Health Score</div>
+      </div>
+
+    </div>
+  </div>
+
+  <div class="critical-box">
+    <strong>Critical Issues Found:</strong>
+    <ol>
+      <li><strong>Info:</strong> ~6,400 of 8,328 /glossary/*-vs-* URLs return HTTP 500 (server bug), all listed in sitemap — sitemap is ~96% broken URLs</li>
+      <li><strong>Info:</strong> Blog JSON-LD unparseable on most new posts (unescaped HTML in JSON strings)</li>
+      <li><strong>Info:</strong> 14 bulk-AI blog posts (7/27-7/30) contain fabricated &#x27;research&#x27; claims; missing from sitemap</li>
+      <li><strong>Info:</strong> /pricing serves the dashboard app shell (noindex) — navigational intent mismatch</li>
+      <li><strong>Info:</strong> E-E-A-T vacuum: anonymous ownership, brand-only bylines, fabricated metrics, empty &#x27;Trusted by&#x27; section, Gmail contact</li>
+    </ol>
+  </div>
+
+  <div class="success-box">
+    <strong>Quick Wins:</strong>
+    <ol>
+      <li>Fix vs-page server bug or drop 8.3k vs-URLs from sitemap</li>
+      <li>Add llms.txt / llms-full.txt (both 404)</li>
+      <li>Fix Organization logo.svg 404 (all templates)</li>
+      <li>Reconcile sitemap: remove 5 noindex pages, add 15 blog posts + 17 tools, add lastmod</li>
+      <li>Fix blog JSON-LD escaping + &#x27;2026 2026&#x27; title bug + duplicate canonicals</li>
+    </ol>
+  </div>
+
+</div>
+
+<!-- ======================================================= 2. AUDIT CATEGORIES === -->
+<div class="section">
+  <div class="section-header">
+    <h2>2. Audit Categories</h2>
+  </div>
+
+  <h3>2.1 Technical SEO</h3>
+  <p><strong>Score:</strong> <span class="status-warn">58/100</span></p>
+  <h4>What Works</h4>
+  <ul>
+    <li>Model robots.txt: 8 AI search bots allowed, GPTBot/CCBot blocked, sitemap declared</li>
+    <li>Valid sitemap, 0 duplicates, clean 308 redirects, real 404 statuses, HSTS preload + CSP</li>
+    <li>All page types fully server-rendered (no SPA shells for crawlers)</li>
+  </ul>
+  <h4>Findings</h4>
+  <div class="action-item medium">
+    <h4>Glossary X-vs-Y pages mass-fail with HTTP 500 (~6,400 URLs) <span class="status-warn">Critical</span></h4>
+    <p>154/500 crawled pages 500, all /glossary/*-vs-*; body: Cannot read properties of undefined (reading &#x27;slug&#x27;); 77% of vs-URLs broken; all in sitemap</p>
+    <p><strong>Recommendation:</strong> Fix serverless lookup for missing term data; exclude vs-URLs from sitemap until fixed; 410 unbuildable pairs</p>
+  </div>
+  <div class="action-item medium">
+    <h4>17 homepage-linked /tools/tag-generator/{niche} URLs 404 <span class="status-warn">High</span></h4>
+    <p>Cooking, coding, gaming etc. niche pages never generated</p>
+    <p><strong>Recommendation:</strong> Generate niche pages or 301 to /tools/tag-generator</p>
+  </div>
+  <div class="action-item medium">
+    <h4>5 noindex pages in sitemap <span class="status-warn">High</span></h4>
+    <p>/dashboard, /about, /privacy-policy, /terms-of-service, /changelog listed but serve noindex</p>
+    <p><strong>Recommendation:</strong> Remove from sitemap or make indexable</p>
+  </div>
+  <div class="action-item medium">
+    <h4>Canonical .html round-trips <span class="status-warn">High</span></h4>
+    <p>/tools -&gt; /tools.html -&gt; 308; /dashboard -&gt; /dashboard.html -&gt; 308</p>
+    <p><strong>Recommendation:</strong> Canonical to clean URL directly</p>
+  </div>
+  <div class="action-item medium">
+    <h4>lastmod on only 0.4% of sitemap URLs <span class="status-warn">Medium</span></h4>
+    <p>35/8,667 URLs have lastmod; glossary none</p>
+    <p><strong>Recommendation:</strong> Add lastmod sitewide</p>
+  </div>
+  <div class="action-item medium">
+    <h4>Inconsistent security headers across routes <span class="status-warn">Medium</span></h4>
+    <p>Homepage vs /blog differ in CSP/XFO/nosniff/Referrer-Policy; HSTS max-age varies</p>
+    <p><strong>Recommendation:</strong> Unify headers in vercel.json</p>
+  </div>
+  <div class="action-item medium">
+    <h4>/blog/_TEMPLATE live and indexable with placeholder content <span class="status-warn">Medium</span></h4>
+    <p>200, index,follow, literal [POST_TITLE]/[POST_SLUG]</p>
+    <p><strong>Recommendation:</strong> noindex it</p>
+  </div>
+  <div class="action-item medium">
+    <h4>CSP weakened by unsafe-inline/eval; analytics script blocked <span class="status-warn">Medium</span></h4>
+    <p>Vercel Analytics (cdn.jsdelivr.net) CSP-blocked; lucide loaded from unpkg</p>
+    <p><strong>Recommendation:</strong> Consolidate scripts, tighten CSP</p>
+  </div>
+  <div class="action-item medium">
+    <h4>Dead links: /contact.html 404, 2 stale /public/tools/*.html <span class="status-warn">Low</span></h4>
+    <p>Linked from site, return 404</p>
+    <p><strong>Recommendation:</strong> Redirect or remove</p>
+  </div>
+  <hr class="divider">
+  <h3>2.2 Content Quality</h3>
+  <p><strong>Score:</strong> <span class="status-fail">45/100</span></p>
+  <h4>What Works</h4>
+  <ul>
+    <li>Glossary terms genuinely deep: 836-1,040 words, definition-first, 25-28 related links</li>
+    <li>Solid older long-form blog posts; full Spanish localization (2,857 pages)</li>
+  </ul>
+  <h4>Findings</h4>
+  <div class="action-item medium">
+    <h4>14 bulk-AI blog posts with fabricated &#x27;research&#x27; (scaled content abuse) <span class="status-warn">Critical</span></h4>
+    <p>Invented studies (&#x27;1 billion views&#x27;), broken grammar, byline mismatch (Team vs Patrick), no sources; published 7/27-7/30</p>
+    <p><strong>Recommendation:</strong> Pull or rewrite with real data, named author, citations; add human review gate</p>
+  </div>
+  <div class="action-item medium">
+    <h4>Fabricated performance claims as fact <span class="status-warn">Critical</span></h4>
+    <p>&#x27;30-50% CTR improvement&#x27;, &#x27;10,000+ titles analyzed&#x27;, empty &#x27;Trusted by YouTube Creators&#x27;</p>
+    <p><strong>Recommendation:</strong> Replace with honest claims or real data</p>
+  </div>
+  <div class="action-item medium">
+    <h4>Boilerplate &#x27;How to Optimize&#x27; blocks on 2,857 glossary pages <span class="status-warn">High</span></h4>
+    <p>4-6 shared templates reused sitewide, nonsensical on some terms</p>
+    <p><strong>Recommendation:</strong> Per-term guidance or remove</p>
+  </div>
+  <div class="action-item medium">
+    <h4>Glossary &#x27;Related Blog Posts&#x27; link to 404/410 URLs <span class="status-warn">High</span></h4>
+    <p>e.g. /blog/youtube-algorithm-changes-2026 -&gt; 410</p>
+    <p><strong>Recommendation:</strong> Fix link targets or filter dead posts</p>
+  </div>
+  <div class="action-item medium">
+    <h4>Anonymous E-E-A-T <span class="status-warn">High</span></h4>
+    <p>No named founder, brand-only bylines, no legal entity, bare Gmail contact</p>
+    <p><strong>Recommendation:</strong> Named authors, About page, legal entity, professional contact</p>
+  </div>
+  <div class="action-item medium">
+    <h4>Meta descriptions missing on tool pages; glossary metas 229-246 chars <span class="status-warn">High</span></h4>
+    <p>Templated suffix truncates in SERPs</p>
+    <p><strong>Recommendation:</strong> Write unique ≤160-char descriptions</p>
+  </div>
+  <div class="action-item medium">
+    <h4>Blog-&gt;tool linking absent; cannibalization /blog vs /tools <span class="status-warn">Medium</span></h4>
+    <p>25+ identical slug pairs both indexable; no hub-and-spoke</p>
+    <p><strong>Recommendation:</strong> Canonical/301 one variant; add cross-links</p>
+  </div>
+  <div class="action-item medium">
+    <h4>Glossary readability FK 14-16 for beginner audience <span class="status-warn">Medium</span></h4>
+    <p>College-level prose on beginner topics</p>
+    <p><strong>Recommendation:</strong> Simplify; target FK ~8-10</p>
+  </div>
+  <div class="action-item medium">
+    <h4>14 posts missing from sitemap; blog index shows &#x27;0 words&#x27; <span class="status-warn">Medium</span></h4>
+    <p>New posts not in sitemap; index cards empty</p>
+    <p><strong>Recommendation:</strong> Auto-regenerate sitemap on publish; fix index bug</p>
+  </div>
+  <div class="action-item medium">
+    <h4>Stale freshness signals <span class="status-warn">Medium</span></h4>
+    <p>Changelog stale since May; homepage &#x27;actively maintained&#x27; claim</p>
+    <p><strong>Recommendation:</strong> Update changelog, add updated dates</p>
+  </div>
+  <div class="action-item medium">
+    <h4>Title/meta/h1 bugs <span class="status-warn">Low</span></h4>
+    <p>86-96 char titles, 15x H1 on one post, &#x27;Shorts up to 60 seconds&#x27; outdated, &#x27;0 AI Tools&#x27; stat, leftover pricing modal</p>
+    <p><strong>Recommendation:</strong> Fix per-item</p>
+  </div>
+  <hr class="divider">
+  <h3>2.3 On-Page SEO</h3>
+  <p><strong>Score:</strong> <span class="status-warn">62/100</span></p>
+  <h4>What Works</h4>
+  <ul>
+    <li>Titles + meta descriptions present on all crawled 200-pages; canonicals present sitewide (verified)</li>
+    <li>Clean URL structure; single H1 on 321/325 pages</li>
+  </ul>
+  <h4>Findings</h4>
+  <div class="action-item medium">
+    <h4>Title length: 198/500 &gt; 60 chars, 79 &gt; 70 chars <span class="status-warn">High</span></h4>
+    <p>SERP truncation on glossary (~72 chars) and blog (93 chars) templates</p>
+    <p><strong>Recommendation:</strong> Trim templates to &lt;= 60 chars</p>
+  </div>
+  <div class="action-item medium">
+    <h4>/tools vs /blog keyword cannibalization <span class="status-warn">High</span></h4>
+    <p>35/38 /tools/ sitemap URLs are article slugs duplicating /blog/</p>
+    <p><strong>Recommendation:</strong> One canonical home per keyword</p>
+  </div>
+  <div class="action-item medium">
+    <h4>16/21 tool pages are 98-180 word shells; one renders &#x27;undefined&#x27; <span class="status-warn">High</span></h4>
+    <p>Transactional pages lack content; keyword-difficulty-scorer shows literal &#x27;undefined&#x27;</p>
+    <p><strong>Recommendation:</strong> Real content per tool: how-to, examples, FAQ</p>
+  </div>
+  <div class="action-item medium">
+    <h4>Blog hub &#x27;0 words&#x27; on 14 newest posts; &#x27;2026 2026&#x27; titles <span class="status-warn">Medium</span></h4>
+    <p>Index bug + title duplication on indexable posts</p>
+    <p><strong>Recommendation:</strong> Fix generation templates</p>
+  </div>
+  <div class="action-item medium">
+    <h4>Sitelinks searchbox targets login-gated /dashboard?q= <span class="status-warn">Low</span></h4>
+    <p>WebSite SearchAction ineligible</p>
+    <p><strong>Recommendation:</strong> Point at public search or remove</p>
+  </div>
+  <hr class="divider">
+  <h3>2.4 Schema / Structured Data</h3>
+  <p><strong>Score:</strong> <span class="status-warn">50/100</span></p>
+  <h4>What Works</h4>
+  <ul>
+    <li>Homepage valid @graph: WebSite + SoftwareApplication (price 0) + Organization + FAQPage + Breadcrumb</li>
+    <li>Glossary breadcrumbs 4-level correct; blog Article has author/dates/publisher</li>
+  </ul>
+  <h4>Findings</h4>
+  <div class="action-item medium">
+    <h4>Blog JSON-LD unparseable (unescaped HTML) <span class="status-warn">Critical</span></h4>
+    <p>2/3 sampled posts fail json.loads; duplicated Article+FAQPage blocks</p>
+    <p><strong>Recommendation:</strong> Fix template escaping; one block per page</p>
+  </div>
+  <div class="action-item medium">
+    <h4>Organization logo.svg 404 on all templates <span class="status-warn">High</span></h4>
+    <p>Homepage + 8,571 glossary pages reference missing logo</p>
+    <p><strong>Recommendation:</strong> Fix asset or point at og-image.png</p>
+  </div>
+  <div class="action-item medium">
+    <h4>/blog and /tools hubs have zero schema <span class="status-warn">High</span></h4>
+    <p>No ItemList/BreadcrumbList on index pages</p>
+    <p><strong>Recommendation:</strong> Add hub schema</p>
+  </div>
+  <div class="action-item medium">
+    <h4>SearchAction targets login-gated dashboard <span class="status-warn">High</span></h4>
+    <p>Ineligible for sitelinks searchbox</p>
+    <p><strong>Recommendation:</strong> Remove or redirect to public search</p>
+  </div>
+  <div class="action-item medium">
+    <h4>FAQPage deprecated (July 2025) but deployed sitewide <span class="status-warn">Medium</span></h4>
+    <p>Valid markup, no rich-result benefit; still useful for AI answers</p>
+    <p><strong>Recommendation:</strong> Keep for AI extraction; don&#x27;t expect SERP features</p>
+  </div>
+  <div class="action-item medium">
+    <h4>Glossary uses Article instead of DefinedTerm <span class="status-warn">Medium</span></h4>
+    <p>8,571-page opportunity</p>
+    <p><strong>Recommendation:</strong> Switch to DefinedTerm</p>
+  </div>
+  <div class="action-item medium">
+    <h4>Minor: &#x27;75+ terms&#x27; hub copy, trailing-slash mismatches, duplicate canonicals, SpeakableSpecification inert <span class="status-warn">Low</span></h4>
+    <p>Consistency issues</p>
+    <p><strong>Recommendation:</strong> Clean up</p>
+  </div>
+  <hr class="divider">
+  <h3>2.5 Performance (CWV)</h3>
+  <p><strong>Score:</strong> <span class="status-warn">70/100</span></p>
+  <h4>What Works</h4>
+  <ul>
+    <li>Fully server-rendered HTML, Vercel edge + br compression + cache HITs</li>
+    <li>Preconnect to Google origins; HSTS preload; near-zero images</li>
+  </ul>
+  <h4>Findings</h4>
+  <div class="action-item medium">
+    <h4>Lab/field CWV data unavailable this run <span class="status-warn">Info</span></h4>
+    <p>PSI API daily quota exhausted; Unlighthouse timed out on WSL. Score is an architecture-based estimate.</p>
+    <p><strong>Recommendation:</strong> Connect GSC CrUX; run Lighthouse on non-WSL machine</p>
+  </div>
+  <div class="action-item medium">
+    <h4>Third-party render dependencies (lucide via unpkg) <span class="status-warn">Medium</span></h4>
+    <p>3 JS + 5 CSS on homepage; unpkg has no SLO</p>
+    <p><strong>Recommendation:</strong> Bundle or inline icons</p>
+  </div>
+  <div class="action-item medium">
+    <h4>CSP blocks Vercel Analytics <span class="status-warn">Medium</span></h4>
+    <p>cdn.jsdelivr.net blocked; analytics dead</p>
+    <p><strong>Recommendation:</strong> Align CSP allowlist with real scripts</p>
+  </div>
+  <div class="action-item medium">
+    <h4>picsum.photos blog hero hotlink <span class="status-warn">Low</span></h4>
+    <p>Random-image CDN, uncacheable</p>
+    <p><strong>Recommendation:</strong> Self-host WebP heroes</p>
+  </div>
+  <hr class="divider">
+  <h3>2.6 AI Search Readiness</h3>
+  <p><strong>Score:</strong> <span class="status-warn">72/100</span></p>
+  <h4>What Works</h4>
+  <ul>
+    <li>Model AI-crawler policy (8 AI bots allowed, 2 training bots blocked)</li>
+    <li>Every page type fully server-rendered for AI crawlers; definition-first glossary highly quotable</li>
+  </ul>
+  <h4>Findings</h4>
+  <div class="action-item medium">
+    <h4>llms.txt / llms-full.txt both 404 <span class="status-warn">High</span></h4>
+    <p>Biggest missing GEO asset for a tool site</p>
+    <p><strong>Recommendation:</strong> Add llms.txt + llms-full.txt</p>
+  </div>
+  <div class="action-item medium">
+    <h4>TL;DR blocks contain keyword-stuffed artifacts <span class="status-warn">Medium</span></h4>
+    <p>AI will quote verbatim; claims lack citations</p>
+    <p><strong>Recommendation:</strong> Clean templates; add sources</p>
+  </div>
+  <div class="action-item medium">
+    <h4>Dashboard CSS force-unlock of premium UI <span class="status-warn">Medium</span></h4>
+    <p>&#x27;Free &amp; Unlimited Overhaul&#x27; stylesheet overrides .premium-locked; contradicts &#x27;100% Free&#x27; claim</p>
+    <p><strong>Recommendation:</strong> Remove or align product claims</p>
+  </div>
+  <div class="action-item medium">
+    <h4>Casing, security.txt, Gmail in Organization schema <span class="status-warn">Low</span></h4>
+    <p>Youtube vs YouTube; no security.txt; personal Gmail as org contact</p>
+    <p><strong>Recommendation:</strong> Polish</p>
+  </div>
+  <hr class="divider">
+  <h3>2.7 Images</h3>
+  <p><strong>Score:</strong> <span class="status-pass">80/100</span></p>
+  <h4>What Works</h4>
+  <ul>
+    <li>Near-zero image footprint on critical templates; no missing alt; width/height on blog heroes</li>
+  </ul>
+  <h4>Findings</h4>
+  <div class="action-item medium">
+    <h4>Blog heroes hotlink picsum.photos (random placeholder CDN) <span class="status-warn">Medium</span></h4>
+    <p>Unstable, off-brand, third-party dependency</p>
+    <p><strong>Recommendation:</strong> Self-host branded 1200x630 WebP images</p>
+  </div>
+  <div class="action-item medium">
+    <h4>No og:image on non-blog templates; logo.svg 404 <span class="status-warn">Low</span></h4>
+    <p>Social/AI previews missing</p>
+    <p><strong>Recommendation:</strong> Sitewide branded og-image</p>
+  </div>
+  <hr class="divider">
+</div>
+
+<!-- ======================================================= 3. ACTION PLAN === -->
+<div class="section">
+  <div class="section-header">
+    <h2>3. Action Plan</h2>
+  </div>
+
+  <div class="roadmap-phase">
+    <h4>Phase 1: Critical Fixes <span class="effort">Week 1</span></h4>
+    <ul>
+      <li>Fix or remove 8,328 vs-URLs (6,400 broken -&gt; 500)</li>
+      <li>Fix blog JSON-LD escaping</li>
+      <li>Reconcile sitemap (remove 5 noindex, add 15 posts + 17 tools, lastmod)</li>
+      <li>Fix 17 homepage 404 niche links</li>
+      <li>Fix logo.svg 404</li>
+      <li>Pull/rewrite 14 bulk-AI posts</li>
+      <li>Add llms.txt + llms-full.txt</li>
+    </ul>
+  </div>
+  <div class="roadmap-phase">
+    <h4>Phase 2: High-Impact Improvements <span class="effort">Weeks 2-3</span></h4>
+    <ul>
+      <li>Resolve /blog vs /tools cannibalization (25+ pairs)</li>
+      <li>Build real indexable /pricing page</li>
+      <li>E-E-A-T pass (founder, bylines, entity, citations)</li>
+      <li>On-page: titles &lt;=60, 2026-2026, metas, H1</li>
+      <li>Header/redirect hygiene + noindex _TEMPLATE</li>
+      <li>Hub schema + DefinedTerm glossary</li>
+    </ul>
+  </div>
+  <div class="roadmap-phase">
+    <h4>Phase 3: Content &amp; Authority <span class="effort">Month 2</span></h4>
+    <ul>
+      <li>Depth for 16 thin tool pages</li>
+      <li>Glossary boilerplate + dead links + readability</li>
+      <li>Topic gaps: monetization, community, Shorts split</li>
+      <li>Perf: bundle lucide, kill picsum, fix analytics</li>
+      <li>AI-search polish: TL;DR cleanup, security.txt</li>
+      <li>Backlink program (domain absent from Common Crawl)</li>
+    </ul>
+  </div>
+  <div class="roadmap-phase">
+    <h4>Phase 4: Monitoring &amp; Iteration <span class="effort">Ongoing</span></h4>
+    <ul>
+      <li>Connect GSC/GA4/CrUX + Indexing API</li>
+      <li>Publishing guardrails: fact-check gate, sitemap auto-gen, broken-link CI</li>
+      <li>Drift baseline + re-audit in 60 days</li>
+    </ul>
+  </div>
+</div>
+
+<!-- ======================================================= DATA SOURCES & METHODOLOGY === -->
+<div class="section" style="text-align: center; padding-top: 15mm;">
+  <hr class="divider">
+  <h3 style="text-align: left;">Data Sources &amp; Methodology</h3>
+  <table>
+    <thead>
+      <tr><th>Source</th><th>Description</th><th>Update Frequency</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>PageSpeed Insights API</td>
+          <td>Lighthouse lab audit (mobile emulation, Moto G Power, slow 4G)</td>
+          <td>Real-time</td></tr>
+      <tr><td>Chrome UX Report (CrUX)</td>
+          <td>28-day rolling field data from real Chrome users</td>
+          <td>Daily ~04:00 UTC</td></tr>
+      <tr><td>CrUX History API</td>
+          <td>25-week p75 trend data per metric</td>
+          <td>Weekly</td></tr>
+      <tr><td>Google Search Console</td>
+          <td>Search Analytics (clicks, impressions, CTR, position)</td>
+          <td>2-3 day lag</td></tr>
+      <tr><td>URL Inspection API</td>
+          <td>Per-URL index status, coverage state, crawl info</td>
+          <td>Real-time (2,000/day)</td></tr>
+    </tbody>
+  </table>
+  <p style="color: #94a3b8; font-size: 9pt; margin-top: 5mm;">
+    Report generated by Claude SEO &mdash; Google SEO Intelligence Skill &mdash; July 31, 2026<br>
+    Methodology based on Google Web Vitals thresholds, Search Console documentation, and Lighthouse scoring algorithms.
+  </p>
+</div>
+
+</body>
+</html>

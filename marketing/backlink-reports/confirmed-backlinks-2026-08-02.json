@@ -1,0 +1,337 @@
+{
+  "generated": "2026-08-02T06:07:28.546Z",
+  "target": "yt-seo-architect.vercel.app",
+  "summary": {
+    "prospects_checked": 46,
+    "confirmed_backlinks": 0,
+    "referring_domains": 0,
+    "live_pages": 46,
+    "dead_or_blocked": 0
+  },
+  "methodology": "Confirmed = external page returning HTTP 200 AND containing a live link to target, checked at generation time. This replaces the older audit-*.json count which conflated prospects with links.",
+  "confirmed": [],
+  "results": [
+    {
+      "url": "https://vidiq.com/free-youtube-tools/",
+      "status": "200",
+      "code": "200",
+      "hasLink": false,
+      "anchor": null
+    },
+    {
+      "url": "https://contentmavericks.com/best-youtube-seo-tools/",
+      "status": "200",
+      "code": "200",
+      "hasLink": false,
+      "anchor": null
+    },
+    {
+      "url": "https://vidiq.com/video-tags-generator/",
+      "status": "200",
+      "code": "200",
+      "hasLink": false,
+      "anchor": null
+    },
+    {
+      "url": "https://vidiq.com/ai-keyword-generator/",
+      "status": "200",
+      "code": "200",
+      "hasLink": false,
+      "anchor": null
+    },
+    {
+      "url": "https://influencermarketinghub.com/youtube-seo-tools/",
+      "status": "200",
+      "code": "200",
+      "hasLink": false,
+      "anchor": null
+    },
+    {
+      "url": "https://wbcomdesigns.com/best-vidiq-similar-software-for-free/",
+      "status": "200",
+      "code": "200",
+      "hasLink": false,
+      "anchor": null
+    },
+    {
+      "url": "https://vidiq.com/features/keyword-tools/",
+      "status": "200",
+      "code": "200",
+      "hasLink": false,
+      "anchor": null
+    },
+    {
+      "url": "https://alanspicer.com/vidiq-alternatives-2026/",
+      "status": "200",
+      "code": "200",
+      "hasLink": false,
+      "anchor": null
+    },
+    {
+      "url": "https://thedigitalmerchant.com/best-tubebuddy-alternatives/",
+      "status": "200",
+      "code": "200",
+      "hasLink": false,
+      "anchor": null
+    },
+    {
+      "url": "https://startupvortex.com/best-tubebuddy-alternatives/",
+      "status": "200",
+      "code": "200",
+      "hasLink": false,
+      "anchor": null
+    },
+    {
+      "url": "https://www.socialpilot.co/youtube-tools",
+      "status": "200",
+      "code": "200",
+      "hasLink": false,
+      "anchor": null
+    },
+    {
+      "url": "https://syscality.com/best-seo-tools-for-youtube/",
+      "status": "200",
+      "code": "200",
+      "hasLink": false,
+      "anchor": null
+    },
+    {
+      "url": "https://rankxdigital.com/blog/youtube-seo-tools/",
+      "status": "200",
+      "code": "200",
+      "hasLink": false,
+      "anchor": null
+    },
+    {
+      "url": "https://rankioz.com/best-youtube-seo-tools/",
+      "status": "200",
+      "code": "200",
+      "hasLink": false,
+      "anchor": null
+    },
+    {
+      "url": "https://www.tunepocket.com/youtube-tags-generator/",
+      "status": "200",
+      "code": "200",
+      "hasLink": false,
+      "anchor": null
+    },
+    {
+      "url": "https://outlierkit.com/resources/vidiq-alternatives/",
+      "status": "200",
+      "code": "200",
+      "hasLink": false,
+      "anchor": null
+    },
+    {
+      "url": "https://outlierkit.com/resources/tubebuddy-alternatives/",
+      "status": "200",
+      "code": "200",
+      "hasLink": false,
+      "anchor": null
+    },
+    {
+      "url": "https://tubelab.net/blog/i-tested-7-youtube-tool-alternatives-to-tubebuddy",
+      "status": "200",
+      "code": "200",
+      "hasLink": false,
+      "anchor": null
+    },
+    {
+      "url": "https://www.nexlev.io/youtube-growth-tools",
+      "status": "200",
+      "code": "200",
+      "hasLink": false,
+      "anchor": null
+    },
+    {
+      "url": "https://konabayev.com/blog/youtube-seo-tools/",
+      "status": "200",
+      "code": "200",
+      "hasLink": false,
+      "anchor": null
+    },
+    {
+      "url": "https://alanspicer.com/best-youtube-seo-tools-2026/",
+      "status": "200",
+      "code": "200",
+      "hasLink": false,
+      "anchor": null
+    },
+    {
+      "url": "https://www.collabpals.com/tools/youtube-keyword-research",
+      "status": "200",
+      "code": "200",
+      "hasLink": false,
+      "anchor": null
+    },
+    {
+      "url": "https://www.socialpilot.co/youtube-analytics-tools",
+      "status": "200",
+      "code": "200",
+      "hasLink": false,
+      "anchor": null
+    },
+    {
+      "url": "https://www.socialchamp.com/blog/youtube-tools/",
+      "status": "200",
+      "code": "200",
+      "hasLink": false,
+      "anchor": null
+    },
+    {
+      "url": "https://www.braiv.co/articles/best-youtube-seo-tools-2026",
+      "status": "200",
+      "code": "200",
+      "hasLink": false,
+      "anchor": null
+    },
+    {
+      "url": "https://impressivemagazine.com/best-youtube-seo-tools-2026/",
+      "status": "200",
+      "code": "200",
+      "hasLink": false,
+      "anchor": null
+    },
+    {
+      "url": "https://www.youngurbanproject.com/youtube-seo-tools/",
+      "status": "200",
+      "code": "200",
+      "hasLink": false,
+      "anchor": null
+    },
+    {
+      "url": "https://hashtagtools.io/youtube-hashtag-generator",
+      "status": "200",
+      "code": "200",
+      "hasLink": false,
+      "anchor": null
+    },
+    {
+      "url": "https://outlierkit.com/resources/youtube-seo/",
+      "status": "200",
+      "code": "200",
+      "hasLink": false,
+      "anchor": null
+    },
+    {
+      "url": "https://www.ryrob.com/youtube-keyword-tool/",
+      "status": "200",
+      "code": "200",
+      "hasLink": false,
+      "anchor": null
+    },
+    {
+      "url": "https://linodash.com/vidiq-vs-tubebuddy/",
+      "status": "200",
+      "code": "200",
+      "hasLink": false,
+      "anchor": null
+    },
+    {
+      "url": "https://lenspov.com/articles/tubebuddy-vs-vidiq-2026",
+      "status": "200",
+      "code": "200",
+      "hasLink": false,
+      "anchor": null
+    },
+    {
+      "url": "https://vidiq.com/youtube-seo-tools/",
+      "status": "200",
+      "code": "200",
+      "hasLink": false,
+      "anchor": null
+    },
+    {
+      "url": "https://rapidtags.io/generator",
+      "status": "200",
+      "code": "200",
+      "hasLink": false,
+      "anchor": null
+    },
+    {
+      "url": "https://entreresource.com/vidiq-vs-tubebuddy/",
+      "status": "200",
+      "code": "200",
+      "hasLink": false,
+      "anchor": null
+    },
+    {
+      "url": "https://www.tubebuddy.com/blog/vidiq-alternative/",
+      "status": "200",
+      "code": "200",
+      "hasLink": false,
+      "anchor": null
+    },
+    {
+      "url": "https://www.tubebuddy.com/blog/tubebuddy-vs-vidiq/",
+      "status": "200",
+      "code": "200",
+      "hasLink": false,
+      "anchor": null
+    },
+    {
+      "url": "https://sproutsocial.com/insights/youtube-tools/",
+      "status": "200",
+      "code": "200",
+      "hasLink": false,
+      "anchor": null
+    },
+    {
+      "url": "https://www.youtool.io/tools/channel-analyzer",
+      "status": "200",
+      "code": "200",
+      "hasLink": false,
+      "anchor": null
+    },
+    {
+      "url": "https://sproutsocial.com/insights/youtube-analytics-tools/",
+      "status": "200",
+      "code": "200",
+      "hasLink": false,
+      "anchor": null
+    },
+    {
+      "url": "https://sproutsocial.com/insights/youtube-marketing-tools/",
+      "status": "200",
+      "code": "200",
+      "hasLink": false,
+      "anchor": null
+    },
+    {
+      "url": "https://vidiq.com/compare/vidiq-vs-tubebuddy/",
+      "status": "200",
+      "code": "200",
+      "hasLink": false,
+      "anchor": null
+    },
+    {
+      "url": "https://vidiq.com/youtube-stats/",
+      "status": "200",
+      "code": "200",
+      "hasLink": false,
+      "anchor": null
+    },
+    {
+      "url": "https://moz.com/blog/youtube-seo",
+      "status": "200",
+      "code": "200",
+      "hasLink": false,
+      "anchor": null
+    },
+    {
+      "url": "https://ahrefs.com/youtube-keyword-tool",
+      "status": "200",
+      "code": "200",
+      "hasLink": false,
+      "anchor": null
+    },
+    {
+      "url": "https://semrush.com/blog/youtube-seo/",
+      "status": "200",
+      "code": "200",
+      "hasLink": false,
+      "anchor": null
+    }
+  ]
+}

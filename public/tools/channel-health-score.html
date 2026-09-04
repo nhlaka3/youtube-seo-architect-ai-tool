@@ -8,14 +8,31 @@
   <link rel="canonical" href="https://yt-seo-architect.vercel.app/tools/channel-health-score" />
   <meta property="og:title" content="Channel health score — Free Interactive Tool | YT SEO Architect" />
   <meta property="og:description" content="Analyze your text for SEO keywords, topic clusters, and readability. Get insights to improve your YouTube content. Apply what you learn from the channel health score guide. Works entirely in your browser, no login required." />
-  <meta property="og:image" content="https://yt-seo-architect.vercel.app/logo.svg" />
+  <meta property="og:image" content="https://yt-seo-architect.vercel.app/og-image.png" />
   <meta name="robots" content="index, follow" />
   <script type="application/ld+json">
-  { "@context": "https://schema.org", "@type": "WebApplication",
-    "name": "Channel health score", "description": "channel health score for YouTube creators",
-    "url": "https://yt-seo-architect.vercel.app/tools/channel-health-score", "applicationCategory": "MultimediaApplication",
-    "operatingSystem": "Web", "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" } }
-  </script>
+{
+  "@context": "https://schema.org",
+  "@type": "WebApplication",
+  "name": "Channel health score",
+  "description": "channel health score for YouTube creators",
+  "url": "https://yt-seo-architect.vercel.app/tools/channel-health-score",
+  "applicationCategory": "MultimediaApplication",
+  "operatingSystem": "Web",
+  "offers": {
+    "@type": "Offer",
+    "price": "0",
+    "priceCurrency": "USD"
+  },
+  "speakable": {
+    "@type": "SpeakableSpecification",
+    "xpath": [
+      "//h1",
+      "//meta[@name='description']/@content"
+    ]
+  }
+}
+</script>
   <style>
     :root { --bg: #0f0f1a; --surface: #1a1a2e; --border: #2a2a4a; --accent: #6366f1; --accent2: #06b6d4; --text: #e2e8f0; --text2: #94a3b8; --text3: #64748b; --success: #22c55e; }
     * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -68,7 +85,8 @@
     <link rel="stylesheet" href="/nav.css">
     <link rel="stylesheet" href="/blog-article.css">
   </noscript>
-</head>
+<link rel="stylesheet" href="/motion-utilities.css">
+<script defer src="/ga.js"></script></head>
 <body data-keyword="channel health score">
   <div class="header">
     <a href="/" class="header-logo"><span>🛠️</span> YT SEO Architect</a>
@@ -107,6 +125,25 @@
       <a href="/blog/channel-health-score">Read the Complete Guide →</a>
     </div>
   </div>
+
+    <div class="seo-content" style="max-width:760px;margin:2.5rem auto 0;padding-top:2rem;border-top:1px solid var(--border);">
+      <h2 style="font-size:1.35rem;font-weight:800;color:var(--text-primary);margin-bottom:.75rem;">About This Tool</h2>
+      <p>This score condenses your channel's overall SEO health into a single number by evaluating your metadata quality, retention signals, upload consistency, and engagement. It is the fastest way to find out which part of your channel is the weakest link holding back growth.</p><p>Why this matters: YouTube's algorithm is a feedback loop — better metadata earns more impressions, more impressions surface your retention, and strong retention expands reach further. Tools like this one exist to make sure you are optimizing every variable in that loop, on every upload, without needing a consultant's budget. Used consistently, the small gains from each check compound into a channel that ranks.</p><p>The YT SEO Architect approach is deliberately simple: run the check, apply the result, move on. No dashboards to babysit, no credits to count. If you pair this tool with the matching guide on the blog, you get the "why" behind every "what" — the benchmarks, the examples, and the mistakes to avoid — so you are never applying advice blindly.</p>
+      <h2 style="font-size:1.35rem;font-weight:800;color:var(--text-primary);margin:1.5rem 0 .75rem;">How to Use It</h2>
+      <ol style="color:var(--text-secondary);line-height:1.8;padding-left:1.25rem;"><li>Answer the short checklist about your titles, thumbnails, retention, upload cadence, and engagement.</li><li>The tool weights each area and produces a 0-100 channel health score with a breakdown.</li><li>Focus your next two weeks on the lowest-scoring area — that is your highest-leverage fix.</li><li>Re-run monthly to track whether your fixes are moving the score.</li></ol>
+      <h2 style="font-size:1.35rem;font-weight:800;color:var(--text-primary);margin:1.5rem 0 .75rem;">Frequently Asked Questions</h2>
+      <div class="faq-item" style="margin-bottom:1rem;"><h3 style="font-size:1rem;color:var(--text-primary);margin-bottom:.3rem;">What makes a YouTube channel healthy?</h3><p style="color:var(--text-secondary);font-size:.9rem;line-height:1.7;margin:0;">Consistent uploads, strong packaging (title/thumbnail CTR), good retention, and genuine engagement. A healthy channel compounds: each video gets more reach because the library signals quality.</p></div><div class="faq-item" style="margin-bottom:1rem;"><h3 style="font-size:1rem;color:var(--text-primary);margin-bottom:.3rem;">What is a good channel health score?</h3><p style="color:var(--text-secondary);font-size:.9rem;line-height:1.7;margin:0;">70+ is solid and growing; below 50 means a specific area is dragging you down — usually packaging or consistency. The breakdown tells you exactly which.</p></div><div class="faq-item" style="margin-bottom:1rem;"><h3 style="font-size:1rem;color:var(--text-primary);margin-bottom:.3rem;">How fast can I improve my channel health?</h3><p style="color:var(--text-secondary);font-size:.9rem;line-height:1.7;margin:0;">Packaging fixes show up within weeks; retention and consistency improvements compound over 2-3 months. The score gives you a measurable target to aim at.</p></div><div class="faq-item" style="margin-bottom:1rem;"><h3 style="font-size:1rem;color:var(--text-primary);margin-bottom:.3rem;">How does this tool fit into a full YouTube SEO workflow?</h3><p style="color:var(--text-secondary);font-size:.9rem;line-height:1.7;margin:0;">It covers one specific lever in the optimization stack. Use it alongside the title, description, tag, and thumbnail tools for a complete pre-publish checklist, then validate the results against your YouTube Studio analytics over the following weeks.</p></div><div class="faq-item" style="margin-bottom:1rem;"><h3 style="font-size:1rem;color:var(--text-primary);margin-bottom:.3rem;">Will this tool work for my channel size?</h3><p style="color:var(--text-secondary);font-size:.9rem;line-height:1.7;margin:0;">Yes — the recommendations are size-agnostic because they follow YouTube's ranking fundamentals, which apply equally to a 100-subscriber channel and a million-subscriber channel. What changes with size is how fast results show, not whether the optimization is correct.</p></div>
+      <h2 style="font-size:1.35rem;font-weight:800;color:var(--text-primary);margin:1.5rem 0 .75rem;">Related Tools</h2>
+      <div style="margin-bottom:.5rem;"><a href="/tools/channel-audit-score" style="display:inline-block;margin:.25rem .5rem .25rem 0;background:rgba(0,242,255,.08);border:1px solid rgba(0,242,255,.15);color:var(--cyan);padding:.35rem .8rem;border-radius:9999px;font-size:.8rem;font-weight:600;text-decoration:none;">channel audit score</a><a href="/tools/youtube-seo-audit-diagnostic-fix-2026" style="display:inline-block;margin:.25rem .5rem .25rem 0;background:rgba(0,242,255,.08);border:1px solid rgba(0,242,255,.15);color:var(--cyan);padding:.35rem .8rem;border-radius:9999px;font-size:.8rem;font-weight:600;text-decoration:none;">youtube seo audit diagnostic fix 2026</a><a href="/tools/monetization-readiness-checker" style="display:inline-block;margin:.25rem .5rem .25rem 0;background:rgba(0,242,255,.08);border:1px solid rgba(0,242,255,.15);color:var(--cyan);padding:.35rem .8rem;border-radius:9999px;font-size:.8rem;font-weight:600;text-decoration:none;">monetization readiness checker</a></div>
+    </div>
+
+  
+
+
+  
+
+
+  
 
   <div class="footer">
     <p>Part of <a href="/">YT SEO Architect</a> — Free AI-powered YouTube SEO tools | <a href="/blog/channel-health-score">Channel health score</a></p>
@@ -324,22 +361,22 @@ function handleTool() {
     <div class="footer-inner">
       <div class="footer-col">
         <h4>Product</h4>
-        <a href="/public/tools">Free Tools</a>
-        <a href="/dashboard.html">Dashboard</a>
-        <a href="/changelog.html">Changelog</a>
+        <a href="/tools/">Free Tools</a>
+        <a href="/dashboard">Dashboard</a>
+        <a href="/changelog">Changelog</a>
       </div>
       <div class="footer-col">
         <h4>Resources</h4>
         <a href="/blog">Blog</a>
-        <a href="/public/glossary">Glossary</a>
-        <a href="/public/guides">Guides</a>
+        <a href="/glossary/">Glossary</a>
+        <a href="/tools/">Guides</a>
       </div>
       <div class="footer-col">
         <h4>Company</h4>
-        <a href="/about.html">About</a>
-        <a href="/contact.html">Contact</a>
-        <a href="/privacy-policy.html">Privacy</a>
-        <a href="/terms-of-service.html">Terms</a>
+        <a href="/about">About</a>
+        <a href="/contact">Contact</a>
+        <a href="/privacy-policy">Privacy</a>
+        <a href="/terms-of-service">Terms</a>
       </div>
       <div class="footer-col">
         <h4>Social</h4>

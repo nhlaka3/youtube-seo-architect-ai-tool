@@ -13,6 +13,7 @@
     "test": "node --test tests/api.test.js",
     "test:critical": "node --test tests/critical-path.test.js",
     "test:watch": "node --test tests/api.test.js --watch",
+    "crux:field-data": "node scripts/fetch-crux-field-data.mjs",
     "lint": "echo 'Linting...'",
     "build": "vite build",
     "preview": "vite preview"

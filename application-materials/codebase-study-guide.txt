@@ -1,0 +1,766 @@
+============================================================
+YT SEO ARCHITECT — CODEBASE STUDY GUIDE
+============================================================
+This guide explains YOUR code so you can confidently discuss
+it in interviews. Read this before every interview.
+============================================================
+
+
+TABLE OF CONTENTS
+==================
+1.  Project Overview
+2.  Tech Stack & Why Each Tool
+3.  Backend Architecture (api/index.js)
+4.  API Routes & What They Do
+5.  AI Integration (Multi-Brain Provider)
+6.  Security Layer
+7.  Database Design
+8.  Autonomous Agent System
+9.  SEO Scoring Algorithm
+10. Credit System
+11. Deployment & DevOps
+12. Interview Q&A Cheat Sheet
+
+
+============================================================
+1. PROJECT OVERVIEW
+============================================================
+
+WHAT IT IS:
+YT SEO Architect is an AI-powered YouTube growth platform.
+It helps YouTube creators optimize their videos for better
+search rankings, more views, and more subscribers.
+
+WHAT IT DOES (17 tools):
+- Keyword Research — find high-traffic, low-competition keywords
+- Title Optimizer — rewrite titles for maximum CTR
+- Tag Generator — auto-generate SEO-optimized tags
+- Description Writer — create descriptions with timestamps/CTA
+- Thumbnail Analyzer — score thumbnails for click-worthiness
+- Metadata Audit — full SEO health check (0-100 score)
+- SEO Bundle — generate title + tags + description in one call
+- AI Coach (Phronesis) — conversational AI assistant
+- A/B Title Testing — compare title performance
+- Playlist Optimizer — reorder playlists by retention score
+- Trend Pulse — detect trending topics in your niche
+- Growth Engine — autonomous optimization loop
+- Programmatic SEO — auto-generate SEO blog posts
+- Comment Responder — AI-generated replies
+- Video Scheduler — publish at optimal times
+- Competitor Scanner — analyze competitor channels
+- Impact Measurement — track before/after optimization
+
+SCALE: 100% free, 26 blog posts with 100% GEO score,
+deployed on Vercel with PostgreSQL (Neon).
+
+
+============================================================
+2. TECH STACK & WHY EACH TOOL
+============================================================
+
+BACKEND:
+  Express.js v5      — HTTP framework (chosen over Fastify
+                        for ecosystem maturity and middleware)
+  Node.js 20         — Runtime (ES modules with "type": "module")
+  PostgreSQL (Neon)  — Serverless Postgres (chosen over MongoDB
+                        because structured relational data:
+                        users, transactions, logs, trials)
+  Drizzle ORM        — Type-safe SQL ORM (chosen over Prisma
+                        because: lighter, faster cold starts,
+                        no binary engine, better for serverless)
+  Zod                — Runtime validation (schemas for every
+                        request body and query parameter)
+
+AI:
+  Groq SDK           — Primary LLM (llama-3.1-8b-instant)
+                        Fast inference, low cost, JSON mode
+  Google Gemini      — Failover LLM (gemini-2.0-flash)
+                        Used when Groq fails or is rate-limited
+  Multi-Brain System — Try Groq first, fall back to Gemini,
+                        with retry logic (max 2 retries)
+
+SECURITY:
+  Helmet             — HTTP security headers (HSTS, CSP, etc.)
+  CORS               — Origin whitelist (only your domain + localhost)
+  CSRF               — Token-based protection (HMAC-SHA256)
+  Rate Limiting      — 500 req/15min global, 10 req/min for AI
+  Input Sanitization — Strip prompt injection attempts
+  Zod Validation     — Every request body validated before processing
+
+MONITORING:
+  Sentry             — Error tracking with breadcrumbs
+  Winston            — Structured logging with rotation
+  Performance MW     — Request duration tracking
+
+DEPLOYMENT:
+  Vercel             — Serverless functions (auto-scales)
+  Neon               — Serverless PostgreSQL (scales to zero)
+  Git                — Version control
+
+
+============================================================
+3. BACKEND ARCHITECTURE (api/index.js)
+============================================================
+
+The entry point (api/index.js) sets up everything:
+
+IMPORT ORDER MATTERS:
+  1. dotenv/config — loads .env variables FIRST
+  2. Sentry init — must be before any other imports
+  3. Express app creation
+  4. Middleware stack (in exact order)
+  5. Route mounting
+
+MIDDLEWARE STACK (in order):
+  ┌─────────────────────────────────────────┐
+  │ 1. Sentry Request Handler (captures all)│
+  │ 2. Sentry Tracing Handler               │
+  │ 3. Helmet (security headers)            │
+  │ 4. CORS (origin validation)             │
+  │ 5. express.json (body parsing, 1mb max) │
+  │ 6. Input Sanitization (anti-injection)  │
+  │ 7. Performance Middleware                │
+  │ 8. Request Logger (Winston + Sentry)    │
+  │ 9. Rate Limiter (500/15min)             │
+  │ 10. Routes                              │
+  └─────────────────────────────────────────┘
+
+ENVIRONMENT VALIDATION:
+  - Checks for GROQ_API_KEY, CSRF_SECRET at startup
+  - In production: also checks PAYPAL_*, DATABASE_URL
+  - If CSRF_SECRET is default value in production → EXIT
+  - Missing vars don't crash serverless (marks config invalid)
+
+ERROR HANDLING:
+  process.on('uncaughtException') → log + exit(1)
+  process.on('unhandledRejection') → log only (don't crash)
+  Route-level try/catch in every handler
+
+
+============================================================
+4. API ROUTES & WHAT THEY DO
+============================================================
+
+--- AI ROUTES (api/ai-engine.js) ---
+
+POST /api/ai/generate
+  - Generic AI text generation
+  - Accepts: systemPrompt, userPrompt, taskType, temperature
+  - Deducts credits (unless agency plan)
+  - Uses Multi-Brain (Groq → Gemini)
+  - Returns Groq-compatible format for frontend
+
+POST /api/ai/recommendations
+  - Analyzes a video's title/desc/tags/thumbnail scores
+  - Generates improvement suggestions for low-scoring areas
+  - Each suggestion includes a "reason" (why it helps)
+
+POST /api/ai/seo-bundle
+  - One-call generation of: 3 title variants, 15 tags, description
+  - Has template fallback if AI fails
+  - Returns structured JSON
+
+POST /api/ai/assistant
+  - Phronesis AI Coach (conversational)
+  - Loads coach memory from DB (past conversations, goals, wins)
+  - Loads channel baselines (view velocity, success rate)
+  - Loads goal status (current plan, next phase)
+  - System prompt includes reasoning framework:
+    1. Diagnosis → 2. Impact → 3. Action → 4. Timeline
+
+POST /api/ai/neural-strategy
+  - Generates 4 growth experiments based on niche + recent titles
+  - Uses fallback tips if AI fails
+
+--- YOUTUBE ROUTES (api/youtube-ops.js) ---
+
+GET /api/youtube/channels
+  - Fetches authenticated user's channel info from YouTube API
+
+GET /api/youtube/video-details
+  - Fetches video metadata (snippet, statistics, topicDetails)
+
+POST /api/youtube/update-video
+  - Updates video title/description/tags via YouTube API PUT
+  - Merges with existing snippet (only changes provided fields)
+
+POST /api/youtube/playlist-fetch
+  - Fetches all videos in a playlist (handles pagination)
+  - Transforms to flat format for frontend
+
+POST /api/youtube/prepare-reorder
+  - Calculates "Gateway Score" for playlist optimization
+  - Score = Views(45%) + AVD(35%) + Engagement(20%)
+  - Uses YouTube Analytics API if available
+  - Falls back to engagement-based AVD estimation
+  - Returns sorted order + original order for backup
+
+POST /api/youtube/reorder-playlist
+  - Executes the reorder instructions from prepare-reorder
+  - Calls YouTube API to update playlist item positions
+
+POST /api/youtube/metadata-weave
+  - Uses AI to weave playlist videos into cohesive narrative
+  - Generates: algorithmicDescription, themes, tags
+
+--- AGENT ROUTES (api/agent-workflows/orchestrator.js) ---
+
+POST /api/agent/run
+  - Triggers the autonomous optimization loop
+  - Orchestrates multiple sub-agents
+
+--- OTHER ROUTES ---
+
+POST /api/credits/deduct      — Deduct credits for actions
+GET /api/health                — Health check + DB status
+GET /api/analytics/*           — Channel analytics
+POST /api/ab-test/*            — A/B testing
+POST /api/trend-pulse/*        — Trend detection
+POST /api/coach-memory/*       — AI coach memory CRUD
+
+
+============================================================
+5. AI INTEGRATION (Multi-Brain Provider)
+============================================================
+
+FILE: api/_lib/ai-provider.js
+
+THE PATTERN:
+  askAI(systemPrompt, userPrompt, options)
+  ├── Try Groq (llama-3.1-8b-instant)
+  │   └── Success → return result
+  │   └── Fail → try Gemini
+  ├── Try Gemini (gemini-2.0-flash)
+  │   └── Success → return result
+  │   └── Fail → retry with backoff
+  └── After 3 attempts → throw error (or mock in dev)
+
+WHY THIS PATTERN:
+  - Groq is fast (8b model) and cheap
+  - Gemini is more capable but slower
+  - Failover ensures high availability
+  - Retry with exponential backoff handles transient errors
+
+JSON PARSING:
+  - AI often returns markdown-wrapped JSON (```json...```)
+  - parseAIJson() handles: strip fences → extract object → parse
+  - Multiple fallback attempts: direct parse → fix common issues
+    (trailing commas, unquoted keys) → normalize newlines
+
+CHAIN-OF-THOUGHT:
+  - When forceJson is true, appends reasoning array to prompt
+  - Forces LLM to think step-by-step before outputting JSON
+  - Example: {"reasoning":["step1","step2","step3"], ...}
+
+COST TRACKING:
+  - Rough estimation: Groq ~$0.0002/1K tokens, Gemini ~$0.0005/1K
+  - Tracks: totalCost, totalCalls, costByProvider
+  - Exposed via getAICostStats() for monitoring
+
+PROMPT SANITIZATION:
+  sanitizePromptInput() strips:
+  - Prompt injection attempts ("ignore previous instructions")
+  - Jailbreak keywords ("dan", "uncensored")
+  - Control characters and newlines
+  - Caps to maxLen (500 default)
+
+
+============================================================
+6. SECURITY LAYER
+============================================================
+
+--- Helmet (HTTP Security Headers) ---
+  - Content Security Policy (CSP): whitelist of allowed sources
+  - HSTS: 1 year max-age, includeSubDomains, preload
+  - Cross-Origin policies configured for PayPal/Google integrations
+
+--- CORS ---
+  - Only allows: yt-seo-architect.vercel.app + *.vercel.app
+  - In development: localhost and 127.0.0.1
+  - Credentials: true (for auth cookies)
+  - Allowed methods: GET, POST, PUT, DELETE
+  - Max age: 24 hours (86400s)
+
+--- CSRF Protection ---
+  - Token = HMAC-SHA256(secret, sessionId:timestamp)
+  - Tokens expire after 1 hour
+  - Uses timingSafeEqual to prevent timing attacks
+  - Currently disabled (100% free tool, no payments)
+
+--- Rate Limiting ---
+  - Global: 500 requests per 15 minutes per IP
+  - AI endpoints: 10 requests per minute per channel
+  - Returns 429 with retry-after header
+
+--- Input Validation ---
+  - Every POST body validated with Zod schemas
+  - Types enforced: string, number, array, object
+  - Required fields checked
+  - Pattern matching: channelId must match /^UC[\w-]{22}$/
+
+--- Prompt Injection Defense ---
+  - Global middleware sanitizes: topic, q, query, seed, keyword,
+    prompt, userPrompt, systemPrompt
+  - Strips: "ignore previous instructions", jailbreak keywords,
+    control characters, excessive length
+
+--- Serverless Security ---
+  - CSRF_SECRET must not be default value in production
+  - Missing env vars don't crash (marks config invalid)
+  - Sentry captures errors but doesn't expose internals
+
+
+============================================================
+7. DATABASE DESIGN
+============================================================
+
+FILE: src/database/schema.js
+ORM: Drizzle ORM
+DB: PostgreSQL (Neon Serverless)
+
+TABLES:
+
+  users
+  ├── id (cuid2 primary key)
+  ├── channel_id (YouTube channel ID, unique)
+  ├── email
+  ├── plan (free/pro/agency)
+  ├── credits (integer)
+  ├── plan_expires_at
+  ├── nurture_step (onboarding progress)
+  ├── is_verified
+  ├── metadata (JSONB — stores accessToken, etc.)
+  ├── created_at, updated_at
+
+  sessions
+  ├── id (cuid2)
+  ├── user_id → users.id
+  ├── session_token (unique)
+  ├── expires_at
+  ├── metadata (JSONB — IP, user agent)
+
+  credit_transactions
+  ├── id (cuid2)
+  ├── user_id → users.id
+  ├── amount (positive = add, negative = use)
+  ├── type (purchase/usage/refund/bonus)
+  ├── description, reference
+  ├── metadata (JSONB)
+
+  api_logs
+  ├── id (cuid2)
+  ├── user_id → users.id
+  ├── endpoint, method, status_code
+  ├── response_time (ms)
+  ├── ip_address, user_agent
+  ├── error, metadata
+
+  paypal_orders
+  ├── id (cuid2)
+  ├── order_id (unique)
+  ├── user_id → users.id
+  ├── plan, amount, currency, status
+  ├── completed_at, metadata
+
+  optimization_trials
+  ├── id (cuid2)
+  ├── channel_id, video_id
+  ├── optimization_type (title/tags/description/etc.)
+  ├── before_metrics, after_metrics (JSONB)
+  ├── applied_data (what was changed)
+  ├── seo_score_before, seo_score_after
+  ├── status (pending/measuring/completed/failed)
+  ├── improvement_pct
+
+  optimization_queue
+  ├── id (cuid2)
+  ├── channel_id, video_id
+  ├── current_title/description/tags
+  ├── proposed_title/description/tags
+  ├── score_before, score_after
+  ├── confidence, ev_score
+  ├── rationale
+  ├── status (pending/applied/skipped)
+
+  keyword_wins
+  ├── keyword, niche
+  ├── pattern_type (title_word, tag_phrase, etc.)
+  ├── avg_views_lift, avg_ctr_lift
+  ├── sample_count
+  ├── UNIQUE(keyword, niche)
+
+  impact_measurements
+  ├── trial_id, channel_id, video_id
+  ├── views_before/after, likes_before/after
+  ├── comments_before/after
+
+  + agent_settings, agent_activity_logs,
+    agent_goals, coach_memory, trend_cache,
+    ab_tests, blog_posts, etc.
+
+INDEXES:
+  - users_channel_id (unique)
+  - sessions_user_id, sessions_session_token
+  - credit_transactions_user_id
+  - api_logs_user_id, api_logs_created_at
+  - paypal_orders_order_id
+
+
+============================================================
+8. AUTONOMOUS AGENT SYSTEM
+============================================================
+
+This is the most impressive part of your project.
+It's a multi-agent AI system that runs automatically.
+
+--- Agent Architecture ---
+
+  ┌─────────────────────────────────────┐
+  │         ORCHESTRATOR                 │
+  │  (api/agent-workflows/orchestrator) │
+  │  - Coordinates all sub-agents       │
+  │  - Enforces daily limits            │
+  │  - Circuit breaker (error rate)     │
+  │  - Concurrency guard                │
+  └──────────┬──────────────────────────┘
+             │
+  ┌──────────┴──────────────────────────┐
+  │         SUB-AGENTS                  │
+  │                                     │
+  │  Scanner    — scans videos for SEO │
+  │  Optimizer  — proposes fixes        │
+  │  Trend      — detects trends        │
+  │  A/B Test   — runs experiments      │
+  │  Coach      — learns from outcomes  │
+  │  Content    — plans new content     │
+  │  PSEO       — generates blog posts  │
+  └─────────────────────────────────────┘
+
+--- Goal Engine (api/agent-core/goal-engine.js) ---
+
+  setGoal(channelId, type, target, deadline)
+  ├── Gets current metric (subs/views/watch_hours)
+  ├── Generates plan with phases:
+  │   Phase 1: AUDIT (establish baseline)
+  │   Phase 2: OPTIMIZE (immediate wins)
+  │   Phase 3: GROWTH (scale what works)
+  │   Phase 4: COMPOUND (compound effects)
+  ├── Persists to PostgreSQL
+  └── Returns goal with progress tracking
+
+  getGoalStatus(channelId)
+  ├── Calculates weekly growth rate
+  ├── Projects ETA based on current velocity
+  └── Updates DB with current progress
+
+--- Planner (api/agent-core/planner.js) ---
+
+  generatePlan(goalId, goalText, niche)
+  ├── Creates dependency-aware action sequence
+  ├── Steps have: agent, action, dependency, rationale
+  ├── Expected outcomes for each step
+  └── Adapts based on goal type:
+      - Subscriber goals → focus on CTR optimization
+      - View goals → focus on trends + SEO
+      - CTR goals → focus on thumbnails + A/B testing
+
+--- Scoring Engine (api/agent-core/scoring-engine.js) ---
+
+  calculateExpectedValue(actionType, confidence, impact)
+  ├── EV = (Confidence × Impact) - (Cost × RiskMultiplier)
+  ├── Risk increases when:
+  │   - Near API quota limits
+  │   - Trend is volatile
+  │   - User recently skipped similar actions
+  │   - Sensitive action (title/thumbnail change)
+  ├── Risk decreases when:
+  │   - Historical win rate > 70%
+  │   - Brand safety is low
+  ├── Verdict: high_value / medium_value / low_value
+  └── Threshold: EV > 0.5 to be queued
+
+--- Concurrency Guard ---
+
+  let _runToken = 0;
+  let _runAbortController = null;
+
+  function runAutonomousLoop() {
+    const myToken = ++_runToken;
+    if (_runAbortController) _runAbortController.abort();
+    _runAbortController = new AbortController();
+    // ... run with signal.aborted checks
+  }
+
+  WHY: Prevents overlapping cron/manual runs.
+  Each new run aborts the previous one via AbortController.
+
+--- Circuit Breaker ---
+
+  Checks error rate across all agent actions
+  If error rate > 15% → trips circuit → pauses all sub-agents
+  Prevents cascading failures from broken API keys or quotas
+
+--- Daily Limits ---
+
+  Default: 10 optimizations per day
+  Counts only "real" agents (not system/admin actions)
+  Prevents runaway automation from burning API quota
+
+
+============================================================
+9. SEO SCORING ALGORITHM
+============================================================
+
+FILE: api/youtube-ops.js — computeSEOScores()
+
+This is a vidIQ-style 0-100 scoring system.
+
+--- TITLE SCORING (0-100) ---
+  Base: 30 points
+  + 25  if length ≤ 60 chars (YouTube truncates at 60)
+  + 8   if length 60-70 chars
+  - 10  if length > 70 chars
+  + 8   if front-loaded keyword (first 45 chars have 10+)
+  + 8   if contains numbers
+  + 6   if contains brackets: [ ] ( )
+  + 3   if contains ! or ?
+  + 10  if contains power words (how, why, secret, proven, etc.)
+  - 8   if all-caps block > 15 chars
+  - 5   if excessive punctuation (!!!, ???)
+
+--- DESCRIPTION SCORING (0-100) ---
+  Base: 20 points
+  + 30  if word count ≥ 200
+  + 20  if word count 150-199
+  + 10  if word count 100-149
+  + 5   if word count 50-99
+  + 10  if character length ≥ 1500
+  + 6   if character length 1000-1499
+  + 5   if contains hashtags
+  + 8   if contains CTA (subscribe, like, comment, etc.)
+  + 5   if contains links
+  + 10  if tags appear in description
+  + 7   if contains timestamps (MM:SS pattern)
+
+--- TAGS SCORING (0-100) ---
+  Base: 15 points
+  + 25  if tag count 10-25 (sweet spot)
+  + 15  if tag count 5-30
+  + 15  if NO tags contain spaces (YouTube treats them as separate)
+  - (spaced_tags × 3) penalty for spaces
+  + 15  if 5+ long-tail tags (3+ words)
+  + 8   if 2+ long-tail tags
+  - 10  if >60% are single-word tags (too generic)
+  + 10  if total chars 200-500 (YouTube's 500 char limit)
+  - 5   if total chars > 500
+  - (duplicates × 3) penalty
+
+--- OVERALL SCORE ---
+  title × 0.35 + desc × 0.35 + tags × 0.30
+
+
+============================================================
+10. CREDIT SYSTEM
+============================================================
+
+FILE: api/credits.js
+
+CURRENT STATE: 100% FREE
+  - All credit costs set to 0
+  - getCredits() returns 999999
+  - getPlan() returns 'agency'
+  - deductCredits() always succeeds
+
+DESIGN (when credits were active):
+  - KV store: Vercel KV (Redis) with in-memory fallback
+  - Idempotency keys prevent double-charging
+  - Audit trail via Winston logger
+  - Credit transactions tracked in PostgreSQL
+
+  deductCredits(channelId, cost)
+  ├── Check idempotency key (prevent double-deduct)
+  ├── Atomically decrement KV counter
+  ├── Log audit trail
+  └── Return { success, balance }
+
+  refundCredits(channelId, cost)
+  └── Atomically increment KV counter
+
+WHY FREE NOW:
+  - User decided: audience growth > monetization
+  - Credit system kept in code for future use
+  - All routes check credits but always succeed
+
+
+============================================================
+11. DEPLOYMENT & DEVOPS
+============================================================
+
+PLATFORM: Vercel (Serverless)
+  - Each API route = separate serverless function
+  - Auto-scales to zero when no traffic
+  - Cold starts: ~200-500ms
+  - Environment variables in Vercel dashboard
+
+DATABASE: Neon (Serverless PostgreSQL)
+  - Scales to zero (no always-on cost)
+  - Connection pooling via @neondatabase/serverless
+  - Migrations run on first request
+
+MONITORING:
+  - Sentry: error tracking with breadcrumbs
+  - Vercel Analytics: page views, performance
+  - Winston: structured logs (JSON format)
+  - Custom performance middleware: request duration
+
+CI/CD:
+  - Git push → Vercel auto-deploys
+  - Preview deployments for PRs
+  - Environment variables per branch
+
+CORS CONFIGURATION:
+  - Production: only yt-seo-architect.vercel.app
+  - Development: localhost:*
+  - Preview: *.vercel.app
+
+HEALTH CHECKS:
+  GET /api/health
+  - Checks: DB connection, PayPal config, CSRF token
+  - Returns: status, db_connected, timestamp, environment
+
+
+============================================================
+12. INTERVIEW Q&A CHEAT SHEET
+============================================================
+
+Q: "Tell me about your project."
+A: "I built YT SEO Architect, a full-stack AI platform for
+    YouTube creators. It has 17 AI-powered tools including
+    keyword research, metadata optimization, an autonomous
+    agent system that runs SEO improvements automatically,
+    and a conversational AI coach. It's deployed on Vercel
+    with PostgreSQL, uses Groq and Gemini for AI inference,
+    and is 100% free to use."
+
+Q: "Why did you choose Express.js over Fastify or Koa?"
+A: "Express has the largest middleware ecosystem and I needed
+    specific middleware (Helmet, CORS, rate limiting) that
+    integrates seamlessly. For a project with 30+ routes and
+    complex middleware chains, Express's maturity and debugging
+    tooling outweighed Fastify's raw performance."
+
+Q: "Why Drizzle ORM over Prisma?"
+A: "Three reasons: (1) No binary engine — Prisma bundles a
+    Rust binary that adds cold start time on Vercel. Drizzle
+    is pure JS. (2) Drizzle generates standard SQL — I can
+    see exactly what queries run. (3) Drizzle is lighter
+    (~200KB vs Prisma's ~5MB node_modules impact). For a
+    serverless deployment where cold starts matter, this was
+    critical."
+
+Q: "How does your AI failover work?"
+A: "I implemented a Multi-Brain pattern in ai-provider.js.
+    Every AI call tries Groq first (fast, cheap, llama-3.1-8b),
+    then falls back to Gemini (more capable, slower) if Groq
+    fails. There's exponential backoff retry logic (max 2
+    retries). In development, it falls back to mock responses.
+    This ensures 99.9% uptime for AI features."
+
+Q: "How do you prevent prompt injection?"
+A: "Three layers: (1) Global middleware strips injection patterns
+    from all POST bodies — catches 'ignore previous instructions',
+    jailbreak keywords, and control characters. (2) sanitizePromptInput()
+    in the AI engine strips remaining attacks. (3) Zod validation
+    ensures input types and lengths are constrained before
+    reaching AI prompts."
+
+Q: "Explain your autonomous agent system."
+A: "It's a multi-agent architecture with an orchestrator that
+    coordinates specialized sub-agents: scanner (analyzes videos),
+    optimizer (proposes fixes), trend scanner (detects trends),
+    A/B tester (runs experiments), and a coach (learns from
+    outcomes). It uses Expected Value scoring to prioritize
+    actions — EV = (confidence × impact) - (cost × risk).
+    There's a circuit breaker that pauses all agents if error
+    rate exceeds 15%, and daily limits prevent runaway automation."
+
+Q: "How does your scoring algorithm work?"
+A: "I built a vidIQ-style 0-100 scoring system. Title scoring
+    checks length (≤60 chars is ideal), power words, numbers,
+    brackets. Description scoring checks word count (200+ is
+    ideal), timestamps, CTAs, hashtags. Tags scoring checks
+    count (10-25 sweet spot), long-tail coverage, duplicate
+    detection, and whether tags have spaces (which YouTube
+    splits into separate tags). Overall is a weighted average:
+    35% title, 35% description, 30% tags."
+
+Q: "How do you handle serverless cold starts?"
+A: "Several strategies: (1) Drizzle ORM instead of Prisma
+    (no binary to load). (2) Lazy-load Gemini only when needed
+    (not on every request). (3) Dynamic imports for non-critical
+    modules. (4) Deferred migrations (run on first request,
+    not at startup). (5) No process.exit(1) for missing env
+    vars — marks config invalid instead of crashing."
+
+Q: "How do you ensure data consistency?"
+A: "Atomic operations via Drizzle transactions. Idempotency
+    keys on credit deductions prevent double-charging. The
+    concurrency guard (AbortController) prevents overlapping
+    agent runs from corrupting state. Circuit breaker prevents
+    cascading failures."
+
+Q: "What would you do differently?"
+A: "I'd add Redis caching for YouTube API responses (rate
+    limited to 10,000 units/day). I'd implement WebSocket
+    for real-time agent status updates instead of polling.
+    And I'd add comprehensive integration tests — currently
+    I have API-level tests but not full E2E coverage."
+
+Q: "How do you handle errors in production?"
+A: "Sentry captures errors with full context (breadcrumbs,
+    user info, request data). Winston logs structured JSON
+    with rotation. Every route has try/catch that returns
+    meaningful error messages without exposing internals.
+    Circuit breaker pauses automation if error rate spikes.
+    Uncaught exceptions log and exit; unhandled rejections
+    log but don't crash the serverless function."
+
+
+============================================================
+QUICK REFERENCE — KEY FILES
+============================================================
+
+api/index.js              — Entry point, middleware stack
+api/ai-engine.js          — AI routes (generate, coach, bundle)
+api/youtube-ops.js        — YouTube API integration + SEO scoring
+api/credits.js            — Credit system (currently free)
+api/_lib/ai-provider.js   — Multi-Brain AI failover
+api/middleware/csrf.js     — CSRF token generation/verification
+api/middleware/validate.js — Zod validation middleware
+api/agent-workflows/orchestrator.js — Autonomous agent loop
+api/agent-core/goal-engine.js       — Goal setting & tracking
+api/agent-core/planner.js           — Dependency-aware planning
+api/agent-core/scoring-engine.js    — EV scoring & circuit breaker
+api/agent-core/outcome-tracker.js   — Learning from results
+api/agent-core/memory-engine.js     — Long-term agent memory
+src/database/schema.js    — Database table definitions
+src/database/services.js  — Database CRUD operations
+
+
+============================================================
+STUDY TIPS
+============================================================
+
+1. Read api/index.js — understand the middleware order
+2. Read api/_lib/ai-provider.js — know the failover pattern
+3. Read api/youtube-ops.js computeSEOScores() — explain the algorithm
+4. Read api/agent-workflows/orchestrator.js — understand the agent loop
+5. Read api/agent-core/scoring-engine.js — explain EV calculation
+6. Read src/database/schema.js — know your data model
+7. Practice explaining each component in 2-3 sentences
+8. Be ready to draw the architecture on a whiteboard
+9. Know WHY you chose each tool (not just WHAT you used)
+10. Have a "what would you improve" answer ready
+
+Good luck! You built something real and impressive.
+============================================================

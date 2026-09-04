@@ -105,7 +105,7 @@ function processFile(filePath) {
       );
       changes.push('font order updated (Geist first)');
     }
-  } else if (html.includes('</head>')) {
+  } else if (html.includes('<script defer src="/ga.js"></script></head>')) {
     // Insert the style block right before </head>
     html = html.replace('</head>', `  ${FONT_STYLE}\n</head>`);
     changes.push('body font style');

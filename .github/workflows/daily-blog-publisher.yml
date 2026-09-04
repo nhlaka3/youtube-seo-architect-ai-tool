@@ -40,6 +40,13 @@ jobs:
       DATABASE_URL: ${{ secrets.DATABASE_URL }}
       CI: true   # Tells auto-blog-generator.mjs to skip internal Vercel deploy
       NODE_ENV: production
+      # Scored quality gate (0-100). Posts below this are blocked from publishing.
+      # Existing posts score ~85-100; raise it for stricter quality control.
+      BLOG_MIN_SCORE: ${{ vars.BLOG_MIN_SCORE || '70' }}
+      # Minimum authored images/charts per post (default 3). NOTE: existing cron
+      # posts have 0 visuals, so with the default the cron will BLOCK until posts
+      # include ≥3 visuals. Set to 0 to keep publishing text-only posts.
+      BLOG_MIN_VISUALS: ${{ vars.BLOG_MIN_VISUALS || '3' }}
 
     steps:
       - name: ⬇️ Checkout private repo
@@ -48,16 +55,55 @@ jobs:
           token: ${{ secrets.GH_PAT }}
           fetch-depth: 0
 
-      - name: 🔧 Setup Node.js 24
+      - name: 🔧 Setup Node.js 22
         uses: actions/setup-node@v4
         with:
-          node-version: '24'
+          node-version: '22'
           cache: 'npm'
 
       - name: 🐍 Setup Python 3.12
         uses: actions/setup-python@v5
         with:
           python-version: '3.12'
+
+      - name: 📈 Install matplotlib (blog chart generator)
+        run: |
+          python3 -m pip install --quiet matplotlib
+
+      - name: 🖼️ Install hero image rasterizer (librsvg + ffmpeg)
+        run: |
+          sudo apt-get update -qq && sudo apt-get install -y -qq librsvg2-bin ffmpeg
+          rsvg-convert --version
+          ffmpeg -version | head -1
+
+      - name: 🔐 Pull DATABASE_URL from Vercel (production env)
+        env:
+          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+        run: |
+          # Link project + pull production envs so the generator can DB-insert posts
+          # (no DATABASE_URL secret on the repo — Vercel holds the prod value).
+          set +e
+          set -o pipefail
+          echo "--- installing vercel CLI ---"
+          npm install -g vercel@54.9.1 >/dev/null 2>&1
+          echo "vercel: $(vercel --version 2>&1)"
+          echo "--- linking project ---"
+          vercel link --yes --project yt-seo-architect 2>&1 | tail -3
+          echo "link exit: ${PIPESTATUS[0]}"
+          echo "--- pulling production envs ---"
+          vercel env pull .env.vercel --environment=production --yes 2>&1 | tail -3
+          echo "pull exit: ${PIPESTATUS[0]}"
+          if [ -f .env.vercel ]; then
+            DB_URL=$(grep -E '^DATABASE_URL=' .env.vercel | head -1 | cut -d= -f2- | tr -d '"' | tr -d "'")
+            if [ -n "$DB_URL" ]; then
+              echo "DATABASE_URL=$DB_URL" >> "$GITHUB_ENV"
+              echo "✅ DATABASE_URL pulled from Vercel ($(echo -n "$DB_URL" | wc -c) chars)"
+            else
+              echo "⚠ DATABASE_URL not found in .env.vercel — DB insert will be skipped"
+            fi
+          else
+            echo "⚠ vercel env pull failed — DB insert will be skipped"
+          fi
 
       - name: 🏗️ Build command
         id: build-cmd
@@ -83,6 +129,7 @@ jobs:
 
       - name: 🔗 Inject glossary cross-links into blog posts
         id: inject-links
+        if: steps.generate.outcome == 'success'
         run: |
           echo "Injecting glossary links into new blog post..."
           node scripts/add-glossary-links.mjs
@@ -145,6 +192,16 @@ jobs:
         run: |
           git config user.name "YT SEO Bot"
           git config user.email "hnhlaka142@gmail.com"
+          # Scrub API-shadowing stubs BEFORE git add -A: these files shadow
+          # /blog + /sitemap.xml API routes (Vercel serves static before
+          # afterFiles rewrites). Recurrence of 1db141ed — never ship them.
+          rm -f public/blog.html public/blog/.html public/blog/generic.html \
+                public/blog/how-to-ranking-youtube.html \
+                public/blog/seo-for-cooking-channels-2026.html public/sitemap.xml
+          # hero/og/matplotlib PNGs + webp are gitignored — force-add so every
+          # post ships its hero, og image, and in-article visuals
+          git add -f public/blog/*.png public/blog/*.webp 2>/dev/null || true
+          git add -f scripts/keywords.json 2>/dev/null || true
           git add -A
           if git diff --staged --quiet; then
             echo "✅ No changes to commit"
@@ -159,6 +216,7 @@ jobs:
 
       - name: 🌐 Deploy to Vercel
         if: steps.push.outputs.COMMITTED == 'true'
+        continue-on-error: true  # mirror push blocked by push protection; deploys go via private repo -> Vercel
         env:
           PUBLIC_REPO: https://x-access-token:${{ secrets.GH_PAT }}@github.com/nhlaka3/youtube-seo-architect-ai-tool.git
         run: |
@@ -173,6 +231,7 @@ jobs:
           echo "  📝 DAILY BLOG PUBLISHER REPORT"
           echo "════════════════════════════════════════════"
           echo "  Generate step: ${{ steps.generate.outcome }}"
+          echo "  Quality score: ${{ steps.generate.outputs.quality_score }}/100 (${{ steps.generate.outputs.quality_grade }})"
           echo "  Changes pushed: ${{ steps.push.outputs.COMMITTED }}"
           echo "  Time:          $(date -u)"
           echo "════════════════════════════════════════════"

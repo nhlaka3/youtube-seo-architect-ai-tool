@@ -1,0 +1,32 @@
+<svg viewBox="0 0 560 380" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Three common YouTube retention curve shapes: steady plateau, early cliff, mid-video cliff">
+  <rect width="560" height="380" rx="12" fill="#0f0c29"/>
+  <text x="280" y="32" text-anchor="middle" font-family="sans-serif" font-size="15" font-weight="700" fill="#e0e7ff">Three common retention curve shapes</text>
+  <text x="280" y="50" text-anchor="middle" font-family="sans-serif" font-size="10" fill="#8b8b9e">Read the shape before the number</text>
+
+  <!-- Steady plateau (left) -->
+  <g transform="translate(20,78)">
+    <rect width="166" height="230" rx="8" fill="#1e1b4b" stroke="#2d2a5e"/>
+    <text x="83" y="20" text-anchor="middle" font-family="sans-serif" font-size="11" font-weight="700" fill="#4ade80">1 · Steady plateau</text>
+    <text x="83" y="34" text-anchor="middle" font-family="sans-serif" font-size="9" fill="#8b8b9e">healthy — holds interest</text>
+    <polyline points="20,40 40,44 60,50 80,58 100,66 120,76 140,88 146,94" fill="none" stroke="#4ade80" stroke-width="2.5" stroke-linecap="round"/>
+  </g>
+
+  <!-- Early cliff (center) -->
+  <g transform="translate(197,78)">
+    <rect width="166" height="230" rx="8" fill="#1e1b4b" stroke="#2d2a5e"/>
+    <text x="83" y="20" text-anchor="middle" font-family="sans-serif" font-size="11" font-weight="700" fill="#f87171">2 · Early cliff</text>
+    <text x="83" y="34" text-anchor="middle" font-family="sans-serif" font-size="9" fill="#8b8b9e">packaging promise mismatch</text>
+    <polyline points="20,40 28,42 36,48 44,70 52,100 60,120 76,136 100,150 146,158" fill="none" stroke="#f87171" stroke-width="2.5" stroke-linecap="round"/>
+  </g>
+
+  <!-- Mid-video cliff (right) -->
+  <g transform="translate(374,78)">
+    <rect width="166" height="230" rx="8" fill="#1e1b4b" stroke="#2d2a5e"/>
+    <text x="83" y="20" text-anchor="middle" font-family="sans-serif" font-size="11" font-weight="700" fill="#fb923c">3 · Mid-video cliff</text>
+    <text x="83" y="34" text-anchor="middle" font-family="sans-serif" font-size="9" fill="#8b8b9e">a section lost people</text>
+    <polyline points="20,40 40,46 60,52 80,58 92,64 100,96 108,120 120,136 146,150" fill="none" stroke="#fb923c" stroke-width="2.5" stroke-linecap="round"/>
+  </g>
+
+  <text x="280" y="338" text-anchor="middle" font-family="sans-serif" font-size="9.5" fill="#8b8b9e">Each shape points to a different fix: intro, packaging, or a specific section.</text>
+  <text x="280" y="358" text-anchor="middle" font-family="sans-serif" font-size="8.5" fill="#6b6b80">Conceptual diagnostic framework — not measured data · YT SEO Architect, 2026</text>
+</svg>

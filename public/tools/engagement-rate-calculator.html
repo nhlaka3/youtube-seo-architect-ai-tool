@@ -8,14 +8,31 @@
   <link rel="canonical" href="https://yt-seo-architect.vercel.app/tools/engagement-rate-calculator" />
   <meta property="og:title" content="Engagement rate calculator — Free Interactive Tool | YT SEO Architect" />
   <meta property="og:description" content="Analyze your text for SEO keywords, topic clusters, and readability. Get insights to improve your YouTube content. Apply what you learn from the engagement rate calculator guide. Works entirely in your browser, no login required." />
-  <meta property="og:image" content="https://yt-seo-architect.vercel.app/logo.svg" />
+  <meta property="og:image" content="https://yt-seo-architect.vercel.app/og-image.png" />
   <meta name="robots" content="index, follow" />
   <script type="application/ld+json">
-  { "@context": "https://schema.org", "@type": "WebApplication",
-    "name": "Engagement rate calculator", "description": "engagement rate calculator for YouTube creators",
-    "url": "https://yt-seo-architect.vercel.app/tools/engagement-rate-calculator", "applicationCategory": "MultimediaApplication",
-    "operatingSystem": "Web", "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" } }
-  </script>
+{
+  "@context": "https://schema.org",
+  "@type": "WebApplication",
+  "name": "Engagement rate calculator",
+  "description": "engagement rate calculator for YouTube creators",
+  "url": "https://yt-seo-architect.vercel.app/tools/engagement-rate-calculator",
+  "applicationCategory": "MultimediaApplication",
+  "operatingSystem": "Web",
+  "offers": {
+    "@type": "Offer",
+    "price": "0",
+    "priceCurrency": "USD"
+  },
+  "speakable": {
+    "@type": "SpeakableSpecification",
+    "xpath": [
+      "//h1",
+      "//meta[@name='description']/@content"
+    ]
+  }
+}
+</script>
   <style>
     :root { --bg: #0f0f1a; --surface: #1a1a2e; --border: #2a2a4a; --accent: #6366f1; --accent2: #06b6d4; --text: #e2e8f0; --text2: #94a3b8; --text3: #64748b; --success: #22c55e; }
     * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -68,7 +85,8 @@
     <link rel="stylesheet" href="/nav.css">
     <link rel="stylesheet" href="/blog-article.css">
   </noscript>
-</head>
+<link rel="stylesheet" href="/motion-utilities.css">
+<script defer src="/ga.js"></script></head>
 <body data-keyword="engagement rate calculator">
   <div class="header">
     <a href="/" class="header-logo"><span>🛠️</span> YT SEO Architect</a>
@@ -107,6 +125,25 @@
       <a href="/blog/engagement-rate-calculator">Read the Complete Guide →</a>
     </div>
   </div>
+
+    <div class="seo-content" style="max-width:760px;margin:2.5rem auto 0;padding-top:2rem;border-top:1px solid var(--border);">
+      <h2 style="font-size:1.35rem;font-weight:800;color:var(--text-primary);margin-bottom:.75rem;">About This Tool</h2>
+      This calculator measures your engagement rate — the percentage of viewers who like, comment, share, or subscribe relative to your views. Engagement is the clearest signal YouTube uses to decide whether your audience genuinely values a video.<p>Why this matters: YouTube's algorithm is a feedback loop — better metadata earns more impressions, more impressions surface your retention, and strong retention expands reach further. Tools like this one exist to make sure you are optimizing every variable in that loop, on every upload, without needing a consultant's budget. Used consistently, the small gains from each check compound into a channel that ranks.</p><p>The YT SEO Architect approach is deliberately simple: run the check, apply the result, move on. No dashboards to babysit, no credits to count. If you pair this tool with the matching guide on the blog, you get the "why" behind every "what" — the benchmarks, the examples, and the mistakes to avoid — so you are never applying advice blindly.</p>
+      <h2 style="font-size:1.35rem;font-weight:800;color:var(--text-primary);margin:1.5rem 0 .75rem;">How to Use It</h2>
+      <ol style="color:var(--text-secondary);line-height:1.8;padding-left:1.25rem;"><li>Enter your views and the combined number of likes, comments, shares, and new subscribers the video generated.</li><li>The tool computes the engagement percentage and benchmarks it against the 3-6% typical range.</li><li>Videos with strong engagement get pushed harder — use the output to identify which of your topics your audience actually cares about.</li><li>Pair the result with your retention benchmark to separate 'engaged but bounced' from 'watched and loved'.</li></ol>
+      <h2 style="font-size:1.35rem;font-weight:800;color:var(--text-primary);margin:1.5rem 0 .75rem;">Frequently Asked Questions</h2>
+      <div class="faq-item" style="margin-bottom:1rem;"><h3 style="font-size:1rem;color:var(--text-primary);margin-bottom:.3rem;">What is a good engagement rate on YouTube?</h3><p style="color:var(--text-secondary);font-size:.9rem;line-height:1.7;margin:0;">An engagement rate of 3-6% (interactions per view) is healthy, with higher rates common on smaller, niche channels where audiences are more invested. Shorts tend to run higher on likes but lower on comments.</p></div><div class="faq-item" style="margin-bottom:1rem;"><h3 style="font-size:1rem;color:var(--text-primary);margin-bottom:.3rem;">How do I increase engagement?</h3><p style="color:var(--text-secondary);font-size:.9rem;line-height:1.7;margin:0;">End every video with a specific question, reply to comments in the first hour to seed discussion, and add engagement hooks like polls and community posts between uploads.</p></div><div class="faq-item" style="margin-bottom:1rem;"><h3 style="font-size:1rem;color:var(--text-primary);margin-bottom:.3rem;">Does engagement affect YouTube rankings?</h3><p style="color:var(--text-secondary);font-size:.9rem;line-height:1.7;margin:0;">Yes — engagement velocity (how fast likes and comments arrive) is a strong freshness signal. A video that sparks discussion in its first hours gets more recommendation impressions.</p></div><div class="faq-item" style="margin-bottom:1rem;"><h3 style="font-size:1rem;color:var(--text-primary);margin-bottom:.3rem;">How does this tool fit into a full YouTube SEO workflow?</h3><p style="color:var(--text-secondary);font-size:.9rem;line-height:1.7;margin:0;">It covers one specific lever in the optimization stack. Use it alongside the title, description, tag, and thumbnail tools for a complete pre-publish checklist, then validate the results against your YouTube Studio analytics over the following weeks.</p></div><div class="faq-item" style="margin-bottom:1rem;"><h3 style="font-size:1rem;color:var(--text-primary);margin-bottom:.3rem;">Will this tool work for my channel size?</h3><p style="color:var(--text-secondary);font-size:.9rem;line-height:1.7;margin:0;">Yes — the recommendations are size-agnostic because they follow YouTube's ranking fundamentals, which apply equally to a 100-subscriber channel and a million-subscriber channel. What changes with size is how fast results show, not whether the optimization is correct.</p></div>
+      <h2 style="font-size:1.35rem;font-weight:800;color:var(--text-primary);margin:1.5rem 0 .75rem;">Related Tools</h2>
+      <div style="margin-bottom:.5rem;"><a href="/tools/subscriber-growth-calculator" style="display:inline-block;margin:.25rem .5rem .25rem 0;background:rgba(0,242,255,.08);border:1px solid rgba(0,242,255,.15);color:var(--cyan);padding:.35rem .8rem;border-radius:9999px;font-size:.8rem;font-weight:600;text-decoration:none;">subscriber growth calculator</a><a href="/tools/audience-retention-benchmark" style="display:inline-block;margin:.25rem .5rem .25rem 0;background:rgba(0,242,255,.08);border:1px solid rgba(0,242,255,.15);color:var(--cyan);padding:.35rem .8rem;border-radius:9999px;font-size:.8rem;font-weight:600;text-decoration:none;">audience retention benchmark</a><a href="/tools/hashtag-performance-checker" style="display:inline-block;margin:.25rem .5rem .25rem 0;background:rgba(0,242,255,.08);border:1px solid rgba(0,242,255,.15);color:var(--cyan);padding:.35rem .8rem;border-radius:9999px;font-size:.8rem;font-weight:600;text-decoration:none;">hashtag performance checker</a></div>
+    </div>
+
+  
+
+
+  
+
+
+  
 
   <div class="footer">
     <p>Part of <a href="/">YT SEO Architect</a> — Free AI-powered YouTube SEO tools | <a href="/blog/engagement-rate-calculator">Engagement rate calculator</a></p>
@@ -324,22 +361,22 @@ function handleTool() {
     <div class="footer-inner">
       <div class="footer-col">
         <h4>Product</h4>
-        <a href="/public/tools">Free Tools</a>
-        <a href="/dashboard.html">Dashboard</a>
-        <a href="/changelog.html">Changelog</a>
+        <a href="/tools/">Free Tools</a>
+        <a href="/dashboard">Dashboard</a>
+        <a href="/changelog">Changelog</a>
       </div>
       <div class="footer-col">
         <h4>Resources</h4>
         <a href="/blog">Blog</a>
-        <a href="/public/glossary">Glossary</a>
-        <a href="/public/guides">Guides</a>
+        <a href="/glossary/">Glossary</a>
+        <a href="/tools/">Guides</a>
       </div>
       <div class="footer-col">
         <h4>Company</h4>
-        <a href="/about.html">About</a>
-        <a href="/contact.html">Contact</a>
-        <a href="/privacy-policy.html">Privacy</a>
-        <a href="/terms-of-service.html">Terms</a>
+        <a href="/about">About</a>
+        <a href="/contact">Contact</a>
+        <a href="/privacy-policy">Privacy</a>
+        <a href="/terms-of-service">Terms</a>
       </div>
       <div class="footer-col">
         <h4>Social</h4>

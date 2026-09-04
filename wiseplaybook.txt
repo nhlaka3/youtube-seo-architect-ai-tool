@@ -1,0 +1,20 @@
+Wise's programmatic SEO (pSEO) strategy is a massive global engine that generates approximately **90% of its 54.4 million monthly organic visits**. The company’s success is built on a "product-led" foundation, where they first developed a valuable product and then used pSEO as a strategic lever to scale content that aligns with user search intent.
+
+### **1. The Core Templated Categories**
+Wise utilizes **eight core templates** organized into five highly searched categories to target high-intent, long-tail keywords.
+
+*   **Currency Converters:** This is their top-performing category, with estimates ranging from **260,000 to over 8.5 million pages** across 60+ country-specific subfolders. These pages target queries like "USD to EUR" as well as hyper-specific amounts like "2,000 Maldivian rufiyaas to New Zealand dollars".
+*   **Code Guides:** Over **120,000 pages** (including 1.25 million for SWIFT codes specifically) helping users find and verify essential banking identifiers like **SWIFT codes, IBANs, Routing Numbers, and Sort Codes**.
+*   **Compare Pages:** More than **6,000 pages** that capture traffic from users comparing exchange rates offered by competitors like "Chase currency exchange rates" or "Western Union dollar to peso".
+*   **Stock Ticker Conversions:** Over **79,000 pages** assist investors looking for the conversion rates of stock prices not traded in their local currency (e.g., “NVDA stock price today”).
+*   **Currency Exchange Locations:** A geographically focused category with nearly **200 pages** targeting physical exchange locations in various cities, such as "currency exchange in Paris".
+
+### **2. Strategic Implementation Tactics**
+Wise ensures these automated pages rank and convert by focusing on three key technical and structural elements:
+
+*   **Passing the "Data Depth Test":** Wise avoids "thin content" penalties by enriching its templates with high-value data points. A typical currency converter page includes **real-time rates, interactive calculators, historical conversion charts**, and tables comparing their rates against competitors.
+*   **Featured Snippet Maximisation:** Wise structures its content to capture "position zero" in Google Search. For its routing number pages, it provides the answer in **three different formats** (H1 header, in-line text, and a chart), allowing it to rank as a snippet for 5,700 keywords in the U.S. alone.
+*   **Robust Internal Linking:** To maintain crawlability across millions of URLs, Wise uses a **hub-and-spoke internal linking structure**. Individual pages link to a "browse all currencies" library, feature "top pairing" sections, and provide modules linking to the same information in different languages.
+
+### **3. Internationalization and Scalability**
+The strategy is designed for **global reach**, catering to users in 160 countries and 40 currencies. By translating a single high-performing template into dozens of languages and deploying it across country-specific sub-folders (like `/es/` for Spain or `/it/` for Italy), Wise skyrocketed its indexed pages from 7,000 to **1.7 million** in under 24 months.

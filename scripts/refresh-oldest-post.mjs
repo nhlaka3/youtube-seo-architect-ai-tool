@@ -36,9 +36,11 @@ const SLUG_OVERRIDE = args.find(a => a.startsWith('--slug='))
 async function callAI(prompt, system) {
   const apiKey = process.env.GROQ_API_KEY;
   const fallbackKey = process.env.GEMINI_API_KEY;
-  let lastError;
+  const errors = [];
 
-  // Primary: Groq
+  const backoff = (ms) => new Promise(r => setTimeout(r, ms));
+
+  // Primary: Groq (retry with backoff on 429/5xx)
   if (apiKey) {
     for (let attempt = 0; attempt < 3; attempt++) {
       try {
@@ -59,42 +61,58 @@ async function callAI(prompt, system) {
           }),
         });
         if (!res.ok) {
-          lastError = `Groq HTTP ${res.status}`;
-          if (res.status === 429) {
-            await new Promise(r => setTimeout(r, 2000 * (attempt + 1)));
+          const body = await res.text().catch(() => '');
+          const msg = `Groq HTTP ${res.status} ${body.slice(0, 120)}`.trim();
+          errors.push(msg);
+          if (res.status === 429 || res.status >= 500) {
+            await backoff(3000 * (attempt + 1));
             continue;
           }
-          throw new Error(lastError);
+          break;
         }
         const data = await res.json();
         return data.choices[0].message.content;
       } catch (e) {
-        lastError = e.message;
-        if (attempt < 2) await new Promise(r => setTimeout(r, 2000));
+        errors.push(`Groq: ${e.message}`);
+        if (attempt < 2) await backoff(3000);
       }
     }
   }
 
-  // Fallback: Gemini
+  // Fallback: Gemini (retry with backoff on 429/5xx)
   if (fallbackKey) {
-    try {
-      const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${fallbackKey}`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          contents: [{ parts: [{ text: `${system}\n\n${prompt}` }] }],
-          generationConfig: { temperature: 0.7, maxOutputTokens: 4096 },
-        }),
-      });
-      if (!res.ok) throw new Error(`Gemini HTTP ${res.status}`);
-      const data = await res.json();
-      return data.candidates?.[0]?.content?.parts?.[0]?.text || '';
-    } catch (e) {
-      lastError = e.message;
+    for (let attempt = 0; attempt < 3; attempt++) {
+      try {
+        const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${fallbackKey}`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            contents: [{ parts: [{ text: `${system}\n\n${prompt}` }] }],
+            generationConfig: { temperature: 0.7, maxOutputTokens: 4096 },
+          }),
+        });
+        if (!res.ok) {
+          const body = await res.text().catch(() => '');
+          const msg = `Gemini HTTP ${res.status} ${body.slice(0, 120)}`.trim();
+          errors.push(msg);
+          if (res.status === 429 || res.status >= 500) {
+            await backoff(3000 * (attempt + 1));
+            continue;
+          }
+          break;
+        }
+        const data = await res.json();
+        return data.candidates?.[0]?.content?.parts?.[0]?.text || '';
+      } catch (e) {
+        errors.push(`Gemini: ${e.message}`);
+        if (attempt < 2) await backoff(3000);
+      }
     }
   }
 
-  throw new Error(`All AI providers failed: ${lastError}`);
+  throw new Error(
+    `All AI providers failed: ${errors.join(' | ') || 'no API keys configured (set GROQ_API_KEY and/or GEMINI_API_KEY)'}`
+  );
 }
 
 // ── Blog post parser ───────────────────────────────────────────────
@@ -238,40 +256,75 @@ async function main() {
   let targetSlug = SLUG_OVERRIDE;
 
   if (!targetSlug) {
-    // Parse all posts to find the oldest one
-    let oldest = null;
-    let oldestDate = Infinity;
+    // QUALITY-AWARE SELECTION: honor refresh-priority.json (written by
+    // scripts/blog-quality-audit.py, worst-first) so we refresh the
+    // LOWEST-QUALITY post, not just the oldest. Falls back to oldest.
+    const priorityFile = resolve(PROJECT, 'scripts/refresh-priority.json');
+    let prioritySlug = null;
+    try {
+      if (existsSync(priorityFile)) {
+        const priority = JSON.parse(readFileSync(priorityFile, 'utf-8'));
+        const candidate = priority.find(entry => {
+          if (!entry || !entry.slug) return false;
+          const p = resolve(BLOG_DIR, `${entry.slug}.html`);
+          if (!existsSync(p)) return false;
+          // Regenerate entries need the full generator, not a section graft —
+          // skip them here so the refresh cron doesn't waste a cycle.
+          if (entry.action === 'regenerate') return false;
+          // Skip posts refreshed within the last 7 days
+          const html = readFileSync(p, 'utf-8');
+          const meta = getPostMeta(html, entry.slug);
+          if (meta.modified) {
+            const days = Math.floor((Date.now() - new Date(meta.modified).getTime()) / (1000*60*60*24));
+            if (days < 7 && !FORCE) return false;
+          }
+          return true;
+        });
+        if (candidate) prioritySlug = candidate.slug;
+      }
+    } catch (e) {
+      console.log(`  ⚠ refresh-priority.json read failed (${e.message}) — falling back to oldest`);
+    }
 
-    for (const file of files) {
-      const slug = file.replace('.html', '');
-      const html = readFileSync(resolve(BLOG_DIR, file), 'utf-8');
-      const meta = getPostMeta(html, slug);
-      if (meta.published) {
-        const pubDate = new Date(meta.published).getTime();
-        if (pubDate < oldestDate && !isNaN(pubDate)) {
-          oldestDate = pubDate;
-          oldest = { ...meta, html };
+    if (prioritySlug) {
+      targetSlug = prioritySlug;
+      console.log(`  🎯 Priority target (from refresh-priority.json): ${targetSlug}`);
+    } else {
+      // Fallback: parse all posts to find the oldest one
+      let oldest = null;
+      let oldestDate = Infinity;
+
+      for (const file of files) {
+        const slug = file.replace('.html', '');
+        const html = readFileSync(resolve(BLOG_DIR, file), 'utf-8');
+        const meta = getPostMeta(html, slug);
+        if (meta.published) {
+          const pubDate = new Date(meta.published).getTime();
+          if (pubDate < oldestDate && !isNaN(pubDate)) {
+            oldestDate = pubDate;
+            oldest = { ...meta, html };
+          }
         }
       }
-    }
 
-    if (!oldest) {
-      console.log('❌ No blog posts found with valid published dates');
-      process.exit(1);
-    }
-
-    // Check if already refreshed recently (skip if modified within 7 days)
-    if (!FORCE && oldest.modified) {
-      const modDate = new Date(oldest.modified);
-      const daysSinceMod = Math.floor((Date.now() - modDate.getTime()) / (1000*60*60*24));
-      if (daysSinceMod < 7) {
-        console.log(`⏭️  "${oldest.title}" was refreshed ${daysSinceMod} day(s) ago — skipping (use --force to override)`);
-        process.exit(0);
+      if (!oldest) {
+        console.log('❌ No blog posts found with valid published dates');
+        process.exit(1);
       }
-    }
 
-    targetSlug = oldest.slug;
-    console.log(`  Target: "${oldest.title}" (published: ${oldest.published})`);
+      // Check if already refreshed recently (skip if modified within 7 days)
+      if (!FORCE && oldest.modified) {
+        const modDate = new Date(oldest.modified);
+        const daysSinceMod = Math.floor((Date.now() - modDate.getTime()) / (1000*60*60*24));
+        if (daysSinceMod < 7) {
+          console.log(`⏭️  "${oldest.title}" was refreshed ${daysSinceMod} day(s) ago — skipping (use --force to override)`);
+          process.exit(0);
+        }
+      }
+
+      targetSlug = oldest.slug;
+      console.log(`  Target: "${oldest.title}" (published: ${oldest.published})`);
+    }
   }
 
   // 2. Read the target post
@@ -302,7 +355,15 @@ async function main() {
   }
 
   // 3. Generate new sections via AI
-  const existingHeadings = sections.map(s => `- ${s.heading} (#${s.id})`).join('\n');
+  // Trim heading list: free-tier Groq caps TPM at 6000, and the 6.5MB post has
+  // 1275 headings (~15K+ input tokens) — sending all of them guarantees a 429.
+  const MAX_HEADINGS = 40;
+  const allHeadings = sections.map(s => `- ${s.heading} (#${s.id})`);
+  const existingHeadings =
+    allHeadings.slice(0, MAX_HEADINGS).join('\n') +
+    (allHeadings.length > MAX_HEADINGS
+      ? `\n... and ${allHeadings.length - MAX_HEADINGS} more existing sections (do NOT duplicate their topics)`
+      : '');
   const prompt = `You are refreshing the blog post "${meta.title}" on YT SEO Architect.
 
 The post already has these sections:
@@ -314,7 +375,7 @@ REQUIREMENTS:
 - Each section must start with <h2 id="fresh-section-N"> where N is 1, 2, or 3
 - Each section must be 250-400 words of substantial, actionable content
 - Focus on: new YouTube algorithm updates, recent data, fresh strategies that weren't covered before
-- Include specific numbers, dates, and actionable steps
+- Include dates and actionable steps. Use a specific number ONLY when it is a real, verifiable fact you can cite; otherwise keep claims qualitative ("more", "higher"). NEVER invent statistics, studies, or attribution to real companies/creators, and NEVER fabricate metrics for named channels.
 - Link to YT SEO Architect dashboard (/dashboard) naturally once or twice
 - Use the same writing style as the existing post (direct, authoritative, no fluff)
 - NO banned words: leverage, seamless, robust, embark, streamline, cutting-edge, delve, harness, unlock, realm, game-changer

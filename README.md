@@ -2,6 +2,15 @@
 
 AI-powered YouTube SEO platform with 17 tools for keyword research, tag generation, metadata optimization, and channel growth.
 
+**🔗 Live app:** [https://yt-seo-architect.vercel.app](https://yt-seo-architect.vercel.app) — free, no signup required
+
+**🛠️ Featured tools**
+- [Tag Generator](https://yt-seo-architect.vercel.app/tools/tag-generator) — 30 optimized tags per video
+- [Title Optimizer](https://yt-seo-architect.vercel.app/tools/title-optimizer) — CTR-focused titles
+- [Keyword Research](https://yt-seo-architect.vercel.app/tools/keywords-youtube) — search volume + difficulty
+- [Description Writer](https://yt-seo-architect.vercel.app/tools/description-writer) — SEO descriptions
+- [All 17 tools](https://yt-seo-architect.vercel.app/tools) + [YouTube SEO blog](https://yt-seo-architect.vercel.app/blog)
+
 ## Architecture
 
 ```

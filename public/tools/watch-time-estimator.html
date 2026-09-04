@@ -9,6 +9,25 @@
   <link rel="canonical" href="https://yt-seo-architect.vercel.app/tools/watch-time-estimator" />
   <meta property="og:title" content="YouTube Watch Time Calculator — Free Tool" />
   <meta property="og:description" content="Estimate YouTube watch time in minutes and hours. Free calculator for content creators to track total watch time." />
+  <meta property="og:image" content="https://yt-seo-architect.vercel.app/og-image.png" />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://yt-seo-architect.vercel.app/tools/watch-time-estimator" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="YouTube Watch Time Calculator — Free Tool" />
+  <meta name="twitter:description" content="Estimate YouTube watch time in minutes and hours. Free calculator for content creators to track total watch time." />
+  <meta name="twitter:image" content="https://yt-seo-architect.vercel.app/og-image.png" />
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebApplication",
+    "name": "Watch Time Estimator",
+    "description": "Estimate total watch time from views and average view duration. Calculate how many hours of watch time your videos generate.",
+    "url": "https://yt-seo-architect.vercel.app/tools/watch-time-estimator/",
+    "applicationCategory": "UtilitiesApplication",
+    "operatingSystem": "Web",
+    "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" }
+  }
+  </script>
   <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3831668789026424" crossorigin="anonymous"></script>
   <style>
     *{box-sizing:border-box;margin:0;padding:0}
@@ -46,99 +65,40 @@
     footer{text-align:center;padding:2rem;color:#6b7280;font-size:.8rem}
     footer a{color:#8b8b9e;text-decoration:none}
   </style>
-    <link rel="stylesheet" href="/design-tokens.css" media="print" onload="this.media='all'">
-  <link rel="stylesheet" href="/utilities.css" media="print" onload="this.media='all'">
-  <link rel="stylesheet" href="/nav.css" media="print" onload="this.media='all'">
-  <link rel="stylesheet" href="/blog-article.css" media="print" onload="this.media='all'">
-  <noscript>
-    <link rel="stylesheet" href="/design-tokens.css">
-    <link rel="stylesheet" href="/utilities.css">
-    <link rel="stylesheet" href="/nav.css">
-    <link rel="stylesheet" href="/blog-article.css">
-  </noscript>
-</head>
+<script defer src="/ga.js"></script></head>
 <body>
-    <!-- Skip to content -->
-  <a href="#main-content" class="skip-link">Skip to content</a>
-
-  <!-- Reading Progress Bar -->
-  <div class="reading-progress" id="reading-progress"></div>
-
-  <!-- Shared Header -->
-  <header class="site-header">
-    <div class="header-inner">
-      <a href="/" class="header-logo">
-        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#00f2ff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="9.75 15.02 15.5 12 9.75 8.98 9.75 15.02"/><circle cx="12" cy="12" r="10"/></svg>
-        YT <span>SEO</span> Architect
-      </a>
-      <nav class="header-nav" id="header-nav">
-        <a href="/tools.html">Tools</a>
-        <a href="/blog">Blog</a>
-        <a href="/public/glossary">Glossary</a>
-        <a href="/public/tools">Free Tools</a>
-        <a href="/dashboard.html" class="header-cta">Dashboard</a>
-      </nav>
-      <button class="mobile-menu-btn" aria-label="Menu" onclick="document.getElementById('header-nav').classList.toggle('open')">\\u2630</button>
-    </div>
+  <header class="header">
+    <a href="/">⚡ YT SEO Architect</a>
+    <a href="/tools/" class="cta">All Tools</a>
   </header>
-
-  <!-- Breadcrumbs -->
-  <div class="breadcrumbs">
-    <a href="/">Home</a>
-    <span class="sep">/</span>
-    <a href="/tools.html">Tools</a>
-    <span class="sep">/</span>
-    <span class="current">Tool</span>
-  </div>
   <main>
     <h1>⏱️ Watch Time Estimator</h1>
     <p class="sub">Estimate total watch time from views and average view duration. Calculate how many hours of watch time your videos generate.</p>
-    <div id="tool-root">undefined</div>
+    <div id="tool-root">
+
+      <div class="tool-card">
+        <h2>Estimate Watch Time</h2>
+        <div class="input-group"><label for="wt-views">Total views</label><input id="wt-views" type="number" placeholder="e.g. 100000" /></div>
+        <div class="input-group"><label for="wt-duration">Average view duration (seconds)</label><input id="wt-duration" type="number" placeholder="e.g. 240" /></div>
+        <button onclick="document.getElementById('wt-result-box').classList.add('show');ToolLogic.calcWatchTime()">Calculate Watch Time</button>
+        <div class="result-box" id="wt-result-box">
+          <div class="result-big" id="wt-minutes">—</div>
+          <div class="result-detail">total watch minutes</div>
+          <div class="result-row"><span class="label">Watch hours</span><span class="value" id="wt-hours">—</span></div>
+          <div class="result-row"><span class="label">Calculation</span><span class="value" id="wt-per-video">—</span></div>
+          <div class="advice-box" id="wt-eligibility">⏳ Enter views + duration to check YPP eligibility.</div>
+        </div>
+      </div>
+    </div>
     <div class="cta-box">
       <h3>🚀 More Free Tools</h3>
       <p>17 AI-powered tools to optimize your YouTube titles, tags, descriptions, and more.</p>
-      <a href="/tools.html" class="btn btn-primary">Browse All Tools →</a>
+      <a href="/tools/">Browse All Tools →</a>
     </div>
   </main>
-    <!-- Footer -->
-  <footer class="site-footer">
-    <div class="footer-inner">
-      <div class="footer-col">
-        <h4>Product</h4>
-        <a href="/public/tools">Free Tools</a>
-        <a href="/dashboard.html">Dashboard</a>
-        <a href="/changelog.html">Changelog</a>
-      </div>
-      <div class="footer-col">
-        <h4>Resources</h4>
-        <a href="/blog">Blog</a>
-        <a href="/public/glossary">Glossary</a>
-        <a href="/public/guides">Guides</a>
-      </div>
-      <div class="footer-col">
-        <h4>Company</h4>
-        <a href="/about.html">About</a>
-        <a href="/contact.html">Contact</a>
-        <a href="/privacy-policy.html">Privacy</a>
-        <a href="/terms-of-service.html">Terms</a>
-      </div>
-      <div class="footer-col">
-        <h4>Social</h4>
-        <a href="https://twitter.com/YTSEOArchitect" target="_blank" rel="noopener">Twitter / X</a>
-        <a href="https://youtube.com" target="_blank" rel="noopener">YouTube</a>
-        <a href="https://github.com/nhlaka3" target="_blank" rel="noopener">GitHub</a>
-      </div>
-    </div>
-    <div class="footer-bottom">
-      <span>&copy; 2026 YT SEO Architect. All rights reserved.</span>
-      <div class="footer-social">
-        <a href="https://twitter.com/YTSEOArchitect" target="_blank" rel="noopener" aria-label="Twitter">\\u1d54\\u1d43</a>
-        <a href="https://github.com/nhlaka3" target="_blank" rel="noopener" aria-label="GitHub">GH</a>
-      </div>
-    </div>
+  <footer>
+    <p>&copy; 2026 YT SEO Architect · <a href="/glossary/">Glossary</a> · <a href="/blog">Blog</a> · <a href="/tools/">Tools</a></p>
   </footer>
-
-  <script defer src="/js/blog-enhancements.js"></script>
   <script>
   
 const ToolLogic = {
@@ -165,7 +125,7 @@ const ToolLogic = {
     }
   }
 };
-  document.getElementById('tool-root').innerHTML = `undefined`;
+  // tool UI rendered statically; logic wired via onclick
   </script>
 </body>
 </html>

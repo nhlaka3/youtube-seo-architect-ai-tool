@@ -1,0 +1,39 @@
+<svg viewBox="0 0 560 380" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="YouTube metric diagnostic: low impressions means packaging or niche authority, low CTR means title and thumbnail, early retention drop means intro hook and content match">
+  <rect width="560" height="380" rx="12" fill="#0f0c29"/>
+  <text x="280" y="34" text-anchor="middle" font-family="sans-serif" font-size="16" font-weight="700" fill="#e0e7ff">Which metric → which fix</text>
+  <text x="280" y="52" text-anchor="middle" font-family="sans-serif" font-size="11" fill="#8b8b9e">Read impressions, CTR, and retention together — not views</text>
+
+  <!-- Impressions -->
+  <rect x="24" y="76" width="160" height="118" rx="8" fill="#1e1b4b" stroke="#312e81"/>
+  <text x="104" y="100" text-anchor="middle" font-family="sans-serif" font-size="12" font-weight="700" fill="#a5b4fc">📉 Low impressions</text>
+  <text x="104" y="122" text-anchor="middle" font-family="sans-serif" font-size="10" fill="#c4b5fd">Algorithm isn't</text>
+  <text x="104" y="136" text-anchor="middle" font-family="sans-serif" font-size="10" fill="#c4b5fd">testing your video</text>
+  <text x="104" y="164" text-anchor="middle" font-family="sans-serif" font-size="10" font-weight="600" fill="#fdba74">Fix: packaging</text>
+  <text x="104" y="178" text-anchor="middle" font-family="sans-serif" font-size="10" fill="#fdba74">or niche authority</text>
+
+  <!-- CTR -->
+  <rect x="200" y="76" width="160" height="118" rx="8" fill="#1e1b4b" stroke="#312e81"/>
+  <text x="280" y="100" text-anchor="middle" font-family="sans-serif" font-size="12" font-weight="700" fill="#a5b4fc">🔽 Low CTR (&lt;~4%)</text>
+  <text x="280" y="122" text-anchor="middle" font-family="sans-serif" font-size="10" fill="#c4b5fd">Packaging isn't</text>
+  <text x="280" y="136" text-anchor="middle" font-family="sans-serif" font-size="10" fill="#c4b5fd">earning the click</text>
+  <text x="280" y="164" text-anchor="middle" font-family="sans-serif" font-size="10" font-weight="600" fill="#fdba74">Fix: title +</text>
+  <text x="280" y="178" text-anchor="middle" font-family="sans-serif" font-size="10" fill="#fdba74">thumbnail test</text>
+
+  <!-- Retention -->
+  <rect x="376" y="76" width="160" height="118" rx="8" fill="#1e1b4b" stroke="#312e81"/>
+  <text x="456" y="100" text-anchor="middle" font-family="sans-serif" font-size="12" font-weight="700" fill="#a5b4fc">⏱ Early retention drop</text>
+  <text x="456" y="122" text-anchor="middle" font-family="sans-serif" font-size="10" fill="#c4b5fd">Content doesn't match</text>
+  <text x="456" y="136" text-anchor="middle" font-family="sans-serif" font-size="10" fill="#c4b5fd">the title's promise</text>
+  <text x="456" y="164" text-anchor="middle" font-family="sans-serif" font-size="10" font-weight="600" fill="#fdba74">Fix: tighten hook</text>
+  <text x="456" y="178" text-anchor="middle" font-family="sans-serif" font-size="10" fill="#fdba74">in first 60s</text>
+
+  <!-- Bottom flow -->
+  <text x="280" y="226" text-anchor="middle" font-family="sans-serif" font-size="11" fill="#8b8b9e">The algorithm reads all three signals together on every upload</text>
+
+  <rect x="40" y="250" width="480" height="92" rx="8" fill="url(#grad)" stroke="#4f46e5"/>
+  <defs><linearGradient id="grad" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#1a1a2e"/><stop offset="1" stop-color="#16213e"/></linearGradient></defs>
+  <text x="280" y="276" text-anchor="middle" font-family="sans-serif" font-size="12" font-weight="700" fill="#e2e8f0">Fastest beginner wins in order of impact</text>
+  <text x="280" y="298" text-anchor="middle" font-family="sans-serif" font-size="10.5" fill="#94a3b8">1. One primary keyword → 2. Title + thumbnail for the click</text>
+  <text x="280" y="316" text-anchor="middle" font-family="sans-serif" font-size="10.5" fill="#94a3b8">3. Description + chapters for the watch → 4. Metadata audit pre-publish</text>
+  <text x="280" y="334" text-anchor="middle" font-family="sans-serif" font-size="9" fill="#8b8b9e">Source: YT SEO Architect diagnostic framework, 2026</text>
+</svg>

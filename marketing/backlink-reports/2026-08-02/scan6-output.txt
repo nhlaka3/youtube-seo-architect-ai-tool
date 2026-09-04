@@ -1,0 +1,64 @@
+
+============================================================
+LINK SWAP SCANNER
+Finding sites open to ethical link partnerships
+============================================================
+
+🔄 Stage 1: Searching for link swap opportunities...
+  [1/20] "link swap seo tools"
+  [2/20] "link exchange youtube tools"
+  [3/20] "reciprocal links seo tools"
+  [4/20] "link partnership youtube niche"
+  [5/20] "three way link swap"
+  [6/20] "link exchange partners"
+  [7/20] "link swap digital marketing"
+  [8/20] "link building partnership"
+  [9/20] "link exchange for seo tools"
+  [10/20] "link swap blogging"
+  [11/20] "resource link exchange"
+  [12/20] "mutual link building"
+  [13/20] "link swap partners wanted"
+  [14/20] "reciprocal linking youtube creators"
+  [15/20] "link exchange program"
+  [16/20] "bloggers link swap"
+  [17/20] "link sharing community seo"
+  [18/20] "link building outreach partners"
+  [19/20] "collaboration link exchange"
+  [20/20] "link trade seo tools"
+  Found 0 unique results from DDG
+  DDG returned 0. Using curated fallback list...
+  Using 16 fallback pages
+  Total pages to scan: 16
+
+🔄 Stage 2: Fetching and analyzing up to 15 pages...
+  [1/15] 🎯 SWAP OPPORTUNITY https://backlinko.com/link-building
+       Relevance: 10 | Link Building for SEO: Proven Strategies That Stil
+  [2/15] 🎯 SWAP OPPORTUNITY https://ahrefs.com/blog/link-building/
+       Relevance: 10 | Link Building for SEO: The Beginner’s Guide
+  [3/15] 🎯 SWAP OPPORTUNITY https://neilpatel.com/blog/link-building-strategie, email: neil@advanced.npdigital.com
+       Relevance: 10 | 18 Link Building Strategies (Templates Included) -
+  [4/15] [SKIP] https://searchengineland.com/guide/link-building — HTTP Error 403: Forbidden
+  [5/15] [SKIP] https://bloggingwizard.com/link-swap/ — HTTP Error 404: Not Found
+  [6/15] [SKIP] https://www.ryrob.com/link-swap/ — HTTP Error 404: Not Found
+  [7/15] 🎯 SWAP OPPORTUNITY https://www.searchenginejournal.com/link-building/, email: ce1a6e4081594e5e6d533e8e4fc66a0c@o4510320006397952.ingest.us.sentry.io
+       Relevance: 9 | Link Building for SEO: A Complete Guide
+  [8/15] [SKIP] https://moz.com/blog/link-building — HTTP Error 404: Not Found
+  [9/15] 🎯 SWAP OPPORTUNITY https://www.semrush.com/blog/link-building/
+       Relevance: 10 | Link building for SEO: What works in 2026
+  [10/15] [SKIP] https://contentmarketinginstitute.com/link-buildin — HTTP Error 404: Not Found
+  [11/15] [SKIP] https://www.wordstream.com/link-building — relevance 1 < 2
+  [12/15] [SKIP] https://blog.hubspot.com/marketing/link-building — HTTP Error 404: Not Found
+  [13/15] [SKIP] https://smartblogger.com/link-building/ — HTTP Error 403: Forbidden
+  [14/15] [SKIP] https://mention.com/en/blog/link-building/ — HTTP Error 404: Not Found
+  [15/15] [SKIP] https://foundationinc.co/link-building/ — HTTP Error 404: Not Found
+
+  Found 5 relevant sites
+
+  Swap opportunities: 5 sites
+
+🔄 Stage 4: Generating link swap outreach...
+
+  New swap opportunities: 0
+  Skipped (seen): 5
+
+No new swap opportunities found.

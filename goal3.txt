@@ -1,0 +1,18 @@
+2) Build topic clusters and pillar content
+text
+/goal Build a topic-cluster architecture for YouTube SEO on yt-seo-architect.vercel.app
+verify:
+- At least 4 pillar pages (1,500+ words each) covering:
+1) Complete YouTube SEO strategy 2026
+2) YouTube keyword research master guide
+3) YouTube metadata optimization (titles, descriptions, tags)
+4) YouTube channel growth and analytics
+- For each pillar, 5–8 cluster articles (600–1,200 words) targeting long-tail queries and linking back to the pillar
+- All pillars and clusters interlinked with descriptive anchor text
+constraints:
+- Each page must have unique title tag, meta description, H1, and FAQ section
+- Include at least one original example, checklist, or mini-case study per article
+boundaries:
+- Use /guides for pillars and /blog for cluster articles
+- Align content with the tools on the site (e.g., link “YouTube SEO audit” article to the SEO Audit tool)
+This implements the “layered content + topic clusters” model used to build authority in niches.affinco+2youtube

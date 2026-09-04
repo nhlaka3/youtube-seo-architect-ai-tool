@@ -1,0 +1,5 @@
+Contact: mailto:thiza3062@gmail.com
+Preferred-Languages: en
+Canonical: https://yt-seo-architect.vercel.app/.well-known/security.txt
+Policy: https://yt-seo-architect.vercel.app/terms-of-service
+Expires: 2027-08-03T00:00:00.000Z

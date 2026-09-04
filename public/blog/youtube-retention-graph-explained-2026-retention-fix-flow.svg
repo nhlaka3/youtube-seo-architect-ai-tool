@@ -1,0 +1,63 @@
+<svg viewBox="0 0 560 300" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Retention graph fix decision flow: early cliff means packaging mismatch, mid-video cliff means a weak section, steady plateau means length is the variable">
+  <rect width="560" height="300" rx="12" fill="#0f0c29"/>
+  <text x="280" y="30" text-anchor="middle" font-family="sans-serif" font-size="15" font-weight="700" fill="#e0e7ff">Retention graph → diagnosis → fix</text>
+
+  <!-- Row 1: Early cliff -->
+  <g transform="translate(20,50)">
+    <rect width="160" height="66" rx="8" fill="#1e1b4b" stroke="#2d2a5e"/>
+    <text x="80" y="24" text-anchor="middle" font-family="sans-serif" font-size="11" font-weight="700" fill="#f87171">Early cliff</text>
+    <polyline points="20,48 34,50 48,52 60,60 72,58 86,52 120,46 140,42" fill="none" stroke="#f87171" stroke-width="2"/>
+  </g>
+  <g transform="translate(200,50)">
+    <rect width="160" height="66" rx="8" fill="#1e1b4b" stroke="#2d2a5e"/>
+    <text x="80" y="24" text-anchor="middle" font-family="sans-serif" font-size="11" font-weight="700" fill="#c4b5fd">Packaging mismatch</text>
+    <text x="80" y="42" text-anchor="middle" font-family="sans-serif" font-size="9" fill="#8b8b9e">Title/thumbnail promised more</text>
+    <text x="80" y="54" text-anchor="middle" font-family="sans-serif" font-size="9" fill="#8b8b9e">than the opening delivers</text>
+  </g>
+  <g transform="translate(380,50)">
+    <rect width="160" height="66" rx="8" fill="#1e1b4b" stroke="#4ade80"/>
+    <text x="80" y="24" text-anchor="middle" font-family="sans-serif" font-size="11" font-weight="700" fill="#4ade80">Fix the hook</text>
+    <text x="80" y="42" text-anchor="middle" font-family="sans-serif" font-size="9" fill="#8b8b9e">Front-load the payoff in the</text>
+    <text x="80" y="54" text-anchor="middle" font-family="sans-serif" font-size="9" fill="#8b8b9e">first 3–5 seconds</text>
+  </g>
+
+  <!-- Row 2: Mid-video cliff -->
+  <g transform="translate(20,128)">
+    <rect width="160" height="66" rx="8" fill="#1e1b4b" stroke="#2d2a5e"/>
+    <text x="80" y="24" text-anchor="middle" font-family="sans-serif" font-size="11" font-weight="700" fill="#fb923c">Mid-video cliff</text>
+    <polyline points="20,46 40,42 60,40 76,38 84,58 94,60 110,54 140,46" fill="none" stroke="#fb923c" stroke-width="2"/>
+  </g>
+  <g transform="translate(200,128)">
+    <rect width="160" height="66" rx="8" fill="#1e1b4b" stroke="#2d2a5e"/>
+    <text x="80" y="24" text-anchor="middle" font-family="sans-serif" font-size="11" font-weight="700" fill="#c4b5fd">A section lost people</text>
+    <text x="80" y="42" text-anchor="middle" font-family="sans-serif" font-size="9" fill="#8b8b9e">Tangent, slow demo, or</text>
+    <text x="80" y="54" text-anchor="middle" font-family="sans-serif" font-size="9" fill="#8b8b9e">payoff delayed past a cliff</text>
+  </g>
+  <g transform="translate(380,128)">
+    <rect width="160" height="66" rx="8" fill="#1e1b4b" stroke="#4ade80"/>
+    <text x="80" y="24" text-anchor="middle" font-family="sans-serif" font-size="11" font-weight="700" fill="#4ade80">Cut that section</text>
+    <text x="80" y="42" text-anchor="middle" font-family="sans-serif" font-size="9" fill="#8b8b9e">Watch the cliff timestamp,</text>
+    <text x="80" y="54" text-anchor="middle" font-family="sans-serif" font-size="9" fill="#8b8b9e">then cut or move the payoff</text>
+  </g>
+
+  <!-- Row 3: Steady plateau -->
+  <g transform="translate(20,206)">
+    <rect width="160" height="66" rx="8" fill="#1e1b4b" stroke="#2d2a5e"/>
+    <text x="80" y="24" text-anchor="middle" font-family="sans-serif" font-size="11" font-weight="700" fill="#4ade80">Steady plateau</text>
+    <polyline points="20,44 40,46 60,50 80,52 100,56 120,58 140,62" fill="none" stroke="#4ade80" stroke-width="2"/>
+  </g>
+  <g transform="translate(200,206)">
+    <rect width="160" height="66" rx="8" fill="#1e1b4b" stroke="#2d2a5e"/>
+    <text x="80" y="24" text-anchor="middle" font-family="sans-serif" font-size="11" font-weight="700" fill="#c4b5fd">Length is the variable</text>
+    <text x="80" y="42" text-anchor="middle" font-family="sans-serif" font-size="9" fill="#8b8b9e">Content holds interest; the</text>
+    <text x="80" y="54" text-anchor="middle" font-family="sans-serif" font-size="9" fill="#8b8b9e">question is how long to run</text>
+  </g>
+  <g transform="translate(380,206)">
+    <rect width="160" height="66" rx="8" fill="#1e1b4b" stroke="#4ade80"/>
+    <text x="80" y="24" text-anchor="middle" font-family="sans-serif" font-size="11" font-weight="700" fill="#4ade80">Match length to value</text>
+    <text x="80" y="42" text-anchor="middle" font-family="sans-serif" font-size="9" fill="#8b8b9e">Extend while the plateau holds;</text>
+    <text x="80" y="54" text-anchor="middle" font-family="sans-serif" font-size="9" fill="#8b8b9e">trim once it starts eroding</text>
+  </g>
+
+  <text x="280" y="292" text-anchor="middle" font-family="sans-serif" font-size="8.5" fill="#6b6b80">Diagnostic framework — not measured data · YT SEO Architect, 2026</text>
+</svg>

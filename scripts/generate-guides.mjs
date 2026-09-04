@@ -102,7 +102,7 @@ function generatePage(g) {
     footer a { color: #6366f1; text-decoration: none; }
     @media(max-width:640px) { .hero h1 { font-size: 1.5rem; } .step-card { padding: 1.25rem; } }
   </style>
-</head>
+<script defer src="/ga.js"></script></head>
 <body>
   <nav class="nav-bar">
     <a href="/" class="brand">⚡ YT SEO <span>Architect</span></a>
@@ -214,8 +214,14 @@ async function main() {
   }
 
   const idxHtml = generateIndex();
-  writeFileSync(resolve(OUT_DIR, 'index.html'), idxHtml);
-  console.log(`  ✅ index.html  (${(idxHtml.length / 1024).toFixed(1)} KB) — Guides hub`);
+  // Hub (index.html) is maintained separately (pillar cards + modern design) —
+  // only write it if it doesn't exist yet, so the daily workflow never clobbers it.
+  if (!existsSync(resolve(OUT_DIR, 'index.html'))) {
+    writeFileSync(resolve(OUT_DIR, 'index.html'), idxHtml);
+    console.log(`  ✅ index.html  (${(idxHtml.length / 1024).toFixed(1)} KB) — Guides hub`);
+  } else {
+    console.log('  ⏭ index.html exists — hub is maintained separately, skipping');
+  }
   console.log('');
   console.log(`  Summary: ${count} how-to guides + index`);
 }

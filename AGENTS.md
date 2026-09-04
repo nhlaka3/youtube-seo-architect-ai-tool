@@ -831,3 +831,26 @@ npx hyperframes lint && npx hyperframes validate && npx hyperframes render --out
 - Manim output color scheme: dark background (#0a0b10), cyan accents (#00f2ff) — matches Cyber-Luxe Dark
 - Manim produces NO audio — all audio comes from HyperFrames
 - HyperFrames `<video>` rule: never nest in a timed div, never animate video dimensions, never call play/pause/seek from JS
+
+## Motion Conventions (site-wide)
+
+Shared layer: `public/motion-utilities.css` (linked in ALL static pages via `scripts/batch-add-motion-css.py`, plus `api/blog-renderer.js`, `scripts/generate-blog-tools.mjs`, `scripts/generate-all-metric-tools.mjs`, `public/glossary/_template.html`).
+
+- Content images (article/blog/tool/entry contexts) get automatic hover-zoom — no class needed.
+- Opt-in extras: `.motion-float` / `.motion-float-slow` (idle float), `.motion-lift` (hover lift), `[data-motion="zoom"]`, chart containers `.chart-wrap`/`.chart-container`/`[data-chart]` get hover emphasis.
+- ALL motion must be transform/opacity only (60fps, GPU-composited); `prefers-reduced-motion` is handled globally.
+- When adding NEW pages/templates: always include `<link rel="stylesheet" href="/motion-utilities.css">`.
+- Re-run `python3 scripts/batch-add-motion-css.py` after adding new static HTML files (idempotent).
+- Framework reference: `web-animation` skill (motion taxonomy, sector vocabulary, Golden Rules).
+
+### Blog image standard (3+ ANIMATED visuals, auto-corrected)
+
+Every blog post requires >= 3 CONTENT visuals inside `<article>` — images (`<img>`), `<object>` embeds, or inline `<svg>` charts — and EVERY one of them must be animated (entrance/float/lift class on the visual or its wrapper), plus the `motion-utilities.css` link in `<head>` (reduced-motion safe). Icon sprites (share bars, logos, play buttons — `<svg>` smaller than 60 units, not in a chart container) do NOT count toward the 3.
+
+- "Animated" = `.chart-entrance` / `.media-entrance` (one-time fade-up), `.motion-float(-slow)`, `.motion-lift`, or `data-motion="zoom"` on the visual itself or a wrapper (`<picture>`, `<figure>`, `.chart-wrap`, `.media-wrap`). Hover-only effects (`[data-chart]` scale) don't count.
+- AUTO-CORRECT, not just block: `fixVisualAnimations()` in `api/blog-validation.js` wraps any bare visual (img → `.media-wrap.media-entrance`; svg/object chart → `.chart-wrap.chart-entrance[data-chart]`; injects the entrance class into existing `<picture>`/`<figure>`/`.chart-wrap` wrappers). It runs FIRST in every publish path, so a short post gets fixed and the corrected HTML written back before the gate.
+- Gates (all fail only if still non-compliant AFTER auto-fix): `scripts/publish-seo-tips-post-db.js` (DB publish, also verifies 0 unanimated), `scripts/publish-blog-post.mjs` (CI publisher, `BLOG_MIN_VISUALS=3`), `scripts/auto-blog-generator.mjs` (daily cron).
+- Manual check + fix: `node scripts/check-post-visuals.js public/blog/<slug>.html [--fix]` (reports count + unanimated, rewrites file with `--fix`).
+- Inline SVG charts: wrap in `<div class="chart-wrap chart-entrance" data-chart role="img" aria-label="...">` — auto hover emphasis + one-time fade-up entrance; the CI generator enforces the same 3-visual floor via `BLOG_MIN_VISUALS=3` and emits `.chart-figure chart-entrance` figures.
+- HERO + OG images: `node scripts/generate-hero-scene.mjs <slug> "Title L1" "Title L2" "<keyword>" "BADGE"` — TOPIC-BASED scenes: classifies each post (slug+title) into 13 archetypes (SERP mockup, thumbnail card, Shorts reel, growth chart, retention curve, tag cluster, roadmap, audio/podcast, gaming, cooking, fitness, music, default) rendered via headless Chrome (local) or rsvg-convert (CI) to `-hero.png` (800×400), `-hero.webp`, `-og.png` (1200×630). Per-post accent (8 colors) + hash-varied geometry; no identical heroes. Batch: `scripts/regenerate-all-heroes.sh`; overflow QA: `scripts/qa-hero-overflow.cjs` (needs NODE_PATH=~/qa/node_modules). PNGs gitignored → commit with `git add -f`.
+- POST STANDARD (every post, including cron): 1 hero image + 3 animated charts. Charts are hard-gated (BLOG_MIN_VISUALS=3 + fixVisualAnimations); the hero is auto-generated inside `scripts/auto-blog-generator.mjs` after saving (env args HERO_SLUG/HERO_TITLE_*/HERO_KEYWORD, rasterizer auto-detected) and force-added to git by the workflow push step (`git add -f public/blog/*-hero.* public/blog/*-og.png`). blog-renderer.js only injects a hero `<picture>` when the hero file exists (heroExists).
