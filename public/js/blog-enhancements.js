@@ -119,3 +119,25 @@
     });
   }
 })();
+
+/* ── YouTube click-to-play facade ────────────────────── */
+/* Thumbnail + play button; the embed iframe is created only on click, so no
+   cookie-less embed request fires on page load (avoids white boxes when the
+   viewer's network is blocked by Google's "unusual traffic" wall). */
+document.addEventListener('click', function (e) {
+  var btn = e.target && e.target.closest ? e.target.closest('.yt-facade') : null;
+  if (!btn || !btn.parentNode) return;
+  var id = btn.getAttribute('data-video');
+  if (!id) return;
+  var box = btn.parentNode;
+  var ifr = document.createElement('iframe');
+  ifr.src = 'https://www.youtube-nocookie.com/embed/' + encodeURIComponent(id) + '?autoplay=1&rel=0&modestbranding=1';
+  ifr.title = btn.getAttribute('aria-label') || 'YouTube video';
+  ifr.setAttribute('allow', 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share');
+  ifr.setAttribute('allowfullscreen', '');
+  ifr.setAttribute('referrerpolicy', 'strict-origin-when-cross-origin');
+  ifr.style.cssText = 'position:absolute;top:0;left:0;width:100%;height:100%;border:0;';
+  btn.remove();
+  box.appendChild(ifr);
+}, true);
+

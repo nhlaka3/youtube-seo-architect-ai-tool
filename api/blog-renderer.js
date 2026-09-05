@@ -439,15 +439,11 @@ function videoEmbedHTML(slug) {
   if (!v) return '';
   return `<div class="video-embed" style="margin:24px 0;">
     <div style="position:relative;padding-top:56.25%;border-radius:12px;overflow:hidden;border:1px solid rgba(0,242,255,0.25);box-shadow:0 8px 30px rgba(0,0,0,0.35);background:#000;">
-      <iframe
-        src="https://www.youtube-nocookie.com/embed/${v.id}?rel=0&modestbranding=1"
-        title="${escAttr(v.label)} — YT SEO Architect"
-        loading="lazy"
-        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-        referrerpolicy="strict-origin-when-cross-origin"
-        allowfullscreen
-        style="position:absolute;top:0;left:0;width:100%;height:100%;border:0;"
-      ></iframe>
+      <button type="button" class="yt-facade" data-video="${v.id}" aria-label="Play video: ${escAttr(v.label)}" style="position:absolute;inset:0;display:block;width:100%;height:100%;padding:0;border:0;background:#000;cursor:pointer;">
+        <img src="https://i.ytimg.com/vi/${v.id}/hqdefault.jpg" alt="" aria-hidden="true" loading="lazy" decoding="async" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;">
+        <span aria-hidden="true" style="position:absolute;inset:0;background:linear-gradient(180deg,rgba(2,6,23,0) 45%,rgba(2,6,23,0.6) 100%);"></span>
+        <svg viewBox="0 0 68 48" width="72" height="50" aria-hidden="true" style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);filter:drop-shadow(0 4px 10px rgba(0,0,0,0.6));"><path d="M66.52 7.74c-.78-2.93-2.49-5.41-5.42-6.19C55.79.13 34 0 34 0S12.21.13 7.1 1.55c-2.93.78-4.63 3.26-5.42 6.19C.26 12.85 0 24 0 24s.26 11.16 1.68 16.26c.78 2.93 2.49 5.41 5.42 6.19C12.21 47.87 34 48 34 48s21.79-.13 26.9-1.55c2.93-.78 4.64-3.26 5.42-6.19C67.74 35.16 68 24 68 24s-.26-11.15-1.48-16.26z" fill="#f03"/><path d="M45 24 27 14v20l18-10z" fill="#fff"/></svg>
+      </button>
     </div>
     <p style="margin:0.6rem 0 0;font-size:0.85rem;color:#a8b2c1;text-align:center;">
       <a href="https://www.youtube.com/@YTSEOArchitect?sub_confirmation=1" rel="noopener" target="_blank" style="color:#00f2ff;font-weight:600;text-decoration:none;">▶ ${v.label}</a>
