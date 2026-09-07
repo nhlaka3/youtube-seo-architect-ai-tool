@@ -1,15 +1,15 @@
 {
-  "timestamp": "2026-08-31T15:46:14.283Z",
+  "timestamp": "2026-09-07T13:53:39.772Z",
   "total": 306,
   "checked": 306,
-  "live": 304,
+  "live": 306,
   "redirect": 0,
   "dead": 0,
-  "errors": 2,
+  "errors": 0,
   "byType": {
     "blog": {
       "total": 81,
-      "live": 79,
+      "live": 81,
       "dead": 0
     },
     "blog-index": {
