@@ -145,5 +145,40 @@
     "to_email": "creators@subsub.io",
     "subject": "Found a broken link on your www.subsub.io page",
     "sent_at": "2026-09-02T13:25:34Z"
+  },
+  {
+    "source_page": "https://blog.favoree.io/articles/best-youtube-seo-tools/",
+    "broken_url": "https://i0.wp.com/blog.favoree.io/wp-content/uploads/2023/08/cropped-Favoree-Logo.png?fit=192%2C192&#038;ssl=1",
+    "to_email": "contact@favoree.io",
+    "subject": "Found a broken link on your blog.favoree.io page",
+    "sent_at": "2026-09-09T13:31:37Z"
+  },
+  {
+    "source_page": "https://blog.favoree.io/articles/best-youtube-seo-tools/",
+    "broken_url": "https://i0.wp.com/blog.favoree.io/wp-content/uploads/2023/08/cropped-Favoree-Logo.png?fit=32%2C32&#038;ssl=1",
+    "to_email": "contact@favoree.io",
+    "subject": "Found a broken link on your blog.favoree.io page",
+    "sent_at": "2026-09-09T13:32:23Z"
+  },
+  {
+    "source_page": "https://blog.favoree.io/articles/best-youtube-seo-tools/",
+    "broken_url": "https://vidiq.com/favoree",
+    "to_email": "contact@favoree.io",
+    "subject": "Found a broken link on your blog.favoree.io page",
+    "sent_at": "2026-09-09T13:33:12Z"
+  },
+  {
+    "source_page": "https://blog.favoree.io/articles/best-youtube-seo-tools/",
+    "broken_url": "https://www.tubics.com/",
+    "to_email": "contact@favoree.io",
+    "subject": "Found a broken link on your blog.favoree.io page",
+    "sent_at": "2026-09-09T13:33:59Z"
+  },
+  {
+    "source_page": "https://blog.favoree.io/articles/best-youtube-seo-tools/",
+    "broken_url": "https://i0.wp.com/blog.favoree.io/wp-content/uploads/2023/08/cropped-Favoree-Logo.png?fit=180%2C180&#038;ssl=1",
+    "to_email": "contact@favoree.io",
+    "subject": "Found a broken link on your blog.favoree.io page",
+    "sent_at": "2026-09-09T13:34:45Z"
   }
 ]
