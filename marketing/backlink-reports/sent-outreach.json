@@ -180,5 +180,12 @@
     "to_email": "contact@favoree.io",
     "subject": "Found a broken link on your blog.favoree.io page",
     "sent_at": "2026-09-09T13:34:45Z"
+  },
+  {
+    "source_page": "https://www.youtubetoolshub.com/blog/best-youtube-seo-tools-2026",
+    "broken_url": "TubeBuddy + vidIQ",
+    "to_email": "support@youtubetoolshub.com",
+    "subject": "Suggested addition for your TubeBuddy vs vidIQ comparison",
+    "sent_at": "2026-09-11T13:23:01Z"
   }
 ]
