@@ -208,5 +208,12 @@
     "to_email": "info@worldmetrics.org",
     "subject": "Your worldmetrics.org list is missing a free YouTube SEO tool",
     "sent_at": "2026-09-28T17:19:36Z"
+  },
+  {
+    "source_page": "https://www.youngurbanproject.com/youtube-seo-tools/",
+    "broken_url": "https://joseangelostudios.com/b2b-seo/?gclid=removed",
+    "to_email": "hello@youngurbanproject.com",
+    "subject": "Found a broken link on your www.youngurbanproject.com page",
+    "sent_at": "2026-09-30T15:44:45Z"
   }
 ]
