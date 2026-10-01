@@ -215,5 +215,26 @@
     "to_email": "hello@youngurbanproject.com",
     "subject": "Found a broken link on your www.youngurbanproject.com page",
     "sent_at": "2026-09-30T15:44:45Z"
+  },
+  {
+    "source_page": "https://worldmetrics.org/best/youtube-marketing-software/",
+    "broken_url": "Resource page (Top 10 Best Youtube Marketing Software | 2026 Expe)",
+    "to_email": "info@worldmetrics.org",
+    "subject": "Suggestion for your worldmetrics.org resource page",
+    "sent_at": "2026-10-01T16:00:59Z"
+  },
+  {
+    "source_page": "https://gyre.pro/blog/what-are-the-best-free-youtube-tools-to-grow-your-channel-in",
+    "broken_url": "Resource page (Use free YouTube tools to grow your channel \u2013 Gyre)",
+    "to_email": "support@gyre.pro",
+    "subject": "Suggestion for your gyre.pro resource page",
+    "sent_at": "2026-10-01T16:01:46Z"
+  },
+  {
+    "source_page": "https://alanspicer.com/best-free-youtube-tools-2026/",
+    "broken_url": "Resource page (Best Free YouTube Tools Every Creator Needs in 202)",
+    "to_email": "hello@alanspicer.com",
+    "subject": "Suggestion for your alanspicer.com resource page",
+    "sent_at": "2026-10-01T16:02:38Z"
   }
 ]
