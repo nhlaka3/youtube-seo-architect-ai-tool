@@ -236,5 +236,19 @@
     "to_email": "hello@alanspicer.com",
     "subject": "Suggestion for your alanspicer.com resource page",
     "sent_at": "2026-10-01T16:02:38Z"
+  },
+  {
+    "source_page": "https://www.youngurbanproject.com/youtube-seo-tools/",
+    "broken_url": "https://www.globalmediainsight.com/blog/youtube-users-statistics/?utm_source=Tech-Behemoths&#038;utm_medium=rss&#038;utm_term=23862313150650156&#038;utm_content=ad.name&#038;utm_campaign=positioning-vs-messaging-differences",
+    "to_email": "hello@youngurbanproject.com",
+    "subject": "Found a broken link on your www.youngurbanproject.com page",
+    "sent_at": "2026-10-02T15:19:48Z"
+  },
+  {
+    "source_page": "https://www.youngurbanproject.com/youtube-seo-tools/",
+    "broken_url": "https://joseangelostudios.com/b2b-seo/?utm_source=Tech-Behemoths&#038;utm_medium=rss&#038;utm_term=23862313150650156&#038;utm_content=ad.name&#038;utm_campaign=positioning-vs-messaging-differences",
+    "to_email": "hello@youngurbanproject.com",
+    "subject": "Found a broken link on your www.youngurbanproject.com page",
+    "sent_at": "2026-10-02T15:20:34Z"
   }
 ]
