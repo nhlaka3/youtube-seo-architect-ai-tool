@@ -250,5 +250,40 @@
     "to_email": "hello@youngurbanproject.com",
     "subject": "Found a broken link on your www.youngurbanproject.com page",
     "sent_at": "2026-10-02T15:20:34Z"
+  },
+  {
+    "source_page": "https://worldmetrics.org/best/youtube-seo-software/",
+    "broken_url": "https://www.crunchbase.com/organization/worldmetrics-market-research-service",
+    "to_email": "info@worldmetrics.org",
+    "subject": "Found a broken link on your worldmetrics.org page",
+    "sent_at": "2026-10-12T18:42:48Z"
+  },
+  {
+    "source_page": "https://worldmetrics.org/best/youtube-seo-software/",
+    "broken_url": "https://digg.com/demandgeneration/Mqq3yFY/the-5-data-sources-that-wont",
+    "to_email": "info@worldmetrics.org",
+    "subject": "Found a broken link on your worldmetrics.org page",
+    "sent_at": "2026-10-12T18:43:34Z"
+  },
+  {
+    "source_page": "https://worldmetrics.org/best/youtube-seo-software/",
+    "broken_url": "https://clutch.co/profile/worldmetrics-market-research",
+    "to_email": "info@worldmetrics.org",
+    "subject": "Found a broken link on your worldmetrics.org page",
+    "sent_at": "2026-10-12T18:44:21Z"
+  },
+  {
+    "source_page": "https://worldmetrics.org/best/youtube-seo-software/",
+    "broken_url": "https://www.g2.com/products/worldmetrics-market-research/reviews",
+    "to_email": "info@worldmetrics.org",
+    "subject": "Found a broken link on your worldmetrics.org page",
+    "sent_at": "2026-10-12T18:45:07Z"
+  },
+  {
+    "source_page": "https://worldmetrics.org/best/youtube-seo-software/",
+    "broken_url": "https://www.designrush.com/agency/profile/world-metrics-market-research",
+    "to_email": "info@worldmetrics.org",
+    "subject": "Found a broken link on your worldmetrics.org page",
+    "sent_at": "2026-10-12T18:45:53Z"
   }
 ]
