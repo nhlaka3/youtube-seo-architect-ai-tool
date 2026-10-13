@@ -285,5 +285,40 @@
     "to_email": "info@worldmetrics.org",
     "subject": "Found a broken link on your worldmetrics.org page",
     "sent_at": "2026-10-12T18:45:53Z"
+  },
+  {
+    "source_page": "https://worldmetrics.org/best/youtube-seo-software/",
+    "broken_url": "https://tubics.com",
+    "to_email": "info@worldmetrics.org",
+    "subject": "Found a broken link on your worldmetrics.org page",
+    "sent_at": "2026-10-13T16:43:16Z"
+  },
+  {
+    "source_page": "https://worldmetrics.org/best/youtube-seo-software/",
+    "broken_url": "https://www.producthunt.com/products/worldmetrics",
+    "to_email": "info@worldmetrics.org",
+    "subject": "Found a broken link on your worldmetrics.org page",
+    "sent_at": "2026-10-13T16:44:02Z"
+  },
+  {
+    "source_page": "https://worldmetrics.org/best/youtube-seo-software/",
+    "broken_url": "https://videoamigo.com",
+    "to_email": "info@worldmetrics.org",
+    "subject": "Found a broken link on your worldmetrics.org page",
+    "sent_at": "2026-10-13T16:44:49Z"
+  },
+  {
+    "source_page": "https://worldmetrics.org/best/youtube-seo-software/",
+    "broken_url": "https://medium.com/p/86a798df536a",
+    "to_email": "info@worldmetrics.org",
+    "subject": "Found a broken link on your worldmetrics.org page",
+    "sent_at": "2026-10-13T16:45:36Z"
+  },
+  {
+    "source_page": "https://worldmetrics.org/best/youtube-seo-software/",
+    "broken_url": "https://themanifest.com/company/worldmetrics-market-research",
+    "to_email": "info@worldmetrics.org",
+    "subject": "Found a broken link on your worldmetrics.org page",
+    "sent_at": "2026-10-13T16:46:23Z"
   }
 ]
