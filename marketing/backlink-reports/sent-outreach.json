@@ -320,5 +320,33 @@
     "to_email": "info@worldmetrics.org",
     "subject": "Found a broken link on your worldmetrics.org page",
     "sent_at": "2026-10-13T16:46:23Z"
+  },
+  {
+    "source_page": "https://vidiq.com/youtube-seo-tools/",
+    "broken_url": "https://tuberanker.com/",
+    "to_email": "support@vidiq.com",
+    "subject": "Found a broken link on your vidiq.com page",
+    "sent_at": "2026-10-20T14:04:38Z"
+  },
+  {
+    "source_page": "https://www.ryrob.com/youtube-keyword-tool/",
+    "broken_url": "Resource page (YouTube Keyword Tool: Free Search Volume + YouTube)",
+    "to_email": "contact@ryrob.com",
+    "subject": "Suggestion for your www.ryrob.com resource page",
+    "sent_at": "2026-10-20T14:05:29Z"
+  },
+  {
+    "source_page": "https://vidiq.com/ai-title-generator/",
+    "broken_url": "Resource page (AI YouTube Title Generator \u2014 Free Video Titles | v)",
+    "to_email": "support@vidiq.com",
+    "subject": "Suggestion for your vidiq.com resource page",
+    "sent_at": "2026-10-20T14:06:16Z"
+  },
+  {
+    "source_page": "https://www.veed.io/tools/script-generator/youtube-title-generator",
+    "broken_url": "Resource page (YouTube Title Generator - Grow Your Channel - VEED)",
+    "to_email": "press@veed.io",
+    "subject": "Suggestion for your www.veed.io resource page",
+    "sent_at": "2026-10-20T14:07:04Z"
   }
 ]
