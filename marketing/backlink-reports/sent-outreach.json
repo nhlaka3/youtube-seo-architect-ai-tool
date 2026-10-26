@@ -348,5 +348,12 @@
     "to_email": "press@veed.io",
     "subject": "Suggestion for your www.veed.io resource page",
     "sent_at": "2026-10-20T14:07:04Z"
+  },
+  {
+    "source_page": "https://worldmetrics.org/best/youtube-seo-software/",
+    "broken_url": "https://headless.globalcommercemedia.com/api/entity-logo/worldmetrics/favicon/",
+    "to_email": "info@worldmetrics.org",
+    "subject": "Found a broken link on your worldmetrics.org page",
+    "sent_at": "2026-10-26T15:57:52Z"
   }
 ]
