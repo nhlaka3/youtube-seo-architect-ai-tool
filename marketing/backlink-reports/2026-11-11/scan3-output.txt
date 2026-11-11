@@ -1,0 +1,154 @@
+
+============================================================
+RESOURCE PAGE OUTREACH
+Finding resource/list pages that could list YT SEO Architect
+Our site: https://yt-seo-architect.vercel.app
+============================================================
+
+🔄 Stage 1: Searching for resource pages...
+  [1/45] "best youtube tools for creators"
+  [2/45] "best youtube seo tools"
+  [3/45] "best free youtube tools"
+  [4/45] "best tools for youtube growth"
+  [5/45] "best youtube analytics tools"
+  [6/45] "best youtube keyword research tools"
+  [7/45] "best youtube thumbnail maker"
+  [8/45] "best youtube description generator"
+  [9/45] "top youtube tools every creator needs"
+  [10/45] "best free tools for youtubers"
+  [11/45] "best youtube marketing tools"
+  [12/45] "top free youtube tools"
+  [13/45] "youtube seo tools list"
+  [14/45] "free youtube tools"
+  [15/45] "youtube creator tools"
+  [16/45] "youtube tools guide"
+  [17/45] "tools for youtube channels"
+  [18/45] "youtube creator toolkit"
+  [19/45] "youtube tools list"
+  [20/45] "youtube seo resources"
+  [21/45] "essential youtube tools"
+  [22/45] "tools for youtube creators"
+  [23/45] "youtube growth resources"
+  [24/45] "helpful resources youtube creators"
+  [25/45] "youtube resources page"
+  [26/45] "tools i use for youtube"
+  [27/45] "tools i use as a youtuber"
+  [28/45] "youtube content creation tools"
+  [29/45] "youtube video optimization tools"
+  [30/45] "youtube tools and resources"
+  [31/45] "youtube creator resources"
+  [32/45] "free tools for youtube channels"
+  [33/45] "youtube seo checklist tools"
+  [34/45] "resources for youtube creators"
+  [35/45] "youtube toolkit"
+  [36/45] "tools i recommend for youtube"
+  [37/45] "my favorite youtube tools"
+  [38/45] "free youtube tag generator"
+  [39/45] "youtube thumbnail tools"
+  [40/45] "youtube keyword tool"
+  [41/45] "youtube title generator"
+  [42/45] "youtube description templates tools"
+  [43/45] "curated list of youtube tools"
+  [44/45] "youtube tool roundup"
+  [45/45] "best free seo tools for youtube"
+  Found 131 unique results from DDG
+  Total pages to scan: 131
+
+  💾 Saved 203 pages to resource database for future runs
+🔄 Stage 2: Fetching and analyzing up to 15 pages...
+  [1/15] 🎯 OPPORTUNITY https://creatoreconomytools.com/best-youtube-tools, email: hello@creatoreconomytools.com
+       Score: 2 | Title: 15 Best YouTube Tools for Growth, SEO & Editing in
+  [2/15] 🎯 OPPORTUNITY https://outlierkit.com/resources/best-youtube-anal
+       Score: 7 | Title: 12 Best YouTube Analytics Tools in 2026 (Free &amp
+  [3/15] 🎯 OPPORTUNITY https://taap.bio/blog/best-tools-for-youtubers, email: hello@taap.bio
+       Score: 5 | Title: The 10 Best Tools for YouTubers in 2026
+  [4/15] 🎯 OPPORTUNITY https://www.youngurbanproject.com/youtube-seo-tool, email: hello@youngurbanproject.com
+       Score: 6 | Title: 20 Best YouTube SEO Tools in 2026
+  [5/15] 🎯 OPPORTUNITY https://nealschaffer.com/youtube-tools/, email: neal@nealschaffer.com
+       Score: 5 | Title: 15 YouTube Tools for 2027, Organized by the Job Th
+  [6/15] [SKIP] https://blog.contentgorilla.co/the-best-youtube-se — <urlopen error [SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: Hostname mismatch, certif
+  [7/15] 🎯 OPPORTUNITY https://www.socialpilot.co/youtube-tools
+       Score: 5 | Title: 15 Best YouTube Tools for Scheduling, SEO, Editing
+  [8/15] 🎯 OPPORTUNITY https://worldmetrics.org/best/youtube-seo-software, email: info@worldmetrics.org
+       Score: 5 | Title: Top 10 Best Youtube SEO Software | Reviewer-read 2
+  [9/15] [SKIP] https://www.lifewire.com/video-editor-for-youtube- — HTTP Error 403: Forbidden
+  [10/15] 🎯 OPPORTUNITY https://influencermarketinghub.com/youtube-seo-too, email: hello@influencermarketinghub.com
+       Score: 2 | Title: Top 24 YouTube SEO Tools to Boost Your Reach and R
+  [11/15] 🎯 OPPORTUNITY https://aiclicks.io/blog/best-youtube-seo-tools
+       Score: 2 | Title: 10 Best YouTube SEO Tools in 2026
+  [12/15] 🎯 OPPORTUNITY https://vidiq.com/free-youtube-tools/, email: support@vidiq.com
+       Score: 4 | Title: Free YouTube Tools Used by 30M+ Creators | vidIQ
+  [13/15] 🎯 OPPORTUNITY https://www.tubebuddy.com/blog/12-free-youtube-too
+       Score: 5 | Title: 12 Free YouTube Tools and Sites for Creators | Tub
+  [14/15] [SKIP] https://www.socialez.com/blog/youtube-tools/ — HTTP Error 520: <none>
+  [15/15] 🎯 OPPORTUNITY https://gyre.pro/blog/what-are-the-best-free-youtu, email: support@gyre.pro
+       Score: 3 | Title: Use free YouTube tools to grow your channel – Gyre
+
+  Analyzed 12 relevant resource pages
+
+  Missing our link: 12 pages
+
+🔄 Stage 4: Generating outreach templates...
+
+  --- Opportunity #1 ---
+  Source:  https://creatoreconomytools.com/best-youtube-tools
+  Title:   15 Best YouTube Tools for Growth, SEO & Editing in 2026
+  Score:   2, email: hello@creatoreconomytools.com
+  Subject: Suggestion for your creatoreconomytools.com resource page
+
+  --- Opportunity #2 ---
+  Source:  https://outlierkit.com/resources/best-youtube-analytics-tools/
+  Title:   12 Best YouTube Analytics Tools in 2026 (Free &amp; Paid) | 
+  Score:   7
+  Subject: Suggestion for your outlierkit.com resource page
+
+  --- Opportunity #3 ---
+  Source:  https://taap.bio/blog/best-tools-for-youtubers
+  Title:   The 10 Best Tools for YouTubers in 2026
+  Score:   5, email: hello@taap.bio
+  Subject: Suggestion for your taap.bio resource page
+
+  --- Opportunity #4 ---
+  Source:  https://worldmetrics.org/best/youtube-seo-software/
+  Title:   Top 10 Best Youtube SEO Software | Reviewer-read 2026
+  Score:   5, email: info@worldmetrics.org
+  Subject: Suggestion for your worldmetrics.org resource page
+
+  --- Opportunity #5 ---
+  Source:  https://influencermarketinghub.com/youtube-seo-tools/
+  Title:   Top 24 YouTube SEO Tools to Boost Your Reach and Rankings
+  Score:   2, email: hello@influencermarketinghub.com
+  Subject: Suggestion for your influencermarketinghub.com resource page
+
+  --- Opportunity #6 ---
+  Source:  https://vidiq.com/free-youtube-tools/
+  Title:   Free YouTube Tools Used by 30M+ Creators | vidIQ
+  Score:   4, email: support@vidiq.com
+  Subject: Suggestion for your vidiq.com resource page
+
+  New opportunities: 6
+  Skipped (seen): 6
+
+  Saved to: /tmp/backlink-scans/opportunities-resource.csv
+  Marked 6 as processed
+
+============================================================
+SUMMARY
+============================================================
+  Pages searched:    131
+  Pages fetched:     15
+  Relevant pages:    12
+  Already link to us: 0
+  Missing our link:  12
+  New opportunities: 6
+  Output:            /tmp/backlink-scans/opportunities-resource.csv
+============================================================
+
+Next steps:
+1. Review CSV: /tmp/backlink-scans/opportunities-resource.csv
+2. Send outreach: python3 scripts/backlink-outreach-sender.py --file "/tmp/backlink-scans/opportunities-resource.csv"
+3. Or preview first: python3 scripts/backlink-outreach-sender.py --file "/tmp/backlink-scans/opportunities-resource.csv" --dry-run
+
+Expected response rate: 10-20% for resource page requests
+Typical result: 2-4 backlinks from 20 outreach attempts
+
