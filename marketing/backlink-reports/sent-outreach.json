@@ -453,5 +453,26 @@
     "to_email": "support@vidiq.com",
     "subject": "Suggestion for your vidiq.com resource page",
     "sent_at": "2026-11-11T16:58:19Z"
+  },
+  {
+    "source_page": "https://www.youngurbanproject.com/youtube-seo-tools/",
+    "broken_url": "https://www.globalmediainsight.com/blog/youtube-users-statistics/?utm_medium=organic&#038;utm_term=deleted&#038;utm_content=na&#038;gclid=deleted",
+    "to_email": "hello@youngurbanproject.com",
+    "subject": "Found a broken link on your www.youngurbanproject.com page",
+    "sent_at": "2026-11-12T17:20:31Z"
+  },
+  {
+    "source_page": "https://www.youngurbanproject.com/youtube-seo-tools/",
+    "broken_url": "https://joseangelostudios.com/b2b-seo/?utm_medium=organic&#038;utm_term=deleted&#038;utm_content=na&#038;gclid=deleted",
+    "to_email": "hello@youngurbanproject.com",
+    "subject": "Found a broken link on your www.youngurbanproject.com page",
+    "sent_at": "2026-11-12T17:21:17Z"
+  },
+  {
+    "source_page": "https://lenspov.com/articles/best-youtube-tools-2026",
+    "broken_url": "Resource page (Best YouTube Tools in 2026: 15 We Actually Use)",
+    "to_email": "your@email.com",
+    "subject": "Suggestion for your lenspov.com resource page",
+    "sent_at": "2026-11-12T17:22:04Z"
   }
 ]
