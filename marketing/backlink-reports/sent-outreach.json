@@ -474,5 +474,12 @@
     "to_email": "your@email.com",
     "subject": "Suggestion for your lenspov.com resource page",
     "sent_at": "2026-11-12T17:22:04Z"
+  },
+  {
+    "source_page": "https://www.opus.pro/blog/best-youtube-scheduling-tools-for-creators",
+    "broken_url": "Resource page (13 Best YouTube Scheduling Tools for Creators in 2)",
+    "to_email": "contact@opus.pro",
+    "subject": "Suggestion for your www.opus.pro resource page",
+    "sent_at": "2026-11-13T16:56:26Z"
   }
 ]
