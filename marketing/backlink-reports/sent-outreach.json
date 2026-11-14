@@ -481,5 +481,12 @@
     "to_email": "contact@opus.pro",
     "subject": "Suggestion for your www.opus.pro resource page",
     "sent_at": "2026-11-13T16:56:26Z"
+  },
+  {
+    "source_page": "https://rewind.ai/youtube/seo/",
+    "broken_url": "https://api.rewind.ai",
+    "to_email": "support@rewind.ai",
+    "subject": "Found a broken link on your rewind.ai page",
+    "sent_at": "2026-11-14T15:32:12Z"
   }
 ]
