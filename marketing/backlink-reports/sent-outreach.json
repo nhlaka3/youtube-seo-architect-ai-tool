@@ -488,5 +488,19 @@
     "to_email": "support@rewind.ai",
     "subject": "Found a broken link on your rewind.ai page",
     "sent_at": "2026-11-14T15:32:12Z"
+  },
+  {
+    "source_page": "https://www.demilked.com/best/youtube-seo-tools",
+    "broken_url": "TubeBuddy + vidIQ",
+    "to_email": "partnerships@demilked.com",
+    "subject": "Suggested addition for your TubeBuddy vs vidIQ comparison",
+    "sent_at": "2026-11-16T19:14:35Z"
+  },
+  {
+    "source_page": "https://www.demilked.com/best/youtube-seo-tools",
+    "broken_url": "Resource page (YouTube SEO and growth tools (2026) | Demilked)",
+    "to_email": "partnerships@demilked.com",
+    "subject": "Suggestion for your www.demilked.com resource page",
+    "sent_at": "2026-11-16T19:15:22Z"
   }
 ]
