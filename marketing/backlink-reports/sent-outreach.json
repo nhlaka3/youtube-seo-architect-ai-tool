@@ -509,5 +509,19 @@
     "to_email": "support@tubescout.app",
     "subject": "Suggestion for your tubescout.app resource page",
     "sent_at": "2026-11-19T17:59:01Z"
+  },
+  {
+    "source_page": "https://www.youngurbanproject.com/youtube-seo-tools/",
+    "broken_url": "https://www.globalmediainsight.com/blog/youtube-users-statistics/?utm_medium=ig&#038;utm_content=deleted&#038;gclid=deleted",
+    "to_email": "hello@youngurbanproject.com",
+    "subject": "Found a broken link on your www.youngurbanproject.com page",
+    "sent_at": "2026-11-20T17:31:35Z"
+  },
+  {
+    "source_page": "https://www.youngurbanproject.com/youtube-seo-tools/",
+    "broken_url": "https://joseangelostudios.com/b2b-seo/?utm_medium=ig&#038;utm_content=deleted&#038;gclid=deleted",
+    "to_email": "hello@youngurbanproject.com",
+    "subject": "Found a broken link on your www.youngurbanproject.com page",
+    "sent_at": "2026-11-20T17:32:21Z"
   }
 ]
