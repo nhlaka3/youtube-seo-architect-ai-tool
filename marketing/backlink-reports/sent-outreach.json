@@ -523,5 +523,12 @@
     "to_email": "hello@youngurbanproject.com",
     "subject": "Found a broken link on your www.youngurbanproject.com page",
     "sent_at": "2026-11-20T17:32:21Z"
+  },
+  {
+    "source_page": "https://www.creator-hero.com/blog/best-youtube-tools-for-creators",
+    "broken_url": "Resource page (Best YouTube Tools for Creators in 2025)",
+    "to_email": "info@creator-hero.com",
+    "subject": "Suggestion for your www.creator-hero.com resource page",
+    "sent_at": "2026-11-22T16:53:27Z"
   }
 ]
