@@ -1,0 +1,133 @@
+
+============================================================
+COMPETITOR BACKLINK REPLICATOR
+Scanning for pages that link to YouTube SEO tool competitors
+Our site: https://yt-seo-architect.vercel.app
+Competitors tracked: 10
+============================================================
+
+🔄 Stage 1: Searching for relevant pages...
+  [1/26] "best youtube seo tools"
+  [2/26] "best free youtube seo tools"
+  [3/26] "youtube seo tools 2026"
+  [4/26] "youtube keyword research tools"
+  [5/26] "youtube tag generator tools"
+  [6/26] "best tools for youtube growth"
+  [7/26] "youtube optimization tools"
+  [8/26] "youtube analytics tools"
+  [9/26] "alternatives to vidiq"
+  [10/26] "alternatives to tubebuddy"
+  [11/26] "free alternatives to vidiq"
+  [12/26] "vidiq vs tubebuddy"
+  [13/26] "vidiq alternative free"
+  [14/26] "tubebuddy alternative free"
+  [15/26] "youtube tools list"
+  [16/26] "youtube seo resources"
+  [17/26] "tools for youtube creators"
+  [18/26] "youtube marketing tools"
+  [19/26] "best free tools for youtubers"
+  [20/26] "youtube creator toolkit"
+  [21/26] "essential youtube tools"
+  [22/26] "youtube growth tools"
+  [23/26] "how to optimize youtube videos tools"
+  [24/26] "youtube seo guide tools"
+  [25/26] "youtube thumbnail maker tools"
+  [26/26] "youtube description generator tools"
+  Found 95 unique results across all queries
+
+  Raw results saved: /home/runner/work/yt-seo-architect-private/yt-seo-architect-private/marketing/backlink-reports/competitor-raw-results-2026-11-24.json
+
+🔄 Stage 2: Fetching pages and analyzing links...
+  [1/15] 🎯 MISSING https://influencermarketinghub.com/youtube-seo-too
+       Links to: KeywordTool.io + TubeBuddy + Canva + RapidTags + vidIQ
+  [2/15] [SKIP] https://aiclicks.io/blog/best-youtube-seo-tools — 0-0 competitor links
+  [SKIP] https://joseangelostudios.com/best-youtube-seo-tools/ — HTTP Error 502: Bad Gateway
+  [SKIP] https://thecmo.com/tools/youtube-seo-tools/ — HTTP Error 403: Forbidden
+  [5/15] 🎯 MISSING https://contentmavericks.com/best-youtube-seo-tool
+       Links to: TubeBuddy + YTCockpit + KeywordTool.io
+  [6/15] [SKIP] https://fluxnote.io/guides/youtube-seo-tools-compa — 0-0 competitor links
+  [7/15] 🎯 MISSING https://vidiq.com/youtube-seo-tools/
+       Links to: vidIQ + TubeBuddy
+  [8/15] [SKIP] https://rankxdigital.com/blog/youtube-seo-tools/ — 0-0 competitor links
+  [9/15] [SKIP] https://outlierkit.com/resources/youtube-seo/ — 0-0 competitor links
+  [10/15] [SKIP] https://www.youngurbanproject.com/youtube-seo-tool — 0-0 competitor links
+  [SKIP] https://impressivemagazine.com/best-youtube-seo-tools-2026/ — HTTP Error 403: Forbidden
+  [12/15] [SKIP] https://brightseotools.com/post/youtube-seo-the-co — 0-0 competitor links
+  [13/15] [SKIP] https://www.ryrob.com/youtube-keyword-tool/ — 0-0 competitor links
+  [14/15] [SKIP] https://www.collabpals.com/tools/youtube-keyword-r — 0-0 competitor links
+  [15/15] 🎯 MISSING https://www.socialpilot.co/youtube-tools
+       Links to: TubeBuddy + Canva + vidIQ
+
+  Analyzed 4 pages with competitor links
+
+🔄 Stage 3: Finding pages that DON'T link to us yet...
+  Missing our link: 4 pages
+
+  Top opportunities:
+    🎯 [links 5 comps] https://influencermarketinghub.com/youtube-seo-tools/
+         Competitors: KeywordTool.io + TubeBuddy + Canva + RapidTags + vidIQ
+    🎯 [links 3 comps] https://contentmavericks.com/best-youtube-seo-tools/
+         Competitors: TubeBuddy + YTCockpit + KeywordTool.io
+    🎯 [links 3 comps] https://www.socialpilot.co/youtube-tools
+         Competitors: TubeBuddy + Canva + vidIQ
+    🎯 [links 2 comps] https://vidiq.com/youtube-seo-tools/
+         Competitors: vidIQ + TubeBuddy
+
+🔄 Stage 4: Generating personalized outreach templates...
+
+  --- Opportunity #1 ---
+  Source:    https://www.socialpilot.co/youtube-tools
+  Title:     15 Best YouTube Tools for Scheduling, SEO, Editing &amp; Mor
+  Links to:  TubeBuddy + Canva + vidIQ
+  Subject:   Your www.socialpilot.co list is missing a free YouTube SEO tool
+  Body:
+Hi there,
+
+I came across your excellent resource at https://www.socialpilot.co/youtube-tools — great roundup of TubeBuddy, Canva and vidIQ and other YouTube tools.
+
+I noticed you're not yet listing YT SEO Architect, a completely free platform with 17+ tools for YouTube creators, including:
+
+• AI title optimizer — scores titles out of 100 before you publish
+• Tag generator — finds 15+ optimized tags with relevance scores
+• Description writer — writes SEO-optimized descriptions with timestamps
+• Full channel audit — finds metadata issues across all your videos
+• Bulk metadata updater — fix titles/tags/descriptions in batches
+
+It's 100% free, no account required, and used by thousands of creators. I think it would be a valuable addition to your list — especially as a free alternative to tools like TubeBuddy, Canva and vidIQ that have paid tiers.
+
+You can check it out here: https://yt-seo-architect.vercel.app/tools/title-optimizer
+
+Happy to provide screenshots, a demo video, or additional details if helpful.
+
+Best,
+[NHLAKA]
+Founder, YT SEO Architect
+https://yt-seo-architect.vercel.app
+
+  New opportunities: 1
+  Skipped (already seen): 3
+
+🔄 Stage 5: Exporting to CSV...
+  Saved 1 opportunities to: /tmp/backlink-scans/opportunities-competitor.csv
+  Marked 1 pages as processed (won't re-process)
+
+============================================================
+SUMMARY
+============================================================
+  Pages searched:    95
+  Pages fetched:     15
+  With competitor links: 4
+  Already link to us:    0
+  Missing our link:      4
+  New opportunities:     1
+  Output:                /tmp/backlink-scans/opportunities-competitor.csv
+============================================================
+
+Next steps:
+1. Review the CSV at: /tmp/backlink-scans/opportunities-competitor.csv
+2. Send outreach via: python3 scripts/backlink-outreach-sender.py --file "/tmp/backlink-scans/opportunities-competitor.csv"
+3. Or preview first:  python3 scripts/backlink-outreach-sender.py --file "/tmp/backlink-scans/opportunities-competitor.csv" --dry-run
+
+Expected response rate: 15-25% for "you're missing from this awesome list" emails
+Typical result: 3-5 backlinks from 20 outreach attempts
+
