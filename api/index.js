@@ -70,6 +70,7 @@ process.on('unhandledRejection', (reason, promise) => {
 // Import Modular Routers
 
 import { router as creditsRouter } from './credits.js';
+import paypalBilling from './paypal-billing.js';
 
 import { router as aiRouter } from './ai-engine.js';
 
@@ -656,6 +657,7 @@ app.get('/api/health/:check', async (req, res) => {
 // --- Mount Modular Routers ---
 
 app.use('/api/credits', creditsRouter);
+app.use('/api/billing', paypalBilling);
 
 app.use('/api/ai', aiRouter);
 
@@ -1573,14 +1575,11 @@ app.post('/api/dev/refill', requireAdmin, async (req, res) => {
 
 // --- PayPal Webhook Proxy (Fortress Layer) ---
 
-app.post('/api/paypal/webhook', (req, res) => {
-
-  // Delegate to credits router logic
-
-  req.url = '/paypal/webhook';
-
-  creditsRouter(req, res);
-
+app.post('/api/paypal/webhook', (req, res, next) => {
+  // Route legacy webhook URL to the real billing handler.
+  // (Previously this delegated to credits.js, which returned "Payments disabled".)
+  req.url = '/webhook';
+  paypalBilling(req, res, next);
 });
 
 

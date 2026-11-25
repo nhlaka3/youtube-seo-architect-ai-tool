@@ -3,18 +3,18 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Pricing — YT SEO Architect | 100% Free, No Limits</title>
-  <meta name="description" content="YT SEO Architect pricing: $0 forever. All AI YouTube SEO tools free with unlimited credits, no credit card, no catch. Pro plans coming soon." />
+  <title>Pricing — YT SEO Architect | Free Forever + Pro $12/mo</title>
+  <meta name="description" content="YT SEO Architect pricing: Free $0 forever with unlimited AI tools, no credit card. Pro $12/mo unlocks Bulk Injector, Auto-Responder and AI Coach. Lifetime $149 one-time." />
   <meta name="robots" content="index, follow" />
   <link rel="canonical" href="https://yt-seo-architect.vercel.app/pricing" />
   <meta property="og:type" content="website" />
   <meta property="og:url" content="https://yt-seo-architect.vercel.app/pricing" />
-  <meta property="og:title" content="Pricing — YT SEO Architect | 100% Free, No Limits" />
-  <meta property="og:description" content="All AI YouTube SEO tools free with unlimited credits. No credit card, no subscription, no catch." />
+  <meta property="og:title" content="Pricing — YT SEO Architect | Free Forever + Pro $12/mo" />
+  <meta property="og:description" content="Free $0 forever. Pro $12/mo for bulk optimization, auto-responder and unlimited AI Coach. Lifetime $149." />
   <meta property="og:image" content="https://yt-seo-architect.vercel.app/og-image.png" />
   <meta name="twitter:card" content="summary_large_image" />
-  <meta name="twitter:title" content="Pricing — YT SEO Architect | 100% Free, No Limits" />
-  <meta name="twitter:description" content="All AI YouTube SEO tools free with unlimited credits. No credit card, no subscription, no catch." />
+  <meta name="twitter:title" content="Pricing — YT SEO Architect | Free Forever + Pro $12/mo" />
+  <meta name="twitter:description" content="Free $0 forever. Pro $12/mo. Lifetime $149 one-time. No card stored — PayPal checkout." />
   <link rel="icon" href="/favicon.ico" />
   <script type="application/ld+json">
   {
@@ -24,13 +24,36 @@
     "description": "YT SEO Architect pricing: $0 forever. All AI YouTube SEO tools free with unlimited credits.",
     "url": "https://yt-seo-architect.vercel.app/pricing",
     "isPartOf": { "@type": "WebSite", "name": "YT SEO Architect", "url": "https://yt-seo-architect.vercel.app/" },
-    "mainEntity": {
-      "@type": "Offer",
-      "name": "YT SEO Architect Free Plan",
-      "price": "0",
-      "priceCurrency": "USD",
-      "description": "100% free forever. All tools, unlimited AI credits, no credit card required."
-    },
+    "mainEntity": [
+      {
+        "@type": "Offer",
+        "name": "YT SEO Architect Free",
+        "price": "0",
+        "priceCurrency": "USD",
+        "description": "Free forever. Core AI SEO tools, no credit card required."
+      },
+      {
+        "@type": "Offer",
+        "name": "YT SEO Architect Pro",
+        "price": "12",
+        "priceCurrency": "USD",
+        "description": "Unlimited audits, Bulk Injector, Auto-Responder, unlimited AI Coach.",
+        "priceSpecification": {
+          "@type": "UnitPriceSpecification",
+          "price": "12",
+          "priceCurrency": "USD",
+          "billingDuration": 1,
+          "billingUnit": "MON"
+        }
+      },
+      {
+        "@type": "Offer",
+        "name": "YT SEO Architect Lifetime",
+        "price": "149",
+        "priceCurrency": "USD",
+        "description": "One-time payment. Everything in Pro, forever, plus founding-member status."
+      }
+    ],
     "breadcrumb": {
       "@type": "BreadcrumbList",
       "itemListElement": [
@@ -68,6 +91,31 @@
     .section { max-width: 720px; margin: 0 auto 3rem; padding: 0 1.5rem; color: var(--text-secondary); }
     .section h2 { color: var(--text-primary); font-size: 1.5rem; font-weight: 800; margin-bottom: 1rem; }
     .section p { margin-bottom: 1rem; }
+    /* ── 3-tier pricing ── */
+    .pricing-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.25rem;max-width:1080px;margin:2.5rem auto 3rem;padding:0 1.5rem}
+    @media(max-width:900px){.pricing-grid{grid-template-columns:1fr}}
+    .price-card{background:var(--bg-surface);border:1px solid var(--border);border-radius:20px;padding:2rem 1.5rem;display:flex;flex-direction:column;position:relative}
+    .price-card.featured{border:2px solid var(--cyan);background:linear-gradient(180deg,rgba(0,242,255,.08),var(--bg-surface));box-shadow:0 0 40px rgba(0,242,255,.12)}
+    .price-badge{display:inline-block;font-size:.7rem;font-weight:800;letter-spacing:.08em;text-transform:uppercase;padding:.3rem .75rem;border-radius:999px;margin-bottom:1rem;align-self:flex-start}
+    .price-badge.free{background:rgba(255,255,255,.06);color:var(--text-secondary);border:1px solid var(--border)}
+    .price-badge.pro{background:var(--cyan);color:#05070a}
+    .price-badge.lifetime{background:rgba(0,255,136,.1);color:var(--green);border:1px solid rgba(0,255,136,.25)}
+    .price-card .price-amount{font-size:2.6rem;font-weight:900;color:var(--text-white);line-height:1}
+    .price-card .price-amount span{font-size:1rem;color:var(--text-muted);font-weight:500}
+    .price-features li.muted{color:var(--text-muted)}
+    .price-features li.muted i{color:var(--text-muted)}
+    .btn-cta.btn-ghost{background:transparent;border:1px solid var(--border-hover);color:var(--text-primary)}
+    .fine{font-size:.78rem;color:var(--text-muted);text-align:center;margin-top:.6rem}
+    .compare-wrap,.faq-block{max-width:880px;margin:0 auto 3rem;padding:0 1.5rem}
+    .compare-wrap h2,.faq-block h2{color:var(--text-primary);font-size:1.5rem;font-weight:800;margin-bottom:1rem}
+    .compare-table{width:100%;border-collapse:collapse;font-size:.92rem}
+    .compare-table th,.compare-table td{padding:.7rem .9rem;text-align:left;border-bottom:1px solid rgba(255,255,255,.06)}
+    .compare-table th{background:var(--bg-elevated);color:var(--text-primary);font-weight:700}
+    .compare-table td{color:var(--text-secondary)}
+    .compare-table .yes{color:var(--green);font-weight:700}
+    .faq-block details{background:var(--bg-surface);border:1px solid var(--border);border-radius:12px;padding:1rem 1.25rem;margin-bottom:.6rem}
+    .faq-block summary{cursor:pointer;font-weight:700;color:var(--text-primary)}
+    .faq-block details p{color:var(--text-secondary);margin:.6rem 0 0;font-size:.92rem}
     @media (max-width: 640px) { .pricing-hero { padding: 3rem 1rem 1.5rem; } .pricing-card { margin: 2rem 1rem 3rem; padding: 2rem 1.5rem; } }
   </style>
 <link rel="stylesheet" href="/motion-utilities.css">
@@ -81,36 +129,102 @@
 
   <main>
     <div class="pricing-hero">
-      <h1>Pricing: <span class="gradient-text">$0 Forever</span></h1>
-      <p>Every tool in YT SEO Architect is completely free. Unlimited AI credits, no credit card, no subscription, no catch — now and always.</p>
+      <h1>Free forever. <span class="gradient-text">Pro when you need power.</span></h1>
+      <p>Start free with the full tool suite — no credit card, no trial countdown. Go Pro only when you want unlimited audits, bulk optimization, and always-on automation.</p>
     </div>
 
-    <div class="pricing-card">
-      <h2 style="color:var(--text-white);font-size:1.3rem;margin-bottom:1rem;">Free Plan</h2>
-      <div class="price-amount">$0<span>/forever</span></div>
-      <p class="price-desc">Everything included. Built for creators, not for profit.</p>
-      <ul class="price-features">
-        <li><i>✓</i> All AI YouTube SEO tools</li>
-        <li><i>✓</i> Unlimited AI credits — no caps, no meters</li>
-        <li><i>✓</i> Keyword research, tag & title generators</li>
-        <li><i>✓</i> Metadata auditor & thumbnail analyzer</li>
-        <li><i>✓</i> Bulk optimization & retention re-ordering</li>
-        <li><i>✓</i> No login required for tools · optional Google sign-in for channel features</li>
-      </ul>
-      <a href="/dashboard" class="btn-cta">Start Free Now →</a>
+    <div class="pricing-grid">
+
+      <div class="price-card">
+        <div class="price-badge free">Free</div>
+        <div class="price-amount">$0<span>/forever</span></div>
+        <p class="price-desc">Everything you need to fix your first 50 videos.</p>
+        <ul class="price-features">
+          <li><i>✓</i> Keyword research &amp; discovery</li>
+          <li><i>✓</i> Tag generator &amp; title optimizer</li>
+          <li><i>✓</i> Description writer</li>
+          <li><i>✓</i> Metadata auditor &amp; thumbnail analyzer</li>
+          <li><i>✓</i> 5 keyword discoveries / day</li>
+          <li><i>✓</i> 3 SEO audits / day</li>
+          <li><i>✓</i> AI Coach — 10 questions / day</li>
+          <li class="muted"><i>—</i> Bulk Injector</li>
+          <li class="muted"><i>—</i> Auto-Responder</li>
+        </ul>
+        <a href="/dashboard" class="btn-cta btn-ghost">Start Free — No Card →</a>
+        <p class="fine">No credit card. No expiry.</p>
+      </div>
+
+      <div class="price-card featured">
+        <div class="price-badge pro">Most popular</div>
+        <div class="price-amount">$12<span>/month</span></div>
+        <p class="price-desc">For creators publishing weekly who want to rank faster.</p>
+        <ul class="price-features">
+          <li><i>✓</i> <strong>Everything in Free</strong></li>
+          <li><i>✓</i> <strong>Unlimited</strong> keyword discovery</li>
+          <li><i>✓</i> <strong>Unlimited</strong> SEO audits</li>
+          <li><i>✓</i> Bulk Injector — 50 videos at once</li>
+          <li><i>✓</i> Auto-Responder + Phronesis agent</li>
+          <li><i>✓</i> Unlimited AI Coach</li>
+          <li><i>✓</i> Playlist optimizer &amp; Evergreen Revival</li>
+          <li><i>✓</i> API access</li>
+          <li><i>✓</i> Priority AI routing (Groq + Gemini)</li>
+        </ul>
+                <a href="/api/billing/pay?plan=pro" class="btn-cta js-checkout" data-plan="pro">Upgrade to Pro — $12/mo</a>
+        <p class="fine">PayPal · Auto-renews · Cancel anytime</p>
+      </div>
+
+      <div class="price-card">
+        <div class="price-badge lifetime">Lifetime</div>
+        <div class="price-amount">$149<span>/once</span></div>
+        <p class="price-desc">Early-supporter deal. Pay once, keep Pro forever.</p>
+        <ul class="price-features">
+          <li><i>✓</i> Everything in Pro, forever</li>
+          <li><i>✓</i> All future Pro features included</li>
+          <li><i>✓</i> Priority support</li>
+          <li><i>✓</i> Founding member badge</li>
+          <li><i>✓</i> Lock in today's price</li>
+        </ul>
+        <a href="/api/billing/pay?plan=life" class="btn-cta btn-ghost js-checkout" data-plan="life">Get Lifetime — $149</a>
+        <p class="fine">One-time via PayPal · No subscription</p>
+      </div>
+
+    </div>
+    <div class="compare-wrap">
+      <h2>Free vs Pro — feature by feature</h2>
+      <table class="compare-table">
+        <thead><tr><th>Feature</th><th>Free</th><th>Pro</th></tr></thead>
+        <tbody>
+          <tr><td>Keyword discovery</td><td>5 / day</td><td class="yes">Unlimited</td></tr>
+          <tr><td>SEO audits</td><td>3 / day</td><td class="yes">Unlimited</td></tr>
+          <tr><td>Tag generator</td><td>20 tags</td><td class="yes">30+ tags with volume</td></tr>
+          <tr><td>Title optimizer</td><td>5 titles</td><td class="yes">Unlimited + CTR scores</td></tr>
+          <tr><td>Metadata auditor</td><td>✓</td><td class="yes">✓ Bulk mode</td></tr>
+          <tr><td>Bulk Injector</td><td>—</td><td class="yes">50 videos / run</td></tr>
+          <tr><td>Auto-Responder</td><td>—</td><td class="yes">✓</td></tr>
+          <tr><td>AI Coach</td><td>10 questions / day</td><td class="yes">Unlimited</td></tr>
+          <tr><td>API access</td><td>—</td><td class="yes">✓</td></tr>
+        </tbody>
+      </table>
     </div>
 
-    <p class="soon-note">Optional Pro features (advanced analytics, team seats) are in development — coming soon. Free plan stays free forever.</p>
+    <div class="faq-block">
+      <h2>Pricing questions</h2>
+      <details><summary>Is Free really free forever?</summary><p>Yes. The Free plan does not expire and does not require a card. Pro only removes the daily limits and unlocks automation.</p></details>
+      <details><summary>How does payment work?</summary><p>Checkout runs through PayPal. We never see or store your card details. You can cancel from your PayPal account at any time.</p></details>
+      <details><summary>What happens after I pay?</summary><p>PayPal sends a receipt to your email. Reply with it (or forward it to the contact address) and Pro is activated on your channel within 24 hours.</p></details>
+      <details><summary>Can I cancel later?</summary><p>Yes. Cancel anytime and you stay Pro until the end of the period you paid for, then drop back to Free.</p></details>
+      <details><summary>Do the free tools use my YouTube data?</summary><p>Only if you connect a channel with Google sign-in. Tools work without login; connecting is optional and used solely to run audits.</p></details>
+    </div>
+
 
     <div class="section">
-      <h2>Why is it free?</h2>
-      <p>We believe every creator deserves professional-grade SEO, regardless of budget. The expensive tools charge $5–$50 per month for the same core workflows — keyword research, metadata optimization, and AI content help. We built the free version first because that's the version that should exist.</p>
-      <p>We may add optional paid features later to sustain development, but the core tool suite you see today is free forever, with unlimited credits. No trial window, no feature paywall, no "upgrade to unlock" bait.</p>
+      <h2>Why is there a paid tier now?</h2>
+      <p>Hosting and AI inference cost real money. The Free plan covers the workflows most creators need. Pro covers creators who want automation — bulk metadata overhauls, auto-replies, and unlimited AI coaching. Nothing that is free today becomes paid later.</p>
     </div>
 
     <div class="section">
-      <h2>What does "unlimited" mean?</h2>
-      <p>Exactly what it sounds like: unlimited tool runs, unlimited AI generations, unlimited saved optimizations. The tools run in your browser or through our AI engines without credit metering. We don't count your usage against you, and we never will.</p>
+      <h2>What does "unlimited" mean on Pro?</h2>
+      <p>No daily caps on keyword discovery, audits, or AI coaching. Fair-use limits exist only to prevent automated abuse of the API — normal creator usage never hits them.</p>
     </div>
   </main>
 
@@ -123,5 +237,37 @@
     <span>&copy; 2026 YT SEO Architect. All rights reserved.</span>
   </div></footer>
   <script defer src="/js/blog-enhancements.js"></script>
+
+<!--
+     Checkout is handled server-side by /api/billing/pay (api/paypal-billing.js).
+
+     It creates a real recurring PayPal Subscription ($12/mo) or a one-time
+     $149 charge, then redirects the buyer to PayPal. No handle or email needs
+     to be pasted into this file.
+
+     To change where money lands, set these in Vercel → Settings → Environment
+     Variables (all server-side, nothing hardcoded in HTML):
+
+       PAYPAL_CLIENT_ID        live client id      (already set)
+       PAYPAL_SECRET           live secret         (already set)
+       PAYPAL_WEBHOOK_ID       webhook id          ← needed to auto-grant Pro
+       PAYPAL_PLAN_PRO         optional: pin plan id instead of auto-create
+       PAYPAL_PLAN_LIFETIME    optional: pin plan id
+       PAYPAL_ME_HANDLE        fallback if PayPal API creds are missing
+       PAYPAL_BUSINESS_EMAIL   fallback email checkout
+-->
+
+<script>
+/* Pass the connected channel to checkout so PayPal's webhook can grant the right account. */
+(function () {
+  var ch = null;
+  try { ch = localStorage.getItem('ytseo_channel_id'); } catch (e) {}
+  if (!ch || ch === 'anonymous') return;
+  document.querySelectorAll('a.js-checkout').forEach(function (a) {
+    var plan = a.getAttribute('data-plan') || 'pro';
+    a.href = '/api/billing/pay?plan=' + plan + '&channelId=' + encodeURIComponent(ch);
+  });
+})();
+</script>
 </body>
 </html>
