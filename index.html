@@ -29,7 +29,7 @@
   </script>
 
   <title>YT SEO Architect — AI YouTube SEO Tool | Keywords, Tags & Scripts</title>
-  <meta name="description" content="Free AI YouTube SEO tools: keyword research, tag generator, title optimizer, metadata audit, thumbnail analyzer." />
+  <meta name="description" content="Free AI YouTube SEO tools: keyword research, tag generator, title optimizer, metadata audit, thumbnail analyzer. Free forever — Pro $12/mo for bulk automation." />
   <meta name="keywords" content="YouTube SEO tool, YouTube keyword research tool, AI YouTube SEO software, YouTube tag generator, YouTube script generator, YouTube SEO audit tool, YouTube thumbnail analyzer" />
   <meta name="author" content="YT SEO Architect" />
   <meta name="robots" content="index, follow" />
@@ -41,7 +41,7 @@
   <meta property="og:type" content="website" />
   <meta property="og:url" content="https://yt-seo-architect.vercel.app/" />
   <meta property="og:title" content="YT SEO Architect — AI-Powered YouTube Growth Platform" />
-  <meta property="og:description" content="Research keywords, generate scripts, audit metadata, and get more views — all from one AI-powered dashboard. 100% Free &amp; Unlimited." />
+  <meta property="og:description" content="Research keywords, generate scripts, audit metadata, and get more views — all from one AI-powered dashboard. Free forever, no card required." />
   <meta property="og:image" content="https://yt-seo-architect.vercel.app/og-image.png" />
   <meta property="og:image:width" content="1200" />
   <meta property="og:image:height" content="630" />
@@ -52,7 +52,7 @@
   <meta name="twitter:card" content="summary_large_image" />
   <meta name="twitter:url" content="https://yt-seo-architect.vercel.app/" />
   <meta name="twitter:title" content="YT SEO Architect — AI-Powered YouTube Growth Platform" />
-  <meta name="twitter:description" content="Research keywords, generate scripts, audit metadata, and get more views — all from one AI-powered dashboard. 100% Free &amp; Unlimited." />
+  <meta name="twitter:description" content="Research keywords, generate scripts, audit metadata, and get more views — all from one AI-powered dashboard. Free forever, no card required." />
   <meta name="twitter:image" content="https://yt-seo-architect.vercel.app/og-image.png" />
 
   <script type="application/ld+json">
@@ -88,7 +88,7 @@
         "@type": "Offer",
         "price": "0",
         "priceCurrency": "USD",
-        "description": "100% Free, No Limits"
+        "description": "Free forever YouTube SEO toolkit, no card required"
       },
       "featureList": "AI Keyword Discovery, AI Script Generation, Metadata Auditor, Smart Bulk Injector, Retention Re-Orderer, AI Auto-Responder, AI Coach, Playlist Growth Suite, Thumbnail Lab, Competitor Sniper, AI Content Label, Chapters Generator, Script-to-Shorts, Trend Pulse, Evergreen Audit, Multi-Language SEO, Gemini AI Failover",
       "speakable": {
@@ -194,7 +194,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Geist:wght@100..900&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
   <link href="https://fonts.googleapis.com/css2?family=Geist+Mono:wght@100..900&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
-  <script src="/js/lucide.min.js" defer></script>
+  <script src="/js/icon-inline.js" defer></script>
   <link rel="stylesheet" href="/design-tokens.css" media="print" onload="this.media='all'">
   <link rel="stylesheet" href="/utilities.css" media="print" onload="this.media='all'">
   <link rel="stylesheet" href="/nav.css" media="print" onload="this.media='all'">
@@ -799,6 +799,22 @@
     .tools-marquee-track span::after { content: '✦'; color: var(--primary); font-size: 0.65rem; opacity: 0.75; }
     @keyframes marquee-scroll { from { transform: translateX(0); } to { transform: translateX(-50%); } }
     @media (prefers-reduced-motion: reduce) { .tools-marquee-track { animation: none; will-change: auto; } }
+    .home-pricing-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:1.25rem;max-width:880px;margin:0 auto;text-align:left}
+    @media(max-width:760px){.home-pricing-grid{grid-template-columns:1fr}}
+    .home-price-card{background:var(--bg-surface);border:1px solid var(--border);border-radius:18px;padding:1.75rem 1.5rem;display:flex;flex-direction:column;text-decoration:none;transition:border-color .25s,transform .25s}
+    .home-price-card.featured{border:2px solid var(--cyan);background:linear-gradient(180deg,rgba(0,242,255,.07),var(--bg-surface))}
+    .home-price-card:hover{border-color:var(--border-hover);transform:translateY(-3px)}
+    .hp-label{font-size:.7rem;font-weight:800;letter-spacing:.09em;text-transform:uppercase;color:var(--text-muted);margin-bottom:.75rem}
+    .hp-label.hp-pro{color:var(--cyan)}
+    .hp-amount{font-size:2.2rem;font-weight:900;color:var(--text-white);line-height:1.1;margin-bottom:1rem}
+    .hp-amount span{font-size:.95rem;color:var(--text-muted);font-weight:500}
+    .hp-list{list-style:none;padding:0;margin:0 0 1.5rem;flex:1}
+    .hp-list li{position:relative;padding-left:1.4rem;margin-bottom:.6rem;font-size:.92rem;color:var(--text-secondary)}
+    .hp-list li::before{content:"✓";position:absolute;left:0;color:var(--green);font-weight:800}
+    .gear-card h3{color:var(--text-white);font-size:1.05rem;margin:0 0 .5rem;font-weight:800}
+    .gear-desc{color:var(--text-secondary);font-size:.92rem;margin:0 0 1rem;flex:1}
+    .gear-link{color:var(--cyan);font-weight:700;font-size:.9rem}
+    .affiliate-note{text-align:center;font-size:.78rem;color:var(--text-muted);margin-top:1.5rem;max-width:640px;margin-left:auto;margin-right:auto}
   </style>
 <link rel="stylesheet" href="/motion-utilities.css">
 <script defer src="/ga.js"></script></head>
@@ -843,12 +859,12 @@
     <!-- Hero -->
     <section class="hero reveal reveal-fade-up" aria-labelledby="hero-heading">
       <div class="badge-new">100% FREE AI YOUTUBE TOOLKIT</div>
-      <h1 id="hero-heading">Free YouTube SEO Tool — AI Keyword, Tag &amp; Title Generator.<br><span class="gradient-text"> 100% Free, Unlimited.</span></h1>
-      <p>YT SEO Architect is a free, AI-powered YouTube SEO toolkit for keyword research, title optimization, tag generation, metadata auditing, and channel growth analysis — unlimited usage, no credits, no subscription.</p>
-      <p>Research keywords, generate scripts, and audit metadata — for free. This tool does it in seconds so you can actually make videos instead of doing paperwork for the algorithm.</p>
+      <h1 id="hero-heading">Free YouTube SEO Tool — AI Keyword, Tag &amp; Title Generator.<br><span class="gradient-text">Free Forever. Pro When You Need Speed.</span></h1>
+      <p>YT SEO Architect is a free, AI-powered YouTube SEO toolkit for keyword research, title optimization, tag generation, metadata auditing, and channel growth analysis. Every core tool is free forever, no card required. Pro ($12/mo) adds bulk automation, the AI Coach, and API access for creators publishing at volume.</p>
+      <p>Research keywords, generate scripts, and audit metadata — free, in seconds. So you spend your time making videos instead of doing paperwork for the algorithm.</p>
       <div class="cta-buttons">
-       <a href="/dashboard" class="btn btn-main" aria-label="Start free YouTube SEO tool — 100% Free & Unlimited">
-          <i data-lucide="rocket" aria-hidden="true"></i> Get Started Now — 100% Free
+       <a href="/dashboard" class="btn btn-main" aria-label="Start free YouTube SEO tool — no card required">
+          <i data-lucide="rocket" aria-hidden="true"></i> Get Started Free — No Card
         </a>
         <a href="#how-it-works" class="btn btn-outline" aria-label="Learn how the AI YouTube SEO toolkit works">
           <i data-lucide="play" aria-hidden="true"></i> How It Works
@@ -1218,7 +1234,7 @@
         </div>
         <div class="trust-badge">
           <span class="trust-badge-icon">🔓</span>
-          <div><div class="trust-badge-title">100% Free Forever</div><div class="trust-badge-sub">Unlimited AI credits, no card</div></div>
+          <div><div class="trust-badge-title">Free Forever</div><div class="trust-badge-sub">No card, no trial countdown</div></div>
         </div>
       </div>
     </section>
@@ -1250,15 +1266,83 @@
     </section>
 
     <!-- Final CTA -->
-    <section id="pricing" class="pricing-section reveal reveal-fade-up">
-      <div class="badge-new">NO PAYWALLS</div>
-      <h2>Built for Creators, <span class="gradient-text">Not for Profit</span>.</h2>        <p>YT SEO Architect is 100% free. No credits to buy, no subscription plans, no catch. Just connect your channel and start growing.</p>
-      
-      <div style="margin-top: 40px;">
-       <a href="/dashboard" class="btn btn-main btn-lg" style="padding: var(--space-20) 48px; font-size: 1.25rem;">
-          <i data-lucide="zap" aria-hidden="true"></i> Launch Free Dashboard Now
+    <section id="start-here" class="pricing-section reveal reveal-fade-up" aria-labelledby="start-here-heading">
+      <div class="badge-new">START HERE</div>
+      <h2 id="start-here-heading">New to YouTube SEO? <span class="gradient-text">Read These First.</span></h2>
+      <p style="max-width:720px;margin:0 auto 2rem;">Three guides that take you from "no idea what to make" to "I know exactly which keyword to target this week".</p>
+      <div class="home-pricing-grid" style="text-align:left;">
+        <a class="home-price-card" href="/blog/low-competition-youtube-keywords-2026">
+          <div class="hp-label">Guide 1 · 11 min</div>
+          <h3 style="color:var(--text-white);font-size:1.05rem;margin:0 0 .5rem;font-weight:800;">90+ Low Competition Keywords</h3>
+          <p class="gear-desc">A niche-by-niche list of keywords small channels can realistically rank for.</p>
+          <span class="gear-link">Read the list →</span>
+        </a>
+        <a class="home-price-card" href="/blog/how-to-find-low-competition-keywords-youtube-2026">
+          <div class="hp-label">Guide 2 · 10 min</div>
+          <h3 style="color:var(--text-white);font-size:1.05rem;margin:0 0 .5rem;font-weight:800;">Find Your Own Keywords</h3>
+          <p class="gear-desc">The 4-step method: autocomplete mining, competitor gaps, AI scoring, clustering.</p>
+          <span class="gear-link">Read the method →</span>
+        </a>
+        <a class="home-price-card" href="/blog/best-youtube-keywords-by-niche-2026">
+          <div class="hp-label">Guide 3 · 9 min</div>
+          <h3 style="color:var(--text-white);font-size:1.05rem;margin:0 0 .5rem;font-weight:800;">Best Keywords by Niche</h3>
+          <p class="gear-desc">Tech, gaming, fitness, cooking, education and finance — what to target in each.</p>
+          <span class="gear-link">Compare niches →</span>
         </a>
       </div>
+    </section>
+
+    <section id="gear" class="pricing-section reveal reveal-fade-up" aria-labelledby="gear-heading">
+      <div class="badge-new">CREATOR GEAR</div>
+      <h2 id="gear-heading">The Kit We Actually <span class="gradient-text">Recommend</span></h2>
+      <p style="max-width:700px;margin:0 auto 2rem;">SEO gets you impressions. Audio and lighting get you watch time. These are the budget picks we point new creators to first.</p>
+      <div class="home-pricing-grid">
+        <a class="home-price-card gear-card" href="https://amzn.to/44HlecM" target="_blank" rel="nofollow sponsored noopener">
+          <div class="hp-label">#1 pick</div>
+          <h3>Creator Mic &amp; Lighting Kit</h3>
+          <p class="gear-desc">Clear voice, soft light, no echo. The fastest watch-time upgrade for a talking-head channel.</p>
+          <span class="gear-link">Check price on Amazon →</span>
+        </a>
+        <a class="home-price-card gear-card" href="https://amzn.to/44HlecM" target="_blank" rel="nofollow sponsored noopener">
+          <div class="hp-label">Upgrade</div>
+          <h3>Starter Streaming &amp; Recording Bundle</h3>
+          <p class="gear-desc">Mic, arm and interface in one order — enough for tutorials, commentary and Shorts.</p>
+          <span class="gear-link">See bundle on Amazon →</span>
+        </a>
+      </div>
+      <p class="affiliate-note">Affiliate disclosure: we may earn a commission from Amazon links on this page, at no extra cost to you. It keeps the free tools running.</p>
+    </section>
+
+    <section id="pricing" class="pricing-section reveal reveal-fade-up">
+      <div class="badge-new">FREE FOREVER + OPTIONAL PRO</div>
+      <h2>Start Free. <span class="gradient-text">Go Pro Only When You Need Speed.</span></h2>
+      <p style="max-width:720px;margin:0 auto 2.5rem;">Every core tool is free and always will be — keyword research, tag generator, title optimizer, description writer, metadata auditor, thumbnail analyzer. No card, no trial countdown. Pro adds the automation that saves hours a week.</p>
+
+      <div class="home-pricing-grid">
+        <div class="home-price-card">
+          <div class="hp-label">Free</div>
+          <div class="hp-amount">$0<span>/forever</span></div>
+          <ul class="hp-list">
+            <li>All core AI SEO tools</li>
+            <li>5 keywords + 3 audits per day</li>
+            <li>Tag generator &amp; title optimizer</li>
+            <li>AI Coach — 10 questions/day</li>
+          </ul>
+          <a href="/dashboard" class="btn btn-secondary" style="width:100%;justify-content:center;">Start Free →</a>
+        </div>
+        <div class="home-price-card featured">
+          <div class="hp-label hp-pro">Pro — most popular</div>
+          <div class="hp-amount">$12<span>/month</span></div>
+          <ul class="hp-list">
+            <li><strong>Unlimited</strong> keywords &amp; audits</li>
+            <li>Bulk Injector — 50 videos at once</li>
+            <li>Auto-Responder + Phronesis agent</li>
+            <li>Unlimited AI Coach &amp; API access</li>
+          </ul>
+          <a href="/pricing" class="btn btn-main" style="width:100%;justify-content:center;">See Pro — $12/mo →</a>
+        </div>
+      </div>
+      <p style="margin-top:1.5rem;font-size:.85rem;color:var(--text-muted);">Lifetime option available at $149 — one payment, Pro forever.</p>
     </section>
 
     <!-- Video Explainer -->
@@ -1334,7 +1418,7 @@
 
         <div class="bento-card stagger-item">
           <h3>Is there really no catch?</h3>
-          <p>No catch. YT SEO Architect is completely free — no subscriptions, no credit card required, no hidden fees. We monetize through partnerships, not your wallet.</p>
+          <p>No catch. Every core tool is free, with no credit card required and no hidden fees. We fund it with an optional Pro plan ($12/mo) for creators who want bulk automation, plus Amazon affiliate links for gear we actually recommend.</p>
         </div>
 
         <div class="bento-card stagger-item">
@@ -1363,7 +1447,7 @@
 
     <footer>
       <p class="footer-updated">✅ Updated May 2026 — actively maintained</p>
-      <p>&copy; 2026 YT SEO Architect &middot; <a href="/privacy-policy">Privacy</a> &middot; <a href="/terms-of-service">Terms</a> &middot; <a href="/about">About</a> &middot; <a href="/tools">Tools</a> &middot; <a href="/templates/">Templates</a> &middot; <a href="/glossary/">Glossary</a> &middot; <a href="/blog">Blog</a> &middot; <a href="mailto:thiza3062@gmail.com">Support</a></p>
+      <p>&copy; 2026 YT SEO Architect &middot; <a href="/privacy-policy">Privacy</a> &middot; <a href="/terms-of-service">Terms</a> &middot; <a href="/about">About</a> &middot; <a href="/tools">Tools</a> &middot; <a href="/templates/">Templates</a> &middot; <a href="/glossary/">Glossary</a> &middot; <a href="/blog">Blog</a> &middot; <a href="/cdn-cgi/l/email-protection#cfbba7a6b5aefcfff9fd8fa8a2aea6a3e1aca0a2">Support</a></p>
       <div class="footer-tagline-wrap">
         <p class="footer-tagline">🎯 <strong>Free YouTube Tag Generators:</strong></p>
         <nav class="footer-niche-nav" aria-label="Free tag generator tools">
@@ -1396,13 +1480,13 @@
   <div id="payment-modal" class="hidden" style="position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.8); z-index:2147483647; display:none; align-items:center; justify-content:center;">
     <div style="background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-24); padding: var(--space-40); max-width: 440px; width: 90%; text-align: center;">
       <h2 id="payment-modal-title" style="margin-bottom:8px; color:var(--primary);">Plans (Coming Soon)</h2>
-      <p id="payment-modal-desc" style="color:var(--text-muted); margin-bottom:24px;">YT SEO Architect is 100% free today — no credits to buy, no subscription, no catch. Optional pro plans are in development and will be announced here when ready.</p>
+      <p id="payment-modal-desc" style="color:var(--text-muted); margin-bottom:24px;">Every core tool is free forever. Pro ($12/mo) adds unlimited audits, the Bulk Injector and Auto-Responder — <a href="/pricing" style="color:var(--cyan);font-weight:600;">compare plans →</a></p>
       <div id="paypal-button-container" style="min-height: 150px;"></div>
       <button id="close-payment-modal" onclick="document.getElementById('payment-modal').style.display='none'; document.getElementById('payment-modal').classList.add('hidden');" class="btn btn-outline" style="margin-top: 1rem; width:100%; justify-content:center;">Cancel</button>
     </div>
   </div>
 
-  <script>
+  <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
     // ═══════════════════════════════════════════
     //  Animation Engine
     // ═══════════════════════════════════════════
@@ -1596,5 +1680,5 @@
     import { inject } from 'https://cdn.jsdelivr.net/npm/@vercel/analytics@1/dist/index.mjs';
     inject();
   </script>
-</body>
+<script>(function(){function c(){var b=a.contentDocument||(a.contentWindow&&a.contentWindow.document);if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'a600ce7f9fb38de3',t:'MTc5NTYxMTMxNQ=='};var l=window.parent.location,o;try{o=new URL(l.origin).origin}catch(e){try{o=new URL(new URL(l.href).origin).origin}catch(e){o=''}}var u='/cdn-cgi/challenge-platform/scripts/jsd/main.js?ray=a600ce7f9fb38de3',a=document.createElement('script');a.src=o?new URL(u,o).href:u;document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>
