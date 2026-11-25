@@ -537,5 +537,33 @@
     "to_email": "info@worldmetrics.org",
     "subject": "Suggestion for your worldmetrics.org resource page",
     "sent_at": "2026-11-23T20:52:02Z"
+  },
+  {
+    "source_page": "https://www.youngurbanproject.com/youtube-seo-tools/",
+    "broken_url": "https://www.notta.ai/en/blog/youtube-statistics?utm_source=Tech-Behemoths&#038;utm_medium=Profile&#038;utm_term=deleted&#038;utm_content=na&#038;utm_campaign=viewprofile&#038;gclid=Cj0KCQjwsaqzBhDdARIsAK2gqndI7ar09PaZTYoLkJ-vhCNBKeENApjLk3cxnBNiXITnMA8jZeWqydMaAg6jEALw_wcB",
+    "to_email": "hello@youngurbanproject.com",
+    "subject": "Found a broken link on your www.youngurbanproject.com page",
+    "sent_at": "2026-11-25T18:59:09Z"
+  },
+  {
+    "source_page": "https://www.youngurbanproject.com/youtube-seo-tools/",
+    "broken_url": "https://joseangelostudios.com/b2b-seo/?utm_source=Tech-Behemoths&#038;utm_medium=Profile&#038;utm_term=deleted&#038;utm_content=na&#038;utm_campaign=viewprofile&#038;gclid=Cj0KCQjwsaqzBhDdARIsAK2gqndI7ar09PaZTYoLkJ-vhCNBKeENApjLk3cxnBNiXITnMA8jZeWqydMaAg6jEALw_wcB",
+    "to_email": "hello@youngurbanproject.com",
+    "subject": "Found a broken link on your www.youngurbanproject.com page",
+    "sent_at": "2026-11-25T18:59:55Z"
+  },
+  {
+    "source_page": "https://www.youngurbanproject.com/youtube-seo-tools/",
+    "broken_url": "https://www.globalmediainsight.com/blog/youtube-users-statistics/?utm_source=Tech-Behemoths&#038;utm_medium=Profile&#038;utm_term=deleted&#038;utm_content=na&#038;utm_campaign=viewprofile&#038;gclid=Cj0KCQjwsaqzBhDdARIsAK2gqndI7ar09PaZTYoLkJ-vhCNBKeENApjLk3cxnBNiXITnMA8jZeWqydMaAg6jEALw_wcB",
+    "to_email": "hello@youngurbanproject.com",
+    "subject": "Found a broken link on your www.youngurbanproject.com page",
+    "sent_at": "2026-11-25T19:00:41Z"
+  },
+  {
+    "source_page": "https://digitalconvey.com/youtube-seo-tools/",
+    "broken_url": "https://morningfa.me/",
+    "to_email": "info@digitalconvey.com",
+    "subject": "Found a broken link on your digitalconvey.com page",
+    "sent_at": "2026-11-25T19:01:28Z"
   }
 ]
